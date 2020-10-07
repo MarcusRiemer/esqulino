@@ -1,6 +1,7 @@
 import * as Desc from "./grammar.description";
-import { QualifiedTypeName } from "./syntaxtree.description";
+import { QualifiedTypeName, NodeDescription } from "./syntaxtree.description";
 import { FullNodeConcreteTypeDescription } from "./grammar-type-util.description";
+import { typenameEquals } from "./syntaxtree";
 
 /**
  * If no name is provided: Generates a name based on a running number and the type.
@@ -87,6 +88,109 @@ export function getFullQualifiedAttributes(
       });
     }
   });
+
+  return toReturn;
+}
+
+/**
+ * Retrieve the node with the given attribute name, no matter how
+ * deeply it is nested.
+ */
+export function getNodeAttribute(
+  nodeDesc: Desc.NodeConcreteTypeDescription | Desc.NodeVisualTypeDescription,
+  name: string
+) {
+  const recurseAttribute = (a: Desc.NodeAttributeDescription) => {
+    if (a.name === name) {
+      return a;
+    } else if (a.type === "container") {
+      for (let i = 0; i < a.children.length; i++) {
+        const res = recurseAttribute(a.children[i]);
+        if (res) {
+          return res;
+        }
+      }
+    }
+  };
+
+  for (let i = 0; i < nodeDesc.attributes.length; i++) {
+    const res = recurseAttribute(nodeDesc.attributes[i]);
+    if (res) {
+      return res;
+    }
+  }
+
+  return undefined;
+}
+
+export function resolveNodeTypeChildReference(
+  ref: Desc.NodeTypesChildReference,
+  languageName: string
+): QualifiedTypeName {
+  if (Desc.isChildCardinalityDescription(ref)) {
+    return resolveNodeTypeChildReference(ref.nodeType, languageName);
+  } else if (Desc.isQualifiedTypeName(ref)) {
+    return ref;
+  } else {
+    return { languageName, typeName: ref };
+  }
+}
+
+export function allChildTypes(
+  attr: Desc.NodeChildrenGroupDescription,
+  languageName: string
+): QualifiedTypeName[] {
+  // The node for the references is named slightly different, depending on the context
+  const extractNodeTypes = () => {
+    switch (attr.type) {
+      case "allowed":
+      case "sequence":
+        return attr.nodeTypes;
+      case "parentheses":
+        return attr.group.nodeTypes;
+      case "choice":
+        return attr.choices;
+    }
+  };
+
+  return extractNodeTypes().map((t) =>
+    resolveNodeTypeChildReference(t, languageName)
+  );
+}
+
+/**
+ * The given type may or may not refer to a typedef. This function
+ * walks down the type hierarchy until each and every type that
+ * may appear as a typedef choice is resolved.
+ */
+export function resolveToConcreteTypes(
+  t: QualifiedTypeName,
+  g: Desc.NamedLanguages
+): QualifiedTypeName[] {
+  const toReturn: QualifiedTypeName[] = [];
+
+  const impl = (t: QualifiedTypeName) => {
+    const currType = g?.[t.languageName]?.[t.typeName];
+    if (!currType) {
+      throw new Error(
+        `Unknown type ${JSON.stringify(
+          t
+        )} while resolving concrete types from ${JSON.stringify(g)}`
+      );
+    }
+
+    if (currType.type === "oneOf") {
+      currType.oneOf.forEach((option) =>
+        impl(resolveNodeTypeChildReference(option, t.languageName))
+      );
+    } else {
+      // Don't add items more than once
+      if (!toReturn.find((o) => typenameEquals(o, t))) {
+        return toReturn.push(t);
+      }
+    }
+  };
+  impl(t);
 
   return toReturn;
 }
@@ -234,11 +338,29 @@ export const ensureTypename = (
 
 export type OrderedTypes = QualifiedTypeName[];
 
+// Used to separate the language from the typename in the string representation
+const TYPE_SEPARATOR = ".";
+
 /**
  *
  */
-export function stableQualifiedTypename(n: QualifiedTypeName): string {
-  return n.languageName + "." + n.typeName;
+export function stableQualifiedTypename(
+  n: QualifiedTypeName | NodeDescription
+): string {
+  if (Desc.isQualifiedTypeName(n)) {
+    return n.languageName + TYPE_SEPARATOR + n.typeName;
+  } else {
+    return n.language + TYPE_SEPARATOR + n.name;
+  }
+}
+
+export function fromStableQualifiedTypename(n: string): QualifiedTypeName {
+  const parts = n.split(TYPE_SEPARATOR);
+  if (parts.length != 2) {
+    throw new Error(`"${n}" is not a typename`);
+  } else {
+    return { languageName: parts[0], typeName: parts[1] };
+  }
 }
 
 /**
@@ -339,7 +461,36 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
   }
 }
 
-export function allPresentTypes(g: Desc.GrammarDocument): Desc.NamedLanguages {
+export type FilterType = (desc: Desc.NodeTypeDescription) => boolean;
+
+/**
+ * Returns a new object with all keys removed whose values didn't
+ * satisfy the given predicate. If the predicate is not specified
+ * the given object is returned as is. This is not a particularly
+ * nice design but it allows this function to act as a NOP if no
+ * predicate is specified.
+ *
+ * @param obj The input object to be filtered
+ * @param predicate The predicate to use. No filter applied if omitted.
+ * @return The filtered object.
+ */
+const objectFilter = <O extends Object, T>(
+  obj: O,
+  predicate?: (a0: T) => boolean
+): Partial<O> => {
+  if (predicate) {
+    return Object.keys(obj)
+      .filter((key) => predicate(obj[key]))
+      .reduce((res, key) => ((res[key] = obj[key]), res), {});
+  } else {
+    return obj;
+  }
+};
+
+export function allPresentTypes(
+  g: Desc.GrammarDocument,
+  filter: FilterType = undefined
+): Desc.NamedLanguages {
   const allLangKeys = new Set([
     ...Object.keys(g.types ?? []),
     ...Object.keys(g.foreignTypes ?? []),
@@ -350,8 +501,8 @@ export function allPresentTypes(g: Desc.GrammarDocument): Desc.NamedLanguages {
   allLangKeys.forEach((lang) => {
     toReturn[lang] = Object.assign(
       {},
-      g.foreignTypes[lang] ?? {},
-      g.types[lang] ?? {}
+      objectFilter(g.foreignTypes[lang] ?? {}, filter),
+      objectFilter(g.types[lang] ?? {}, filter)
     );
   });
 

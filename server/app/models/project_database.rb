@@ -17,7 +17,6 @@ class ProjectDatabase < ApplicationRecord
     5000
   end
 
-
   # Creating the database record for this instance is the trivial part.
   # The actual work is to create some sort of database-thing in the
   # "real world".
@@ -64,7 +63,7 @@ class ProjectDatabase < ApplicationRecord
     if table_exists? table_description["name"]
       raise CreateDuplicateTableNameDatabaseError.new(self, table_description["name"])
     else
-      create_statement = SchemaTools::Alter:: table_to_create_statement(table_description)
+      create_statement = SchemaTools::Alter::table_to_create_statement(table_description)
       db_connection_admin.execute(create_statement)
       refresh_schema
     end
@@ -130,11 +129,11 @@ class ProjectDatabase < ApplicationRecord
   def table_bulk_insert(table_name, column_names, rows)
     if table_exists? table_name
       sql_column_names = column_names
-        .map { |n| "'#{n}'" }
-        .join(",")
+                         .map { |n| "'#{n}'" }
+                         .join(",")
       sql_data = rows
-        .map { |r| "(" + r.map { |n| "'#{n}'" }.join(",") + ")" }
-        .join(",\n")
+                 .map { |r| "(" + r.map { |n| "'#{n}'" }.join(",") + ")" }
+                 .join(",\n")
 
       sql = "INSERT INTO '#{table_name}' (#{sql_column_names}) VALUES\n#{sql_data}"
 
@@ -147,8 +146,18 @@ class ProjectDatabase < ApplicationRecord
   # Refreshes the cached schema.
   def refresh_schema
     # Not so nice: Explicitly calling this complicated version of serializable_hash here
-    self.schema = SchemaTools::database_describe_schema(db_connection_admin)
-      .map { |t| t.serializable_hash(include: { columns: {}, foreign_keys: {} }) }
+    # Not so nice: Converting keys
+    self.schema = SchemaTools::database_describe_schema(db_connection_admin).map do |t|
+      t
+        .serializable_hash(include: {
+                             columns: {},
+                             foreign_keys: {
+                               include: { references: {} }
+                             },
+                             system_table: {}
+                           })
+        .deep_transform_keys { |key| key.camelize(:lower) }
+    end
   end
 
   # Refreshes and persists a possibly changed schema.
@@ -192,12 +201,12 @@ class ProjectDatabase < ApplicationRecord
           end
         end
         return {
-                 "columns" => result.first,
-                 "rows" => result.drop(1),
-                 "totalCount" => num_rows - 1, # First row are columns
-                 "changes" => db.changes,
-                 "unknownTotal" => unknown_total
-               }
+          "columns" => result.first,
+          "rows" => result.drop(1),
+          "totalCount" => num_rows - 1, # First row are columns
+          "changes" => db.changes,
+          "unknownTotal" => unknown_total
+        }
       rescue SQLite3::ConstraintException, SQLite3::SQLException => e
         # Something anticipated went wrong. This is probably the fault
         # of the caller in some way.

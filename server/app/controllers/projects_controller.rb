@@ -5,44 +5,17 @@ class ProjectsController < ApplicationController
   include UserHelper
   include PaginationHelper
 
-  # Lists all public projects
-  def index
-    render json: pagination_response(Project,Project.only_public,options:{})
-  end
-
-  # Lists all projects that exist in the system (if the user is an admin)
-  def index_admin
-    authorize Project, :list_all?
-    render json: pagination_response(Project,Project.all,options:{})
-  end
-
   # Retrieves all information about a single project. This is the only
   # request the client will make to retrieve the *whole* project with
   # *everything* that is required to render it properly.
   def show
-    project = Project.full.find_by!(slug: params[:project_id])
+    needle = params[:project_id]
+    project = if (BlattwerkzeugUtil::string_is_uuid? needle) then
+                Project.full.find(needle)
+              else
+                Project.full.find_by! slug: needle
+              end
     render json: project.to_full_api_response
-  end
-
-  # Apart from creating the database object this action also needs to
-  # set up the directory layout for project assets that are stored
-  # on the disk. Thankfully the Project-model takes care of the whole
-  # filesystem stuff.
-  def create
-    begin
-      authorize Project, :create?
-      creation_params = project_creation_params
-      project = Project.new(creation_params)
-      if project.save
-        ProjectMailer.with(project: project).created_admin.deliver_later
-
-        render json: { 'id' => project.slug }, :status => 200
-      else
-        render :json => { 'errors' => project.errors }, :status => 400
-      end
-    rescue Pundit::NotAuthorizedError => e
-      error_response("Please log in")
-    end
   end
 
   # Update an existing project.
@@ -59,18 +32,6 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # Destroy an existing project and all of its associated data
-  def destroy
-    begin
-      authorize current_project
-
-      current_project.destroy
-    rescue Pundit::NotAuthorizedError => e
-      error_response("You need the permission")
-    end
-  end
-
-
   # The preview image for a specific project
   def preview_image
     if current_project.preview_image_exists? then
@@ -85,7 +46,7 @@ class ProjectsController < ApplicationController
   # These attributes are mandatory when a project is created
   def project_creation_params
     to_return = params.permit(:slug, name: {})
-      .transform_keys { |k| k.underscore }
+                      .transform_keys { |k| k.underscore }
 
     to_return["user"] = current_user
 
@@ -95,7 +56,7 @@ class ProjectsController < ApplicationController
   # These attributes may be changed once a project has been created
   def project_update_params
     params.permit(:indexPageId, :preview, name: {}, description: {})
-      .transform_keys { |k| k.underscore }
+          .transform_keys { |k| k.underscore }
   end
 
   # The references to block languages that are part of this project.
@@ -104,12 +65,12 @@ class ProjectsController < ApplicationController
     used_block_languages = params[:projectUsesBlockLanguages]
     if used_block_languages then
       attributes = used_block_languages
-                     .map { |used| used.transform_keys! { |k| k.underscore } }
-                     .each { |used| used.permit! }
+                   .map { |used| used.transform_keys! { |k| k.underscore } }
+                   .each { |used| used.permit! }
 
       to_return = ActionController::Parameters
-                    .new({ "project_uses_block_languages_attributes" => attributes})
-                    .permit!
+                  .new({ "project_uses_block_languages_attributes" => attributes })
+                  .permit!
       return (to_return)
     else
       return ({})

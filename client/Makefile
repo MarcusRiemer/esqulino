@@ -2,6 +2,7 @@
 # the Angular CLI
 
 include ../Makefile.common
+include ../schema/graphql/Makefile
 
 # Various tools may be installed in different locations
 # * npm dependencies should not be installed globally
@@ -21,6 +22,8 @@ CLIENT_ALL_SOURCES = $(shell find src ! -name 'version.ts' 2> /dev/null) angular
 
 # All sources except the translation files
 CLIENT_NON_XLF_SOURCES = $(filter-out %.xlf, $(CLIENT_ALL_SOURCES))
+# All sources except generated files
+CLIENT_NON_GENERATED_SOURCES = $(filter-out src/generated/%, $(CLIENT_NON_XLF_SOURCES))
 
 TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
@@ -52,7 +55,7 @@ client-compile-dev : msg-pre-build src/environments/version.ts
 ##################################
 # Commandline Client
 ##################################
-dist/cli/main.cli.js : $(CLIENT_NON_XLF_SOURCES) src/environments/version.ts
+dist/cli/main.cli.js : $(CLIENT_NON_GENERATED_SOURCES) src/environments/version.ts
 	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Commandline Build) ..."; $(TPUT_BIN) sgr0
 	$(TSC_BIN) -p src/tsconfig.cli.json
 
@@ -117,6 +120,26 @@ src/locale/messages.en.xlf : src/locale/messages.xlf
 	$(NG_BIN) run "blattwerkzeug-client:xliffmerge"
 
 update-xlf : src/locale/messages.en.xlf
+
+##################################
+# GraphQL Client Generation
+##################################
+
+src/generated/graphql.ts : ../schema/graphql/schema.json $(GRAPHQL_QUERY_SOURCES)
+	npm run graphql-codegen
+	npx prettier --write "src/generated/**/*.{html,ts}"
+
+generate-graphql-client: src/generated/graphql.ts
+
+GIT_LS_CHANGED_FILES = git ls-files --modified $(JSON_SCHEMA_FILES)
+
+verify-cached-schemas:
+	@make -B generate-graphql-client
+	@test -z "`$(GIT_LS_CHANGED_FILES)`" || (git --no-pager diff; echo "There are modified schema files"; $(GIT_LS_CHANGED_FILES); exit 1) >&2
+
+# Ensures that the GraphQL-Client can be compiled
+verify-compile-graphql-client: src/generated/graphql.ts
+	npx tsc --noEmit --experimentalDecorators --target "es5" $^
 
 ##################################
 # Dependencies

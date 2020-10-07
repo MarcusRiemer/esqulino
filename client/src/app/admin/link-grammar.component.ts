@@ -1,8 +1,10 @@
+import { ApolloQueryResult } from "@apollo/client/core";
 import { Component, Input } from "@angular/core";
 
-import { map, filter } from "rxjs/operators";
+import { map, filter, switchMap, distinctUntilChanged } from "rxjs/operators";
 
-import { ListGrammarDataService } from "../shared/serverdata";
+import { AdminListGrammarsGQL } from "../../generated/graphql";
+import { BehaviorSubject, Observable, merge } from "rxjs";
 
 /**
  * Creates a link to the grammar with the specified ID. Will attempt to
@@ -14,18 +16,34 @@ import { ListGrammarDataService } from "../shared/serverdata";
   selector: "link-grammar",
 })
 export class LinkGrammarComponent {
-  /**
-   * The ID of the grammar to display
-   */
-  @Input() grammarId: string;
+  private _grammarId = new BehaviorSubject<string>(undefined);
 
-  constructor(private _grammarData: ListGrammarDataService) {}
+  readonly grammarId$ = this._grammarId.asObservable();
 
-  /**
-   * (Possibly) the description of the grammar
-   */
-  readonly description = this._grammarData.list.pipe(
+  @Input()
+  set grammarId(newId: string) {
+    this._grammarId.next(newId);
+  }
+
+  constructor(private _grammarsGQL: AdminListGrammarsGQL) {}
+
+  readonly resolveName$: Observable<string> = this._grammarId.pipe(
+    filter((id) => !!id),
+    distinctUntilChanged(),
+    switchMap(
+      (_id) => this._grammarsGQL.watch({}, { errorPolicy: "all" }).valueChanges
+    ),
+    map((response) => response.data.grammars.nodes),
     filter((grammars) => !!grammars),
-    map((grammars) => grammars.find((g) => g.id == this.grammarId))
+    map(
+      (grammars) =>
+        grammars.find((g) => g.id == this._grammarId.value)?.name ??
+        this._grammarId.value
+    )
+  );
+
+  readonly displayName$: Observable<string> = merge(
+    this._grammarId,
+    this.resolveName$
   );
 }

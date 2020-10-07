@@ -4,23 +4,25 @@ RSpec.describe "auth controller" do
   json_headers = { "CONTENT_TYPE" => "application/json" }
 
   before(:each) { create(:user, :guest) }
-  let(:identity_params){{
-    :email => "blattwerkzeug@web.de",
-    :password => "12345678",
-    :username => "Blattwerkzeug"
-  }}
+  let(:identity_params) {
+    {
+      :email => "blattwerkzeug@web.de",
+      :password => "12345678",
+      :username => "Blattwerkzeug"
+    }
+  }
 
   describe "developer provider with default values" do
     before(:all) do
       OmniAuth.config.test_mode = true
       OmniAuth.config.mock_auth[:developer] = OmniAuth::AuthHash.new({
-        :provider => 'developer',
-        :info => {
-          :name => 'Tom',
-          :email => 'developer@blattwerkzeug.de'
-        },
-        :uid => 'developer@blattwerkzeug.de'
-      })
+                                                                       :provider => 'developer',
+                                                                       :info => {
+                                                                         :name => 'Tom',
+                                                                         :email => 'developer@blattwerkzeug.de'
+                                                                       },
+                                                                       :uid => 'developer@blattwerkzeug.de'
+                                                                     })
     end
 
     context "logging in" do
@@ -187,8 +189,8 @@ RSpec.describe "auth controller" do
     identity_count = Identity::Identity.all.count
 
     post '/api/auth/identity/register',
-      :headers => json_headers,
-      :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     # Must wait for confirmation mail
     expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
@@ -199,8 +201,8 @@ RSpec.describe "auth controller" do
 
   it "identity with password" do
     post '/api/auth/identity/register',
-        :headers => json_headers,
-        :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     # Must wait for confirmation mail
     expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
@@ -209,23 +211,20 @@ RSpec.describe "auth controller" do
     expect(Identity::Identity.all.first.confirmed?).to eq(false)
   end
 
-
   it "identity with existing uid" do
     create(:identity_provider, :existing, uid: identity_params[:email])
 
     identity_count = Identity::Identity.all.count
 
     post '/api/auth/identity/register',
-        :headers => json_headers,
-        :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     # Must wait for confirmation mail
     expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
     expect(Identity::Identity.all.count).to eq(identity_count)
   end
-
-
 
   it "registering identity with an empty password" do
     create(:identity_provider, :new)
@@ -235,8 +234,8 @@ RSpec.describe "auth controller" do
     identity_params[:password] = ""
 
     post '/api/auth/identity/register',
-        :headers => json_headers,
-        :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
@@ -254,8 +253,8 @@ RSpec.describe "auth controller" do
     identity_params[:password] = "12345"
 
     post '/api/auth/identity/register',
-        :headers => json_headers,
-        :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
@@ -273,8 +272,8 @@ RSpec.describe "auth controller" do
     identity_params[:username] = ""
 
     post '/api/auth/identity/register',
-        :headers => json_headers,
-        :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
@@ -289,14 +288,13 @@ RSpec.describe "auth controller" do
     identity_params[:username] = "   "
 
     post '/api/auth/identity/register',
-        :headers => json_headers,
-        :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
     expect(Identity::Identity.all.count).to eq(identity_count)
   end
-
 
   it "with identity" do
     identity = create(:identity_provider, :new)
@@ -305,14 +303,13 @@ RSpec.describe "auth controller" do
     count_identity = Identity::Identity.where(user_id: identity.user_id).count
 
     post '/api/auth/identity/register',
-      :headers => json_headers,
-      :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
     expect(Identity::Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
   end
-
 
   it "with identity and existing extern provider" do
     identity = create(:developer_provider, :new)
@@ -323,14 +320,13 @@ RSpec.describe "auth controller" do
     expect(identity.user[:email]).to be_nil
 
     post '/api/auth/identity/register',
-      :headers => json_headers,
-      :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
     expect(Identity::Identity.where(user_id: identity.user_id).count).to eq(count_identity + 1)
   end
-
 
   it "with already linked identity ( identity )" do
     identity = create(:identity_provider, :existing)
@@ -339,8 +335,8 @@ RSpec.describe "auth controller" do
     count_identities = Identity::Identity.all.count
 
     post '/api/auth/identity/register',
-      :headers => json_headers,
-      :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(response).not_to set_cookie ["REFRESH_TOKEN", "ACCESS_TOKEN"]
 
@@ -348,13 +344,12 @@ RSpec.describe "auth controller" do
     expect(Identity::Identity.all.count).to eq(count_identities)
   end
 
-
   it "with email and password" do
     create(:identity_provider, :existing)
 
     post '/api/auth/identity',
-      :headers => json_headers,
-      :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(response.cookies['ACCESS_TOKEN']).to be_truthy
   end
@@ -365,8 +360,8 @@ RSpec.describe "auth controller" do
     identity_params[:password] = "wrong"
 
     post '/api/auth/identity',
-      :headers => json_headers,
-      :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(response.status).to eq(401)
     expect(response.cookies['ACCESS_TOKEN']).to be_nil
@@ -378,13 +373,12 @@ RSpec.describe "auth controller" do
     identity_params[:email] = "wrong"
 
     post '/api/auth/identity',
-      :headers => json_headers,
-      :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(response.status).to eq(401)
     expect(response.cookies['ACCESS_TOKEN']).to be_nil
   end
-
 
   it "new email to an logged in user" do
     identity = create(:identity_provider, :new)
@@ -394,8 +388,8 @@ RSpec.describe "auth controller" do
     count_identities = Identity::Identity.all.count
 
     post '/api/auth/identity/register',
-      :headers => json_headers,
-      :params => identity_params.to_json
+         :headers => json_headers,
+         :params => identity_params.to_json
 
     expect(Identity::Identity.where(user_id: identity.user_id).count)
       .to eq(count_identity_by_user_id + 1)

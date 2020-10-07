@@ -33,11 +33,11 @@ class ProjectDatabasesController < ApplicationController
       send_data db_graphviz, type: 'text'
     else
       # Invoke graphviz to actually render something
-      db_img, err, status = Open3.capture3('dot',"-T#{format}", :stdin_data => db_graphviz)
+      db_img, err, status = Open3.capture3('dot', "-T#{format}", :stdin_data => db_graphviz)
 
       # Was the rendering successful?
       if status.exitstatus != 0
-        halt 500, {'Content-Type' => 'text/plain'}, err
+        halt 500, { 'Content-Type' => 'text/plain' }, err
       else
         # We need some special work for SVG images
         content_type = if format.start_with? 'svg'
@@ -83,7 +83,7 @@ class ProjectDatabasesController < ApplicationController
         render :json => { :schema => current_database.schema }
       else
         render :status => 400,
-               :json => { :errors => [ { :status => 400, :title => "Given database is 0 byte large" }] }
+               :json => { :errors => [{ :status => 400, :title => "Given database is 0 byte large" }] }
       end
     end
   end
@@ -99,7 +99,7 @@ class ProjectDatabasesController < ApplicationController
   # Creates a new table in the given database
   def table_create
     ensure_write_access do
-      table_description = ensure_request("TableDescription", request.body.read)
+      table_description = ensure_request("TableDescription", request.body.read, underscore_keys: false)
 
       # Grab the database and modify it
       if (current_database.nil?) then
@@ -117,7 +117,7 @@ class ProjectDatabasesController < ApplicationController
     ensure_write_access do
       # Grab parameters
       table_name = params['tablename']
-      alter_schema_request = JSON.parse request.body.read
+      alter_schema_request = ensure_request("AlterSchemaRequestDescription", request.body.read, underscore_keys: false)
 
       # Alter the database
       current_database.table_alter table_name, alter_schema_request['commands']
@@ -141,9 +141,9 @@ class ProjectDatabasesController < ApplicationController
       )
 
       render status: 200, :json => {
-               :numInsertedRows => result['changes'],
-               :numTotalRows => current_database.table_row_count(table_name)
-             }
+        :numInsertedRows => result['changes'],
+        :numTotalRows => current_database.table_row_count(table_name)
+      }
     end
   end
 

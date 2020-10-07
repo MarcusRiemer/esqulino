@@ -29,34 +29,34 @@ FactoryBot.define do
       meta_grammar
       ast {
         ({
-           "children"=> {
-             "nodes"=> [
-               {
-                 "language"=> "MetaGrammar",
-                 "name"=> "concreteNode",
-                 "properties"=> {
-                   "languageName"=> "lang",
-                   "typeName"=> "root"
-                 }
-               }
-             ],
-             "root"=> [
-               {
-                 "language"=> "MetaGrammar",
-                 "name"=> "nodeRefOne",
-                 "properties"=> {
-                   "languageName"=> "lang",
-                   "typeName"=> "root"
-                 }
-               }
-             ]
-           },
-           "language"=> "MetaGrammar",
-           "name"=> "grammar",
-           "properties"=> {
-             "name"=> "lang"
-           }
-         })
+          "children" => {
+            "nodes" => [
+              {
+                "language" => "MetaGrammar",
+                "name" => "concreteNode",
+                "properties" => {
+                  "languageName" => "lang",
+                  "typeName" => "root"
+                }
+              }
+            ],
+            "root" => [
+              {
+                "language" => "MetaGrammar",
+                "name" => "nodeRefOne",
+                "properties" => {
+                  "languageName" => "lang",
+                  "typeName" => "root"
+                }
+              }
+            ]
+          },
+          "language" => "MetaGrammar",
+          "name" => "grammar",
+          "properties" => {
+            "name" => "lang"
+          }
+        })
       }
     end
 
@@ -65,103 +65,103 @@ FactoryBot.define do
       association :programming_language, factory: [:programming_language, :sql]
       query.ast {
         ({
-           "name"=> "querySelect",
-           "language"=> "sql",
-           "children"=> {
-             "from"=> [
-               {
-                 "name"=> "from",
-                 "language"=> "sql",
-                 "children"=> {
-                   "tables"=> [
-                     {
-                       "name"=> "tableIntroduction",
-                       "language"=> "sql",
-                       "properties"=> {
-                         "name"=> "key_value"
-                       }
-                     }
-                   ]
-                 }
-               }
-             ],
-             "where"=> [
-               {
-                 "name"=> "where",
-                 "language"=> "sql",
-                 "children"=> {
-                   "expressions"=> [
-                     {
-                       "name"=> "binaryExpression",
-                       "language"=> "sql",
-                       "children"=> {
-                         "lhs"=> [
-                           {
-                             "name"=> "columnName",
-                             "language"=> "sql",
-                             "properties"=> {
-                               "columnName"=> "key",
-                               "refTableName"=> "key_value"
-                             }
-                           }
-                         ],
-                         "rhs"=> [
-                           {
-                             "name"=> "constant",
-                             "language"=> "sql",
-                             "properties"=> {
-                               "value"=> "3"
-                             }
-                           }
-                         ],
-                         "operator"=> [
-                           {
-                             "name"=> "relationalOperator",
-                             "language"=> "sql",
-                             "properties"=> {
-                               "operator"=> ">="
-                             }
-                           }
-                         ]
-                       }
-                     }
-                   ]
-                 }
-               }
-             ],
-             "select"=> [
-               {
-                 "name"=> "select",
-                 "language"=> "sql",
-                 "children"=> {
-                   "columns"=> [
-                     {
-                       "name"=> "columnName",
-                       "language"=> "sql",
-                       "properties"=> {
-                         "columnName"=> "key",
-                         "refTableName"=> "key_value"
-                       }
-                     },
-                     {
-                       "name"=> "columnName",
-                       "language"=> "sql",
-                       "properties"=> {
-                         "columnName"=> "value",
-                         "refTableName"=> "key_value"
-                       }
-                     },
-                     {
-                       "name"=> "starOperator",
-                       "language"=> "sql"
-                     }
-                   ]
-                 }
-               }
-             ],
-             "groupBy"=> []
-           }
-         })
+          "name" => "querySelect",
+          "language" => "sql",
+          "children" => {
+            "from" => [
+              {
+                "name" => "from",
+                "language" => "sql",
+                "children" => {
+                  "tables" => [
+                    {
+                      "name" => "tableIntroduction",
+                      "language" => "sql",
+                      "properties" => {
+                        "name" => "key_value"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "where" => [
+              {
+                "name" => "where",
+                "language" => "sql",
+                "children" => {
+                  "expressions" => [
+                    {
+                      "name" => "binaryExpression",
+                      "language" => "sql",
+                      "children" => {
+                        "lhs" => [
+                          {
+                            "name" => "columnName",
+                            "language" => "sql",
+                            "properties" => {
+                              "columnName" => "key",
+                              "refTableName" => "key_value"
+                            }
+                          }
+                        ],
+                        "rhs" => [
+                          {
+                            "name" => "constant",
+                            "language" => "sql",
+                            "properties" => {
+                              "value" => "3"
+                            }
+                          }
+                        ],
+                        "operator" => [
+                          {
+                            "name" => "relationalOperator",
+                            "language" => "sql",
+                            "properties" => {
+                              "operator" => ">="
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "select" => [
+              {
+                "name" => "select",
+                "language" => "sql",
+                "children" => {
+                  "columns" => [
+                    {
+                      "name" => "columnName",
+                      "language" => "sql",
+                      "properties" => {
+                        "columnName" => "key",
+                        "refTableName" => "key_value"
+                      }
+                    },
+                    {
+                      "name" => "columnName",
+                      "language" => "sql",
+                      "properties" => {
+                        "columnName" => "value",
+                        "refTableName" => "key_value"
+                      }
+                    },
+                    {
+                      "name" => "starOperator",
+                      "language" => "sql"
+                    }
+                  ]
+                }
+              }
+            ],
+            "groupBy" => []
+          }
+        })
       }
     end
   end

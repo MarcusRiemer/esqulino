@@ -1,15 +1,17 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
-import {
-  IndividualBlockLanguageDataService,
-  ListBlockLanguageDataService,
-} from "../../shared/serverdata";
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 
 import { ProjectService, Project } from "../project.service";
 import { SidebarService } from "../sidebar.service";
 import { EditorToolbarService } from "../toolbar.service";
+import {
+  SelectionListBlockLanguagesGQL,
+  ProjectAddUsedBlockLanguageGQL,
+  ProjectRemoveUsedBlockLanguageGQL,
+} from "../../../generated/graphql";
+import { map } from "rxjs/operators";
 
 @Component({
   templateUrl: "templates/settings.html",
@@ -26,6 +28,13 @@ export class SettingsComponent {
   private _subscriptionRefs: any[] = [];
 
   /**
+   * @return All block languages that could currently be used.
+   */
+  readonly availableBlockLanguages$ = this._selectBlockLanguagesGQL
+    .watch()
+    .valueChanges.pipe(map((result) => result.data.blockLanguages.nodes));
+
+  /**
    * Used for dependency injection.
    */
   constructor(
@@ -33,8 +42,9 @@ export class SettingsComponent {
     private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService,
     private _router: Router,
-    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
-    private _listBlockLanguageData: ListBlockLanguageDataService,
+    private _selectBlockLanguagesGQL: SelectionListBlockLanguagesGQL,
+    private _addUsedBlockLanguage: ProjectAddUsedBlockLanguageGQL,
+    private _removeUsedBlockLanguage: ProjectRemoveUsedBlockLanguageGQL,
     private _performData: PerformDataService
   ) {}
 
@@ -77,17 +87,14 @@ export class SettingsComponent {
       "d",
       this._performData.project.delete(this.project.id)
     );
-    subRef = btnDelete.onClick.subscribe((_) => {
+    subRef = btnDelete.onClick.subscribe(async (_) => {
       // Don't delete without asking the user
       if (confirm("Dieses Projekt löschen?")) {
-        this._projectService
-          .deleteProject(this.project.slug)
-          .subscribe((res) => {
-            // Go back to title after deleting
-            if (res) {
-              this._router.navigateByUrl("/");
-            }
-          });
+        const res = await this._projectService.deleteProject(this.project.slug);
+        // Go back to title after deleting
+        if (res) {
+          this._router.navigateByUrl("/");
+        }
       }
     });
     this._subscriptionRefs.push(subRef);
@@ -102,26 +109,35 @@ export class SettingsComponent {
   }
 
   /**
-   * @return All block languages that could currently be used.
-   */
-  get availableBlockLanguages() {
-    return this._listBlockLanguageData.list;
-  }
-
-  /**
    * Reference a block language from this project.
    */
-  addUsedBlockLanguage(blockLanguageId: string) {
-    this.project.addUsedBlockLanguage(blockLanguageId);
+  async addUsedBlockLanguage(blockLanguageId: string) {
+    const res = await this._addUsedBlockLanguage
+      .mutate({
+        blockLanguageId,
+        projectId: this.project.id,
+      })
+      .toPromise();
+
+    const used =
+      res.data.addUsedBlockLanguage.result.projectUsesBlockLanguage.id;
+    this.project.addUsedBlockLanguage(blockLanguageId, used);
   }
 
   /**
    * Remove a block language from this project.
    */
-  removeUsedBlockLanguage(blockLanguageId: string) {
-    console.log("Removing", blockLanguageId);
-    if (!this.project.removeUsedBlockLanguage(blockLanguageId)) {
+  async removeUsedBlockLanguage(blockLanguageId: string, usageId: string) {
+    if (this.project.isBlockLanguageReferenced(blockLanguageId)) {
       alert("Benutzte Programmiersprachen können nicht entfernt werden");
+    } else {
+      await this._removeUsedBlockLanguage
+        .mutate({
+          usedBlockLanguageId: usageId,
+        })
+        .toPromise();
+
+      this.project.removeUsedBlockLanguage(usageId);
     }
   }
 
@@ -129,6 +145,6 @@ export class SettingsComponent {
    * Retrieves the name of the given block language
    */
   resolveBlockLanguageName(blockLanguageId: string) {
-    return this._individualBlockLanguageData.getSingle(blockLanguageId);
+    return this._projectService.cachedProject.getBlockLanguage(blockLanguageId);
   }
 }

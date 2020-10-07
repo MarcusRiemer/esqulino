@@ -60,29 +60,15 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     this._toolbarService.resetItems();
     this._toolbarService.savingEnabled = false;
 
-    // Deleting this code resource
-    const btnDelete = this._toolbarService.addButton(
-      "delete",
-      "Löschen",
-      "trash",
-      "w"
+    // Wiring up the "switch to other editor"-button
+    let btnBlocklyEditor = this._toolbarService.addButton(
+      "blockly-editor",
+      "Blockly Editor",
+      "puzzle-piece"
     );
-    btnDelete.onClick.subscribe(async (_) => {
-      const confirmed = await MessageDialogComponent.confirm(this._matDialog, {
-        description: $localize`:@@message.ask-delete-resource:Soll diese Resource wirklich gelöscht werden?`,
-      });
-
-      if (confirmed) {
-        this._codeResourceService
-          .deleteCodeResource(this.peekProject, this.peekResource)
-          .pipe(first())
-          .subscribe((_) => {
-            this.peekProject.removedCodeResource(this.peekResource);
-            this._router.navigate(["create"], {
-              relativeTo: this._route.parent,
-            });
-          });
-      }
+    btnBlocklyEditor.onClick.pipe(first()).subscribe(async (_) => {
+      const snap = this._router.url;
+      this._router.navigateByUrl(snap + "ly");
     });
 
     // Reacting to saving
@@ -112,6 +98,31 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
           this.peekProject.addCodeResource(clone);
           this._router.navigate([clone.id], { relativeTo: this._route.parent });
         });
+    });
+
+    // Deleting this code resource
+    const btnDelete = this._toolbarService.addButton(
+      "delete",
+      "Löschen",
+      "trash",
+      "w"
+    );
+    btnDelete.onClick.subscribe(async (_) => {
+      const confirmed = await MessageDialogComponent.confirm(this._matDialog, {
+        description: $localize`:@@message.ask-delete-resource:Soll diese Resource wirklich gelöscht werden?`,
+      });
+
+      if (confirmed) {
+        this._codeResourceService
+          .deleteCodeResource(this.peekProject, this.peekResource)
+          .pipe(first())
+          .subscribe((_) => {
+            this.peekProject.removedCodeResource(this.peekResource);
+            this._router.navigate(["create"], {
+              relativeTo: this._route.parent,
+            });
+          });
+      }
     });
 
     // Keep the sidebar updated

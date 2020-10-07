@@ -1,0 +1,8 @@
+GET      /api/projects                      projects#index
+GET      /api/projects/:id            projects#index_admin
+POST     /api/projects                       projects#create
+DELETE   /api/project(.:format)                       projects#destroy
+GET      /api/project/:project_id(.:format)           projects#show
+PUT      /api/project/:project_id(.:format)           projects#update
+DELETE   /api/project/:project_id(.:format)           projects#destroy
+GET      /api/project/:project_id/preview(.:format)   projects#preview_image

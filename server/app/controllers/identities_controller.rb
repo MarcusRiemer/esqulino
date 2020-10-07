@@ -18,7 +18,7 @@ class IdentitiesController < ApplicationController
   def reset_password
     permited_params = reset_password_params
     identity = Identity::Password.find_by_password_reset_token(permited_params[:token])
-                               .first
+                                 .first
 
     if (not identity)
       return error_response("token not valid")
@@ -74,7 +74,7 @@ class IdentitiesController < ApplicationController
   def email_confirmation
     permited_params = email_confirmation_params
     identity = Identity::Password.find_by_verify_token(permited_params[:verify_token])
-                               .first
+                                 .first
 
     # identity found and not confirmed
     if identity && (not identity.confirmed?) then
@@ -109,6 +109,7 @@ class IdentitiesController < ApplicationController
       if (not identity) then
         return error_response("There exist no identity with this email.")
       end
+
       all_identities = current_user.all_validated_emails
 
       # You need at least more than 1 confirmed identity
@@ -138,25 +139,24 @@ class IdentitiesController < ApplicationController
 
   def change_password_params
     params
-        .permit([:currentPassword, :newPassword])
-        .transform_keys { |k| k.underscore }
+      .permit([:currentPassword, :newPassword])
+      .transform_keys { |k| k.underscore }
   end
-
 
   def reset_password_params
     params
-        .permit([:password, :confirmedPassword, :token])
-        .transform_keys { |k| k.underscore }
+      .permit([:password, :confirmedPassword, :token])
+      .transform_keys { |k| k.underscore }
   end
 
   def email_permit_param
     params
-        .permit([:email])
+      .permit([:email])
   end
 
   def email_confirmation_params
     params
-        .permit([:verify_token])
+      .permit([:verify_token])
   end
 
   def delete_identity_params
@@ -164,6 +164,6 @@ class IdentitiesController < ApplicationController
   end
 
   def api_array_response(to_response)
-    render json: to_response.map { |k| k.transform_keys! { |v| v.to_s.camelize(:lower) }}, status: :ok
+    render json: to_response.map { |k| k.transform_keys! { |v| v.to_s.camelize(:lower) } }, status: :ok
   end
 end

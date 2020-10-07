@@ -26,7 +26,7 @@ module SchemaTools
     def to_json(options)
       {
         :index => @index, :name => @name, :type => @type,
-        :not_null => @not_null, :dflt_value => @dflt_value,
+        :notNull => @not_null, :dfltValue => @dflt_value,
         :primary => @primary
       }.to_json(options)
     end

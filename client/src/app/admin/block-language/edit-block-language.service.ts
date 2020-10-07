@@ -4,13 +4,8 @@ import { Title } from "@angular/platform-browser";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { BehaviorSubject } from "rxjs";
-import { switchMap, map, first, filter, flatMap } from "rxjs/operators";
+import { switchMap, map, filter, flatMap, pluck } from "rxjs/operators";
 
-import {
-  IndividualGrammarDataService,
-  IndividualBlockLanguageDataService,
-  MutateBlockLanguageService,
-} from "../../shared/serverdata";
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import {
   generateBlockLanguage,
@@ -20,6 +15,12 @@ import { prettyPrintBlockLanguage } from "../../shared/block/prettyprint";
 import { GeneratorError } from "../../shared/block/generator/error.description";
 import { prettyPrintGrammar } from "../../shared/syntaxtree";
 import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
+import {
+  FullGrammarGQL,
+  FullBlockLanguageGQL,
+  UpdateBlockLanguageGQL,
+} from "../../../generated/graphql";
+import { objectOmit } from "src/app/shared/util";
 
 @Injectable()
 export class EditBlockLanguageService {
@@ -35,9 +36,9 @@ export class EditBlockLanguageService {
   public prettyPrintedBlockLanguage = "";
 
   constructor(
-    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
-    private _mutateBlockLanguageData: MutateBlockLanguageService,
-    private _individualGrammarData: IndividualGrammarDataService,
+    private _singleBlockLanguageGQL: FullBlockLanguageGQL,
+    private _updateBlockLanguageGQL: UpdateBlockLanguageGQL,
+    private _individualGrammarData: FullGrammarGQL,
     private _activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private _title: Title
@@ -47,11 +48,13 @@ export class EditBlockLanguageService {
       .pipe(
         map((params: ParamMap) => params.get("blockLanguageId")),
         switchMap((id: string) =>
-          this._individualBlockLanguageData.getSingle(id).pipe(first())
+          this._singleBlockLanguageGQL
+            .fetch({ id: id }, { fetchPolicy: "network-only" })
+            .pipe(pluck("data", "blockLanguages", "nodes", 0))
         )
       )
       .subscribe((blockLanguage) => {
-        this._editedSubject.next(blockLanguage);
+        this._editedSubject.next(objectOmit("__typename", blockLanguage));
       });
 
     // Update the title of the page according to the current language
@@ -72,7 +75,9 @@ export class EditBlockLanguageService {
    */
   readonly baseGrammar = this._editedSubject.pipe(
     flatMap((blockLang) =>
-      this._individualGrammarData.getSingle(blockLang.grammarId)
+      this._individualGrammarData
+        .watch({ id: blockLang.grammarId })
+        .valueChanges.pipe(pluck("data", "grammars", "nodes", 0))
     )
   );
 
@@ -106,7 +111,6 @@ export class EditBlockLanguageService {
     if (!changedValue) {
       changedValue = this._editedSubject.value;
     }
-
     // That JSON-wrapping and unwrapping is a dirty hack to ensure that the
     // Angular change detector "sees" a new object.
     this._editedSubject.next(JSON.parse(JSON.stringify(changedValue)));
@@ -128,8 +132,8 @@ export class EditBlockLanguageService {
     if (this.generatorErrors.length === 0) {
       // Fetch the actual grammar that should be used
       this._individualGrammarData
-        .getSingle(this.editedSubject.grammarId, true)
-        .pipe(first())
+        .fetch({ id: this.editedSubject.grammarId })
+        .pipe(pluck("data", "grammars", "nodes", 0))
         .subscribe((g) => {
           try {
             this.generatorErrors.push(...validateGenerator(instructions));
@@ -151,6 +155,9 @@ export class EditBlockLanguageService {
                   instructions,
                   g
                 );
+                // Keep previous root css classes
+                updated.rootCssClasses = blockLanguage.rootCssClasses;
+
                 this._snackBar.open(`Regenerated block language`, "", {
                   duration: 3000,
                 });
@@ -176,7 +183,7 @@ export class EditBlockLanguageService {
    * Saves the current state of the block language
    */
   save() {
-    this._mutateBlockLanguageData.updateSingle(this.editedSubject);
+    this._updateBlockLanguageGQL.mutate(this.editedSubject).toPromise();
   }
 
   /**

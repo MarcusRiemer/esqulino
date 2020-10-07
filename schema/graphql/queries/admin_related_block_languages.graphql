@@ -1,0 +1,6 @@
+query AdminRelatedBlockLanguages($grammarId: ID!) {
+    relatedBlockLanguages(grammarId: $grammarId) {
+        id
+        name
+    }
+}

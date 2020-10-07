@@ -1,9 +1,4 @@
-import {
-  Tree,
-  LanguageDefinition,
-  Language,
-  NodeTypeDescription,
-} from "../syntaxtree";
+import { Tree, LanguageDefinition, Language } from "../syntaxtree";
 
 import {
   BlockLanguageDescription,
@@ -21,6 +16,7 @@ const langEmptyBlocks: LanguageDefinition = {
       types: {
         emptyBlocks: {
           root: {
+            type: "concrete",
             attributes: [
               {
                 name: "cat_a",
@@ -33,9 +29,9 @@ const langEmptyBlocks: LanguageDefinition = {
                 ],
               },
             ],
-          } as NodeTypeDescription,
-          a: {} as NodeTypeDescription,
-          z: {} as NodeTypeDescription,
+          },
+          a: { type: "concrete" },
+          z: { type: "concrete" },
         },
       },
       foreignTypes: {},
@@ -50,6 +46,7 @@ const langModelEmptyBlocks: BlockLanguageDescription = {
   slug: "emptyblocks",
   defaultProgrammingLanguageId: "emptyBlocks",
   editorComponents: [],
+  rootCssClasses: [],
   sidebars: [
     {
       type: "fixedBlocks",

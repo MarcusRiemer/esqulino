@@ -43,7 +43,6 @@ RSpec.describe Identity::Password, type: :model do
     expect(a.password_eql? "hahasicher").to eq true
   end
 
-
   it "can't be persisted with only a user and a valid password" do
     u = create(:user)
     a = Identity::Password.new(user: u, password: "hahasicher")

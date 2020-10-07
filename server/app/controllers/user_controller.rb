@@ -40,8 +40,8 @@ class UserController < ApplicationController
     end
 
     identity = Identity::Identity
-                 .find_by_change_primary_email_token(token)
-                 .first
+               .find_by_change_primary_email_token(token)
+               .first
 
     if (not identity) then
       return error_response("No user was found")
@@ -91,9 +91,9 @@ class UserController < ApplicationController
       validated_identities = current_user.all_validated_emails
 
       identity = Identity::Identity
-                   .where(user_id: current_user.id)
-                   .find_by_email(permited_params[:primary_email])
-                   .first
+                 .where(user_id: current_user.id)
+                 .find_by_email(permited_params[:primary_email])
+                 .first
 
       if (not identity) then
         return error_response("Your account has no linked email with this name")
@@ -116,25 +116,24 @@ class UserController < ApplicationController
     to_response = []
     permited_params = may_perform_params
     # begin
-      permited_params[:list].each do |k|
-        resource_type = k[:resource_type].to_s
-        resource_id = k[:resource_id].to_s
-        policy_action = k[:policy_action].to_s + "?"
-        resource = nil
+    permited_params[:list].each do |k|
+      resource_type = k[:resource_type].to_s
+      resource_id = k[:resource_id].to_s
+      policy_action = k[:policy_action].to_s + "?"
+      resource = nil
 
-        if (not resource_id.eql? "") then
-          resource = resource_type.constantize.find_by(id: resource_id)
-        end
-
-        policy = "#{resource_type}Policy".constantize.new(current_user, resource)
-        to_response << {"perform" => policy.send(policy_action)}
+      if (not resource_id.eql? "") then
+        resource = resource_type.constantize.find_by(id: resource_id)
       end
-      api_array_response(to_response)
+
+      policy = "#{resource_type}Policy".constantize.new(current_user, resource)
+      to_response << { "perform" => policy.send(policy_action) }
+    end
+    api_array_response(to_response)
     # rescue => exception
     #   error_response(exception.message)
     # end
   end
-
 
   private
 
@@ -157,6 +156,6 @@ class UserController < ApplicationController
   end
 
   def api_array_response(to_response)
-    render json: to_response.map { |k| k.transform_keys! { |v| v.to_s.camelize(:lower) }}, status: :ok
+    render json: to_response.map { |k| k.transform_keys! { |v| v.to_s.camelize(:lower) } }, status: :ok
   end
 end

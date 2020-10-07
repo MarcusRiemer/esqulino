@@ -12,9 +12,19 @@
     <h2 *ngIf="!hasImage" class="card-title">
       {{ project.name | currentLanguage }}
     </h2>
+    <ul class="list-inline mb-1">
+      <li
+        *ngFor="let blockLang of project.blockLanguages"
+        class="list-inline-item"
+      >
+        <span class="badge badge-primary">
+          {{blockLang.defaultProgrammingLanguage.name}}
+        </span>
+      </li>
+    </ul>
     <p class="card-text">{{ project.description | currentLanguage }}</p>
     <a
-      [routerLink]="['/editor/', project.slug]"
+      [routerLink]="['/editor/', project.id]"
       class="btn btn-info btn-block btn-edit-project"
     >
       <span class="fa fa-fw fa-pencil" aria-hidden="true"></span>

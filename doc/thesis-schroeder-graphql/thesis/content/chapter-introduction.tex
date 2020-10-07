@@ -1,0 +1,27 @@
+%! Author = Yannick Schröder
+%! Date = 13.05.20
+
+%************************************************
+% Grundlagen
+%************************************************
+\chapter{Einleitung}
+\label{sec:introduction}
+ 
+Ziel dieser Arbeit ist die Migration von REST nach GraphQL in der von Marcus Riemer entwickelten Lehr-Entwicklungsumgebung BlattWerkzeug, mit Evaluierung ob die Migration den Aufwand Wert ist. 
+
+GraphQL ist eine Abfragesprache und serverseitige Runtime zur Implementierung webbasierter APIs. Die Sprache
+stellt eine Alternative zu populären REST-basierten APIs dar, wobei der Kernunterschied die
+Verlagerung der Entscheidung über die genauen Daten, die von API-Aufrufen zurückgegeben werden, von den Servern auf die Clients ist~\cite{introduction}.
+GraphQL wurde 2015 von Facebook als eine laufende Arbeit veröffentlicht~\cite{graphql-first-commit} und im November 2018 von Facebook in die neu gegründete GraphQL Foundation unter dem Dach der gemeinnützigen Linux Foundation ausgegliedert. Es wurde schnell populär, als neue Unternehmen und Hobbyisten begannen, es auszubauen. Schließlich wurde die Technologie von größeren Unternehmen übernommen, beginnend mit GitHub im Jahr 2016 und später von Twitter, Yelp, The New York Times, Airbnb und anderen~\cite{graphql-users}.
+
+Das System hinter BlattWerkzeug hat seit Veröffentlichung im Jahre 2016~\cite{riemer2016} einige Veränderungen durchlebt. Zu Beginn wurde auf dem Client Typescript mit Angular 2 und auf dem Server Ruby mit Sinatra eingesetzt. Im Mai 2016 wurden JSON Schema Dateien in einem Schema Ordner auf Projekt Ebene bereitgestellt~\cite{riemerJSONSchemaCommit}.
+Im Juni 2017 wurde dann der Grundstein für einen Rails Server gelegt~\cite{riemerRailsCommit} und 2 Monate später auf eine PostgreSQL Datenbank umgestellt~\cite{riemerPostgresCommit}. 
+Das System funktioniert einwandfrei. Problematisch ist jedoch, dass im Client die Anforderungen mit der Zeit deutlich diverser wurden und zukünftig noch werden. 
+Das aktuelle System stößt dabei an die Grenzen des noch zu vertretenden Entwicklungsaufwands und läuft damit Gefahr den Entwicklungsaufwand zu lähmen.
+
+Im Kern dieser Arbeit wird eine vorhandene REST-artige Schnittstelle durch eine neuere Technologie (GraphQL) weitestgehend ersetzt. Zudem werden alle Berührungspunkte der REST-artigen Schnittstelle ebenfalls auf die Nutzung von GraphQL angepasst. Dazu gehören neben der naheliegenden Kommunikationsschnittstelle auf dem Server, auch clientseitige Implementierungen, die durch die Migration von GraphQL angepasst werden müssen. 
+Nachfolgend werden Grundlagen beschrieben, deren Kenntnis im späteren Verlauf vorausgesetzt wird. Anschließend werden das aktuelle System bewertet und Anforderungen an ein neues System formuliert. 
+Zuletzt wird die Implementierung von GraphQL
+erläutert und ein Fazit gezogen, ob es eine lohnenswerte Migration für BlattWerkzeug ist.
+ 
+

@@ -1,88 +1,97 @@
+===============
 Block Languages
 ===============
 
-Block Languages are built with specific grammars in mind and can be thought of as an "representation layer" for syntaxtrees. Whilst the task of a grammar is to describe the structure of a tree, the task of a block language is to describe the visual representation. It does this via its own meta-description that may be either generated and maintained by hand or automatically generated from a grammar and some generation instructions.
+Block Languages are generated from grammars and can be thought of as a visualisation function for syntaxtrees. Whilst the task of a grammar is to describe the structure of a tree, the task of a block language is to describe the visual representation.
 
-This section of the manual initially describes the widgets that are available to represent a specific syntax tree. It then continues to describe how meaningful block languages may be automatically generated from a grammar.
+BlattWerkzeug comes with different generators for (block) languages:
 
-Available widgets
------------------
+* A builtin block editor that closely resembles syntax highlighted source code.
+* On the fly generated editors for `Googles Blockly <https://developers.google.com/blockly>`_.
+* A text only output that can be used for code generation.
 
-The formal definition of the available widgets is part of the Typescript-namespace ``VisualBlockDescriptions``. All available widgets are defined as a ``JSON``-object that must at least define the ``blockType``.
+Design Choices, Hacks, Shortcomings and Caveats
+===============================================
 
-Additionally every widget may be styled using arbitrary ``DOM``-properties using the optional ``style``-object. The given properties will be applied directly to the given ``DOM``-nodes, there is currently no support for "real" ``CSS``.
+Some things about grammars and the visualisation are not exactly nice currently.
 
-Constant
-~~~~~~~~
+Virtual Root
+------------
 
-Displays a constant value in the editor. This is meant to be used for keywords or keyword-like delimiters that may never be edited by the user. Constants are routinely meant to be styled with regards to their text colour and similar textual properties.
+Blattwerkzeug assumes that a syntaxtree is actually a tree, not a forest. This is a great match for e.g. ``HTML`` where a document per definition also works with a single root node. But programs in some less fitting languages require the use of a "virtual" root node that has no intuitive meaning for the user. In the case of ``SQL``, this root node could define the general structure of a query like ``SELECT ... FROM ...``::
 
-.. code-block:: json
+    node "sql"."querySelect" {
+      children sequence "select" ::= select
+      children sequence "from" ::= from
+      children sequence "where" ::= where?
+      children sequence "groupBy" ::= groupBy?
+      children sequence "orderBy" ::= orderBy?
+    }
 
-   {
-     "blockType": "constant",
-     "text": "FROM",
-     "style": {
-       "color": "#0000ff",
-       "width": "9ch",
-       "display": "inline-block"
-     }
+There are of course alternative ways to model this. For ``SQL`` it would be possible to define ``FROM`` and the following clauses as children of the ``SELECT`` node. This doesn't change the semantics of the generated program, but it changes the semantics of the created block editor. With the modelling approach taken in the ``sql.querySelect`` example above, each of the components can be swapped out individually. If the ``SELECT`` node would have the other nodes as children, the ``SELECT`` component itself can not be removed without also removing the children.
+
+This kind of modelling with a virtual root node is not excluisve to ``SQL``. For a typical imperative programming language this root node could define child categories for function definitions and the actual ``main`` program.
+
+The builtin block language editor has a special workaround for virtual root nodes builtin. It allows multiple nodes to be defined when a single node is actually dragged, typically from the sidebar. For Blockly, these virtual blocks can not be meaningfully hidden because each block always has a visual representation, even if no terminal symbols are defined at all.
+
+In Blockly this kind of modelling results in an undescripted and seemingly useless block.
+
+.. figure:: examples/blockly/blockly-sql-virtual-root.png
+   :scale: 40%
+
+   Blockly: A visible virtual root block without description.
+
+.. figure:: examples/builtin-editor/builtin-sql-virtual-root.png
+   :scale: 40%
+
+   Builtin Editor: A visible virtual root block without description.
+
+
+Properties or Blocks
+--------------------
+
+Some nodes have properties that may occur either exactly once or optionally once. One prominent example for such a ``boolean`` property is the ``DISTINCT`` keyword in ``SQL``: It may be specified for a whole ``SELECT`` component or as part of a function call. There are different semantically equivalent but structurally different ways to model this in the grammar.
+
+1. Use a ``boolean`` property directly on the ``SELECT`` component. This will be rendered as a checkbox by the backend and is therefore always visible in the block language.
+2. Introduce an empty block type fot the ``DISTINCT`` keyword and allow this as a single occuring element in a childgroup. In that case the user needs to drop a dedicated block into a hole of the ``SELECT`` component.
+
+
+
+Blockly Backend: (Inline) Values are not meant to be continued
+--------------------------------------------------------------
+
+
+
+Blockly Backend: All or none continuation
+-----------------------------------------
+
+Blockly defines compatible inputs and outputs on a per-block level, no matter the context. The outputs of a block also define their orientation (horizontal or vertical), which is not always compatible with BlockWerkzeug. In BlockWerkzeug a single type may be used in two different contexts. One example would be references to tables in ``SQL``.
+
+The following snippet shows, how such a component could be modelled::
+
+   node "sql"."from" {
+     // First: One or more tables
+     children sequence "tables" ::= tableIntroduction+
+     // Afterwards: Sophisticated joins
+     children sequence "joins" ::= innerJoinOn*
    }
 
-.. figure :: screenshots/sql-blocks-constants.png
-
-  Constants in the ``SQL`` language
-
-Interpolated Values
-~~~~~~~~~~~~~~~~~~~
-
-Displays a property of a node that is represented in its block form. Although the result looks pretty much like a constant text on the outside, the value that is actually displayed will be determined depending on the syntaxtree that is loaded.
-
-.. graphviz:: generated/ast-sql-column-name.graphviz
-   :align: center
-   :caption: Tree to visualize
-
-.. code-block:: json
-
-   {
-     "blockType": "interpolated",
-     "property": "columName"
+   node "sql"."tableIntroduction" {
+     prop "name" { string }
    }
 
-.. figure :: screenshots/sql-blocks-interpolated.png
-
-  Interpolated values in the ``SQL`` language
-
-Editable Values
-~~~~~~~~~~~~~~~
-
-This property works almost like an interpolated value: It displays the value of a property. But if the user clicks the value an editor is opened.
-
-.. code-block:: json
-
-   {
-     "blockType": "input",
-     "property": "columName"
+   node "sql"."innerJoinOn" {
+     children sequence "table" ::= tableIntroduction
+     children sequence "on" ::= expression
    }
 
-.. figure :: screenshots/sql-blocks-input.png
+In this example the node ``sql.tableIntroduction`` may have nodes of the same type that follow it (when introducing multiple tables without sophisticated joins) but in the context of ``sql.innerJoinOn`` only a single node of that type is permitted. To the best of my knowledge this can't be expressed with a single type in Blockly.
 
-  Editing a value
+Blockly Backend: All or none inline
+-----------------------------------
 
-Blocks
-~~~~~~
+Blockly allows values to be rendered as either "inline" or "external" inputs.
 
-The actual blocks have no default appearance of their own but they may define child widgets that should be rendered. These blocks usually correspond to distinct types in grammars.
+.. figure:: examples/blockly/blockly-inputs-inline-external.png
 
-Iterating over children
-~~~~~~~~~~~~~~~~~~~~~~~
-
-So far every presented widget worked on atomic properties of a node. Child groups are rendered using an iterator which specifies the name of the child group to render.
-
-Block Language Generation
--------------------------
-
-Although it is possible to create block languages by hand, this approach does not scale too nicely with the idea of dynamically restricted programming environments. It would mean that e.g. different variants of ``SQL`` (that all share a common grammar) would require loads of duplicated effort to maintain.
-
-
-
+   Google Blockly example for internal and external inputs.

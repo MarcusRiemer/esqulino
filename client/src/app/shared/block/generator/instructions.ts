@@ -9,7 +9,10 @@ import {
   TypeInstructionsDescription,
 } from "./instructions.description";
 
-import { NodeConcreteTypeDescription } from "../../syntaxtree";
+import {
+  NodeConcreteTypeDescription,
+  NodeVisualTypeDescription,
+} from "../../syntaxtree";
 
 /**
  * A safe way to access generation instructions. Silently returns empty
@@ -74,7 +77,10 @@ export class TypeInstructions {
   /**
    * The types for that specific instructions exist.
    */
-  relevantAttributes(i: number, typeDesc: NodeConcreteTypeDescription) {
+  relevantAttributes(
+    i: number,
+    typeDesc: NodeConcreteTypeDescription | NodeVisualTypeDescription
+  ) {
     const block = this._type.blocks[i];
     const order = block && block.attributeMapping;
     if (!order || order === "grammar") {

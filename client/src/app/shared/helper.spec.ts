@@ -18,13 +18,15 @@ export function emptyProject(
     description: { en: "Dynamically created for client side specs" },
     public: true,
     projectUsesBlockLanguages: [],
-    activeDatabase: "default",
-    availableDatabases: {},
+    defaultDatabase: {
+      id: "spec",
+      name: "specDb",
+    },
     blockLanguages: [],
     grammars: [],
     codeResources: [],
     schema: [],
-    sources: [],
+    projectSources: [],
   };
 
   return Object.assign(defaultDescription, override);
@@ -43,6 +45,7 @@ export function emptyBlockLanguage(
   const defaultDescription: BlockLanguageDescription = {
     id: "test",
     slug: "test",
+    rootCssClasses: [],
     defaultProgrammingLanguageId: "test",
     name: "Empty BlockLanguage",
     editorBlocks: [],

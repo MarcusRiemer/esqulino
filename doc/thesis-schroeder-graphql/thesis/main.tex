@@ -1,0 +1,275 @@
+% **************************************************
+% Information and Commands for Reuse
+% **************************************************
+\newcommand{\thesisTitle}{Migration von REST nach GraphQL in einer bestehenden Webapplikation}
+\newcommand{\thesisSubtitle}{Bachelor-Thesis im Fachbereich Informatik}
+\newcommand{\thesisDate}{09. September 2020}
+%\newcommand{\thesisVersion}{\input{GIT_REV}}
+
+\newcommand{\thesisAuthor}{Yannick Schröder}
+\newcommand{\thesisAuthorStudentNumber}{Informatik 102751}
+\newcommand{\thesisAuthorEmail}{inf102751@fh-wedel.de}
+
+\newcommand{\thesisFirstReviewer}{Dr. Michael Predeschly}
+\newcommand{\thesisFirstReviewerEmail}{\protect{mpr@fh-wedel.de}}
+
+\newcommand{\thesisSecondReviewer}{M.~Sc. Marcus Riemer}
+\newcommand{\thesisSecondReviewerEmail}{\protect{mri@fh-wedel.de}}
+
+\newcommand{\thesisUniversity}{\protect{Fachhochschule Wedel}}
+\newcommand{\thesisUniversityCity}{Wedel}
+\newcommand{\thesisUniversityStreetAddress}{Feldstra{\ss}e 143}
+\newcommand{\thesisUniversityPostalCode}{22880}
+
+
+
+% **************************************************
+% Load and Configure Packages
+% **************************************************
+\usepackage[utf8]{inputenc}       % defines file's character encoding
+\usepackage[ngerman]{babel}       % babel system, adjust the language of the content
+\usepackage[                      % clean thesis style
+	figuresep=colon,%
+	sansserif=false,%
+	hangfigurecaption=false,%
+	hangsection=false,%
+	hangsubsection=false,%
+	colorize=full,%
+	colortheme=bluemagenta,%
+	bibsys=bibtex,%
+	bibfile=bib-refs,%
+	bibstyle=alphabetic,%
+]{sty/cleanthesis}
+
+\hypersetup{                      % setup the hyperref-package options
+	pdftitle={\thesisTitle},      %   - title (PDF meta)
+	pdfsubject={\thesisSubtitle}, %   - subject (PDF meta)
+	pdfauthor={\thesisAuthor},    %   - author (PDF meta)
+	plainpages=false,             %   -
+	colorlinks=false,             %   - colorize links?
+	pdfborder={0 0 0},            %   -
+	breaklinks=true,              %   - allow line break inside links
+	bookmarksnumbered=true,       %
+	bookmarksopen=true            %
+}
+
+% Font and Color
+\cthesissetcolor{cmyk}{1, .87, .27, .12}{1, .87, .27, .12}
+\usepackage{fontspec}
+
+% \setmainfont{Dax Pro}
+% \renewcommand{\helv}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
+% \renewcommand{\book}{\fontspec{Dax Pro}\fontsize{12}{14}\selectfont}
+% \renewcommand{\tgherosfont}{\fontspec{Dax Pro}}
+% \renewcommand{\thesischapterfont}{\color{ctcolorblack}\huge\fontspec{Dax Pro}}
+
+% \renewcommand{\ttfamily}{\fontspec{Ubuntu Mono}}
+
+\renewcommand{\cftchapfont}{\normalfont\bfseries}
+\renewcommand{\cftchappagefont}{\normalfont\bfseries}
+\usepackage{multicol}
+\addtokomafont{caption}{\normalfont}
+\addtokomafont{captionlabel}{\normalfont}
+\urlstyle{rm}
+\makeatletter
+\def\blx@maxline{77}
+\makeatother
+
+\usepackage{hyperref}
+\usepackage{nameref}
+
+\makeatletter
+\let\orgdescriptionlabel\descriptionlabel
+\renewcommand*{\descriptionlabel}[1]{%
+	\let\orglabel\label
+	\let\label\@gobble
+	\phantomsection
+	%\edef\@currentlabel{#1}%
+    \edef\@currentlabelname{#1}%
+	\let\label\orglabel
+	\orgdescriptionlabel{#1}%
+}
+\makeatother
+
+% **************************************************
+% Additional Utilities
+% **************************************************
+
+\newcommand{\fullref}[1]{\ref{#1}~\enquote{\nameref{#1}}}
+
+
+% \inlinec for inline code
+\NewDocumentCommand{\inlinec}{v}{%
+\texttt{#1}%
+}
+
+% Fix quotes
+\usepackage{csquotes}
+\MakeOuterQuote{"}
+
+% Code
+\usepackage{listings,lstautogobble}
+
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\definecolor{orange}{rgb}{1, 0.722, 0.424}
+
+\lstset{
+	numberstyle=\tiny
+}
+
+
+\lstdefinelanguage{SQL}{
+	keywords={INSERT, UPDATE, DELETE, SELECT, FROM, WHERE, GROUP BY, SET, INTO, VALUES, LIMIT},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={strftime},
+	ndkeywordstyle=\color{OliveGreen}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstdefinelanguage{HTML}{
+	keywords={select, option, h1, template, h2, div, ul, li, table, thead, tr, th, td, tbody, tr, value, innerHtml, class, id},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={for, in, include, endfor, endif, else, if, ngIf, ngFor, each},
+ndkeywordstyle=\color{OliveGreen}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstdefinelanguage{JavaScript}{
+	keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, let, const, if, in, while, do, else, case, break, class, interface},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, number, string, throw, extends, implements, import, this, constructor, private, object, readonly},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstdefinelanguage{Ruby}{
+	keywords={do, def, end, if, else, elsif, not, return, class, field, argument},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={each, map, zip},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{\#},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstset{
+	backgroundcolor=\color{white},
+	extendedchars=true,
+	basicstyle=\scriptsize\ttfamily,
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	stepnumber=1,
+	numberstyle=\tiny\ttfamily,
+	numbersep=9pt,
+	tabsize=4,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b,
+	autogobble=true,
+	frame=single
+}
+
+
+
+\usepackage[simplified]{sty/pgf-umlcd}
+\usepackage{float}
+% https://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD
+\usepackage{xfrac}
+\usepackage{svg}
+\usepackage{amsmath}
+
+% https://tex.stackexchange.com/a/42620
+\usepackage{amssymb}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+\usepackage{nameref}
+\usepackage[multidot]{grffile}
+\usepackage{xparse}
+\usepackage{multirow}
+
+% **************************************************
+% Document CONTENT
+% **************************************************
+\begin{document}
+
+% --------------------------
+% rename document parts
+% --------------------------
+\renewcaptionname{ngerman}{\figurename}{Abb.}
+\renewcaptionname{ngerman}{\tablename}{Tab.}
+
+% --------------------------
+% Front matter
+% --------------------------
+\pagenumbering{roman}             % roman page numbing (invisible for empty page style)
+\pagestyle{empty}                 % no header or footers
+\input{content/titlepages}        % INCLUDE: all titlepages
+\cleardoublepage
+%
+\pagestyle{plain}                 % display just page numbers
+%input{content/abstract}          % INCLUDE: the abstracts (english and german)
+\cleardoublepage
+%
+\pdfbookmark[0]{Inhaltsverzeichnis}{Inhaltsverzeichnis}
+\setcounter{tocdepth}{2}          % define depth of toc
+\tableofcontents                  % display table of contents
+\cleardoublepage
+
+% --------------------------
+% Body matter
+% --------------------------
+\pagenumbering{arabic}            % arabic page numbering
+\setcounter{page}{1}              % set page counter
+\pagestyle{maincontentstyle}      % fancy header and footer
+
+\input{content/chapter-introduction}
+\input{content/chapter-basics}
+\input{content/chapter-requirements}
+\input{content/chapter-implementation}
+
+
+%\appendix{}
+
+\input{content/appendix-bliography}
+%\input{content/appendix-exercises}
+%\input{content/appendix-cd-rom}
+
+% \listoffigures
+% \cleardoublepage
+
+% \listoftables
+% \cleardoublepage
+
+\input{content/appendix-declaration}
+\cleardoublepage

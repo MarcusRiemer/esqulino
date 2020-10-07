@@ -46,36 +46,36 @@ RSpec.describe Grammar, type: :model do
     end
 
     it "root" do
-      root = { "languageName" => "l", "typeName" => "t"}
+      root = { "languageName" => "l", "typeName" => "t" }
       res = FactoryBot.build(
         :grammar,
         root: root,
         types: nil,
         foreign_types: nil
       )
-      expect(res.document).to eq({"root" => root})
+      expect(res.document).to eq({ "root" => root })
     end
 
     it "root and types" do
-      root = { "languageName" => "l", "typeName" => "t"}
+      root = { "languageName" => "l", "typeName" => "t" }
       res = FactoryBot.build(
         :grammar,
         root: root,
         types: Hash.new,
         foreign_types: nil
       )
-      expect(res.document).to eq({"root" => root, "types" => Hash.new})
+      expect(res.document).to eq({ "root" => root, "types" => Hash.new })
     end
 
     it "root, types and foreign_types" do
-      root = { "languageName" => "l", "typeName" => "t"}
+      root = { "languageName" => "l", "typeName" => "t" }
       res = FactoryBot.build(
         :grammar,
         root: root,
         types: Hash.new,
         foreign_types: Hash.new
       )
-      expect(res.document).to eq({"root" => root, "types" => Hash.new, "foreign_types" => Hash.new})
+      expect(res.document).to eq({ "root" => root, "types" => Hash.new, "foreign_types" => Hash.new })
     end
   end
 
@@ -107,22 +107,22 @@ RSpec.describe Grammar, type: :model do
 
       it "Empty local language" do
         g = FactoryBot.build(:grammar, types: { "l" => {} })
-        expect(g.all_types).to eq({"l" => {}})
+        expect(g.all_types).to eq({ "l" => {} })
       end
 
       it "Empty foreign language" do
         g = FactoryBot.build(:grammar, foreign_types: { "l" => {} })
-        expect(g.all_types).to eq({"l" => {}})
+        expect(g.all_types).to eq({ "l" => {} })
       end
 
       it "Identical empty foreign and local language" do
         g = FactoryBot.build(:grammar, types: { "l" => {} }, foreign_types: { "l" => {} })
-        expect(g.all_types).to eq({"l" => {}})
+        expect(g.all_types).to eq({ "l" => {} })
       end
 
       it "Different empty foreign and local language" do
         g = FactoryBot.build(:grammar, types: { "l1" => {} }, foreign_types: { "l2" => {} })
-        expect(g.all_types).to eq({"l1" => {}, "l2" => {}})
+        expect(g.all_types).to eq({ "l1" => {}, "l2" => {} })
       end
 
       it "Local language with single type" do
@@ -132,7 +132,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+        expect(g.all_types).to eq({ "l" => { "t" => type_empty } })
       end
 
       it "Foreign language with single type" do
@@ -142,7 +142,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+        expect(g.all_types).to eq({ "l" => { "t" => type_empty } })
       end
 
       it "Local and foreign language with identical single type" do
@@ -158,7 +158,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+        expect(g.all_types).to eq({ "l" => { "t" => type_empty } })
       end
 
       it "Local precedence: Termninal a" do
@@ -174,7 +174,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t" => type_terminal_a } })
+        expect(g.all_types).to eq({ "l" => { "t" => type_terminal_a } })
       end
 
       it "Local precedence: Empty" do
@@ -190,7 +190,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t" => type_empty } })
+        expect(g.all_types).to eq({ "l" => { "t" => type_empty } })
       end
 
       it "Local precedence: Termninal a, additional local" do
@@ -207,7 +207,7 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t1" => type_terminal_a, "t2" => type_terminal_a } })
+        expect(g.all_types).to eq({ "l" => { "t1" => type_terminal_a, "t2" => type_terminal_a } })
       end
 
       it "Local precedence: Termninal a, additional foreign" do
@@ -224,11 +224,11 @@ RSpec.describe Grammar, type: :model do
                                }
                              })
 
-        expect(g.all_types).to eq({"l" => {"t1" => type_terminal_a, "t2" => type_terminal_a } })
+        expect(g.all_types).to eq({ "l" => { "t1" => type_terminal_a, "t2" => type_terminal_a } })
       end
     end
 
-    context "regenerate_foreign_types!" do
+    context "refresh_from_references!" do
       it "doesn't extend anything" do
         g = FactoryBot.build(:grammar)
 
@@ -266,6 +266,36 @@ RSpec.describe Grammar, type: :model do
 
         expect(origin.foreign_types).to eq({ "l" => { "t" => type_empty } })
       end
+
+      it "The base grammar is visualized" do
+        origin = FactoryBot.create(:grammar)
+        target = FactoryBot.create(:grammar, types: { "l" => { "t" => type_empty } })
+        origin.grammar_reference_origins.create(target: target, reference_type: :visualize)
+
+        origin.refresh_from_references!
+
+        expect(origin.foreign_types).to eq({ "l" => { "t" => type_empty } })
+      end
+
+      it "Multiple inclusions" do
+        origin = FactoryBot.create(:grammar)
+        target_1 = FactoryBot.create(:grammar)
+        target_2 = FactoryBot.create(:grammar)
+        origin.grammar_reference_origins.create(target: target_1, reference_type: :include_types)
+        origin.grammar_reference_origins.create(target: target_2, reference_type: :include_types)
+
+        expect { origin.refresh_from_references! }.to raise_error EsqulinoError::Base
+      end
+
+      it "Mixed references" do
+        origin = FactoryBot.create(:grammar)
+        target_1 = FactoryBot.create(:grammar)
+        target_2 = FactoryBot.create(:grammar)
+        origin.grammar_reference_origins.create(target: target_1, reference_type: :include_types)
+        origin.grammar_reference_origins.create(target: target_2, reference_type: :visualize)
+
+        expect { origin.refresh_from_references! }.to raise_error EsqulinoError::Base
+      end
     end
   end
 
@@ -293,6 +323,39 @@ RSpec.describe Grammar, type: :model do
 
       grammar.reload
       expect(grammar.generated_from_id).to eq resource.id
+    end
+
+    it "regeneration from code_resource does not override foreign types" do
+      foreign_types = {
+        "foreign" => {
+          "elsewhere" => {
+            "type" => "concrete",
+            "attributes" => []
+          }
+        }
+      }
+
+      resource = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: resource, foreign_types: foreign_types)
+
+      expect(grammar.types).to eq Hash.new
+      expect(grammar.foreign_types).to eq foreign_types
+      expect(grammar.root).to be_nil
+
+      ide_service = IdeService.instantiate(allow_mock: false)
+      did_change = grammar.regenerate_from_code_resource!(ide_service)
+
+      expect(did_change).to eq [grammar]
+      expect(grammar.root).to eq({ "languageName" => "lang", "typeName" => "root" })
+      expect(grammar.types).to eq({
+                                    "lang" => {
+                                      "root" => {
+                                        "type" => "concrete",
+                                        "attributes" => []
+                                      }
+                                    }
+                                  })
+      expect(grammar.foreign_types).to eq foreign_types
     end
 
     it "can regenerate" do
@@ -328,39 +391,40 @@ RSpec.describe Grammar, type: :model do
     end
 
     context "references" do
-      def grammar_document_includes(*grammar_ids)
+      def grammar_document_references(category_name, *grammar_ids)
         ({
-           "language"=> "MetaGrammar",
-           "name"=> "grammar",
-           "properties"=> {
-             "name"=> "lang"
-           },
-           "children" => {
-             "includes" => [
-               {
-                 "language" => "MetaGrammar",
-                 "name" => "grammarIncludes",
-                 "children" => {
-                   "includes" => grammar_ids.map do |id|
-                     ({
-                        "language" => "MetaGrammar",
-                        "name" => "grammarRef",
-                        "properties" => {
-                          "grammarId" => id
-                        }
-                      })
-                   end
-                 }
-               }
-             ]
-           }
-         })
+          "language" => "MetaGrammar",
+          "name" => "grammar",
+          "properties" => {
+            "name" => "lang"
+          },
+          "children" => {
+            category_name => [
+              {
+                "language" => "MetaGrammar",
+                "name" => "grammarIncludes",
+                "children" => {
+                  "includes" => grammar_ids.map do |id|
+                    ({
+                      "language" => "MetaGrammar",
+                      "name" => "grammarRef",
+                      "properties" => {
+                        "grammarId" => id
+                      }
+                    })
+                  end
+                }
+              }
+            ]
+          }
+        })
       end
 
       it "ensure that the AST leads to 'include' instructions" do
         exp_uuid = "f8528b38-cdee-4539-ac7a-b90fe0da6e37"
 
-        res = FactoryBot.build(:code_resource, :meta_grammar, ast: grammar_document_includes(exp_uuid))
+        res = FactoryBot.build(:code_resource, :meta_grammar,
+                               ast: grammar_document_references("includes", exp_uuid))
         expect(res.ast).to validate_against "NodeDescription"
 
         compiled_grammar_description = JSON.parse res.emit_ast!(IdeService.guaranteed_instance)
@@ -370,7 +434,21 @@ RSpec.describe Grammar, type: :model do
       it "no previous references, new code resource references" do
         inc_1 = FactoryBot.create(:grammar)
 
-        resource = FactoryBot.create(:code_resource, :meta_grammar, ast: grammar_document_includes(inc_1.id))
+        resource = FactoryBot.create(:code_resource, :meta_grammar,
+                                     ast: grammar_document_references("includes", inc_1.id))
+
+        grammar = FactoryBot.create(:grammar, generated_from: resource)
+
+        grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
+
+        expect(grammar.targeted_grammars).to match_array [inc_1]
+      end
+
+      it "no previous references, new code resource visualization" do
+        inc_1 = FactoryBot.create(:grammar)
+
+        resource = FactoryBot.create(:code_resource, :meta_grammar,
+                                     ast: grammar_document_references("visualizes", inc_1.id))
         grammar = FactoryBot.create(:grammar, generated_from: resource)
 
         grammar.regenerate_from_code_resource!(IdeService.guaranteed_instance)
@@ -382,7 +460,8 @@ RSpec.describe Grammar, type: :model do
         inc_1 = FactoryBot.create(:grammar)
         inc_2 = FactoryBot.create(:grammar)
 
-        resource = FactoryBot.create(:code_resource, :meta_grammar, ast: grammar_document_includes(inc_2.id))
+        resource = FactoryBot.create(:code_resource, :meta_grammar,
+                                     ast: grammar_document_references("includes", inc_2.id))
         grammar = FactoryBot.create(:grammar, generated_from: resource)
 
         grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
@@ -392,15 +471,14 @@ RSpec.describe Grammar, type: :model do
         expect(grammar.targeted_grammars).to match_array [inc_2]
       end
     end
-
   end
 
   context "references to other grammars" do
     it "doesn't have any references at all" do
       g = create(:grammar)
 
-      expect(g.grammar_reference_origins). to eq []
-      expect(g.targeted_grammars). to eq []
+      expect(g.grammar_reference_origins).to eq []
+      expect(g.targeted_grammars).to eq []
     end
 
     it "includes types of another grammar" do
@@ -414,6 +492,8 @@ RSpec.describe Grammar, type: :model do
 
       expect(origin.grammar_reference_origins).to eq [reference]
       expect(origin.targeted_grammars).to eq [target]
+      expect(origin.includes_references).to eq [reference]
+      expect(origin.visualizes_references).to eq []
     end
 
     it "adds includes" do
@@ -432,6 +512,9 @@ RSpec.describe Grammar, type: :model do
       grammar.grammar_reference_origins.clear
 
       expect(grammar.grammar_reference_origins).to eq []
+      expect(grammar.includes_references).to eq []
+      expect(grammar.visualizes_references).to eq []
+
       expect(GrammarReference.all).to eq []
       expect(Grammar.all).to eq [grammar, inc_1]
     end
@@ -449,6 +532,8 @@ RSpec.describe Grammar, type: :model do
 
       expect(ref_1).to eq ref_1_again
       expect(grammar.targeted_grammars).to eq [inc_1]
+      expect(grammar.includes_references).to eq [ref_1_again]
+      expect(grammar.visualizes_references).to eq []
     end
 
     it "replaces an existing includes with a new includes" do
@@ -473,6 +558,9 @@ RSpec.describe Grammar, type: :model do
       grammar.reload # Dependant relationships are cached
 
       expect(grammar.targeted_grammars).to eq [inc_2]
+      expect(grammar.includes_references).to eq [ref_2]
+      expect(grammar.visualizes_references).to eq []
+
       expect(GrammarReference.all).to match_array [ref_2]
       expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
     end
@@ -508,29 +596,12 @@ RSpec.describe Grammar, type: :model do
       grammar.reload # Dependant relationships are cached
 
       expect(ref_1_orig).to eq ref_1
-      expect(grammar.targeted_grammars).to eq [inc_1, inc_2]
+      expect(grammar.targeted_grammars).to match_array [inc_1, inc_2]
+      expect(grammar.includes_references).to match_array [ref_1, ref_2]
+      expect(grammar.visualizes_references).to match_array []
+
       expect(GrammarReference.all).to match_array [ref_1, ref_2]
       expect(Grammar.all).to match_array [grammar, inc_1, inc_2]
-    end
-  end
-
-  describe "to_full_api_response" do
-    it "Includes empty references" do
-      grammar = FactoryBot.create(:grammar)
-
-      full_response = grammar.to_full_api_response
-      expect(full_response).to validate_against "GrammarDescription"
-      expect(full_response["includes"]).to match_array([])
-    end
-
-    it "Includes a single reference" do
-      grammar = FactoryBot.create(:grammar)
-      inc_1 = FactoryBot.create(:grammar)
-      ref_1 = grammar.grammar_reference_origins.create(target: inc_1, reference_type: "include_types")
-
-      full_response = grammar.to_full_api_response
-      expect(full_response).to validate_against "GrammarDescription"
-      expect(full_response["includes"]).to match_array([inc_1.id])
     end
   end
 end

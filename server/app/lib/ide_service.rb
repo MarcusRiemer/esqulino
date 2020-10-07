@@ -31,7 +31,7 @@ class BaseIdeService
   # Emits the block visualization instructions for the given block
   # language.
   def emit_generated_blocks(block_language)
-    generator_description = block_language.model['localGeneratorInstructions']
+    generator_description = block_language.local_generator_instructions
     if (generator_description)
       ensure_valid_document(
         "BlockLanguageGeneratorDocument",
@@ -47,27 +47,32 @@ class BaseIdeService
         block_language.to_list_api_response
       )
 
-      execute_request({
-                        "type" => "emitGeneratedBlocks",
-                        "block_language" => block_language_description,
-                        "generator" => generator_description,
-                        "grammar" => grammar_description
-                      })
+      json_result = execute_request({
+                                      "type" => "emitGeneratedBlocks",
+                                      "block_language" => block_language_description,
+                                      "generator" => generator_description,
+                                      "grammar" => grammar_description
+                                    })
+
+      return json_result.transform_keys { |k| k.underscore }
     else
       nil
     end
   end
 
-  # Finds out which other code resources are referenced by the given
+  # Finds out which other resources are referenced by the given
   # code resource
-  def referenced_code_resource_ids(code_resource)
+  # @param code_resource [CodeResource]
+  #   The code resource that is analyzed
+  # @param search_type ["referencedCodeResources"|"referencedGrammars"]
+  def referenced_resource_ids(code_resource, search_type)
     grammar_document = code_resource
-                         .block_language
-                         .grammar
-                         .document
-                         .transform_keys{ |k| k.camelize(:lower) }
+                       .block_language
+                       .grammar
+                       .document
+                       .transform_keys { |k| k.camelize(:lower) }
     execute_request({
-                      "type" => "referencedCodeResources",
+                      "type" => search_type,
                       "ast" => code_resource.ast,
                       "grammar" => grammar_document
                     })
@@ -75,7 +80,7 @@ class BaseIdeService
 
   # Checks whether the IDE-service is available
   def ping!
-    execute_request({ "type" => "ping"}) == "pong"
+    execute_request({ "type" => "ping" }) == "pong"
   end
 
   # Communicates the given request to the IDE service.
@@ -197,14 +202,13 @@ class MockIdeService < BaseIdeService
   end
 
   def emit_generated_blocks(block_language)
-    result = super
-    if not result.nil?
+    if block_language and block_language.local_generator_instructions
       return ({
-                "editorBlocks" => [],
-                "editorComponents" => [],
-                "sidebars" => [],
-                "rootCssClasses" => []
-              })
+        "editor_blocks" => [],
+        "editor_components" => [],
+        "sidebars" => [],
+        "root_css_classes" => []
+      })
     else
       return nil
     end

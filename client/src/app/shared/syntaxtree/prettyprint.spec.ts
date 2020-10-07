@@ -171,6 +171,22 @@ describe("Grammar PrettyPrinter", () => {
     expect(r).toEqual([`prop "i2" { integer ≤ 2 }`]);
   });
 
+  it('prop "i2" { integer ≤ 2 }', () => {
+    const r = p.prettyPrintProperty({
+      name: "i2",
+      type: "property",
+      base: "integer",
+      restrictions: [
+        {
+          type: "maxInclusive",
+          value: 2,
+        },
+      ],
+    });
+
+    expect(r).toEqual([`prop "i2" { integer ≤ 2 }`]);
+  });
+
   it("Type References & Cardinalities", () => {
     const parentType: QualifiedTypeName = {
       languageName: "spec",

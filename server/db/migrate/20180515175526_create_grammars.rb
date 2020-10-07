@@ -1,6 +1,6 @@
 class CreateGrammars < ActiveRecord::Migration[5.1]
   def change
-    create_table :grammars, id: :uuid  do |t|
+    create_table :grammars, id: :uuid do |t|
       t.string :name, null: false
       t.string :slug, null: false
       t.jsonb :model, null: false

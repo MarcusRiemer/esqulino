@@ -3,19 +3,14 @@
 ##################################
 
 # Full path of typescript-json-schema
-TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/.bin/ts-json-schema-generator
-
-# Once more: Hacking along with a custom version of the schema generator.
-# This time due to conditional types, see the github repo for details
-# https://github.com/vega/ts-json-schema-generator/pull/39
-# TYPESCRIPT_JSON_SCHEMA_BIN = ./node_modules/ts-json-schema-generator/bin/ts-json-schema-generator
+TYPESCRIPT_JSON_SCHEMA_BIN = npx ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceDescription.json CodeResourceRequestUpdateDescription.json GrammarDescription.json GrammarDocument.json GrammarListDescription.json GrammarRequestUpdateDescription.json NewsDescription.json NewsFrontpageDescription.json NewsUpdateDescription.json NodeDescription.json ProjectCreationRequest.json ProjectDescription.json ProjectFullDescription.json ProjectListDescription.json ProjectSourceDescription.json ProjectUpdateDescription.json ProjectUsesBlockLanguageDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json QualifiedTypeName.json BlockLanguageGeneratorDocument.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceRequestUpdateDescription.json GrammarDocument.json NodeDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json QualifiedTypeName.json BlockLanguageGeneratorDocument.json BlockLanguageSidebarsDescription.json BlockLanguageEditorBlocksDescription.json BlockLanguageEditorComponentsDescription.json
 
-##################################
-# Not so nice: Repeated rules
-##################################
+# How to generate a JSON description from a source file
+%.json : %.ts
+	$(CONVERT_COMMAND)
 
 define CONVERT_COMMAND
 	@echo "Generating $(notdir $(basename $@)).json"
@@ -24,98 +19,48 @@ define CONVERT_COMMAND
 	@mv "$@.tmp" "$@"
 endef
 
+
 ArbitraryQueryRequestDescription.json : $(SRC_PATH)/shared/syntaxtree/sql/query.description.ts
 	$(CONVERT_COMMAND)
-
-ProjectDescription.json : $(SRC_PATH)/shared/project.description.ts
-	$(CONVERT_COMMAND)
-
-ProjectFullDescription.json : $(SRC_PATH)/shared/project.description.ts
-	$(CONVERT_COMMAND)
-
-ProjectUpdateDescription.json : $(SRC_PATH)/shared/project.description.ts
-	$(CONVERT_COMMAND)
-
-ProjectCreationRequest.json : $(SRC_PATH)/shared/project.description.ts
-	$(CONVERT_COMMAND)
-
-ProjectListDescription.json : $(SRC_PATH)/shared/project.description.ts
-	$(CONVERT_COMMAND)
-
-ProjectUsesBlockLanguageDescription.json : $(SRC_PATH)/shared/project.description.ts
-	$(CONVERT_COMMAND)
-
-ProjectSourceDescription.json : $(SRC_PATH)/shared/project.description.ts
-	$(CONVERT_COMMAND)
-
 AlterSchemaRequestDescription.json : $(SRC_PATH)/shared/schema/table-commands.description.ts
 	$(CONVERT_COMMAND)
-
 TableDescription.json : $(SRC_PATH)/shared/schema/schema.description.ts
 	$(CONVERT_COMMAND)
-
 BlockLanguageDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
-
 BlockLanguageListDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
-
 BlockLanguageListItemDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
-
 BlockLanguageListResponseDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
-
 BlockLanguageDocument.json : $(SRC_PATH)/shared/block/block-language.description.ts $(SRC_PATH)/shared/block/block.description.ts
 	$(CONVERT_COMMAND)
-
 BlockLanguageGeneratorDocument.json: $(SRC_PATH)/shared/block/generator/generator.description.ts $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
-
 NodeDescription.json : $(SRC_PATH)/shared/syntaxtree/syntaxtree.description.ts
 	$(CONVERT_COMMAND)
-
 CodeResourceDescription.json : $(SRC_PATH)/shared/syntaxtree/coderesource.description.ts
 	$(CONVERT_COMMAND)
-
 CodeResourceRequestUpdateDescription.json : $(SRC_PATH)/shared/syntaxtree/coderesource.description.ts
 	$(CONVERT_COMMAND)
-
 RequestTabularInsertDescription.json : $(SRC_PATH)/shared/schema/schema.description.ts
 	$(CONVERT_COMMAND)
-
 ResponseTabularInsertDescription.json : $(SRC_PATH)/shared/schema/schema.description.ts
 	$(CONVERT_COMMAND)
-
 GrammarDocument.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 	$(CONVERT_COMMAND)
-
-GrammarDescription.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
-	$(CONVERT_COMMAND)
-
-GrammarListDescription.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
-	$(CONVERT_COMMAND)
-
-GrammarRequestUpdateDescription.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
-	$(CONVERT_COMMAND)
-
-NewsDescription.json : $(SRC_PATH)/shared/news.description.ts
-	$(CONVERT_COMMAND)
-
-NewsUpdateDescription.json : $(SRC_PATH)/shared/news.description.ts
-	$(CONVERT_COMMAND)
-
-NewsFrontpageDescription.json : $(SRC_PATH)/shared/news.description.ts
-	$(CONVERT_COMMAND)
-
 ServerProviderDescription.json : $(SRC_PATH)/shared/auth/provider.description.ts
 	$(CONVERT_COMMAND)
-
 UnexpectedLogoutDescription.json : $(SRC_PATH)/shared/error.description.ts
 	$(CONVERT_COMMAND)
-
 NamedLanguages.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 	$(CONVERT_COMMAND)
-
 QualifiedTypeName.json : $(SRC_PATH)/shared/syntaxtree/syntaxtree.description.ts
+	$(CONVERT_COMMAND)
+BlockLanguageSidebarsDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
+	$(CONVERT_COMMAND)
+BlockLanguageEditorBlocksDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
+	$(CONVERT_COMMAND)
+BlockLanguageEditorComponentsDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)

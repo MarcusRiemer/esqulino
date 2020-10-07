@@ -1,4 +1,3 @@
-
 require 'rails_helper'
 
 RSpec.describe "user controller" do
@@ -54,10 +53,10 @@ RSpec.describe "user controller" do
       expect(User.find(identity.user_id).email).to eq(identity.uid)
 
       post '/api/user/send_change_email',
-        :headers => json_headers,
-        :params => {
-          primaryEmail: identity2.uid
-        }.to_json
+           :headers => json_headers,
+           :params => {
+             primaryEmail: identity2.uid
+           }.to_json
 
       expect(response.status).to eq(200)
 
@@ -72,10 +71,10 @@ RSpec.describe "user controller" do
 
       it 'logged out' do
         post '/api/user/send_change_email',
-          :headers => json_headers,
-          :params => {
-            primaryEmail: "test@web.de"
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               primaryEmail: "test@web.de"
+             }.to_json
 
         expect(response.status).to eq(401)
       end
@@ -90,10 +89,10 @@ RSpec.describe "user controller" do
         expect(User.find(identity.user_id).email).to eq(identity.uid)
 
         post '/api/user/send_change_email',
-          :headers => json_headers,
-          :params => {
-            primaryEmail: identity2.uid
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               primaryEmail: identity2.uid
+             }.to_json
 
         expect(response.status).to eq(401)
         expect(User.find(identity.user_id).email).not_to eq(identity2.uid)
@@ -109,10 +108,10 @@ RSpec.describe "user controller" do
         expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
         post '/api/user/send_change_email',
-          :headers => json_headers,
-          :params => {
-            primaryEmail: "not_existing@web.de"
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               primaryEmail: "not_existing@web.de"
+             }.to_json
 
         expect(response.status).to eq(401)
         expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
@@ -128,10 +127,10 @@ RSpec.describe "user controller" do
         expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
         post '/api/user/send_change_email',
-          :headers => json_headers,
-          :params => {
-            primaryEmail: identity2.uid
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               primaryEmail: identity2.uid
+             }.to_json
 
         get "/api/user/change_primary_email/invalid"
         expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
@@ -148,10 +147,10 @@ RSpec.describe "user controller" do
         expect(User.find_by(id: identity.user_id)[:email]).to eq(identity.uid)
 
         post '/api/user/send_change_email',
-          :headers => json_headers,
-          :params => {
-            primaryEmail: identity2.uid
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               primaryEmail: identity2.uid
+             }.to_json
 
         expired = Identity::Identity.find_by(uid: identity2.uid)
         expired.set_primary_email_token_expired
@@ -169,13 +168,12 @@ RSpec.describe "user controller" do
 
     it "valid" do
       set_access_token(identity.user)
-      expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
       patch '/api/user/change_username',
-        :headers => json_headers,
-        :params => {
-          displayName: "New name"
-        }.to_json
+            :headers => json_headers,
+            :params => {
+              displayName: "New name"
+            }.to_json
 
       aggregate_failures "testing changes and response" do
         expect(User.find_by(id: identity.user_id)[:display_name]).to eq("New name")
@@ -185,15 +183,14 @@ RSpec.describe "user controller" do
 
     it "invalid (empty string)" do
       set_access_token(identity.user)
-      expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
 
       patch '/api/user/change_username',
-        :headers => json_headers,
-        :params => {
-          displayName: ""
-        }.to_json
+            :headers => json_headers,
+            :params => {
+              displayName: ""
+            }.to_json
 
-      expect(User.find_by(id: identity.user_id)[:display_name]).to eq("Blattwerkzeug")
+      expect(User.find_by(id: identity.user_id)[:display_name]).to eq(identity.user.display_name)
     end
   end
 
@@ -210,22 +207,22 @@ RSpec.describe "user controller" do
       set_access_token(identity.user)
 
       post '/api/user/may_perform',
-        :headers => json_headers,
-        :params => {
-          list: [
-            {
-              resourceType: "News",
-              policyAction: "create"
-            },
-            {
-              resourceType: "Project",
-              policyAction: "create"
-            }
-          ]
-        }.to_json
+           :headers => json_headers,
+           :params => {
+             list: [
+               {
+                 resourceType: "News",
+                 policyAction: "create"
+               },
+               {
+                 resourceType: "Project",
+                 policyAction: "create"
+               }
+             ]
+           }.to_json
 
       json_data = JSON.parse(response.body)
-      expect(json_data).to eq([{"perform" => false}, {"perform" => true}])
+      expect(json_data).to eq([{ "perform" => false }, { "perform" => true }])
     end
   end
 end

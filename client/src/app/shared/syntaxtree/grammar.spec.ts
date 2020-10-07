@@ -2226,6 +2226,66 @@ describe("Grammar Validation", () => {
     });
   });
 
+  describe(`Visualisation`, () => {
+    it(`Foreign type visualized`, () => {
+      const g = multiLanguageGrammar(
+        "g",
+        { languageName: "g", typeName: "t1" },
+        {
+          g: {
+            t1: {
+              type: "visualize",
+              attributes: [],
+            },
+          },
+        },
+        {
+          g: {
+            t1: {
+              type: "concrete",
+              attributes: [
+                {
+                  type: "property",
+                  base: "integer",
+                  name: "p1",
+                },
+              ],
+            },
+          },
+        }
+      );
+
+      const v = new Validator([g]);
+
+      const astDesc: AST.NodeDescription = {
+        language: "g",
+        name: "t1",
+      };
+
+      const ast = new AST.Tree(astDesc);
+      expect(comparableErrors(v.validateFromRoot(ast))).toEqual([
+        { code: ErrorCodes.MissingProperty, location: [] },
+      ]);
+    });
+
+    it(`Visualized type but no base type`, () => {
+      const g = multiLanguageGrammar(
+        "g",
+        { languageName: "g", typeName: "t1" },
+        {
+          g: {
+            t1: {
+              type: "visualize",
+              attributes: [],
+            },
+          },
+        }
+      );
+
+      expect(() => new Validator([g])).toThrowError(/g\.t1/);
+    });
+  });
+
   describe(`Multiple Languages in Single Grammar`, () => {
     it(`Two languages, same typename, no relation`, () => {
       const g = multiLanguageGrammar(

@@ -47,7 +47,7 @@ module ValidateAgainstMatcher
       else
         # Omit the whole schema from the shown output
         @result
-          .map {|r| JSON.pretty_generate(r.except("root_schema")) }
+          .map { |r| JSON.pretty_generate(r.except("root_schema")) }
           .join "\n"
       end
     end
@@ -78,6 +78,72 @@ module ApplicationRecordSpecExtensions
   end
 end
 
+module GraphqlSpecHelper
+  include GraphqlQueryHelper
+
+  # Sends the GraphQL query with the given name and the given variables.
+  # Expects that there shouldn't be any errors in the response by default.
+  def send_query(
+        query_name:,
+        variables: {},
+        expect_no_errors: true,
+        exp_http_status: 200
+      )
+    post "/api/graphql",
+         headers: { "CONTENT_TYPE" => "application/json" },
+         params: {
+           operationName: query_name,
+           variables: variables
+         }.to_json
+
+    aggregate_failures "Basic GraphQL Response" do
+      # Graphql usually returns with status: 200
+      # https://medium.com/@takewakamma/graphql-error-handling-with-graphql-ruby-653aa2a129f6
+      # https://www.graph.cool/docs/faq/api-eep0ugh1wa/#how-does-error-handling-work-with-graphcool
+
+      expect(response.status).to eq exp_http_status
+      expect(response.media_type).to eq "application/json"
+    end
+
+    json_data = JSON.parse(response.body)
+
+    # Ensure that there are no errors
+    if expect_no_errors
+      aggregate_failures "GraphQL Query Errors" do
+        recurse_no_error(json_data, [])
+      end
+    end
+
+    return json_data
+  end
+
+  def execute_query(query: nil, variables: {}, operation_name: nil, language: ["de"])
+    query = get_query(operation_name) if query.nil?
+    context = {
+      user: create(:user, :guest),
+      language: language
+    }
+    result = ServerSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
+    return result.as_json
+  rescue => e
+    return { "errors": [e] }
+  end
+
+  private
+
+  def recurse_no_error(data, path)
+    if data.is_a? Hash
+      data.each do |key,value|
+        if key === "errors"
+          expect(value).to eq([]), "Path: Root" + path.join(".")
+        else
+          recurse_no_error(value, path + [key])
+        end
+      end
+    end
+  end
+end
+
 ApplicationRecord.include ApplicationRecordSpecExtensions
 
 # More natural way to expect cookies that should be set
@@ -102,7 +168,7 @@ RSpec::Matchers.define :delete_cookie do |names|
   end
 
   failure_message do |actual|
-    deleted_cookies = response.cookies.keys.filter {|name| response.cookies[name].nil? }
+    deleted_cookies = response.cookies.keys.filter { |name| response.cookies[name].nil? }
     "Deleted cookies [#{deleted_cookies.join ', '}] but expected [#{names.join ', '}] to be deleted"
   end
 end
@@ -137,6 +203,7 @@ RSpec.configure do |config|
 
   # Ensure we can actually validate stuff
   config.include ValidateAgainstMatcher
+  config.include GraphqlSpecHelper
 end
 
 FactoryBot::SyntaxRunner.class_eval do

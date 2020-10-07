@@ -39,7 +39,10 @@ export function prettyPrintType(
   name: QualifiedTypeName,
   t: Desc.NodeTypeDescription
 ): NestedString {
-  if (Desc.isNodeConcreteTypeDescription(t)) {
+  if (
+    Desc.isNodeConcreteTypeDescription(t) ||
+    Desc.isNodeVisualTypeDescription(t)
+  ) {
     return prettyPrintConcreteNodeType(name, t);
   } else if (Desc.isNodeOneOfTypeDescription(t)) {
     return prettyPrintOneOfType(name, t);
@@ -64,9 +67,10 @@ export function prettyPrintQualifiedTypeName(name: QualifiedTypeName): string {
  */
 export function prettyPrintConcreteNodeType(
   name: QualifiedTypeName,
-  t: Desc.NodeConcreteTypeDescription
+  t: Desc.NodeConcreteTypeDescription | Desc.NodeVisualTypeDescription
 ): NestedString {
-  const head = `node ${prettyPrintQualifiedTypeName(name)} {`;
+  const type = Desc.isNodeConcreteTypeDescription ? "node" : "visualize";
+  const head = `${type} ${prettyPrintQualifiedTypeName(name)} {`;
   const attributes = (t.attributes ? t.attributes : []).map((a) =>
     prettyPrintConcreteNodeTypeAttribute(name, a)
   );
@@ -95,6 +99,10 @@ export function prettyPrintConcreteNodeTypeAttribute(
     case "choice":
     case "parentheses":
       return prettyPrintChildGroup(name, a);
+    case "interpolate":
+      return prettyPrintInterpolateProperty(a);
+    case "each":
+      return prettyPrintInterpolateChildren(a);
     case "container":
       return prettyPrintContainer(name, a);
     default:
@@ -136,50 +144,57 @@ export function prettyPrintTerminal(p: Desc.NodeTerminalSymbolDescription) {
 export function prettyPrintProperty(
   p: Desc.NodePropertyTypeDescription
 ): NestedString {
-  const optional = p.isOptional ? "?" : "";
-  const head = `prop${optional} "${p.name}"`;
+  const headName = Desc.isNodePropertyDesciption(p) ? "prop" : "interpolate";
+  const optional = Desc.isNodePropertyDesciption(p) && p.isOptional ? "?" : "";
+  const head = `${headName}${optional} "${p.name}"`;
 
-  const restrictionSign = (baseType: string) => {
-    switch (baseType) {
-      case "length":
-        return "==";
-      case "minLength":
-        return ">";
-      case "maxLength":
-        return "<";
-      case "minInclusive":
-        return "≥";
-      case "maxInclusive":
-        return "≤";
-      default:
-        return baseType;
-    }
-  };
-
-  let restrictions: string[] = [];
-  if (Desc.isNodePropertyStringDesciption(p) && p.restrictions) {
-    restrictions = p.restrictions.map((r) => {
-      switch (r.type) {
+  if (Desc.isNodePropertyDesciption(p)) {
+    const restrictionSign = (baseType: string) => {
+      switch (baseType) {
         case "length":
-        case "maxLength":
+          return "==";
         case "minLength":
-          return `length ${restrictionSign(r.type)} ${r.value}`;
-        case "enum":
-          return `${r.type} ${r.value.map((v) => JSON.stringify(v)).join(" ")}`;
+          return ">";
+        case "maxLength":
+          return "<";
+        case "minInclusive":
+          return "≥";
+        case "maxInclusive":
+          return "≤";
+        default:
+          return baseType;
       }
-    });
-  } else if (p.base === "integer" && p.restrictions) {
-    restrictions = p.restrictions.map(
-      (r) => `${restrictionSign(r.type)} ${r.value}`
-    );
-  }
+    };
 
-  if (restrictions.length === 0) {
-    return [`${head} { ${p.base} }`];
-  } else if (restrictions.length === 1) {
-    return [`${head} { ${p.base} ${restrictions[0]} }`];
+    let restrictions: string[] = [];
+    if (Desc.isNodePropertyStringDesciption(p) && p.restrictions) {
+      restrictions = p.restrictions.map((r) => {
+        switch (r.type) {
+          case "length":
+          case "maxLength":
+          case "minLength":
+            return `length ${restrictionSign(r.type)} ${r.value}`;
+          case "enum":
+            return `${r.type} ${r.value
+              .map((v) => JSON.stringify(v))
+              .join(" ")}`;
+        }
+      });
+    } else if (Desc.isNodePropertyIntegerDesciption(p) && p.restrictions) {
+      restrictions = p.restrictions.map(
+        (r) => `${restrictionSign(r.type)} ${r.value}`
+      );
+    }
+
+    if (restrictions.length === 0) {
+      return [`${head} { ${p.base} }`];
+    } else if (restrictions.length === 1) {
+      return [`${head} { ${p.base} ${restrictions[0]} }`];
+    } else {
+      return [head + " {", [p.base + " {", restrictions, "}"], "}"];
+    }
   } else {
-    return [head + " {", [p.base + " {", restrictions, "}"], "}"];
+    return [head];
   }
 }
 
@@ -315,6 +330,18 @@ function prettyPrintChildGroupElements(
     default:
       throw new Error(`Can't print child group of type "${(p as any).type}"`);
   }
+}
+
+export function prettyPrintInterpolateProperty(
+  t: Desc.NodeInterpolatePropertyDescription
+): NestedString {
+  return [`{{${t.name}}}`];
+}
+
+export function prettyPrintInterpolateChildren(
+  t: Desc.NodeInterpolateChildrenDescription
+): NestedString {
+  return [`{{#each ${t.name}}}`];
 }
 
 export function prettyPrintContainer(

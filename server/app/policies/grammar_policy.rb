@@ -1,4 +1,4 @@
-class GrammarPolicy
+class GrammarPolicy < ApplicationPolicy
   attr_reader :user, :grammar
 
   def initialize(user, grammar)

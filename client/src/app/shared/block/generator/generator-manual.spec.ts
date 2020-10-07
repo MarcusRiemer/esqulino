@@ -116,6 +116,43 @@ describe("Manual BlockLanguage Generator", () => {
       expect(c.children.length).toEqual(1);
     });
 
+    it("Grammar with foreign empty node that is visualized with unnamed terminal symbols", () => {
+      const grammar: GrammarDocument = {
+        root: {
+          languageName: "g1",
+          typeName: "t1",
+        },
+        types: {
+          g1: {
+            t1: {
+              type: "visualize",
+              attributes: [{ type: "terminal", symbol: "t1" }],
+            },
+          },
+        },
+        foreignTypes: {
+          g1: {
+            t1: {
+              type: "concrete",
+              attributes: [],
+            },
+          },
+        },
+      };
+
+      const generator: BlockLanguageGeneratorDocument = {
+        type: "manual",
+        editorComponents: [],
+      };
+
+      const r = convertGrammarManualInstructions(generator, grammar);
+
+      expect(r.editorBlocks.length).toEqual(1);
+
+      const v = expectMappedAttribute(r, 0, 0);
+      expect(v.blockType).toEqual("constant");
+    });
+
     it("Grammar with multiple unnamed containers for a single block", () => {
       const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
         t1: {

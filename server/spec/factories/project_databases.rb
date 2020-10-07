@@ -1,12 +1,91 @@
 # coding: utf-8
+
 require 'tempfile'
 
 FactoryBot.define do
   factory :project_database do
     association :project, factory: :project
 
+    sequence(:name) { |n| "db #{n}" }
+
     after(:create) do |db|
       db.project.update!(default_database: db)
+    end
+
+    trait :tables_references do
+      after(:create) do |db|
+        db.table_create(
+          {
+            "name" => "B",
+            "columns" => [
+              {
+                "name" => "key",
+                "type" => "INTEGER",
+                "index" => 0,
+                "primary" => true,
+                "notNull" => true,
+                "dfltValue" => nil
+              },
+            ],
+            "foreignKeys" => [],
+            "systemTable" => false
+          }
+        )
+
+        db.table_create(
+          {
+            "name" => "A",
+            "columns" => [
+              {
+                "name" => "key",
+                "type" => "INTEGER",
+                "index" => 0,
+                "primary" => true,
+                "notNull" => true,
+                "dfltValue" => nil
+              },
+            ],
+            "foreignKeys" => [
+              {
+                "references" => [
+                  {
+                    "toTable" => "B",
+                    "toColumn" => "key",
+                    "fromColumn" => "key"
+                  }
+                ]
+              }
+            ],
+            "systemTable" => false
+          }
+        )
+
+        db.table_bulk_insert(
+          "B",
+          ['key'],
+          [
+            ['0'],
+            ['1'],
+            ['2'],
+            ['3'],
+            ['4'],
+            ['5'],
+          ]
+        )
+
+        db.table_bulk_insert(
+          "A",
+          ['key'],
+          [
+            ['0'],
+            ['1'],
+            ['2'],
+            ['3'],
+          ]
+        )
+
+        db.refresh_schema!
+      end
     end
 
     # A simple table that stores the nams of all digits
@@ -27,19 +106,20 @@ FactoryBot.define do
                 "type" => "INTEGER",
                 "index" => 0,
                 "primary" => true,
-                "not_null" => true,
-                "dflt_value" => nil
+                "notNull" => true,
+                "dfltValue" => nil
               },
               {
                 "name" => "value",
                 "type" => "TEXT",
                 "index" => 1,
                 "primary" => false,
-                "not_null" => false,
-                "dflt_value" => "value"
+                "notNull" => false,
+                "dfltValue" => "value"
               }
             ],
-            "foreign_keys" => []
+            "foreignKeys" => [],
+            "systemTable" => false
           }
         )
 
@@ -76,7 +156,6 @@ FactoryBot.define do
         row_count { 10 }
       end
 
-
       after(:create) do |db, options|
         db.table_create(
           {
@@ -87,11 +166,12 @@ FactoryBot.define do
                 "type" => "INTEGER",
                 "index" => 0,
                 "primary" => true,
-                "not_null" => true,
-                "dflt_value" => nil
+                "notNull" => true,
+                "dfltValue" => nil
               },
             ],
-            "foreign_keys" => []
+            "foreignKeys" => [],
+            "systemTable" => false
           }
         )
 

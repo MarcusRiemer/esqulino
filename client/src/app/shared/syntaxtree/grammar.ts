@@ -175,6 +175,7 @@ export class NodeConcreteType extends NodeType {
             this.loadAttributes(a.children);
             break;
           case "terminal":
+          case "interpolate":
             // Do nothing, terminals have no impact on validation
             break;
           default:
@@ -1425,7 +1426,7 @@ export class GrammarValidator {
     // Register all existing types
     Object.entries(allTypes).forEach(([langName, langTypes]) => {
       Object.entries(langTypes).forEach(([typeName, typeDesc]) => {
-        this.registerTypeValidator(langName, typeName, typeDesc);
+        this.registerTypeValidator(langName, typeName, typeDesc, description);
       });
     });
 
@@ -1500,7 +1501,8 @@ export class GrammarValidator {
   private registerTypeValidator(
     languageName: string,
     nodeName: string,
-    desc: Desc.NodeTypeDescription
+    desc: Desc.NodeTypeDescription,
+    grammarDoc: Desc.GrammarDocument
   ) {
     // Ensure that we don't override any types
     if (this.isKnownType(languageName, nodeName)) {
@@ -1529,6 +1531,19 @@ export class GrammarValidator {
         languageName,
         nodeName
       );
+    } else if (Desc.isNodeVisualTypeDescription(desc)) {
+      const origType = grammarDoc.foreignTypes?.[languageName]?.[nodeName];
+      if (!origType) {
+        const origName = languageName + "." + nodeName;
+        throw new Error(`Visual type ${origName} has no concrete counterpart`);
+      } else {
+        this.registerTypeValidator(
+          languageName,
+          nodeName,
+          origType,
+          grammarDoc
+        );
+      }
     }
   }
 }

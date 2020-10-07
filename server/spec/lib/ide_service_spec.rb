@@ -3,7 +3,6 @@ require 'rails_helper'
 require_dependency 'ide_service'
 
 RSpec.describe "IDE Service" do
-
   # Retrieves the test configuration for the "exec" mode.
   def exec_configuration
     Rails.configuration.sqlino[:ide_service][:exec]
@@ -32,8 +31,9 @@ RSpec.describe "IDE Service" do
       grammar = create(:grammar)
       block_language = create(:block_language, :auto_generated_blocks, grammar: grammar);
 
-      expect(service.emit_generated_blocks(block_language).keys).to(
-        contain_exactly("editorBlocks", "editorComponents", "sidebars", "rootCssClasses")
+      result = service.emit_generated_blocks(block_language)
+      expect(result.keys).to(
+        contain_exactly("editor_blocks", "editor_components", "sidebars", "root_css_classes")
       )
     end
 
@@ -65,17 +65,6 @@ RSpec.describe "IDE Service" do
 
       expect(service.execute_request(req)).to eq req.to_json
     end
-
-    it "always returns valid (but empty) generated blocks" do
-      service = MockIdeService.new()
-
-      grammar = create(:grammar)
-      block_language = create(:block_language, :auto_generated_blocks, grammar: grammar);
-
-      expect(service.emit_generated_blocks(block_language).keys).to(
-        contain_exactly("editorBlocks", "editorComponents", "sidebars", "rootCssClasses")
-      )
-    end
   end
 
   context "initialization" do
@@ -98,7 +87,7 @@ RSpec.describe "IDE Service" do
     end
 
     it "missing modes are an error" do
-      expect { IdeService.instantiate(service_config: { }) }.to raise_exception EsqulinoError::IdeService
+      expect { IdeService.instantiate(service_config: {}) }.to raise_exception EsqulinoError::IdeService
     end
   end
 end

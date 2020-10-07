@@ -32,18 +32,20 @@ RSpec.describe "News-Policy" do
   context "as owner" do
     let(:user) { news.user }
 
-    it { should_not permit(:create)  }
+    it { should_not permit(:create) }
     it { should permit(:update)  }
     it { should permit(:destroy) }
   end
 
   context "as user with update permission" do
-    let(:user) { create(:user, roles: [
-      Role.find_or_create_by(name: :news_editor, resource: news)
-    ])}
+    let(:user) {
+      create(:user, roles: [
+               Role.find_or_create_by(name: :news_editor, resource: news)
+             ])
+    }
 
-    it { should_not permit(:create)  }
-    it { should permit(:update)  }
+    it { should_not permit(:create) }
+    it { should permit(:update) }
     it { should_not permit(:destroy) }
   end
 end

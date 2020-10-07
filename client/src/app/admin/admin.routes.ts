@@ -7,7 +7,7 @@ import { EditGrammarComponent } from "./grammar/edit-grammar.component";
 import { OverviewGrammarComponent } from "./grammar/overview-grammar.component";
 import { OverviewBlockLanguageComponent } from "./block-language/overview-block-language.component";
 import { NavSiteComponent } from "../shared/nav-page.component";
-import { AdminNewsListComponent } from "./news.component";
+import { AdminNewsListComponent } from "./news/news.component";
 import { AdminNewsEditComponent } from "./edit-news.component";
 import { OverviewProjectComponent } from "./project/overview-project.component";
 import { GalleryGrammarComponent } from "./grammar/gallery-grammar.component";

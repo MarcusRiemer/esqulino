@@ -1,0 +1,8 @@
+export interface ProjectListDescription {
+  id: string;
+  slug?: string;
+  name: MultiLangString;
+  createdAt?: string;
+  updatedAt?: string;
+  userId?: string;
+}

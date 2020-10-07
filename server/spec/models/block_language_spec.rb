@@ -10,16 +10,6 @@ RSpec.describe BlockLanguage do
     end
   end
 
-  context "model" do
-    it "rejects missing block, sidebar and component lists" do
-      res = FactoryBot.build(:block_language, model: Hash.new)
-
-      res.validate
-
-      expect(res.errors["model"]).not_to be_empty
-    end
-  end
-
   context "slug" do
     it "allows missing slugs" do
       res = FactoryBot.build(:block_language, slug: nil)
@@ -64,7 +54,7 @@ RSpec.describe BlockLanguage do
   context "to_list_api_response" do
     it "with 'generated' field" do
       b = FactoryBot.create(:block_language, id: SecureRandom.uuid)
-      api_response = BlockLanguage.scope_list.first.to_list_api_response(options:{include_list_calculations:true})
+      api_response = BlockLanguage.scope_list.first.to_list_api_response(options: { include_list_calculations: true })
 
       expect(api_response).to validate_against "BlockLanguageListItemDescription"
       expect(api_response['id']).to eq b.id
@@ -75,7 +65,7 @@ RSpec.describe BlockLanguage do
 
     it "without 'generated' field" do
       b = FactoryBot.create(:block_language, id: SecureRandom.uuid)
-      api_response = BlockLanguage.scope_list.first.to_list_api_response(options:{include_list_calculations:false})
+      api_response = BlockLanguage.scope_list.first.to_list_api_response(options: { include_list_calculations: false })
 
       expect(api_response).to validate_against "BlockLanguageListDescription"
       expect(api_response['id']).to eq b.id
@@ -83,7 +73,6 @@ RSpec.describe BlockLanguage do
       expect(api_response['slug']).to eq b.slug
       expect(api_response).not_to have_key("generated")
     end
-
   end
 
   context "emit_generated_blocks!" do
@@ -95,20 +84,11 @@ RSpec.describe BlockLanguage do
     it "Overwrites previous block data" do
       block_language = create(:block_language, :auto_generated_blocks)
 
-      # Set some specific content for two of the fields
-      block_language.model['editorComponents'] = [{"componentType": "block-root"}]
-      block_language.model['rootCssClasses'] = ["spec"]
+      # Set some specific content that will be overwritten when regeneratng
+      block_language.root_css_classes = ["spec"]
 
-      # The mock implementation of the IDE will only have empty outputs
-      # that must override the previous values
-      block_language.emit_generated_blocks!
-      expect(block_language.model).to eq({
-                                           "editorBlocks" => [],
-                                           "editorComponents" => [],
-                                           "sidebars" => [],
-                                           "rootCssClasses" => [],
-                                           "localGeneratorInstructions" => { "type" => "tree" }
-                                         })
+      result = block_language.emit_generated_blocks!(IdeService.guaranteed_instance)
+      expect(result["root_css_classes"]).not_to eq ["spec"]
     end
   end
 

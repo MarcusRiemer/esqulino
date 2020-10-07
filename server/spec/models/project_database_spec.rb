@@ -12,19 +12,20 @@ RSpec.describe ProjectDatabase, type: :model do
             "type" => "INTEGER",
             "index" => 0,
             "primary" => true,
-            "not_null" => true,
-            "dflt_value" => nil
+            "notNull" => true,
+            "dfltValue" => nil
           },
           {
             "name" => "value",
             "type" => "TEXT",
             "index" => 1,
             "primary" => false,
-            "not_null" => false,
-            "dflt_value" => "value"
+            "notNull" => false,
+            "dfltValue" => "value"
           }
         ],
-        "foreign_keys" => []
+        "foreignKeys" => [],
+        "systemTable" => false
       }
     ]
   end
@@ -40,50 +41,50 @@ RSpec.describe ProjectDatabase, type: :model do
             "type" => "INTEGER",
             "index" => 0,
             "primary" => true,
-            "not_null" => true,
-            "dflt_value" => nil
+            "notNull" => true,
+            "dfltValue" => nil
           },
           {
             "name" => "a_b",
             "type" => "TEXT",
             "index" => 1,
             "primary" => false,
-            "not_null" => false,
-            "dflt_value" => nil
+            "notNull" => false,
+            "dfltValue" => nil
           },
           {
             "name" => "a_c",
             "type" => "BOOLEAN",
             "index" => 1,
             "primary" => false,
-            "not_null" => false,
-            "dflt_value" => nil
+            "notNull" => false,
+            "dfltValue" => nil
           },
           {
             "name" => "a_d",
             "type" => "FLOAT",
             "index" => 1,
             "primary" => false,
-            "not_null" => false,
-            "dflt_value" => nil
+            "notNull" => false,
+            "dfltValue" => nil
           },
           {
             "name" => "a_e",
             "type" => "URL",
             "index" => 1,
             "primary" => false,
-            "not_null" => false,
-            "dflt_value" => nil
+            "notNull" => false,
+            "dfltValue" => nil
           },
         ],
-        "foreign_keys" => [
+        "foreignKeys" => [
           {
             "references" =>
             [
               {
-                "to_table" => "b",
-                "to_column" => "b_id",
-                "from_column" => "a_b"
+                "toTable" => "b",
+                "toColumn" => "b_id",
+                "fromColumn" => "a_b"
               }
             ]
           }
@@ -97,12 +98,11 @@ RSpec.describe ProjectDatabase, type: :model do
             "type" => "TEXT",
             "index" => 1,
             "primary" => false,
-            "not_null" => false,
-            "dflt_value" => nil
+            "notNull" => false,
+            "dfltValue" => nil
           },
         ],
-        "foreign_keys" => [
-        ]
+        "foreignKeys" => []
       }
     ]
   end
@@ -200,15 +200,15 @@ RSpec.describe ProjectDatabase, type: :model do
 
     it 'add column and rename it' do
       new_schema = @db.table_alter("key_value", [
-                                    { "index" => 0, "type" => "addColumn" },
-                                    {
-                                      "columnIndex" => 2,
-                                      "index" => 1,
-                                      "newName" => "Renamed_Column",
-                                      "oldName" => "New_Column",
-                                      "type" => "renameColumn"
-                                    }
-                                  ])
+                                     { "index" => 0, "type" => "addColumn" },
+                                     {
+                                       "columnIndex" => 2,
+                                       "index" => 1,
+                                       "newName" => "Renamed_Column",
+                                       "oldName" => "New_Column",
+                                       "type" => "renameColumn"
+                                     }
+                                   ])
 
       expect(new_schema[0]['columns'].size).to eq 3
       expect(new_schema[0]['columns'][2]['name']).to eq "Renamed_Column"
@@ -216,25 +216,25 @@ RSpec.describe ProjectDatabase, type: :model do
 
     it 'delete column' do
       new_schema = @db.table_alter("key_value", [
-                                    {
-                                      "index" => 0,
-                                      "columnIndex" => 1,
-                                      "type" => "deleteColumn"
-                                    },
-                                  ])
+                                     {
+                                       "index" => 0,
+                                       "columnIndex" => 1,
+                                       "type" => "deleteColumn"
+                                     },
+                                   ])
 
       expect(new_schema[0]['columns'].size).to eq 1
     end
 
     it 'swap column order' do
       new_schema = @db.table_alter("key_value", [
-                                    {
-                                      "index" => 0,
-                                      "columnIndex" => 0,
-                                      "indexOrder" => [1, 0],
-                                      "type" => "switchColumn"
-                                    },
-                                  ])
+                                     {
+                                       "index" => 0,
+                                       "columnIndex" => 0,
+                                       "indexOrder" => [1, 0],
+                                       "type" => "switchColumn"
+                                     },
+                                   ])
 
       expect(new_schema[0]['columns'].size).to eq 2
     end
@@ -242,50 +242,49 @@ RSpec.describe ProjectDatabase, type: :model do
     it 'toggle primary key' do
       # First flip
       new_schema = @db.table_alter "key_value",
-                                  [{ "index" => 0, "columnIndex" => 0, "type" => "changeColumnPrimaryKey" }]
+                                   [{ "index" => 0, "columnIndex" => 0, "type" => "changeColumnPrimaryKey" }]
       expect(new_schema[0]['columns'][0]['primary']).to eq false
 
       # Second flip
       new_schema = @db.table_alter "key_value",
-                                  [{ "index" => 0, "columnIndex" => 0, "type" => "changeColumnPrimaryKey" }]
+                                   [{ "index" => 0, "columnIndex" => 0, "type" => "changeColumnPrimaryKey" }]
       expect(new_schema[0]['columns'][0]['primary']).to eq true
     end
 
     it 'toggle NOT NULL' do
       # First flip
       new_schema = @db.table_alter "key_value",
-                                  [{ "index" => 0, "columnIndex" => 1, "type" => "changeColumnNotNull" }]
-      expect(new_schema[0]['columns'][1]['not_null']).to eq true
+                                   [{ "index" => 0, "columnIndex" => 1, "type" => "changeColumnNotNull" }]
+      expect(new_schema[0]['columns'][1]['notNull']).to eq true
 
       # Second flip
       new_schema = @db.table_alter "key_value",
-                                  [{ "index" => 0, "columnIndex" => 1, "type" => "changeColumnNotNull" }]
-      expect(new_schema[0]['columns'][1]['not_null']).to eq false
+                                   [{ "index" => 0, "columnIndex" => 1, "type" => "changeColumnNotNull" }]
+      expect(new_schema[0]['columns'][1]['notNull']).to eq false
     end
 
     it 'alter default value' do
-      # First flip
       new_schema = @db.table_alter "key_value", [
-                                     {
-                                       "index" => 0,
-                                       "columnIndex" => 1,
-                                       "type" => "changeColumnStandardValue",
-                                       "oldValue" => "dont care",
-                                       "newValue" => "'new value'"
-                                     }
-                                   ]
-      expect(new_schema[0]['columns'][1]['dflt_value']).to eq "'new value'"
+        {
+          "index" => 0,
+          "columnIndex" => 1,
+          "type" => "changeColumnStandardValue",
+          "oldValue" => "dont care",
+          "newValue" => "'new value'"
+        }
+      ]
+      expect(new_schema[0]['columns'][1]['dfltValue']).to eq "'new value'"
     end
 
     it 'rename table' do
       new_schema = @db.table_alter "key_value", [
-                                     {
-                                       "index" => 0,
-                                       "type" => "renameTable",
-                                       "oldName" => "key_value",
-                                       "newName" => "value_key"
-                                     }
-                                   ]
+        {
+          "index" => 0,
+          "type" => "renameTable",
+          "oldName" => "key_value",
+          "newName" => "value_key"
+        }
+      ]
       expect(new_schema[0]['name']).to eq "value_key"
     end
   end
@@ -307,22 +306,22 @@ RSpec.describe ProjectDatabase, type: :model do
 
     it 'remove foreign keys' do
       new_schema = @db.table_alter "a", [
-                                     {
-                                       "index" => 0,
-                                       "type" => "removeForeignKey",
-                                       "foreignKeyToRemove" => {
-                                         "references" => [
-                                           {
-                                             "to_table" => "b",
-                                             "to_column" => "b_id",
-                                             "from_column" => "a_b"
-                                           }
-                                         ]
-                                       }
-                                     }
-                                   ]
+        {
+          "index" => 0,
+          "type" => "removeForeignKey",
+          "foreignKeyToRemove" => {
+            "references" => [
+              {
+                "to_table" => "b",
+                "to_column" => "b_id",
+                "from_column" => "a_b"
+              }
+            ]
+          }
+        }
+      ]
       expect(new_schema[0]['name']).to eq "a"
-      expect(new_schema[0]['foreign_keys']).to eq []
+      expect(new_schema[0]['foreignKeys']).to eq []
     end
   end
 
@@ -372,7 +371,7 @@ RSpec.describe ProjectDatabase, type: :model do
       res = @db.table_bulk_insert(
         @table_name,
         ['key', 'value'],
-        [ ['1', 'eins'] ]
+        [['1', 'eins']]
       )
 
       expect(res['changes']).to be 1
@@ -381,7 +380,7 @@ RSpec.describe ProjectDatabase, type: :model do
       res = @db.table_bulk_insert(
         @table_name,
         ['key', 'value'],
-        [ ['2', 'zwei'] ]
+        [['2', 'zwei']]
       )
 
       expect(res['changes']).to be 1
@@ -475,6 +474,17 @@ RSpec.describe ProjectDatabase, type: :model do
       expect(res['totalCount']).to eq 20
       expect(res['rows'].length).to eq 10
     end
+  end
+
+  it 'properly generates foreign_key references' do
+    db = create(:project_database, :tables_references)
+    schema = db.refresh_schema
+
+    expect(schema[0]["foreignKeys"][0]["references"][0]).to eq({
+                                                                 "fromColumn" => "key",
+                                                                 "toTable" => "B",
+                                                                 "toColumn" => "key"
+                                                               })
   end
 
   # This spec can't be run with FakeFS as the C-bindings of SQLite

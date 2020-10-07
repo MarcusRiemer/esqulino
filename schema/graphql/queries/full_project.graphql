@@ -1,0 +1,74 @@
+query FullProject($id: ID!) {
+  projects(input: {filter: {id: $id}}) {
+    nodes {
+      id
+      slug
+      name
+      description
+      public
+      indexPageId
+      defaultDatabase {
+        id
+        name
+      }
+      codeResources {
+        id
+        name
+        ast
+        blockLanguageId
+        programmingLanguageId
+      }
+      blockLanguages {
+        id
+        name
+        sidebars
+        editorBlocks
+        editorComponents
+        localGeneratorInstructions
+        rootCssClasses
+        grammarId
+        defaultProgrammingLanguageId
+      }
+      grammars {
+        id
+        name
+        root
+        types
+        foreignTypes
+        includes
+        visualizes
+        programmingLanguageId
+      }
+      projectUsesBlockLanguages {
+        id
+        blockLanguageId
+      }
+      projectSources {
+        id
+        kind
+        readOnly
+        title
+        url
+      }
+      schema {
+        name
+        columns {
+          index
+          name
+          type
+          notNull
+          dfltValue
+          primary
+        }
+        foreignKeys {
+          references {
+            fromColumn
+            toTable
+            toColumn
+          }
+        }
+        systemTable
+      }
+    }
+  }
+}

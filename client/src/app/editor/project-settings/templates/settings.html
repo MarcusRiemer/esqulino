@@ -76,35 +76,6 @@
       </div>
     </div>
 
-    <!-- Selecting the currently active database -->
-    <div
-      *ngIf="project?.availableDatabaseNames.length > 1"
-      class="form-group row"
-    >
-      <label for="project-index-page" class="col-sm-2 form-control-label">
-        Aktuelle Datenbank
-      </label>
-      <div class="col-sm-10">
-        <select
-          [(ngModel)]="project.currentDatabaseName"
-          id="project-index-page"
-          class="form-control custom-select"
-        >
-          <option
-            *ngFor="let db of project.availableDatabaseNames"
-            [value]="db"
-          >
-            {{db}}
-          </option>
-        </select>
-
-        <small class="text-muted">
-          Diese Datenbank wird von deinem Projekt gerade verwendet. Um sie zu
-          ändern, musst du das Projekt speichern und die Seite neu laden.
-        </small>
-      </div>
-    </div>
-
     <!-- Selecting a project Image -->
     <div class="form-group row">
       <label for="project-image" class="col-sm-2 form-control-label">
@@ -137,7 +108,7 @@
       </label>
       <select class="custom-select mr-sm-2" #selectedBlockLanguage>
         <option
-          *ngFor="let blockLanguage of availableBlockLanguages | async"
+          *ngFor="let blockLanguage of availableBlockLanguages$ | async"
           [value]="blockLanguage.id"
         >
           {{ blockLanguage.name }}
@@ -160,11 +131,11 @@
       class="list-group-item"
     >
       <h5 class="card-title">
-        {{ (resolveBlockLanguageName(used.blockLanguageId) | async)?.name }}
+        {{ resolveBlockLanguageName(used.blockLanguageId)?.name }}
       </h5>
       <button
         *ngIf="used.id"
-        (click)="removeUsedBlockLanguage(used.id)"
+        (click)="removeUsedBlockLanguage(used.blockLanguageId, used.id)"
         class="btn btn-danger"
       >
         <span class="fa fa-chain-broken fa-fw" aria-hidden="true"></span>

@@ -1,4 +1,4 @@
-class ProjectPolicy
+class ProjectPolicy < ApplicationPolicy
   attr_reader :user, :project
 
   def initialize(user, project)
@@ -20,5 +20,15 @@ class ProjectPolicy
 
   def destroy?
     user.owner_of?(project) || user.has_role?(:admin)
+  end
+
+  class Scope < Scope
+    def resolve
+      if user.has_role?(:admin)
+        Project.all
+      else
+        Project.only_public
+      end
+    end
   end
 end

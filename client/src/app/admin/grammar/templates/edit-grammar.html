@@ -62,7 +62,7 @@
     <div class="col-sm-10">
       <ul class="list-inline">
         <li
-          *ngFor="let related of relatedBlockLanguages?.value | async"
+          *ngFor="let related of relatedBlockLanguages"
           class="list-inline-item"
         >
           <a
@@ -98,15 +98,18 @@
   <!-- All grammars that are included -->
   <div class="form-group row">
     <label for="grammar-root" class="col-sm-2 col-form-label">
-      Inkludierte Grammatiken
+      Referenzierte Grammatiken
     </label>
     <div class="col-sm-10 col-form-label">
       <ul
-        *ngIf="grammar.includes?.length > 0 else noGrammarReferences"
+        *ngIf="(grammarReferences$ | async).length > 0 else noGrammarReferences"
         class="list-inline"
       >
-        <li *ngFor="let grammarId of grammar.includes" class="list-inline-item">
-          <link-grammar [grammarId]="grammarId"></link-grammar>
+        <li
+          *ngFor="let ref of grammarReferences$ | async"
+          class="list-inline-item"
+        >
+          <link-grammar [grammarId]="ref.grammarId"></link-grammar>
         </li>
       </ul>
       <ng-template #noGrammarReferences>Keine</ng-template>

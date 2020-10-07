@@ -1,0 +1,5 @@
+function printSecondHalf(s: string) {
+    return s.substr(s.length/2)
+}
+printSecondHalf(123);     // Error bereits zur Kompilierungszeit
+printSecondHalf("hello"); // Ok - "llo"

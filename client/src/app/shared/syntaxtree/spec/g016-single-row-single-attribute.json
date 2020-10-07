@@ -3,6 +3,7 @@
   "types": {
     "g016": {
       "root": {
+        "type": "concrete",
         "attributes": [
           {
             "type": "container",

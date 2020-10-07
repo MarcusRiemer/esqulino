@@ -11,9 +11,9 @@ module UserHelper
   # A user is logged in if a HTTP-request contains a cookie with a value that is a valid jwt.
   # If there was no jwt, the current user will be set to the guest user.
   #
-  # @param attempt_refresh [Boolean] Defines whether an attempt
-  # to refresh an expired access_token should be made. In the case
-  # of login or logout operations this is not helpful.
+  # @param attempt_refresh [Boolean]
+  #   Defines whether an attempt to refresh an expired access_token should be
+  #   made. In the case of login or logout operations this is not helpful.
   def current_user(attempt_refresh = true)
     # @current_user may only be nil if this method was never called before
     if (not @current_user) then

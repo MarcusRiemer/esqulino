@@ -56,7 +56,7 @@
       >
         <option value="">-- Grammatik Wählen --</option>
         <option
-          *ngFor="let grammar of availableGrammars | async"
+          *ngFor="let grammar of availableGrammars$ | async"
           [value]="grammar.id"
         >
           {{ grammar.name }}

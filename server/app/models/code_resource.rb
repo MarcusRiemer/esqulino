@@ -124,15 +124,15 @@ class CodeResource < ApplicationRecord
   def update_code_resource_references!(ide_service: IdeService.instance)
     if not persisted?
       raise EsqulinoError::Base.new(
-              "Code Resource must be persisted when updating references",
-              500, true
-            )
+        "Code Resource must be persisted when updating references",
+        500, true
+      )
     end
 
-    ast_referenced_code_resource_ids = ide_service.referenced_code_resource_ids(self)
+    ast_referenced_code_resource_ids = ide_service.referenced_resource_ids(self, "referencedCodeResources")
     referenced_ids = CodeResource
-                       .where(id: ast_referenced_code_resource_ids)
-                       .pluck(:id)
+                     .where(id: ast_referenced_code_resource_ids)
+                     .pluck(:id)
 
     updated_references = referenced_ids.map do |id|
       CodeResourceReference.find_or_initialize_by(

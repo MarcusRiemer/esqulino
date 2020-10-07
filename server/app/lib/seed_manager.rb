@@ -25,7 +25,6 @@
 # We basically piggy-back the `to_yaml`-representation of ActiveModel to have a
 # robust (but very verbose) on-disk representation of our models.
 class SeedManager
-
   #############################################
   # Projects
   #############################################
@@ -170,8 +169,6 @@ class SeedManager
   def load_all_user_roles
     Seed::UserRoleSeed.load_all
   end
-
-
 
   #############################################
   # Programming Languages

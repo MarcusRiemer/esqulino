@@ -1,14 +1,20 @@
 # A user defined view on a programming language that uses blocks. These block models
 # closely rely on the grammars of their corresponding programming language.
 class BlockLanguage < ApplicationRecord
+  # In progress: Pulling out model type
+  self.ignored_columns = ['model']
+
   # Every language must have a name and a family assigned
   validates :name, presence: true
 
   # Some special languages may get a slug assigned
   validates :slug, uniqueness: true, allow_nil: true, length: { minimum: 1 }
 
-  # The JSON document needs to be a valid block language
-  validates :model, json_schema: 'BlockLanguageDocument'
+  # The JSON documents needs to describe a valid block language
+  validates :sidebars, json_schema: 'BlockLanguageSidebarsDescription'
+  validates :editor_blocks, json_schema: 'BlockLanguageEditorBlocksDescription'
+  validates :editor_components, json_schema: 'BlockLanguageEditorComponentsDescription'
+  validates :local_generator_instructions, json_schema: 'BlockLanguageGeneratorDocument', allow_nil: true
 
   # The programming language that should be chosen as a default when
   # creating code resources.
@@ -26,9 +32,16 @@ class BlockLanguage < ApplicationRecord
   scope :scope_list, -> {
     select(:id, :slug, :name, :default_programming_language_id,
            :grammar_id, :created_at, :updated_at,
-           "(model->'localGeneratorInstructions') IS NOT NULL AS generated")
+           "(block_languages.model->'localGeneratorInstructions') IS NOT NULL AS generated")
   }
 
+  # The parts of this model that together validate against BlockLanguageDocument
+  def document
+    attributes
+      .slice("editor_blocks", "editor_components", "sidebars", "root_css_classes", "local_generator_instructions")
+      .compact
+      .transform_keys { |k| k.camelize(:lower) }
+  end
 
   # Uses the associated grammar and the generator instructions to re-generate
   # the visual blocks for this language.
@@ -41,12 +54,13 @@ class BlockLanguage < ApplicationRecord
     regenerated = ide_service.emit_generated_blocks(self)
     if regenerated
       model_attributes = regenerated.slice(
-        "rootCssClasses",
+        "root_css_classes",
         "sidebars",
-        "editorBlocks",
-        "editorComponents",
+        "editor_blocks",
+        "editor_components",
       )
-      self.model = self.model.merge model_attributes
+
+      self.assign_attributes model_attributes
       return model_attributes
     else
       return nil
@@ -68,8 +82,7 @@ class BlockLanguage < ApplicationRecord
   # full access to the block language. This usually happens when the
   # client is working with the editor.
   def to_full_api_response
-    to_list_api_response
-      .merge(self.model)
+    self.to_json_api_response
   end
 
   # Computes a hash that may be sent back to the client if only superficial
@@ -78,14 +91,13 @@ class BlockLanguage < ApplicationRecord
   #
   # @param options {include_list_calculations [boolean]}
   #   True, if certain calculated values should be part of the response
-  def to_list_api_response(options:{})
+  def to_list_api_response(options: {})
     response = self.to_json_api_response
-                 .except "model"
+                   .except("editorBlocks", "sidebars", "editorComponents", "rootCssClasses", "localGeneratorInstructions")
     if options.fetch(:include_list_calculations, false)
       return response
     else
       return response.except("generated")
     end
   end
-
 end

@@ -1,7 +1,9 @@
 import { Component, Input, PLATFORM_ID, Inject } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 
-import { ProjectListDescription } from "../shared/project.description";
+import { FrontpageListProjectsQuery } from "../../generated/graphql";
+
+type projectNode = FrontpageListProjectsQuery["projects"]["nodes"][0];
 
 /**
  * A single project list item entry.
@@ -11,7 +13,7 @@ import { ProjectListDescription } from "../shared/project.description";
   templateUrl: "templates/project-list-item.html",
 })
 export class ProjectListItemComponent {
-  @Input() project: ProjectListDescription;
+  @Input() project: projectNode;
 
   /**
    * TODO: Make this configurable

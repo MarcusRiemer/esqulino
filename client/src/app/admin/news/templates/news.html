@@ -1,0 +1,93 @@
+<div id="news">
+  <form>
+    <div class="row">
+      <div class="col-md-3">
+        <label>Wähle eine Sprache</label>
+        <select
+          class="custom-select"
+          name="language"
+          required
+          [(ngModel)]="selectedLanguage"
+        >
+          <option *ngFor="let item of languages" [value]="item.token">
+            {{item.name}}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>Wähle einen Editor</label>
+        <select
+          class="custom-select"
+          name="editor"
+          required
+          [(ngModel)]="selectedEditor"
+        >
+          <option *ngFor="let item of editors" [value]="item.name">
+            {{item.description}}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>Suche:</label>
+        <input
+          class="form-control"
+          name="search-for"
+          (ngModelChange)="change($event)"
+          [(ngModel)]="searchFor"
+        />
+      </div>
+
+      <may-perform [payload]="performCreateData">
+        <div class="col-md-3">
+          <button (click)="createNews()" class="btn btn-primary">
+            Erstellen
+          </button>
+        </div>
+      </may-perform>
+    </div>
+  </form>
+  <app-table-paginator-graphql [queryData]="queryData" matSort>
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Titel</th>
+      <td mat-cell *matCellDef="let news">
+        <a
+          [routerLink]="['edit', news.id]"
+          [queryParams]="{ mode: selectedEditor, language: selectedLanguage }"
+        >
+          {{news.title ? news.title[selectedLanguage] || '' : ''}}
+        </a>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+      <td mat-cell *matCellDef="let news">
+        <code>{{ news.id }}</code>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="text">
+      <th mat-header-cell *matHeaderCellDef>Verfügbar In</th>
+      <td mat-cell *matCellDef="let news">
+        {{getLanguagesFlags(news.text)}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="publishedFrom">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Freigegeben ab</th>
+      <td mat-cell *matCellDef="let news">
+        {{(news.publishedFrom == "UNSET" ? "" : news.publishedFrom | date:
+        'dd.MM.yyyy') || ''}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Erstellt am</th>
+      <td mat-cell *matCellDef="let news">
+        {{(parseUTCDate(news.createdAt) | date: 'dd.MM.yyyy HH:mm') || ''}}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="updatedAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Geändert am</th>
+      <td mat-cell *matCellDef="let news">
+        {{(parseUTCDate(news.updatedAt) | date: 'dd.MM.yyyy HH:mm') || ''}}
+      </td>
+    </ng-container>
+  </app-table-paginator-graphql>
+</div>

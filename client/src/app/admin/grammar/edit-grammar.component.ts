@@ -1,53 +1,68 @@
-import { Component, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from "@angular/core";
 import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { HttpClient } from "@angular/common/http";
 import { Title } from "@angular/platform-browser";
 
-import { from } from "rxjs";
-import { switchMap, map } from "rxjs/operators";
+import { Subscription, BehaviorSubject } from "rxjs";
+
+import { switchMap, map, pluck } from "rxjs/operators";
+
+import {
+  FullGrammarGQL,
+  DestroyGrammarGQL,
+  UpdateGrammarGQL,
+  RegenerateForeignTypesGQL,
+} from "../../../generated/graphql";
 
 import { ToolbarService } from "../../shared/toolbar.service";
-import {
-  CachedRequest,
-  IndividualGrammarDataService,
-  MutateGrammarService,
-} from "../../shared/serverdata";
-import { ServerApiService } from "../../shared/serverdata/serverapi.service";
 import { prettyPrintGrammar } from "../../shared/syntaxtree/prettyprint";
-import { GrammarDescription, QualifiedTypeName } from "../../shared/syntaxtree";
-import { BlockLanguageListDescription } from "../../shared/block/block-language.description";
+import { QualifiedTypeName, GrammarDescription } from "../../shared/syntaxtree";
 import {
   getTypeList,
   allPresentTypes,
 } from "../../shared/syntaxtree/grammar-type-util";
+import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 
 @Component({
   templateUrl: "templates/edit-grammar.html",
 })
-export class EditGrammarComponent implements OnInit {
+export class EditGrammarComponent implements OnInit, OnDestroy {
   @ViewChild("toolbarButtons", { static: true })
   toolbarButtons: TemplateRef<any>;
 
   // The grammar that is beeing edited
   grammar: GrammarDescription;
 
+  subscriptions: Subscription[] = [];
+
   // Block languages that are related to this grammar
-  relatedBlockLanguages: CachedRequest<BlockLanguageListDescription[]>;
+  relatedBlockLanguages: Pick<BlockLanguageDescription, "id" | "name">[];
 
   // All types that are available as root. These may not be regenerated
   // on the fly because [ngValue] uses the identity of the objects to compare them.
   availableTypes: QualifiedTypeName[] = [];
 
+  readonly grammarReferences$ = new BehaviorSubject<{ grammarId: string }[]>(
+    []
+  );
+
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    private _http: HttpClient,
-    private _serverApi: ServerApiService,
-    private _individualGrammarData: IndividualGrammarDataService,
-    private _mutateGrammarData: MutateGrammarService,
     private _title: Title,
-    private _toolbarService: ToolbarService
+    private _toolbarService: ToolbarService,
+    private _updateGrammarGQL: UpdateGrammarGQL,
+    private _destroyGrammarGQL: DestroyGrammarGQL,
+    private _editGrammarGQL: FullGrammarGQL,
+    private _regenerateGrammar: RegenerateForeignTypesGQL
   ) {}
+
+  //TODO: Related Blocklanguages are still in cache after they were deleted.
 
   ngOnInit() {
     // Grab the first grammar from the server or the local cache. The grammar must not
@@ -55,44 +70,66 @@ export class EditGrammarComponent implements OnInit {
     this._activatedRoute.paramMap
       .pipe(
         map((params: ParamMap) => params.get("grammarId")),
-        switchMap((id: string) =>
-          from(this._individualGrammarData.getLocal(id, "request"))
-        )
+        switchMap(
+          (id: string) =>
+            this._editGrammarGQL.watch(
+              { id },
+              { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
+            ).valueChanges
+        ),
+        pluck("data", "grammars", "nodes", 0)
       )
       .subscribe((g) => {
-        this.grammar = g;
+        // The response object contains additional properties that
+        // we don't expect.
+        this.grammar = Object.assign({}, g);
+        delete this.grammar["blockLanguages"];
+
         this.availableTypes = getTypeList(allPresentTypes(this.grammar));
-        this.grammarRoot = g.root;
-        this._title.setTitle(`Grammar "${g.name}" - Admin - BlattWerkzeug`);
-
-        // We want a local copy of the resource that is being edited available "globally"
-        this._individualGrammarData.setLocal(g);
-      });
-
-    // Always grab fresh related block languages
-    this._activatedRoute.paramMap
-      .pipe(map((params: ParamMap) => params.get("grammarId")))
-      .subscribe((id) => {
-        const relatedUrl = this._serverApi.individualGrammarRelatedBlockLanguagesUrl(
-          id
+        this.grammarRoot = this.grammar.root;
+        this._title.setTitle(
+          `Grammar "${this.grammar.name}" - Admin - BlattWerkzeug`
         );
-        const request = this._http.get<BlockLanguageListDescription[]>(
-          relatedUrl
-        );
-        this.relatedBlockLanguages = new CachedRequest<
-          BlockLanguageListDescription[]
-        >(request);
-      });
+        this.relatedBlockLanguages = g.blockLanguages.nodes;
+        if (this.grammar.generatedFromId === null) {
+          this.grammar.generatedFromId = undefined;
+        }
 
+        const grammarRefs = () => {
+          const all = [
+            ...(this.grammar?.includes ?? []),
+            ...(this.grammar?.visualizes ?? []),
+          ];
+
+          return all.map((grammarId) => {
+            return {
+              grammarId,
+            };
+          });
+        };
+
+        this.grammarReferences$.next(grammarRefs());
+      });
     // Setup the toolbar buttons
     this._toolbarService.addItem(this.toolbarButtons);
+  }
+
+  ngOnDestroy(): void {
+    for (let sub of this.subscriptions) {
+      if (sub && sub.unsubscribe) {
+        sub.unsubscribe();
+      }
+    }
   }
 
   /**
    * User has decided to save.
    */
   onSave() {
-    this._mutateGrammarData.updateSingle(this.grammar);
+    const mutationSubscription = this._updateGrammarGQL
+      .mutate(this.grammar)
+      .subscribe();
+    this.subscriptions = [...this.subscriptions, mutationSubscription];
   }
 
   get grammarRoot() {
@@ -130,17 +167,19 @@ export class EditGrammarComponent implements OnInit {
    * User has decided to delete.
    */
   async onDelete() {
-    await this._mutateGrammarData.deleteSingle(this.grammar.id);
+    await this._destroyGrammarGQL.mutate({ id: this.grammar.id }).toPromise();
     this._router.navigate([".."], { relativeTo: this._activatedRoute });
   }
 
   async onRegenerateForeignTypes() {
-    const updated = await this._mutateGrammarData.regenerateForeignTypes(
-      this.grammar.id
-    );
+    const response = await this._regenerateGrammar
+      .mutate({
+        id: this.grammar.id,
+      })
+      .toPromise();
 
-    this._individualGrammarData.setLocal(updated);
-    this.grammar = updated;
+    this.grammar.foreignTypes =
+      response.data.regenerateForeignTypes.grammar.foreignTypes;
   }
 
   /**

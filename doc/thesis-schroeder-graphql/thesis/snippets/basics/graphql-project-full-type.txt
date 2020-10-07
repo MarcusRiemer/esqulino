@@ -1,0 +1,5 @@
+type Project {
+ id: ID!
+ public: Boolean!
+ name(language: LanguageEnum = DE): String!
+}

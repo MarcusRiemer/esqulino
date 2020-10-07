@@ -1,0 +1,13 @@
+query AdminSingleNews($id: ID!) {
+  news(input: {filter: {id: $id}}) {
+    nodes {
+      id
+      title
+      text
+      publishedFrom
+      createdAt
+      updatedAt
+      userId
+    }
+  }
+}

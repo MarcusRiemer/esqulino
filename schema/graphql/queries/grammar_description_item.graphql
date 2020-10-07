@@ -1,0 +1,14 @@
+query GrammarDescriptionItem($id: ID!) {
+  grammars(input: {filter: {id: $id}}) {
+    nodes {
+      id
+      name
+      programmingLanguageId
+      slug
+      generatedFromId
+      foreignTypes
+      root
+      types
+    }
+  }
+}

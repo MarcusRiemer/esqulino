@@ -57,7 +57,7 @@ RSpec.describe User, type: :model do
       expect(User.guest.has_role?(:admin)).to eq false
       allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
 
-      expect{ User.make_guest_admin! }.to raise_exception(EsqulinoError::Base)
+      expect { User.make_guest_admin! }.to raise_exception(EsqulinoError::Base)
       expect(User.guest.has_role?(:admin)).to eq false
     end
   end
@@ -98,7 +98,7 @@ RSpec.describe User, type: :model do
       expect(User.guest.has_role?(:admin)).to eq false
 
       allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("production"))
-      expect{ User.make_user_admin! User.guest.id }.to raise_exception(EsqulinoError::Base)
+      expect { User.make_user_admin! User.guest.id }.to raise_exception(EsqulinoError::Base)
 
       expect(User.guest.has_role?(:admin)).to eq false
     end

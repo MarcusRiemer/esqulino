@@ -107,11 +107,11 @@ class AuthController < ApplicationController
 
   def register_params
     params
-        .permit([:email, :username, :password])
+      .permit([:email, :username, :password])
   end
 
   def login_params
     params
-        .permit([:email, :password])
+      .permit([:email, :password])
   end
 end

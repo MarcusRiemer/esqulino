@@ -50,7 +50,7 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
     expect(dom.documentElement.localName).toEqual(astDesc.properties["name"]);
   });
 
-  it(`<root key="value"></root>`, () => {
+  it(`<root key="value"></root> (attribute subtree)`, () => {
     const v = new Validator([GRAMMAR_DESCRIPTION]);
 
     const astDesc: NodeDescription = {
@@ -77,6 +77,46 @@ describe("Language: Dynamic XML (eruby & liquid)", () => {
             },
             properties: {
               name: "key",
+            },
+          },
+        ],
+      },
+    };
+
+    const ast = new Node(astDesc, undefined);
+
+    const res = v.validateFromRoot(ast);
+    expect(res.errors.map(printableError)).toEqual([]);
+
+    const codeGen = new CodeGenerator(NODE_CONVERTER_ERUBY);
+    const result = codeGen.emit(ast);
+    expect(result).toEqual(`<root key="value"></root>`);
+
+    const dom = parseDom(result);
+    const root = dom.documentElement;
+    expect(root.localName).toEqual(astDesc.properties["name"]);
+    expect(root.attributes[0].localName).toEqual(
+      astDesc.children["attributes"][0].properties["name"]
+    );
+  });
+
+  it(`<root key="value"></root> (attribute value)`, () => {
+    const v = new Validator([GRAMMAR_DESCRIPTION]);
+
+    const astDesc: NodeDescription = {
+      language: "dxml",
+      name: "element",
+      properties: {
+        name: "root",
+      },
+      children: {
+        attributes: [
+          {
+            language: "dxml",
+            name: "attribute",
+            properties: {
+              name: "key",
+              value: "value",
             },
           },
         ],

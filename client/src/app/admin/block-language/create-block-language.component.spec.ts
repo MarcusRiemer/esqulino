@@ -2,40 +2,35 @@ import { FormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { TestBed } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from "@angular/common/http/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from "@angular/material/table";
 import { PortalModule } from "@angular/cdk/portal";
-import { Router } from "@angular/router";
+import { NavigationStart, Router } from "@angular/router";
 
-import {
-  LanguageService,
-  ServerApiService,
-  ToolbarService,
-  GrammarDescription,
-} from "../../shared";
-import {
-  ListGrammarDataService,
-  ListBlockLanguageDataService,
-  MutateBlockLanguageService,
-  IndividualGrammarDataService,
-  MutateGrammarService,
-} from "../../shared/serverdata";
-import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
-
+import { LanguageService, ToolbarService } from "../../shared";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
-import { buildGrammar, provideGrammarList } from "../../editor/spec-util";
 import { EmptyComponent } from "../../shared/empty.component";
 
 import { CreateBlockLanguageComponent } from "./create-block-language.component";
+import {
+  ApolloTestingController,
+  ApolloTestingModule,
+} from "apollo-angular/testing";
+import {
+  buildGrammarDescItemResponse,
+  buildSingleGrammarResponse,
+} from "../../editor/spec-util/grammar.gql.data.spec";
+import {
+  CreateBlockLanguageDocument,
+  GrammarDescriptionItemDocument,
+  SelectionListGrammarsDocument,
+} from "../../../generated/graphql";
 
 describe("CreateBlockLanguageComponent", () => {
-  async function createComponent(availableGrammars: GrammarDescription[] = []) {
+  async function createComponent() {
     await TestBed.configureTestingModule({
       imports: [
+        ApolloTestingModule,
         RouterTestingModule.withRoutes([
           { path: "admin/block-language/:id", component: EmptyComponent },
         ]),
@@ -44,19 +39,8 @@ describe("CreateBlockLanguageComponent", () => {
         MatSnackBarModule,
         MatTableModule,
         PortalModule,
-        HttpClientTestingModule,
       ],
-      providers: [
-        ToolbarService,
-        ServerApiService,
-        LanguageService,
-        ListGrammarDataService,
-        IndividualGrammarDataService,
-        MutateGrammarService,
-        ListBlockLanguageDataService,
-        MutateBlockLanguageService,
-        ServerTasksService,
-      ],
+      providers: [ToolbarService, LanguageService],
       declarations: [CreateBlockLanguageComponent, DefaultValuePipe],
     }).compileComponents();
 
@@ -65,25 +49,15 @@ describe("CreateBlockLanguageComponent", () => {
 
     // Initial rendering to trigger requirement for grammar list
     fixture.detectChanges();
-    await fixture.whenRenderingDone();
 
-    provideGrammarList(availableGrammars);
-
-    // Render with grammar list
-    fixture.detectChanges();
-    await fixture.whenRenderingDone();
-
-    const httpTesting = TestBed.inject(HttpTestingController);
-    const serverApi = TestBed.inject(ServerApiService);
+    const controller = TestBed.inject(ApolloTestingController);
     const router = TestBed.inject(Router);
 
     return {
       fixture,
       component,
+      controller,
       element: fixture.nativeElement as HTMLElement,
-      httpTesting,
-      serverApi,
-      availableGrammars,
       router,
     };
   }
@@ -95,20 +69,28 @@ describe("CreateBlockLanguageComponent", () => {
   });
 
   it(`shows the grammars that are available`, async () => {
-    const t = await createComponent([buildGrammar({ name: "G1" })]);
+    const t = await createComponent();
 
-    const grammarIdSelect: HTMLSelectElement = t.element.querySelector(
-      "select[data-spec=grammarIdSelect]"
-    );
+    const singleGrammar = buildSingleGrammarResponse();
+    t.component.availableGrammars$.subscribe(async (response) => {
+      // Render with grammar list
+      t.fixture.detectChanges();
+      await t.fixture.whenRenderingDone();
 
-    const grammarOption = grammarIdSelect.options.item(1);
+      const grammarIdSelect: HTMLSelectElement = t.element.querySelector(
+        "select[data-spec=grammarIdSelect]"
+      );
 
-    expect(grammarOption.value).toEqual(t.availableGrammars[0].id);
-    expect(grammarOption.innerText.trim()).toEqual(t.availableGrammars[0].name);
+      const grammarOption = grammarIdSelect.options.item(1);
+
+      expect(grammarOption.value).toEqual(response[0].id);
+      expect(grammarOption.innerText.trim()).toEqual(response[0].name);
+    });
+    const op = t.controller.expectOne(SelectionListGrammarsDocument);
+    op.flush(singleGrammar);
   });
-
   it(`create BlockLanguage without a slug`, async () => {
-    const t = await createComponent([buildGrammar({ name: "G1" })]);
+    const t = await createComponent();
 
     const nameInput: HTMLInputElement = t.element.querySelector(
       "input[data-spec=nameInput]"
@@ -116,6 +98,15 @@ describe("CreateBlockLanguageComponent", () => {
     const grammarIdSelect: HTMLSelectElement = t.element.querySelector(
       "select[data-spec=grammarIdSelect]"
     );
+
+    const singleGrammar = buildSingleGrammarResponse();
+    const grammarDescriptionItem = buildGrammarDescItemResponse();
+
+    // Render with grammar list
+    t.controller.expectOne(SelectionListGrammarsDocument).flush(singleGrammar);
+
+    await t.fixture.whenStable();
+    t.fixture.detectChanges();
 
     // simulate user entering a new name into the input box
     nameInput.value = "G1Test";
@@ -125,25 +116,47 @@ describe("CreateBlockLanguageComponent", () => {
     // use newEvent utility function (not provided by Angular) for better browser compatibility
     nameInput.dispatchEvent(new Event("input"));
     grammarIdSelect.dispatchEvent(new Event("change"));
-
     t.fixture.detectChanges();
 
-    const req = t.component.submitForm();
+    //
+    t.component.submitForm();
 
-    t.httpTesting
-      .expectOne(t.serverApi.individualGrammarUrl(t.availableGrammars[0].id))
-      .flush(t.availableGrammars[0]);
+    t.controller
+      .expectOne(
+        GrammarDescriptionItemDocument,
+        "Grammar must be requested before creation"
+      )
+      .flush(grammarDescriptionItem);
+
+    // For whatever reason this call to `whenStable` immediatly returns
+    // before the code inside the async `submitForm` method has run.
+    await t.fixture.whenStable();
+    // So: Most dirty hack to ensure that the promise inside the
+    // submitForm method will be resolved
+    await new Promise((r) => setTimeout(r, 1));
+
+    const generatedId = "f9f64792-0ceb-4e3c-ae7b-4c7a8af6a552";
+    t.controller
+      .expectOne(
+        CreateBlockLanguageDocument,
+        "Creation request for block language"
+      )
+      .flush({
+        data: { createBlockLanguage: { id: generatedId, errors: [] } },
+        errors: [],
+      });
 
     await t.fixture.whenStable();
 
-    const generatedId = "f9f64792-0ceb-4e3c-ae7b-4c7a8af6a552";
-    t.httpTesting
-      .expectOne({ method: "POST", url: t.serverApi.createBlockLanguageUrl() })
-      .flush({ id: generatedId });
-
-    const res = await req;
-
-    expect(res.id).toEqual(generatedId);
-    expect(t.router.url).toEqual(`/admin/block-language/${res.id}`);
+    //expecting in subscribe would cause a warning that test has no expectations.
+    const navigationHappened = await new Promise<boolean>((resolve, _) => {
+      t.router.events.subscribe((event) => {
+        if (event instanceof NavigationStart) {
+          // Navigation started.
+          resolve(event.url === `/admin/block-language/${generatedId}`);
+        }
+      });
+    });
+    expect(navigationHappened).toBeTrue();
   });
 });

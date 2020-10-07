@@ -5,6 +5,9 @@ import {
   NodePropertyTypeDescription,
   NodeChildrenGroupDescription,
   NodeVisualContainerDescription,
+  NodeInterpolatePropertyDescription,
+  NodeVisualTypeDescription,
+  NodeInterpolateChildrenDescription,
 } from "../../syntaxtree/grammar.description";
 
 import { VisualBlockDescriptions } from "../block.description";
@@ -17,6 +20,8 @@ import {
 } from "./instructions.description";
 
 import { TypeInstructions } from "./instructions";
+
+type MappedNodeType = NodeConcreteTypeDescription | NodeVisualTypeDescription;
 
 /**
  * Checks whether the given attributes have any tags assigned. If that is the case
@@ -61,8 +66,8 @@ export function mapTerminal(
  * Maps properties to read-only interpolated values.
  */
 export function mapInterpolated(
-  attr: NodePropertyTypeDescription,
-  instructions: PropertyInstructions
+  attr: NodePropertyTypeDescription | NodeInterpolatePropertyDescription,
+  instructions: TerminalInstructions
 ): VisualBlockDescriptions.EditorInterpolated {
   const toReturn: VisualBlockDescriptions.EditorInterpolated = {
     blockType: "interpolated",
@@ -112,8 +117,8 @@ export function mapProperty(
  * Maps children of a specific child group to an iterable block.
  */
 export function mapChildren(
-  _typeDesc: NodeConcreteTypeDescription,
-  attr: NodeChildrenGroupDescription,
+  _typeDesc: MappedNodeType,
+  attr: NodeChildrenGroupDescription | NodeInterpolateChildrenDescription,
   instructions: IteratorInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
   // Find out what goes between the elements
@@ -123,7 +128,8 @@ export function mapChildren(
   if (
     attr.type === "parentheses" ||
     attr.type === "allowed" ||
-    attr.type === "sequence"
+    attr.type === "sequence" ||
+    attr.type === "each"
   ) {
     if (attr.between) {
       between = [
@@ -145,8 +151,12 @@ export function mapChildren(
       ),
     ];
   }
-  // "allowed" and "sequence" may provide fallbacks in the grammar
-  else if (attr.type === "allowed" || attr.type === "sequence") {
+  // Complex type may provide fallbacks in the grammar
+  else if (
+    attr.type === "allowed" ||
+    attr.type === "sequence" ||
+    attr.type === "each"
+  ) {
     if (attr.between) {
       between = [
         mapTerminal(attr.between, DefaultInstructions.terminalInstructions),
@@ -178,7 +188,7 @@ export function mapChildren(
 }
 
 export function mapContainer(
-  _typeDesc: NodeConcreteTypeDescription,
+  _typeDesc: MappedNodeType,
   attr: NodeVisualContainerDescription,
   instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock {
@@ -199,7 +209,7 @@ export function mapContainer(
 }
 
 export function mapAttribute(
-  typeDesc: NodeConcreteTypeDescription,
+  typeDesc: MappedNodeType,
   attr: NodeAttributeDescription,
   instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
@@ -208,9 +218,12 @@ export function mapAttribute(
     case "sequence":
     case "choice":
     case "parentheses":
+    case "each":
       return mapChildren(typeDesc, attr, instructions.scopeIterator(attr.name));
     case "property":
       return [mapProperty(attr, instructions.scopeProperty(attr.name))];
+    case "interpolate":
+      return [mapInterpolated(attr, instructions.scopeProperty(attr.name))];
     case "terminal":
       return [mapTerminal(attr, instructions.scopeTerminal(attr.name))];
     case "container":
@@ -226,7 +239,7 @@ export function mapAttribute(
  * given explicitly.
  */
 export function mapBlockAttributes(
-  typeDesc: NodeConcreteTypeDescription,
+  typeDesc: MappedNodeType,
   instructions: TypeInstructions,
   blockNumber: number
 ): VisualBlockDescriptions.ConcreteBlock[] {
@@ -257,7 +270,7 @@ export function mapBlockAttributes(
  * of multiple blocks.
  */
 export function mapType(
-  typeDesc: NodeConcreteTypeDescription,
+  typeDesc: MappedNodeType,
   instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock[] {
   const toReturn: VisualBlockDescriptions.ConcreteBlock[] = [];

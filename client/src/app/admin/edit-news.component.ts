@@ -1,4 +1,3 @@
-import { MayPerformRequestDescription } from "./../shared/may-perform.description";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   Component,
@@ -8,12 +7,22 @@ import {
   ViewChild,
   TemplateRef,
 } from "@angular/core";
-import { first } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { NewsUpdateDescription } from "../shared/news.description";
-import { ServerDataService, ToolbarService } from "../shared";
+import { pluck } from "rxjs/operators";
+
+import * as _ from "lodash";
+
+import { ToolbarService } from "../shared";
 import { PerformDataService } from "../shared/authorisation/perform-data.service";
+import {
+  CreateNewsGQL,
+  UpdateNewsGQL,
+  DestroyNewsGQL,
+  AdminSingleNewsGQL,
+  UpdateNewsMutationVariables,
+} from "../../generated/graphql";
+import { objectOmit } from "../shared/util";
 
 /**
  * Administrative UI to edit or create news.
@@ -26,13 +35,15 @@ export class AdminNewsEditComponent implements OnInit {
   toolbarItems: TemplateRef<any>;
 
   constructor(
-    private _serverData: ServerDataService,
     private _activeRoute: ActivatedRoute,
     private _router: Router,
-    private _serverService: ServerDataService,
     private _snackBar: MatSnackBar,
     private _toolbar: ToolbarService,
     private _performData: PerformDataService,
+    private _singleNewsGQL: AdminSingleNewsGQL,
+    private _createNewsGQL: CreateNewsGQL,
+    private _updateNewsGQL: UpdateNewsGQL,
+    private _destroyNewsGQL: DestroyNewsGQL,
     @Inject(LOCALE_ID) private readonly localeID: string
   ) {}
 
@@ -51,7 +62,7 @@ export class AdminNewsEditComponent implements OnInit {
   readonly performCreateData = this._performData.news.create();
   readonly performDeleteData = this._performData.news.delete(this._newsId);
 
-  public newsData: NewsUpdateDescription;
+  public newsData: UpdateNewsMutationVariables;
   public readonly queryParamsLanguage =
     this._queryParams.language || this.localeID;
   public queryParamsMode = this._queryParams.mode || "single";
@@ -66,13 +77,13 @@ export class AdminNewsEditComponent implements OnInit {
       this.newNews();
     } else {
       // Retrieve the news that should be edited
-      this._serverData.getAdminNewsSingle
-        .getDescription(this._newsId)
-        .pipe(first())
+      this._singleNewsGQL
+        .fetch({ id: this._newsId })
+        .pipe(pluck("data", "news", "nodes", 0))
         .subscribe(
           (news) => {
-            this.newsData = news;
-            if (this.newsData.publishedFrom) {
+            this.newsData = objectOmit("__typename", news);
+            if (this.newsData.publishedFrom != "UNSET") {
               this.newsData.publishedFrom = new Date(
                 this.newsData.publishedFrom
               )
@@ -92,7 +103,8 @@ export class AdminNewsEditComponent implements OnInit {
     this.newsData = {
       title: {},
       text: {},
-      publishedFrom: null, // Field needs to be sent, even if empty
+      id: undefined,
+      publishedFrom: "UNSET", // Field needs to be sent, even if empty
     };
   }
 
@@ -104,17 +116,22 @@ export class AdminNewsEditComponent implements OnInit {
   }
 
   get isPublished(): boolean {
-    return (
-      this.newsData.publishedFrom !== undefined &&
-      this.newsData.publishedFrom !== null
-    );
+    return this.newsData.publishedFrom !== "UNSET";
+  }
+
+  // method could be replaced by using the event which should be triggered when clicking on the delete button at form-group input field
+  correctPublishedFrom(): void {
+    if (this.newsData.publishedFrom == "") {
+      this.newsData.publishedFrom = "UNSET";
+    }
   }
 
   /**
    * Send our new news to the server.
    */
   onCreate(): void {
-    this._serverService.createNews(this.newsData).subscribe(
+    this.correctPublishedFrom();
+    this._createNewsGQL.mutate(this.newsData).subscribe(
       (_) => {
         this._router.navigate(["admin/news"]);
         this._snackBar.open("Created succesful", "", { duration: 3000 });
@@ -126,17 +143,21 @@ export class AdminNewsEditComponent implements OnInit {
   /**
    * Update the news on the server.
    *
-   * @param option May be "redirect" to redirect the user back to the overview page
+   * @param option May be "redirect" to redirect the user
+      this._serverService.deleteNews(this._newsId) back to the overview page
    */
   public onUpdate(option: "redirect" | "stay"): void {
-    this._serverService.updateNews(this._newsId, this.newsData).subscribe(
-      (_) => {
-        if (option == "redirect") this._router.navigate(["admin/news"]);
+    this.correctPublishedFrom();
+    this._updateNewsGQL
+      .mutate({ id: this._newsId, ...this.newsData })
+      .subscribe(
+        (_) => {
+          if (option == "redirect") this._router.navigate(["admin/news"]);
 
-        this._snackBar.open("Update succesful", "", { duration: 3000 });
-      },
-      (err) => alert(`Error: ${JSON.stringify(err)}`)
-    );
+          this._snackBar.open("Update succesful", "", { duration: 3000 });
+        },
+        (err) => alert(`Error: ${JSON.stringify(err)}`)
+      );
   }
 
   /**
@@ -145,7 +166,7 @@ export class AdminNewsEditComponent implements OnInit {
   public onDelete(): void {
     let question = confirm("Ganze Nachricht löschen?");
     if (question) {
-      this._serverService.deleteNews(this._newsId).subscribe(
+      this._destroyNewsGQL.mutate({ id: this._newsId }).subscribe(
         (_) => {
           this._router.navigate(["admin/news"]);
           this._snackBar.open("Deleted succesful", "", { duration: 3000 });

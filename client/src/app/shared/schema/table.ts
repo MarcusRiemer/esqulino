@@ -22,7 +22,7 @@ export class Table {
     foreign_keys: ForeignKeyDescription[]
   ) {
     this._name = desc.name;
-    this._isSystemTable = desc.system_table;
+    this._isSystemTable = desc.systemTable;
     this._columns = col.map((val) => new Column(val, ColumnStatus.unchanged));
     this._foreign_keys = foreign_keys;
   }
@@ -38,7 +38,7 @@ export class Table {
     var newColumn: ColumnDescription = {
       name: "New_Column",
       index: newIndex,
-      not_null: false,
+      notNull: false,
       primary: false,
       type: "TEXT",
     };
@@ -49,8 +49,8 @@ export class Table {
     let table: string = undefined;
     for (let fk of this._foreign_keys) {
       for (let ref of fk.references) {
-        if (ref.from_column == columnName) {
-          table = ref.to_table;
+        if (ref.fromColumn == columnName) {
+          table = ref.toTable;
         }
       }
     }
@@ -61,8 +61,8 @@ export class Table {
     let column: string = undefined;
     for (let fk of this._foreign_keys) {
       for (let ref of fk.references) {
-        if (ref.from_column == columnName) {
-          column = ref.to_column;
+        if (ref.fromColumn == columnName) {
+          column = ref.toColumn;
         }
       }
     }
@@ -137,9 +137,9 @@ export class Table {
     for (let fkRef of this.foreign_keys) {
       for (let fk of fkRef.references) {
         if (
-          fk.from_column === toRemove.references[0].from_column &&
-          fk.to_column === toRemove.references[0].to_column &&
-          fk.to_table === toRemove.references[0].to_table
+          fk.fromColumn === toRemove.references[0].fromColumn &&
+          fk.toColumn === toRemove.references[0].toColumn &&
+          fk.toTable === toRemove.references[0].toTable
         ) {
           toReturn.references.push(
             fkRef.references.splice(fkRef.references.indexOf(fk), 1)[0]
@@ -161,8 +161,8 @@ export class Table {
     return {
       name: this._name,
       columns: this._columns.map((val) => val.toModel()),
-      foreign_keys: this._foreign_keys,
-      system_table: this._isSystemTable,
+      foreignKeys: this._foreign_keys,
+      systemTable: this._isSystemTable,
     };
   }
 }

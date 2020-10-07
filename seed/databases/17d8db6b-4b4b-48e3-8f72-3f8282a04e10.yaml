@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: 5c8569ae-f318-4e07-8766-6e5902e066d7
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 17d8db6b-4b4b-48e3-8f72-3f8282a04e10
@@ -19,14 +19,14 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "key_value", "columns": [{"name": "key", "type":
-    "INTEGER", "index": 0, "primary": true, "not_null": true, "dflt_value": null},
-    {"name": "value", "type": "TEXT", "index": 1, "primary": false, "not_null": true,
-    "dflt_value": null}], "foreign_keys": []}]'
+    "INTEGER", "index": 0, "notNull": true, "primary": true, "dfltValue": null}, {"name":
+    "value", "type": "TEXT", "index": 1, "notNull": true, "primary": false, "dfltValue":
+    null}], "foreignKeys": [], "systemTable": false}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2018-02-22 16:02:47.888730000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-06-07 11:41:49.821710000 Z
+  value_before_type_cast: 2020-08-22 21:04:42.405136000 Z
 new_record: false
 active_record_yaml_version: 2

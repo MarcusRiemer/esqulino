@@ -32,5 +32,4 @@ module SchemaTools
       }.to_json(options)
     end
   end
-
 end

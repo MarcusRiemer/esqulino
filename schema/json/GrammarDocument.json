@@ -60,6 +60,12 @@
         },
         "types": {
           "$ref": "#/definitions/NamedLanguages"
+        },
+        "visualizes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "required": [
@@ -188,6 +194,12 @@
           "$ref": "#/definitions/NodePropertyTypeDescription"
         },
         {
+          "$ref": "#/definitions/NodeInterpolatePropertyDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeInterpolateChildrenDescription"
+        },
+        {
           "$ref": "#/definitions/NodeChildrenGroupDescription"
         },
         {
@@ -226,6 +238,12 @@
           },
           "type": "array"
         },
+        "tags": {
+          "items": {
+            "$ref": "#/definitions/TagDescription"
+          },
+          "type": "array"
+        },
         "type": {
           "enum": [
             "concrete"
@@ -248,6 +266,61 @@
         }
       ],
       "description": "The restrictions that are applicable to integers"
+    },
+    "NodeInterpolateChildrenDescription": {
+      "additionalProperties": false,
+      "description": "References an existing child group on this node",
+      "properties": {
+        "between": {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "each"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name"
+      ],
+      "type": "object"
+    },
+    "NodeInterpolatePropertyDescription": {
+      "additionalProperties": false,
+      "description": "References an existing property on this node. This is useful for languages\nthat have some kind of reference to a common name in opening and closing\ncontexts (eg. XML with _the-name__/the-name_).",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "interpolate"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "name"
+      ],
+      "type": "object"
     },
     "NodeOneOfTypeDescription": {
       "additionalProperties": false,
@@ -352,6 +425,7 @@
     },
     "NodePropertyReferenceDescription": {
       "additionalProperties": false,
+      "description": "A value that must reference another grammar or coderesource",
       "properties": {
         "base": {
           "enum": [
@@ -477,7 +551,7 @@
         },
         "tags": {
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/TagDescription"
           },
           "type": "array"
         },
@@ -500,10 +574,13 @@
           "$ref": "#/definitions/NodeConcreteTypeDescription"
         },
         {
+          "$ref": "#/definitions/NodeVisualTypeDescription"
+        },
+        {
           "$ref": "#/definitions/NodeOneOfTypeDescription"
         }
       ],
-      "description": "Types may either be concrete new type or an alias\ngrouping together multiple other types."
+      "description": "Types may either be concrete new type, an alias grouping together multiple\nother types or a visualization of an existing type."
     },
     "NodeTypesAllowedDescription": {
       "additionalProperties": false,
@@ -714,6 +791,34 @@
       ],
       "type": "object"
     },
+    "NodeVisualTypeDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "attributes": {
+          "items": {
+            "$ref": "#/definitions/VisualNodeAttributeDescription"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "$ref": "#/definitions/TagDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "visualize"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "attributes"
+      ],
+      "type": "object"
+    },
     "OccursDescription": {
       "anyOf": [
         {
@@ -795,6 +900,9 @@
       ],
       "type": "object"
     },
+    "TagDescription": {
+      "type": "string"
+    },
     "TypeReference": {
       "anyOf": [
         {
@@ -805,6 +913,23 @@
         }
       ],
       "description": "Simple strings are used to refer to local types that share the\nsame language name."
+    },
+    "VisualNodeAttributeDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeVisualContainerDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeInterpolatePropertyDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeInterpolateChildrenDescription"
+        }
+      ],
+      "description": "These attributes are available when visualizing things"
     }
   }
 }

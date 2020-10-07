@@ -1,0 +1,144 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromUser
+  name: project_id
+  value_before_type_cast: cf28c9fc-f891-42b6-a1b3-e72dba2850fd
+  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
+    name: project_id
+    value_before_type_cast: cf28c9fc-f891-42b6-a1b3-e72dba2850fd
+    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
+      precision:
+      scale:
+      limit:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 5c96eafa-0ec9-43ee-96ca-99ad14da4647
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 00 XML Structure
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "element", "languageName":
+    "dxml"}}], "nodes": [{"name": "concreteNode", "children": {"attributes": [{"name":
+    "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
+    "name"}}, {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "attribute", "languageName": "dxml"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "attributes"}}, {"name": "children", "children":
+    {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "text", "languageName":
+    "dxml"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
+    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}, {"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "element", "languageName": "dxml"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "elements"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "element", "languageName": "dxml"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "name"}}, {"name": "property", "language": "MetaGrammar",
+    "properties": {"base": "string", "name": "value"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "attribute", "languageName": "dxml"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "value"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "text", "languageName": "dxml"}}]}, "language": "MetaGrammar", "properties":
+    {"name": "dxml"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2020-08-13 09:57:41.797908000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2020-09-02 21:44:29.657927000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "dxml": {
+          "element": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "name"
+              },
+              {
+                "type": "sequence",
+                "name": "attributes",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "dxml",
+                      "typeName": "attribute"
+                    },
+                    "occurs": "*"
+                  }
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "elements",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "dxml",
+                      "typeName": "text"
+                    },
+                    "occurs": "*"
+                  },
+                  {
+                    "nodeType": {
+                      "languageName": "dxml",
+                      "typeName": "element"
+                    },
+                    "occurs": "*"
+                  }
+                ]
+              }
+            ]
+          },
+          "attribute": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "name"
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "value"
+              }
+            ]
+          },
+          "text": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "value"
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "root": {
+        "languageName": "dxml",
+        "typeName": "element"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

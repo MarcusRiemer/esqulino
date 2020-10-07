@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: eed33970-43fd-47ab-b9d6-5a8fafc37629
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: acf04fe4-b478-4082-9cc6-735788e27302
@@ -19,51 +19,52 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "ausgabe", "columns": [{"name": "id", "type":
-    "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value": null},
-    {"name": "ausgabe_nr", "type": "INTEGER", "index": 1, "primary": false, "not_null":
-    false, "dflt_value": null}, {"name": "auflage_nr", "type": "INTEGER", "index":
-    2, "primary": false, "not_null": false, "dflt_value": null}, {"name": "titel",
-    "type": "STRING", "index": 3, "primary": false, "not_null": false, "dflt_value":
-    null}, {"name": "erschienen", "type": "DATE", "index": 4, "primary": false, "not_null":
-    false, "dflt_value": null}, {"name": "seitenzahl", "type": "INTEGER", "index":
-    5, "primary": false, "not_null": false, "dflt_value": null}, {"name": "url_node",
-    "type": "STRING", "index": 6, "primary": false, "not_null": false, "dflt_value":
-    null}], "foreign_keys": []}, {"name": "ausgabe_to_geschichte", "columns": [{"name":
-    "ausgabe_id", "type": "INTEGER", "index": 0, "primary": true, "not_null": false,
-    "dflt_value": null}, {"name": "geschichte_id", "type": "INTEGER", "index": 1,
-    "primary": true, "not_null": false, "dflt_value": null}], "foreign_keys": [{"references":
-    [{"to_table": "geschichte", "to_column": "id", "from_column": "geschichte_id"}]},
-    {"references": [{"to_table": "ausgabe", "to_column": "id", "from_column": "ausgabe_id"}]}]},
-    {"name": "bild_url", "columns": [{"name": "book_id", "type": "INTEGER", "index":
-    0, "primary": true, "not_null": false, "dflt_value": null}, {"name": "url", "type":
-    "STRING", "index": 1, "primary": false, "not_null": false, "dflt_value": null},
-    {"name": "dateiname", "type": "STRING", "index": 2, "primary": false, "not_null":
-    false, "dflt_value": null}], "foreign_keys": [{"references": [{"to_table": "ausgabe",
-    "to_column": "id", "from_column": "book_id"}]}]}, {"name": "charakter", "columns":
-    [{"name": "id", "type": "INTEGER", "index": 0, "primary": true, "not_null": false,
-    "dflt_value": null}, {"name": "name", "type": "STRING", "index": 1, "primary":
-    false, "not_null": false, "dflt_value": null}], "foreign_keys": []}, {"name":
-    "geschichte", "columns": [{"name": "id", "type": "INTEGER", "index": 0, "primary":
-    true, "not_null": false, "dflt_value": null}, {"name": "geschichte_code", "type":
-    "STRING", "index": 1, "primary": false, "not_null": false, "dflt_value": null},
-    {"name": "titel", "type": "STRING", "index": 2, "primary": false, "not_null":
-    false, "dflt_value": null}, {"name": "genre", "type": "STRING", "index": 3, "primary":
-    false, "not_null": false, "dflt_value": null}, {"name": "original_titel", "type":
-    "STRING", "index": 4, "primary": false, "not_null": false, "dflt_value": null},
-    {"name": "herkunftsland", "type": "STRING", "index": 5, "primary": false, "not_null":
-    false, "dflt_value": null}, {"name": "seitenanzahl", "type": "INTEGER", "index":
-    6, "primary": false, "not_null": false, "dflt_value": null}], "foreign_keys":
-    []}, {"name": "geschichte_to_charakter", "columns": [{"name": "geschichte_id",
-    "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
-    null}, {"name": "charakter_id", "type": "INTEGER", "index": 1, "primary": true,
-    "not_null": false, "dflt_value": null}], "foreign_keys": [{"references": [{"to_table":
-    "charakter", "to_column": "id", "from_column": "charakter_id"}]}, {"references":
-    [{"to_table": "geschichte", "to_column": "id", "from_column": "geschichte_id"}]}]}]'
+    "INTEGER", "index": 0, "notNull": false, "primary": true, "dfltValue": null},
+    {"name": "ausgabe_nr", "type": "INTEGER", "index": 1, "notNull": false, "primary":
+    false, "dfltValue": null}, {"name": "auflage_nr", "type": "INTEGER", "index":
+    2, "notNull": false, "primary": false, "dfltValue": null}, {"name": "titel", "type":
+    "STRING", "index": 3, "notNull": false, "primary": false, "dfltValue": null},
+    {"name": "erschienen", "type": "DATE", "index": 4, "notNull": false, "primary":
+    false, "dfltValue": null}, {"name": "seitenzahl", "type": "INTEGER", "index":
+    5, "notNull": false, "primary": false, "dfltValue": null}, {"name": "url_node",
+    "type": "STRING", "index": 6, "notNull": false, "primary": false, "dfltValue":
+    null}], "foreignKeys": [], "systemTable": false}, {"name": "ausgabe_to_geschichte",
+    "columns": [{"name": "ausgabe_id", "type": "INTEGER", "index": 0, "notNull": false,
+    "primary": true, "dfltValue": null}, {"name": "geschichte_id", "type": "INTEGER",
+    "index": 1, "notNull": false, "primary": true, "dfltValue": null}], "foreignKeys":
+    [{"references": [{"toTable": "geschichte", "toColumn": "id", "fromColumn": "geschichte_id"}]},
+    {"references": [{"toTable": "ausgabe", "toColumn": "id", "fromColumn": "ausgabe_id"}]}],
+    "systemTable": false}, {"name": "bild_url", "columns": [{"name": "book_id", "type":
+    "INTEGER", "index": 0, "notNull": false, "primary": true, "dfltValue": null},
+    {"name": "url", "type": "STRING", "index": 1, "notNull": false, "primary": false,
+    "dfltValue": null}, {"name": "dateiname", "type": "STRING", "index": 2, "notNull":
+    false, "primary": false, "dfltValue": null}], "foreignKeys": [{"references": [{"toTable":
+    "ausgabe", "toColumn": "id", "fromColumn": "book_id"}]}], "systemTable": false},
+    {"name": "charakter", "columns": [{"name": "id", "type": "INTEGER", "index": 0,
+    "notNull": false, "primary": true, "dfltValue": null}, {"name": "name", "type":
+    "STRING", "index": 1, "notNull": false, "primary": false, "dfltValue": null}],
+    "foreignKeys": [], "systemTable": false}, {"name": "geschichte", "columns": [{"name":
+    "id", "type": "INTEGER", "index": 0, "notNull": false, "primary": true, "dfltValue":
+    null}, {"name": "geschichte_code", "type": "STRING", "index": 1, "notNull": false,
+    "primary": false, "dfltValue": null}, {"name": "titel", "type": "STRING", "index":
+    2, "notNull": false, "primary": false, "dfltValue": null}, {"name": "genre", "type":
+    "STRING", "index": 3, "notNull": false, "primary": false, "dfltValue": null},
+    {"name": "original_titel", "type": "STRING", "index": 4, "notNull": false, "primary":
+    false, "dfltValue": null}, {"name": "herkunftsland", "type": "STRING", "index":
+    5, "notNull": false, "primary": false, "dfltValue": null}, {"name": "seitenanzahl",
+    "type": "INTEGER", "index": 6, "notNull": false, "primary": false, "dfltValue":
+    null}], "foreignKeys": [], "systemTable": false}, {"name": "geschichte_to_charakter",
+    "columns": [{"name": "geschichte_id", "type": "INTEGER", "index": 0, "notNull":
+    false, "primary": true, "dfltValue": null}, {"name": "charakter_id", "type": "INTEGER",
+    "index": 1, "notNull": false, "primary": true, "dfltValue": null}], "foreignKeys":
+    [{"references": [{"toTable": "charakter", "toColumn": "id", "fromColumn": "charakter_id"}]},
+    {"references": [{"toTable": "geschichte", "toColumn": "id", "fromColumn": "geschichte_id"}]}],
+    "systemTable": false}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-06-18 18:50:41.080768000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2019-06-18 19:40:20.628961000 Z
+  value_before_type_cast: 2020-08-22 21:58:29.750947000 Z
 new_record: false
 active_record_yaml_version: 2

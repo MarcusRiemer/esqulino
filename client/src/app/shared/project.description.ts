@@ -56,9 +56,8 @@ export interface AvailableDatabaseDescription {
 export interface ProjectSourceDescription {
   id: string;
   title: string;
-  type: "data";
+  kind: "data";
   url: string;
-  display: string;
   readOnly: boolean;
 
   /**
@@ -74,7 +73,7 @@ export interface ProjectSourceDescription {
 
 /**
  * The properties of a project that can be queried from the
- * server when asking for all available projecs.
+ * server when asking for all available projects.
  *
  * This is a stripped down version of all possibly
  * existing project properties that is used to list available
@@ -82,7 +81,7 @@ export interface ProjectSourceDescription {
  */
 export interface ProjectListDescription {
   id: string;
-  slug: ProjectSlug;
+  slug?: ProjectSlug;
   name: ProjectName;
   public?: boolean;
   description: MultiLangString;
@@ -98,12 +97,10 @@ export interface ProjectListDescription {
  * complicated standalone resources.
  */
 export interface ProjectDescription extends ProjectListDescription {
-  availableDatabases?: { [id: string]: AvailableDatabaseDescription };
-  activeDatabase?: string;
   projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[];
   blockLanguages: BlockLanguageDescription[];
   grammars: GrammarDescription[];
-  sources: ProjectSourceDescription[];
+  projectSources: ProjectSourceDescription[];
 }
 
 /**
@@ -114,6 +111,10 @@ export interface ProjectDescription extends ProjectListDescription {
 export interface ProjectFullDescription extends ProjectDescription {
   schema: TableDescription[];
   codeResources: CodeResourceDescription[];
+  defaultDatabase?: {
+    id: string;
+    name: string;
+  };
 }
 
 /**
@@ -146,11 +147,4 @@ export interface ProjectUpdateDescription {
 export interface ProjectCreationRequest {
   slug: ProjectSlug;
   name: ProjectName;
-}
-
-/**
- * Server feedback when attempting project creation.
- */
-export interface ProjectCreationResponse {
-  id: string;
 }

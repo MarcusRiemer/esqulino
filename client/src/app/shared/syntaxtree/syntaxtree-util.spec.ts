@@ -1,6 +1,6 @@
 import * as AST from "./syntaxtree";
 import { singleLanguageGrammar } from "./grammar.spec-util";
-import { referencedCodeResourceIds } from "./syntaxtree-util";
+import { referencedResourceIds } from "./syntaxtree-util";
 
 describe("syntaxtree-util.spec", () => {
   describe("referencedResourceIds", () => {
@@ -20,6 +20,12 @@ describe("syntaxtree-util.spec", () => {
             isOptional: true,
           },
           {
+            type: "property",
+            base: "grammarReference",
+            name: "grammarRef",
+            isOptional: true,
+          },
+          {
             type: "sequence",
             name: "c",
             nodeTypes: [
@@ -34,7 +40,9 @@ describe("syntaxtree-util.spec", () => {
     });
 
     it("No node at all", () => {
-      expect(referencedCodeResourceIds(undefined, gDesc)).toEqual([]);
+      expect(
+        referencedResourceIds(undefined, gDesc, "codeResourceReference")
+      ).toEqual([]);
     });
 
     it("Single node with single reference", () => {
@@ -46,7 +54,23 @@ describe("syntaxtree-util.spec", () => {
         properties: { ref1 },
       }).rootNode;
 
-      expect(referencedCodeResourceIds(n, gDesc)).toEqual([ref1]);
+      expect(referencedResourceIds(n, gDesc, "codeResourceReference")).toEqual([
+        ref1,
+      ]);
+    });
+
+    it("Single node with single reference to grammar", () => {
+      const grammarRef = "3d52ddf6-6d81-4158-9f66-365ad5adea90";
+
+      const n = new AST.Tree({
+        language: "l",
+        name: "r",
+        properties: { grammarRef },
+      }).rootNode;
+
+      expect(referencedResourceIds(n, gDesc, "grammarReference")).toEqual([
+        grammarRef,
+      ]);
     });
 
     it("Single node with two references", () => {
@@ -59,7 +83,10 @@ describe("syntaxtree-util.spec", () => {
         properties: { ref1, ref2 },
       }).rootNode;
 
-      expect(referencedCodeResourceIds(n, gDesc)).toEqual([ref1, ref2]);
+      expect(referencedResourceIds(n, gDesc, "codeResourceReference")).toEqual([
+        ref1,
+        ref2,
+      ]);
     });
 
     it("Two nodes each with single reference", () => {
@@ -75,7 +102,10 @@ describe("syntaxtree-util.spec", () => {
         },
       }).rootNode;
 
-      expect(referencedCodeResourceIds(n, gDesc)).toEqual([ref1, ref2]);
+      expect(referencedResourceIds(n, gDesc, "codeResourceReference")).toEqual([
+        ref1,
+        ref2,
+      ]);
     });
 
     it("Two nodes, child with two references", () => {
@@ -98,7 +128,7 @@ describe("syntaxtree-util.spec", () => {
         },
       }).rootNode;
 
-      expect(referencedCodeResourceIds(n, gDesc)).toEqual([
+      expect(referencedResourceIds(n, gDesc, "codeResourceReference")).toEqual([
         ref1,
         ref2_1,
         ref2_2,

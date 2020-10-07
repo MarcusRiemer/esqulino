@@ -1,42 +1,43 @@
 require 'rails_helper'
+include GraphqlQueryHelper
 
-RSpec.describe NewsController, type: :request do
-  json_headers = { "CONTENT_TYPE" => "application/json" }
-
-  describe 'GET /api/news' do
+RSpec.describe "GraphQL News Endpoint", type: :request do
+  before(:each) { create(:user, :guest) }
+  describe 'GraphQL FrontpageListNews' do
     it 'Frontpage: retrieving news without anything published' do
-      news = create(:news, published_from: Date.new(2999, 1, 1) )
-      get '/api/news'
-      json_data = JSON.parse(response.body)
+      create(:news, published_from: Date.new(2999, 1, 1))
+      send_query(query_name: "FrontpageListNews")
 
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
       expect(response).to have_http_status(200)
       expect(json_data.length).to eq(0)
     end
 
     it 'Frontpage: retrieving the only existing news (default language)' do
-      news = create(:news)
-      get '/api/news'
+      create(:news)
+      send_query(query_name: "FrontpageListNews")
 
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
       expect(json_data.length).to eq(1)
-      expect(json_data[0]).to validate_against "NewsFrontpageDescription"
+      # validate_against "NewsFrontpageDescription" does not work because of __typename fields
       expect(response).to have_http_status(200)
     end
 
     it 'Frontpage: retrieving only published news, skipping unpublished ones' do
       create(:news, published_from: nil)
-      get '/api/news'
+      send_query(query_name: "FrontpageListNews")
 
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
       expect(json_data.length).to eq(0)
       expect(response).to have_http_status(200)
     end
 
     it 'Frontpage: retrieving only published news, skipping future ones' do
       create(:news, published_from: Date.new(9999, 1, 1))
-      get '/api/news'
+      send_query(query_name: "FrontpageListNews")
 
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
+
       expect(json_data.length).to eq(0)
       expect(response).to have_http_status(200)
     end
@@ -45,104 +46,127 @@ RSpec.describe NewsController, type: :request do
       create(:news, published_from: Date.new(9999, 1, 1)) # Future
       create(:news, published_from: nil) # Unpublished
       create(:news) # Published
-      get '/api/news'
+      send_query(query_name: "FrontpageListNews")
 
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
+
       expect(json_data.length).to eq(1)
-      expect(json_data[0]).to validate_against "NewsFrontpageDescription"
+      # validate_against "NewsFrontpageDescription" does not work because of __typename fields
       expect(response).to have_http_status(200)
     end
 
     it 'Frontpage: retrieving the only existing news (english)' do
-      host! 'en.example.com'
+      news = create(:news, published_from: Date.new(2019, 1, 1))
+      send_query(query_name: "FrontpageListNews", variables: { languages: ["en"] })
 
-      news = create(:news, published_from: Date.new(2019, 1, 1) )
-      get '/api/news'
-
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
       expect(json_data.length).to eq(1)
-      expect(json_data[0]['title']).to eq({ "en" =>  news.title['en'] })
-      expect(json_data[0]['text']).to eq({ "en" =>  news.rendered_text()['en'] })
-
-      expect(json_data[0]).to validate_against "NewsFrontpageDescription"
+      expect(json_data[0]['title']).to eq({ "en" => news.title['en'] })
+      expect(json_data[0]['renderedTextShort']).to eq({ "en" => news.rendered_text_short()['en'] })
     end
 
     it 'Frontpage: retrieving the only existing news (german)' do
-      host! 'de.example.com'
+      news = create(:news, published_from: Date.new(2019, 1, 1))
+      send_query(query_name: "FrontpageListNews", variables: { languages: ["de"] })
 
-      news = create(:news, published_from: Date.new(2019, 1, 1) )
-      get '/api/news'
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
       expect(json_data.length).to eq(1)
-      expect(json_data[0]['title']).to eq({ "de" =>  news.title['de'] })
-      expect(json_data[0]['text']).to eq({ "de" =>  news.rendered_text()['de'] })
+      expect(json_data[0]['title']).to eq({ "de" => news.title['de'] })
+      expect(json_data[0]['renderedTextShort']).to eq({ "de" => news.rendered_text_short()['de'] })
+    end
 
-      expect(json_data[0]).to validate_against "NewsFrontpageDescription"
+    it 'Frontpage: retrieving the only existing news (english & german)' do
+      news = create(:news, published_from: Date.new(2019, 1, 1))
+      send_query(query_name: "FrontpageListNews", variables: { languages: ["de", "en"] })
+
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
+      expect(json_data.length).to eq(1)
+      expect(json_data[0]['title']).to eq(news.title)
+      expect(json_data[0]['renderedTextShort']).to eq(news.rendered_text_short)
     end
 
     it 'Frontpage: News are shortened' do
       news = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
 
-      get '/api/news'
-      json_data = JSON.parse(response.body)
+      send_query(query_name: "FrontpageListNews")
+
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
 
       aggregate_failures "frontpage response" do
         expect(json_data.length).to eq(1)
-        expect(json_data[0]['text']['de']).to include("1")
-        expect(json_data[0]['text']['de']).not_to include("2")
-        expect(json_data[0]['text']['de']).not_to eq(news.text['de'])
+        expect(json_data[0]['renderedTextShort']['de']).to include("1")
+        expect(json_data[0]['renderedTextShort']['de']).not_to include("2")
+        expect(json_data[0]['renderedTextShort']['de']).not_to eq(news.text['de'])
       end
     end
   end
 
-  describe 'GET /api/news/:id' do
+  describe 'GraphQL FrontpageSingleNews' do
     it 'Frontpage: Existing news' do
       n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
-      set_access_token(n.user)
-      get "/api/news/#{n.id}"
-      json_data = JSON.parse(response.body)
+
+      send_query(query_name: "FrontpageSingleNews", variables: { id: n.id })
+
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"][0]
 
       aggregate_failures "frontpage detail response" do
-        expect(json_data['text']['de']).to include("1")
-        expect(json_data['text']['de']).to include("2")
-        expect(json_data['text']['de']).not_to eq(n.text['de'])
+        expect(json_data['renderedTextFull']['de']).to include("1")
+        expect(json_data['renderedTextFull']['de']).to include("2")
+        expect(json_data['renderedTextFull']['de']).not_to eq(n.text['de'])
       end
     end
 
     it 'Frontpage: non existant news' do
-      get "/api/news/63ed0067-7bef-4a54-bac7-06831c0fccbd"
+      send_query(query_name: "FrontpageSingleNews", variables: { id: "63ed0067-7bef-4a54-bac7-06831c0fccbd" })
 
-      expect(response).to have_http_status(404)
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)["errors"]).not_to eq []
     end
   end
 
-  describe 'GET /api/news/admin' do
+  describe 'GraphQL AdminListNews' do
     it 'Admin: getting all news in multiple languages, even if unpublished' do
       admin = create(:user, :admin)
-      create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
-      create(:news, published_from: Date.new(9999, 12, 1) )
-      create(:news, published_from: nil )
-
       set_access_token(admin)
-      get '/api/news/admin'
-      json_data = JSON.parse(response.body)
-      expect(json_data[0]['title']['de']).to eq("Schlagzeile 1")
-      expect(json_data[0]['title']['en']).to eq("Headline 1")
-      expect(json_data[1]['title']['de']).to eq("Schlagzeile")
-      expect(json_data[1]['title']['en']).to eq("Headline")
-      expect(json_data[2]['title']['de']).to eq("Schlagzeile")
-      expect(json_data[2]['title']['en']).to eq("Headline")
-      expect(json_data[0]).to validate_against "NewsDescription"
-      expect(json_data[1]).to validate_against "NewsDescription"
+
+      create(:news, published_from: nil)
+      create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1" }, published_from: Date.new(2019, 1, 1))
+      create(:news, published_from: Date.new(9999, 12, 1))
+
+      send_query(query_name: "AdminListNews")
+
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
+      expect(json_data.length).to eq(3)
+      # validate_against "NewsDescription" does not work because of __typename fields
+    end
+    it 'Admin: returning "UNSET" if published_from field is not set ohterwise the Date' do
+      admin = create(:user, :admin)
+      set_access_token(admin)
+
+      create(:news, published_from: nil)
+      create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1" }, published_from: Date.new(2019, 1, 1))
+      create(:news, published_from: Date.new(9999, 12, 1))
+
+      send_query(query_name: "AdminListNews")
+
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
+      expect(json_data[0]["publishedFrom"]).to eq("UNSET")
+      expect(json_data[1]["publishedFrom"]).to eq("9999-12-01T00:00:00Z")
+      expect(json_data[2]["publishedFrom"]).to eq("2019-01-01T00:00:00Z")
+      # validate_against "NewsDescription" does not work because of __typename fields
     end
   end
 
-  describe 'GET /api/news/admin/:id' do
+  describe 'GraphQL AdminSingleNews' do
+    before(:each) {
+      admin = create(:user, :admin)
+      set_access_token(admin)
+    }
     it 'Admin: Existing news' do
-      n = create(:news, "text" => { "de": "1 <!-- SNIP --> 2" })
-      set_access_token(n.user)
-      get "/api/news/admin/#{n.id}"
-      json_data = JSON.parse(response.body)
+      n = create(:news, text: { "de": "1 <!-- SNIP --> 2" })
+      send_query(query_name: "AdminSingleNews", variables: { id: n.id })
+
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"][0]
 
       aggregate_failures "frontpage detail response" do
         expect(json_data['text']['de']).to include("1")
@@ -152,30 +176,31 @@ RSpec.describe NewsController, type: :request do
     end
 
     it 'Admin: non existant news' do
-      get "/api/news/63ed0067-7bef-4a54-bac7-06831c0fccbd"
+      send_query(
+        query_name: "AdminSingleNews",
+        variables: { id: "63ed0067-7bef-4a54-bac7-06831c0fccbd" },
+        expect_no_errors: false,
+      )
 
-      expect(response).to have_http_status(404)
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)["errors"]).not_to eq []
     end
   end
 
-  describe 'PUT /api/news/:id' do
+  describe 'GraphQL UpdateNews' do
     it 'updating the title of a news (removing a language)' do
-      news = create(:news, published_from: Date.new(2019, 1, 1) )
-      news_params = news.api_attributes.merge({ "title" => { "de" => "Test" } })
+      news = create(:news, published_from: Date.new(2019, 1, 1))
 
-      set_access_token(news.user)
-
-      put "/api/news/#{news.id}",
-          :headers => json_headers,
-          :params => news_params.to_json
+      news_params = news.api_attributes.merge({ "title" => { "de" => "Test" }, "id" => news.id })
+      send_query(query_name: "UpdateNews", variables: news_params)
 
       # Ensure that no error was reported
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]
+
       expect(json_data.fetch('errors', [])).to eq []
       expect(response).to have_http_status(200)
-
       # Ensure the response is well formed
-      expect(json_data).to validate_against "NewsDescription"
+      # validate_against "NewsDescription" does not work because of __typename fields
 
       # Ensure the news has changed
       news.reload
@@ -183,62 +208,63 @@ RSpec.describe NewsController, type: :request do
     end
 
     it 'updating a news without a valid language' do
-      news = create(:news, published_from: Date.new(2019, 1, 1) )
-      news_params = news.api_attributes.merge({ "title" => { "nope" => "no" }})
+      news = create(:news, published_from: Date.new(2019, 1, 1))
 
-      set_access_token(news.user)
+      news_params = news.api_attributes.merge({ "title" => { "nope" => "no" }, "id" => news.id })
+      json_data = send_query(
+        query_name: "UpdateNews",
+        variables: news_params,
+        expect_no_errors: false,
+      )
 
-      put "/api/news/#{news.id}",
-          :headers => json_headers,
-          :params => news_params.to_json
-
-      aggregate_failures "update response" do
-        expect(response).to have_http_status(400)
-        json_data = JSON.parse(response.body)
-        expect(json_data.fetch('errors', [])).not_to eq []
-      end
+      expect(json_data.fetch('errors', [])).not_to eq([])
 
       # Ensure the news has not changed
       curr_news = News.find(news.id)
       expect(curr_news.title).to eq news.title
     end
 
-    it 'updating a news to remove a previously set publishing date' do
-      news = create(:news, published_from: Date.new(2019, 1, 1) )
-      news_params = news.api_attributes.merge({ "publishedFrom" => nil })
+    it 'updating a news to remove a previously set publishing date in database' do
+      news = create(:news, published_from: Date.new(2019, 1, 1))
+      news_params = news.api_attributes.merge({ "publishedFrom" => "UNSET", "id" => news.id })
 
-      set_access_token(news.user)
-
-      put "/api/news/#{news.id}",
-          :headers => json_headers,
-          :params => news_params.to_json
+      send_query(query_name: "UpdateNews", variables: news_params)
 
       aggregate_failures "update response" do
         expect(response).to have_http_status(200)
 
-        json_data = JSON.parse(response.body)
+        json_data = JSON.parse(response.body)["data"]["updateNews"]
         expect(json_data.fetch('errors', [])).to eq []
-
-        expect(json_data).to validate_against "NewsDescription"
+        # validate_against "NewsDescription" does not work because of __typename fields
+        # expect(json_data["news"]).to validate_against "NewsDescription"
       end
 
       news.reload
       expect(news.published_from).to be nil
     end
+    it 'Returning UNSET for published_from if value is set to nil in database' do
+      admin = create(:user, :admin)
+      set_access_token(admin)
+      news = create(:news, published_from: Date.new(2019, 1, 1))
+      news_params = news.api_attributes.merge({ "publishedFrom" => "UNSET", "id" => news.id })
+
+      send_query(query_name: "UpdateNews", variables: news_params)
+      send_query(query_name: "AdminListNews", variables: news_params)
+
+      json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
+      expect(json_data[0]["publishedFrom"]).to eq("UNSET")
+    end
 
     it 'updating a news with a valid language and an invalid language' do
-      news = create(:news, published_from: Date.new(2019, 1, 1) )
-      news_params = news.api_attributes.merge({ "title" => { "nope" => "no", "de" => "changed" }})
+      news = create(:news, published_from: Date.new(2019, 1, 1))
+      news_params = news.api_attributes.merge({ "title" => { "nope" => "no", "de" => "changed" }, "id" => news.id })
 
-      set_access_token(news.user)
+      json_data = send_query(
+        query_name: "UpdateNews",
+        variables: news_params,
+        expect_no_errors: false,
+      )
 
-      put "/api/news/#{news.id}",
-          :headers => json_headers,
-          :params => news_params.to_json
-
-      # Ensure some kind of error was reported
-      expect(response).to have_http_status(400)
-      json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).not_to eq []
 
       # Ensure the news has not changed
@@ -247,17 +273,19 @@ RSpec.describe NewsController, type: :request do
     end
 
     it 'updating a news with an invalid date' do
-      news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1) )
-      news_params = news.api_attributes.merge({ "publishedFrom" => "test" })
+      news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1" }, published_from: Date.new(2019, 1, 1))
+      news_params = news.api_attributes.merge({ "publishedFrom" => "test", "id" => news.id })
 
-      set_access_token(news.user)
-      put "/api/news/#{news.id}",
-          :headers => json_headers,
-          :params => news_params.to_json
+      send_query(
+        query_name: "UpdateNews",
+        variables: news_params,
+        expect_no_errors: false
+      )
 
       # Ensure some kind of error was reported
       json_data = JSON.parse(response.body)
-      expect(response).to have_http_status(400)
+      expect(response).to have_http_status(200)
+      expect(json_data.fetch('errors', [])).not_to eq []
 
       # Ensure the news has not changed
       curr_news = News.find(news.id)
@@ -266,120 +294,125 @@ RSpec.describe NewsController, type: :request do
 
     it 'updating a news without a date' do
       news = create(:news)
-      set_access_token(news.user)
-      news_params = news.api_attributes.except("publishedFrom")
+      news_params = news.slice(:id, :title, :text)
 
-      put "/api/news/#{news.id}",
-          :headers => json_headers,
-          :params => news_params.to_json
+      send_query(
+        query_name: "UpdateNews",
+        variables: news_params,
+        expect_no_errors: false
+      )
 
       # Ensure some kind of error was reported
       json_data = JSON.parse(response.body)
-      expect(response).to have_http_status(400)
+
+      expect(response).to have_http_status(200)
+      expect(json_data.fetch('errors', [])).not_to eq []
 
       # Ensure the news has not changed
       curr_news = News.find(news.id)
       expect(curr_news.title).to eq news.title
     end
-
   end
 
-
-  describe 'DELETE /api/news/:id' do
+  describe 'GraphQL DestroyNews' do
     it 'deleting a news' do
-      news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1"}, published_from: Date.new(2019, 1, 1), user: create(:user, :admin) )
-      set_access_token(news.user)
+      news = create(:news, title: { 'de': "Schlagzeile 1", 'en': "Headline 1" }, published_from: Date.new(2019, 1, 1), user: create(:user, :admin))
 
-      delete "/api/news/#{news.id}"
+      send_query(query_name: "DestroyNews", variables: news.slice(:id))
 
-      expect(response).to have_http_status(204)
+      expect(response).to have_http_status(200)
       expect(News.find_by(id: news.id)).to be_nil
     end
 
     it 'deleting a news with an invalid id' do
-      news = create(:news)
+      create(:news)
       count_news = News.all.count
+      send_query(
+        query_name: "DestroyNews",
+        variables: { id: "63ed0067-7bef-4a54-bac7-06831c0fccbd" },
+        expect_no_errors: false
+      )
 
-      delete "/api/news/#{SecureRandom.uuid}"
-
-      expect(response).to have_http_status(404)
+      expect(response).to have_http_status(200)
+      expect(JSON.parse(response.body)["data"]["destroyNews"]["errors"]).not_to eq []
       expect(count_news).to eq(News.all.count)
     end
   end
 
-  describe "POST /api/news" do
+  describe "GraphQL CreateNews" do
     let(:user) { create(:user, :admin) }
 
     it 'creating a news' do
-      set_access_token(user)
       count_news = News.all.count
-      post "/api/news",
-           headers: json_headers,
-           params: {
-             title: { 'de': 'Test' },
-             text: { 'de': 'Test2' },
-             publishedFrom: Date.new(2019, 1, 1)
-           }.to_json
+      news_params = {
+        title: { 'de': 'Test' },
+        text: { 'de': 'Test2' },
+        publishedFrom: Date.new(2019, 1, 1)
+      }
+      send_query(query_name: "CreateNews", variables: news_params)
 
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["createNews"]
       expect(json_data.fetch('errors', [])).to eq []
+      news_data = json_data["news"]
 
-      expect(json_data['id']).to_not be_nil
-      expect(json_data['text']).to_not be_nil
-      expect(json_data['title']).to_not be_nil
-      expect(json_data['publishedFrom']).to_not be_nil
+      expect(news_data['id']).to_not be_nil
+      expect(news_data['text']).to_not be_nil
+      expect(news_data['title']).to_not be_nil
+      expect(news_data['publishedFrom']).to_not be_nil
       expect(count_news).to_not eq(News.all.count)
     end
 
     it 'creating a news with an empty publishing date' do
-      set_access_token(user)
       count_news = News.all.count
-      post "/api/news",
-           headers: json_headers,
-           params: {
-             title: { 'de': 'Test' },
-             text: { 'de': 'Test2' },
-             publishedFrom: nil
-           }.to_json
+      news_params = {
+        title: { 'de': 'Test' },
+        text: { 'de': 'Test2' },
+        publishedFrom: "UNSET"
+      }
+      send_query(query_name: "CreateNews", variables: news_params)
 
-      json_data = JSON.parse(response.body)
+      json_data = JSON.parse(response.body)["data"]["createNews"]
+
       expect(json_data.fetch('errors', [])).to eq []
+      news_data = json_data["news"]
 
-      expect(json_data['id']).to_not be_nil
-      expect(json_data['text']).to_not be_nil
-      expect(json_data['title']).to_not be_nil
-      expect(json_data['publishedFrom']).to be_nil
+      expect(news_data['id']).to_not be_nil
+      expect(news_data['text']).to_not be_nil
+      expect(news_data['title']).to_not be_nil
+      expect(news_data['publishedFrom']).to eq("UNSET")
       expect(count_news).to_not eq(News.all.count)
     end
 
     it 'creating a news with an invalid date' do
-      set_access_token(user)
-      count_news = News.all.count
-      post "/api/news",
-           headers: json_headers,
-           params: {
-             title: { 'de': 'Test' },
-             text: { 'de': 'Test2' },
-             publishedFrom: 'tom'
-           }.to_json
+      news_params = {
+        title: { 'de': 'Test' },
+        text: { 'de': 'Test2' },
+        publishedFrom: "tom"
+      }
+      send_query(
+        query_name: "CreateNews",
+        variables: news_params,
+        expect_no_errors: false,
+      )
 
       json_data = JSON.parse(response.body)
-      expect(json_data.fetch('errors', [])).to eq []
-      expect(response).to have_http_status(400)
+      expect(json_data.fetch('errors', [])).not_to eq []
+      expect(response).to have_http_status(200)
     end
 
     it 'creating a news without a date' do
-      news = build(:news)
-      news_params = news.api_attributes.except("publishedFrom")
-      set_access_token(user)
-
-      post "/api/news",
-          :headers => json_headers,
-          :params => news_params.to_json
-
-      # Ensure some kind of error was reported
+      json_data = send_query(
+        query_name: "CreateNews",
+        variables: {
+          title: { de: "Titel" },
+          text: { de: "text" },
+        },
+        expect_no_errors: false,
+      )
       json_data = JSON.parse(response.body)
-      expect(response).to have_http_status(400)
+
+      expect(json_data.fetch('errors', [])).not_to eq []
+      expect(response).to have_http_status(200)
 
       # Ensure the news has not changed
       expect(News.count).to eq 0

@@ -1,29 +1,79 @@
 import { Component, ViewChild } from "@angular/core";
 import { MatSort } from "@angular/material/sort";
 
-import { AdminListProjectDataService } from "../../shared/serverdata";
-import { ProjectListDescription } from "../../shared/project.description";
+import { GraphQLQueryComponent } from "../../shared/table/paginator-table-graphql.component";
+import {
+  AdminListProjectsGQL,
+  AdminListProjectsQuery,
+  AdminListProjectsQueryVariables,
+} from "../../../generated/graphql";
+import { MatPaginator } from "@angular/material/paginator";
+
+// TODO: Should be beautified and used
+type Query = ReturnType<AdminListProjectsGQL["watch"]>;
+
+type DataKey = Exclude<keyof AdminListProjectsQuery, "__typename">;
+
+// TODO: Resolve this from the Query type above, requires unpacking
+//       a type argument to Observable
+type ListItem = AdminListProjectsQuery[DataKey]["nodes"][0];
+
+type ColumnName = keyof ListItem | "totalCount";
 
 /**
  *
  */
 @Component({
   templateUrl: "./templates/overview-project.html",
-  providers: [AdminListProjectDataService],
 })
-export class OverviewProjectComponent {
+export class OverviewProjectComponent
+  implements
+    GraphQLQueryComponent<
+      AdminListProjectsQuery,
+      AdminListProjectsQueryVariables,
+      DataKey,
+      ColumnName
+    > {
+  // Angular Material UI to paginate
+  @ViewChild(MatPaginator)
+  _paginator: MatPaginator;
+
   // Angular Material UI to sort by different columns
   @ViewChild(MatSort, { static: true })
   sort: MatSort;
 
-  constructor(readonly projects: AdminListProjectDataService) {}
+  constructor(readonly projectsService: AdminListProjectsGQL) {}
 
-  /**
-   * User wants to see a refreshed dataset.
-   */
-  onRefresh() {
-    this.projects.listCache.refresh();
+  typed(doc: any): ListItem {
+    return doc as ListItem;
   }
 
-  displayedColumns: (keyof ProjectListDescription)[] = ["name", "slug", "id"];
+  readonly dataKey: DataKey = "projects";
+
+  // mat-pagination info
+  pageSize: number = 25;
+
+  //Query Object which can be used to refetch data
+  //fetchPolicy must be network-only, to get a clean pagination
+  readonly query = this.projectsService.watch(
+    { first: this.pageSize },
+    { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
+  );
+
+  readonly displayedColumns: ColumnName[] = [
+    "name",
+    "slug",
+    "totalCount",
+    "id",
+  ];
+
+  get queryData() {
+    return {
+      query: this.query,
+      dataKey: this.dataKey,
+      displayColumns: this.displayedColumns,
+      pageSize: this.pageSize,
+      sort: this.sort,
+    };
+  }
 }

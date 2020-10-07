@@ -1,4 +1,4 @@
-class UserPolicy
+class UserPolicy < ApplicationPolicy
   attr_reader :user, :second_user
 
   def initialize(user, second_user)

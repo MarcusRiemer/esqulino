@@ -7,9 +7,9 @@ concise_attributes:
     name: project_id
     value_before_type_cast: 32056357-a38a-4258-9046-b8814cc35a55
     type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
+      precision:
+      scale:
+      limit:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: ca22b86c-b1a6-4420-a91a-c222110bb0e1
@@ -19,25 +19,25 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "article", "columns": [{"name": "article_id",
-    "type": "INTEGER", "index": 0, "primary": true, "not_null": false, "dflt_value":
-    null}, {"name": "caption", "type": "TEXT", "index": 1, "primary": false, "not_null":
-    true, "dflt_value": null}, {"name": "text", "type": "TEXT", "index": 2, "primary":
-    false, "not_null": true, "dflt_value": null}, {"name": "date", "type": "INTEGER",
-    "index": 3, "primary": false, "not_null": true, "dflt_value": null}], "foreign_keys":
-    []}, {"name": "comment", "columns": [{"name": "comment_id", "type": "INTEGER",
-    "index": 0, "primary": true, "not_null": false, "dflt_value": null}, {"name":
-    "article_id", "type": "INTEGER", "index": 1, "primary": false, "not_null": true,
-    "dflt_value": null}, {"name": "commenter_name", "type": "TEXT", "index": 2, "primary":
-    false, "not_null": true, "dflt_value": null}, {"name": "text", "type": "INTEGER",
-    "index": 3, "primary": false, "not_null": true, "dflt_value": null}, {"name":
-    "date", "type": "INTEGER", "index": 4, "primary": false, "not_null": true, "dflt_value":
-    null}], "foreign_keys": [{"references": [{"to_table": "article", "to_column":
-    "article_id", "from_column": "article_id"}]}]}]'
+    "type": "INTEGER", "index": 0, "notNull": false, "primary": true, "dfltValue":
+    null}, {"name": "caption", "type": "TEXT", "index": 1, "notNull": true, "primary":
+    false, "dfltValue": null}, {"name": "text", "type": "TEXT", "index": 2, "notNull":
+    true, "primary": false, "dfltValue": null}, {"name": "date", "type": "INTEGER",
+    "index": 3, "notNull": true, "primary": false, "dfltValue": null}], "foreignKeys":
+    [], "systemTable": false}, {"name": "comment", "columns": [{"name": "comment_id",
+    "type": "INTEGER", "index": 0, "notNull": false, "primary": true, "dfltValue":
+    null}, {"name": "article_id", "type": "INTEGER", "index": 1, "notNull": true,
+    "primary": false, "dfltValue": null}, {"name": "commenter_name", "type": "TEXT",
+    "index": 2, "notNull": true, "primary": false, "dfltValue": null}, {"name": "text",
+    "type": "INTEGER", "index": 3, "notNull": true, "primary": false, "dfltValue":
+    null}, {"name": "date", "type": "INTEGER", "index": 4, "notNull": true, "primary":
+    false, "dfltValue": null}], "foreignKeys": [{"references": [{"toTable": "article",
+    "toColumn": "article_id", "fromColumn": "article_id"}]}], "systemTable": false}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2018-02-26 10:26:54.527608000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2018-02-26 10:27:29.143900000 Z
+  value_before_type_cast: 2020-08-22 21:58:29.746620000 Z
 new_record: false
 active_record_yaml_version: 2

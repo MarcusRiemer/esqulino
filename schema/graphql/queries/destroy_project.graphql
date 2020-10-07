@@ -1,0 +1,5 @@
+mutation DestroyProject($id: ID!) {
+    destroyProject(input: {id: $id}) {
+        errors
+    }
+}

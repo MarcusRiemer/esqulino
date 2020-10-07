@@ -1,0 +1,13 @@
+interface ProjectResponse {
+  project: Project,
+  error: string | null
+}
+const createProjectRecord = async (p: PostProject):Promise<ProjectResponse> => {
+  return xmlhttp.postProject(p);
+}
+
+const newRecord: PostProject = {
+  name: "esqulino"
+};
+
+const response: ProjectResponse = await createProjectRecord(newRecord);

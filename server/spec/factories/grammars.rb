@@ -666,7 +666,6 @@ FactoryBot.define do
             }
           }
         }
-
       }
     end
 

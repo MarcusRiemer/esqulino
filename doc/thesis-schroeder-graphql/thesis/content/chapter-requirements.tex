@@ -1,0 +1,663 @@
+%! Author = Yannick Schröder
+%! Date = 17.08.20
+
+%************************************************
+% Anforderungsanalyse
+%************************************************
+\chapter{Anforderungsanalyse}
+\label{sec:requirements}
+
+Ziel dieser Arbeit ist die Evaluierung und Migration von REST nach GraphQL in die von Marcus Riemer entwickelte Lehr-Entwicklungsumgebung BlattWerkzeug zur Verbesserung des aktuell genutzten Systems.
+Nachfolgend wird in diesem Kapitel die Funktionsweise des aktuellen Systems erläutert. 
+Anschließend werden Anforderungen, die ein neues System erfüllen muss, formuliert und evaluiert.
+
+\section{Aktuelles System}
+\label{sec:requirements:system}
+
+Marcus Riemer hat im Rahmen seiner Master-Thesis an der Fachhochschule Wedel die Lehr-Entwicklungsumgebung BlattWerkzeug als Webapplikation entwickelt,
+die sich an Kinder und Jugendliche richtet. Mit BlattWerkzeug lassen sich, gestützt durch Drag \& Drop-Edi\-toren,
+für beliebige SQLite-Datenbanken Abfragen formulieren und Oberflächen entwickeln~\cite[2]{riemer2016}.
+Seit dem Abschluss der Master-Thesis wird BlattWerkzeug im Rahmen eines Promotionsvorhabens weiterentwickelt.
+
+%Server:
+Der Server dieser Web-App ist auf Basis von Ruby on Rails gebaut. Er dient hauptsächlich der Speicherung und Auslieferung von Daten.
+Kommuniziert wird über eine REST-artige JSON-Schnittstelle~\cite[94]{riemer2016}.
+
+%Client:
+Der Client wurde als eine Single-Page Application mit rein clientseitiger Visualisierung aufgebaut,
+die lediglich für den Zugriff auf serverseitige Ressourcen  (Datenbank, gespeicherte Ressourcen, gerenderte Seiten) Anfragen zum Server schickt.
+Programmiert wurde sie 2016~\cite[1]{riemer2016} auf Basis von Angular 2 in Typescript.
+Zum aktuellen Zeitpunkt wird allerdings auf die Angular Version 10.0.4 gesetzt.
+
+%Datenbanksystem
+Für die Wahl des einzusetzenden Datenbanksystems wurde sich beim Entwicklungsstart, auf Grund der Kriterien "Kostenlose Verfügbarkeit",
+"Einfacher Betrieb", "Einfache Backups", "Tools zur Modellierung" und "Externe Tools zur Entwicklung von SQL-Abfragen"
+für eine SQLite Datenbank entschieden~\cite[99-100]{riemer2016}. Im November 2017 ist dann der Grundstein gelegt worden,
+um den Server mit einer PostgreSQL Datenbank zu verbinden~\cite{riemerPostgresCommit}, da diese es unter anderem ermöglicht JSON Objekte direkt zu speichern,
+ohne diese in Text Datentypen konvertieren zu müssen.
+
+Anhand eines Praxisbeispiels wird im Weiteren die Funktionsweise des Systems in Hinblick auf das Hinzufügen neuer Daten
+unter Gewährleistung der Typsicherheit (siehe Unterabschnitt~\fullref{req:typesafe}) verdeutlicht.
+
+\section{Praxisbeispiel - Erweiterung des Datenmodels}
+\label{sec:requirements:example}
+
+Damit neue Datensätzen zwischen Server und Client typsicher mithilfe der bislang genutzten REST API ausgetauscht werden können, sind mehrere Schritte erforderlich.
+Die Reihenfolge der nachfolgend aufgeführten Schritte ergibt sich aus dem bisherigen Entwicklungsprozess.
+
+\subsection{Anlegen des Typescript Interfaces}
+\label{sec:requirements:example:interface}
+
+Als erstes wird ein Typescript Interface für den Datensatz erstellt, der abgebildet werden soll.
+Wir erweitern den Datentyp \texttt{Project} aus Listing~\ref{fig:basics:graphql:2} erneut (siehe Listing~\ref{lst:example:projectdesc}):
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Typescript Interface für die Darstellung eines Projektes}, label={lst:example:projectdesc}]
+export interface Project {
+  id: string;
+  name: MultiLangString;
+  public?: boolean;
+  slug?: string;
+  userId?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+}
+\end{lstlisting}
+
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item Zeile 2:~\texttt{id}/\texttt{public} siehe Listing~\ref{fig:basics:graphql:2}.
+    \item Zeile 3:~\texttt{name} hat sich zu einem multilingualen Feld geändert. \texttt{MultiLangString} repräsentiert eine Map von String auf String (\texttt{[key: string]: string;}).
+    \item Zeile 5:~\texttt{slug} ist ein aus einem oder wenigen Wörtern bestehender benutzer- und suchmaschinenfreundlicher
+    Text (sprechender Name) als Bestandteil einer URL \cite{slug-wikipedia}. Diese Angabe ist optional.
+    \item Zeile 6:~\texttt{userId} ist die ID des Nutzers, dem dieses \texttt{Project} zugeordnet ist (Fremdschlüsselbeziehung).
+    \item Zeile 7:~\texttt{createdAt} ist die optionale zeitliche Angabe, wann dieses \texttt{Project} erstellt wurde.
+    \item Zeile 8:~\texttt{updatedAt} ist die optionale zeitliche Angabe, wann dieses \texttt{Project} zuletzt verändert wurde.
+     \item Zeile 11-14:~\texttt{User} ist der mit dem Projekt in Beziehung stehende Nutzer.
+\end{itemize}
+
+Wird ein Datensatz mit einem Projekt beim Server angefragt, lässt sich die Antwort des Servers auf eine Variable mit dem Typ \texttt{Project} zuweisen.
+Dadurch wird zur Kompilierungszeit ermöglicht, typsicher auf die einzelnen Felder des Interfaces zugreifen zu können.
+Im nächsten Schritt wird das Interface dem Server zur Verfügung gestellt.
+
+%List Interface/Response Interface
+%Dokument Interface
+\subsection{Generierung der JSON Schema Definitionen}
+\label{sec:requirements:example:schema}
+Das Interface aus Listing~\ref{lst:example:projectdesc} wurde clientseitig erstellt und kann auch nur dort verwendet werden. Um es serverseitig nutzen zu können, wird daraus eine JSON Schema Datei generiert.
+Für die Generierung sind Einträge in einem Makefile nötig (siehe Listing~\ref{lst:example:makefile}), welches die Erstellung aller JSON Schema Dateien realisiert. Nach der Generierung befinden sich zu jedem aufgeführten Typescript Interface ein passendes JSON Schema in einer eigenen Datei. Diese werden dann in einem Schema Ordner auf Projekt Ebene gehalten. Dass jedes Schema in einer eigenen Datei gespeichert ist, kommt dem Server bei der Validierung zu gute. 
+Dieser lädt die Datei - deren Namen äquivalent zum ursprünglichen Typescript Interface ist - aus dem Ordner, liest das Schema aus und kann dieses zu Validierungszwecken nutzen.
+Mithilfe der JSON Schema Dateien können dann Datensätze validiert werden.
+
+\begin{lstlisting}[float=h!,caption={TypeScript Interface für die Project Darstellung in einer Liste}, label={lst:example:makefile}]
+Project.json : $(SRC_PATH)/shared/project.ts
+	$(CONVERT_COMMAND)
+\end{lstlisting}
+
+\subsection{Anlegen des Models in Rails}
+\label{sec:requirements:example:model}
+
+Sollte das Interface aus Listing~\ref{lst:example:projectdesc} einer neuen Datenbanktabelle entsprechen, muss eine Active Record Migration erstellt werden,
+die das Datenbankschema erweitert~\cite{rails-migration}.
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Rails Migration zum hinzufügen einer \texttt{projects} Datenbanktabelle}, label={lst:example:migration}]
+create_table "projects", id: :uuid, do |t|
+	t.string "slug"
+	t.hstore "name", default: {}, null: false
+	t.uuid "user_id"
+	t.datetime "created_at", null: false
+	t.datetime "updated_at", null: false
+end
+\end{lstlisting}
+
+Durch Ausführung der Migration aus Listing~\ref{lst:example:migration} wird eine neue Tabelle mit der Bezeichnung \texttt{projects} erstellt.
+Außerdem wird ein Active Record Model benötigt (siehe Listing~\ref{lst:example:model}), dem die \texttt{projects}-Tabelle zugeordnet wird.
+Zur Realisierung wird eine Ruby Klasse, die
+von der Klasse ApplicationRecord erbt, mit dem selben Namen, den die Tabelle hat, erstellt.
+Die Rails Konvention sieht vor, dass Datenbanktabellen im Plural und das dazugehörige Model im Singular benannt werden~\cite{rails-naming-convention}.
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Model}, label={lst:example:model}]
+class Project < ApplicationRecord
+	# der Nutzer eines Projektes
+	belongs_to :user
+end
+\end{lstlisting}
+
+Auf diese Weise entsteht die Möglichkeit, die Spalten jeder Zeile in dieser Tabelle mit den Attributen der Instanzen des Models abzubilden.
+Jede Zeile dieser Tabelle stellt also ein "Projekt" Datensatz mit den in Listing~\ref{sec:requirements:example:interface} aufgeführten Feldern dar.
+
+\subsection{Anlegen eines Controllers in Rails}
+\label{sec:requirements:example:controller}
+Um nun auf Anfragen reagieren und Daten aus Model Instanzen an den Client liefern zu können, bedarf es einem Controller.
+Controller haben die Aufgabe Anfragen zu verarbeiten, die vom Router (siehe Listing~\ref{lst:example:router}) an sie weitergeleitet wurden.
+Die Funktionen innerhalb eines Controllers sind dafür verantwortlich die angefragte Funktionalität auszuführen und die entsprechende Antwort zu erzeugen.
+Bei einer Anfrage, die Projekt-Daten ausgeliefert bekommen soll, übernimmt die Controller Funktion die Aufgabe alle Daten aus dem \texttt{Project}-Model
+zu holen und gibt diese dann wie bei REST APIs üblich in JSON Form zurück.
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Route entspricht URL '/project/' und leitet Anfrage an die ProjectsController Funktion \texttt{index} weiter }, label={lst:example:router}]
+scope 'project' do
+	get '/', controller: 'projects', action: :index
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Controller mit Funktion zum zurückgeben aller Project Instanzen}, label={lst:example:controller}]
+class ProjectsController < ApplicationController
+	def index
+		render json: Project.all.map(&:to_full_api_response)
+	end
+end
+\end{lstlisting}
+
+In Zeile 3 des Controllers in Listing~\ref{lst:example:controller} werden alle Projekte aus der Datenbank geladen inkl. aller Beziehungen und in JSON Form zurück gegeben. Im aktuellen System hingegen werden die Projekte portioniert an den Client geliefert, damit nicht aus Versehen riesige Datensätze an den Client übertragen werden. Um gewährleisten zu können, dass die Antwort vom Server auch die erwarteten Daten liefert, wird ein
+Test geschrieben (siehe Listing~\ref{lst:example:controller-test}), der prüft, ob die Antwort dem clientseitig erstellten Interface aus Listing~\ref{lst:example:projectdesc} entspricht.
+Für die Validierung wird ein für Ruby entwickelter JSON Schema Validator genutzt.
+
+\begin{lstlisting}[language=Ruby,float=h!,caption={Test überprüft, ob bei Anfrage der Route '/project/' eine Antwort vom Typ Project folgt}, label={lst:example:controller-test}]
+it 'lists a single project' do
+	FactoryBot.create(:project, :public)
+	get "/project/"
+	
+	expect(response).to have_http_status(200)
+
+	parsed = JSON.parse(response.body)
+	expect(parsed['data'].length).to eq 1
+
+	# Validierung gegen  das "Project" interface
+	expect(parsed['data'][0]).to validate_against "Project"
+end
+\end{lstlisting}
+
+\begin{itemize}
+	\setlength\itemsep{-1em}
+	\item Zeile 2: erstellt eine \texttt{Project} Instanz und speichert diese in der Datenbank.
+	\item Zeile 3: schickt ein GET Request an die Route "/project/".
+	\item Zeile 5: erwartet den HTTP Status 200 . 
+	\item Zeile 7: parst den response body in JSON.
+	\item Zeile 8: erwartet, dass die Länge der empfangenen Datensätze 1 ist.
+	\item Zeile 11: validiert die Antwort gegen das JSON Schema \texttt{Project}.
+\end{itemize}
+
+Der Server hat nun die Fähigkeit auf eine Anfrage nach allen Projekten zu antworten.
+Somit muss der Client noch die Möglichkeit erhalten, eine Anfrage zu erstellen und die Antwort grafisch abbilden zu können.
+
+\subsection{Dataservices auf dem Client}
+\label{sec:requirements:example:service}
+In der Welt von Angular gibt es eine strikte Trennung zwischen Darstellung und Verarbeitung von Daten~\cite{angular-service}.
+Für die Verarbeitung von Daten - wie das Abrufen - werden Angular Services genutzt. Diese sind typischerweise Typescript Klassen,
+deren Verwendungszwecke genau definiert sind. Der in Listing~\ref{lst:example:service} aufgeführte Service hat die Aufgabe Projekt-Daten zu verarbeiten.
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Funktion zum Abruf aller Projekte vom Server}, label={lst:example:service}]
+@Injectable()
+export class ProjectsDataService {
+    constructor(private http: HttpClient) { }
+    // Die Antwort soll dem Typparameter "Project" entsprechen
+    readonly projects = this.http.get<Project>('/project/');
+}
+\end{lstlisting}
+
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item Zeile 1: \texttt{@Injectable} stellt sicher, dass der Compiler die notwendigen Metadaten erzeugt, um die Abhängigkeiten der Klasse zu erstellen, wenn die Klasse zur Laufzeit injiziert wird.
+    \item Zeile 2: Deklarierung der Klasse/des Services \texttt{ProjectsDataService}
+    \item Zeile 3: Injektion des HttpClient~\cite{angular-http} in den Service
+    \item Zeile 5: Nutzung des HttpClient zur Erstellung und zum Abschicken eines typisierten HTTP-Requests an die Route aus Listing~\ref{lst:example:router}.
+    Dieser wird auf die readonly Variable projects geschrieben.
+\end{itemize}
+
+Hinzuzufügen ist, dass dieses Beispiel nur bedingt dem aktuellen System entspricht, da eigentlich eine einheitliche Service Klasse mit einem Cache verwendet wird, von der der ProjectsDataService erbt. Diese Komplexität wurde aus Gründen der Übersichtlichkeit ausgelassen.
+Die Angabe des Antworttyps \texttt{Project} in Zeile 5 fungiert dabei zur Kompilierungszeit als Type Assertion~\cite{typescript-typeassertion}
+und erleichtert den Zugriff auf die Attribute der Antwort. Der vom Typescript Compiler erzeugte Javascript Code führt während der Laufzeit jedoch keine Überprüfung durch.
+Um Typfehler während der Laufzeit zu verhindern, muss der Entwickler spezielle Prüfungen durchführen, wie z.B. der Test in Listing~\ref{lst:example:controller-test}.
+
+Die Darstellung der erhaltenen Daten übernehmen dann Angular Komponenten, in die Services "injiziert" werden können.
+Dadurch können Komponenten die Funktionen eines injizierten Services nach Belieben nutzen.
+
+\subsection{Komponenten auf dem Client}
+\label{sec:requirements:example:component}
+
+Eine Angular Komponente entspricht einem Teilbaum des DOM-Baums, auch View genannt.
+Somit wird eine Komponente für einen bestimmten Zweck erstellt,
+der in unserem Fall die grafische Auflistung der Projekt-Daten ist (siehe Listing~\ref{lst:example:component}).
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Funktion zum Abruf aller Projekte vom Server}, label={lst:example:component}]
+@Component({
+    selector: "project-list",
+    templateUrl: "templates/project-list.html",
+})
+export class ProjectListComponent {
+    // Injizierung des ProjectsDataService
+    constructor(private _projectsData: ProjectsDataService) {}
+
+    readonly projects = this._projectsData.projects;
+}
+\end{lstlisting}
+
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item Zeile 1: Annotation einer Typescript-Klasse als Komponente.
+    \item Zeile 2: Der Wert von \texttt{selector} kann als HTML-Tag in Templates genutzt werden (\texttt{<project-list></project-list>}),
+    um diese Komponente instanziieren und das zugehörige Template innerhalb des Bezeichners rendern zu können.
+    \item Zeile 3: Festlegung des Pfades, wo sich das zu rendernde Template, also der darzustellende HTML Code, befindet.
+    \item Zeile 5: Deklarierung der Klasse/des Komponente \texttt{ProjectListComponent}.
+    \item Zeile 7: Das Injizieren des \texttt{ProjectsDataService}~\cite{angular-http} in die Komponente.
+    \item Zeile 9: Speichern der Funktion aus dem \texttt{ProjectsDataService} zum Abrufen der Projekt-Daten auf eine Instanzvariable.
+\end{itemize}
+
+Eine Komponente stellt HTML Code dar, der in einer Datei gespeichert wird, die als Template bezeichnet wird.
+Innerhalb des Templates ist der Zugriff auf die nicht privaten Variablen der Komponenten gegeben.
+Das zugehörige Template \texttt{project-list.html} sieht wie in Listing~\ref{lst:example:service} aus.
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Funktion zum Abruf aller Projekte vom Server}, label={lst:example:service}]
+<project-list-item
+  *ngFor="let project of projects | async"
+  [project]="project"
+></project-list-item>
+\end{lstlisting}
+
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item Zeile 1: Aufruf der Komponente mit dem \texttt{selector} "project-list-item".
+    Diese übernimmt hier die Darstellung eines einzelnen Projektes innerhalb einer Liste und verdeutlicht damit
+    die Modularität von Angular Komponenten.
+    \item Zeile 2: \texttt{*ngFor} ist die "Repeater"-Direktive~\cite{ng-for} in Angular.
+    Sie ermöglicht ein gegebenes HTML Template einmal für jeden Wert in einem Array zu wiederholen,
+    wobei jedes Mal der Array-Wert als Kontext übergeben wird. Das Array \texttt{projects} kommt aus der Komponente in Listing~\ref{lst:example:component} Zeile 9.
+    \item Zeile 3: Übergibt den Wert aus dem Array an eine mit \texttt{@Input()} annotierte Variable \texttt{project} in der Komponente mit dem Selektor \texttt{project-list-item} .
+\end{itemize}
+
+Diese Schritte sind in ihrer Gänze nur bei der Einführung neuer Entitäten notwendig.
+Bei der Nutzung von Subtypen kann ein Teil der umgesetzten Schritte wiederverwendet werden,
+bzw. ist nur einmal erforderlich, wie das Ausführen einer Datenbankmigration.
+
+\subsection{Anlegen einer neuen Sicht}
+\label{sec:requirements:example:newview}
+
+\begin{table}[h!]
+	\begin{tabular}{|p{0.12\textwidth}|p{0.52\textwidth}|p{0.12\textwidth}|}
+		\hline
+		\textbf{Schritt} & \textbf{Beschreibung} & \textbf{Aktuelles \newline System} \\ \hline
+		$\ref{sec:requirements:example:interface}$ & Anlegen eines Interfaces & $\surd$  \\ \hline
+		$\ref{sec:requirements:example:schema}$ & Eintrag in Makefile & $\surd$\\ \hline
+		\multirow{2}{*}{$\ref{sec:requirements:example:model}$}
+		& Anlegen einer Datenbank Migration & $X$  \\
+		& Anlegen des Models & $X$ \\ \hline
+		\multirow{4}{*}{$\ref{sec:requirements:example:controller}$}
+		& Route definieren & $\surd$  \\
+		& Anlegen des Controllers & $X$  \\
+		& Controller Funktion schreiben & $\surd$  \\
+		& Tests schreiben & $\surd$  \\ \hline
+		\multirow{2}{*}{$\ref{sec:requirements:example:service}$}
+		& Anlegen eines Angular Services & $X$  \\
+		& Funktion zum Abschicken einer Query & $\surd$  \\ \hline
+		\multirow{2}{*}{$\ref{sec:requirements:example:component}$}
+		& Anlegen einer Angular Komponenten & $\surd$  \\
+		& Anlegen eines Templates & $\surd$  \\ \hline
+	\end{tabular}
+	\vspace{5pt}
+	\centering
+	\caption{Funktionsweise des aktuellen Systems in Bezug auf die Erstellung neuer Sichten auf bereits vorhandene Datensätze}
+	\label{tbl:newview}
+\end{table}
+
+Das Hinzufügen eines neuen Datensatzes erfolgt in 12 Schritten (siehe Tabelle~\ref{tbl:newview}). Der Entwicklungsaufwand für diesen einmaligen Prozesses ist noch vertretbar. Problematisch wird allerdings das wiederholte Anlegen einer neuen Sicht. Wird nur eine Teilmenge der Attribute des erstellten Datensatzes benötigt, müssen die meisten Schritte (8 von 12) wiederholt werden. Je diverser die Sichten auf dem Client werden, desto öfter muss der Prozess, in dem Server und Client gleichermaßen involviert sind, erneut durchlaufen werden.
+
+Um Daten zu liefern, die zu der in einem Interface definierten Teilmenge passen, wurden serverseitig mit der Funktion \texttt{.slice} nur die geforderten Attribute extrahiert (ansonsten Overfetching). Somit entsteht für jede Sicht ein neuer Scope (SQL Abfrage) im Model. Bisher existierten zwei verschiedene Scopes pro Model:
+\texttt{to\_list\_api\_response} ist für die Darstellung von Projekten für jeden Nutzer im Frontpage Bereich gedacht.
+\texttt{to\_full\_api\_response} liefert alle im Model enthaltenen und mit dem Model verbundenen Daten für den Admin Bereich.
+Wird eine Sicht benötigt, die zu jedem Projekt noch den Namen des zugehörigen Nutzers anzeigt, muss mit der Funktion \texttt{.includes} die Beziehung zur Ergebnismenge hinzugefügt werden, da ansonsten übermäßig viele SQL Queries ausgeführt werden (Underfetching).
+
+Möchte der Client also eine neue Sicht erstellen, müssen auf dem Server eine Route, eine Controller Funktion und dazu Tests entwickelt sowie ein Scope für die Antwort geschrieben werden. Daraus ergibt sich ein beachtlicher Aufwand, den es im Kontext der Arbeit zu minimieren gilt.
+
+\section{Vorteile des bisherigen Ansatzes}
+\label{sec:requirements:pros}
+Die Verwendung des derzeitigen Systems hat viele Vorteile,
+deren Gewichtung es in Hinsicht auf die Migration von REST nach GraphQL zu evaluieren gilt.
+Nachfolgend werden die wichtigen Vorteile erläutert.
+
+\subsection{Typescript Typsystem}
+\label{sec:requirements:pros:typescript}
+Ein Vorteil ist die Verwendung des umfangreichen Typescript Typsystems.
+Dieses ermöglicht neben Typüberprüfungen zur Kompilierungszeit auch Vererbungen zwischen Interfaces, die Abbildung verschiedenster Typvarianten wie
+Union Types, zur Ermöglichung verschiedener Typen innerhalb einer Variablen, Intersection Types zum zusammenfügen von Typen,
+Generische Typen sowie Utility Types um bestehende Typen zu manipulieren.
+In Abschnitt~\fullref{sec:basics:typescript} wurden bereits mehrere Möglichkeiten dazu vorgestellt.
+
+\subsection{Typescript zu JSON Schema Generatoren}
+\label{sec:requirements:pros:generation}
+Zusätzlich können "Typescript zu JSON Schema Generatoren" Annotationen innerhalb der Typescript Interfaces verarbeiten~\cite{json-schema-generator-annotations}.
+Dadurch können Wertebereiche vorgegeben bzw. eingeschränkt werden,
+wie das Setzen eines Minimums bzw. Maximums bei Zahlen, die Verwendung von regulären Ausdrücken für Zeichenketten,
+die Angabe wie viele Elemente ein Array minimal bzw. maximal aufnehmen kann,
+sowie die Angabe, wie viele Attribute ein Objekt minimal bzw. maximal haben darf und welche erwartet werden.
+Zudem ermöglichen die Generatoren die Bereitstellung der clientseitig erstellten Typdefinitionen in Form von JSON Schema Dateien.
+
+\subsection{Modularität}
+\label{sec:requirements:pros:modul}
+Aus Unterabschnitt~\fullref{sec:requirements:pros:generation} ergibt sich eine bessere Modularität.
+Der Kern des Systems zur typsicheren Kommunikation besteht aus den drei Punkten: Typescript Interface, Typescript zu JSON Schema Generator und
+JSON Schema Validator. Die ersten beiden Punkte sind unabhängig vom Backend.
+Zudem sind JSON Schema Validatoren in 19 Sprachen~\cite{json-schema-implementations} bereitgestellt worden, wodurch das Backend austauschbar ist.
+Daher kann der Client auch mit anderen APIs typsicher kommunizieren, wenn diese Zugriff auf dessen Typdefinitionen erhalten.
+
+\subsection{Typsicherheit zur Kompilierungszeit}
+\label{sec:requirements:pros:typesafe-compile}
+Im Client sorgt das Typescript Typsystem durch für Typsicherheit zur Kompilierungszeit.
+Typsicherheit auf dem Server stellt sich schwieriger dar. In der untypisierten Welt von Ruby wird nur mit Objekten ohne expliziter Typangabe gearbeitet.
+Auf eine Variable, in der eine Zeichenkette steckt, kann z.B. eine Zahl zugewiesen werden. Wenn anschließend eine Funktion der String Klasse
+im guten Glauben, dass es sich bei der Variablen noch um eine Zeichenkette handelt, auf einer Zahl aufgerufen wird, kommt es zu einem Laufzeitfehler.
+Ein ausreichendes Sicherheitsgefühl wurde dennoch durch umfangreiches Testen der Controller, Models und Helper erlangt.
+Ungeachtet dessen besteht das Problem, dass zur Laufzeit eingehende Daten ungewollte Beschaffenheiten aufweisen können.
+
+\subsection{Typsicherheit zur Laufzeit}
+\label{sec:requirements:pros:typesafe-runtime}
+Beim Kompilieren von Typescript zu Javascript werden alle Typinformationen entfernt.
+Wenn also Daten von einer Schnittstelle abgerufen werden, kann nicht sichergestellt werden, dass diese korrekt ankommen, woraus
+ungewolltes Verhalten resultieren kann.
+Um ungewolltem Verhalten vorzubeugen, wurden Fehlerbehandlungen hinzugefügt, bei denen jede Anfrage auf Korrektheit geprüft wird.
+Voraussetzung ist, dass eingehende Anfragen gegen den selben Typ validiert werden,
+den der Client für das Abschicken nutzt und dieser Typ bei Anfragen zum Erstellen oder Ändern von Daten kompatibel mit dem Datenbankschema ist.
+Hinzuzufügen ist, dass - wie in Abschnitt~\ref{sec:requirements:example:schema} beschrieben - aus Interfaces JSON Schema Dateien erzeugt werden,
+die für die Validierung vom in BlattWerkzeug genutzten JSON Schemer Validator~\cite{json-schemer} gebraucht werden. Somit wird indirekt gegen die Typescript Interfaces validiert.
+
+Zusätzlich wurden auf dem Server Request Specs genutzt.
+Diese können zur Kompilierungszeit Laufzeitfehler in der API Kommunikation bestmöglich ausschließen.
+Sie testen das Verhalten der Controller durch Abschicken von HTTP-Requests und prüfen, ob die Antwort die erwartete Beschaffenheit ausweist. 
+Diese Tests wurden in den Deployment Prozess der Webapplikation eingebaut. Bei fehlgeschlagenen Tests wird die Bereitstellung der Software
+verhindert, wodurch zur Laufzeit ein typsicheres Verhalten suggeriert wird (siehe Listing~\ref{req:typesafe:server-client-short}).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{snippets/server-client-api.pdf}
+    \caption{Typsichere Kommunikation zwischen Typescript Client und Ruby Server}
+    \label{req:typesafe:server-client-short}
+\end{figure}
+
+\subsection{Stabilität}
+\label{sec:requirements:pros:stable}
+Die Software BlattWerkzeug befindet sich seit mehreren Jahren in der Entwicklung. Seit 2016 wird
+eine REST-artige JSON-Schnittstelle verwendet (siehe Kapitel 4.1. Client-Server-Architektur ~\cite{riemer2016}).
+Im Laufe der Zeit wurden zahlreiche Sichten und Funktionalitäten unter Nutzung der typsicheren REST Kommunikationsschnittelle~\ref{req:typesafe:server-client-short} erfolgreich entwickelt.
+Somit konnte sich das aktuelle System bewähren.
+
+\section{Nachteile des bisherigen Ansatzes}
+\label{sec:requirements:cons:typescript}
+Auch wenn ein System funktionstüchtig ist, ist es nicht zwangsläufig perfekt.
+In diesem Abschnitt werden die relevanten Nachteile der bisherigen Umsetzung ausgearbeitet.
+
+\subsection{Manuelle SQL Queries}
+Für alle im Client darzustellenden Models müssen die zwei Funktionen \texttt{to\_full\-\_api\-\_re\-sponse} und \texttt{to\_list\_api\_response} entwickelt werden.
+Die Funktion \texttt{to\-\_full\-\_api\-\_response} selektiert alle Attribute die ein Admin sehen darf. Nur ein Teil dieser Attribute wird im Admin Bereich auch wirklich gebraucht, sie sollen trotzdem dem Admin zugängig gemacht werden.
+\texttt{to\-\_list\-\_api\-\_response} selektiert nur die Attribute, die ein normaler Nutzer sehen darf. Dieses Verfahren ist sehr unflexibel und wird schnell aufwendig, wenn noch weitere Rollen mit anderen Berechtigungen - in Bezug auf den Zugriff von Daten - dazu kommen.
+
+\subsection{Auswahl von Attributen}
+\label{sec:requirements:cons:attributes}
+Bei allen im Kontext dieser Arbeit relevanten Listendarstellungen im Client treten Overfetching Probleme auf.
+Die Listendarstellung von Projekten im Admin Bereich werden 3 von 11 Attributen in der Liste angezeigt. 
+Um dies als Nachteil zu untermauern, wird die Größe des im aktuellen System übertragenen JSON Objektes mit einem JSON Objekt verglichen, welches nur die drei anzuzeigenden Attribute der Projektdaten beinhaltet (siehe Tabelle~\ref{tbl:req:data-transfer}). Die Größe eines Objektes ohne überflüssige Attribute ist bei einer Listengröße von fünf Projekten fast fünfmal kleiner.
+Für die Ermittlung der Werte wurde die verwendete Controller Funktion so umgeschrieben, dass diese nur noch die drei angezeigten Attribute liefert. Die Größe der Antwort konnte dann aus dem Firefox Netzwerkanalyse Tool abgelesen.
+
+\begin{table}[h!]
+	\begin{tabular}{|p{0.3\textwidth}|p{0.3\textwidth}|p{0.3\textwidth}|}
+		\hline
+		\textbf{Anzahl Attribute} & \textbf{Übertragen}  & \textbf{Größe} \\ \hline
+		3 & 1,12 KB & 594 B \\ \hline
+		11 & 3,41 KB & 2,87 KB \\ \hline
+	\end{tabular}
+	\vspace{5pt}
+	\caption{Vergleich der Übertragungsgrößen von ausführlicher Antwort (11 Attribute) mit Antwort ohne überflüssige Daten (3 Attribute)}
+	\label{tbl:req:data-transfer}
+\end{table}
+
+Möchte man zusätzlich noch Beziehungen abbilden kann ebenfalls das in Abschnitt \ref{sec:basics:restapi:interface} beschriebene Underfetching Problem auftauchen.
+Dieses ließe sich im aktuellen System durch manuelle Erstellung der SQL Queries beheben.
+
+\subsection{camelCase und snake\_case Notationen}
+Da in Ruby für Benennungen von Variablen, Methoden, Dateien etc. Snake Case und auf dem Typescript Client Camel Case verwendet werden, müssen Datensätze nach Auslesen aus der Datenbank vor dem Ausliefern an den Client zu Camel Case konvertiert werden. Das Gleiche gilt, wenn Anfragen zum Erstellen von Datensätzen an den Server geschickt werden. Bevor diese in die Datenbank eingefügt werden können, muss die Schreibweise der einzelnen Attribute zu Snake Case verändert werden.
+
+\subsection{Hoher Aufwand}
+Die Haltung der zur JSON Schema Generierung benötigten Informationen zu jedem Interface - Pfad der Datei, Name des Interfaces, Name der generierten Zieldatei -
+in einem Makefile ist unübersichtlich und deren Eintragung kann vergessen werden. 
+Eine Einschränkung des Entwicklers und damit ein weiterer Nachteil ist der Programmieraufwand bei der Erstellung neuer Abfragen bzw. neuer Sichten (siehe Tabelle~\ref{sec:requirements:example:newview}).
+So wie das System aktuell ist, skaliert es noch ausreichend. Je größer allerdings die Anwendung wird, je mehr generierte Typen verwendet werden und je mehr unterschiedliche Sichten gebraucht werden, desto schlechter skaliert es.
+
+\section{Anforderungen}
+\label{sec:requirements:req}
+In diesem Abschnitt sind Kernanforderungen an ein neues System formuliert.
+Aus dem Abschnitt~\fullref{sec:requirements:system} konnten sich bereits mehrere dieser Anforderungen ableiten lassen.
+
+\subsection{Darstellungsvielfalt}
+\label{sec:requirements:req:view}
+Als wichtigste Anforderung wird die Darstellungsvielfalt definiert.
+In einer Webapplikation, in der Nutzer verschiedene Rollen zugewiesen bekommen, wodurch sie Berechtigungen erhalten,
+werden je nach Rolle unterschiedliche Funktionalitäten und Sichten auf Daten gewährt.
+
+Im aktuellen System wird zwischen den Rollen Admin, Owner und User unterschieden - beschrieben in Kapitel 3.2.6 "Rollen und Autorisierung"
+in der Abschlussarbeit von Tom Hilge~\cite{Abschlussarbeit-Tom-Hilge}.
+Die relevanten Berechtigungen der einzelnen Rollen sind in Tabelle~\ref{tbl:req:roles} beschrieben.
+
+\begin{table}[h!]
+    \begin{tabular}{|p{0.34\textwidth}|p{0.3\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|p{0.08\textwidth}|}
+        \hline
+        \textbf{Berechtigung} & \textbf{Beschreibung} & \textbf{Admin} & \textbf{Owner} & \textbf{User} \\ \hline
+        \multirow{3}{*}{Sichten im Frontpage Bereich}
+        & Projekt Liste & $\surd$ & $\surd$ & $\surd$\\
+        & Projekt Details & $\surd$ & $\surd$ & $\surd$\\
+        & Projekt Erstellen & $\surd$ & $\surd$ & $\surd$ \\
+        \hline
+        \multirow{2}{*}{Sichten im Admin Bereich}
+        & Erweiterte Projekt Liste & $\surd$ & $X$ & $X$\\
+        & Erweiterte Projekt Details & $\surd$ & $X$ & $X$\\
+        \hline
+        \multirow{1}{*}{Geplante Sichten}
+        & Projekt Liste eines Owners & $\surd$ & $\surd$ & $X$\\
+        \hline
+    \end{tabular}
+    \vspace{5pt}
+    \caption{Zugriffsberechtigungen auf Projekt Daten der verschiedenen Rollen zur Hervorhebung der benötigten Darstellungsvielhalt}
+    \label{tbl:req:roles}
+\end{table}
+
+Viele dieser Sichten nutzen unterschiedliche Subtypen des Projekttypen.
+Beispielsweise zeigt die Projektliste auf der Frontpage nur öffentliche Projekte - bei denen das Attribut \texttt{public} auf \texttt{true} gesetzt ist  -
+und benötigt andere Attribute als die Projektliste im Adminbereich. 
+
+Zu diesen unterschiedlichen Sichten kommen noch weitere Spezifikationen in der Darstellung, die gefordert sind.
+
+\subsubsection{Mehrsprachigkeit}
+Die Webapplikation von Marcus wird aktuell in zwei Sprachen angeboten, Deutsch und Englisch.
+In Abbildung~\fullref{fig:basics:graphql:6} wurde bereits suggeriert, dass das Feld \texttt{name} eines Projektes nach Sprachen gefiltert werden kann.
+Im aktuellen System werden mehrsprachige Felder
+als hstore (Hash mit Tiefe 1) in der Datenbank gehalten (siehe Listing~\ref{sec:requirements:multilang}). Der Schlüssel gibt den zweistelligen Ländercode nach ISO Alpha-2 \cite{iso-alpha-2} an
+und der dazugehörige Wert den Namen des Projektes in der jeweiligen Sprache.
+
+\begin{lstlisting}[language=JavaScript,float=h!,caption={Speicherung der Projektnamen als hstore}, label={sec:requirements:multilang}]
+{
+    "de"=>"Drei Fragezeichen",
+    "en"=>"Three Investigators"
+}
+\end{lstlisting}
+
+Das Sprachenangebot gilt bei einer Systemmigration weiterhin als gefordert und soll zukünftig erweiterbar sein.
+
+\subsubsection{Sortieren und Paginierung}
+Die Paginierung ist das Portionieren großer Datensätze zur übersichtlicheren und schnelleren Verarbeitung und Darstellung.
+In BlattWerkzeug werden alle Listenansichten im Admin Bereich in einer Tabelle paginiert angezeigt.
+Ein Datensatz, der einer Liste mit 30 Einträgen entspricht, würde bei einer Paginierung mit der Seitengröße fünf auf sechs Seiten aufgeteilt werden.
+Ein Menü zum Traversieren der Einträge könnte wie in Abbildung~\ref{req:view:pagination} aussehen.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\linewidth]{snippets/paginierung.pdf}
+    \caption{Menüleiste zum Wechseln der Seite und Einstellen der Seitengröße}
+    \label{req:view:pagination}
+\end{figure}
+
+Außerdem soll es möglich sein, eine Liste nach verschiedenen Attributen sortieren zu können, auch wenn diese mehrsprachig sind und
+in der Datenbank als hstore gespeichert werden.
+
+\subsubsection{Filtern}
+
+Für Listendarstellungen soll es möglich sein, serverseitig Einträge effizient zu filtern - also möglichst direkt in SQL.
+
+Ein neues System muss also folgende Anforderungen erfüllen:
+\begin{itemize}
+	\setlength\itemsep{-1em}
+	\item Auswahl von Feldern
+	\item Sprachauswahl
+	\item Sortieren
+	\item Paginierung
+	\item Filtern
+\end{itemize}
+\subsection{Typdefinitionen}
+
+Typdefinitionen (als ganzes Typschema genannt) sind die Grundlagen für typsichere Webapplikationen.
+Gefordert wird, dass sich sowohl serverseitige als auch clientseitige Applikationen ein Typschema teilen. 
+Die Alternative, dass jede Applikation ein eigenes Typschema besitzt, ist keine Option. Diese müssten mit viel Aufwand zu jedem Zeitpunkt synchron gehalten werden, wodurch bei jeder Änderung eines Schemas alle Weiteren angepasst werden müssten. Dies würde keine Verbesserung zum aktuellen System bedeuten.
+
+Somit muss ein Typschema, wie in Listing~\fullref{req:typesafe} erwähnt, systemübergreifend zur Verfügung gestellt werden.
+
+\subsubsection{Übersetzung des Typschema durch Codegenerierung}
+Codegeneratoren ermöglichen das Übersetzen eines Typschemas in ein anderes, wie z.B. von Typescript zu JSON Schema.
+Sie sind für die zentrale Haltung und Nutzung nur eines Typschemas ausschlaggebend.
+Gefordert ist bei der Einführung eines Typschemas, dass entsprechende Generatoren für alle angebundenen Applikationen vorhanden sind.
+
+\subsubsection{Datenbankschema}
+Zusätzlich wird gefordert, dass das Typschema mit dem bereits vorhandenen Datenbankschema kompatibel ist.
+Bei Abweichungen, wie der Speicherung eines Datums in verschiedenen Datumsformaten,
+werden Übersetzungen nach Auslesen oder vor dem Einfügen in die Datenbank gefordert.
+Codegeneratoren können hierbei nur in eine Richtung genutzt werden.
+Diese bezieht sich auf die Generierung von Typen aus dem Datenbankschema zum Beispiel mithilfe des Rubygems \emph{schema2type}~\cite{schema2type}.
+Die Generierung eines Datenbankschemas aus Typdefinitionen ist nicht zu empfehlen.
+Zum einen muss für jeden Typen angegeben werden, ob dieser eine Datenbanktabelle darstellt oder z.B. nur ein Subtyp ist.
+Zum anderen sind komplexe Beziehungen zwischen Typen schwer abzubilden.
+Also ist mit einer Koexistenz zwischen zentralem Typschema und Datenbankschema zu rechnen.
+
+\subsubsection{Synchronisation der Typdefinitionen}
+Sollte das zentrale Typschema für eine Applikation übersetzt werden,
+muss das übersetzte Schema synchron zum Ursprünglichen bleiben. Dies sollte in den Prozess der Bereitstellung der Software eingebunden werden.
+Ein neues System muss also folgende Anforderungen erfüllen:
+
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item Zentrales Typschema
+    \item Übersetzung des Typschemas für jede Applikation
+    \item Synchronität aller Schemata
+    \item Kompatibilität mit Datenbankschema
+\end{itemize}
+
+\subsection{Typsicherheit}
+\label{req:typesafe}
+Eine weitere grundlegende Anforderung bei der Entwicklung einer Webapplikation ist die Typsicherheit.
+Im Kontext der Arbeit werden Typsicherheit auf dem Client,
+dem Server und die typsichere Kommunikation zwischen Client und Server miteinander in Bezug gebracht.
+Sind die drei Punkte gegeben, wird von einer typsicheren Webapplikation gesprochen.
+
+\subsubsection{Auf dem Client und Server}
+\label{req:typesafe:client}
+Die Typsicherheit ist im aktuellen System clientseitig und serverseitig ausreichend gegeben (siehe Unterabschnitt~\fullref{sec:requirements:pros:typesafe-compile} und Unterabschnitt~\fullref{sec:requirements:pros:typesafe-runtime}).
+Es wird mindestens gefordert, dass sich diese mit Einführung eines neuen Systems nicht verschlechtert.
+
+\subsubsection{Kommunikation zwischen Server und Client}
+\label{req:typesafe:api}
+Während des Datenaustausches zwischen Client und Server kann es durch fehlerhafte Daten zu Laufzeitfehlern kommen.
+Dieses Problem lässt sich bei eingehenden Daten durch Validierungen jeder Anfrage und Antwort auf ihre Korrektheit lösen.
+Voraussetzung dafür ist, dass jede eingehende Anfrage gegen den \textbf{selben} Typen validiert wird,
+den der Client auch für das Abschicken nutzt und kompatibel mit dem Datenbankschema ist.
+Umgekehrt gilt, dass jede Antwort gegen den selben Typen serverseitig validiert wird, den der Client zur Speicherung der Antwort verwendet.
+Dafür sind systemübergreifende Typdefinitionen, wie in Abbildung~\ref{req:typesafe:server-client-short} SCHEMA genannt, unabdingbar.
+
+Die folgenden Beispiele zeigen in, welchem Ausmaß die Validierung der Daten gefordert ist. In Abbildung~\ref{req:typesafe:request-validation} wird durch ein Formular die Erstellung eines Projektes demonstriert. Die Inhalte des Formulars werden auf ein Objekt vom Typ \texttt{CreateProjekt} (siehe Listing~\ref{req:typesafe:createproject}) geschrieben und an den Server geschickt. Dort wird der eingehende Datensatz gegen den selben Typ validiert. Treten hierbei Fehler auf, wird der Datensatz nicht in die Datenbank geschrieben und der HTTP Status 400 zurück gegeben.
+Wird der Datensatz erfolgreich validiert, wird der Datensatz in der Datenbank gespeichert und der HTTP Status 200 an den Client geschickt.
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Interface zum Erstellen eines Projektes}, label={req:typesafe:createproject}]
+interface CreateProject {
+  name: string;
+  slug?: string;
+  public: boolean;
+}
+\end{lstlisting}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{snippets/project-create-validation.pdf}
+	\caption{Validierung von Requests zum Erstellen eines neuen Projekt Datensatzes}
+	\label{req:typesafe:request-validation}
+\end{figure}
+
+\ \\
+\ \\
+
+In Abbildung~\ref{req:typesafe:list-validation} wird eine Liste von Projekten, deren Attribut \texttt{public} auf \texttt{true} gesetzt ist, beim Server angefragt. Bevor diese Liste an den Client zurück gegeben wird, wird gefordert, dass diese gegen das Interface validiert wird, welches der Client zur Darstellung nutzt (siehe Listing~\ref{req:typesafe:listproject}). Schlägt die Validierung fehl, wird der HTTP Status 400 zurück gegeben, ansonsten der Datensatz - inkl. HTTP Status 200.
+
+
+
+Ein neues System muss als Anforderung mindestens den aktuellen Grad an Typsicherheit aufweisen durch:
+
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item Systemübergreifendes Validieren gegen die selben Typen
+    \item Validierung von Anfragen
+    \item Validierung von Antworten
+    \item Testen der Schnittstellen, um Laufzeitfehler vorzubeugen.
+\end{itemize}
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Interface zum Auflisten von Projekten}, label={req:typesafe:listproject}]
+interface ListProject {
+id: string;
+name: string;
+slug?: string;
+}
+\end{lstlisting}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{snippets/project-list-validation.pdf}
+	\caption{Validierung von Responses zum Auflisten von Projekt Datensätzen}
+	\label{req:typesafe:list-validation}
+\end{figure}
+
+\subsection{Performance und Skalierbarkeit}
+Performance und Skalierbarkeit sind bei der Wahl eines Systems ausschlaggebende Kriterien. Das aktuelle System weist im Bereich der Kommunikation Schwächen auf, die es zu beheben gilt.
+
+\subsubsection{Over- und Underfetching}
+Over- und Underfetching sind für eine REST API typische Probleme.
+In Unterabschnitt \fullref{sec:requirements:cons:attributes} wurde bereits gezeigt, weshalb diese ein Nachteil in der Performance darstellen.
+Ein neues System sollte diese Probleme beheben können.
+Wichtig ist, dass nicht für jede gekürzte Sicht ein Subtyp und eine neue Route inkl. Controller Funktion erstellt wird. Des weiteren dürfen Beziehungen zwischen Daten nicht das Abfeuern übermäßig vieler Requests bedeuten.
+
+\subsubsection{N+1 Query Problem}
+Ein weiterer Aspekt der, die Performanz und Skalierbarkeit einschränkt, ist das N+1 Query Problem bei Datenbankabfragen. Dieses unterscheidet sich kaum zu dem bereits erwähnten N+1 Query Problem bei Abfragen an die Web API. Beide beschreiben einen Engpass, der bei Hochskalierung von Anfragen zu Einbußen in der Performance führt. 
+
+Datenbankabfragen werden auch nach der Migration von REST nach GraphQL serverseitig von Rails ausgeführt. Wurde das N+1 Query Problem beim Anfragen der Web API gelöst, kann es dennoch zum Abschicken von N+1 Datenbankabfragen kommen.
+Dieses Problem gilt es als Anforderung zu lösen.
+
+\subsubsection{Cache}
+Die Nutzung eines Caches soll bei HTTP Anfragen möglich sein, um Anfragen einsparen zu können. Der Cache ermöglicht bei wiederholten Abfragen das Laden der bereits vom Server übertragenen Antwort aus dem lokalen Speicher eines Clients. Da die schnellsten Anfragen die sind, die nicht verschickt werden müssen, wird gefordert einen Cache mit wenig Aufwand integrieren und nutzen können. 
+
+\begin{itemize}
+	\setlength\itemsep{-1em}
+	\item Lieferung nur benötigter Daten
+	\item Abschicken möglichst weniger Anfragen an die Web API
+	\item Abschicken möglichst weniger Anfragen an die Datenbank
+	\item Möglichkeit zur Nutzung eines Caches
+\end{itemize}
+
+\subsection{Validierung von jsonb und hstore}
+\label{req:validation:json}
+Das Validieren von Entitäten aus der Datenbank, die ein JSON Objekt beinhalten wird gefordert.
+Komplexe Datentypen mit tiefen Verschachtelungen oder flexible Datentypen - die sich oft ändern - lassen sich erschwert in ein Datenbankschema gießen. Sie können dann als json,
+jsonb oder hstore in ihrer Gesamtheit gespeichert werden, ohne das für Schlüssel und Werte Bedingungen (Constraints) auf Datenbankebene definiert werden können.
+
+Gefordert wird das diese JSON Objekte gegen einen Typen aus dem Typschema validiert werden, bevor sie in die Datenbank eingefügt werden. Sollten die JSON Objekte ebenfalls nicht im Typschema des neues Systems abbildbar sein und dadurch implizit validiert werden können, müssen sie mindestens gegen das bereits existierende JSON Schema validiert werden.
+
+\subsection{Benennungskonvention}
+\label{req:naming:convention}
+Die Verwendung verschiedener Benennungskonventionen kann problematische Folgen haben.
+In der Welt von Ruby werden Worttrennungen in Dateinamen, Variablennamen sowie Funktionsnamen mit Unterstrichen getrennt (Snake Case).
+In Typescript sieht die Konvention vor Variablen- und Funktionsnamen in Camel Case und Klassennamen in Pascal Case zu schreiben~\cite{typescript-conventions}.
+
+Diese Gegebenheit erschwert die Kommunikation zwischen Typescript Client und Ruby Server. Gefordert ist, dass ein neues System mit diesen Unterschieden umgehen kann.

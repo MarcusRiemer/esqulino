@@ -62,7 +62,14 @@ const NODE_CONVERTER_BASE: NodeConverterRegistration[] = [
           OutputSeparator.SPACE_BEFORE
         );
 
-        node.children["value"].forEach((child) => process.generateNode(child));
+        // Value may be modeled as property or as child
+        if ("value" in node.properties) {
+          process.addConvertedFragment(node.properties["value"], node);
+        } else if (node.children["value"]) {
+          node.children["value"].forEach((child) =>
+            process.generateNode(child)
+          );
+        }
 
         process.addConvertedFragment(`"`, node, OutputSeparator.NONE);
       },

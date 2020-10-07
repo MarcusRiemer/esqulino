@@ -6,8 +6,8 @@ module EsqulinoError
     def initialize(code_resource)
       @code_resource = code_resource
       readable_dependants = @code_resource
-                              .immediate_dependants
-                              .map { |i| i.readable_identification }
+                            .immediate_dependants
+                            .map { |i| i.readable_identification }
       super(
         "CodeResource #{code_resource.id} is referenced by: #{readable_dependants.join ', '}",
         400

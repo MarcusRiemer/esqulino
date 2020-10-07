@@ -1,0 +1,8 @@
+query SelectionListGrammars{
+    grammars{
+        nodes {
+            id
+            name
+        }
+    }
+}

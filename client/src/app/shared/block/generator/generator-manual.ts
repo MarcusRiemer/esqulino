@@ -1,6 +1,7 @@
 import {
   NodeConcreteTypeDescription,
   GrammarDocument,
+  NodeVisualTypeDescription,
 } from "../../syntaxtree/grammar.description";
 
 import { BlockLanguageDocument } from "../block-language.description";
@@ -67,6 +68,7 @@ export function convertGrammarManualInstructions(
   // these can be copied over without further ado.
   const toReturn: BlockLanguageDocument = {
     editorBlocks: [],
+    rootCssClasses: [],
     editorComponents: d.editorComponents || defaultEditorComponents,
     sidebars: (d.staticSidebars || []).map((sidebar) =>
       generateSidebar(strictlyNamedTypes, sidebar)
@@ -98,7 +100,7 @@ export function convertGrammarManualInstructions(
       return {
         describedType: { languageName: t.languageName, typeName: t.typeName },
         visual: mapType(
-          t as NodeConcreteTypeDescription,
+          t as NodeConcreteTypeDescription | NodeVisualTypeDescription,
           instructions.typeInstructions(t.languageName, t.typeName)
         ),
       };

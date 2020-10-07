@@ -1,0 +1,24 @@
+<mat-progress-bar
+  conditionalDisplay
+  [_indicator]="progress$"
+  [_initiator]="false"
+  mode="indeterminate"
+></mat-progress-bar>
+<table
+  conditionalDisplay
+  [_initiator]="true"
+  [_indicator]="progress$"
+  class="full-width"
+  mat-table
+  [dataSource]="listData$ | async"
+>
+  <ng-content></ng-content>
+  <tr mat-header-row *matHeaderRowDef="queryData.displayColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: queryData.displayColumns;"></tr>
+</table>
+<mat-paginator
+  (page)="onChangePagination($event)"
+  [length]="totalCount$ | async"
+  [pageSize]="25"
+  [pageSizeOptions]="[5,25,100]"
+></mat-paginator>

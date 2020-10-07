@@ -6,8 +6,8 @@ export interface ColumnDescription {
   index: number;
   name: string;
   type: string;
-  not_null: boolean;
-  dflt_value?: string;
+  notNull: boolean;
+  dfltValue?: string;
   primary: boolean;
 }
 
@@ -17,9 +17,9 @@ export interface ColumnDescription {
  */
 export interface ForeignKeyDescription {
   references: {
-    to_table: string;
-    to_column: string;
-    from_column: string;
+    toTable: string;
+    toColumn: string;
+    fromColumn: string;
   }[];
 }
 
@@ -33,8 +33,8 @@ export interface TableDescription {
    * @minItems 1
    */
   columns: ColumnDescription[];
-  foreign_keys: ForeignKeyDescription[];
-  system_table?: boolean;
+  foreignKeys: ForeignKeyDescription[];
+  systemTable: boolean;
 }
 
 /**

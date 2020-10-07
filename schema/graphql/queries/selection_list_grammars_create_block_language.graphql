@@ -1,0 +1,9 @@
+query SelectionListGrammarsCreateBlockLanguage {
+  grammars{
+    nodes {
+      id
+      name
+      programmingLanguageId
+    }
+  }
+}

@@ -27,16 +27,22 @@ Rails.application.config.after_initialize do
 
   IdeService::LogSubscriber.attach_to :ide_service
 
-  Rails.logger.info "IDE service configured, testing availability ..."
-  begin
-    IdeService.instance.wait_cli_program_exists!
+  wait_for_cli = ENV.fetch("WAIT_IDE_SERVICE", false).to_s.downcase == "true"
 
-    if not IdeService.instance.ping!
-      abort("Startup Error: IDE service did not respond")
+  if wait_for_cli
+    Rails.logger.info "IDE service configured, testing availability ..."
+    begin
+      IdeService.instance.wait_cli_program_exists!
+
+      if not IdeService.instance.ping!
+        abort("Startup Error: IDE service did not respond")
+      end
+    rescue IdeServiceError => e
+      puts "##### Exception of type #{e.class.name} #####"
+      puts e.message
+      abort("Startup Exception: See above")
     end
-  rescue IdeServiceError => e
-    puts "##### Exception of type #{e.class.name} #####"
-    puts e.message
-    abort("Startup Exception: See above")
+  else
+    Rails.logger.info "IDE service configured, Skipping availability test ..."
   end
 end

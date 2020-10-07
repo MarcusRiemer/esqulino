@@ -1,0 +1,45 @@
+mutation UpdateGrammar(
+  $id: ID!,
+  $name: String,
+  $slug: String,
+  $types: JSON,
+  $foreignTypes: JSON,
+  $root: QualifiedTypeName,
+  $programmingLanguageId: ID,
+  $generatedFromId: ID,
+  $blockLanguageIds: [ID!]
+) {
+  updateGrammar(
+    input:{
+      id: $id,
+      name: $name,
+      slug: $slug,
+      types: $types,
+      foreignTypes: $foreignTypes,
+      root: $root,
+      programmingLanguageId: $programmingLanguageId,
+      generatedFromId: $generatedFromId,
+      blockLanguageIds: $blockLanguageIds
+    }
+  ) {
+    grammar {
+      id
+      name
+      programmingLanguageId
+      slug
+      generatedFromId
+      foreignTypes
+      root
+      types
+      includes
+      visualizes
+      blockLanguages {
+        nodes {
+          id
+          name
+        }
+      }
+    }
+    errors
+  }
+}

@@ -1,0 +1,39 @@
+mutation CreateGrammar(
+  $name: String!,
+  $slug: String,
+  $types: JSON!,
+  $foreignTypes: JSON,
+  $root: QualifiedTypeName,
+  $programmingLanguageId: ID!
+) {
+  createGrammar(
+    input: {
+      name: $name,
+      slug: $slug,
+      types: $types,
+      foreignTypes: $foreignTypes,
+      root: $root,
+      programmingLanguageId: $programmingLanguageId
+    }
+  ) {
+    grammar {
+      id
+      name
+      programmingLanguageId
+      slug
+      generatedFromId
+      foreignTypes
+      root
+      types
+      visualizes
+      includes
+      blockLanguages {
+        nodes {
+          id
+          name
+        }
+      }
+    }
+    errors
+  }
+}

@@ -1,9 +1,9 @@
 # coding: utf-8
+
 require 'sqlite3'
 require 'fileutils'
 require 'ostruct'
 require 'json'
-
 
 module SchemaTools
   module Alter
@@ -14,7 +14,7 @@ module SchemaTools
       FileUtils.cp(sqlite_file_path, sqlite_file_path + '.bak')
 
       table = SchemaTools::database_describe_schema(sqlite_file_path)
-                .select{ |table| table.name == table_name}.first
+                         .select { |table| table.name == table_name}.first
 
       # Execute each command one by one
       begin
@@ -46,7 +46,7 @@ module SchemaTools
               removeForeignKey(table, cmd['foreignKeyToRemove'])
             end
 
-            table_hash = table.serializable_hash(include: { columns: { }, foreign_keys: {} })
+            table_hash = table.serializable_hash(include: { columns: {}, foreign_keys: {} })
             database_alter_table(sqlite_file_path, table_hash, colHash)
           else
             internal_rename_table(sqlite_file_path, table.name, cmd['newName'])
@@ -61,7 +61,6 @@ module SchemaTools
         # raise EsqulinoError.new("Internal error altering the database")
       end
     end
-
 
     def self.database_alter_table(sqlite_file_path, schema_table, colHash)
       tempTableName = String.new(schema_table['name'])
@@ -109,7 +108,7 @@ module SchemaTools
     def self.create_column_strings(colHash)
       colFrom = String.new()
       colTo = String.new()
-      colHash.each_with_index { |(key,value), index|
+      colHash.each_with_index { |(key, value), index|
         colFrom.concat(key)
         colTo.concat(value)
         if index != colHash.length - 1
@@ -123,7 +122,6 @@ module SchemaTools
       return colFrom, colTo
     end
 
-
     # Function to create a CREATE TABLE statement out of a schemaTable object.
     # @param schema_table - Table object to create a CREATE TABLE statement
     # return - The CREATE TABLE statement
@@ -136,7 +134,8 @@ module SchemaTools
         end
       end
       # create fk constraints
-      schema_table['foreign_keys'].each do |fk|
+      foreign_keys = schema_table['foreignKeys'] || schema_table['foreign_keys']
+      foreign_keys.each do |fk|
         createStatement.concat(", ")
         createStatement.concat(tables_foreignKey_to_create_statement(fk))
       end
@@ -193,11 +192,11 @@ module SchemaTools
           fk_ref_columns.concat(", ")
         end
 
-        fk_columns.concat(ref['from_column'])
-        fk_ref_columns.concat(ref['to_column'])
+        fk_columns.concat(ref['from_column'] || ref['fromColumn'])
+        fk_ref_columns.concat(ref['to_column'] || ref['toColumn'])
       end
 
-      target_table = fk_references[0]['to_table']
+      target_table = fk_references[0]['to_table'] || fk_references[0]['toTable']
       to_return = "FOREIGN KEY (#{fk_columns}) REFERENCES #{target_table}(#{fk_ref_columns})"
       return to_return
     end
@@ -233,11 +232,13 @@ module SchemaTools
         createStatement.concat(" ")
       end
 
-      if schema_column['not_null'] || schema_column['primary']
+      if schema_column['notNull'] || schema_column['not_null'] || schema_column['primary']
         createStatement.concat("NOT NULL ")
       end
-      unless schema_column['dflt_value'].nil? or schema_column['dflt_value'].empty?
-        createStatement.concat("DEFAULT #{schema_column['dflt_value']}")
+
+      dflt_value = schema_column['dfltValue'] || schema_column['dflt_value']
+      if dflt_value and not dflt_value.empty?
+        createStatement.concat("DEFAULT #{dflt_value}")
       end
       return createStatement
     end
@@ -259,43 +260,45 @@ module SchemaTools
     ### Table Commands ###
 
     def self.addColumn(table)
-      column_schema = SchemaColumn.new(table.columns.length,'NewColumn','TEXT', 0, nil, 0)
+      column_schema = SchemaColumn.new(table.columns.length, 'NewColumn', 'TEXT', 0, nil, 0)
       table.add_column(column_schema)
     end
 
     def self.deleteColumn(table, colHash, columnIndex)
-      colHash.delete(table.columns.find{|col| col.index == columnIndex}.name)
+      colHash.delete(table.columns.find { |col| col.index == columnIndex}.name)
       table.foreign_keys.each do |fk|
-        fk.references.select!{ |ref| ref.from_column != table.columns.find{|col| col.index == columnIndex}.name }
+        fk.references.select! { |ref| ref.from_column != table.columns.find { |col| col.index == columnIndex}.name }
       end
-      table.foreign_keys.select!{ |fk| fk.references.size != 0 }
-      table.columns.delete(table.columns.find{|col| col.index == columnIndex})
+      table.foreign_keys.select! { |fk| fk.references.size != 0 }
+      table.columns.delete(table.columns.find { |col| col.index == columnIndex})
     end
 
     def self.switchColumn(table, columnOrder)
-      table.columns = columnOrder.map{|col| table.columns.find{|tcol| tcol.index == col}}
+      table.columns = columnOrder.map { |col| table.columns.find { |tcol| tcol.index == col}}
     end
 
     def self.renameColumn(table, colHash, columnIndex, newName)
-      colHash[table.columns.find{|col| col.index == columnIndex}.name] = newName
-      table.columns.find{|col| col.index == columnIndex}.name = newName
+      colHash[table.columns.find { |col| col.index == columnIndex}.name] = newName
+      table.columns.find { |col| col.index == columnIndex}.name = newName
     end
 
     def self.changeColumnType(table, columnIndex, newType)
-      table.columns.find{|col| col.index == columnIndex}.type = newType
+      table.columns.find { |col| col.index == columnIndex}.type = newType
     end
 
     def self.changeColumnPrimaryKey(table, columnIndex)
-      pk_column = table.columns.find{|col| col.index == columnIndex}
+      pk_column = table.columns.find { |col| col.index == columnIndex}
       pk_column.primary = !pk_column.primary
     end
 
     def self.changeColumnNotNull(table, columnIndex)
-      table.columns.find{|col| col.index == columnIndex}.not_null = !table.columns.find{|col| col.index == columnIndex}.not_null
+      col = table.columns.find { |col| col.index == columnIndex }
+      col.not_null = !col.not_null
     end
 
     def self.changeColumnStandardValue(table, columnIndex, newValue)
-      table.columns.find{|col| col.index == columnIndex}.dflt_value = newValue
+      col = table.columns.find { |col| col.index == columnIndex}
+      col.dflt_value = newValue
     end
 
     def self.changeTableName(table, newName)

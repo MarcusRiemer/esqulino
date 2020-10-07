@@ -1,0 +1,512 @@
+%! Author = yannux
+%! Date = 24.08.20
+
+%************************************************
+% Status Quo
+%************************************************
+\chapter{Grundlagen}
+\label{sec:basics}
+Das Hauptmotiv bei der Nutzung des Internets ist die In\-for\-ma\-tions\-auf\-nah\-me~\cite{ard-zdf}.
+Informationen werden auf unzähligen Webapplikationen bereitgestellt, die jeder mit einem Internetzugang einsehen kann,
+solange der Zugriff auf die Informationen nicht sonderlich geschützt wird.
+
+Um persistente und sensible Daten gesichert und nicht für Jedermann zugreifbar lagern zu können, werden sie \emph{serverseitig} gehalten.
+Möchte man diese Daten zusätzlich filtern, sortieren oder mehrere Datensätze miteinander verknüpfen, wird eine Datenbank benötigt.
+Eine Datei, in der die Daten abgelegt werden, wäre auch eine Option, allerdings müsste man alle Methoden zum Filtern, Sortieren und Verknüpfen
+selber implementieren.
+
+Die in einer Datenbank gespeicherten Informationen sind also aus Nutzersicht nur über eine Anfrage an den Server abrufbar.
+Somit ist der Server das Bindeglied zwischen einem Client und der Datenbank und kümmert sich um Aufgaben wie Authentifizierung des Nutzers
+und Überprüfung der Autorisierung bezüglich der angefragten Daten, aber auch um die Zusammensetzung und Ausführung von Datenbankabfragen.
+Daraus geht hervor, dass ein Client nur begrenzten Zugriff bekommt, da die Ausführung von vordefinierten Funktionen, die Anfragen an die Datenbank beinhalten,
+lediglich angefragt werden kann. Werden die vordefinierten Funktionen den Bedarf an Informationen nicht gerecht, müssen neue Funktionen entwickelt
+oder mithilfe von mehreren Anfragen die Daten zusammengesammelt werden.
+
+Dieser Entwicklungsaufwand könnte verringert werden, indem der Client mehr Flexibilität, Verantwortung und Effizienz besitzen würde,
+z.B. durch eine direkte Anbindung an die Datenbank.
+Er könnte exakt die benötigten Daten mit nur einer Anfrage direkt und effizient aus der Datenbank auslesen.
+Jedoch würde dieser Ansatz viele Gefahren mit sich bringen. Ein Client der direkten Datenbankzugriff erlangt,
+könnte unerwünschte Transaktionen in der Datenbank ausführen, wodurch der erwartete Datenbestand geändert,
+Einträge gar gelöscht oder sensible Daten anderer Nutzer abgefragt werden könnten. Also sollten Zugriffsbeschränkungen erteilt werden, die
+auf der Datenbankschicht realisiert werden, da clientseitiger Code nach Belieben vom Nutzer eingesehen und verändert werden kann.
+Hinzu kommen weitere Herausforderungen, wenn die Verbindung zur Datenbank veröffentlicht wird,
+wie zum Beispiel das Schützen vor zu exzessiver Nutzung oder das Ausnutzen von bekannten Sicherheitslücken bei nicht aktuellsten Versionen~\cite{postgresql-security}.
+Alles in allem ist das ein Verfahren, von dem dringend abgeraten wird, da es in den wenigsten Fällen nutzbringend und sicher gehandhabt werden kann~\cite{client-to-database}.
+
+Im Folgenden werden diese Probleme anhand von grundlegenden Inhalten, die aktuell Gegenstand des von Marcus Riemers entwickelten Systems~\cite{riemer2016} sind 
+wieder aufgegriffen und bei Erläuterungen bzw. Code-Beispielen als bekannt vorausgesetzt.
+Dazu gehören die Unterkapitel \fullref{sec:basics:restapi}, \fullref{sec:basics:typescript}, \fullref{sec:basics:jsonschema} und \fullref{sec:basics:postgres}.
+Diese müssen für die Schaffung und Umsetzung von Verbesserungen grundlegend verstanden werden.
+Bei dem Kapitel \fullref{sec:basics:graphql} handelt es sich um eine Abfragesprache und Laufzeitumgebung,
+für die im Laufe der Arbeit evaluiert wird, ob sie gewinnbringend in das bestehende System migriert werden und Teile ersetzen kann.
+
+%Nicht spezifisch auf Blattwerzeuge werden!! Kleines Beispiel ist erlaubt (Begriff Blattwerzeug wird nicht erwähnt).
+\section{REST API}
+\label{sec:basics:restapi}
+Der Begriff Representational State Transfer (abgekürzt REST, seltener auch ReST) wurde erstmalig in der Dissertation "Architectural Styles and the Design of
+Network-based Software Architectures" von Roy Thomas Fielding im Jahr 2000 geprägt~\cite{fielding-dissertation}.
+Er beschreibt REST als einen Architekturstil für verteilte Systeme, welcher in eine einheitliche Schnittstelle für Kommunikation mündet.
+Dieser Architekturstil oder auch Programmierparadigma wird durch verschiedene Software-Engineering-Prinzipien und Beschränkungen definiert.
+Im Folgenden werden die Prinzipien von REST näher erläutert.
+
+\subsection{Client-Server-Modell}
+Der Ausgangspunkt des Client-Server-Modells ist eine strikte Trennung der Benutzeroberfläche von der Datenhaltung/-verwertung.
+Das bedeutet wiederum, dass kein HTML, CSS und Javascript vom Server an den Client geschickt wird, sondern ausschließlich Datensätze
+meist in Form von XML oder JSON, die clientseitig in die Benutzeroberfläche eingebaut werden.
+Dadurch verbessert sich die Portabilität der Benutzeroberfläche in Bezug auf die Anbindung an verschiedene Datenhaltungs/-verwertungs-Systeme,
+also die Wiederverwendbarkeit und die Skalierbarkeit aufgrund der Vereinfachung der Serverkomponenten.
+
+\subsection{Zustandslosigkeit}
+Zustandslosigkeit ist eine Beschränkung in Bezug auf die Kommunikation zwischen Server und Client.
+Anfragen vom Client müssen alle Informationen beinhalten um diese interpretieren zu können.
+Insbesondere werden Anfragen ohne Bezug zu früheren Anfragen behandelt und keine Sitzungsinformationen -
+wie Authentifizierungs- und Authorisierungsinformationen - ausgetauscht bzw. verwaltet.
+Diese befinden sich ausschließlich auf dem Client und müssen bei Anforderung von geschützten Daten der Anfrage beigefügt werden.
+
+Vorteile aus dieser Beschränkung sind, dass Anfragen unabhängig voneinander betrachtet werden können
+und somit z.B. von mehreren Maschinen parallel ausgeführt werden können, da jede Anfrage für sich eine vollständige Anforderung an den Server beschreibt.
+Zudem kann einfacher auf den Misserfolg einer Anfrage reagiert werden als auf eine erfolglose Kette von zusammenhängenden Anfragen
+und es ist nicht vonnöten Zwischenzustände bzw. Status zu speichern, welche die Ressourcenauslastung erhöhen würde.
+Dies kann jedoch zu einer verringerten Netzwerkleistung führen aufgrund von Zusatzinformationen,
+die sich bei mehreren verschiedenen Anfragen wiederholen und erneut mit gesendet werden müssen.
+
+\subsection{Cache}
+In Hinblick auf das Verbessern der Netzwerkleistung wurde ein Cache als Einschränkung hinzugefügt.
+Diese Einschränkung setzt voraus, dass Daten aus einer Antwort vom Server implizit oder explizit als cachefähig oder nicht cachefähig gekennzeichnet werden.
+Werden Daten in einer Antwort auf eine Anfrage als cachefähig gekennzeichnet, kann der Client diese Information speichern und erhält das Recht diese
+bei einer späteren gleichwertigen Anfrage wiederzuverwenden.
+Somit können Anfragen effizienter behandelt bzw. ganz durch eine direkt aus dem Cache geladene Antwort ersetzt werden.
+
+\subsection{Einheitliche Schnittstelle}
+\label{sec:basics:restapi:interface}
+Ein zentrales Merkmal von REST ist die einheitliche und vom Dienst entkoppelte Schnittstelle.
+Auf jede Ressource muss über einen einheitlichen Satz an URLs, hinter denen sich Transaktionen zum Erstellen, Lesen, Aktualisieren
+und zum Löschen (CRUD) verbergen, zugegriffen werden können.
+
+Durch eine einheitliche Komponentenschnittstelle wird die Sichtbarkeit der einzelnen Interaktionen erhöht.
+Dies bedeutet, dass es für jede Ressource eine Menge fest definierter Interaktionen gibt, die sich in ihrer Struktur nur durch den Namen der
+Ressource und ihre Fremdbeziehungen unterscheiden.
+
+\begin{table}[h]
+    \begin{tabular}{|p{0.14\textwidth}|p{0.08\textwidth}|p{0.12\textwidth}|p{0.2\textwidth}|p{0.32\textwidth}|}
+        \hline
+        \textbf{CRUD\newline  Operation} & \textbf{SQL} & \textbf{HTTP} & \textbf{URL} & \textbf{Bedeutung} \\ \hline
+        Create & \inlinec{INSERT} & \inlinec{POST} & \inlinec{/projects} & Erstellen eines Projekts \\ \hline
+        Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects} & Abrufen aller Projekte \\ \hline
+        Read & \inlinec{SELECT} & \inlinec{GET} & \inlinec{/projects/:id} & Abrufen eines Projekts \\ \hline
+        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/projects/:id/ users} & Abrufen aller Nutzer eines Projekts
+        \\ \hline
+        Read & \inlinec{SELECT} &\inlinec{GET} & \inlinec{/users/:id/ friends} & Abrufen aller Freunde eines Nutzers \\ \hline
+        Update & \inlinec{UPDATE} & \inlinec{PATCH/PUT} & \inlinec{/projects/:id} & Aktualisieren eines Projekts \\ \hline
+        Delete & \inlinec{DELETE} &\inlinec{DELETE} & \inlinec{/projects/:id} & Löschen eines Projekts \\ \hline
+    \end{tabular}
+    \vspace{5pt}
+    \caption{Einheitliche REST Schnittstellen}
+    \label{tbl:basics:crud}
+\end{table}
+
+Das hat zur Folge, dass anwendungsspezifische Daten in einer standardisierten Form übertragen werden müssen,
+wodurch die Effizienz der Datenübertragung Mängel aufwerfen kann.
+Insbesondere treten im Kontext der Arbeit zwei für REST bekannte Mängel auf, die hier näher erläutert werden.
+
+\begin{description}
+	\item[Overfetching\label{rest:overfetching}] \ \\
+	Aufgrund der einheitliche Komponentenschnittstelle gibt es für eine Liste aller Projekte genau eine Route \texttt{GET /projects}, die zu jedem Projekt alle Attribute ungekürzt liefert. Wird nur ein Teil der Attribute benötigt, sind weitere Angaben nutzlos und damit ineffizient.
+	Dennoch werden sie von der API mitgeliefert.
+	\item[Underfetching\label{rest:underfetching}] \ \\
+	Ein weiteres Problem ist, dass mehrere Anfragen für Daten, die in Beziehung zueinander stehen, benötigt werden. In Abbildung~\ref{basics:rest:data-fetching} muss für jeden Nutzer eines Projektes erfragt werden, welche Freunde dieser hat. Vorausgesetzt wird, dass eine entsprechende Route für die Abfrage nach Freunden eines Nutzers existiert.
+	Sind einem Projekt N Nutzer zugeordnet, muss für diese Information die dritte Abfrage N mal abgeschickt werden. Da zusätzlich noch die Liste von mit dem Projekt in Beziehung stehenden Nutzern erfragt wird, spricht man von N + 1 Abfragen.
+\end{description}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=\linewidth]{snippets/rest-data-fetching.pdf}
+	\caption{Abfragen von Projektdaten inklusive aller Nutzer die das Projekt einsehen können}
+	\label{basics:rest:data-fetching}
+\end{figure}
+
+\subsection{Weitere Einschränkungen}
+Zusätzlich gibt es noch die Einschränkung \emph{Layered System}, welches das Prinzip eines hierarchisch in Schichten aufgebauten Systems
+beschreibt und eine optionale Einschränkung \emph{Code-On-Demand}, welche die Client-Funktionalität durch Herunterladen und Ausführen von Code in
+Form von Applets oder Skripten erweitert. Diese werden im Rahmen der Arbeit nicht genutzt und deshalb nur am Rande erwähnt.
+
+\section{GraphQL}
+\label{sec:basics:graphql}
+Bei GraphQL handelt es sich um eine Abfragesprache für APIs und eine Laufzeitumgebung
+zum Ausführen dieser Abfragen und Wiedergeben von Daten unter Verwendung eines von für die Daten definierten Typensystems.
+Es ist an keinerlei Datenbanksysteme gebunden und lässt sich gut mit vorhandenen Code und Daten verbinden.
+
+Ein GraphQL Service entsteht durch das Definieren eines Typschemas, vergleichbar mit Datenbanktabellen. Zu jedem Attribut (Feld) eines Typs lassen sich - genauso wie bei Da\-tenban\-ken -
+Datentypen und Restriktionen wie \texttt{NOT NULL} definieren.
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Project Typdefinition}, label={fig:basics:graphql:1}]
+type Project {
+    id: ID!
+    public: Boolean
+}
+\end{lstlisting}
+
+Das aufgeführte Codefragment~\fullref{fig:basics:graphql:1} definiert einen Typ \texttt{Project} mit zwei Feldern, welcher ein Programmierprojekt darstellen soll.
+
+\begin{itemize}
+	\setlength\itemsep{-1em}
+    \item \texttt{id}: hat den von GraphQL vorgegebenen Typen ID, der als eindeutiger String gewertet wird und nicht dazu gedacht ist vom Menschen "lesbar" zu sein.
+    Zusätzlich wurde mit "!" festgelegt, dass dieses Feld nicht Null sein darf.
+    \item \texttt{public}: besitzt den Typen Boolean, der den Wert Null annehmen kann.
+    Es gibt an, ob das Projekt bereits veröffentlicht und für jeden zugreifbar gemacht wurde.
+\end{itemize}
+
+Im Gegensatz zu einem Datenbank-Schema ermöglicht das Typsystem von GraphQL zu jedem Typen Argumente zu definieren,
+die wiederum einer Funktion (Resolver) übergeben werden können,
+die aufgerufen wird, wenn das Feld im Kontext einer Query aufgelöst werden soll~\cite{graphql-resolver}.
+
+Für ein Beispiel wird der Typ \texttt{Project} um ein Feld erweitert:
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Erweiterung der Typdefinition von Project und Einführung eines Enums mit Ländercodes}, label={fig:basics:graphql:2}]
+enum LanguageEnum {
+    DE
+    EN
+    FR
+}
+
+type Project {
+    id: ID!
+    public: Boolean
+    name(language: LanguageEnum = DE): String!
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\setlength\itemsep{-1em}
+    \item \texttt{name}: besitzt den Typ String, der ebenfalls nicht den Wert Null annehmen kann. Zusätzlich wurde dem Feld ein Argument \texttt{language} zugeteilt,
+    welches den selbst definierten Datentypen \texttt{LanguageEnum} besitzt und den Default Wert DE setzt.
+\end{itemize}
+
+Zusätzlich wird eine Funktion benötigt, die das Argument \texttt{language} verarbeiten kann und dementsprechend den Rückgabewert formuliert.
+Solche Funktionen nennen sich in der Welt von GraphQL Resolver.
+Aufgabe dieses Resolvers ist es - durch Aufruf der in Zeile 2 Listing~\ref{fig:basics:graphql:3} als Pseudocode aufgeführten Funktion \texttt{translate} -
+den Namen eines Projektes in die übergebene Sprache zu übersetzen.
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Resolver des Feldes \texttt{name}}, label={fig:basics:graphql:3}]
+name(obj, args, context, info) {
+    return translate(obj,args['language'])
+}
+\end{lstlisting}
+
+Damit nun ein Datentyp abgefragt werden kann, müssen Queries zu den Datentypen definiert werden.
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={GraphQL Query Typdefinition}, label={fig:basics:graphql:4}]
+type Query {
+    projects: [Project!]!
+}
+\end{lstlisting}
+
+Der Query Typ gehört zum Typsystem von GraphQL. Er beinhaltet alle für das Schema definierten Queries (siehe Listing~\ref{fig:basics:graphql:4}). In diesem Fall ist es lediglich eine Query mit dem Bezeichner \texttt{projects}, die
+ein Array vom Typ \texttt{Project} als Rückgabewert erwartet. Zusätzlich wurde angegeben, dass Projekte innerhalb des Arrays und das Array selber nicht Null sein dürfen.
+Es wird also mindestens eine leeres Array erwartet, aber keinesfalls Null oder ein Array, das mit Null-Werten gefüllt ist~\cite{graphql}.
+
+Um Queries im GraphQL Schema bereitzustellen, wird auf oberster Ebene ein Einstiegspunkt definiert (siehe Zeile 2 Listing~\ref{fig:basics:graphql:schema}). Über diesen können alle Anfragen gefunden werden, die der GraphQL Service behandeln soll.
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={GraphQL Schema Definition}, label={fig:basics:graphql:schema}]
+schema {
+  query: Query
+  mutation: Mutation
+}
+\end{lstlisting}
+
+Jetzt kann dem Client die Freiheit gewährt werden, eigene Abfragen für genau den Datensatz, der benötigt wird, zu formulieren.
+Zudem lässt sich anhand der gestellten Abfrage die Struktur der erhaltenen Antwort festlegen. Dies könnte wie in Listing~\ref{fig:basics:graphql:5} aussehen.
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={GraphQL Query mit dem Bezeichner Projects}, label={fig:basics:graphql:5}]
+query Projects{
+    projects {
+        id
+        name(language: EN)
+    }
+}
+\end{lstlisting}
+
+Das aufgeführte Listing~\fullref{fig:basics:graphql:5} verkörpert eine GraphQL Query mit dem Bezeichner \texttt{Projects},
+die für alle vorhandenen Projekte die Felder \texttt{id} und \texttt{name} zurück gibt. 
+Aus dieser Query lässt sich nicht der Rückgabewert von projects erschließen.
+Diese Information erhält man als Entwickler lediglich aus den Query Definitionen.
+Bei Abschicken der Query wird neben der Query auch der 
+Bezeichner als \texttt{operationName} mit gegeben.
+Nachdem eine GraphQL Query gegen das Typsystem validiert wurde, wird sie von dem GraphQL Modul ausgeführt und
+ein Ergebnis - typischerweise in Form von JSON - zurückgegeben, das die Form und Struktur der Anfrage spiegelt (siehe Listing~\ref{fig:basics:graphql:6}).
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={JSON Antwort auf die Projects Query}, label={fig:basics:graphql:6}]
+{
+  "projects": [
+    {
+      "id": "368b6ee9-2b1f-4661-a82f-ff7b62dc9251"
+      "name": "Esqulino"
+    },
+    {
+      "id": "b25c342e-f2b1-4a74-8124-a7a688911380"
+      "name": "Trucklino"
+    }
+  ]
+}
+\end{lstlisting}
+
+Dies könnte zum Beispiel der bereits definierte Query-Typ \texttt{projects} sein.
+Damit der GraphQL Server eine Anfrage an eine an den Server gebundene Datenbank schicken kann, wird die zum Query-Typ definierte
+Resolver-Funktion ausgeführt~\cite{graphql-execution}. Innerhalb dieser Resolver-Funktion ist der Zugriff auf das Dateisystem festgelegt, sodass
+neben Datenbanken sogar Dateien als Speichermedium genutzt werden könnten.
+
+GraphQL bietet neben Queries zum Abfragen von Datensätzen auch Anfragen zum Speichern von Daten im gewählten Speichermedium. Solche Anfragen nennen sich Mutationen (siehe Listing~\ref{fig:basics:graphql:7}). Genau wie bei Resolvern eines Feldes wird bei einer Mutation Code hinzugefügt, der  für das Erstellen oder Ändern von Datensätzen zuständig ist. Technisch gesehen könnte jede Query auch so implementiert werden, dass diese das Speichern von Daten bewirkt. Es ist jedoch nützlich, eine Konvention festzulegen, dass alle Operationen, die Schreibvorgänge verursachen, explizit über eine Mutation gesendet werden sollten~\cite{graphql-mutations}.
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={GraphQL Mutation zum Erstellen eines Projektes}, label={fig:basics:graphql:7}]
+type creationResponse {
+  id: String
+  errors: [String]
+}
+
+type Mutation {
+  createProject(name: String!, public: Boolean):creationResponse
+}
+
+mutation CreateProject($name: String!, $public: Boolean) {
+  createProject(name: $name, public: $public) {
+    id
+    errors
+  }
+}
+\end{lstlisting}
+
+\begin{itemize}
+	\setlength\itemsep{-1em}
+	\item Zeile 1-4: Festlegung eines Typs mit den Feldern \texttt{id} und \texttt{errors}. Dieser Typ spiegelt den Rückgabewert einer Mutation zum Erstellen neuer Datensätze wider. Wenn die Mutation erfolgreich war, wird die id des neuen Datensatzes zurück gegeben. Wenn Fehler aufgetreten sind, wird das \texttt{errors} Feld mit diesen gefüllt.
+	\item Zeile 6-8: Definition eines Mutations-Typs, welcher alle Mutationen beinhaltet, ähnlich wie beim Queries-Typ in Listing~\ref{fig:basics:graphql:4}. Dieser erhält die Mutation \texttt{createProject}, welche zwei Argumente \texttt{name} und \texttt{public} übergeben bekommt. Letzteres ist dabei optional.
+	\item Zeile 10-15: Festlegen einer Mutation mit dem Operations Namen \texttt{CreateProject}, die das Argument \texttt{name} als String zwingend erwartet und das optionale Argument \texttt{public} bekommt.
+	Diese Argumente werden dann der \texttt{createProject} Mutation übergeben.
+	Als Antwort auf die Mutation werden die Felder \texttt{id} und \texttt{errors} erwartet.
+\end{itemize}
+
+\section{Ausgewählte Details des Typescript Typsystems}
+\label{sec:basics:typescript}
+Typescript ist ein typisiertes Superset von Javascript, das zu reinem Javascript kompiliert~\cite{typescript}.
+Das heißt, es beinhaltet alle Funktionalitäten von Javascript und wurde darüber hinaus erweitert und verbessert~\cite{superset}.
+Dazu gehört das in Typescript eingeführte Typsystem. Selbstverständlich besitzt Javascript ebenfalls Typen, doch kann eine Variable,
+auf die ursprünglich eine \texttt{number} zugewiesen wurde, auch als \texttt{string} enden. Das kann schnell zu unbedachten Seiteneffekten führen.
+
+Ein Typsystem ist eine Menge von Regeln, die jeder Variable, jedem Ausdruck, jeder Klasse,
+jeder Funktion, jedem Objekt oder Modul im System einen Typ zuweist.
+Diese Regeln werden zur  Kompilierungszeit (statische Typprüfung) oder zur Laufzeit (dynamische Typprüfung) geprüft,
+um Fehler in einem Programm aufzudecken~\cite{typescript-typesystem-medium}.
+
+Der Typescript-Compiler prüft zur Kompilierungszeit alle Variablen und Ausdrücke auf ihren Typen und entfernt anschließend alle Typinformationen
+bei der Konvertierung zu Javascript Code~\cite{typescript-github-specification}.
+Die im folgenden Beispiel in Listing~\ref{fig:basics:typescript:1} deklarierte Funktion gibt die zweite Hälfte eines übergebenen Strings zurück.
+Der erste Aufruf der Funktion führt zu einem Fehler beim Kompilieren. Es wird also direkt darauf hingewiesen, dass es sich um ein fehlerhaften Code handelt.
+
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Typescript Funktion mit typisiertem Parameter}, label={fig:basics:typescript:1}]
+function printSecondHalf(s: string) {
+  return s.substr(s.length/2);
+}
+printSecondHalf(123);     // Error bereits zur Kompilierungszeit
+printSecondHalf("hello"); // Ok - "llo"
+\end{lstlisting}
+
+Nach der Kompilierung sind alle Typinformationen entfernt worden, wodurch erst durch einen fehlerhaften Aufruf
+ein \texttt{TypeError} auftritt (siehe Listing~\ref{fig:basics:typescript:2}).
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Zu Javascript kompilierte Funktion}, label={fig:basics:typescript:2}]
+function printSecondHalf(s) {
+  return s.substr(s.length/2);
+}
+printSecondHalf(123);     // Error zur Laufzeit - TypeError: s.substr is not a function
+printSecondHalf("hello"); // Ok - "llo"
+\end{lstlisting}
+
+Nehmen wir an, wir möchten den in Kapitel GraphQL~\fullref{sec:basics:graphql} erstellten Typen \texttt{Project} nutzen,
+um eine Funktion zu schreiben, die einen neuen \texttt{Project} Datensatz an den Server schickt. Um diesen Typen clientseitig nutzen zu können,
+können wir ein äquivalentes Typescript Interface erstellen oder eines generieren lassen (siehe Listing~\ref{fig:basics:typescript:3}).
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Typescript Project Interface}, label={fig:basics:typescript:3}]
+interface Project {
+  id: string,
+  name: string
+}
+\end{lstlisting}
+
+Wollen wir jetzt einen neuen Datensatz an den Server schicken, können wir das Interface nutzen. Jedoch ist nur der Name des neuen Datensatzes bekannt,
+die \texttt{id} ist eine \texttt{uuid} und wird serverseitig generiert. Also wollen wir die \texttt{id} beim clientseitigen Erstellen außen vorlassen.
+Dafür bietet Typescript unter einer Vielzahl von Werkzeugen, die allgemeine Typtransformationen ermöglichen~\cite{typescript-utility-types},
+\texttt{Omit<T,K>}, das alle Attribute von \texttt{T} nimmt und anschließend \texttt{K} aus den Attributen entfernt  (siehe Listing~\ref{fig:basics:typescript:4}).
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Transformierter \texttt{Project} Typ}, label={fig:basics:typescript:4}]
+type PostProject = Omit<Project, 'id'>; // Äquivalent zu Pick<Project, 'name'>
+\end{lstlisting}
+
+Der Typ \texttt{PostProject} beinhaltet also alle Felder von \texttt{Project}, allerdings ohne \texttt{id}. Das Gegenstück zu \texttt{Omit<T,K>} wäre \texttt{Pick<T,K>},
+welches aus dem Typ \texttt{T} nur die Attribute \texttt{K} nimmt. Mithilfe dieser Typen lässt sich eine typsichere Methode entwickeln,
+um einen neuen Datensatz an den Server schicken zu können (siehe Listing~\ref{fig:basics:typescript:5}).
+\begin{lstlisting}[language=Javascript,float=h!,caption={Typen und Methode zum Abschicken eines \texttt{Project}-Datensatzes}, label={fig:basics:typescript:5}]
+interface ProjectResponse {
+  project: Project,
+  error: string | null
+}
+const createProjectRecord = async (p: PostProject):Promise<ProjectResponse> => {
+  return xmlhttp.postProject(p);
+}
+
+const newRecord: PostProject = {
+  name: "esqulino"
+};
+
+const response: ProjectResponse = await createProjectRecord(newRecord);
+\end{lstlisting}
+
+Die Methode \texttt{createProjectRecord} erwartet also ein \texttt{Project} ohne \texttt{id} als Parameter und gibt ein \texttt{ProjectResponse} wieder.
+Der Code im Methodenrumpf ist hierbei nur Pseudocode. Der Typ \texttt{ProjectResponse} beinhaltet neben dem \texttt{Project} auch ein \texttt{error} Feld,
+welches in dem Kontext angibt, ob ein neuer Datensatz auf dem Server erstellt werden konnte oder nicht.
+Des Weiteren gibt es noch \texttt{Exclude<T,U>} wodurch sich von T diejenigen Typen ausschließen lassen,
+die U zugeordnet werden können. Gäbe es mehrere \emph{"Response"}-Typen, ließe sich das Feld extrahieren,
+über welches auf die Datensätze zugegriffen werden kann (siehe Listing~\ref{fig:basics:typescript:6}).
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Exclude zum Exkludieren von Schlüsseln}, label={fig:basics:typescript:6}]
+type DataKey = Exclude<keyof ProjectResponse, "error">;
+const key: DataKey = "project";
+const project: Project = response[key];
+\end{lstlisting}
+% Definition eines Schemas mit Typescript Interfaces, Bsp. Project Tabelle
+% pick operator / exclude operator
+
+\section{JSON Schema}
+\label{sec:basics:jsonschema}
+JSON-Schema ist ein Vokabular, mit dem JSON-Dokumente  annotiert und validiert werden können~\cite{json-schema}.
+Es wird zur Überprüfung genutzt, ob JSON Objekte die im JSON-Schema beschriebene Struktur einhalten.
+
+Der Vorgänger von JSON-Schema war das XML-Schema.
+Es erlaubt das Format eines XML-Dokuments zu definieren,
+d.h. welche Elemente erlaubt sind, die Anzahl und Reihenfolge ihres Auftretens, welchen Datentyp sie haben sollen usw.
+Seit 2006 gibt es einen neuen Akteur auf dem Gebiet der Datenformate, Javascript Object Notation (JSON).
+Die JSON Daten sind viel kleiner als ihr XML-Gegenstück und ihre Instanzen sind gültige JavaScript-Objekte, was es interessant für Webentwickler macht, da sie beim Laden von
+Informationen in asynchronen Webanwendungen über AJAX (Asynchronous Javascript and XML) keinen separaten Konvertierungsschritt mehr benötigen~\cite{json-schema-xml}.
+
+Nehmen wir an, wir möchten den in Kapitel GraphQL erstellten Typen \texttt{Project} aus Listing~\ref{fig:basics:graphql:3} mit verschiedenen Attributen erweitern.
+Eine JSON Instanz soll mindestens folgende Attribute beinhalten, wobei die Angabe, ob es sich bei dem Entwickler um einen proudFather handelt, optional ist (siehe Listing~\ref{fig:basics:jsonschema:1}).
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Ein Projekt als JSON Objekt}, label={fig:basics:jsonschema:1}]
+{
+  "id":"de0d91a7-61ae-49af-90d9-5a37dd883a01",
+  "name":"Esqulino",
+  "public": false,
+  "createdAt":1452985200000,
+  "developer": {
+    "firstname":"Marcus",
+    "proudFather":true
+  }
+}
+\end{lstlisting}
+
+Das passendes Schema dazu sieht folgendermaßen aus (siehe Listing~\ref{fig:basics:jsonschema:2}).
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={JSON Schema zu Projekt Objekt}, label={fig:basics:jsonschema:2}]
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "project",
+    "description": "A project from Esqulino",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer"
+        },
+        "name": {
+            "type": "string"
+        },
+        "public": {
+            "type": "boolean"
+        },
+        "createdAt": {
+            "description": "Date of creation in milliseconds",
+            "type": "number"
+        },
+        "developer": {
+            "description": "The developer of a project",
+            "type": "object"
+            "properties": {
+                "firstname": {
+                    "description": "The forename of the developer",
+                    "type": "string"
+                },
+                "proudFather". {
+                    "description": "Indicator if he is a father or not",
+                    "type": "boolean"
+                }
+            },
+            "required": [ "firstname" ]
+        },
+    },
+    "required": [ "id", "name", "developer", "createdAt" ]
+}
+\end{lstlisting}
+
+Neben den verwendeten Schlüsselwörtern gibt es noch eine Vielzahl weiterer, die es unter anderem erlauben Einschränkungen, Abhängigkeiten,
+Muster in Form von Regulären Ausdrücken oder die maximale oder minimale Anzahl an zu einem Objekt gehörende Attribute festzulegen.
+Die hier verwendeten Schlüsselwörter haben folgende Bedeutung:
+
+\begin{itemize}
+    \label{basics:jsonschema:items}
+    \setlength\itemsep{-1em}
+    \item Zeile 2: \texttt{\$schema} besagt, dass dieses Schema nach einem bestimmten Entwurf des Standards geschrieben ist, in erster Linie zur Versionskontrolle.
+    \item Zeile 3: \texttt{title}/\texttt{description} haben nur beschreibenden Charakter.
+    \item Zeile 5: Das Schlüsselwort \texttt{type} für die Typüberprüfung definiert die erste Beschränkung für die JSON-Daten und in diesem Fall muss es sich um ein JSON-Objekt handeln.
+    \item Zeile 6: \texttt{properties} beschreibt, welche Attribute das Objekt haben darf.
+    \item Zeile 7-35: Definierung der Attribute eines Projektes, wobei in Zeile 20-34 ein weiteres Objekt als Attribut definiert wird. Dieses besitzt die beiden Attribute \texttt{firstname} als String und \texttt{proudFather} als Boolean. Die Angabe von \texttt{firstname} wird bei einem \texttt{developer} Objekt zwingend erwartet, \texttt{proudFather} ist optional.
+    \item Zeile 36: Da das Schlüsselwort \texttt{required}  ein Array von Strings beinhaltet, können bei Bedarf mehrere Attribute angeben werden, die erwartet werden.
+\end{itemize}
+
+Nehmen wir an, ein Entwickler hat ein fehlerhaftes Projekt wie in Listing~\fullref{fig:basics:jsonschema:3} erstellt.
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Ein fehlerhaftes Projekt}, label={fig:basics:jsonschema:3}]
+{
+  "id":"de0d91a7-61ae-49af-90d9-5a37dd883a01",
+  "public": false,
+  "developer":{
+    "firstname":"Michael",
+    "professor": true
+  },
+  "createdAt":"1452985200000"
+}
+\end{lstlisting}
+
+Es kommt bei der Validierung dieses Objektes zu folgenden Verstößen:
+
+\begin{itemize}
+    \setlength\itemsep{-1em}
+    \item \texttt{name}: ist im \texttt{required} Array angegeben und muss somit vorhanden sein.
+    \item \texttt{createdAt}: Es wurde ein falscher Datentyp angegeben, \texttt{string} statt \texttt{number}.
+    \item \texttt{professor}: Dieses Attribut ist nicht im \texttt{properties} Objekt angegeben und dadurch fehl am Platz.
+\end{itemize}
+
+Die händische Erstellung solcher JSON-Schema kann bei einer Vielzahl von Typen schnell lästig werden.
+Um dem Problem entgegen zu wirken, lassen sich aus Typescript Interfaces passende JSON-Schema Dateien generieren.
+Der Vorteil daran ist, dass sich clientseitig definierte Datentypen durch die Generierung serverseitig validieren lassen;
+denn für die meisten gängigen Programmiersprachen sind JSON-Schema Validatoren entwickelt worden.
+Somit ist es unabhängig, welche Programmiersprache der Server nutzt~\cite{json-schema-implementations}.
+
+\section{Postgres jsonb und hstore Typen}
+\label{sec:basics:postgres}
+Das PostgreSQL Datenbanksystem kennt über den SQL-Standard hinaus die Datentypen \emph{hstore} und \emph{jsonb} zur Speicherung von JSON Strukturen oder assoziativen Arrays, die üblicherweise in NoSQL-Systemen gespeichert werden.
+Diese beiden Typen werden im Kontext der Arbeit für Objekte genutzt, die sich nur mit sehr großem Aufwand und zukünftigen Migrationen in ein Datenbankschema gießen lassen. Einer dieser Typen ist ein Objekt, das in Listing~\ref{fig:basics:jsonschema:4} ein multilingualen String darstellen soll. 
+
+\begin{lstlisting}[language=Javascript,float=h!,caption={Multilinguales Objekt}, label={fig:basics:jsonschema:4}]
+{
+  "DE": "Die Drei",
+  "EN": "The three"
+}
+\end{lstlisting}
+
+Zukünftig sollen weitere Sprachen ermöglicht werden. Würde man dieses Objekt als Tabelle definieren, müsste bei Hinzufügen oder Entfernen einer Sprache eine Rails Migration durchgeführt werden, um das Datenbankschema anzupassen. Damit diese Objekte flexibel sein können, wird bei der Speicherung ein hstore Typ verwendet.
+
+Hstore differenziert sich von jsonb, indem es nur eine Ebene von Schlüssel-Werte-Paaren ohne weitere Verschachtelungen zulässt und diese als String abspeichert. Erst durch die Einführung von jsonb wurde aus Postgres auch eine dokumentenorientierte Datenbank.
+Denn im Gegensatz zu hstore können jsonb Datensätze beliebig tief verschachtelt werden und
+darüber hinaus werden sie in einem dekomprimierten Binärformat gespeichert, wodurch die Eingabe aufgrund des zusätzlichen Konvertierungs-Overheads etwas langsamer,
+die Verarbeitung jedoch erheblich schneller ist, da kein Reparsen erforderlich ist~\cite{postgresql-json}.
+Ansonsten haben beide Typen in vielen Dingen die gleichen Verhaltensweisen. Wie bei der Eingabe doppelter Schlüssel wird nur der letzte Wert beibehalten.
+Zudem wurden für beide Datentypen eine beachtliche Menge an Operationen und Funktionen bereitgestellt, die es möglich machen,
+auf SQL Ebene einen hstore oder jsonb Datensatz fast wie ein Hash in Ruby oder ein JSON-Objekt in Javascript zu behandeln~\cite{postgresql-hstore}.

@@ -56,15 +56,8 @@ import { ProviderShowComponent } from "./provider-show.component";
 import { EmptyComponent } from "./empty.component";
 
 import {
-  ListGrammarDataService,
   IndividualGrammarDataService,
-  ListBlockLanguageDataService,
   IndividualBlockLanguageDataService,
-  ProjectDataService,
-  IndividualProjectDataService,
-  AdminListProjectDataService,
-  MutateGrammarService,
-  MutateBlockLanguageService,
 } from "./serverdata";
 
 import { RequestResetPasswordComponent } from "./auth/request-reset-password.component";
@@ -87,21 +80,16 @@ import { UserService } from "./auth/user.service";
 import { ResourceReferencesService } from "./resource-references.service";
 import { ResourceReferencesOnlineService } from "./resource-references-online.service";
 import { PaginatorTableComponent } from "./table/paginator-table.component";
+import { PaginatorTableGraphqlComponent } from "./table/paginator-table-graphql.component";
+
 import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
 import { OverlayModule } from "@angular/cdk/overlay";
 
 const dataServices = [
-  ListGrammarDataService,
   IndividualGrammarDataService,
-  MutateGrammarService,
-  ListBlockLanguageDataService,
   IndividualBlockLanguageDataService,
-  MutateBlockLanguageService,
-  ProjectDataService,
-  IndividualProjectDataService,
-  AdminListProjectDataService,
   ServerTasksService,
 ];
 
@@ -180,6 +168,7 @@ const materialModules = [
     ProvidersAllButtonsComponent,
     MessageDialogComponent,
     PaginatorTableComponent,
+    PaginatorTableGraphqlComponent,
     ConditionalDisplayDirective,
     ServerTasksComponent,
   ],
@@ -219,7 +208,9 @@ const materialModules = [
     MessageDialogComponent,
     ProvidersAllButtonsComponent,
     PaginatorTableComponent,
+    PaginatorTableGraphqlComponent,
     ServerTasksComponent,
+    ConditionalDisplayDirective,
   ],
 })
 export class SharedAppModule {

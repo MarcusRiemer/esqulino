@@ -3,6 +3,7 @@
   "types": {
     "g8": {
       "n1": {
+        "type": "concrete",
         "attributes": [
           {
             "name": "c",
@@ -12,8 +13,10 @@
         ]
       },
       "n2": {
+        "type": "concrete"
       },
       "n3": {
+        "type": "concrete"
       }
     }
   },

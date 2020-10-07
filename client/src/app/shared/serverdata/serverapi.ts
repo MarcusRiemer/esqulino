@@ -156,20 +156,6 @@ export class ServerApi {
   }
 
   /**
-   * Retrieves the URL that is used to list all public grammars
-   */
-  getGrammarListUrl(): string {
-    return `${this._apiBaseUrl}/grammars`;
-  }
-
-  /**
-   * Retrieves the URL that is used to create a new grammar
-   */
-  createGrammarUrl(): string {
-    return `${this._apiBaseUrl}/grammars`;
-  }
-
-  /**
    * Retrieves the URL that is used to list meta code resources (that may be used
    * as the basis for a grammar).
    */
@@ -208,20 +194,6 @@ export class ServerApi {
   }
 
   /**
-   * Retrieves block languages that are related to this grammar
-   */
-  individualGrammarRelatedBlockLanguagesUrl(id: string) {
-    return `${this.individualGrammarUrl(id)}/related_block_languages`;
-  }
-
-  /**
-   * Regenerates the foreign types of a grammar
-   */
-  individualGrammarRegenerateForeignTypes(id: string) {
-    return `${this.individualGrammarUrl(id)}/regenerate_foreign_types`;
-  }
-
-  /**
    * Retrieves code resources that may be visualized for a grammar code gallery.
    */
   individualGrammarCodeResourceGallery(id: string) {
@@ -236,20 +208,6 @@ export class ServerApi {
   }
 
   /**
-   * Retrieves the URL that is used to list all public projects.
-   */
-  getProjectListUrl(): string {
-    return `${this._apiBaseUrl}/project`;
-  }
-
-  /**
-   * Retrieves the URL that is used to list all public projects.
-   */
-  getAdminProjectListUrl(): string {
-    return `${this._apiBaseUrl}/project/list_admin`;
-  }
-
-  /**
    * Retrieves the URL that uniquely describes a project.
    */
   getProjectUrl(projectId: string): string {
@@ -257,59 +215,10 @@ export class ServerApi {
   }
 
   /**
-   * Retrieves the url to create a new project
-   */
-  createProjectUrl(): string {
-    return `${this._apiBaseUrl}/project`;
-  }
-
-  /**
    * The base URL for all operations on code resources
    */
   getCodeResourceBaseUrl(projectId: string): string {
     return this.getProjectUrl(projectId) + "/code_resources";
-  }
-
-  /**
-   * Getting a List of User News
-   */
-  getUserNewsListUrl(): string {
-    return `${this._apiBaseUrl}/news`;
-  }
-
-  /**
-   * Getting a single news
-   */
-  getNewsSingle(id: string): string {
-    return `${this._apiBaseUrl}/news/${id}`;
-  }
-
-  /**
-   * Getting a single news
-   */
-  getAdminNewsSingle(id: string): string {
-    return `${this._apiBaseUrl}/news/admin/${id}`;
-  }
-
-  /**
-   * Getting a List of User News
-   */
-  getAdminNewsListUrl(): string {
-    return `${this._apiBaseUrl}/news/admin`;
-  }
-
-  /**
-   * Creating/Getting a new News
-   */
-  getCreateNewsUrl(): string {
-    return `${this._apiBaseUrl}/news/`;
-  }
-
-  /**
-   * Getting the URL for the news update route
-   */
-  getNewsUpdateUrl(id: string): string {
-    return `${this._apiBaseUrl}/news/${id}`;
   }
 
   /**

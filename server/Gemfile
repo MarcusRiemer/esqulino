@@ -57,6 +57,9 @@ gem "rolify"
 # Used for HTTP-Requests
 gem "rest-client"
 
+# Used to build a strongly-typed API
+gem 'graphql'
+
 ############################
 # Rails dependencies
 ###########################
@@ -87,6 +90,9 @@ group :development, :test do
 
   # Factories seem to be so much nicer then fixtures
   gem 'factory_bot_rails', '~> 4.11'
+
+  # Used for manually testing graphql queries
+  gem 'graphiql-rails'
 end
 
 # Use rspec for unit test
@@ -98,6 +104,7 @@ group :development, :test do
   gem 'pry', '~> 0.13'
   gem 'pry-byebug'
   gem 'webmock'
+  gem "rails-erd"
 end
 
 group :development do
@@ -107,6 +114,9 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 
   gem 'irb', require: false
+
+  # Code formatting and stylecheck
+  gem 'rubocop', '~> 0.92.0', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

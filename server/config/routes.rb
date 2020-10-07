@@ -1,7 +1,15 @@
 Rails.application.routes.draw do
-
+  if Rails.env.development?
+    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/graphiql"
+  end
   # Second stop: The API for the editor
   scope '/api' do
+    post "graphql", to: "graphql#execute"
+
+    # Allow a special unrestricted graphql endpoint for development with GraphiQL
+    if Rails.env.development?
+      post "graphiql", to: "graphql#execute_graphiql"
+    end
 
     scope 'identities' do
       get '/', controller: 'identities', action: :show
@@ -33,21 +41,12 @@ Rails.application.routes.draw do
 
     # Everything in the context of projects
     scope 'project' do
-      get '/', controller: 'projects', action: :index
-      get '/list_admin', controller: 'projects', action: :index_admin
-      post '/', controller: 'projects', action: :create
-      delete '/', controller: 'projects', action: :destroy
-
       # Everything that does something in the context of a specific project
       scope ':project_id' do
-        get '/', controller: 'projects', action: :show
-        put '/', controller: 'projects', action: :update
-        delete '/', controller: 'projects', action: :destroy
-
         get 'preview', controller: 'projects', action: :preview_image
 
         resources :code_resources, only: [:create, :update, :destroy], param: "code_resource_id"
-        post 'code_resources/:code_resource_id/clone', controller:  'code_resources', action: 'clone'
+        post 'code_resources/:code_resource_id/clone', controller: 'code_resources', action: 'clone'
 
         # Everything that does something with the database content via a query
         scope 'query' do
@@ -104,27 +103,10 @@ Rails.application.routes.draw do
       end
     end
 
-    # Getting the News as JSON
-    scope 'news' do
-      scope 'admin' do
-        get '/', controller: 'news', action: :index_admin
-        get ':id', controller: 'news', action: :show_admin
-      end
+    resources :block_languages, only: [:show]
 
-      get '/', controller: 'news', action: :index
-      post '/', controller: 'news', action: :create
-      get ':id', controller: 'news', action: :show
-      put ':id', controller: 'news', action: :update
-      delete ':id', controller: 'news', action: :destroy
-    end
-
-    resources :block_languages, only: [:create, :index, :show, :update, :destroy]
-
-    resources :grammars, only: [:create, :index, :show, :update, :destroy]
-    get 'grammars/:id/related_block_languages', controller: 'grammars', action: :related_block_languages
+    resources :grammars, only: [:show]
     get 'grammars/:id/code_resources_gallery', controller: 'grammars', action: :code_resources_gallery
-    post 'grammars/:id/regenerate_foreign_types', controller: 'grammars', action: :regenerate_foreign_types
-
     get 'code_resources/by_programming_language/:programming_language_id',
         controller: 'code_resources', action: :index_by_programming_language
 

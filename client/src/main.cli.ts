@@ -13,7 +13,7 @@ import {
   graphvizSyntaxTree,
   prettyPrintGrammar,
 } from "./app/shared/syntaxtree/prettyprint";
-import { referencedCodeResourceIds } from "./app/shared/syntaxtree/syntaxtree-util";
+import { referencedResourceIds } from "./app/shared/syntaxtree/syntaxtree-util";
 import { NodeDescription } from "./app/shared/syntaxtree/syntaxtree.description";
 import { GrammarDescription } from "./app/shared/syntaxtree/grammar.description";
 
@@ -76,14 +76,17 @@ interface EmitGeneratedBlocksCommand {
 }
 
 /**
- * Prints a list of all available programming languages.
+ * A list of all available programming languages.
  */
 interface AvailableProgrammingLanguagesCommand {
   type: "available";
 }
 
+/**
+ * All code resources that are referenced
+ */
 interface ReferencedCodeResourcesCommand {
-  type: "referencedCodeResources";
+  type: "referencedCodeResources" | "referencedGrammars";
   ast: NodeDescription;
   grammar: GrammarDescription;
 }
@@ -98,8 +101,8 @@ type Command =
   | EmitGeneratedBlocksCommand
   | ReferencedCodeResourcesCommand;
 
-// Knows all URLs that are avaiable to the API
-const serverApi: ServerApi = new ServerApi("http://localhost:9292/api");
+// Knows all URLs that are available to the API
+const serverApi = new ServerApi("http://localhost:9292/api");
 
 /**
  * Retrieves a single grammar by name
@@ -186,8 +189,13 @@ async function executeCommand(command: Command): Promise<Object | string> {
           command.grammar
         );
       }
-      case "referencedCodeResources": {
-        return referencedCodeResourceIds(command.ast, command.grammar);
+      case "referencedCodeResources":
+      case "referencedGrammars": {
+        const searched =
+          command.type === "referencedCodeResources"
+            ? "codeResourceReference"
+            : "grammarReference";
+        return referencedResourceIds(command.ast, command.grammar, searched);
       }
     }
   });

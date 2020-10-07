@@ -6,7 +6,7 @@ import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { World, Command } from "../../../shared/syntaxtree/truck/world";
 import { NodeLocation } from "../../../shared/syntaxtree";
 import { rxFilterRootLanguage } from "../../../shared/util";
-import { referencedCodeResourceIds } from "../../../shared/syntaxtree/syntaxtree-util";
+import { referencedResourceIds } from "../../../shared/syntaxtree/syntaxtree-util";
 
 import { TruckWorldService } from "./truck-world.service";
 import { WorldSelectorComponent } from "./world-selector.component";
@@ -61,7 +61,11 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
       .subscribe((prog) => {
         const g = prog.validatorPeek.getGrammarValidator("trucklino_program")
           .description;
-        const refs = referencedCodeResourceIds(prog.syntaxTreePeek, g);
+        const refs = referencedResourceIds(
+          prog.syntaxTreePeek,
+          g,
+          "codeResourceReference"
+        );
         if (refs.length > 0) {
           this._truckWorld.setNewWorld(refs[0]);
         }

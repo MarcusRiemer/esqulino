@@ -1,11 +1,5 @@
 <!-- Always render the link itself -->
-<a [routerLink]="['/admin/grammar', grammarId]">
-  <!-- Render the name if possible -->
-  <ng-container *ngIf="(description | async); let description; else displayId;">
-    {{ description.name }}
-  </ng-container>
-  <!-- Fallback to the ID -->
-  <ng-template #displayId>
-    {{ grammarId }}
-  </ng-template>
+<a [routerLink]="['/admin/grammar', grammarId$ | async]">
+  <!-- Render the name (or whatever is available) -->
+  {{ displayName$ | async }}
 </a>

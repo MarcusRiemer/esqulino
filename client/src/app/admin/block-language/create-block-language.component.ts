@@ -2,18 +2,17 @@ import { Component } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 
-import { first, tap } from "rxjs/operators";
+import { map, first, pluck } from "rxjs/operators";
 
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
 import { generateBlockLanguage } from "../../shared/block/generator/generator";
 
 import {
-  ServerApiService,
-  ListBlockLanguageDataService,
-  IndividualGrammarDataService,
-  ListGrammarDataService,
-} from "../../shared/serverdata";
+  CreateBlockLanguageGQL,
+  GrammarDescriptionItemGQL,
+  SelectionListGrammarsGQL,
+} from "../../../generated/graphql";
 
 /**
  * A comprehensive way to create new block languages
@@ -34,31 +33,33 @@ export class CreateBlockLanguageComponent {
     editorBlocks: [],
     editorComponents: [],
     sidebars: [],
+    rootCssClasses: [],
   };
 
   // Enables usage of slugs
   useSlug = false;
 
   constructor(
-    private _serverData: ListBlockLanguageDataService,
-    private _grammarData: IndividualGrammarDataService,
-    private _grammarList: ListGrammarDataService,
-    private _serverApi: ServerApiService,
-    private _http: HttpClient,
-    private _router: Router
+    private _router: Router,
+    private _createBlockLanguageGQL: CreateBlockLanguageGQL,
+    private _grammarSelectionGQL: SelectionListGrammarsGQL,
+    private _grammarGQL: GrammarDescriptionItemGQL
   ) {}
 
-  readonly availableGrammars = this._grammarList.list;
+  readonly availableGrammars$ = this._grammarSelectionGQL
+    .watch()
+    .valueChanges.pipe(map((response) => response.data.grammars.nodes));
 
   /**
    * Attempts to create the specified block language
    */
   async submitForm() {
     // We need to give the new language a default programming language
-    // and only the grammar knows which language that may be.
-    const g = await this._grammarData
-      .getSingle(this.blockLanguage.grammarId)
-      .pipe(first())
+    // and only the grammar knows which language that may be. Additionally
+    // fetching the whole grammar here allows us to generate some blocks.
+    const g = await this._grammarGQL
+      .fetch({ id: this.blockLanguage.grammarId })
+      .pipe(first(), pluck("data", "grammars", "nodes", 0))
       .toPromise();
 
     // Generate some default blocks
@@ -77,16 +78,11 @@ export class CreateBlockLanguageComponent {
       delete toCreate.slug;
     }
 
-    const req = this._http
-      .post<{ id: string }>(this._serverApi.createBlockLanguageUrl(), toCreate)
-      .pipe(first())
+    const res = await this._createBlockLanguageGQL
+      .mutate(toCreate)
+      .pipe(first(), pluck("data", "createBlockLanguage"))
       .toPromise();
 
-    const res = await req;
-
-    this._serverData.listCache.refresh();
-    await this._router.navigateByUrl(`/admin/block-language/${res.id}`);
-
-    return res;
+    this._router.navigateByUrl(`/admin/block-language/${res.id}`);
   }
 }

@@ -58,6 +58,7 @@ describe("BlockRenderInputComponent", () => {
       id: "specBlockLang",
       name: "Spec Block Lang",
       sidebars: [],
+      rootCssClasses: [],
       editorBlocks: [
         {
           describedType: { languageName: "spec", typeName: "input" },
