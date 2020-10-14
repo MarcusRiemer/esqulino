@@ -34,6 +34,8 @@ NG_PROD         ?= --prod
 # Targets that may be used in the `dist` target have some special flags
 DIST_FLAGS      ?= --no-progress
 
+DEV_FLAGS       ?= --watch
+
 all : dist
 
 clean : msg-pre-clean
@@ -50,7 +52,7 @@ client-compile : msg-pre-build src/environments/version.ts
 	$(NG_BIN) build --aot --localize --outputPath="dist/browser" $(NG_PROD) $(DIST_FLAGS)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --localize --outputPath="dist/browser" --watch
+	$(NG_BIN) build --aot --outputPath="dist/browser" $(DEV_FLAGS)
 
 ##################################
 # Commandline Client
