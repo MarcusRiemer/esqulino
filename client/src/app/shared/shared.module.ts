@@ -4,6 +4,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 
+import { OverlayModule } from "@angular/cdk/overlay";
 import { PortalModule } from "@angular/cdk/portal";
 
 import { MatButtonModule } from "@angular/material/button";
@@ -85,7 +86,8 @@ import { PaginatorTableGraphqlComponent } from "./table/paginator-table-graphql.
 import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
-import { OverlayModule } from "@angular/cdk/overlay";
+
+import { DatabaseSchemaSidebar } from "./block/sql/database-schema-sidebar";
 
 const dataServices = [
   IndividualGrammarDataService,
@@ -116,6 +118,8 @@ const materialModules = [
   MatProgressBarModule,
   MatIconModule,
 ];
+
+const sidebarServices = [DatabaseSchemaSidebar];
 
 /**
  * Bundles facilities that are used all over the app, no matter
@@ -236,6 +240,7 @@ export class SharedAppModule {
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
+        ...sidebarServices,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,

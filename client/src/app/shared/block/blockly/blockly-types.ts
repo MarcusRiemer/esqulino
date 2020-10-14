@@ -1,3 +1,8 @@
+import {
+  NodeConcreteTypeDescription,
+  NodeVisualTypeDescription,
+} from "../../syntaxtree";
+
 export interface BlockArgsInputValue {
   type: "input_value";
   name: string;
@@ -68,4 +73,6 @@ export interface BlocklyBlock {
   helpUrl?: string;
 
   inputsInline?: boolean;
+
+  coreType: NodeConcreteTypeDescription | NodeVisualTypeDescription;
 }
