@@ -139,7 +139,7 @@ verify-cached-schemas:
 
 # Ensures that the GraphQL-Client can be compiled
 verify-compile-graphql-client: src/generated/graphql.ts
-	npx tsc --noEmit --experimentalDecorators --target "es5" $^
+	npx tsc --noEmit --experimentalDecorators --esModuleInterop  --target "es5" $^
 
 ##################################
 # Dependencies
