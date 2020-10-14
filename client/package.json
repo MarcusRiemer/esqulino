@@ -38,7 +38,7 @@
     "typeface-roboto": "0.0.75",
     "typeface-roboto-mono": "0.0.75",
     "zone.js": "~0.10.3",
-    "@apollo/client": "^3.0.0"
+    "@apollo/client": "^3.2.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1001.4",
