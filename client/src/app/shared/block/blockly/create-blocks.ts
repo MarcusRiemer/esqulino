@@ -185,6 +185,7 @@ export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
           message0: messageString || t.languageName + "." + t.typeName,
           args0: args,
           tooltip: t.languageName + "." + t.typeName,
+          coreType: t,
         },
         blockConnectors(t, ac)
       );

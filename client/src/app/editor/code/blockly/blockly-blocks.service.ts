@@ -1,26 +1,41 @@
 import { Injectable } from "@angular/core";
 
-import { GrammarDocument, NodeDescription } from "../../../shared/syntaxtree";
+import { Observable, of } from "rxjs";
 
+import { GrammarDocument } from "../../../shared/syntaxtree";
 import { BlocklyBlock } from "../../../shared/block/blockly/blockly-types";
 import { createBlocksFromGrammar } from "../../../shared/block/blockly/create-blocks";
+import { BlockLanguage } from "../../../shared/block/block-language.forward";
+
+interface LoadableBlocklyDefinition {
+  blocks: BlocklyBlock[];
+  toolboxXml: Observable<string>;
+}
 
 @Injectable()
 export class BlocklyBlocksService {
-  loadToolbox(blocks: BlocklyBlock[]): string {
+  constructor() {}
+
+  loadToolbox(blocks: BlocklyBlock[], b: BlockLanguage): Observable<string> {
     const blocksXml = blocks.map((b) => `<block type="${b.type}"></block>`);
-    return `
-      <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
+
+    return of(`
+      <xml
+        xmlns="https://developers.google.com/blockly/xml"
+        id="toolbox-simple"
+        style="display: none"
+      >
         ${blocksXml.join()}
-      </xml>`;
+      </xml>
+    `);
   }
 
-  loadGrammar(g: GrammarDocument): { blocks: BlocklyBlock[]; toolbox: string } {
+  loadGrammar(g: GrammarDocument, b: BlockLanguage): LoadableBlocklyDefinition {
     const blocks = createBlocksFromGrammar(g);
 
     return {
       blocks,
-      toolbox: this.loadToolbox(blocks),
+      toolboxXml: this.loadToolbox(blocks, b),
     };
   }
 }

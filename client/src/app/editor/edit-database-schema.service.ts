@@ -20,7 +20,7 @@ interface CurrentlyEdited {
 }
 
 /**
- * Service to hold, get and send data from a schema.
+ * Allows modifications to the loaded SQL database schema.
  */
 @Injectable()
 export class EditDatabaseSchemaService {

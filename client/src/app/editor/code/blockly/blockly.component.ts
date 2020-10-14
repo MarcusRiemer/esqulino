@@ -42,8 +42,15 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild("blocklyOutlet")
   blocklyOutlet: ElementRef;
 
-  // The canvas the user is interacting with
-  private _workspace: Blockly.WorkspaceSvg;
+  // Relevant properties of the current blockly instance
+  private _blockly: {
+    // The canvas the user is interacting with
+    workspace: Blockly.WorkspaceSvg;
+
+    // The toolbox sometimes needs to be updated on the fly. This
+    // subscription is used to
+    xmlToolboxSubscription: Subscription;
+  };
 
   // This is an experimental API not yet supported by Typescript
   private _resizeObserver: any;
@@ -95,7 +102,11 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
       "download"
     );
     const subsDownloadImage = btnDownloadImage.onClick.subscribe((_) => {
-      downloadBlockly("png", this._workspace, this._current.peekResource.name);
+      downloadBlockly(
+        "png",
+        this._blockly.workspace,
+        this._current.peekResource.name
+      );
     });
     this._subscriptions.push(subsDownloadImage);
   }
@@ -107,8 +118,8 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
     const currResSub = this._current.currentResource.subscribe(
       (currRes: CodeResource) => {
         // Clear previously loaded blockly data
-        if (this._workspace) {
-          this._workspace.clear();
+        if (this._blockly?.workspace) {
+          this._blockly.workspace.clear();
         }
 
         const validators = currRes.validatorPeek.grammarValidators;
@@ -121,20 +132,36 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
 
         const g = validators[0].description;
 
-        const generated = this._blocklyBlocks.loadGrammar(g);
-        console.log("Generated blockly settings", generated);
-        console.log("XML Toolbox", generated.toolbox);
+        const blocklyLoadable = this._blocklyBlocks.loadGrammar(
+          g,
+          currRes.blockLanguagePeek
+        );
+        console.log("Generated blockly settings", blocklyLoadable);
+        console.log("XML Toolbox", blocklyLoadable.toolboxXml);
 
-        Blockly.defineBlocksWithJsonArray(generated.blocks);
+        Blockly.defineBlocksWithJsonArray(blocklyLoadable.blocks);
 
-        if (!this._workspace) {
-          this._workspace = Blockly.inject(
-            this.blocklyOutlet.nativeElement,
-            Object.assign({}, this.config, { toolbox: generated.toolbox })
-          );
-        } else {
-          this._workspace.updateToolbox(generated.toolbox);
+        // Is a workspace present or is there a need to create one?
+        if (!this._blockly) {
+          // Create a new workspace
+          this._blockly = {
+            workspace: Blockly.inject(
+              this.blocklyOutlet.nativeElement,
+              Object.assign({}, this.config, {
+                toolbox: blocklyLoadable.toolboxXml,
+              })
+            ),
+            xmlToolboxSubscription: undefined,
+          };
         }
+
+        // Available blocks have been defined, now react to changes in the workspace
+        this._blockly.xmlToolboxSubscription?.unsubscribe();
+        this._blockly.xmlToolboxSubscription = blocklyLoadable.toolboxXml.subscribe(
+          (toolboxXml) => {
+            this._blockly.workspace.updateToolbox(toolboxXml);
+          }
+        );
 
         const astXmlWorkspace = internalToBlockly(
           currRes.syntaxTreePeek.toModel(),
@@ -142,7 +169,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
         );
         const loadedIds = Blockly.Xml.domToWorkspace(
           astXmlWorkspace,
-          this._workspace
+          this._blockly.workspace
         );
       }
     );
@@ -151,7 +178,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
 
     // Can't pass the method directly, `this` would be incorrectly bound
     // when the callback is executed.
-    this._workspace.addChangeListener((_: Blockly.Events.Change) => {
+    this._blockly.workspace.addChangeListener((_: Blockly.Events.Change) => {
       // this.syncToCodeResource(e);
     });
 
@@ -160,14 +187,16 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
     if (ResizeObserver) {
       // @ts-ignore
       this._resizeObserver = new ResizeObserver(() => {
-        Blockly.svgResize(this._workspace);
+        Blockly.svgResize(this._blockly.workspace);
       });
       this._resizeObserver.observe(this.blocklyOutlet.nativeElement);
     }
   }
 
   ngOnDestroy(): void {
-    this._workspace.removeChangeListener(this.syncToCodeResource);
+    this._blockly?.workspace.removeChangeListener(this.syncToCodeResource);
+    this._blockly?.xmlToolboxSubscription?.unsubscribe();
+
     this._resizeObserver.disconnect();
 
     this._subscriptions.forEach((s) => s.unsubscribe());
@@ -178,7 +207,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
    * The user has interacted with the workspace.
    */
   syncToCodeResource() {
-    const workspaceDom = Blockly.Xml.workspaceToDom(this._workspace);
+    const workspaceDom = Blockly.Xml.workspaceToDom(this._blockly.workspace);
 
     try {
       const ast = blocklyToInternal(workspaceDom);

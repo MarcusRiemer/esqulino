@@ -50,7 +50,8 @@ export class BlockLanguage implements Forward.BlockLanguage {
         case "fixedBlocks":
           return new FixedBlocksSidebar(this, sidebarDesc);
         case "databaseSchema":
-          return new DatabaseSchemaSidebar();
+          // TODO: Pass in the correct service
+          return new DatabaseSchemaSidebar(undefined);
         case "truckProgramUserFunctions":
           return new ProgramUserFunctionsSidebar();
         case "metaDefinedTypes":
