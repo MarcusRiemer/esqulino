@@ -20,7 +20,7 @@ import { TrashComponent } from "./trash.component";
 import { TrashService } from "./trash.service";
 import { ContenteditableModel } from "./contenteditable-model.directive";
 import { SourceIconComponent } from "./source-icon.component";
-import { SchemaService } from "./schema.service";
+import { EditDatabaseSchemaService } from "./edit-database-schema.service";
 import { CurrentCodeResourceService } from "./current-coderesource.service";
 import { EditorToolbarService } from "./toolbar.service";
 
@@ -49,7 +49,7 @@ import { EditorToolbarService } from "./toolbar.service";
   ],
   providers: [
     TrashService,
-    SchemaService,
+    EditDatabaseSchemaService,
     CurrentCodeResourceService,
     EditorToolbarService,
   ],

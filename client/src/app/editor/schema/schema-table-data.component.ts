@@ -5,7 +5,7 @@ import { first } from "rxjs/operators";
 
 import { Table } from "../../shared/schema";
 
-import { SchemaService } from "../schema.service";
+import { EditDatabaseSchemaService } from "../edit-database-schema.service";
 import { ProjectService, Project } from "../project.service";
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
@@ -19,7 +19,7 @@ import { SidebarService } from "../sidebar.service";
 })
 export class SchemaTableDataComponent implements OnInit, OnDestroy {
   constructor(
-    private _schemaService: SchemaService,
+    private _schemaService: EditDatabaseSchemaService,
     private _projectService: ProjectService,
     private _routeParams: ActivatedRoute,
     private _router: Router,

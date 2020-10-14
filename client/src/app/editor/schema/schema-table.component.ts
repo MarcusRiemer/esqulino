@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 
 import { Table } from "../../shared/schema";
 
-import { SchemaService } from "../schema.service";
+import { EditDatabaseSchemaService } from "../edit-database-schema.service";
 import { ProjectService, Project } from "../project.service";
 
 /**
@@ -35,7 +35,7 @@ export class SchemaTableComponent {
   @Output("columnToHighlightChange") selectedColumnName = new EventEmitter();
 
   constructor(
-    private _schemaService: SchemaService,
+    private _schemaService: EditDatabaseSchemaService,
     private _projectService: ProjectService
   ) {}
 
