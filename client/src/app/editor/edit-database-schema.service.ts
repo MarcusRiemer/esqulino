@@ -23,7 +23,7 @@ interface CurrentlyEdited {
  * Service to hold, get and send data from a schema.
  */
 @Injectable()
-export class SchemaService {
+export class EditDatabaseSchemaService {
   /**
    * The table that is currently edited.
    */

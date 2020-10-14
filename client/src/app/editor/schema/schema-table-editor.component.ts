@@ -16,7 +16,7 @@ import {
   RemoveForeignKey,
 } from "../../shared/schema/table-commands";
 
-import { SchemaService } from "../schema.service";
+import { EditDatabaseSchemaService } from "../edit-database-schema.service";
 
 import { ProjectService, Project } from "../project.service";
 import { EditorToolbarService } from "../toolbar.service";
@@ -34,7 +34,7 @@ import { TableEditorSidebarControlsComponent } from "./table-editor-controls.sid
 })
 export class SchemaTableEditorComponent implements OnInit, OnDestroy {
   constructor(
-    private _schemaService: SchemaService,
+    private _schemaService: EditDatabaseSchemaService,
     private _projectService: ProjectService,
     private _routeParams: ActivatedRoute,
     private _router: Router,
