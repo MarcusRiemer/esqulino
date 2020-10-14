@@ -3,3 +3,15 @@ AllCops:
 
 Layout/LineLength:
   Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Style/DefWithParentheses:
+  Enabled: false
