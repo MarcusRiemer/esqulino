@@ -6,28 +6,24 @@ import {
   typenameEquals,
 } from "../syntaxtree";
 
-import { FixedBlocksSidebar } from "./sidebar-blocks";
-import { Sidebar } from "./sidebar";
 import {
   BlockLanguageDescription,
   EditorComponentDescription,
 } from "./block-language.description";
-import { EditorBlockDescription } from "./block.description";
+import {
+  EditorBlockDescription,
+  SidebarDescription,
+} from "./block.description";
 import * as Forward from "./block-language.forward";
-
-import { DatabaseSchemaSidebar } from "./sql/database-schema-sidebar";
-import { ProgramUserFunctionsSidebar } from "./truck/program-user-functions-sidebar";
-import { MetaDefinedTypesSidebar } from "./meta/meta-defined-types-sidebar";
-import { TruckWorldTilesSidebar } from "./truck/truck-world-tiles-sidebar";
 
 /**
  * Augments an existing language with additional information on how to
  * display elements of that languages using blocks.
  */
 export class BlockLanguage implements Forward.BlockLanguage {
-  private _sidebars: Sidebar[];
-  private _editorBlocks: EditorBlockDescription[] = [];
-  private _editorComponents: EditorComponentDescription[] = [];
+  private _sidebarDescriptions: SidebarDescription[];
+  private _editorBlocks: EditorBlockDescription[];
+  private _editorComponents: EditorComponentDescription[];
   private _name: string;
   private _id: string;
   private _slug: string;
@@ -43,25 +39,8 @@ export class BlockLanguage implements Forward.BlockLanguage {
     this._defaultProgrammingLanguageId = desc.defaultProgrammingLanguageId;
     this._editorBlocks = desc.editorBlocks;
     this._editorComponents = desc.editorComponents;
-    this._rootCssClasses = desc.rootCssClasses || [];
-
-    this._sidebars = desc.sidebars.map((sidebarDesc) => {
-      switch (sidebarDesc.type) {
-        case "fixedBlocks":
-          return new FixedBlocksSidebar(this, sidebarDesc);
-        case "databaseSchema":
-          // TODO: Pass in the correct service
-          return new DatabaseSchemaSidebar(undefined);
-        case "truckProgramUserFunctions":
-          return new ProgramUserFunctionsSidebar();
-        case "metaDefinedTypes":
-          return new MetaDefinedTypesSidebar();
-        case "truckWorldTiles":
-          return new TruckWorldTilesSidebar();
-        default:
-          throw new Error(`Unknown sidebar type: ${(sidebarDesc as any).type}`);
-      }
-    });
+    this._rootCssClasses = desc.rootCssClasses ?? [];
+    this._sidebarDescriptions = desc.sidebars ?? [];
   }
 
   /**
@@ -107,17 +86,17 @@ export class BlockLanguage implements Forward.BlockLanguage {
   }
 
   /**
-   * @return All sidebars that are defined for this block language.
+   * @return The sidebars that should be used with this block language.
    */
-  get sidebars(): ReadonlyArray<Sidebar> {
-    return this._sidebars;
+  get sidebarDesriptions(): ReadonlyArray<SidebarDescription> {
+    return this._sidebarDescriptions;
   }
 
   /**
    * @return True if this block language makes use of multiple sidebars.
    */
   get hasMultipleSidebars() {
-    return this.sidebars.length > 1;
+    return this._sidebarDescriptions.length > 1;
   }
 
   /**

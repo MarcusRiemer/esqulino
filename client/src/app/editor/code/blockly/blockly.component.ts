@@ -9,7 +9,7 @@ import {
 import { Router } from "@angular/router";
 
 import { Subscription } from "rxjs";
-import { first } from "rxjs/operators";
+import { first, skip } from "rxjs/operators";
 
 import * as Blockly from "blockly";
 
@@ -116,11 +116,14 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
    */
   ngAfterViewInit(): void {
     const currResSub = this._current.currentResource.subscribe(
-      (currRes: CodeResource) => {
+      async (currRes: CodeResource) => {
         // Clear previously loaded blockly data
         if (this._blockly?.workspace) {
           this._blockly.workspace.clear();
         }
+
+        // Ensure that old subscriptions are not fired anymore
+        this._blockly?.xmlToolboxSubscription?.unsubscribe();
 
         const validators = currRes.validatorPeek.grammarValidators;
 
@@ -136,32 +139,38 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
           g,
           currRes.blockLanguagePeek
         );
+
         console.log("Generated blockly settings", blocklyLoadable);
-        console.log("XML Toolbox", blocklyLoadable.toolboxXml);
 
         Blockly.defineBlocksWithJsonArray(blocklyLoadable.blocks);
 
         // Is a workspace present or is there a need to create one?
         if (!this._blockly) {
+          const toolboxXml = await blocklyLoadable.toolboxXml
+            .pipe(first())
+            .toPromise();
+
+          console.log("Initial XML Toolbox", toolboxXml);
+
+          const config = Object.assign({}, this.config, {
+            toolbox: toolboxXml,
+          });
+
           // Create a new workspace
           this._blockly = {
-            workspace: Blockly.inject(
-              this.blocklyOutlet.nativeElement,
-              Object.assign({}, this.config, {
-                toolbox: blocklyLoadable.toolboxXml,
-              })
-            ),
+            workspace: Blockly.inject(this.blocklyOutlet.nativeElement, config),
             xmlToolboxSubscription: undefined,
           };
         }
 
         // Available blocks have been defined, now react to changes in the workspace
-        this._blockly.xmlToolboxSubscription?.unsubscribe();
-        this._blockly.xmlToolboxSubscription = blocklyLoadable.toolboxXml.subscribe(
-          (toolboxXml) => {
+        this._blockly.xmlToolboxSubscription = blocklyLoadable.toolboxXml
+          // First value can be skipped as it was assigned on initial load
+          .pipe(skip(1))
+          .subscribe((toolboxXml) => {
+            console.log("Updated Toolbox XML: ", toolboxXml);
             this._blockly.workspace.updateToolbox(toolboxXml);
-          }
-        );
+          });
 
         const astXmlWorkspace = internalToBlockly(
           currRes.syntaxTreePeek.toModel(),
@@ -176,18 +185,14 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
 
     this._subscriptions.push(currResSub);
 
-    // Can't pass the method directly, `this` would be incorrectly bound
-    // when the callback is executed.
-    this._blockly.workspace.addChangeListener((_: Blockly.Events.Change) => {
-      // this.syncToCodeResource(e);
-    });
-
     // Detect resizes
     // @ts-ignore
     if (ResizeObserver) {
       // @ts-ignore
       this._resizeObserver = new ResizeObserver(() => {
-        Blockly.svgResize(this._blockly.workspace);
+        if (this._blockly?.workspace) {
+          Blockly.svgResize(this._blockly.workspace);
+        }
       });
       this._resizeObserver.observe(this.blocklyOutlet.nativeElement);
     }

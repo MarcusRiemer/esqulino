@@ -23,6 +23,9 @@ import { SourceIconComponent } from "./source-icon.component";
 import { EditDatabaseSchemaService } from "./edit-database-schema.service";
 import { CurrentCodeResourceService } from "./current-coderesource.service";
 import { EditorToolbarService } from "./toolbar.service";
+import { SidebarService } from "./sidebar.service";
+import { DatabaseSchemaService } from "./database-schema.service";
+import { SidebarDataService } from "./sidebar-data.service";
 
 @NgModule({
   imports: [
@@ -50,8 +53,11 @@ import { EditorToolbarService } from "./toolbar.service";
   providers: [
     TrashService,
     EditDatabaseSchemaService,
+    DatabaseSchemaService,
     CurrentCodeResourceService,
     EditorToolbarService,
+    SidebarService,
+    SidebarDataService,
   ],
   exports: [
     EditorComponent,

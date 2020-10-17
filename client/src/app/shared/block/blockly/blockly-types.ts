@@ -1,6 +1,7 @@
 import {
   NodeConcreteTypeDescription,
   NodeVisualTypeDescription,
+  NodeDescription,
 } from "../../syntaxtree";
 
 export interface BlockArgsInputValue {
@@ -75,4 +76,13 @@ export interface BlocklyBlock {
   inputsInline?: boolean;
 
   coreType: NodeConcreteTypeDescription | NodeVisualTypeDescription;
+}
+
+/**
+ * A Blockly block that is ready to be placed on a workspace. Used to
+ * populate the sidebar.
+ */
+export interface BlocklyWorkspaceBlock {
+  type: string;
+  properties: NodeDescription["properties"];
 }

@@ -5,6 +5,10 @@ import { CodeResource } from "../../shared/syntaxtree";
 import { SIDEBAR_MODEL_TOKEN } from "../editor.token";
 
 import { map } from "rxjs/operators";
+import {
+  FixedBlocksSidebarDescription,
+  FixedBlocksSidebar,
+} from "src/app/shared/block";
 
 @Component({
   templateUrl: "templates/sidebar-fixed-blocks.html",
@@ -20,7 +24,11 @@ export class CodeSidebarFixedBlocksComponent {
 
   readonly fixedBlockSidebars$ = this.currentBlockLanguage$.pipe(
     map((b) =>
-      b.sidebars.filter((s) => s.portalComponentTypeId === "fixedBlocks")
+      b.sidebarDesriptions
+        .filter(
+          (s): s is FixedBlocksSidebarDescription => s.type === "fixedBlocks"
+        )
+        .map((s) => new FixedBlocksSidebar(s))
     )
   );
 }
