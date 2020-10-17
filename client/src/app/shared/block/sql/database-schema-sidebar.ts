@@ -3,24 +3,44 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
-import { DatabaseSchemaService } from "../../../editor/database-schema.service";
-
 import { Sidebar } from "../sidebar";
 import { FixedBlocksSidebarCategoryDescription } from "../block.description";
+import { Table } from "../../schema";
 
 @Injectable()
 export class DatabaseSchemaSidebar implements Sidebar {
-  constructor(private _dbSchema: DatabaseSchemaService) {}
+  constructor(private _schema: Observable<Table[]>) {}
 
   readonly portalComponentTypeId = "databaseSchema";
 
   readonly currentBlocks: Observable<
     FixedBlocksSidebarCategoryDescription
-  > = this._dbSchema?.currentSchema.pipe(
+  > = this._schema.pipe(
     map((tables) => {
       return {
         categoryCaption: "Test",
-        blocks: [],
+        blocks: [
+          {
+            displayName: "Test",
+            defaultNode: {
+              language: "sql",
+              name: "tableIntroduction",
+              properties: {
+                name: "test_table",
+              },
+            },
+          },
+          {
+            displayName: "Test",
+            defaultNode: {
+              language: "sql",
+              name: "tableIntroduction",
+              properties: {
+                name: "test_table_2",
+              },
+            },
+          },
+        ],
       };
     })
   );

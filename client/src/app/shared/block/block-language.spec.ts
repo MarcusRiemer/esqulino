@@ -131,7 +131,7 @@ describe("Block Language", () => {
       typeName: "z",
     });
 
-    expect(lm.sidebars.length).toEqual(2);
+    expect(lm.sidebarDesriptions.length).toEqual(2);
     expect(lm.hasMultipleSidebars).toBeTruthy();
 
     expect(

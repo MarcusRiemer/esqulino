@@ -7,7 +7,6 @@ import {
   NodeTailoredDescription,
   isNodeDerivedPropertyDescription,
 } from "./block.description";
-import { BlockLanguage } from "./block-language.forward";
 import { Sidebar } from "./sidebar";
 
 /**
@@ -143,7 +142,7 @@ export class FixedBlocksSidebar implements Sidebar {
    */
   public readonly categories: ReadonlyArray<BlocksSidebarCategory>;
 
-  constructor(_parent: BlockLanguage, desc: FixedBlocksSidebarDescription) {
+  constructor(desc: FixedBlocksSidebarDescription) {
     this.displayName = desc.caption;
     this.categories = desc.categories.map((catDesc) => {
       return new FixedBlocksSidebarCategory(this, catDesc);

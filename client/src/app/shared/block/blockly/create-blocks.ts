@@ -6,9 +6,14 @@ import {
   EnumRestrictionDescription,
   Orientation,
   QualifiedTypeName,
+  NodeDescription,
 } from "../../syntaxtree/";
 
-import { BlocklyBlock, BlockArgs } from "./blockly-types";
+import {
+  BlocklyBlock,
+  BlockArgs,
+  BlocklyWorkspaceBlock,
+} from "./blockly-types";
 import { allPresentTypes } from "../../syntaxtree/grammar-type-util";
 
 import {
@@ -16,6 +21,10 @@ import {
   blockOrientation,
   buildAppearanceContext,
 } from "./appearance-context";
+import {
+  FixedBlocksSidebarCategoryDescription,
+  isNodeDerivedPropertyDescription,
+} from "../block.description";
 
 function anyTag(a: NodeAttributeDescription, ...tag: string[]) {
   if (!a.tags) {
@@ -203,4 +212,36 @@ export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
   );
 
   return toReturn;
+}
+
+export function createWorkspaceBlocksFromSidebar(
+  s: FixedBlocksSidebarCategoryDescription
+): BlocklyWorkspaceBlock[] {
+  return (
+    s.blocks
+      // Take the only or the last available node (as it will be the most specific)
+      .map((b) =>
+        Array.isArray(b.defaultNode) ? b.defaultNode[0] : b.defaultNode
+      )
+      // Remove anything that requires tailoring
+      .filter(
+        (n): n is NodeDescription =>
+          !Object.values(n.properties).some((p) =>
+            isNodeDerivedPropertyDescription(p)
+          )
+      )
+      .map((b) => {
+        return {
+          type: b.language + "." + b.name,
+          properties: b.properties,
+        };
+      })
+  );
+}
+
+export function workspaceBlockToXml(b: BlocklyWorkspaceBlock): string {
+  const properties = Object.entries(b.properties).map(
+    ([k, v]) => `<field name="${k}">${v}</field>`
+  );
+  return `<block type="${b.type}">${properties.join()}</block>`;
 }
