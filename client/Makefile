@@ -52,7 +52,7 @@ client-compile : msg-pre-build src/environments/version.ts
 	$(NG_BIN) build --aot --localize --outputPath="dist/browser" $(NG_PROD) $(DIST_FLAGS)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --outputPath="dist/browser" $(DEV_FLAGS)
+	$(NG_BIN) build --aot --localize --outputPath="dist/browser" $(DEV_FLAGS)
 
 ##################################
 # Commandline Client
