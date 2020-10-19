@@ -4,7 +4,6 @@ import { FormsModule } from "@angular/forms";
 
 import { SharedAppModule } from "../shared/shared.module";
 
-import { SchemaEditorModule } from "./schema/schema.module";
 import { ImageEditorModule } from "./image/image.module";
 import { CodeEditorModule } from "./code/code.module";
 
@@ -35,7 +34,6 @@ import { SidebarDataService } from "./sidebar-data.service";
     SharedAppModule,
 
     ImageEditorModule.forRoot(),
-    SchemaEditorModule.forRoot(),
     CodeEditorModule.forRoot(),
   ],
   declarations: [
@@ -62,7 +60,6 @@ import { SidebarDataService } from "./sidebar-data.service";
   exports: [
     EditorComponent,
     SettingsComponent,
-    SchemaEditorModule,
 
     QueryIconComponent,
     TrashComponent,
