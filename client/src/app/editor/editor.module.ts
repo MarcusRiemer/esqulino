@@ -4,6 +4,8 @@ import { FormsModule } from "@angular/forms";
 
 import { SharedAppModule } from "../shared/shared.module";
 
+import { editorRouting } from "./editor.routes";
+
 import { ImageEditorModule } from "./image/image.module";
 import { CodeEditorModule } from "./code/code.module";
 
@@ -25,6 +27,7 @@ import { EditorToolbarService } from "./toolbar.service";
 import { SidebarService } from "./sidebar.service";
 import { DatabaseSchemaService } from "./database-schema.service";
 import { SidebarDataService } from "./sidebar-data.service";
+import { DragService } from "./drag.service";
 
 @NgModule({
   imports: [
@@ -32,6 +35,8 @@ import { SidebarDataService } from "./sidebar-data.service";
     FormsModule,
 
     SharedAppModule,
+
+    editorRouting,
 
     ImageEditorModule.forRoot(),
     CodeEditorModule.forRoot(),
@@ -56,6 +61,7 @@ import { SidebarDataService } from "./sidebar-data.service";
     EditorToolbarService,
     SidebarService,
     SidebarDataService,
+    DragService,
   ],
   exports: [
     EditorComponent,
