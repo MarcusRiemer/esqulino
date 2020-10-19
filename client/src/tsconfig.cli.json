@@ -11,6 +11,7 @@
     "lib": [
       "ES2017",
       "ES2016",
+      "es2019.array"
     ],
     "outDir": "../dist/cli/"
   },
