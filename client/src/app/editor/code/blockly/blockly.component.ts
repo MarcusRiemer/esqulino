@@ -83,7 +83,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
       this._router.navigateByUrl(snap.substring(0, snap.length - 2));
     });
 
-    // Wiring up the "switch to other editor"-button
+    // Wiring up the "sync AST" button
     let btnSync = this._toolbarService.addButton(
       "sync-coderesource",
       "Synchronisieren",

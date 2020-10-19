@@ -11,7 +11,9 @@ import {
 } from "../shared/block";
 import { DatabaseSchemaService } from "./database-schema.service";
 
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class SidebarDataService {
   constructor(private _databaseSchema: DatabaseSchemaService) {}
 

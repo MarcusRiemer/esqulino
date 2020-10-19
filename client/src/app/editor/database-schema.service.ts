@@ -6,7 +6,9 @@ import { ProjectService } from "./project.service";
 /**
  * Service to hold, get and send data from a schema.
  */
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class DatabaseSchemaService {
   constructor(private _projectService: ProjectService) {}
 
