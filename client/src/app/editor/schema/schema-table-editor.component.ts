@@ -160,11 +160,12 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
         this._subscriptionRefs.push(projref);
         this.isNewTable = true;
         this._schemaService.initCurrentlyEdit(
-          new Table(
-            { name: "", columns: [], foreignKeys: [], systemTable: false },
-            [],
-            []
-          )
+          new Table({
+            name: "",
+            columns: [],
+            foreignKeys: [],
+            systemTable: false,
+          })
         );
         this.table = this._schemaService.getCurrentlyEditedTable();
       }
@@ -275,7 +276,7 @@ export class SchemaTableEditorComponent implements OnInit, OnDestroy {
       // Create new table
       if (this.table.name != "") {
         let desc = this.table.toModel();
-        let tableToSend = new Table(desc, desc.columns, desc.foreignKeys);
+        let tableToSend = new Table(desc);
         for (var i = tableToSend.columns.length - 1; i >= 0; i--) {
           console.log(tableToSend.columns[i].state);
           if (this.table.columns[i].state == ColumnStatus.deleted) {

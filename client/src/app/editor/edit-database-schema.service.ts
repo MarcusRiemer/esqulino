@@ -56,11 +56,7 @@ export class EditDatabaseSchemaService {
   initCurrentlyEdit(table: Table) {
     let desc = table.toModel();
     this._currentlyEdited = {};
-    this._currentlyEdited.table = new Table(
-      desc,
-      desc.columns,
-      desc.foreignKeys
-    );
+    this._currentlyEdited.table = new Table(desc);
     this._currentlyEdited.stack = new TableCommandHolder(
       this._currentlyEdited.table
     );
