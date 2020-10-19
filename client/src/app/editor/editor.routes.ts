@@ -6,7 +6,6 @@ import { SettingsComponent } from "./project-settings/settings.component";
 
 import { ProjectExistsGuard } from "./project-exists.guard";
 
-import { schemaEditorRoutes } from "./schema/schema.routes";
 import { imageEditorRoutes } from "./image/image.routes";
 import { codeEditorRoutes } from "./code/code.routes";
 
@@ -27,7 +26,8 @@ export const editorRoutes: Routes = [
       },
       {
         path: "schema",
-        children: [...schemaEditorRoutes],
+        loadChildren: () =>
+          import("./schema/schema.module").then((m) => m.SchemaEditorModule),
       },
       {
         path: "ast",
