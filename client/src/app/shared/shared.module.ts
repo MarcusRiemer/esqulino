@@ -87,8 +87,6 @@ import { ConditionalDisplayDirective } from "./table/directives/conditional-disp
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
 
-import { DatabaseSchemaSidebar } from "./block/sql/database-schema-sidebar";
-
 const dataServices = [
   IndividualGrammarDataService,
   IndividualBlockLanguageDataService,
@@ -118,8 +116,6 @@ const materialModules = [
   MatProgressBarModule,
   MatIconModule,
 ];
-
-const sidebarServices = [DatabaseSchemaSidebar];
 
 /**
  * Bundles facilities that are used all over the app, no matter
@@ -240,7 +236,6 @@ export class SharedAppModule {
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
-        ...sidebarServices,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,

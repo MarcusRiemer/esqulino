@@ -1,13 +1,48 @@
-import { Injectable } from "@angular/core";
-
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 
-import { Sidebar } from "../sidebar";
-import { FixedBlocksSidebarCategoryDescription } from "../block.description";
-import { Table } from "../../schema";
+import { Table, Column } from "../../schema";
 
-@Injectable()
+import { Sidebar } from "../sidebar";
+import {
+  FixedBlocksSidebarCategoryDescription,
+  SidebarBlockDescription,
+} from "../block.description";
+
+export function mapColumn(t: Table, c: Column): SidebarBlockDescription {
+  return {
+    displayName: c.name,
+    defaultNode: {
+      language: "sql",
+      name: "columnName",
+      properties: {
+        refTableName: t.name,
+        columnName: c.name,
+      },
+    },
+  };
+}
+
+export function mapTable(t: Table): SidebarBlockDescription[] {
+  const tableBlock: SidebarBlockDescription = {
+    displayName: t.name,
+    defaultNode: {
+      language: "sql",
+      name: "tableIntroduction",
+      properties: {
+        name: t.name,
+      },
+    },
+  };
+
+  const columnBlocks = t.columns.map((c) => mapColumn(t, c));
+
+  return [tableBlock, ...columnBlocks];
+}
+
+/**
+ * Creates sidebar blocks that match a certain SQL database schema.
+ */
 export class DatabaseSchemaSidebar implements Sidebar {
   constructor(private _schema: Observable<Table[]>) {}
 
@@ -16,32 +51,9 @@ export class DatabaseSchemaSidebar implements Sidebar {
   readonly currentBlocks: Observable<
     FixedBlocksSidebarCategoryDescription
   > = this._schema.pipe(
-    map((tables) => {
-      return {
-        categoryCaption: "Test",
-        blocks: [
-          {
-            displayName: "Test",
-            defaultNode: {
-              language: "sql",
-              name: "tableIntroduction",
-              properties: {
-                name: "test_table",
-              },
-            },
-          },
-          {
-            displayName: "Test",
-            defaultNode: {
-              language: "sql",
-              name: "tableIntroduction",
-              properties: {
-                name: "test_table_2",
-              },
-            },
-          },
-        ],
-      };
-    })
+    map((tables) => ({
+      categoryCaption: "SQL Schema",
+      blocks: tables.flatMap((t) => mapTable(t)),
+    }))
   );
 }
