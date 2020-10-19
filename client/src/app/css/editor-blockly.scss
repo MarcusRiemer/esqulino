@@ -2,9 +2,6 @@
 // container into account. We therefore override the calculations
 // of the blockly CSS to include our margins.
 .blockly-outlet {
-    position: absolute;
-    width: calc(100% - 30px);
-    // min-width: calc(100% - 30px);
-    height: calc(100vh - (#{$toolbar-padding} + #{$toolbar-height} + #{$toolbar-margin-bottom} + 15px));
-    // min-height: calc(100vh - (#{$toolbar-padding} + #{$toolbar-height} + #{$toolbar-margin-bottom} + 15px));
+    height: calc(60vh - (#{$toolbar-padding} + #{$toolbar-height} + #{$toolbar-margin-bottom} + 15px));
+    min-height: 400px;
 }

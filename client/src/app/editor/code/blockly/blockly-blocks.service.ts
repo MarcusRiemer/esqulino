@@ -18,7 +18,9 @@ interface LoadableBlocklyDefinition {
   toolboxXml: Observable<string>;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class BlocklyBlocksService {
   constructor(private _sidebarData: SidebarDataService) {}
 

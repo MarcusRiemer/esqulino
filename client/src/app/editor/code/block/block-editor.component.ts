@@ -22,7 +22,7 @@ import { CodeSidebarComponent } from "../code.sidebar";
 import { EditorComponentsService } from "../editor-components.service";
 
 interface PlacedEditorComponent {
-  portal: ComponentPortal<{}>;
+  portal: Promise<ComponentPortal<{}>>;
   columnClasses: string[];
 }
 
@@ -168,7 +168,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   /**
    * @return The resolved portal for the given description
    */
-  getEditorComponentPortal(desc: EditorComponentDescription) {
+  createEditorComponentPortal(desc: EditorComponentDescription) {
     return this._editorComponentsService.createComponent(desc);
   }
 
@@ -225,7 +225,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       components.map((c) => {
         // Resolved component and sane defaults for components that are displayed
         return {
-          portal: this.getEditorComponentPortal(c),
+          portal: this.createEditorComponentPortal(c),
           columnClasses: c.columnClasses || ["col-12"],
         };
       })

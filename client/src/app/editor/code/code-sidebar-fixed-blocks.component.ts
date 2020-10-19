@@ -1,14 +1,14 @@
 import { Component, Inject } from "@angular/core";
 
-import { CodeResource } from "../../shared/syntaxtree";
-
-import { SIDEBAR_MODEL_TOKEN } from "../editor.token";
-
 import { map } from "rxjs/operators";
+
+import { CodeResource } from "../../shared/syntaxtree";
 import {
   FixedBlocksSidebarDescription,
   FixedBlocksSidebar,
-} from "src/app/shared/block";
+} from "../../shared/block";
+
+import { SIDEBAR_MODEL_TOKEN } from "../editor.token";
 
 @Component({
   templateUrl: "templates/sidebar-fixed-blocks.html",
