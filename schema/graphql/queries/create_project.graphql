@@ -1,4 +1,4 @@
-mutation CreateProject($name:LangJson!,$slug:String!){
+mutation CreateProject($name:LangJson!,$slug:String){
     createProject(input:{name:$name,slug:$slug}) {
         errors
         id

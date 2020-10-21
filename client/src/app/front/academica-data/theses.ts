@@ -8,7 +8,24 @@ const LOGO_CAU_URL = "/vendor/logos/cau.png";
  */
 const THESIS_BASE_URL = "http://files.blattwerkzeug.de/theses";
 
-export default [
+/** Required front end information for a thesis */
+export interface Thesis {
+  id: string;
+  language: string;
+  title: string;
+  subtitle: string;
+  author: {
+    name: string;
+  };
+  publicationType: string;
+  institutionLogo: string;
+  abstract: string;
+  degree?: string;
+  url: string;
+  date: Date;
+}
+
+export const Theses: Thesis[] = [
   {
     id: "origin",
     language: "de",
@@ -114,6 +131,7 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
     author: {
       name: "Marcus Riemer",
     },
+    publicationType: "Projektbeschreibung Promotion",
     institutionLogo: LOGO_FHW_URL,
     url: `${THESIS_BASE_URL}/marcus-riemer-project-ide-generation.pdf`,
     abstract: `<p>Im Rahmen dieser Promotion soll erforscht und demonstriert werden, wie sich aus formalen Beschreibungen von Programmiersprachen benutzerfreundliche syntaxfreie Entwicklungsumgebungen erzeugen lassen. Letztendlich soll Lehrkräften ein Werkzeug an die Hand gegeben werden, welches die Einstiegshürde in die Programmierung mit konventionellen Programmiersprachen wie SQL, HTML, CSS oder JavaScript senkt.</p>`,
@@ -137,5 +155,20 @@ Um syntaktische Fehler während der Programmierung systematisch auszuschließen,
       Mit Fertigstellung der Thesis ist es möglich, sich mit einer standardisierten Registrierung oder einem externen Anbieter bei Blattwerkzeug anzumelden. Außerdem werden je nach Benutzerrolle und Benutzergruppe des angemeldeten Nutzers unterschiedlicher Inhalt dargestellt oder andere Operationen gestattet.
     </p>`,
     date: new Date("September 2, 2019"),
+  },
+  {
+    id: "graphql-migration",
+    language: "de",
+    title: "Migration von REST nach GraphQL",
+    subtitle: "in einer bestehenden Webapplikation",
+    author: {
+      name: "Yannick Schröder",
+    },
+    institutionLogo: LOGO_FHW_URL,
+    publicationType: "Thesis (B.Sc.)",
+    url: `${THESIS_BASE_URL}/yannick-schroeder-thesis-migration-graphql.pdf`,
+    abstract:
+      "Im Kern dieser Arbeit wird eine vorhandene REST-artige Schnittstelle durch eine neuere Technologie (GraphQL) weitestgehend ersetzt. Zudem werden alle Berührungspunkte der REST-artigen Schnittstelle ebenfalls auf die Nutzung von GraphQL angepasst. Dazu gehören neben der naheliegenden Kommunikationsschnittstelle auf dem Server, auch clientseitige Implementierungen, die durch die Migration von GraphQL angepasst werden müssen. Dafür wird zunächst das aktuelle System beschrieben und bewertet um auf dieser Grundlage Anforderungen an ein neues System zu formulieren und zu implementieren. Zuletzt wird die Implementierung von GraphQL erläutert und ein Fazit gezogen, ob es eine lohnenswerte Migration für BlattWerkzeug ist.",
+    date: new Date("September 9, 2020"),
   },
 ];

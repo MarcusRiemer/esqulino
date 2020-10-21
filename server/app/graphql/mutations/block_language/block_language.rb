@@ -1,6 +1,4 @@
-
 class Mutations::BlockLanguage::BlockLanguage < Mutations::BaseMutation
-
   field :blockLanguage, Types::BlockLanguageType, null: true
   field :id, ID, null: true
   field :errors, [String], null: false
@@ -8,13 +6,13 @@ class Mutations::BlockLanguage::BlockLanguage < Mutations::BaseMutation
   def save_block_language(block_language)
     if block_language.save
       {
-          blockLanguage: block_language,
-          errors: []
+        blockLanguage: block_language,
+        errors: []
       }
     else
       {
-          blockLanguage: nil,
-          errors: block_language.errors.full_messages
+        blockLanguage: nil,
+        errors: block_language.errors.full_messages
       }
     end
   end
@@ -23,13 +21,13 @@ class Mutations::BlockLanguage::BlockLanguage < Mutations::BaseMutation
     begin
       block_language.destroy!
       {
-          blockLanguage: nil,
-          errors: []
+        blockLanguage: nil,
+        errors: []
       }
     rescue ActiveRecord::InvalidForeignKey
       {
-          blockLanguage: nil,
-          errors: ['EXISTING_REFERENCES']
+        blockLanguage: nil,
+        errors: ['EXISTING_REFERENCES']
       }
     end
   end

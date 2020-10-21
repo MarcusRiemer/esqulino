@@ -6,9 +6,9 @@ module Types
     field :types, GraphQL::Types::JSON, null: false, default_value: {}
     field :foreign_types, GraphQL::Types::JSON, null: false, default_value: {}
     field :root, Types::Scalar::QualifiedTypeName, null: true
-    field :programming_language_id,  ID, null: false
+    field :programming_language_id, ID, null: false
     field :programming_language, Types::ProgrammingLanguageType, null: false
-    field :generated_from_id, ID, null:true
+    field :generated_from_id, ID, null: true
     field :generated_from, Types::CodeResourceType, null: true
     field :block_languages, Types::BlockLanguageType.connection_type, null: true
     field :code_resources, Types::CodeResourceType.connection_type, null: true
@@ -20,7 +20,7 @@ module Types
 
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'GrammarOrderFieldEnum'
-      #Order Fields
+      # Order Fields
       value 'name'
       value 'slug'
     end
@@ -48,6 +48,5 @@ module Types
       argument :filter, FilterFieldType, required: false
       argument :languages, [Types::Base::BaseEnum::LanguageEnum], required: false
     end
-
   end
 end

@@ -67,10 +67,10 @@ class BaseIdeService
   # @param search_type ["referencedCodeResources"|"referencedGrammars"]
   def referenced_resource_ids(code_resource, search_type)
     grammar_document = code_resource
-                         .block_language
-                         .grammar
-                         .document
-                         .transform_keys{ |k| k.camelize(:lower) }
+                       .block_language
+                       .grammar
+                       .document
+                       .transform_keys { |k| k.camelize(:lower) }
     execute_request({
                       "type" => search_type,
                       "ast" => code_resource.ast,
@@ -80,7 +80,7 @@ class BaseIdeService
 
   # Checks whether the IDE-service is available
   def ping!
-    execute_request({ "type" => "ping"}) == "pong"
+    execute_request({ "type" => "ping" }) == "pong"
   end
 
   # Communicates the given request to the IDE service.
@@ -204,11 +204,11 @@ class MockIdeService < BaseIdeService
   def emit_generated_blocks(block_language)
     if block_language and block_language.local_generator_instructions
       return ({
-                "editor_blocks" => [],
-                "editor_components" => [],
-                "sidebars" => [],
-                "root_css_classes" => []
-              })
+        "editor_blocks" => [],
+        "editor_components" => [],
+        "sidebars" => [],
+        "root_css_classes" => []
+      })
     else
       return nil
     end

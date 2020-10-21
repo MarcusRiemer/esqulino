@@ -7,34 +7,22 @@ RSpec.describe ProjectsController, type: :request do
     it 'finds a project by id' do
       p = create(:project)
 
-      send_query(
+      data = send_query(
         query_name: "FullProject",
-        variables: { "id" => p.id}
+        variables: { "id" => p.id }
       )
-
-      expect(response.status).to eq 200
-      expect(response.media_type).to eq "application/json"
-      data = JSON.parse(response.body)
-      expect(data.fetch("errors", [])).to eq []
 
       node = data["data"]["projects"]["nodes"][0];
       expect(node["id"]).to eq p.id
     end
 
     it 'finds a project by slug' do
-      pending("Projects must be resolved by slug or id")
-
       p = create(:project, slug: "uniq")
 
-      send_query(
+      data = send_query(
         query_name: "FullProject",
-        variables: { "id" => p.slug}
+        variables: { "id" => p.slug }
       )
-
-      expect(response.status).to eq 200
-      expect(response.media_type).to eq "application/json"
-      data = JSON.parse(response.body)
-      expect(data.fetch("errors", [])).to eq []
 
       node = data["data"]["projects"]["nodes"][0];
       expect(node["id"]).to eq p.id
@@ -44,15 +32,10 @@ RSpec.describe ProjectsController, type: :request do
       db = create(:project_database, :table_key_value)
       p = db.project
 
-      send_query(
+      data = send_query(
         query_name: "FullProject",
         variables: { "id" => p.id }
       )
-
-      expect(response.status).to eq 200
-      expect(response.media_type).to eq "application/json"
-      data = JSON.parse(response.body)
-      expect(data.fetch("errors", [])).to eq []
 
       node = data["data"]["projects"]["nodes"][0];
       expect(node["id"]).to eq p.id
@@ -62,29 +45,21 @@ RSpec.describe ProjectsController, type: :request do
       db = create(:project_database, :tables_references)
       p = db.project
 
-      send_query(
+      data = send_query(
         query_name: "FullProject",
         variables: { "id" => p.id }
       )
-
-      expect(response.status).to eq 200
-      expect(response.media_type).to eq "application/json"
-      data = JSON.parse(response.body)
-      expect(data.fetch("errors", [])).to eq []
 
       node = data["data"]["projects"]["nodes"][0];
       expect(node["id"]).to eq p.id
     end
 
     it 'empty list on non existant projects' do
-      send_query(
+      data = send_query(
         query_name: "FullProject",
         variables: { "id" => "ed0b2730-bb75-462b-aadc-6cfc03e6ef02" }
       )
 
-      expect(response.status).to eq 200
-      expect(response.media_type).to eq "application/json"
-      data = JSON.parse(response.body)
       expect(data.fetch("errors", [])).to eq []
       expect(data["data"]["projects"]["nodes"]).to eq []
     end
@@ -96,16 +71,10 @@ RSpec.describe ProjectsController, type: :request do
     describe 'valid request' do
       it 'creates a project' do
         set_access_token(user)
-        send_query(
+        data = send_query(
           query_name: "CreateProject",
-          variables: {"name" => { "en" => "Some project" }, "slug" => "test" }
+          variables: { "name" => { "en" => "Some project" }, "slug" => "test" }
         )
-
-        expect(response.status).to eq(200)
-        expect(response.media_type).to eq "application/json"
-
-        json_body = JSON.parse(response.body)
-        expect(json_body["data"]["createProject"].fetch("errors", [])).to eq []
 
         created_project = Project.find_by(slug: "test")
         expect(created_project.name).to eq({ "en" => "Some project" })
@@ -117,15 +86,13 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'missing the slug' do
         set_access_token(user)
-        send_query(
+        json_body = send_query(
           query_name: "CreateProject",
-          variables: {"name" => { "en" => "Some project" }, "slug" => "test" }
+          variables: { "name" => { "en" => "Some project" }, "slug" => "test" },
+          expect_no_errors: false,
+
         )
 
-        expect(response.status).to eq(200)
-        expect(response.media_type).to eq "application/json"
-
-        json_body = JSON.parse(response.body)
         expect(json_body["data"]["createProject"].fetch("errors", [])).to eq []
 
         expect(Project.all.length).to eq 1
@@ -135,15 +102,12 @@ RSpec.describe ProjectsController, type: :request do
     describe 'invalid request' do
       it 'missing a name' do
         set_access_token(user)
-        send_query(
+        json_body = send_query(
           query_name: "CreateProject",
-          variables: { "slug" => "test" }
+          variables: { "slug" => "test" },
+          expect_no_errors: false,
         )
 
-        expect(response.status).to eq(200)
-        expect(response.media_type).to eq "application/json"
-
-        json_body = JSON.parse(response.body)
         expect(json_body.fetch("errors", []).length).to eq 1
 
         expect(Project.all.length).to eq 0
@@ -162,16 +126,17 @@ RSpec.describe ProjectsController, type: :request do
     }
 
     it 'denies unauthenticated requests' do
-      send_query(
+      json_body = send_query(
         query_name: "UpdateProject",
-        variables: update_params
+        variables: update_params,
+        expect_no_errors: false,
       )
 
-      # Ensure the response is well formed
-      expect(response).to have_http_status(200)
-      expect(response.media_type).to eq "application/json"
-      json_body = JSON.parse(response.body)
       expect(json_body.fetch("errors", []).length).to eq 1
+
+      project.reload
+      expect(project.name).to eq({ "en" => "Some project" })
+
     end
 
     describe 'valid request' do
@@ -204,7 +169,7 @@ RSpec.describe ProjectsController, type: :request do
           }
         )
 
-         # Ensure the response is well formed
+        # Ensure the response is well formed
         expect(response).to have_http_status(200)
         expect(response.media_type).to eq "application/json"
         json_body = JSON.parse(response.body)
@@ -223,11 +188,11 @@ RSpec.describe ProjectsController, type: :request do
           query_name: "UpdateProject",
           variables: {
             "id" => project.id,
-            "name" => { }
+            "name" => {}
           }
         )
 
-         # Ensure the response is well formed
+        # Ensure the response is well formed
         expect(response).to have_http_status(200)
         expect(response.media_type).to eq "application/json"
         json_body = JSON.parse(response.body)
@@ -248,7 +213,7 @@ RSpec.describe ProjectsController, type: :request do
           }
         )
 
-         # Ensure the response is well formed
+        # Ensure the response is well formed
         expect(response).to have_http_status(200)
         expect(response.media_type).to eq "application/json"
         json_body = JSON.parse(response.body)
@@ -269,7 +234,7 @@ RSpec.describe ProjectsController, type: :request do
           }
         )
 
-         # Ensure the response is well formed
+        # Ensure the response is well formed
         expect(response).to have_http_status(200)
         expect(response.media_type).to eq "application/json"
         json_body = JSON.parse(response.body)
@@ -355,14 +320,12 @@ RSpec.describe ProjectsController, type: :request do
       json_body = JSON.parse(response.body)
       expect(json_body["errors"]).to eq nil
 
-
       # Ensure the database has actually changed
       project.reload
       expect(project.project_uses_block_languages.size).to eq 0
       expect(BlockLanguage.count).to eq 1
     end
   end
-
 
   describe 'GraphQL FrontpageListProjects' do
     it 'lists nothing if nothing is there' do
@@ -398,27 +361,27 @@ RSpec.describe ProjectsController, type: :request do
   end
 
   describe 'GraphQL AdminListProjects' do
-   it 'guest user: not permitted' do
-      send_query(query_name: "AdminListProjects")
-
-      expect(response.status).to eq(401)
-      expect(response.media_type).to eq "application/json"
+    it 'guest user: not permitted' do
+      send_query(
+        query_name: "AdminListProjects",
+        exp_http_status: 401
+      )
     end
 
     it 'ordinary user: not permitted' do
       user = create(:user)
       set_access_token(user)
 
-      send_query(query_name: "AdminListProjects")
-
-      expect(response.status).to eq(401)
-      expect(response.media_type).to eq "application/json"
+      send_query(
+        query_name: "AdminListProjects",
+        exp_http_status: 401
+      )
     end
 
     it 'admin user: permitted' do
-      FactoryBot.create(:project, :public, name: {"de" => 'cccc'}, slug: 'cccc')
-      FactoryBot.create(:project, :public, name: {"de" => 'aaaa'}, slug: 'aaaa')
-      FactoryBot.create(:project, :public, name: {"de" => 'bbbb'}, slug: 'bbbb')
+      FactoryBot.create(:project, :public, name: { "de" => 'cccc' }, slug: 'cccc')
+      FactoryBot.create(:project, :public, name: { "de" => 'aaaa' }, slug: 'aaaa')
+      FactoryBot.create(:project, :public, name: { "de" => 'bbbb' }, slug: 'bbbb')
 
       user = create(:user, :admin)
       set_access_token(user)
@@ -437,7 +400,8 @@ RSpec.describe ProjectsController, type: :request do
 
       send_query(
         query_name: "DestroyProject",
-        variables: { "id" => p.id}
+        variables: { "id" => p.id },
+        expect_no_errors: false,
       )
 
       expect(response).to have_http_status(200)
@@ -452,7 +416,8 @@ RSpec.describe ProjectsController, type: :request do
     it 'nonexistant' do
       send_query(
         query_name: "DestroyProject",
-        variables: { "id" => "11ceddb1-951b-40dc-bf60-fcfbcdaddc65" }
+        variables: { "id" => "11ceddb1-951b-40dc-bf60-fcfbcdaddc65" },
+        expect_no_errors: false,
       )
 
       expect(response).to have_http_status(200)

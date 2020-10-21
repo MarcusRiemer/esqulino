@@ -46,9 +46,8 @@ end
 #
 # @return [Array<ApplicationRecord>] All invalid models
 def select_invalid(records)
-  records.select {|g| not g.validate }
+  records.select { |g| not g.validate }
 end
-
 
 # Prints all models that have been identified as invalid
 def output_invalid_models(invalid_models)

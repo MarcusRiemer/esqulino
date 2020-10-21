@@ -54,25 +54,3 @@ export const ensureLocalGrammarRequest = (
 
   return toReturn;
 };
-
-export type GrammarOrder = ListOrder<GrammarListDescription>;
-
-/**
- * Expects a request for the given list of grammars. If a ordered dataset
- * is requested, the `items` param must be already ordered accordingly.
- */
-export const provideGrammarList = (
-  items: GrammarDescription[],
-  options?: {
-    order?: GrammarOrder;
-    pagination?: {
-      limit: number;
-      page: number;
-    };
-  }
-) => {
-  const serverApi = TestBed.inject(ServerApiService);
-  let reqUrl = serverApi.getGrammarListUrl();
-
-  return provideListResponse(items, reqUrl, options);
-};

@@ -7,7 +7,6 @@ class AddPrimaryKeyToProjectUsesBlockLanguage < ActiveRecord::Migration[5.1]
       t.references :project, type: :uuid, index: true
     end
 
-    
     add_foreign_key :project_uses_block_languages, :block_languages
     add_foreign_key :project_uses_block_languages, :projects
 

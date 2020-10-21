@@ -1,28 +1,28 @@
-module Types
+ module Types
   class Types::BlockLanguageType < Types::Base::BaseObject
-    field :id, ID, null:false
-    field :name, String, null:false
-    field :slug, String, null:true
+    field :id, ID, null: false
+    field :name, String, null: false
+    field :slug, String, null: true
 
-    field :sidebars, GraphQL::Types::JSON, null:false
-    field :editorBlocks, GraphQL::Types::JSON, null:false
-    field :editorComponents, GraphQL::Types::JSON, null:false
-    field :localGeneratorInstructions, GraphQL::Types::JSON, null:true
-    field :rootCssClasses, [String], null:false
+    field :sidebars, GraphQL::Types::JSON, null: false
+    field :editor_blocks, GraphQL::Types::JSON, null: false
+    field :editor_components, GraphQL::Types::JSON, null: false
+    field :local_generator_instructions, GraphQL::Types::JSON, null: true
+    field :root_css_classes, [String], null: false
 
-    field :defaultProgrammingLanguage, Types::ProgrammingLanguageType,null:false
-    field :defaultProgrammingLanguageId, ID,null:false
-    field :grammar, Types::GrammarType, null:true
-    field :grammarId, ID, null: true
-    field :generated, Boolean, null:true
-    field :code_resources, [Types::CodeResourceType], null:true
+    field :default_programming_language, Types::ProgrammingLanguageType, null: false
+    field :default_programming_language_id, ID, null: false
+    field :grammar, Types::GrammarType, null: true
+    field :grammar_id, ID, null: true
+    field :generated, Boolean, null: true
+    field :code_resources, [Types::CodeResourceType], null: true
 
-    field :created_at, GraphQL::Types::ISO8601DateTime, null:false
-    field :updated_at, GraphQL::Types::ISO8601DateTime, null:false
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'BlockLanguageOrderFieldEnum'
-      #Order Fields
+      # Order Fields
       value 'name'
       value 'slug'
       value 'grammar'
@@ -30,8 +30,8 @@ module Types
 
     class OrderType < Types::Base::BaseInputObject
       graphql_name 'BlockLanguageOrderType'
-      argument :orderField, OrderFieldEnum, required: false
-      argument :orderDirection, Types::Base::BaseEnum::OrderDirectionEnum, required: false
+      argument :order_field, OrderFieldEnum, required: false
+      argument :order_direction, Types::Base::BaseEnum::OrderDirectionEnum, required: false
     end
 
     class MultilingualColumnsEnum < Types::Base::BaseEnum

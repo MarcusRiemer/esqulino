@@ -10,8 +10,8 @@ module Seed
 
     def initialize(seed_id)
       super(seed_id, dependencies = {
-              "grammar" => GrammarSeed
-            })
+        "grammar" => GrammarSeed
+      })
     end
   end
 end

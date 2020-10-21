@@ -34,6 +34,8 @@ NG_PROD         ?= --prod
 # Targets that may be used in the `dist` target have some special flags
 DIST_FLAGS      ?= --no-progress
 
+DEV_FLAGS       ?= --watch
+
 all : dist
 
 clean : msg-pre-clean
@@ -50,7 +52,7 @@ client-compile : msg-pre-build src/environments/version.ts
 	$(NG_BIN) build --aot --localize --outputPath="dist/browser" $(NG_PROD) $(DIST_FLAGS)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --localize --outputPath="dist/browser" --watch
+	$(NG_BIN) build --aot --localize --outputPath="dist/browser" $(DEV_FLAGS)
 
 ##################################
 # Commandline Client
@@ -127,9 +129,6 @@ update-xlf : src/locale/messages.en.xlf
 
 src/generated/graphql.ts : ../schema/graphql/schema.json $(GRAPHQL_QUERY_SOURCES)
 	npm run graphql-codegen
-	# Horrible hack to generate an appropriate constructor, will hopefully be obsoleted by
-	# https://github.com/dotansimha/graphql-code-generator/issues/4366
-	sed -i "s/Document;/Document;\n  constructor(apollo: Apollo.Apollo) { super(apollo); }/g" $@
 	npx prettier --write "src/generated/**/*.{html,ts}"
 
 generate-graphql-client: src/generated/graphql.ts
@@ -142,7 +141,7 @@ verify-cached-schemas:
 
 # Ensures that the GraphQL-Client can be compiled
 verify-compile-graphql-client: src/generated/graphql.ts
-	npx tsc --experimentalDecorators $^
+	npx tsc --noEmit --experimentalDecorators --esModuleInterop  --target "es5" $^
 
 ##################################
 # Dependencies

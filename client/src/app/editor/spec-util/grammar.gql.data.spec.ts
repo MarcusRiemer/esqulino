@@ -1,6 +1,5 @@
 import { generateUUIDv4 } from "../../shared/util-browser";
 import {
-  AdminListBlockLanguagesQuery,
   AdminListGrammarsQuery,
   GrammarDescriptionItemQuery,
 } from "../../../generated/graphql";
@@ -12,7 +11,7 @@ type GrammarGQLResponse = {
 };
 type AdminListGrammarNode = AdminListGrammarsQuery["grammars"]["nodes"][0];
 
-type GrammarDescriptionItemNode = GrammarDescriptionItemQuery["singleGrammar"];
+type GrammarDescriptionItemNode = GrammarDescriptionItemQuery["grammars"]["nodes"][0];
 type GrammarItemGQLResponse = {
   data: GrammarDescriptionItemQuery;
   errors: ReadonlyArray<GraphQLError>;
@@ -34,7 +33,10 @@ const GRAMMAR_DESCRIPTION_ITEM: GrammarDescriptionItemNode = {
   programmingLanguageId: "28066123-7d53-40de-a89b-95bf37c982be",
   generatedFromId: "28123123-7d53-40de-a89b-95bf37c982be",
   foreignTypes: {},
-  root: {},
+  root: {
+    languageName: "",
+    typeName: "",
+  },
   types: {},
 };
 
@@ -44,7 +46,9 @@ const wrapGrammarItem = (
   return {
     errors: [],
     data: {
-      singleGrammar: data,
+      grammars: {
+        nodes: [data],
+      },
     },
   };
 };

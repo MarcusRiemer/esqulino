@@ -9,7 +9,7 @@ module ProjectsHelper
 
   # Calls the given block if the current project is available
   # with write acess. Asks for write access otherwise
-  def ensure_write_access (&proc)
+  def ensure_write_access(&proc)
     success = false
 
     # Was a password provided?

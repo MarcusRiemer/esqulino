@@ -17,7 +17,6 @@
   <tr mat-row *matRowDef="let row; columns: queryData.displayColumns;"></tr>
 </table>
 <mat-paginator
-  #paginator
   (page)="onChangePagination($event)"
   [length]="totalCount$ | async"
   [pageSize]="25"

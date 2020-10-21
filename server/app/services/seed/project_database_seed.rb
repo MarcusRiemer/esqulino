@@ -11,6 +11,7 @@ module Seed
     # this method is called after store_seed is called
     def after_store_seed
       return unless File.exist? seed.sqlite_file_path
+
       info "Copying database file to #{seed.sqlite_file_path}"
       FileUtils.cp(seed.sqlite_file_path, seed_directory)
     end

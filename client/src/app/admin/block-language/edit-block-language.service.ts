@@ -4,8 +4,9 @@ import { Title } from "@angular/platform-browser";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { BehaviorSubject } from "rxjs";
-import { switchMap, map, filter, flatMap } from "rxjs/operators";
+import { switchMap, map, filter, flatMap, pluck } from "rxjs/operators";
 
+import { objectOmit } from "../../shared/util";
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import {
   generateBlockLanguage,
@@ -16,8 +17,8 @@ import { GeneratorError } from "../../shared/block/generator/error.description";
 import { prettyPrintGrammar } from "../../shared/syntaxtree";
 import { DEFAULT_GENERATOR } from "../../shared/block/generator/generator.description";
 import {
-  AdminEditBlockLanguageGQL,
-  AdminSingleGrammarGQL,
+  FullGrammarGQL,
+  FullBlockLanguageGQL,
   UpdateBlockLanguageGQL,
 } from "../../../generated/graphql";
 
@@ -35,9 +36,9 @@ export class EditBlockLanguageService {
   public prettyPrintedBlockLanguage = "";
 
   constructor(
-    private _singleBlockLanguageGQL: AdminEditBlockLanguageGQL,
+    private _singleBlockLanguageGQL: FullBlockLanguageGQL,
     private _updateBlockLanguageGQL: UpdateBlockLanguageGQL,
-    private _individualGrammarData: AdminSingleGrammarGQL,
+    private _individualGrammarData: FullGrammarGQL,
     private _activatedRoute: ActivatedRoute,
     private _snackBar: MatSnackBar,
     private _title: Title
@@ -49,17 +50,11 @@ export class EditBlockLanguageService {
         switchMap((id: string) =>
           this._singleBlockLanguageGQL
             .fetch({ id: id }, { fetchPolicy: "network-only" })
-            .pipe(
-              map(
-                (bl) =>
-                  // unpack model Object
-                  bl.data.blockLanguages.nodes[0]
-              )
-            )
+            .pipe(pluck("data", "blockLanguages", "nodes", 0))
         )
       )
       .subscribe((blockLanguage) => {
-        this._editedSubject.next(blockLanguage);
+        this._editedSubject.next(objectOmit("__typename", blockLanguage));
       });
 
     // Update the title of the page according to the current language
@@ -82,7 +77,7 @@ export class EditBlockLanguageService {
     flatMap((blockLang) =>
       this._individualGrammarData
         .watch({ id: blockLang.grammarId })
-        .valueChanges.pipe(map((response) => response.data.singleGrammar))
+        .valueChanges.pipe(pluck("data", "grammars", "nodes", 0))
     )
   );
 
@@ -138,7 +133,7 @@ export class EditBlockLanguageService {
       // Fetch the actual grammar that should be used
       this._individualGrammarData
         .fetch({ id: this.editedSubject.grammarId })
-        .pipe(map((response) => response.data.singleGrammar))
+        .pipe(pluck("data", "grammars", "nodes", 0))
         .subscribe((g) => {
           try {
             this.generatorErrors.push(...validateGenerator(instructions));

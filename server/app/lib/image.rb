@@ -142,7 +142,7 @@ class Image
     img = Image.new(project, uuid)
     img.metadata_set!(metadata)
 
-    #needs to be done before saving metadata
+    # needs to be done before saving metadata
     FileUtils.mkdir_p(img.folder)
 
     img.metadata_save
@@ -162,5 +162,4 @@ class Image
 
     metadata
   end
-
 end

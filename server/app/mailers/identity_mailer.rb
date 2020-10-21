@@ -1,5 +1,4 @@
 class IdentityMailer < ApplicationMailer
-
   @@base_url = Rails.configuration.sqlino["editor_domain"]
 
   def reset_password(identity, locale)

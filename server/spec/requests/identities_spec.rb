@@ -69,11 +69,11 @@ RSpec.describe "identities controller" do
         set_access_token(identity.user)
 
         patch '/api/identities/change_password',
-          :headers => json_headers,
-          :params => {
-            currentPassword: identity.password,
-            newPassword: "newPassword"
-          }.to_json
+              :headers => json_headers,
+              :params => {
+                currentPassword: identity.password,
+                newPassword: "newPassword"
+              }.to_json
 
         expect(Identity::Password.all.first.password_eql?("newPassword"))
       end
@@ -83,11 +83,11 @@ RSpec.describe "identities controller" do
         set_access_token(identity.user)
 
         patch '/api/identities/change_password',
-          :headers => json_headers,
-          :params => {
-            currentPassword: identity.password,
-            newPassword: "newPassword"
-          }.to_json
+              :headers => json_headers,
+              :params => {
+                currentPassword: identity.password,
+                newPassword: "newPassword"
+              }.to_json
 
         expect(Identity::Password.all.count).to eq(2)
         expect(Identity::Password.all.first.password_eql?("newPassword"))
@@ -100,11 +100,11 @@ RSpec.describe "identities controller" do
         set_access_token(identity.user)
 
         patch '/api/identities/change_password',
-          :headers => json_headers,
-          :params => {
-            currentPassword: "12121212",
-            newPassword: "newPassword"
-          }.to_json
+              :headers => json_headers,
+              :params => {
+                currentPassword: "12121212",
+                newPassword: "newPassword"
+              }.to_json
 
         expect(Identity::Password.all.first.password).to eq(identity.password)
       end
@@ -113,11 +113,11 @@ RSpec.describe "identities controller" do
         set_access_token(identity.user)
 
         patch '/api/identities/change_password',
-          :headers => json_headers,
-          :params => {
-            currentPassword: "12345678",
-            newPassword: "12345"
-          }.to_json
+              :headers => json_headers,
+              :params => {
+                currentPassword: "12345678",
+                newPassword: "12345"
+              }.to_json
 
         json_data = JSON.parse(response.body)
 
@@ -134,17 +134,17 @@ RSpec.describe "identities controller" do
       identity.user.save!
 
       post "/api/identities/reset_password_mail",
-        :headers => json_headers,
-        :params => {
-          email: identity.user[:email]
-        }.to_json
+           :headers => json_headers,
+           :params => {
+             email: identity.user[:email]
+           }.to_json
 
       patch "/api/identities/reset_password",
-        :headers => json_headers,
-        :params => {
-          token: Identity::Password.first.password_reset_token,
-          password: "reseted_password"
-        }.to_json
+            :headers => json_headers,
+            :params => {
+              token: Identity::Password.first.password_reset_token,
+              password: "reseted_password"
+            }.to_json
 
       expect(Identity::Password.all.first.password_eql?("reseted_password")).to be_truthy
     end
@@ -152,10 +152,10 @@ RSpec.describe "identities controller" do
     context "invalid" do
       it "wrong email" do
         post "/api/identities/reset_password_mail",
-          :headers => json_headers,
-          :params => {
-            email: "wrong@email.de"
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               email: "wrong@email.de"
+             }.to_json
 
         json_data = JSON.parse(response.body)
         expect(json_data["message"]).to eq("e-mail not found")
@@ -167,17 +167,17 @@ RSpec.describe "identities controller" do
         identity.user.save!
 
         post "/api/identities/reset_password_mail",
-          :headers => json_headers,
-          :params => {
-            email: identity[:uid]
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               email: identity[:uid]
+             }.to_json
 
         patch "/api/identities/reset_password",
-          :headers => json_headers,
-          :params => {
-            token: "invalid-token",
-            password: "reseted_password"
-          }.to_json
+              :headers => json_headers,
+              :params => {
+                token: "invalid-token",
+                password: "reseted_password"
+              }.to_json
 
         json_data = JSON.parse(response.body)
         expect(json_data["message"]).to eq("token not valid")
@@ -186,12 +186,12 @@ RSpec.describe "identities controller" do
 
       it "expired token" do
         patch "/api/identities/reset_password",
-          :headers => json_headers,
-          :params => {
-            email: identity[:uid],
-            token: identity.password_reset_token,
-            password: "reseted_password"
-          }.to_json
+              :headers => json_headers,
+              :params => {
+                email: identity[:uid],
+                token: identity.password_reset_token,
+                password: "reseted_password"
+              }.to_json
 
         json_data = JSON.parse(response.body)
         expect(json_data["message"]).to eq("token expired")
@@ -210,10 +210,10 @@ RSpec.describe "identities controller" do
       expect(Identity::Password.all.count).to eq(2)
 
       delete '/api/identities/delete_identity',
-        :headers => json_headers,
-        :params => {
-          id: identity.id
-        }.to_json
+             :headers => json_headers,
+             :params => {
+               id: identity.id
+             }.to_json
 
       expect(response.status).to eq(200)
       expect(Identity::Password.all.count).to eq(1)
@@ -228,10 +228,10 @@ RSpec.describe "identities controller" do
         expect(Identity::Password.all.count).to eq(2)
 
         delete '/api/identities/delete_identity',
-          :headers => json_headers,
-          :params => {
-            id: "wrong_uid"
-          }.to_json
+               :headers => json_headers,
+               :params => {
+                 id: "wrong_uid"
+               }.to_json
 
         expect(response.status).to eq(401)
         expect(Identity::Password.all.count).to eq(2)
@@ -244,10 +244,10 @@ RSpec.describe "identities controller" do
         expect(Identity::Password.all.count).to eq(2)
 
         delete '/api/identities/delete_identity',
-          :headers => json_headers,
-          :params => {
-            id: identity.id
-          }.to_json
+               :headers => json_headers,
+               :params => {
+                 id: identity.id
+               }.to_json
 
         expect(response.status).to eq(401)
         expect(Identity::Password.all.count).to eq(2)
@@ -263,10 +263,10 @@ RSpec.describe "identities controller" do
         expect(Identity::Password.all.count).to eq(2)
 
         delete '/api/identities/delete_identity',
-          :headers => json_headers,
-          :params => {
-            id: identity.id
-          }.to_json
+               :headers => json_headers,
+               :params => {
+                 id: identity.id
+               }.to_json
 
         expect(response.status).to eq(401)
         expect(Identity::Password.all.count).to eq(2)
@@ -276,10 +276,10 @@ RSpec.describe "identities controller" do
         set_access_token(identity.user)
 
         delete '/api/identities/delete_identity',
-          :headers => json_headers,
-          :params => {
-            id: identity.id
-          }.to_json
+               :headers => json_headers,
+               :params => {
+                 id: identity.id
+               }.to_json
 
         expect(response.status).to eq(401)
         expect(Identity::Password.all.count).to eq(1)
@@ -292,10 +292,10 @@ RSpec.describe "identities controller" do
 
     it "valid" do
       post "/api/identities/send_verify_email",
-        :headers => json_headers,
-        :params => {
-          email: identity[:uid]
-        }.to_json
+           :headers => json_headers,
+           :params => {
+             email: identity[:uid]
+           }.to_json
 
       expect(response.status).to eq(200)
     end
@@ -303,28 +303,28 @@ RSpec.describe "identities controller" do
     context "invalid" do
       it "in too short a time" do
         post "/api/identities/send_verify_email",
-          :headers => json_headers,
-          :params => {
-            email: identity[:uid]
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               email: identity[:uid]
+             }.to_json
 
         expect(response.status).to eq(200)
 
         post "/api/identities/send_verify_email",
-          :headers => json_headers,
-          :params => {
-            email: identity[:uid]
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               email: identity[:uid]
+             }.to_json
 
         expect(response.status).to eq(401)
       end
 
       it "invalid email" do
         post "/api/identities/send_verify_email",
-          :headers => json_headers,
-          :params => {
-            email: "invalid"
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               email: "invalid"
+             }.to_json
 
         expect(response.status).to eq(401)
       end
@@ -334,10 +334,10 @@ RSpec.describe "identities controller" do
         identity.save!
 
         post "/api/identities/send_verify_email",
-          :headers => json_headers,
-          :params => {
-            email: identity[:uid]
-          }.to_json
+             :headers => json_headers,
+             :params => {
+               email: identity[:uid]
+             }.to_json
 
         expect(response.status).to eq(401)
       end

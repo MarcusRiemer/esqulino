@@ -14,6 +14,7 @@ import {
   getFullQualifiedAttributes,
   getConcreteTypes,
   getQualifiedTypes,
+  resolveToConcreteTypes,
 } from "./grammar-type-util";
 import { singleLanguageGrammar } from "./grammar.spec-util";
 
@@ -29,6 +30,152 @@ describe(`Grammar Type Utilities`, () => {
           l: { t: { type: "concrete" } },
         })
       ).toEqual([{ languageName: "l", typeName: "t" }]);
+    });
+  });
+
+  describe(`resolveToConcreteTypes()`, () => {
+    it(`l.t is a concrete type`, () => {
+      expect(
+        resolveToConcreteTypes(
+          { languageName: "l", typeName: "r" },
+          {
+            l: {
+              r: {
+                type: "concrete",
+                attributes: [],
+              },
+            },
+          }
+        )
+      ).toEqual([{ languageName: "l", typeName: "r" }]);
+    });
+
+    it(`Typedef for a single, concrete type`, () => {
+      expect(
+        resolveToConcreteTypes(
+          { languageName: "l", typeName: "r" },
+          {
+            l: {
+              r: {
+                type: "oneOf",
+                oneOf: ["l1"],
+              },
+              l1: {
+                type: "concrete",
+                attributes: [],
+              },
+            },
+          }
+        )
+      ).toEqual([{ languageName: "l", typeName: "l1" }]);
+    });
+
+    it(`Typedef for a single typedef with a single concrete type`, () => {
+      expect(
+        resolveToConcreteTypes(
+          { languageName: "l", typeName: "r" },
+          {
+            l: {
+              r: {
+                type: "oneOf",
+                oneOf: ["l1"],
+              },
+              l1: {
+                type: "oneOf",
+                oneOf: ["l2"],
+              },
+              l2: {
+                type: "concrete",
+                attributes: [],
+              },
+            },
+          }
+        )
+      ).toEqual([{ languageName: "l", typeName: "l2" }]);
+    });
+
+    it(`Typedef with mixed resolution`, () => {
+      expect(
+        resolveToConcreteTypes(
+          { languageName: "l", typeName: "r" },
+          {
+            l: {
+              r: {
+                type: "oneOf",
+                oneOf: ["l1", "l3"],
+              },
+              l1: {
+                type: "oneOf",
+                oneOf: ["l2"],
+              },
+              l2: {
+                type: "concrete",
+                attributes: [],
+              },
+              l3: {
+                type: "concrete",
+                attributes: [],
+              },
+            },
+          }
+        )
+      ).toEqual([
+        { languageName: "l", typeName: "l2" },
+        { languageName: "l", typeName: "l3" },
+      ]);
+    });
+
+    it(`Typedef with mixed resolution and double appearances`, () => {
+      expect(
+        resolveToConcreteTypes(
+          { languageName: "l", typeName: "r" },
+          {
+            l: {
+              r: {
+                type: "oneOf",
+                oneOf: ["l1", "l2", "l3"],
+              },
+              l1: {
+                type: "oneOf",
+                oneOf: ["l2"],
+              },
+              l2: {
+                type: "concrete",
+                attributes: [],
+              },
+              l3: {
+                type: "concrete",
+                attributes: [],
+              },
+            },
+          }
+        )
+      ).toEqual([
+        { languageName: "l", typeName: "l2" },
+        { languageName: "l", typeName: "l3" },
+      ]);
+    });
+
+    it(`Typedef for a single, concrete type in another language`, () => {
+      expect(
+        resolveToConcreteTypes(
+          { languageName: "l", typeName: "r" },
+          {
+            l: {
+              r: {
+                type: "oneOf",
+                oneOf: [{ languageName: "o", typeName: "o1" }],
+              },
+            },
+            o: {
+              o1: {
+                type: "concrete",
+                attributes: [],
+              },
+            },
+          }
+        )
+      ).toEqual([{ languageName: "o", typeName: "o1" }]);
     });
   });
 

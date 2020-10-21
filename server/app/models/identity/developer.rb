@@ -24,11 +24,11 @@ module Identity
     # Client side information for the developer provider
     def self.client_information
       return ({
-                name: "Developer",
-                url_name: "developer",
-                icon: "fa-user",
-                color: "LightSlateGray"
-              })
+        name: "Developer",
+        url_name: "developer",
+        icon: "fa-user",
+        color: "LightSlateGray"
+      })
     end
 
     def update_provider_data(hash)

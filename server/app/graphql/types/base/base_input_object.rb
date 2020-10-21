@@ -11,6 +11,5 @@ module Types
       argument :date, type: GraphQL::Types::ISO8601DateTime, required: false
       argument :until, type: Boolean, required: true
     end
-
   end
 end

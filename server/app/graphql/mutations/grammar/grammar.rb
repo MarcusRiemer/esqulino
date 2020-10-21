@@ -8,13 +8,13 @@ class Mutations::Grammar::Grammar < Mutations::BaseMutation
     begin
       grammar.save!
       {
-          grammar: grammar,
-          errors: []
+        grammar: grammar,
+        errors: []
       }
     rescue ActiveRecord::InvalidForeignKey, ActiveRecord::RecordInvalid
       {
-          grammar: nil,
-          errors: grammar.errors.full_messages
+        grammar: nil,
+        errors: grammar.errors.full_messages
       }
     end
   end
@@ -23,16 +23,14 @@ class Mutations::Grammar::Grammar < Mutations::BaseMutation
     begin
       grammar.destroy!
       {
-          grammar: nil,
-          errors: []
+        grammar: nil,
+        errors: []
       }
     rescue ActiveRecord::InvalidForeignKey
       {
-          grammar: nil,
-          errors: ['EXISTING_REFERENCES']
+        grammar: nil,
+        errors: ['EXISTING_REFERENCES']
       }
     end
   end
 end
-
-

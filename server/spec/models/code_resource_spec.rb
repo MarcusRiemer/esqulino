@@ -116,7 +116,6 @@ RSpec.describe CodeResource, type: :model do
 
       # AST must not change
       expect(api_response['ast']).to eq ast
-      expect(api_response).to validate_against "CodeResourceDescription"
     end
   end
 
@@ -241,7 +240,6 @@ RSpec.describe CodeResource, type: :model do
       c = FactoryBot.build(:code_resource, :grammar_code_resource_references)
 
       expect { c.update_code_resource_references! }.to raise_error EsqulinoError::Base
-
     end
 
     it "Empty AST has no references" do

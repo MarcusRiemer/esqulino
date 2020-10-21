@@ -1,5 +1,4 @@
 class Mutations::Grammar::RegenerateForeignTypes < Mutations::BaseMutation
-
   argument :id, ID, required: true
 
   field :grammar, Types::GrammarType, null: false

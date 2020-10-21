@@ -24,7 +24,7 @@
     *ngFor="let codeResource of project?.codeResources"
     mat-list-item
     class="indent"
-    [routerLink]="['ast', codeResource.id, 'block']"
+    [routerLink]="['ast', codeResource.id]"
     routerLinkActive="router-link-active"
   >
     <span class="fa fa-file-code-o fa-fw"></span>

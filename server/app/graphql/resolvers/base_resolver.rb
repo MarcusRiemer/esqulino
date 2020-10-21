@@ -1,15 +1,24 @@
 module Resolvers
   class BaseResolver
-
-    def initialize(model_class,context:nil,scope:,filter:nil,order:nil,languages:nil,order_field:,order_dir:)
+    def initialize(model_class, context: nil, scope:, filter: nil, order: nil, languages: nil, order_field:, order_dir:)
       @model_class = model_class
       @context = context
-      @languages = languages.nil? ? [@context[:language]] : languages
+      @languages = set_languages(languages)
       @order_dir = order_dir
       @order_field = order_field
       scope = select_relevant_fields(scope)
-      scope = apply_filter(scope,filter)
-      @scope = apply_order(scope,order)
+      scope = apply_filter(scope, filter)
+      @scope = apply_order(scope, order)
+    end
+
+    def set_languages(languages)
+      if languages.nil?
+        Types::Base::BaseEnum::LanguageEnum.enum_values
+      elsif languages.empty?
+        raise GraphQL::ExecutionError, "An empty Array is not allowed as languages input field."
+      else
+        languages
+      end
     end
 
     def select_relevant_fields(scope)
@@ -26,11 +35,17 @@ module Resolvers
     def apply_filter(scope, value)
       # When filtering via pattern (substring) matching
       # https://stackoverflow.com/questions/57612020/rails-hstore-column-search-for-the-same-value-in-all-keys-in-fastest-way
-      value.to_h.transform_keys{|k| k.to_s.underscore}.each do |filter_key,filter_value|
+      value.to_h.transform_keys { |k| k.to_s.underscore}.each do |filter_key, filter_value|
         if is_uuid_column? filter_key
-          scope = scope.where "#{@model_class.table_name}.#{filter_key}::text LIKE ?", filter_value
+          if BlattwerkzeugUtil::string_is_uuid? filter_value
+            scope = scope.where "#{@model_class.table_name}.#{filter_key}::text LIKE ?", filter_value
+          elsif @model_class.column_names.include? 'slug'
+            scope = scope.where "#{@model_class.table_name}.slug LIKE ?", filter_value
+          else
+            raise GraphQL::ExecutionError, "The provided filter_value #{filter_value} can not be used as needle, because its not a uuid or class #{@model_class} doesn't have slug as attribute"
+          end
         elsif is_multilingual_column? filter_key
-          scope = scope.where("'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})")
+          scope = scope.where "'#{filter_value}' ILIKE ANY (#{@model_class.table_name}.#{filter_key} -> ARRAY#{to_single_quotes_array(@languages)})"
         elsif is_boolean_column? filter_key
           scope = scope.where "#{@model_class.table_name}.#{filter_key} = ?", filter_value
         elsif is_datetime_column? filter_key
@@ -44,13 +59,13 @@ module Resolvers
       scope
     end
 
-    def apply_order(scope,value)
-      order_key = value.to_h.stringify_keys.fetch("orderField",@order_field).underscore
+    def apply_order(scope, value)
+      order_key = value.to_h.stringify_keys.fetch("orderField", @order_field).underscore
       order_dir = value.to_h.stringify_keys.fetch("orderDirection", @order_dir)
       if is_multilingual_column? order_key
         # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
-        # Using gsub to add comma as delimiter
-        coalesce = @languages.map{|l| "#{@model_class.table_name}.#{order_key}->'#{l}'"}.join(',')
+        # Using join to add comma as delimiter
+        coalesce = @languages.map { |l| "#{@model_class.table_name}.#{order_key}->'#{l}'"}.join(',')
         scope = scope.order Arel.sql("COALESCE(#{coalesce}) #{order_dir}")
       else
         scope = scope.order "#{@model_class.table_name}.#{order_key} #{order_dir}"
@@ -62,7 +77,7 @@ module Resolvers
       # .includes might be the wrong function because it only makes possible to use
       # .size so the number will be determined by iterating the array not in sql
       #  https://jacopretorius.net/2017/05/dealing-with-n1-queries-in-rails.html
-      #TODO: find out which related objects are queried for and should be included
+      # TODO: find out which related objects are queried for and should be included
     end
 
     def escape_search_term(term)
@@ -70,18 +85,34 @@ module Resolvers
     end
 
     def to_single_quotes_array(arr)
-      "[#{arr.map{|e| "'#{e}'"}.join(", ")}]"
+      "[" + arr.map { |e| "'" + e + "'"}.join(", ") + "]"
     end
 
-    # list the requested columns except additional columns which doesnt exist in the Model like (projects codeResourceCount)
-    # also add primary key and foreign key columns (columns which ends with _id) to keep relations.
-    # if no columns are requested select all
+    # List the requested columns except additional columns which doesn't exist in
+    # the Model like (projects codeResourceCount) also add primary key and foreign key
+    # columns (columns which ends with _id) to keep relations if no columns are
+    # requested at all
     def relevant_columns
-      if requested_columns(@context).empty?
-        @model_class.attribute_names
-      else
-        @model_class.attribute_names & requested_columns(@context) | @model_class.attribute_names.filter {|f| f.end_with?("_id")} | ["id"]
-      end
+      column_names = if requested_columns.empty?
+                       # No columns explicitly requested, hand out everything we have
+                       @model_class.attribute_names
+                     else
+                       # All requested columns that exist directly as a column in the model
+                       selectable_columns =  @model_class.attribute_names & requested_columns
+                       # Everything that ends in "_id"
+                       fk_columns = @model_class.attribute_names.filter { |f| f.end_with?("_id")}
+
+                       # Putting it together and always select the id
+                       selectable_columns | fk_columns | ["id"]
+                     end
+
+      return column_names + additional_relevant_columns
+    end
+
+    # Sometimes attributes are computed at runtime from columns. An inheriting resolver may add
+    # additional columns here
+    def additional_relevant_columns
+      []
     end
 
     def multilingual_columns
@@ -96,7 +127,7 @@ module Resolvers
       end
     end
 
-    def requested_columns(context)
+    def requested_columns(context = nil)
       # .query: Access GraphQL::Query instance
       # .lookahead: Access Class: GraphQL::Execution::Lookahead instance
       #   Lookahead creates a uniform interface to inspect the forthcoming selections.
@@ -111,32 +142,34 @@ module Resolvers
       # nodes.selections: Access to Array<Nodes::Field>
       #   Contains all requested nodes like id, slug, name, [...]
       # context should never be nil, unless in tests
-      if  context.nil?
+      context ||= @context
+
+      if context.nil?
         []
       else
         model_query = context.query.lookahead.ast_nodes[0].selections[0]
-        nodes = model_query.children.find {|c| c.name == "nodes"}
-        nodes.nil? ? [] : nodes.selections.map {|s| s.name.underscore}
+        nodes = model_query.children.find { |c| c.name == "nodes"}
+        nodes.nil? ? [] : nodes.selections.map { |s| s.name.underscore}
       end
     end
 
     def is_multilingual_column?(name)
-      is_type_column?(name: name,type: :hstore)
+      is_type_column?(name: name, type: :hstore)
     end
 
     def is_uuid_column?(name)
-      is_type_column?(name: name,type: :uuid)
+      is_type_column?(name: name, type: :uuid)
     end
 
     def is_boolean_column?(name)
-      is_type_column?(name: name,type: :boolean)
+      is_type_column?(name: name, type: :boolean)
     end
 
     def is_datetime_column?(name)
-      is_type_column?(name: name,type: :datetime)
+      is_type_column?(name: name, type: :datetime)
     end
 
-    def is_type_column?(name:,type:)
+    def is_type_column?(name:, type:)
       col = @model_class.columns_hash[name]
       col ? col.type == type : false
     end

@@ -6,14 +6,14 @@ module Types
 
     class LanguageEnum < Types::Base::BaseEnum
       graphql_name 'LanguageEnum'
-      #Available Languages
+      # Available Languages
       value 'de'
       value 'en'
     end
 
     class OrderDirectionEnum < Types::Base::BaseEnum
       graphql_name 'OrderDirectionEnum'
-      #Order Fields
+      # Order Fields
       value 'asc'
       value 'desc'
     end
@@ -23,6 +23,5 @@ module Types
       value 'short'
       value 'long'
     end
-
   end
 end

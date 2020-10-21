@@ -3,7 +3,6 @@ require 'rails_helper'
 require_dependency 'ide_service'
 
 RSpec.describe "IDE Service" do
-
   # Retrieves the test configuration for the "exec" mode.
   def exec_configuration
     Rails.configuration.sqlino[:ide_service][:exec]
@@ -88,7 +87,7 @@ RSpec.describe "IDE Service" do
     end
 
     it "missing modes are an error" do
-      expect { IdeService.instantiate(service_config: { }) }.to raise_exception EsqulinoError::IdeService
+      expect { IdeService.instantiate(service_config: {}) }.to raise_exception EsqulinoError::IdeService
     end
   end
 end

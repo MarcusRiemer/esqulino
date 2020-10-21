@@ -107,12 +107,10 @@ describe("OverviewProjectComponent", () => {
     const t = await createComponent();
     const response = buildEmptyProjectResponse();
 
-    const res = t.component.query.valueChanges.toPromise();
-    const op = t.controller.expectOne(AdminListProjectsDocument);
-    op.flush(response);
+    t.controller.expectOne(AdminListProjectsDocument).flush(response);
 
+    await t.fixture.whenStable();
     t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
 
     const tableElement = t.fixture.nativeElement.querySelector("table");
     const rows = tableElement.querySelectorAll("tbody > tr");
@@ -124,12 +122,10 @@ describe("OverviewProjectComponent", () => {
     const t = await createComponent();
     const response = buildSingleProjectResponse();
 
-    const res = t.component.query.valueChanges.toPromise();
-    const op = t.controller.expectOne(AdminListProjectsDocument);
-    op.flush(response);
+    t.controller.expectOne(AdminListProjectsDocument).flush(response);
 
+    await t.fixture.whenStable();
     t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
 
     const tableElement = t.element.querySelector("table");
     const i1Row = tableElement.querySelector("tbody > tr");
@@ -146,7 +142,7 @@ describe("OverviewProjectComponent", () => {
     const emptyProject = buildEmptyProjectResponse();
     const responses = [emptyProject, singleProject];
 
-    const res = t.component.query.valueChanges.subscribe((response) => {
+    t.component.query.valueChanges.subscribe((response) => {
       if (!response.loading) {
         expect(response.data).toEqual(responses.pop().data);
       }

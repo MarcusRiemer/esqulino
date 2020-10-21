@@ -127,3 +127,8 @@ Valid children of a node are defined via the ``children`` directive, a name and 
       prop "value" { string }
     }
   }
+
+Grammar Visualization
+=======================
+
+So far we have seen how the structure of valid syntaxtrees can be defined with a grammar. The ``XML`` example however lacks all those pointy brackets that users associate with the language.

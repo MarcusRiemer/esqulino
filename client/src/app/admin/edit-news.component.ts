@@ -7,10 +7,12 @@ import {
   ViewChild,
   TemplateRef,
 } from "@angular/core";
-import { map } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { NewsUpdateDescription } from "../shared/news.description";
+import { pluck } from "rxjs/operators";
+
+import * as _ from "lodash";
+
 import { ToolbarService } from "../shared";
 import { PerformDataService } from "../shared/authorisation/perform-data.service";
 import {
@@ -18,7 +20,9 @@ import {
   UpdateNewsGQL,
   DestroyNewsGQL,
   AdminSingleNewsGQL,
+  UpdateNewsMutationVariables,
 } from "../../generated/graphql";
+import { objectOmit } from "../shared/util";
 
 /**
  * Administrative UI to edit or create news.
@@ -58,7 +62,7 @@ export class AdminNewsEditComponent implements OnInit {
   readonly performCreateData = this._performData.news.create();
   readonly performDeleteData = this._performData.news.delete(this._newsId);
 
-  public newsData: NewsUpdateDescription;
+  public newsData: UpdateNewsMutationVariables;
   public readonly queryParamsLanguage =
     this._queryParams.language || this.localeID;
   public queryParamsMode = this._queryParams.mode || "single";
@@ -75,13 +79,11 @@ export class AdminNewsEditComponent implements OnInit {
       // Retrieve the news that should be edited
       this._singleNewsGQL
         .fetch({ id: this._newsId })
-        .pipe(map((result) => result.data.adminSingleNews))
+        .pipe(pluck("data", "news", "nodes", 0))
         .subscribe(
           (news) => {
-            //TODO FIX the ignore
-            // @ts-ignore
-            this.newsData = news;
-            if (this.newsData.publishedFrom) {
+            this.newsData = objectOmit("__typename", news);
+            if (this.newsData.publishedFrom != "UNSET") {
               this.newsData.publishedFrom = new Date(
                 this.newsData.publishedFrom
               )
@@ -101,7 +103,8 @@ export class AdminNewsEditComponent implements OnInit {
     this.newsData = {
       title: {},
       text: {},
-      publishedFrom: null, // Field needs to be sent, even if empty
+      id: undefined,
+      publishedFrom: "UNSET", // Field needs to be sent, even if empty
     };
   }
 
@@ -113,16 +116,21 @@ export class AdminNewsEditComponent implements OnInit {
   }
 
   get isPublished(): boolean {
-    return (
-      this.newsData.publishedFrom !== undefined &&
-      this.newsData.publishedFrom !== null
-    );
+    return this.newsData.publishedFrom !== "UNSET";
+  }
+
+  // method could be replaced by using the event which should be triggered when clicking on the delete button at form-group input field
+  correctPublishedFrom(): void {
+    if (this.newsData.publishedFrom == "") {
+      this.newsData.publishedFrom = "UNSET";
+    }
   }
 
   /**
    * Send our new news to the server.
    */
   onCreate(): void {
+    this.correctPublishedFrom();
     this._createNewsGQL.mutate(this.newsData).subscribe(
       (_) => {
         this._router.navigate(["admin/news"]);
@@ -139,6 +147,7 @@ export class AdminNewsEditComponent implements OnInit {
       this._serverService.deleteNews(this._newsId) back to the overview page
    */
   public onUpdate(option: "redirect" | "stay"): void {
+    this.correctPublishedFrom();
     this._updateNewsGQL
       .mutate({ id: this._newsId, ...this.newsData })
       .subscribe(

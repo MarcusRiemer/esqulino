@@ -3,14 +3,13 @@ require 'json'
 # Validates JSON requests and responses against pre-loaded
 # JSON schemas.
 class JsonSchemaStorage
-
   attr_reader :schemas
-  
+
   # Loads all schemas from the given directory
   #
   # @param schema_dir [string] A path containing JSON schema files
   def initialize(schema_dir)
-    @schemas = { }
+    @schemas = {}
     @schema_dir = File.realdirpath(schema_dir)
 
     Dir.glob(@schema_dir + "/*.json").each do |schema_file|

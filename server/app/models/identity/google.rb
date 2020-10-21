@@ -4,7 +4,7 @@ module Identity
     # This URL is mandated by Google to update
     REFRESH_TOKEN_URL = "https://accounts.google.com/o/oauth2/token"
 
-    scope :find_by_email, -> (email) {
+    scope :find_by_email, ->(email) {
       where("provider_data ->> 'email' = ?", email)
     }
 
@@ -22,13 +22,12 @@ module Identity
     # Client side information for the GitHub provider
     def self.client_information
       return ({
-                name: "Google",
-                url_name: "google_oauth2",
-                icon: "fa-google",
-                color: "FireBrick"
-              })
+        name: "Google",
+        url_name: "google_oauth2",
+        icon: "fa-google",
+        color: "FireBrick"
+      })
     end
-
 
     # Asks Google whether the token that we currently have is still valid and
     # also retrieve a new access_token.
@@ -45,15 +44,15 @@ module Identity
             :client_secret => Rails.configuration.sqlino[:auth_provider_keys][:google_secret],
           )
           parsed_response = JSON.parse(response.body)
-          sliced_response = parsed_response.slice("access_token","expires_in")
+          sliced_response = parsed_response.slice("access_token", "expires_in")
 
           # Ensure that google answers with the two datapoints that we actually
           # asked for.
           if (sliced_response.keys.length != 2)
             raise EsqulinoError::UnexpectedLogout.new(
-                    message: "Malformed response from Google: #{response.body}",
-                    code: 500
-                  )
+              message: "Malformed response from Google: #{response.body}",
+              code: 500
+            )
           end
 
           self.access_token = sliced_response["access_token"]
@@ -65,16 +64,16 @@ module Identity
           save!
 
           raise EsqulinoError::UnexpectedLogout.new(
-                  message: "Error refreshing the access token from Google",
-                  code: 500,
-                  inner_exception: err
-                )
+            message: "Error refreshing the access token from Google",
+            code: 500,
+            inner_exception: err
+          )
         end
       else
         raise EsqulinoError::UnexpectedLogout.new(
-                message: "No server side data to renew from Google",
-                code: 500
-              )
+          message: "No server side data to renew from Google",
+          code: 500
+        )
       end
     end
 

@@ -1,10 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
-import {
-  IndividualBlockLanguageDataService,
-  ListBlockLanguageDataService,
-} from "../../shared/serverdata";
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 
 import { ProjectService, Project } from "../project.service";

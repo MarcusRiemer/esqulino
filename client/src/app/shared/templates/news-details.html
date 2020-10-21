@@ -12,5 +12,7 @@
       Neuigkeiten vom {{news.publishedFrom | date:'dd.MM.yyyy'}}
     </mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content [innerHTML]="news.text[locale]"></mat-card-content>
+  <mat-card-content
+    [innerHTML]="news.renderedTextFull[locale]"
+  ></mat-card-content>
 </mat-card>

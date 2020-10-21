@@ -2,7 +2,6 @@ require 'filemagic'
 require 'mini_magick'
 
 module ImageHelper
-  
   def file_show
     image_id = params['image_id']
 
@@ -10,10 +9,10 @@ module ImageHelper
     path = Image.new(current_project, image_id).file_show
     type = FileMagic.new(FileMagic::MAGIC_MIME).file(path)
 
-    #do not attempt to resize svg
+    # do not attempt to resize svg
     if type == "image/svg+xml; charset=us-ascii"
       send_file path, type: type, disposition: 'inline'
-    #attempt to resize other formats
+    # attempt to resize other formats
     else
       image = shrink_image_from_file_or_nil(path, type, params['width'])
       if image
@@ -43,7 +42,7 @@ module ImageHelper
       if width and Integer(width) and (Integer(width) < image.width)
         width = Integer(width)
 
-        image.resize "#{width}x"        
+        image.resize "#{width}x"
         res = image
       end
     rescue ArgumentError

@@ -6,7 +6,7 @@ module SchemaTools
     attr_accessor :name, :columns, :foreign_keys
 
     def attributes
-      {'name' => nil, 'columns' => nil, 'foreign_keys' => nil, 'system_table' => nil}
+      { 'name' => nil, 'columns' => nil, 'foreign_keys' => nil, 'system_table' => nil }
     end
 
     def initialize(name)

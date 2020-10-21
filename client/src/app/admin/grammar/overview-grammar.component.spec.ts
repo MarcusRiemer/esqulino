@@ -96,12 +96,11 @@ describe("OverviewGrammarComponent", () => {
     const t = await createComponent();
     const response = buildEmptyGrammarResponse();
 
-    const res = t.component.query.valueChanges.toPromise();
     const op = t.controller.expectOne(AdminListGrammarsDocument);
     op.flush(response);
 
+    await t.fixture.whenStable();
     t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
 
     const tableElement = t.fixture.nativeElement.querySelector("table");
     const rows = tableElement.querySelectorAll("tbody > tr");
@@ -113,12 +112,11 @@ describe("OverviewGrammarComponent", () => {
     const t = await createComponent();
     const response = buildSingleGrammarResponse();
 
-    const res = t.component.query.valueChanges.toPromise();
     const op = t.controller.expectOne(AdminListGrammarsDocument);
     op.flush(response);
 
+    await t.fixture.whenStable();
     t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
 
     const tableElement = t.element.querySelector("table");
     const i1Row = tableElement.querySelector("tbody > tr");
@@ -133,7 +131,7 @@ describe("OverviewGrammarComponent", () => {
     const emptyGrammar = buildEmptyGrammarResponse();
     const responses = [emptyGrammar, singleGrammar];
 
-    const res = t.component.query.valueChanges.subscribe((response) => {
+    t.component.query.valueChanges.subscribe((response) => {
       if (!response.loading) {
         expect(response.data).toEqual(responses.pop().data);
       }
@@ -152,7 +150,7 @@ describe("OverviewGrammarComponent", () => {
     const emptyGrammar = buildEmptyGrammarResponse();
     const responses = [emptyGrammar, singleGrammar];
 
-    const res = t.component.query.valueChanges.subscribe((response) => {
+    t.component.query.valueChanges.subscribe((response) => {
       if (!response.loading) {
         expect(response.data).toEqual(responses.pop().data);
       }
@@ -161,8 +159,8 @@ describe("OverviewGrammarComponent", () => {
     const op = t.controller.expectOne(AdminListGrammarsDocument);
     op.flush(singleGrammar);
 
+    await t.fixture.whenStable();
     t.fixture.detectChanges();
-    await t.fixture.whenRenderingDone();
 
     const tableElement = t.element.querySelector("table");
     const i1Row = tableElement.querySelector("tbody > tr");

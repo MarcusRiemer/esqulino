@@ -53,17 +53,17 @@ describe(`Component: NewsList`, () => {
     const news: NewsGQLResponse = buildSingleNewsResponse();
     c.op.flush(news);
 
+    await c.fixture.whenStable();
     c.fixture.detectChanges();
-    await c.fixture.whenRenderingDone();
 
     expect(Array.from(c.element.querySelectorAll("mat-card")).length).toEqual(
       1
     );
     expect(c.element.querySelector("mat-card-title").textContent).toEqual(
-      news.data.frontpageListNews.nodes[0].title["de"]
+      news.data.news.nodes[0].title["de"]
     );
     expect(c.element.querySelector("mat-card-content").textContent).toEqual(
-      news.data.frontpageListNews.nodes[0].text["de"]
+      news.data.news.nodes[0].renderedTextShort["de"]
     );
   });
 });

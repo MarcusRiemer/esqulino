@@ -72,6 +72,5 @@ class ApplicationRecord < ActiveRecord::Base
   def narrow_to_language(lang_priority)
     # Narrow all fields of the current model where the **class** knows that the
     # corresponding field is an hstore
-
   end
 end

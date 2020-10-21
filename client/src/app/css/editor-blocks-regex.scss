@@ -36,16 +36,26 @@
         border-bottom: 1px solid #000;
     }
 
-    .dataRow {
+
+    .dataRowPassed {
         padding: 5px 0;
+        background-color: #77dd77;
     }
 
-    .dataRow:nth-child(even) {
-        background-color: darken(white, 5%);
+    .dataRowFailed {
+        padding: 5px 0;
+        background-color: red;
     }
 
-    .dataRow:hover {
-        background-color: darken(white, 20%);
+    .dataRowPassed:nth-child(even), .dataRowFailed:nth-child(even) {
+        filter: brightness(90%);
     }
+
+    .dataRowPassed:hover, .dataRowFailed:hover {
+        filter: brightness(80%);
+    }
+
+
+
 
 }

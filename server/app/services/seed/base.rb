@@ -45,6 +45,7 @@ module Seed
     # returns nil if seed_id is not an object_id or object
     def seed
       return nil if File.extname(seed_id.to_s).present?
+
       @seed_data ||= seed_id.is_a?(seed_class) ? seed_id : find_seed(seed_id)
     end
 
@@ -59,6 +60,7 @@ module Seed
     def load_seed_id
       return File.basename(seed_id, ".*") if File.extname(seed_id.to_s).present? && File.extname(seed_id.to_s) == ".yaml"
       return seed_id unless seed_id.is_a?(seed_class)
+
       nil
     end
 
@@ -102,7 +104,9 @@ module Seed
 
     # Abstract methods for seed specific cases
     def after_store_seed; end
+
     def after_load_seed; end
+
     def move_data_from_tmp_to_data_directory; end
 
     # Constructs a storing seed or loading seed file path
@@ -237,6 +241,7 @@ module Seed
     # raise in case no file is found with provided load_id
     def seed_instance
       raise "Could not find project with slug or ID \"#{load_id}\"" unless File.exist? seed_file_path
+
       YAML.load_file(seed_file_path)
     end
 
@@ -272,6 +277,7 @@ module Seed
     def self.load_all
       Dir.glob(File.join load_directory, "*.yaml").each do |f|
         next if f =~ /deps/
+
         new(File.basename(f)).start_load
       end
     end
@@ -289,6 +295,7 @@ module Seed
     def find_load_seed_id(load_seed_id)
       Dir.glob(File.join seed_directory, "*.yaml").each do |f|
         next if f =~ /deps/
+
         seed_file_data = YAML.load_file(f)
         return load_seed_id unless seed_file_data.has_attribute?(:slug)
         if seed_file_data.slug == load_seed_id

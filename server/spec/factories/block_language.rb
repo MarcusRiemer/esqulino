@@ -10,7 +10,7 @@ FactoryBot.define do
     association :grammar, factory: :grammar
 
     trait :auto_generated_blocks do
-      local_generator_instructions { ({type: "tree" }) }
+      local_generator_instructions { ({ type: "tree" }) }
     end
 
     trait :grammar_meta do

@@ -10,9 +10,6 @@ import {
 } from "../../../generated/graphql";
 import { GraphQLQueryComponent } from "../../shared/table/paginator-table-graphql.component";
 
-// TODO: Should be beautified and used
-type Query = ReturnType<AdminListBlockLanguagesGQL["watch"]>;
-
 type DataKey = Exclude<keyof AdminListBlockLanguagesQuery, "__typename">;
 
 // TODO: Resolve this from the Query type above, requires unpacking
@@ -77,7 +74,9 @@ export class OverviewBlockLanguageComponent
     this.query.refetch();
   }
 
-  onRefresh() {}
+  onRefresh() {
+    this.query.refetch();
+  }
 
   get queryData() {
     return {

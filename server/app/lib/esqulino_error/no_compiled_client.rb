@@ -10,7 +10,7 @@ module EsqulinoError
     end
 
     def json_data()
-      { "indexHtmlPath" => @index_html_path  }
+      { "indexHtmlPath" => @index_html_path }
     end
   end
 end

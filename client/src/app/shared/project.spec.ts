@@ -19,7 +19,6 @@ describe("Project", () => {
       }),
       undefined
     );
-
     expect(p.isBlockLanguageReferenced("block_a")).toBeTruthy(
       "BlockLanguage is referenced"
     );

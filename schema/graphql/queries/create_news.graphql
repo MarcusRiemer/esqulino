@@ -1,7 +1,7 @@
 mutation CreateNews(
     $title: LangJson!,
     $text: LangJson!,
-    $publishedFrom: ISO8601DateTime!
+    $publishedFrom: SettableDate!
 ) {
     createNews(input:{
         title:$title,

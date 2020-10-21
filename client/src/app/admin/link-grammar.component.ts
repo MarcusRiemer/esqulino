@@ -1,21 +1,10 @@
+import { ApolloQueryResult } from "@apollo/client/core";
 import { Component, Input } from "@angular/core";
 
-import {
-  map,
-  filter,
-  shareReplay,
-  switchMap,
-  distinctUntilChanged,
-  tap,
-  catchError,
-} from "rxjs/operators";
+import { map, filter, switchMap, distinctUntilChanged } from "rxjs/operators";
 
-import {
-  AdminListGrammarsGQL,
-  AdminListGrammarsQuery,
-} from "../../generated/graphql";
-import { BehaviorSubject, Observable, throwError, merge } from "rxjs";
-import { ApolloQueryResult } from "apollo-client";
+import { AdminListGrammarsGQL } from "../../generated/graphql";
+import { BehaviorSubject, Observable, merge } from "rxjs";
 
 /**
  * Creates a link to the grammar with the specified ID. Will attempt to

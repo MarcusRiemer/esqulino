@@ -58,7 +58,12 @@ export interface NodeOneOfTypeDescription {
 export interface NodeConcreteTypeDescription {
   type: "concrete";
   attributes?: NodeAttributeDescription[];
+  tags?: TagDescription[];
 }
+
+// More or less free form metadata that may be attached to types
+// and attributes that serves
+export type TagDescription = string;
 
 /**
  * Attributes of a node may be:
@@ -82,7 +87,7 @@ export interface NodeTerminalSymbolDescription {
   type: "terminal";
   name?: string;
   symbol: string;
-  tags?: string[];
+  tags?: TagDescription[];
 }
 
 export const Orientation = StringUnion("horizontal", "vertical");
@@ -345,6 +350,7 @@ export type VisualNodeAttributeDescription =
 export interface NodeVisualTypeDescription {
   type: "visualize";
   attributes: VisualNodeAttributeDescription[];
+  tags?: TagDescription[];
 }
 
 /**
@@ -450,6 +456,12 @@ export function isNodeVisualTypeDescription(
   return arg instanceof Object && arg.type === "visualize";
 }
 
+export function isVisualizableType(
+  arg: any
+): arg is NodeVisualTypeDescription | NodeConcreteTypeDescription {
+  return isNodeConcreteTypeDescription(arg) || isNodeVisualTypeDescription(arg);
+}
+
 export function isNodeTypesAllowedDescription(
   obj: any
 ): obj is NodeTypesAllowedDescription {
@@ -460,6 +472,18 @@ export function isNodeTypesSequenceDescription(
   obj: any
 ): obj is NodeTypesSequenceDescription {
   return obj instanceof Object && obj.type === "sequence";
+}
+
+export function isNodeTypeChildrenGroupDescription(
+  obj: any
+): obj is NodeChildrenGroupDescription {
+  return (
+    obj instanceof Object &&
+    (obj.type === "sequence" ||
+      obj.type === "allowed" ||
+      obj.type === "choice" ||
+      obj.type === "parentheses")
+  );
 }
 
 export function isChildCardinalityDescription(
@@ -495,7 +519,7 @@ export function isNodePropertyDesciption(
 export function isNodePropertyReferenceDesciption(
   obj: any
 ): obj is NodePropertyReferenceDescription {
-  const validBases: Set<NodePropertyReferenceDescription["base"]> = new Set([
+  const validBases = new Set<NodePropertyReferenceDescription["base"]>([
     "grammarReference",
     "codeResourceReference",
   ]);

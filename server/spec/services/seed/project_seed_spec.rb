@@ -4,7 +4,7 @@ require "fileutils"    # To ease file comparision
 
 RSpec.describe Seed::ProjectSeed do
   let(:seed_data_dir) { Rails.configuration.sqlino[:seed][:data_dir] }
-  let(:project) { FactoryBot.create(:project, name: {"en" =>"Test Project"} ) }
+  let(:project) { FactoryBot.create(:project, name: { "en" => "Test Project" }) }
   let(:payload) { project }
 
   let!(:subject) { described_class.new(payload) }
@@ -172,7 +172,7 @@ RSpec.describe Seed::ProjectSeed do
         pOrig = FactoryBot.create(:project)
         Seed::ProjectSeed.new(pOrig).start_store
         # Making a change after storing
-        pOrig.update_column("name", {"de" => "changed" })
+        pOrig.update_column("name", { "de" => "changed" })
 
         pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)

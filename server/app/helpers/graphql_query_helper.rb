@@ -1,4 +1,3 @@
-
 # Provides access to a globally available Validator instance
 module GraphqlQueryHelper
   include UserHelper
@@ -29,9 +28,8 @@ module GraphqlQueryHelper
   end
 
   def exists?(name:)
-    @@query_storage.exists?(query_name:name)
+    @@query_storage.exists?(query_name: name)
   end
-
 
   # Returns the path the given query would be found under
   def schema_path(name)
@@ -58,7 +56,7 @@ module GraphqlQueryHelper
 
   class InsertTypenameVisitor < GraphQL::Language::Visitor
     def on_field(node, parent)
-      names = node.selections.map {|s| s.name }
+      names = node.selections.map { |s| s.name }
       if not names.empty? and not names.include? "__typename"
         typename_node = GraphQL::Language::Nodes::Field.new(name: "__typename");
         node = node.merge(selections: node.selections + [typename_node])
@@ -66,5 +64,4 @@ module GraphqlQueryHelper
       super
     end
   end
-
 end

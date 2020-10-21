@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ComponentPortal } from "@angular/cdk/portal";
+import { ComponentPortal, ComponentType } from "@angular/cdk/portal";
 
 import { EditorComponentDescription } from "../../shared/block/block-language.description";
 
@@ -19,40 +19,40 @@ import { WorldSensorsComponent } from "./truck/world-sensors.component";
 import { TruckWorldEditorComponent } from "./truck/world-editor/truck-world-editor.component";
 import { RegexTestComponent } from "./regex/regex-test.component";
 
+type ComponentTypeId = EditorComponentDescription["componentType"];
+
 /**
  * Allows registration of available editor components and hands them
  * out on demand.
  */
 @Injectable()
 export class EditorComponentsService {
+  private readonly _availableComponents: {
+    [key in ComponentTypeId]?: ComponentType<any>;
+  } = {
+    "block-root": BlockRootComponent,
+    "code-resource-settings": CodeResourceSettingsComponent,
+    "json-ast": JsonAstComponent,
+    "drop-debug": DropDebugComponent,
+    "query-preview": QueryPreviewComponent,
+    validator: ValidationComponent,
+    "generated-code": CodeGeneratorComponent,
+    "regex-test": RegexTestComponent,
+    "truck-world": WorldRenderComponent,
+    "truck-controller": WorldControllerComponent,
+    "truck-sensors": WorldSensorsComponent,
+    "truck-world-editor": TruckWorldEditorComponent,
+  };
+
   createComponent(
     description: EditorComponentDescription
   ): ComponentPortal<{}> {
-    switch (description.componentType) {
-      case "block-root":
-        return new ComponentPortal(BlockRootComponent);
-      case "code-resource-settings":
-        return new ComponentPortal(CodeResourceSettingsComponent);
-      case "json-ast":
-        return new ComponentPortal(JsonAstComponent);
-      case "drop-debug":
-        return new ComponentPortal(DropDebugComponent);
-      case "query-preview":
-        return new ComponentPortal(QueryPreviewComponent);
-      case "validator":
-        return new ComponentPortal(ValidationComponent);
-      case "generated-code":
-        return new ComponentPortal(CodeGeneratorComponent);
-      case "regex-test":
-        return new ComponentPortal(RegexTestComponent);
-      case "truck-world":
-        return new ComponentPortal(WorldRenderComponent);
-      case "truck-controller":
-        return new ComponentPortal(WorldControllerComponent);
-      case "truck-sensors":
-        return new ComponentPortal(WorldSensorsComponent);
-      case "truck-world-editor":
-        return new ComponentPortal(TruckWorldEditorComponent);
+    const typeId = description.componentType;
+    const toInstantiate = this._availableComponents[typeId];
+    if (toInstantiate) {
+      return new ComponentPortal(toInstantiate);
+    } else {
+      throw new Error(`No known editor component of type id "${typeId}"`);
     }
   }
 }

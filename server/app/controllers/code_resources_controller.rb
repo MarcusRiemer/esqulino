@@ -3,7 +3,6 @@
 # resouces (pages, queries, ...) can be found in the respective
 # controllers.
 class CodeResourcesController < ApplicationController
-
   include JsonSchemaHelper
 
   # All available code resources for a certain programming language
@@ -31,8 +30,8 @@ class CodeResourcesController < ApplicationController
     # See what the new data looks like
     request_data = ensure_request("CodeResourceRequestUpdateDescription", request.body.read)
     update_params = request_data
-                      .dig("resource")
-                      .transform_keys { |k| k.underscore }
+                    .dig("resource")
+                    .transform_keys { |k| k.underscore }
 
     resource = CodeResource.find(params[:code_resource_id])
 

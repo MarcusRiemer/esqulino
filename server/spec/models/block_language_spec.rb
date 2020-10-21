@@ -54,7 +54,7 @@ RSpec.describe BlockLanguage do
   context "to_list_api_response" do
     it "with 'generated' field" do
       b = FactoryBot.create(:block_language, id: SecureRandom.uuid)
-      api_response = BlockLanguage.scope_list.first.to_list_api_response(options:{include_list_calculations:true})
+      api_response = BlockLanguage.scope_list.first.to_list_api_response(options: { include_list_calculations: true })
 
       expect(api_response).to validate_against "BlockLanguageListItemDescription"
       expect(api_response['id']).to eq b.id
@@ -65,7 +65,7 @@ RSpec.describe BlockLanguage do
 
     it "without 'generated' field" do
       b = FactoryBot.create(:block_language, id: SecureRandom.uuid)
-      api_response = BlockLanguage.scope_list.first.to_list_api_response(options:{include_list_calculations:false})
+      api_response = BlockLanguage.scope_list.first.to_list_api_response(options: { include_list_calculations: false })
 
       expect(api_response).to validate_against "BlockLanguageListDescription"
       expect(api_response['id']).to eq b.id
@@ -73,7 +73,6 @@ RSpec.describe BlockLanguage do
       expect(api_response['slug']).to eq b.slug
       expect(api_response).not_to have_key("generated")
     end
-
   end
 
   context "emit_generated_blocks!" do

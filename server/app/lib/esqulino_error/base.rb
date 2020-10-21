@@ -12,7 +12,7 @@ module EsqulinoError
     # @param code [integer] The HTTP status code
     # @param impl_error [bool] True, if this error shouldn't have been
     #                          shown to the user.
-    def initialize(msg="Internal Esqulino Error", code=500, impl_error = false)
+    def initialize(msg = "Internal Esqulino Error", code = 500, impl_error = false)
       @code = code
       @impl_error = impl_error
       super msg
@@ -29,7 +29,7 @@ module EsqulinoError
     #
     # @return [Hash] Additional error information
     def json_data()
-      {  }
+      {}
     end
 
     # Liquid representation is identical to JSON

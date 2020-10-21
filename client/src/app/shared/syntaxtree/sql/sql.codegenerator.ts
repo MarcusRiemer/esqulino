@@ -325,7 +325,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
-        const expressions = node.children["expressions"];
+        const expressions = node.getChildrenInCategory("expressions");
         const head = expressions[0];
         const tail = expressions.slice(1);
 

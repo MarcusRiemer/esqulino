@@ -3,7 +3,7 @@ require 'rails_helper'
 require 'tempfile'
 
 RSpec.describe ProjectImagesController, type: :request do
-  let(:auth_headers) { {"Authorization" => "Basic #{Base64.encode64('user:user')}"} }
+  let(:auth_headers) { { "Authorization" => "Basic #{Base64.encode64('user:user')}" } }
 
   let(:minimal_svg) {
     file = Tempfile.new('minimal.svg')
@@ -76,7 +76,7 @@ RSpec.describe ProjectImagesController, type: :request do
 
       # Actually retrieve images
       get "/api/project/#{p.id}/image/",
-           :headers => auth_headers
+          :headers => auth_headers
       expect(response.status).to eq 200
 
       expect(response).to have_http_status(200)
@@ -147,7 +147,7 @@ RSpec.describe ProjectImagesController, type: :request do
       image_id = "5e171ef3-3983-44bb-95eb-d3b2ac0d42b7"
 
       post "/api/project/#{p.id}/image/#{image_id}/metadata",
-          :headers => auth_headers
+           :headers => auth_headers
 
       expect(response.status).to eq 404
     end
@@ -191,10 +191,9 @@ RSpec.describe ProjectImagesController, type: :request do
            }
       expect(response.status).to eq 200
 
-
       # Update the metadata
       get "/api/project/#{p.id}/image/#{image_id}/metadata",
-           :headers => auth_headers
+          :headers => auth_headers
       expect(response.status).to eq 200
 
       data = JSON.parse(response.body)
@@ -269,7 +268,7 @@ RSpec.describe ProjectImagesController, type: :request do
       image_id = "5e171ef3-3983-44bb-95eb-d3b2ac0d42b7"
 
       delete "/api/project/#{p.id}/image/#{image_id}",
-           :headers => auth_headers
+             :headers => auth_headers
       expect(response.status).to eq 404
     end
 
@@ -279,10 +278,9 @@ RSpec.describe ProjectImagesController, type: :request do
       image_id = ""
 
       delete "/api/project/#{p.id}/image/#{image_id}",
-           :headers => auth_headers
+             :headers => auth_headers
       expect(response.status).to eq 404
     end
-
 
     it 'Deletes an existing image' do
       p = FactoryBot.create(:project)

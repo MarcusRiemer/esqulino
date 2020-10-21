@@ -31,13 +31,6 @@ export function runTestCase(
     });
   }
 
-  console.log("matches: " + matches);
-
-  let testRegex = new RegExp("xbc|de").exec("abcde");
-  console.log("testRegex: " + testRegex);
-
-  // TODO test and make sure this is fine by doing a lot of dedicated testcases
-
   const simplifiedExpectation = simplifyExpectation(testCase);
   // redundant but the compiler keeps bugging me
   if ("hits" in simplifiedExpectation) {

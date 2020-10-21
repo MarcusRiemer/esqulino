@@ -7,7 +7,7 @@ import { ForeignKeyDescription } from "./schema.description";
 export interface CommandDescription {
   type: string;
   index: number;
-  columnIndex: number;
+  columnIndex?: number;
 }
 
 /**

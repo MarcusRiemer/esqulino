@@ -1,6 +1,7 @@
 export * from "./syntaxtree";
 export * from "./coderesource";
 export * from "./grammar";
+export * from "./grammar.description";
 export * from "./language";
 export * from "./validator";
 export * from "./grammar.description";

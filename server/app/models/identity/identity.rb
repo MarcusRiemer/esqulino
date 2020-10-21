@@ -90,15 +90,15 @@ module Identity
     # contains all information about a current selected identity
     def to_list_api_response
       return ({
-                :id => self.id,
-                :type => self.type,
-                :email => self.email,
-                :confirmed => self.confirmed?,
-                :access_token_duration => self.access_token_duration ? Time.at(self.access_token_duration) : nil,
-                :changes => {
-                  primary: self.change_primary_token_exp
-                }
-              }).compact
+        :id => self.id,
+        :type => self.type,
+        :email => self.email,
+        :confirmed => self.confirmed?,
+        :access_token_duration => self.access_token_duration ? Time.at(self.access_token_duration) : nil,
+        :changes => {
+          primary: self.change_primary_token_exp
+        }
+      }).compact
     end
 
     # Updates the current provider data.

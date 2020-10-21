@@ -1,5 +1,4 @@
 FactoryBot.define do
-
   factory :identity, class: Identity::Identity do
     provider {}
     uid {}
@@ -12,57 +11,69 @@ FactoryBot.define do
     trait :new do
       provider { "identity" }
       uid { "identity@web.de" }
-      provider_data { ({
-        credentials: {
-          expires: true,
-          expires_at: 3.hours.from_now
-        }
-      }) }
-      own_data { ({
-        password: BCrypt::Password.create("1234567"),
-        verify_token: SecureRandom.uuid,
-        confirmed: false
-      }) }
+      provider_data {
+        ({
+          credentials: {
+            expires: true,
+            expires_at: 3.hours.from_now
+          }
+        })
+      }
+      own_data {
+        ({
+          password: BCrypt::Password.create("1234567"),
+          verify_token: SecureRandom.uuid,
+          confirmed: false
+        })
+      }
     end
 
     trait :existing do
       provider { "identity" }
       uid { "blattwerkzeug@web.de" }
-      provider_data { ({
-        name: "Tom",
-        email: "blattwerkzeug@web.de",
-        credentials: {
-          expires: true,
-          expires_at: 3.hours.from_now
-        }
-      }) }
-      own_data { ({
-        password: BCrypt::Password.create("12345678"),
-        verify_token: SecureRandom.uuid,
-        confirmed: true,
-        password_reset_token: SecureRandom.uuid,
-        password_reset_token_exp: Time.now - 1.hour
-      }) }
+      provider_data {
+        ({
+          name: "Tom",
+          email: "blattwerkzeug@web.de",
+          credentials: {
+            expires: true,
+            expires_at: 3.hours.from_now
+          }
+        })
+      }
+      own_data {
+        ({
+          password: BCrypt::Password.create("12345678"),
+          verify_token: SecureRandom.uuid,
+          confirmed: true,
+          password_reset_token: SecureRandom.uuid,
+          password_reset_token_exp: Time.now - 1.hour
+        })
+      }
     end
 
     trait :another_existing do
       provider { "identity" }
       uid { "another@web.de" }
-      provider_data { ({
-        name: "Tom",
-        email: "another@web.de",
-        credentials: {
-          expires: true,
-          expires_at: 3.hours.from_now
-        }
-      }) }
-      own_data { ({
-        password: BCrypt::Password.create("12345678"),
-        verify_token: SecureRandom.uuid,
-        confirmed: true,
-        password_reset_token: SecureRandom.uuid,
-        password_reset_token_exp: Time.now - 1.hour
-      }) }
+      provider_data {
+        ({
+          name: "Tom",
+          email: "another@web.de",
+          credentials: {
+            expires: true,
+            expires_at: 3.hours.from_now
+          }
+        })
+      }
+      own_data {
+        ({
+          password: BCrypt::Password.create("12345678"),
+          verify_token: SecureRandom.uuid,
+          confirmed: true,
+          password_reset_token: SecureRandom.uuid,
+          password_reset_token_exp: Time.now - 1.hour
+        })
+      }
     end
   end
 
@@ -73,21 +84,25 @@ FactoryBot.define do
     trait :new do
       provider { "developer" }
       uid { "developer@web.de" }
-      provider_data { ({
-        credentials: {
-          expires: false
-        }
-      }) }
+      provider_data {
+        ({
+          credentials: {
+            expires: false
+          }
+        })
+      }
     end
 
     trait :existing do
       provider { "developer" }
       uid { "developer@blattwerkzeug.de" }
-      provider_data { ({
-        credentials: {
-          expires: false
-        }
-      }) }
+      provider_data {
+        ({
+          credentials: {
+            expires: false
+          }
+        })
+      }
     end
   end
 
@@ -96,59 +111,63 @@ FactoryBot.define do
     sequence (:uid) { |n| "user#{n}@gmail.com" }
 
     trait :new do
-      provider_data { ({
-        name: "Tom",
-        email: "tom@gmail.com",
-        email_verified: false,
-        credentials: {
-          expires: true,
-          expires_at: 3.hours.from_now.to_i
-        }
-      }) }
+      provider_data {
+        ({
+          name: "Tom",
+          email: "tom@gmail.com",
+          email_verified: false,
+          credentials: {
+            expires: true,
+            expires_at: 3.hours.from_now.to_i
+          }
+        })
+      }
     end
 
     trait :existing do
-      provider_data { ({
-        name: "Tom",
-        email: uid,
-        email_verified: true,
-        credentials: {
-          token: "a_google_access_token",
-          refresh_token: "a_google_refresh_token",
-          expires: true,
-          expires_at: 3.hours.from_now.to_i
-        }
-      }) }
+      provider_data {
+        ({
+          name: "Tom",
+          email: uid,
+          email_verified: true,
+          credentials: {
+            token: "a_google_access_token",
+            refresh_token: "a_google_refresh_token",
+            expires: true,
+            expires_at: 3.hours.from_now.to_i
+          }
+        })
+      }
     end
 
     trait :expired do
       provider_data {
         ({
-           name: "Tom",
-           email: uid,
-           email_verified: true,
-           credentials: {
-             token: "a_google_access_token",
-             refresh_token: "a_google_refresh_token",
-             expires: true,
-             expires_at: 3.hours.before.to_i
-           }
-         })
+          name: "Tom",
+          email: uid,
+          email_verified: true,
+          credentials: {
+            token: "a_google_access_token",
+            refresh_token: "a_google_refresh_token",
+            expires: true,
+            expires_at: 3.hours.before.to_i
+          }
+        })
       }
     end
 
     trait :no_renew_credentials do
       provider_data {
         ({
-           name: "Tom",
-           email: uid,
-           email_verified: true,
-           credentials: {
-             token: "a_google_access_token",
-             expires: true,
-             expires_at: 3.hours.before.to_i
-           }
-         })
+          name: "Tom",
+          email: uid,
+          email_verified: true,
+          credentials: {
+            token: "a_google_access_token",
+            expires: true,
+            expires_at: 3.hours.before.to_i
+          }
+        })
       }
     end
   end
@@ -157,27 +176,31 @@ FactoryBot.define do
     trait :new do
       provider { "github" }
       uid { "Stackoverflow is life" }
-      provider_data { ({
-        name: "Special-Name",
-        credentials: {
-          expires: false
-        }
-      }) }
+      provider_data {
+        ({
+          name: "Special-Name",
+          credentials: {
+            expires: false
+          }
+        })
+      }
     end
 
     trait :existing do
       provider { "github" }
       uid { "Stackoverflow is life" }
-      provider_data { ({
-        name: "Special-Name",
-        email: "specialGitHubEmail@web.de",
-        urls: {
-          "Github" => "www.github.com/specialName"
-        },
-        credentials: {
-          expires: false
-        }
-      }) }
+      provider_data {
+        ({
+          name: "Special-Name",
+          email: "specialGitHubEmail@web.de",
+          urls: {
+            "Github" => "www.github.com/specialName"
+          },
+          credentials: {
+            expires: false
+          }
+        })
+      }
     end
   end
 end
