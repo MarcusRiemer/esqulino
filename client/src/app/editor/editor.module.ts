@@ -36,8 +36,6 @@ import { DragService } from "./drag.service";
 
     SharedAppModule,
 
-    editorRouting,
-
     ImageEditorModule.forRoot(),
     CodeEditorModule.forRoot(),
   ],
@@ -74,3 +72,9 @@ import { DragService } from "./drag.service";
   ],
 })
 export class EditorModule {}
+
+@NgModule({
+  imports: [EditorModule, editorRouting],
+  exports: [EditorModule],
+})
+export class EditorModuleWithRoutes {}
