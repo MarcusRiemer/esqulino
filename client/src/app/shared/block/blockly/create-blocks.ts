@@ -162,8 +162,21 @@ export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
                   });
                   addPlaceholder();
                   break;
+                case "codeResourceReference":
+                case "grammarReference":
+                  args.push({
+                    name: attr.name,
+                    type: "field_label_serializable",
+                  });
+                  addPlaceholder();
+                  break;
                 default:
-                  messageString += "<<" + attr.name + ":" + attr.base + ">> ";
+                  messageString +=
+                    "<<" +
+                    (attr as any).name +
+                    ":" +
+                    (attr as any).base +
+                    ">> ";
               }
               break;
             case "terminal":

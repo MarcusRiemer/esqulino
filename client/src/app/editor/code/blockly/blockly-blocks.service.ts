@@ -42,6 +42,7 @@ export class BlocklyBlocksService {
       _b.sidebarDesriptions
     );
 
+    // TODO: Figure out the best way to unsubscribe from this subscription
     const allUpdates = combineLatest(
       sidebars.filter((s) => !!s.currentBlocks).map((s) => s.currentBlocks)
     ).subscribe((blockCategories) => {
