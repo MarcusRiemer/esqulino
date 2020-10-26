@@ -6,6 +6,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { BehaviorSubject } from "rxjs";
 import { switchMap, map, filter, flatMap, pluck } from "rxjs/operators";
 
+import { objectOmit } from "../../shared/util";
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 import {
   generateBlockLanguage,
@@ -20,7 +21,6 @@ import {
   FullBlockLanguageGQL,
   UpdateBlockLanguageGQL,
 } from "../../../generated/graphql";
-import { objectOmit } from "src/app/shared/util";
 
 @Injectable()
 export class EditBlockLanguageService {

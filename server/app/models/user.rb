@@ -111,28 +111,12 @@ class User < ApplicationRecord
     }
   end
 
-  # Returns all confirmed e-mails of a users
-  def all_validated_emails()
-    self.identities
-        .filter { |i| i.confirmed? }
-        .map { |i| i.email }
-  end
-
   # Is current user owner of something
   def owner_of?(instance)
     return instance.owner?(self)
   end
 
-  def email?
-    return !self.email.nil?
-  end
-
-  def has_confirmed_password_identity?
-    self.identities.any? { |k| k.instance_of?(Identity::Password) and k.confirmed?() }
-  end
-
   # Returns the current global role of a user
-  # Global roles are roles
   def global_role
     to_return = "guest"
     if (self.has_role? :admin) then
@@ -142,20 +126,6 @@ class User < ApplicationRecord
     end
 
     return to_return
-  end
-
-  # Checks if the current user is changing his primary email
-  def primary_email_change?
-    return self.identities.find { |k|
-      (k.change_primary_email_token) && (not k.primary_email_token_expired?)
-    } ? (not identity.email.eql?(self.email)) : false
-  end
-
-  # If a user is changing his primary email, the expiration time of the current token returns
-  def primary_email_change_time
-    return self.identities.find { |k|
-      (k.change_primary_email_token) && (not k.primary_email_token_expired?)
-    }.change_primary_token_exp
   end
 
   # Returns a nicely readable representation of id and name

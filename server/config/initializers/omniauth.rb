@@ -12,14 +12,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     config.path_prefix = '/api/auth'
   end
 
-  if auth_providers.include? "Identity::Password"
-    provider :identity,
-             :fields => [],
-             :on_registration => AuthController.action(:register),
-             :on_login => AuthController.action(:login_with_password),
-             :model => Identity::Password
-  end
-
   if auth_providers.include? "Identity::Developer"
     provider :developer, :fields => [:name, :email], :uid_field => :email
   end
@@ -29,12 +21,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              config[:auth_provider_keys][:google_id],
              config[:auth_provider_keys][:google_secret],
              prompt: "consent"
-  end
-
-  if auth_providers.include? "Identity::Github"
-    provider :github,
-             config[:auth_provider_keys][:github_id],
-             config[:auth_provider_keys][:github_secret]
   end
 
   if auth_providers.include? "Identity::Keycloak"
