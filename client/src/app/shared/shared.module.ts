@@ -75,7 +75,6 @@ import { IsAdminGuard } from "./guards/is-admin.guard";
 import { MayPerformComponent } from "./may-perform.component";
 import { PerformDataService } from "./authorisation/perform-data.service";
 import { MessageDialogComponent } from "./message-dialog.component";
-import { MasterGuard } from "./guards/master-guard";
 import { UnexpectedLogoutInterceptor } from "./unexpected-logout.interceptor";
 import { UserService } from "./auth/user.service";
 import { ResourceReferencesService } from "./resource-references.service";
@@ -232,7 +231,6 @@ export class SharedAppModule {
         SideNavService,
         ...dataServices,
         LoggedInGuard,
-        MasterGuard,
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
