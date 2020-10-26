@@ -17,7 +17,7 @@ export interface BlockArgsInputStatement {
 export interface BlockArgsLabelSerializable {
   type: "field_label_serializable";
   name: string;
-  text: string;
+  text?: string;
 }
 
 export interface BlockArgsFieldDropdown {
