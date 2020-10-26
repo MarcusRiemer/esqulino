@@ -1,11 +1,11 @@
 <!-- If a message is passed to the dialog -->
 <div
-  *ngIf="this.data && this.data.message"
+  *ngIf="hasMessage"
   mat-dialog-header
   class="alert"
   [ngClass]="{
-    'alert-danger': type == 'error',
-    'alert-warning': type == 'warning'
+    'alert-danger': messageType == 'error',
+    'alert-warning': messageType == 'warning'
   }"
   role="alert"
 >
@@ -14,35 +14,9 @@
 
 <div mat-dialog-content class="flex-column authentication">
   <div>
-    <h1>
-      <ng-container
-        *ngIf="isSignIn(); else headerRegister"
-        i18n="@@authDialogHeaderSignIn"
-      >
-        Anmelden
-      </ng-container>
-      <ng-template #headerRegister i18n="@@authDialogHeaderRegister">
-        Registrieren
-      </ng-template>
+    <h1 i18n="@@authDialogHeaderSignIn">
+      Anmelden
     </h1>
   </div>
-  <providers-all-buttons (trigger)="showEmailContent()"></providers-all-buttons>
-
-  <ng-container *ngIf="emailContent">
-    <hr />
-
-    <ng-container *ngIf="isSignIn()">
-      <!-- Main content -->
-      <sign-in *ngIf="!secondContent" (content)="changeContent()"></sign-in>
-      <!-- Second content -->
-      <request-reset-password *ngIf="secondContent"></request-reset-password>
-    </ng-container>
-
-    <ng-container *ngIf="!isSignIn()">
-      <!-- Main content -->
-      <sign-up *ngIf="!secondContent" (content)="changeContent()"></sign-up>
-      <!-- Second content -->
-      <request-verify-email *ngIf="secondContent"></request-verify-email>
-    </ng-container>
-  </ng-container>
+  <providers-all-buttons></providers-all-buttons>
 </div>

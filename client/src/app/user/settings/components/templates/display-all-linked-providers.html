@@ -6,22 +6,12 @@
     <thead>
       <th scope="1">E-Mail</th>
       <th scope="2">Provider</th>
-      <th scope="4"></th>
     </thead>
 
     <tbody>
       <tr *ngFor="let provider of providers">
         <td>{{provider.email}}</td>
         <td><provider-show [provider]="provider"></provider-show></td>
-        <td>
-          <button
-            mat-icon-button
-            matTooltip="Remove this linked provider"
-            (click)="onDeleteIdentity(provider)"
-          >
-            <i class="fa fa-trash" aria-hidden="true"></i>
-          </button>
-        </td>
       </tr>
     </tbody>
   </table>
