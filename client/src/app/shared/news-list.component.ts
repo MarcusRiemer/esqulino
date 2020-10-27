@@ -10,11 +10,13 @@ import { pluck } from "rxjs/operators";
 export class NewsListComponent {
   constructor(
     @Inject(LOCALE_ID)
-    readonly locale: string,
+    readonly locale: "de" | "en",
     private _newsGQL: FrontpageListNewsGQL
   ) {}
 
   readonly newsList$ = this._newsGQL
-    .watch()
+    .watch({
+      languages: [this.locale],
+    })
     .valueChanges.pipe(pluck("data", "news", "nodes"));
 }
