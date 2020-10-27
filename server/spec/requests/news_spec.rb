@@ -45,11 +45,12 @@ RSpec.describe "GraphQL News Endpoint", type: :request do
       create(:news, published_from: Date.new(9999, 1, 1)) # Future
       create(:news, published_from: nil) # Unpublished
       create(:news) # Published
+      create(:news) # Published
       send_query(query_name: "FrontpageListNews")
 
       json_data = JSON.parse(response.body)["data"]["news"]["nodes"]
 
-      expect(json_data.length).to eq(1)
+      expect(json_data.length).to eq(2)
       # validate_against "NewsFrontpageDescription" does not work because of __typename fields
       expect(response).to have_http_status(200)
     end
