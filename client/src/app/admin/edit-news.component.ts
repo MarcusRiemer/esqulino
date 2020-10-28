@@ -11,8 +11,6 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { pluck } from "rxjs/operators";
 
-import * as _ from "lodash";
-
 import { ToolbarService } from "../shared";
 import { PerformDataService } from "../shared/authorisation/perform-data.service";
 import {

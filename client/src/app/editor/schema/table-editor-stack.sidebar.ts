@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 
-import { SchemaService } from "../schema.service";
+import { EditDatabaseSchemaService } from "../edit-database-schema.service";
 
 /**
  * Shows the stack of operations in the sidebar.
@@ -14,7 +14,7 @@ export class TableEditorSidebarStackComponent {
     return "schema-table-editor";
   }
 
-  public constructor(private _schemaService: SchemaService) {}
+  public constructor(private _schemaService: EditDatabaseSchemaService) {}
 
   public get commandsHolder() {
     return this._schemaService.getCurrentlyEditedStack();

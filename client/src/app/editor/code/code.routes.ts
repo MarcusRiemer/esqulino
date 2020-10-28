@@ -15,7 +15,7 @@ export const codeEditorRoutes: Routes = [
   },
   {
     path: ":resourceId",
-    redirectTo: ":resourceId/blockly",
+    redirectTo: ":resourceId/block",
     pathMatch: "full",
   },
   {
@@ -25,8 +25,8 @@ export const codeEditorRoutes: Routes = [
   },
   {
     path: ":resourceId/blockly",
-    loadChildren: () =>
-      import("./blockly/blockly.module").then((m) => m.BlocklyEditorModule),
+    canActivate: [ResourceChangedGuard],
+    component: BlockEditorComponent,
   },
   {
     path: ":resourceId/unknown",

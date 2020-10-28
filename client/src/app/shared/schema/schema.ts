@@ -15,9 +15,7 @@ export class Schema {
   private _tables: Table[];
 
   constructor(tables: TableDescription[]) {
-    this._tables = tables.map(
-      (val) => new Table(val, val.columns, val.foreignKeys)
-    );
+    this._tables = tables.map((val) => new Table(val));
   }
 
   /**

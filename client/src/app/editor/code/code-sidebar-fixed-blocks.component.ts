@@ -1,10 +1,14 @@
 import { Component, Inject } from "@angular/core";
 
+import { map } from "rxjs/operators";
+
 import { CodeResource } from "../../shared/syntaxtree";
+import {
+  FixedBlocksSidebarDescription,
+  FixedBlocksSidebar,
+} from "../../shared/block";
 
 import { SIDEBAR_MODEL_TOKEN } from "../editor.token";
-
-import { map } from "rxjs/operators";
 
 @Component({
   templateUrl: "templates/sidebar-fixed-blocks.html",
@@ -20,7 +24,11 @@ export class CodeSidebarFixedBlocksComponent {
 
   readonly fixedBlockSidebars$ = this.currentBlockLanguage$.pipe(
     map((b) =>
-      b.sidebars.filter((s) => s.portalComponentTypeId === "fixedBlocks")
+      b.sidebarDesriptions
+        .filter(
+          (s): s is FixedBlocksSidebarDescription => s.type === "fixedBlocks"
+        )
+        .map((s) => new FixedBlocksSidebar(s))
     )
   );
 }

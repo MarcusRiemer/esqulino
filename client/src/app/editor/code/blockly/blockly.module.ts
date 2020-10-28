@@ -6,19 +6,22 @@
 import { NgModule } from "@angular/core";
 
 import { SharedAppModule } from "../../../shared/shared.module";
+import { EditorComponentsService } from "../editor-components.service";
 
 import { BlocklyComponent } from "./blockly.component";
-import { BlocklyRoutingModule } from "./blockly.routes";
 import { BlocklyBlocksService } from "./blockly-blocks.service";
 
 @NgModule({
-  imports: [BlocklyRoutingModule, SharedAppModule],
+  imports: [SharedAppModule],
   providers: [BlocklyBlocksService],
   declarations: [BlocklyComponent],
   exports: [BlocklyComponent],
 })
 export class BlocklyEditorModule {
-  constructor() {
+  constructor(editorComponents: EditorComponentsService) {
+    // Ensure that the blockly component is available
+    editorComponents.registerComponent("blockly", BlocklyComponent);
+
     console.log("Registered BlocklyEditor!");
   }
 }

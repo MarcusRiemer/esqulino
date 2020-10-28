@@ -15,6 +15,7 @@ import { IndividualGrammarDataService } from "../../shared/serverdata";
 import { allPresentTypes } from "../../shared/syntaxtree/grammar-type-util";
 
 import { CurrentCodeResourceService } from "../current-coderesource.service";
+import { SidebarDataService } from "../sidebar-data.service";
 
 import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.component";
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
@@ -60,7 +61,8 @@ export class CodeSidebarComponent {
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
     private _resourceReferences: ResourceReferencesService,
-    private _grammarData: IndividualGrammarDataService
+    private _grammarData: IndividualGrammarDataService,
+    private _sidebarDataService: SidebarDataService
   ) {}
 
   readonly currentCodeResource$ = this._currentCodeResource.currentResource;
@@ -110,18 +112,20 @@ export class CodeSidebarComponent {
   readonly fallbackSidebar$: Observable<FixedBlocksSidebar> = combineLatest(
     this.currentBlockLanguage$,
     this._fallbackSidebarDescription$
-  ).pipe(map(([b, desc]) => new FixedBlocksSidebar(b, desc)));
+  ).pipe(map(([_b, desc]) => new FixedBlocksSidebar(desc)));
 
   /**
    * The actual sidebars that need to be spawned for the current language.
    */
   readonly portalInstances$ = this.currentBlockLanguage$.pipe(
-    map((blockLanguage) =>
-      blockLanguage.sidebars.map((s) => {
-        return new ComponentPortal(
-          resolvePortalComponentId(s.portalComponentTypeId)
-        );
-      })
+    map((b) =>
+      this._sidebarDataService
+        .instantiateSidebars(b.sidebarDesriptions)
+        .map((s) => {
+          return new ComponentPortal(
+            resolvePortalComponentId(s.portalComponentTypeId)
+          );
+        })
     )
   );
 }
