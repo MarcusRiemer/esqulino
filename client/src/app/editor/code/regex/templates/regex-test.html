@@ -13,10 +13,12 @@
   >
     <div class="col-md-4">{{ testCase.input }}</div>
     <div class="col-md-3">
-      <span *ngFor="let expectedMatch of testCase.expected.hits; let isLast=last">
+      <span
+        *ngFor="let expectedMatch of testCase.expected.hits; let isLast=last"
+      >
         <span
-                style="border: solid 1px black; padding: 3px"
-                [ngStyle]="{'background-color': (checkIfExpectedHitGotMatched(expectedMatch, testCase)) ? '#77dd77' : '#f00'}"
+          style="border: solid 1px black; padding: 3px;"
+          [ngStyle]="{'background-color': (checkIfExpectedHitGotMatched(expectedMatch, testCase)) ? '#77dd77' : '#f00'}"
         >
           {{ expectedMatch }}
         </span>
@@ -25,7 +27,9 @@
       </span>
     </div>
     <div class="col-md-1">{{ testCase.result }}</div>
-    <div class="col-md-1">{{ countSuccessfulHits(testCase) }}/{{ getExpectedHitCount(testCase) }}</div>
+    <div class="col-md-1">
+      {{ countSuccessfulHits(testCase) }}/{{ getExpectedHitCount(testCase) }}
+    </div>
     <div class="col-md-3">{{ testCase.error }}</div>
   </div>
 </div>
