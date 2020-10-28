@@ -1,24 +1,20 @@
 import { Component } from "@angular/core";
 import { Observable, combineLatest } from "rxjs";
-import { switchMap, map, filter } from "rxjs/operators";
+import { switchMap, map, filter, shareReplay } from "rxjs/operators";
 
 import {
   RegexTestBenchDescription,
-  RegexTestCaseDescription,
   readFromNode,
 } from "../../../shared/syntaxtree/regex/regex-testbench.description";
 import { referencedResourceIds } from "../../../shared/syntaxtree/syntaxtree-util";
 import { rxFilterRootLanguage } from "../../../shared/util";
-import { runTestCase } from "../../../shared/syntaxtree/regex/regex-test";
+import {
+  runTestCase,
+  ExecutedTestCase,
+} from "../../../shared/syntaxtree/regex/regex-test";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { ProjectService } from "../../project.service";
-
-export interface ExecutedTestCase extends RegexTestCaseDescription {
-  matches: string[];
-  result: boolean;
-  error: string;
-}
 
 /**
  * Displays the results for various testcases that are associated with
@@ -161,6 +157,7 @@ export class RegexTestComponent {
       });
 
       return executed;
-    })
+    }),
+    shareReplay(1)
   );
 }

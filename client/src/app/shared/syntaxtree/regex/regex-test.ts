@@ -1,5 +1,15 @@
 import { RegexTestCaseDescription } from "./regex-testbench.description";
-import { ExecutedTestCase } from "../../../editor/code/regex/regex-test.component";
+
+// TODO: Pull as much non-frontend datatypes (no Observable) into this file as needed,
+//       the frontend component should be a thin wrapper around these functions or data structures
+
+export interface ExecutedTestCase extends RegexTestCaseDescription {
+  // TODO: Add field for input, see TODO below about assigning the testcase
+  matches: string[];
+  result: boolean;
+  error: string;
+  // TODO: add countSuccessfulHits as property here, maybe more
+}
 
 function simplifyExpectation(
   testCase: RegexTestCaseDescription
@@ -21,9 +31,12 @@ export function runTestCase(
   regex: RegExp,
   testCase: RegexTestCaseDescription
 ): ExecutedTestCase {
+  // TODO: Don't return the complex matches object, return normal strings
   let matches = regex.exec(testCase.input);
 
   if (matches == null) {
+    // TODO: Don't use assign to mix in the testcase, instead simply assign the
+    //       test case as a normal property
     return Object.assign({}, testCase, {
       matches: [],
       result: testCase.expected.type == "noMatch",
@@ -39,15 +52,14 @@ export function runTestCase(
       expectedMatches.length === matches.length &&
       expectedMatches.every((value, index) => value === matches[index]);
 
-    return Object.assign(
-      {},
-      {
-        input: testCase.input,
-        expected: simplifiedExpectation,
-        matches: matches,
-        result: result,
-        error: "",
-      }
-    );
+    return {
+      input: testCase.input,
+      expected: simplifiedExpectation,
+      matches: matches,
+      result: result,
+      error: "",
+    };
   }
+
+  // TODO: What happens here?!
 }
