@@ -1,0 +1,85 @@
+{
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "refTableName": "termin",
+                  "columnName": "TAG"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "adresse"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "where": [
+        {
+          "name": "where",
+          "language": "sql",
+          "children": {
+            "expressions": [
+              {
+                "name": "binaryExpression",
+                "language": "sql",
+                "children": {
+                  "lhs": [
+                    {
+                      "name": "columnName",
+                      "language": "sql",
+                      "properties": {
+                        "refTableName": "adresse",
+                        "columnName": "LKZ"
+                      }
+                    }
+                  ],
+                  "operator": [
+                    {
+                      "name": "relationalOperator",
+                      "language": "sql",
+                      "properties": {
+                        "operator": "<>"
+                      }
+                    }
+                  ],
+                  "rhs": [
+                    {
+                      "name": "constant",
+                      "language": "sql",
+                      "properties": {
+                        "value": "D"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
