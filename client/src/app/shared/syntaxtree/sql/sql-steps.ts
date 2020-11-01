@@ -1,7 +1,17 @@
 import { NodeDescription, Tree, Node } from "../syntaxtree";
 
+interface SqlStepCrossJoinDescription {
+  type: "cross";
+  tables: string[];
+}
+
 interface SqlStepInnerJoinDescription {
   type: "inner";
+  tables: string[];
+}
+
+interface SqlStepOuterJoinDescription {
+  type: "outer";
   tables: string[];
 }
 
@@ -20,6 +30,11 @@ interface SqlStepOnDescription {
   expressions: string[];
 }
 
+interface SqlStepUsingDescription {
+  type: "using";
+  expressions: string[];
+}
+
 interface SqlStepGroupByDescription {
   type: "groupBy";
   expressions: string[];
@@ -32,92 +47,190 @@ interface SqlStepOrderByDescription {
 
 export interface SqlStepDescription {
   ast: NodeDescription;
-  description: SqlStepSelectDescription | SqlStepWhereDescription
-  | SqlStepInnerJoinDescription | SqlStepOnDescription | SqlStepGroupByDescription
-  | SqlStepOrderByDescription;
+  description:
+    | SqlStepCrossJoinDescription
+    | SqlStepSelectDescription
+    | SqlStepWhereDescription
+    | SqlStepInnerJoinDescription
+    | SqlStepOnDescription
+    | SqlStepGroupByDescription
+    | SqlStepOrderByDescription
+    | SqlStepUsingDescription
+    | SqlStepOuterJoinDescription;
 }
 
+function createInitTree(): Tree {
+  return new Tree({
+    name: "querySelect",
+    language: "sql",
+    children: {
+      select: [
+        {
+          name: "select",
+          language: "sql",
+          children: {
+            columns: [
+              {
+                name: "starOperator",
+                language: "sql",
+              },
+            ],
+          },
+        },
+      ],
+      from: [
+        {
+          name: "from",
+          language: "sql",
+        },
+      ],
+    },
+  });
+}
 
 export function stepwiseSqlQuery(
   q: Tree | NodeDescription // Maybe decide which representation is most helpful
 ): SqlStepDescription[] {
   q = q instanceof Tree ? q : new Tree(q);
-  // TODO: Transform
 
-  if(q.isEmpty){
+  if (q.isEmpty) {
     // throwError?
     return [];
   }
 
   let arr: SqlStepDescription[] = [];
-  //let starSelect: NodeDescription = createSelectNodeDescription();
-  let t = new Tree({
-    name: "querySelect",
-    language: "sql",
-    children: {
-      select: [createSelectNodeDescription()],
-      from: [
-        {
-          name: "from",
-          language: "sql"
-        }
-      ]
-    }
-  });
+  let t = createInitTree();
 
   //first from table
-  let table = q.locate([["from", 0], ["tables", 0]]);
-  t = t.insertNode([["from", 0], ["tables", 0]], table.toModel());
+  let table = q.locate([
+    ["from", 0],
+    ["tables", 0],
+  ]);
+  t = t.insertNode(
+    [
+      ["from", 0],
+      ["tables", 0],
+    ],
+    table.toModel()
+  );
 
   //cartesian product (cross join) if more then one table
-
-  let joinNode = q.locateOrUndefined([["from", 0], ["joins", 0]]);
+  let srcJoinNode = q.locateOrUndefined([
+    ["from", 0],
+    ["joins", 0],
+  ]);
   let index = 0;
-  while (joinNode != undefined) {
-    // TODO distinguish between join types
+  let firstTableName = table.properties.name;
 
-    let joinTable = joinNode.getChildInCategory("table");
+  while (srcJoinNode != undefined) {
+    firstTableName = index > 0 ? "Zwischentabelle" : firstTableName;
+    let joinTable = srcJoinNode.getChildInCategory("table");
 
-    // innerJoinOn -> innerJoin
-    let typeName = joinNode.typeName == "innerJoinOn" ? "innerJoin" : joinNode.typeName;
-
-    // maybe customizing existing Node more efficient then insert a new one ?
-    t = t.insertNode([["from", 0], ["joins", index]],
+    t = t.insertNode(
+      [
+        ["from", 0],
+        ["joins", index],
+      ],
       {
-        name: typeName,
-        language: joinNode.languageName,
+        name: "crossJoin",
+        language: srcJoinNode.languageName,
         children: {
-          table: [joinTable.toModel()]
-        }
+          table: [joinTable.toModel()],
+        },
       }
     );
 
     arr.push({
       ast: t.toModel(),
       description: {
-        type: "inner",
-        tables: [table.properties.name, joinTable.properties.name]
-      }
+        type: "cross",
+        tables: [firstTableName, joinTable.properties.name],
+      },
     });
-    //console.log('join added');
+    // TODO decide description-format for UI
+    // firstTableName = firstTableName + "CROSS JOIN" + joinTable.properties.name;
 
-    // 2. case innerJoinOn -  add the on-filter 
-    let onNode = q.locateOrUndefined([["from", 0], ["joins", index], ["on", 0]]);
-    if (onNode != undefined) {
+    let joinFilterType = srcJoinNode.typeName.toLowerCase().includes("using")
+      ? "using"
+      : "on";
+    let joinFilterNode = q.locateOrUndefined([
+      ["from", 0],
+      ["joins", index],
+      [joinFilterType, 0],
+    ]);
 
-      //change join name and add onNode
-      t = t.replaceNode([["from", 0], ["joins", index]], joinNode.toModel());
-      
+    if (joinFilterNode != undefined) {
+      let newName = joinFilterType == "on" ? "innerJoinOn" : "innerJoinUsing";
+      let newDesc: NodeDescription = undefined;
+
+      //    tree.setProperty ??
+
+      if (joinFilterType == "on") {
+        newDesc = {
+          name: newName,
+          language: "sql",
+          children: {
+            table: [joinTable.toModel()],
+            on: [joinFilterNode.toModel()],
+          },
+        };
+      } else {
+        newDesc = {
+          name: newName,
+          language: "sql",
+          children: {
+            table: [joinTable.toModel()],
+            using: [joinFilterNode.toModel()],
+          },
+        };
+      }
+      //change crossJoin to InnerJoin and add filterNode
+      t = t.replaceNode(
+        [
+          ["from", 0],
+          ["joins", index],
+        ],
+        newDesc
+      );
+
       arr.push({
         ast: t.toModel(),
         description: {
-          type: "on",
-          expressions: collectExpressions(joinNode.getChildrenInCategory("on"))
-        }
+          type: srcJoinNode.typeName.toLowerCase().includes("using")
+            ? "using"
+            : "on",
+          expressions: collectExpressions(
+            srcJoinNode.getChildrenInCategory(joinFilterType)
+          ),
+        },
       });
-      //console.log("after adding onNode: \n" + JSON.stringify(t.toModel(), undefined, 2));
+      //firstTableName = firstTableName + joinType + onExpression;
+      //console.log("after adding filter node: \n" + JSON.stringify(t.toModel(), undefined, 2));
     }
-    joinNode = q.locateOrUndefined([["from", 0], ["joins", ++index]]);
+
+    // if outer join - add null rows
+    //console.log("debug typename: " + index + srcJoinNode.typeName);
+    if (srcJoinNode.typeName.toLowerCase().includes("outer")) {
+      t = t.replaceNode(
+        [
+          ["from", 0],
+          ["joins", index],
+        ],
+        srcJoinNode.toModel()
+      );
+
+      arr.push({
+        ast: t.toModel(),
+        description: {
+          type: "outer",
+          tables: [firstTableName, joinTable.properties.name],
+        },
+      });
+    }
+    srcJoinNode = q.locateOrUndefined([
+      ["from", 0],
+      ["joins", ++index],
+    ]);
   }
 
   //WHERE clause
@@ -129,13 +242,15 @@ export function stepwiseSqlQuery(
       ast: t.rootNode.toModel(),
       description: {
         type: "where",
-        expressions: collectExpressions(whereNode.getChildrenInCategory("expressions"))
-      }
+        expressions: collectExpressions(
+          whereNode.getChildrenInCategory("expressions")
+        ),
+      },
     });
-    //console.log("after where-step: \n" + JSON.stringify(t.toModel(), undefined, 2));
   }
 
   //GROUP BY clause
+  // TODO - how to display groups in the ui ???
   let groupNode = q.locateOrUndefined([["groupBy", 0]]);
   if (groupNode != undefined) {
     t = t.insertNode([["groupBy", 0]], groupNode.toModel());
@@ -144,29 +259,39 @@ export function stepwiseSqlQuery(
       ast: t.rootNode.toModel(),
       description: {
         type: "groupBy",
-        expressions: collectExpressions(groupNode.getChildrenInCategory("expressions"))
-      }
+        expressions: collectExpressions(
+          groupNode.getChildrenInCategory("expressions")
+        ),
+      },
     });
-    //console.log('groupBy added');
   }
 
   // HAVING clause -> needed???
 
   //SELECT clause
-  if (!(q.locate([["select", 0], ["columns", 0]]).typeName == "starOperator")) {
+  if (
+    !(
+      q.locate([
+        ["select", 0],
+        ["columns", 0],
+      ]).typeName == "starOperator"
+    )
+  ) {
     t = t.replaceNode([["select", 0]], q.locate([["select", 0]]).toModel());
-  } 
+  }
 
   arr.push({
     ast: t.rootNode.toModel(),
     description: {
       type: "select",
-      expressions: collectExpressions(q.locate([["select", 0]]).children.columns)
-    }
+      expressions: collectExpressions(
+        q.locate([["select", 0]]).children.columns
+      ),
+    },
   });
   //console.log("after select-step: \n" + JSON.stringify(t.toModel(), undefined, 2));
 
-  // TODO DISCTINCT ??
+  // TODO DISCTINCT needed??
 
   //ORDER BY clause
   let orderByNode = q.locateOrUndefined([["orderBy", 0]]);
@@ -177,46 +302,36 @@ export function stepwiseSqlQuery(
       ast: t.rootNode.toModel(),
       description: {
         type: "orderBy",
-        expressions: collectExpressions(orderByNode.getChildrenInCategory("expressions"))
-      }
+        expressions: collectExpressions(
+          orderByNode.getChildrenInCategory("expressions")
+        ),
+      },
     });
-    //console.log('orderBy added');
   }
 
   return arr;
 }
 
-
-function createSelectNodeDescription(): NodeDescription {
-  return {
-    name: "select",
-    language: "sql",
-    children: {
-      columns: [
-        {
-          name: "starOperator",
-          language: "sql"
-        }
-      ]
-    }
-  };
-}
-
 function collectExpressions(nodes: Node[]): string[] {
   // typedef "sql"."expression" ::= columnName | binaryExpression | constant | parameter | functionCall | parentheses
   let exp: string[] = [];
-  
-  for(let node of nodes){
-  
-    switch(node.typeName){
+
+  for (let node of nodes) {
+    switch (node.typeName) {
       case "binaryExpression": {
-        exp = exp.concat(collectExpressions(node.getChildrenInCategory("lhs")));
-        exp.push(node.getChildInCategory("operator").properties.operator);
-        exp = exp.concat(collectExpressions(node.getChildrenInCategory("rhs")));
+        exp.push(
+          collectExpressions(node.getChildrenInCategory("lhs")).toString() +
+            " " +
+            node.getChildInCategory("operator").properties.operator +
+            " " +
+            collectExpressions(node.getChildrenInCategory("rhs")).toString()
+        );
         break;
       }
       case "columnName": {
-        exp.push(node.properties.refTableName + '.' + node.properties.columnName);
+        exp.push(
+          node.properties.refTableName + "." + node.properties.columnName
+        );
         break;
       }
       case "constant": {
@@ -227,22 +342,46 @@ function collectExpressions(nodes: Node[]): string[] {
         break;
       }
       case "functionCall": {
-        exp.push(node.properties.name + "()");
-        exp = exp.concat(collectExpressions(node.getChildrenInCategory("arguments")));
+        exp.push(
+          node.properties.name +
+            "(" +
+            collectExpressions(
+              node.getChildrenInCategory("arguments")
+            ).toString() +
+            ")"
+        );
         break;
       }
       case "parentheses": {
+        exp.push(
+          "(" +
+            collectExpressions(
+              node.getChildrenInCategory("expression")
+            ).toString() +
+            ")"
+        );
         break;
       }
-      // actually not an expression-type
+      // actually not an expression-types
       case "sortOrder": {
-        // typename expression instead of expressions
-        exp = exp.concat(collectExpressions(node.getChildrenInCategory("expression")));
-        exp.push(node.properties.order);
+        exp.push(
+          collectExpressions(
+            node.getChildrenInCategory("expression")
+          ).toString() +
+            " " +
+            node.properties.order
+        );
         break;
       }
       case "starOperator": {
         exp.push("*");
+        break;
+      }
+      case "whereAdditional": {
+        exp.push(node.properties.operator);
+        exp = exp.concat(
+          collectExpressions(node.getChildrenInCategory("expression"))
+        );
         break;
       }
       default: {

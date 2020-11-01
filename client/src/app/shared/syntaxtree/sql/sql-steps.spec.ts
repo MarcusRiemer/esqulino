@@ -1,7 +1,6 @@
 import { stepwiseSqlQuery, SqlStepDescription } from "./sql-steps";
 import { Tree, Node, NodeDescription } from "../syntaxtree";
 
-
 function starSelectTest(stepDesc: SqlStepDescription) {
   const node = new Node(stepDesc.ast, undefined);
   expect(node.typeName).toEqual("querySelect");
@@ -13,68 +12,72 @@ function starSelectTest(stepDesc: SqlStepDescription) {
   );
 }
 
-function crossJoinTest(stepDesc: SqlStepDescription, desc: NodeDescription, childIndex: number){
+function testJoinNode(
+  stepDesc: SqlStepDescription,
+  desc: NodeDescription,
+  childIndex: number,
+  nodeTyp: string,
+  filterName?: string
+) {
   const node = new Node(stepDesc.ast, undefined);
-  //console.log("crossJoinTest: \n" + JSON.stringify(node.toModel(), undefined, 2));
 
-  expect(node.childrenCategoryNames).toEqual(
-    ["select", "from"]
-  );
-
+  expect(node.childrenCategoryNames).toEqual(["select", "from"]);
   starSelectTest(stepDesc);
 
   const fromNode = node.getChildInCategory("from");
   expect(fromNode).toBeDefined();
   expect(fromNode.childrenCategoryNames).toEqual(["tables", "joins"]);
+  expect(fromNode.getChildInCategory("tables").toModel()).toEqual(
+    desc.children.from[0].children.tables[0]
+  );
 
-  //first table should equal to first table from the initial-query
-  // TODO first table could be result table of a previous join
-  expect(fromNode.getChildInCategory("tables").toModel()).toEqual(desc.children.from[0].children.tables[0]);
-
-  //second (join) table
-  expect(fromNode.getChildrenInCategory("joins").length).toEqual(childIndex+1);
+  //join table
+  expect(fromNode.getChildrenInCategory("joins").length).toEqual(
+    childIndex + 1
+  );
   const joinNode = fromNode.getChildrenInCategory("joins")[childIndex];
   // joinNode without on
-  expect(joinNode.childrenCategoryNames).toEqual(["table"]);
-  // innerJoinOn -> innerJoin
-  expect(joinNode.typeName).toEqual("innerJoin");
-  expect(joinNode.getChildrenInCategory("table").length).toEqual(1);
-  expect(joinNode.getChildInCategory("table").toModel()).toEqual(desc.children.from[0].children.joins[childIndex].children.table[0]);
+  if (filterName) {
+    expect(joinNode.childrenCategoryNames.sort()).toEqual(
+      ["table", filterName].sort()
+    );
+  } else {
+    expect(joinNode.childrenCategoryNames).toEqual(["table"]);
+  }
 
-  expect(stepDesc.description).toEqual(
-    {
-      type: "inner",
-      tables: [fromNode.children.tables[0].properties.name, joinNode.children.table[0].properties.name]
-    }
+  expect(joinNode.typeName).toEqual(nodeTyp);
+  expect(joinNode.getChildrenInCategory("table").length).toEqual(1);
+  expect(joinNode.getChildInCategory("table").toModel()).toEqual(
+    desc.children.from[0].children.joins[childIndex].children.table[0]
   );
 }
 
-function onNodeTest(stepDesc: SqlStepDescription, desc: NodeDescription, index: number) {
+function joinFilterNodeTest(
+  stepDesc: SqlStepDescription,
+  desc: NodeDescription,
+  index: number,
+  filter: string
+) {
   const sourceTree = new Tree(desc);
   const node = new Node(stepDesc.ast, undefined);
-  //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
   starSelectTest(stepDesc);
 
-  expect(node.childrenCategoryNames).toEqual(
-    ["select", "from"]
-  );
+  expect(node.childrenCategoryNames).toEqual(["select", "from"]);
 
-  //maybe pass onNode as parameter
-  const onNode = node.getChildInCategory("from").getChildrenInCategory("joins")[index].getChildInCategory("on");
-  expect(onNode.toModel()).toEqual(desc.children.from[0].children.joins[index].children.on[0]);
+  const filterNode = node
+    .getChildInCategory("from")
+    .getChildrenInCategory("joins")
+    [index].getChildInCategory(filter);
 
-  // TODO probably not generally applicable in function
-  let lhs = sourceTree.locate([["from", 0], ["joins", index], ["on", 0], ["lhs",0]]);
-  let rhs = sourceTree.locate([["from", 0], ["joins", index], ["on", 0], ["rhs",0]]);
-  let operator = sourceTree.locate([["from", 0], ["joins", index], ["on", 0], ["operator",0]]);
-  expect(stepDesc.description).toEqual(
-    {
-      type: "on",
-      expressions: [lhs.properties.refTableName + '.' + lhs.properties.columnName, 
-        operator.properties.operator, rhs.properties.refTableName + '.' + rhs.properties.columnName]
-    }
+  expect(filterNode.toModel()).toEqual(
+    sourceTree
+      .locate([
+        ["from", 0],
+        ["joins", index],
+        [filter, 0],
+      ])
+      .toModel()
   );
-  
 }
 
 describe(`SQL Steps`, () => {
@@ -83,8 +86,8 @@ describe(`SQL Steps`, () => {
     //expect(() => stepwiseSqlQuery(undefined)).toThrowError(/Empty Tree/);
   });
 
-  it('Basic select-from, not breaking down', () => {
-    const desc: NodeDescription = require('./spec/ast-40-select-from.json');
+  it("Basic select-from, not breaking down", () => {
+    const desc: NodeDescription = require("./spec/ast-40-select-from.json");
     const steps = stepwiseSqlQuery(desc);
     const node = new Node(steps[0].ast, undefined);
 
@@ -93,241 +96,685 @@ describe(`SQL Steps`, () => {
     starSelectTest(steps[0]);
     expect(node.toModel()).toEqual(desc);
 
-    expect(steps[0].description).toEqual(
-      {
-        type: "select",
-        expressions: ["*"]
-      }
-    );
+    expect(steps[0].description).toEqual({
+      type: "select",
+      expressions: ["*"],
+    });
   });
 });
 
 describe(`simple where filter`, () => {
-  const desc: NodeDescription = require('./spec/ast-41-select-from-where.json');
+  const desc: NodeDescription = require("./spec/ast-41-select-from-where.json");
   const steps = stepwiseSqlQuery(desc);
 
-  // first step containing a starSelect with the where-clause
-  it('first step', () => {
+  it("first step", () => {
     expect(steps.length).toEqual(2);
 
     const node = new Node(steps[0].ast, undefined);
-    expect(node.childrenCategoryNames).toEqual(
-      ["select", "from", "where"]
-    );
+    expect(node.childrenCategoryNames).toEqual(["select", "from", "where"]);
 
     starSelectTest(steps[0]);
 
-    expect(node.getChildInCategory("where").toModel()).toEqual(desc.children.where[0]);
-
-    expect(steps[0].description).toEqual(
-      {
-        type: "where",
-        expressions: ["adresse.LKZ", "<>", "D"]
-      }
+    expect(node.getChildInCategory("where").toModel()).toEqual(
+      desc.children.where[0]
     );
+
+    expect(steps[0].description).toEqual({
+      type: "where",
+      expressions: ["adresse.LKZ <> D"],
+    });
   });
 
   //second step containing the fields from the select-clause and the where-clause
-  it('second step', () => {
+  it("second step", () => {
     const node = new Node(stepwiseSqlQuery(desc)[1].ast, undefined);
-    expect(node.childrenCategoryNames).toEqual(
-      ["select", "from", "where"]
-    );
+    expect(node.childrenCategoryNames).toEqual(["select", "from", "where"]);
     // fields from select should correspond to initial-query
-    expect(node.getChildInCategory("select").toModel()).toEqual(desc.children.select[0]);
+    expect(node.getChildInCategory("select").toModel()).toEqual(
+      desc.children.select[0]
+    );
 
     //where should correspond to initial-query----- maybe redundant?
-    expect(node.getChildInCategory("where").toModel()).toEqual(desc.children.where[0]);
-
-    expect(steps[1].description).toEqual(
-      {
-        type: "select",
-        expressions: ["termin.TAG"]
-      }
+    expect(node.getChildInCategory("where").toModel()).toEqual(
+      desc.children.where[0]
     );
+
+    expect(steps[1].description).toEqual({
+      type: "select",
+      expressions: ["termin.TAG"],
+    });
   });
 });
-
 
 describe("simple join", () => {
-  const desc: NodeDescription = require('./spec/ast-42-simple-join.json');
+  const desc: NodeDescription = require("./spec/ast-42-simple-join.json");
   const steps = stepwiseSqlQuery(desc);
 
-  //first step containing a starSelect with the join-clause
-  it('first step: cross join', () => {
+  it("1: cross join", () => {
     expect(steps.length).toEqual(3);
-    crossJoinTest(steps[0], desc, 0);
+    testJoinNode(steps[0], desc, 0, "crossJoin");
+    expect(steps[0].description).toEqual({
+      type: "cross",
+      tables: ["Charakter", "Auftritt"],
+    });
   });
 
-  //second step containing the join with the on-clouse
-  it('second step: on-clouse', () => {
-    onNodeTest(steps[1], desc, 0);
+  it("2: on-clouse", () => {
+    joinFilterNodeTest(steps[1], desc, 0, "on");
+    expect(steps[1].description).toEqual({
+      type: "on",
+      expressions: ["Auftritt.Charakter_ID = Charakter.Charakter_ID"],
+    });
   });
 
-  it('third step: fields from the select-clause', () => {
+  it("3: select-clause", () => {
     expect(steps[2].ast).toEqual(desc);
-
-    expect(steps[2].description).toEqual(
-      {
-        type: "select",
-        expressions: ["Charakter.Charakter_Name"]
-      }
-    );
+    expect(steps[2].description).toEqual({
+      type: "select",
+      expressions: ["Charakter.Charakter_Name"],
+    });
   });
 });
 
+//  SELECT COUNT(Charakter.Charakter_Name)
+//       FROM Charakter
+// 	    INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
+//     GROUP BY Charakter.Charakter_ID
+//     ORDER BY COUNT() DESC, Charakter.Charakter_Name
 describe("query with join,group,order", () => {
-  const desc: NodeDescription = require('./spec/ast-43-join-group-order.json');
+  const desc: NodeDescription = require("./spec/ast-43-join-group-order.json");
   const steps = stepwiseSqlQuery(desc);
 
-  //first step containing a starSelect with the join-clause
-  it('first step: cross join', () => {
+  // SELECT *
+  // FROM Charakter
+  // INNER JOIN Auftritt
+  it("1: cross join", () => {
     expect(steps.length).toEqual(5);
-
-    crossJoinTest(steps[0], desc, 0);
+    testJoinNode(steps[0], desc, 0, "crossJoin");
+    expect(steps[0].description).toEqual({
+      type: "cross",
+      tables: ["Charakter", "Auftritt"],
+    });
   });
 
-  //second step containing the join with the on-clouse
-  it('second step: on-clouse', () => {
-    onNodeTest(steps[1], desc, 0);
+  //  SELECT *
+  // FROM Charakter
+  // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
+  it("2: on-clouse", () => {
+    joinFilterNodeTest(steps[1], desc, 0, "on");
+    expect(steps[1].description).toEqual({
+      type: "on",
+      expressions: ["Auftritt.Charakter_ID = Charakter.Charakter_ID"],
+    });
   });
 
-  //third step containing the groupBy-clouse
-  it('third step: groupBy-clouse', () => {
+  // SELECT *
+  //   FROM Charakter
+  //   INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
+  // GROUP BY Charakter.Charakter_ID
+  it("3: groupBy-clouse", () => {
     expect(steps[2]).toBeDefined();
     const node = new Node(steps[2].ast, undefined);
     starSelectTest(steps[2]);
-    // TODO test from ?
     expect(node.childrenCategoryNames).toEqual(["select", "from", "groupBy"]);
-    expect(node.getChildInCategory("groupBy").toModel()).toEqual(desc.children.groupBy[0]);
-
-    expect(steps[2].description).toEqual(
-      {
-        type: "groupBy",
-        expressions: ["Charakter.Charakter_ID"]
-      }
+    expect(node.getChildInCategory("groupBy").toModel()).toEqual(
+      desc.children.groupBy[0]
     );
+
+    expect(steps[2].description).toEqual({
+      type: "groupBy",
+      expressions: ["Charakter.Charakter_ID"],
+    });
   });
 
-  it('fourth step: select-clause', () => {
-    //TODO test the other nodes ?
+  // SELECT COUNT(Charakter.Charakter_Name)
+  //   FROM Charakter
+  //   INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
+  // GROUP BY Charakter.Charakter_ID
+  it("4: select-clause", () => {
     const node = new Node(steps[3].ast, undefined);
-    expect(node.childrenCategoryNames.sort()).toEqual(["from", "groupBy", "select"]);
+    expect(node.childrenCategoryNames.sort()).toEqual([
+      "from",
+      "groupBy",
+      "select",
+    ]);
 
-    // contain all select fields
-    expect(node.getChildInCategory("select").toModel()).toEqual(desc.children.select[0]);
-
-    expect(steps[3].description).toEqual(
-      {
-        type: "select",
-        expressions: ["COUNT()", "Charakter.Charakter_Name"]
-      }
+    expect(node.getChildInCategory("select").toModel()).toEqual(
+      desc.children.select[0]
     );
+
+    expect(steps[3].description).toEqual({
+      type: "select",
+      expressions: ["COUNT(Charakter.Charakter_Name)"],
+    });
   });
 
-  it('fifth step: orderBy-clause', () => {
+  // SELECT COUNT(Charakter.Charakter_Name)
+  //   FROM Charakter
+  //   INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
+  // GROUP BY Charakter.Charakter_ID
+  // ORDER BY COUNT() DESC, Charakter.Charakter_Name
+  it("5: orderBy-clause", () => {
     expect(steps[4]).toBeDefined();
     const node = new Node(steps[4].ast, undefined);
- 
-    // TODO test from ?
-    expect(node.childrenCategoryNames.sort()).toEqual(["from", "groupBy", "orderBy", "select"]);
-    expect(node.getChildInCategory("orderBy").toModel()).toEqual(desc.children.orderBy[0]);
+
+    expect(node.childrenCategoryNames.sort()).toEqual([
+      "from",
+      "groupBy",
+      "orderBy",
+      "select",
+    ]);
+    expect(node.getChildInCategory("orderBy").toModel()).toEqual(
+      desc.children.orderBy[0]
+    );
 
     // only this enough?
     expect(node.toModel()).toEqual(desc);
 
-    expect(steps[4].description).toEqual(
-      {
-        type: "orderBy",
-        expressions: ["COUNT()", "DESC", "Charakter.Charakter_Name"]
-      }
-    );
-  });
-
-});
-
-describe("two inner-joins", () => {
-  /*
-  SELECT Charakter.Charakter_Name, Geschichte.Geschichte_Name
-    FROM Charakter
-	INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
-	INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID*/
-  const desc: NodeDescription = require('./spec/ast-44-two-inner-joins.json');
-  const steps = stepwiseSqlQuery(desc);
-  
-    /*
-    SELECT *
-      FROM Charakter
-    INNER JOIN Auftritt 
-  */
-  it('first step: cross-join', () => { 
-    expect(steps.length).toEqual(5);
-    crossJoinTest(steps[0], desc, 0);
-  });
-
-   //second step containing the join with the on-clouse
-   /* 
-    SELECT *
-      FROM Charakter
-	  INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
-   */
-   it('second step: on-filter', () => {
-
-    //const node = new Node(steps[1].ast, undefined);
-    onNodeTest(steps[1], desc, 0);
-  });
-
-    /*
-    SELECT *
-      FROM Charakter
-	  INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
-    INNER JOIN Geschichte 
-    */
-  it('third step: second inner join', () => {
-    //const node = new Node(steps[2].ast, undefined);
-    //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
-    crossJoinTest(steps[2], desc, 1);
-
-  });
-
-      /*
-    SELECT *
-      FROM Charakter
-	  INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
-    INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
-    */
-   it('fourth step: second inner join with on-filter', () => {
-    //const node = new Node(steps[2].ast, undefined);
-    //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
-    onNodeTest(steps[3], desc, 1);
-
-  });
-
-      /*
-    SELECT Charakter.Charakter_Name, Geschichte.Geschichte_Name
-      FROM Charakter
-	  INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
-    INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID*/
-    it('fifth step: fields from the select-clause', () => {
-      //TODO test the other nodes ?
-      const node = new Node(steps[4].ast, undefined);
-      expect(node.childrenCategoryNames.sort()).toEqual(["from", "select"]);
-  
-      // contain all select fields
-      expect(node.getChildInCategory("select").toModel()).toEqual(desc.children.select[0]);
-  
-      // only this enough?
-      expect(node.toModel()).toEqual(desc);
-
-      expect(steps[4].description).toEqual(
-        {
-          type: "select",
-          expressions: ["Charakter.Charakter_Name", "Geschichte.Geschichte_Name"]
-        }
-      );
+    expect(steps[4].description).toEqual({
+      type: "orderBy",
+      expressions: ["COUNT() DESC", "Charakter.Charakter_Name"],
     });
+  });
 });
 
-// next: test outer-join
+// SELECT Charakter.Charakter_Name, Geschichte.Geschichte_Name
+//   FROM Charakter
+// INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
+// INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
+describe("two inner-joins", () => {
+  const desc: NodeDescription = require("./spec/ast-44-two-inner-joins.json");
+  const steps = stepwiseSqlQuery(desc);
 
+  // SELECT *
+  // FROM Charakter
+  // INNER JOIN Auftritt
+  it("1: cross-join", () => {
+    expect(steps.length).toEqual(5);
+    //crossJoinTest(steps[0], desc, 0);
+    testJoinNode(steps[0], desc, 0, "crossJoin");
+    expect(steps[0].description).toEqual({
+      type: "cross",
+      tables: ["Charakter", "Auftritt"],
+    });
+  });
 
+  // SELECT *
+  // FROM Charakter
+  // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
+  it("2: on-filter", () => {
+    joinFilterNodeTest(steps[1], desc, 0, "on");
+    expect(steps[1].description).toEqual({
+      type: "on",
+      expressions: ["Auftritt.Charakter_ID = Charakter.Charakter_ID"],
+    });
+  });
+
+  // SELECT *
+  // FROM Charakter
+  // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
+  // INNER JOIN Geschichte
+  it("3: second inner join", () => {
+    testJoinNode(steps[2], desc, 1, "crossJoin");
+    expect(steps[2].description).toEqual({
+      type: "cross",
+      tables: ["Zwischentabelle", "Geschichte"],
+    });
+  });
+
+  // SELECT *
+  // FROM Charakter
+  // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
+  // INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
+  it("4: second inner join with on-filter", () => {
+    joinFilterNodeTest(steps[3], desc, 1, "on");
+    expect(steps[3].description).toEqual({
+      type: "on",
+      expressions: ["Auftritt.Geschichte_ID = Geschichte.Geschichte_ID"],
+    });
+  });
+
+  // SELECT Charakter.Charakter_Name, Geschichte.Geschichte_Name
+  // FROM Charakter
+  // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
+  // INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
+  it("5: fields from the select-clause", () => {
+    const node = new Node(steps[4].ast, undefined);
+    expect(node.childrenCategoryNames.sort()).toEqual(["from", "select"]);
+
+    // contain all select fields
+    expect(node.getChildInCategory("select").toModel()).toEqual(
+      desc.children.select[0]
+    );
+
+    // only this enough?
+    expect(node.toModel()).toEqual(desc);
+
+    expect(steps[4].description).toEqual({
+      type: "select",
+      expressions: ["Charakter.Charakter_Name", "Geschichte.Geschichte_Name"],
+    });
+  });
+});
+
+// SELECT person.VNAME, person.NNAME, pruefung.NOTE
+// FROM person
+// INNER JOIN student USING ('pin')
+// INNER JOIN pruefung USING ('pin')
+//  WHERE person.VNAME LIKE '%Alex%' AND pruefung.NOTE < 5
+describe("inner-join-using", () => {
+  const desc: NodeDescription = require("./spec/ast-45-inner-join-using.json");
+  const steps = stepwiseSqlQuery(desc);
+
+  // SELECT *
+  // FROM person
+  // INNER JOIN student
+  it("1: cross-join", () => {
+    expect(steps.length).toEqual(6);
+    testJoinNode(steps[0], desc, 0, "crossJoin");
+    expect(steps[0].description).toEqual({
+      type: "cross",
+      tables: ["person", "student"],
+    });
+  });
+
+  //  SELECT *
+  //       FROM person
+  //       INNER JOIN student USING ('pin')
+  it("2: using-filter", () => {
+    joinFilterNodeTest(steps[1], desc, 0, "using");
+    expect(steps[1].description).toEqual({
+      type: "using",
+      expressions: ["(pin)"],
+    });
+  });
+
+  // SELECT *
+  //       FROM person
+  //       INNER JOIN student USING ('pin')
+  //       INNER JOIN pruefung
+  it("3: second inner join", () => {
+    testJoinNode(steps[2], desc, 1, "crossJoin");
+    expect(steps[2].description).toEqual({
+      type: "cross",
+      tables: ["Zwischentabelle", "pruefung"],
+    });
+  });
+
+  // SELECT *
+  //     FROM person
+  //     INNER JOIN student USING ('pin')
+  //     INNER JOIN pruefung USING ('pin')
+  it("4: second inner join with on-filter", () => {
+    joinFilterNodeTest(steps[3], desc, 1, "using");
+    expect(steps[3].description).toEqual({
+      type: "using",
+      expressions: ["(pin)"],
+    });
+  });
+
+  // SELECT *
+  //       FROM person
+  //       INNER JOIN student USING ('pin')
+  //       INNER JOIN pruefung USING ('pin')
+  //     WHERE person.VNAME LIKE '%Alex%' AND pruefung.NOTE < 5
+  it("5: where-clause", () => {
+    const node = new Node(steps[4].ast, undefined);
+    //console.log("after where-step: \n" + JSON.stringify(node.toModel(), undefined, 2));
+
+    expect(node.childrenCategoryNames).toEqual(["select", "from", "where"]);
+    starSelectTest(steps[4]);
+    expect(node.getChildInCategory("where").toModel()).toEqual(
+      desc.children.where[0]
+    );
+
+    expect(steps[4].description).toEqual({
+      type: "where",
+      expressions: ["person.VNAME LIKE %Alex%", "AND", "pruefung.NOTE < 5"],
+    });
+  });
+
+  // SELECT person.VNAME, person.NNAME, pruefung.NOTE
+  //       FROM person
+  //       INNER JOIN student USING ('pin')
+  //       INNER JOIN pruefung USING ('pin')
+  //     WHERE person.VNAME LIKE '%Alex%' AND pruefung.NOTE < 5
+  it("6: fields from the select-clause", () => {
+    const node = new Node(steps[5].ast, undefined);
+    expect(node.childrenCategoryNames.sort()).toEqual([
+      "from",
+      "select",
+      "where",
+    ]);
+
+    // contain all select fields
+    expect(node.getChildInCategory("select").toModel()).toEqual(
+      desc.children.select[0]
+    );
+
+    // only this enough?
+    expect(node.toModel()).toEqual(desc);
+
+    expect(steps[5].description).toEqual({
+      type: "select",
+      expressions: ["person.VNAME", "person.NNAME", "pruefung.NOTE"],
+    });
+  });
+});
+
+// SELECT krankenkasse.KK_NAME, COUNT() - 1
+//   FROM krankenkasse
+//     LEFT JOIN person USING ('krankenkasse_id')
+//     LEFT JOIN student USING ('pin')
+//   GROUP BY krankenkasse.KRANKENKASSE_ID
+//   ORDER BY COUNT()
+describe("left-join-using", () => {
+  const desc: NodeDescription = require("./spec/ast-46-two-left-joins.json");
+  const steps = stepwiseSqlQuery(desc);
+
+  // SELECT *
+  // FROM krankenkasse
+  //   LEFT JOIN person
+  it("1: cross-join", () => {
+    expect(steps.length).toEqual(9);
+    //crossJoinTest(steps[0], desc, 0);
+    testJoinNode(steps[0], desc, 0, "crossJoin");
+    expect(steps[0].description).toEqual({
+      type: "cross",
+      tables: ["krankenkasse", "person"],
+    });
+  });
+
+  //  SELECT *
+  //   FROM krankenkasse
+  //     INNER JOIN person USING ('krankenkasse_id')
+  it("2: using-filter", () => {
+    joinFilterNodeTest(steps[1], desc, 0, "using");
+    expect(steps[1].description).toEqual({
+      type: "using",
+      expressions: ["(krankenkasse_id)"],
+    });
+  });
+
+  // SELECT *
+  //   FROM krankenkasse
+  //     LEFT JOIN person USING ('krankenkasse_id')
+  it("3: left join", () => {
+    //const node = new Node(steps[2].ast, undefined);
+    //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
+    testJoinNode(steps[2], desc, 0, "leftOuterJoinUsing", "using");
+
+    expect(steps[2].description).toEqual({
+      type: "outer",
+      tables: ["krankenkasse", "person"],
+    });
+  });
+
+  // SELECT *
+  // FROM krankenkasse
+  //   LEFT JOIN person USING ('krankenkasse_id')
+  //   CROSS JOIN student
+  it("4: second cross join", () => {
+    //const node = new Node(steps[2].ast, undefined);
+    //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
+    testJoinNode(steps[3], desc, 1, "crossJoin");
+    expect(steps[3].description).toEqual({
+      type: "cross",
+      tables: ["Zwischentabelle", "student"],
+    });
+  });
+
+  // SELECT *
+  //   FROM krankenkasse
+  //     LEFT JOIN person USING ('krankenkasse_id')
+  //     INNER JOIN student USING ('pin')
+  it("5: using-filter", () => {
+    joinFilterNodeTest(steps[4], desc, 0, "using");
+    expect(steps[4].description).toEqual({
+      type: "using",
+      expressions: ["(pin)"],
+    });
+  });
+
+  //  SELECT *
+  //   FROM krankenkasse
+  //     LEFT JOIN person USING ('krankenkasse_id')
+  //     LEFT JOIN student USING ('pin')
+  it("6: left join", () => {
+    //const node = new Node(steps[2].ast, undefined);
+    //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
+    testJoinNode(steps[5], desc, 1, "leftOuterJoinUsing", "using");
+
+    expect(steps[5].description).toEqual({
+      type: "outer",
+      tables: ["Zwischentabelle", "student"],
+    });
+  });
+
+  // SELECT *
+  // FROM krankenkasse
+  //   LEFT JOIN person USING ('krankenkasse_id')
+  //   LEFT JOIN student USING ('pin')
+  // GROUP BY krankenkasse.KRANKENKASSE_ID
+  it("7: groupBy-clause", () => {
+    expect(steps[6]).toBeDefined();
+    const node = new Node(steps[6].ast, undefined);
+    starSelectTest(steps[6]);
+
+    expect(node.childrenCategoryNames).toEqual(["select", "from", "groupBy"]);
+    expect(node.getChildInCategory("groupBy").toModel()).toEqual(
+      desc.children.groupBy[0]
+    );
+
+    expect(steps[6].description).toEqual({
+      type: "groupBy",
+      expressions: ["krankenkasse.KRANKENKASSE_ID"],
+    });
+  });
+
+  //  SELECT krankenkasse.KK_NAME, COUNT() - 1
+  //   FROM krankenkasse
+  //     LEFT JOIN person USING ('krankenkasse_id')
+  //     LEFT JOIN student USING ('pin')
+  //   GROUP BY krankenkasse.KRANKENKASSE_ID
+  it("8: fields from the select-clause", () => {
+    //TODO test the other nodes ?
+    const t = new Tree(desc);
+    const node = new Node(steps[7].ast, undefined);
+    expect(node.childrenCategoryNames.sort()).toEqual([
+      "from",
+      "groupBy",
+      "select",
+    ]);
+
+    // contain all select fields
+    expect(node.getChildInCategory("select").toModel()).toEqual(
+      desc.children.select[0]
+    );
+    expect(node.getChildInCategory("from").toModel()).toEqual(
+      desc.children.from[0]
+    );
+    expect(node.getChildInCategory("groupBy").toModel()).toEqual(
+      desc.children.groupBy[0]
+    );
+
+    expect(steps[7].description).toEqual({
+      type: "select",
+      expressions: ["krankenkasse.KK_NAME", "COUNT() - 1"],
+    });
+  });
+
+  //  SELECT krankenkasse.KK_NAME, COUNT() - 1
+  //   FROM krankenkasse
+  //     LEFT OUTER JOIN person USING ('krankenkasse_id')
+  //     LEFT OUTER JOIN student USING ('pin')
+  //   GROUP BY krankenkasse.KRANKENKASSE_ID
+  //   ORDER BY COUNT()
+  it("9: orderBy-clause", () => {
+    expect(steps[8]).toBeDefined();
+    const node = new Node(steps[8].ast, undefined);
+    //console.log("orderBy: \n" + JSON.stringify(node.toModel(), undefined, 2));
+
+    expect(node.childrenCategoryNames.sort()).toEqual([
+      "from",
+      "groupBy",
+      "orderBy",
+      "select",
+    ]);
+    expect(node.getChildInCategory("orderBy").toModel()).toEqual(
+      desc.children.orderBy[0]
+    );
+
+    // only this enough?
+    expect(node.toModel()).toEqual(desc);
+
+    expect(steps[8].description).toEqual({
+      type: "orderBy",
+      expressions: ["COUNT()"],
+    });
+  });
+});
+
+//  SELECT krankenkasse.KK_NAME, COUNT()
+// FROM krankenkasse
+// OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
+// OUTER JOIN student USING ('pin')
+// GROUP BY krankenkasse.krankenkasse_id
+// ORDER BY COUNT()
+describe("outer-join", () => {
+  const desc: NodeDescription = require("./spec/ast-47-outer-join.json");
+  const steps = stepwiseSqlQuery(desc);
+
+  // SELECT *
+  // FROM krankenkasse
+  // CROSS JOIN person
+  it("1: cross-join", () => {
+    expect(steps.length).toEqual(8);
+    testJoinNode(steps[0], desc, 0, "crossJoin");
+    expect(steps[0].description).toEqual({
+      type: "cross",
+      tables: ["krankenkasse", "person"],
+    });
+  });
+
+  //  SELECT *
+  //   FROM krankenkasse
+  //     INNER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
+  it("2: cross-join and on-filter", () => {
+    joinFilterNodeTest(steps[1], desc, 0, "on");
+    expect(steps[1].description).toEqual({
+      type: "on",
+      expressions: ["krankenkasse.krankenkasse_id = person.krankenkasse_id"],
+    });
+  });
+
+  // SELECT *
+  // FROM krankenkasse
+  //   OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
+  it("3: outer join", () => {
+    //const node = new Node(steps[2].ast, undefined);
+    //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
+    testJoinNode(steps[2], desc, 0, "outerJoinOn", "on");
+
+    expect(steps[2].description).toEqual({
+      type: "outer",
+      tables: ["krankenkasse", "person"],
+    });
+  });
+
+  // SELECT *
+  // FROM krankenkasse
+  //   OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
+  //   CROSS JOIN student
+  it("4: cross-join", () => {
+    //crossJoinTest(steps[3], desc, 1);
+    testJoinNode(steps[3], desc, 1, "crossJoin");
+    expect(steps[3].description).toEqual({
+      type: "cross",
+      tables: ["Zwischentabelle", "student"],
+    });
+  });
+
+  // SELECT *
+  // FROM krankenkasse
+  //   OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
+  //   CROSS JOIN student USING ('pin')
+  it("5: using-filter", () => {
+    joinFilterNodeTest(steps[4], desc, 1, "using");
+    expect(steps[4].description).toEqual({
+      type: "using",
+      expressions: ["(pin)"],
+    });
+  });
+
+  // SELECT *
+  // FROM krankenkasse
+  // OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
+  // OUTER JOIN student USING ('pin')
+  it("6: outer join", () => {
+    //const node = new Node(steps[2].ast, undefined);
+    //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
+    testJoinNode(steps[5], desc, 1, "outerJoinUsing", "using");
+
+    expect(steps[5].description).toEqual({
+      type: "outer",
+      tables: ["Zwischentabelle", "student"],
+    });
+  });
+
+  // SELECT *
+  // FROM krankenkasse
+  // OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
+  // OUTER JOIN student USING ('pin')
+  // GROUP BY krankenkasse.krankenkasse_id
+  it("7: groupBy-clause", () => {
+    expect(steps[6]).toBeDefined();
+    const node = new Node(steps[6].ast, undefined);
+    starSelectTest(steps[6]);
+
+    expect(node.childrenCategoryNames).toEqual(["select", "from", "groupBy"]);
+    expect(node.getChildInCategory("groupBy").toModel()).toEqual(
+      desc.children.groupBy[0]
+    );
+
+    expect(steps[6].description).toEqual({
+      type: "groupBy",
+      expressions: ["krankenkasse.KRANKENKASSE_ID"],
+    });
+  });
+
+  // SELECT krankenkasse.KK_NAME, COUNT() -1
+  // FROM krankenkasse
+  // OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
+  // OUTER JOIN student USING ('pin')
+  // GROUP BY krankenkasse.krankenkasse_id
+  it("8: fields from the select-clause", () => {
+    //const t = new Tree(desc);
+    const node = new Node(steps[7].ast, undefined);
+    expect(node.childrenCategoryNames.sort()).toEqual([
+      "from",
+      "groupBy",
+      "select",
+    ]);
+
+    // contain all select fields
+    expect(node.getChildInCategory("select").toModel()).toEqual(
+      desc.children.select[0]
+    );
+    expect(node.getChildInCategory("from").toModel()).toEqual(
+      desc.children.from[0]
+    );
+    expect(node.getChildInCategory("groupBy").toModel()).toEqual(
+      desc.children.groupBy[0]
+    );
+
+    expect(steps[7].description).toEqual({
+      type: "select",
+      expressions: ["krankenkasse.KK_NAME", "COUNT() - 1"],
+    });
+  });
+});
+
+// next tests:
+//  test more than one table in the from clause
+//  test right outer with on/using / without

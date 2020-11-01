@@ -1,0 +1,212 @@
+{
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "person"
+                }
+              }
+            ],
+            "joins": [
+              {
+                "name": "innerJoinUsing",
+                "language": "sql",
+                "children": {
+                  "table": [
+                    {
+                      "name": "tableIntroduction",
+                      "language": "sql",
+                      "properties": {
+                        "name": "student"
+                      }
+                    }
+                  ],
+                  "using": [
+                    {
+                      "name": "parentheses",
+                      "language": "sql",
+                      "children": {
+                        "expression": [
+                          {
+                            "name": "constant",
+                            "language": "sql",
+                            "properties": {
+                              "value": "pin"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "innerJoinUsing",
+                "language": "sql",
+                "children": {
+                  "table": [
+                    {
+                      "name": "tableIntroduction",
+                      "language": "sql",
+                      "properties": {
+                        "name": "pruefung"
+                      }
+                    }
+                  ],
+                  "using": [
+                    {
+                      "name": "parentheses",
+                      "language": "sql",
+                      "children": {
+                        "expression": [
+                          {
+                            "name": "constant",
+                            "language": "sql",
+                            "properties": {
+                              "value": "pin"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "where": [
+        {
+          "name": "where",
+          "language": "sql",
+          "children": {
+            "expressions": [
+              {
+                "name": "binaryExpression",
+                "language": "sql",
+                "children": {
+                  "lhs": [
+                    {
+                      "name": "columnName",
+                      "language": "sql",
+                      "properties": {
+                        "columnName": "VNAME",
+                        "refTableName": "person"
+                      }
+                    }
+                  ],
+                  "rhs": [
+                    {
+                      "name": "constant",
+                      "language": "sql",
+                      "properties": {
+                        "value": "%Alex%"
+                      }
+                    }
+                  ],
+                  "operator": [
+                    {
+                      "name": "relationalOperator",
+                      "language": "sql",
+                      "properties": {
+                        "operator": "LIKE"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "whereAdditional",
+                "language": "sql",
+                "properties": {
+                  "operator": "AND"
+                },
+                "children": {
+                  "expression": [
+                    {
+                      "name": "binaryExpression",
+                      "language": "sql",
+                      "children": {
+                        "lhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "columnName": "NOTE",
+                              "refTableName": "pruefung"
+                            }
+                          }
+                        ],
+                        "rhs": [
+                          {
+                            "name": "constant",
+                            "language": "sql",
+                            "properties": {
+                              "value": "5"
+                            }
+                          }
+                        ],
+                        "operator": [
+                          {
+                            "name": "relationalOperator",
+                            "language": "sql",
+                            "properties": {
+                              "operator": "<"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "VNAME",
+                  "refTableName": "person"
+                }
+              },
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "NNAME",
+                  "refTableName": "person"
+                }
+              },
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "NOTE",
+                  "refTableName": "pruefung"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
