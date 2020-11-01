@@ -1,24 +1,28 @@
-<div id="regexTestTable">
-  <!-- TODO Dario: Use proper HTML <table> instead of <div> -->
-  <div class="row headerRow">
-    <div class="col-md-4">Zu prüfende Eingabe</div>
-    <div class="col-md-3">Erwartete Treffer</div>
-    <div class="col-md-1">Erfüllt?</div>
-    <div class="col-md-1">Anzahl Erfüllt</div>
-    <div class="col-md-3">evtl. Fehler</div>
-  </div>
-  <div
+<table id="regexTestTable">
+  <tr class="row headerRow">
+    <th class="col-md-4">Zu prüfende Eingabe</th>
+    <th class="col-md-3">Erwartete Treffer</th>
+    <th class="col-md-1 sortColumn" (click)="changeSortDirection()">
+      Erfüllt?
+      <span
+        [ngClass]="(sortDirection == 'none') ? 'fa fa-sort' : (sortDirection == 'asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'"
+      ></span>
+    </th>
+    <th class="col-md-1">Anzahl Erfüllt</th>
+    <th class="col-md-3">evtl. Fehler</th>
+  </tr>
+  <tr
     class="row"
-    *ngFor="let testCase of (executedTestCases$ | async)"
+    *ngFor="let testCase of (executedTestCases$ | async) | tableSortingPipe: sortDirection"
     [ngClass]="(testCase.result) ? 'dataRowPassed' : 'dataRowFailed'"
   >
-    <div class="col-md-4">{{ testCase.input }}</div>
-    <div class="col-md-3">
+    <td class="col-md-4">{{ testCase.input ? testCase.input : "" }}</td>
+    <td class="col-md-3">
       <span
         *ngFor="let expectedMatch of testCase.expected.hits; let isLast=last"
       >
         <span
-          style="border: solid 1px black; padding: 3px;"
+          class="hitBox"
           [ngStyle]="{'background-color': (checkIfExpectedHitGotMatched(expectedMatch, testCase)) ? '#77dd77' : '#f00'}"
         >
           {{ expectedMatch }}
@@ -26,11 +30,11 @@
 
         {{ isLast ? '' : ', ' }}
       </span>
-    </div>
-    <div class="col-md-1">{{ testCase.result }}</div>
-    <div class="col-md-1">
-      {{ countSuccessfulHits(testCase) }}/{{ getExpectedHitCount(testCase) }}
-    </div>
-    <div class="col-md-3">{{ testCase.error }}</div>
-  </div>
-</div>
+    </td>
+    <td class="col-md-1">{{ testCase.result ? "ja" : "nein" }}</td>
+    <td class="col-md-1">
+      {{ testCase.countExpectedHits }}/{{ testCase.countSuccessfulHits }}
+    </td>
+    <td class="col-md-3">{{ testCase.error }}</td>
+  </tr>
+</table>

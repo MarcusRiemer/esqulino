@@ -14,6 +14,8 @@ describe(`RegEx Testing`, () => {
         matches: ["a"],
         result: true,
         error: "",
+        countSuccessfulHits: 1,
+        countExpectedHits: 1,
       });
     });
 
@@ -35,6 +37,8 @@ describe(`RegEx Testing`, () => {
         matches: ["a", "a"],
         result: false,
         error: "",
+        countSuccessfulHits: 0,
+        countExpectedHits: 2,
       });
     });
   });

@@ -24,6 +24,15 @@ import { ProjectService } from "../../project.service";
   templateUrl: "templates/regex-test.html",
 })
 export class RegexTestComponent {
+  // scope variable that holds the current sorting direction of the table
+  sortDirection = "none";
+
+  /**
+   * Constructor
+   *
+   * @param _currentCodeResource
+   * @param _projectService
+   */
   constructor(
     private readonly _currentCodeResource: CurrentCodeResourceService,
     private readonly _projectService: ProjectService
@@ -36,12 +45,15 @@ export class RegexTestComponent {
     filter(rxFilterRootLanguage("regex"))
   );
 
+  /**
+   *
+   */
   readonly regexCompiled$ = this.regexResource$.pipe(
     switchMap((res) => res.generatedCode)
   );
 
   /**
-   * TODO: Follow reference as outlined by regex resource
+   * TODO: kann weg? ich sehe im Moment keinen Nutzen, verstehe TS aber auch nciht ganz
    */
   readonly testCaseResource$ = this.regexResource$;
 
@@ -71,46 +83,6 @@ export class RegexTestComponent {
   );
 
   /**
-   * TODO rausfinden, wie ich das Observable hier holen kann um zu sortieren
-   */
-  // sortListDirectionaly() {
-  //     let list = [];
-  //     this.executedTestCases$.toPromise().then(function (res) {
-  //         list = res.sort(function (a, b) {
-  //             return Number(a.result) - Number(b.result);
-  //         })
-  //     });
-  //
-  //     return list;
-  // }
-
-  /**
-   * counts the successfully hit strings for this testcase
-   *
-   * @param testCase
-   */
-  countSuccessfulHits(testCase: ExecutedTestCase) {
-    if ("hits" in testCase.expected) {
-      return testCase.matches.filter((x) =>
-        testCase.expected["hits"].find((y) => y.trim() == x.trim())
-      ).length;
-    }
-    return 0;
-  }
-
-  /**
-   * return the count of expected hits for this testcase
-   *
-   * @param testCase
-   */
-  getExpectedHitCount(testCase: ExecutedTestCase) {
-    if ("hits" in testCase.expected) {
-      return testCase.expected.hits.length;
-    }
-    return 0;
-  }
-
-  /**
    * Checks whether a expected String matches the expected value from the testcase
    *
    * @param expectedMatch
@@ -123,6 +95,29 @@ export class RegexTestComponent {
     return testCase.matches.find((x) => x.trim() == expectedMatch.trim());
   }
 
+  /**
+   * changes the sorting direction according to it's current state
+   */
+  changeSortDirection() {
+    switch (this.sortDirection) {
+      case "none":
+        this.sortDirection = "asc";
+        break;
+      case "asc":
+        this.sortDirection = "desc";
+        break;
+      case "desc":
+        this.sortDirection = "none";
+        break;
+      default:
+        this.sortDirection = "none";
+        break;
+    }
+  }
+
+  /**
+   *
+   */
   readonly executedTestCases$: Observable<ExecutedTestCase[]> = combineLatest(
     this.regexCompiled$,
     this.test$
@@ -140,19 +135,17 @@ export class RegexTestComponent {
       const executed: ExecutedTestCase[] = testCases.flatMap((bench) => {
         return bench.cases.map((testCase) => {
           if (errorMessage != "") {
-            return Object.assign(
-              {},
-              {
-                input: testCase.input,
-                expected: testCase.expected,
-                matches: [],
-                result: false,
-                error: errorMessage,
-              }
-            );
-          } else {
-            return Object.assign({}, runTestCase(regex, testCase));
+            return {
+              input: testCase.input,
+              expected: testCase.expected,
+              matches: [],
+              result: false,
+              error: errorMessage,
+              countExpectedHits: 0,
+              countSuccessfulHits: 0,
+            };
           }
+          return runTestCase(regex, testCase);
         });
       });
 

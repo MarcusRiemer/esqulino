@@ -29,13 +29,13 @@
 }
 
 #regexTestTable {
-    padding: 10px;
+    border-collapse: collapse;
+    width: 100%;
 
     .headerRow {
         font-weight: bold;
         border-bottom: 1px solid #000;
     }
-
 
     .dataRowPassed {
         padding: 5px 0;
@@ -55,7 +55,13 @@
         filter: brightness(80%);
     }
 
+    .hitBox {
+        border: solid 1px black;
+        padding: 3px;
+    }
 
-
+    .sortColumn:hover {
+        cursor: pointer;
+    }
 
 }
