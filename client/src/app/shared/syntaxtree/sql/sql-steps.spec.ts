@@ -224,6 +224,7 @@ describe("query with join,group,order", () => {
     expect(steps[2].description).toEqual({
       type: "groupBy",
       expressions: ["Charakter.Charakter_ID"],
+      groupByEntriesDescription: require("./spec/ast-43-group-by-entries-query.json"),
     });
   });
 
@@ -569,6 +570,7 @@ describe("left-join-using", () => {
     expect(steps[6].description).toEqual({
       type: "groupBy",
       expressions: ["krankenkasse.KRANKENKASSE_ID"],
+      groupByEntriesDescription: require("./spec/ast-46-group-by-entries-query.json"),
     });
   });
 
@@ -740,6 +742,7 @@ describe("outer-join", () => {
     expect(steps[6].description).toEqual({
       type: "groupBy",
       expressions: ["krankenkasse.KRANKENKASSE_ID"],
+      groupByEntriesDescription: require("./spec/ast-47-group-by-entries-query.json"),
     });
   });
 

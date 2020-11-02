@@ -38,6 +38,7 @@ interface SqlStepUsingDescription {
 interface SqlStepGroupByDescription {
   type: "groupBy";
   expressions: string[];
+  groupByEntriesDescription: NodeDescription;
 }
 
 interface SqlStepOrderByDescription {
@@ -251,9 +252,19 @@ export function stepwiseSqlQuery(
 
   //GROUP BY clause
   // TODO - how to display groups in the ui ???
+  // must be a own query
+  // current approach - transform group by node to an order by node
   let groupNode = q.locateOrUndefined([["groupBy", 0]]);
   if (groupNode != undefined) {
     t = t.insertNode([["groupBy", 0]], groupNode.toModel());
+
+    // TODO develop transform for displaying group entries in UI
+    let groupByTransformDesc = groupNode.toModel();
+    // transform a groupNode to an orderBy node
+    groupByTransformDesc.name = "orderBy";
+
+    let groupTree = t.deleteNode([["groupBy", 0]]);
+    groupTree = groupTree.insertNode([["orderBy", 0]], groupByTransformDesc);
 
     arr.push({
       ast: t.rootNode.toModel(),
@@ -262,8 +273,10 @@ export function stepwiseSqlQuery(
         expressions: collectExpressions(
           groupNode.getChildrenInCategory("expressions")
         ),
+        groupByEntriesDescription: groupTree.toModel(),
       },
     });
+    //console.log("goupBy transform description: " + JSON.stringify(groupTree.toModel(), undefined, 2));
   }
 
   // HAVING clause -> needed???
