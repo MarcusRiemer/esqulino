@@ -60,7 +60,7 @@ export interface SqlStepDescription {
     | SqlStepOuterJoinDescription;
 }
 
-function createInitTree(): Tree {
+function createBaseTree(): Tree {
   return new Tree({
     name: "querySelect",
     language: "sql",
@@ -100,32 +100,58 @@ export function stepwiseSqlQuery(
   }
 
   let arr: SqlStepDescription[] = [];
-  let t = createInitTree();
+  let t = createBaseTree();
 
-  //first from table
-  let table = q.locate([
-    ["from", 0],
-    ["tables", 0],
-  ]);
+  // cross joins of comma separated tables in from clause
+  let from = q.locate([["from", 0]]);
+  let tableIndex = 1;
+  let currentTable = from.getChildrenInCategory("tables")[0];
+  let desc_firstTableName = currentTable.properties.name;
   t = t.insertNode(
     [
       ["from", 0],
       ["tables", 0],
     ],
-    table.toModel()
+    currentTable.toModel()
   );
+  let nextTable = from.getChildrenInCategory("tables")[tableIndex];
+  while (nextTable) {
+    if (tableIndex == 2) {
+      desc_firstTableName = "Zwischentabelle";
+    }
+
+    t = t.insertNode(
+      [
+        ["from", 0],
+        ["tables", tableIndex],
+      ],
+      nextTable.toModel()
+    );
+
+    arr.push({
+      ast: t.toModel(),
+      description: {
+        type: "cross",
+        tables: [desc_firstTableName, nextTable.properties.name],
+      },
+    });
+
+    currentTable = nextTable;
+    nextTable = from.getChildrenInCategory("tables")[++tableIndex];
+  }
 
   //cartesian product (cross join) if more then one table
-  let srcJoinNode = q.locateOrUndefined([
+  let join = q.locateOrUndefined([
     ["from", 0],
     ["joins", 0],
   ]);
   let index = 0;
-  let firstTableName = table.properties.name;
 
-  while (srcJoinNode != undefined) {
-    firstTableName = index > 0 ? "Zwischentabelle" : firstTableName;
-    let joinTable = srcJoinNode.getChildInCategory("table");
+  while (join) {
+    // TODO find suitable name for a virtual table and decide description-format for UI
+    // firstTableName = firstTableName + "CROSS JOIN" + joinTable.properties.name;
+    desc_firstTableName = index > 0 ? "Zwischentabelle" : desc_firstTableName;
+    let joinTable = join.getChildInCategory("table");
 
     t = t.insertNode(
       [
@@ -134,7 +160,7 @@ export function stepwiseSqlQuery(
       ],
       {
         name: "crossJoin",
-        language: srcJoinNode.languageName,
+        language: join.languageName,
         children: {
           table: [joinTable.toModel()],
         },
@@ -145,90 +171,70 @@ export function stepwiseSqlQuery(
       ast: t.toModel(),
       description: {
         type: "cross",
-        tables: [firstTableName, joinTable.properties.name],
+        tables: [desc_firstTableName, joinTable.properties.name],
       },
     });
-    // TODO decide description-format for UI
-    // firstTableName = firstTableName + "CROSS JOIN" + joinTable.properties.name;
 
-    let joinFilterType = srcJoinNode.typeName.toLowerCase().includes("using")
+    let joinFilterType = join.typeName.toLowerCase().includes("using")
       ? "using"
       : "on";
-    let joinFilterNode = q.locateOrUndefined([
+
+    let joinFilter = q.locateOrUndefined([
       ["from", 0],
       ["joins", index],
       [joinFilterType, 0],
     ]);
 
-    if (joinFilterNode != undefined) {
-      let newName = joinFilterType == "on" ? "innerJoinOn" : "innerJoinUsing";
+    if (joinFilter) {
+      let joinType = joinFilterType == "on" ? "innerJoinOn" : "innerJoinUsing";
       let newDesc: NodeDescription = undefined;
 
-      //    tree.setProperty ??
+      //replace cross -> inner join with filter
+      let desc = join.toModel();
+      desc.name = joinType;
 
-      if (joinFilterType == "on") {
-        newDesc = {
-          name: newName,
-          language: "sql",
-          children: {
-            table: [joinTable.toModel()],
-            on: [joinFilterNode.toModel()],
-          },
-        };
-      } else {
-        newDesc = {
-          name: newName,
-          language: "sql",
-          children: {
-            table: [joinTable.toModel()],
-            using: [joinFilterNode.toModel()],
-          },
-        };
-      }
-      //change crossJoin to InnerJoin and add filterNode
       t = t.replaceNode(
         [
           ["from", 0],
           ["joins", index],
         ],
-        newDesc
+        desc
       );
 
+      // TODO check why type doesnt accept var joinFilterType
       arr.push({
         ast: t.toModel(),
         description: {
-          type: srcJoinNode.typeName.toLowerCase().includes("using")
-            ? "using"
-            : "on",
+          type: join.typeName.toLowerCase().includes("using") ? "using" : "on",
           expressions: collectExpressions(
-            srcJoinNode.getChildrenInCategory(joinFilterType)
+            join.getChildrenInCategory(joinFilterType)
           ),
         },
       });
-      //firstTableName = firstTableName + joinType + onExpression;
-      //console.log("after adding filter node: \n" + JSON.stringify(t.toModel(), undefined, 2));
+      //console.log("after adding filter node: " + index + "\n" + JSON.stringify(t.toModel(), undefined, 2));
     }
 
-    // if outer join - add null rows
-    //console.log("debug typename: " + index + srcJoinNode.typeName);
-    if (srcJoinNode.typeName.toLowerCase().includes("outer")) {
+    // TODO decide how to implement outer join
+    // current approach - just run the outer join
+    // maybe add null rows with union?
+    if (join.typeName.toLowerCase().includes("outer")) {
       t = t.replaceNode(
         [
           ["from", 0],
           ["joins", index],
         ],
-        srcJoinNode.toModel()
+        join.toModel()
       );
 
       arr.push({
         ast: t.toModel(),
         description: {
           type: "outer",
-          tables: [firstTableName, joinTable.properties.name],
+          tables: [desc_firstTableName, joinTable.properties.name],
         },
       });
     }
-    srcJoinNode = q.locateOrUndefined([
+    join = q.locateOrUndefined([
       ["from", 0],
       ["joins", ++index],
     ]);
@@ -236,7 +242,7 @@ export function stepwiseSqlQuery(
 
   //WHERE clause
   let whereNode = q.locateOrUndefined([["where", 0]]);
-  if (whereNode != undefined) {
+  if (whereNode) {
     t = t.insertNode([["where", 0]], whereNode.toModel());
 
     arr.push({
@@ -251,14 +257,13 @@ export function stepwiseSqlQuery(
   }
 
   //GROUP BY clause
-  // TODO - how to display groups in the ui ???
+  // TODO - how to transform group by and display groups in the ui ???
   // must be a own query
-  // current approach - transform group by node to an order by node
+  // current approach - transform group by to an order by
   let groupNode = q.locateOrUndefined([["groupBy", 0]]);
-  if (groupNode != undefined) {
+  if (groupNode) {
     t = t.insertNode([["groupBy", 0]], groupNode.toModel());
 
-    // TODO develop transform for displaying group entries in UI
     let groupByTransformDesc = groupNode.toModel();
     // transform a groupNode to an orderBy node
     groupByTransformDesc.name = "orderBy";
@@ -282,6 +287,7 @@ export function stepwiseSqlQuery(
   // HAVING clause -> needed???
 
   //SELECT clause
+  let select = q.locate([["select", 0]]);
   if (
     !(
       q.locate([
@@ -290,16 +296,14 @@ export function stepwiseSqlQuery(
       ]).typeName == "starOperator"
     )
   ) {
-    t = t.replaceNode([["select", 0]], q.locate([["select", 0]]).toModel());
+    t = t.replaceNode([["select", 0]], select.toModel());
   }
 
   arr.push({
     ast: t.rootNode.toModel(),
     description: {
       type: "select",
-      expressions: collectExpressions(
-        q.locate([["select", 0]]).children.columns
-      ),
+      expressions: collectExpressions(select.children.columns),
     },
   });
   //console.log("after select-step: \n" + JSON.stringify(t.toModel(), undefined, 2));
@@ -308,7 +312,7 @@ export function stepwiseSqlQuery(
 
   //ORDER BY clause
   let orderByNode = q.locateOrUndefined([["orderBy", 0]]);
-  if (orderByNode != undefined) {
+  if (orderByNode) {
     t = t.insertNode([["orderBy", 0]], orderByNode.toModel());
 
     arr.push({
@@ -321,7 +325,6 @@ export function stepwiseSqlQuery(
       },
     });
   }
-
   return arr;
 }
 

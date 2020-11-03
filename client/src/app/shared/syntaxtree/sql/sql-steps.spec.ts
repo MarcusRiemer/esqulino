@@ -26,7 +26,7 @@ function testJoinNode(
 
   const fromNode = node.getChildInCategory("from");
   expect(fromNode).toBeDefined();
-  expect(fromNode.childrenCategoryNames).toEqual(["tables", "joins"]);
+  //expect(fromNode.childrenCategoryNames).toEqual(["tables", "joins"]);
   expect(fromNode.getChildInCategory("tables").toModel()).toEqual(
     desc.children.from[0].children.tables[0]
   );
@@ -58,19 +58,22 @@ function joinFilterNodeTest(
   index: number,
   filter: string
 ) {
-  const sourceTree = new Tree(desc);
+  const src = new Tree(desc);
   const node = new Node(stepDesc.ast, undefined);
   starSelectTest(stepDesc);
 
   expect(node.childrenCategoryNames).toEqual(["select", "from"]);
 
-  const filterNode = node
-    .getChildInCategory("from")
-    .getChildrenInCategory("joins")
-    [index].getChildInCategory(filter);
+  const join = node.getChildInCategory("from").getChildrenInCategory("joins")[
+    index
+  ];
+  expect(join.typeName).toEqual(
+    "innerJoin" + filter.charAt(0).toUpperCase() + filter.slice(1)
+  );
 
+  const filterNode = join.getChildInCategory(filter);
   expect(filterNode.toModel()).toEqual(
-    sourceTree
+    src
       .locate([
         ["from", 0],
         ["joins", index],
@@ -530,7 +533,7 @@ describe("left-join-using", () => {
   //     LEFT JOIN person USING ('krankenkasse_id')
   //     INNER JOIN student USING ('pin')
   it("5: using-filter", () => {
-    joinFilterNodeTest(steps[4], desc, 0, "using");
+    joinFilterNodeTest(steps[4], desc, 1, "using");
     expect(steps[4].description).toEqual({
       type: "using",
       expressions: ["(pin)"],
@@ -662,7 +665,7 @@ describe("outer-join", () => {
   //  SELECT *
   //   FROM krankenkasse
   //     INNER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
-  it("2: cross-join and on-filter", () => {
+  it("2: on-filter", () => {
     joinFilterNodeTest(steps[1], desc, 0, "on");
     expect(steps[1].description).toEqual({
       type: "on",
@@ -778,6 +781,125 @@ describe("outer-join", () => {
   });
 });
 
+// SELECT tag.WOCHENTAG, termin.TAG, block.STARTZEIT, block.ENDZEIT
+// FROM tag, termin, block
+// WHERE termin.BLOCK = block.BLOCK AND termin.TAG = tag.TAG
+describe("from with multiple tables", () => {
+  const desc: NodeDescription = require("./spec/ast-48-from-multiple-tables.json");
+  const steps = stepwiseSqlQuery(desc);
+
+  // SELECT *
+  // FROM tag, termin
+  it("1: cross-join", () => {
+    expect(steps.length).toEqual(4);
+    //testJoinNode(steps[0], desc, 0, "crossJoin");
+    const node = new Node(steps[0].ast, undefined);
+    starSelectTest(steps[0]);
+    expect(node.childrenCategoryNames).toEqual(["select", "from"]);
+
+    const fromNode = node.getChildInCategory("from");
+    expect(fromNode).toBeDefined();
+
+    expect(fromNode.getChildrenInCategory("tables")[0].toModel()).toEqual(
+      desc.children.from[0].children.tables[0]
+    );
+    expect(fromNode.getChildrenInCategory("tables")[1].toModel()).toEqual(
+      desc.children.from[0].children.tables[1]
+    );
+
+    expect(steps[0].description).toEqual({
+      type: "cross",
+      tables: ["tag", "termin"],
+    });
+  });
+
+  // SELECT *
+  // FROM tag, termin, block
+  it("2: cross-join", () => {
+    const node = new Node(steps[1].ast, undefined);
+    starSelectTest(steps[1]);
+    expect(node.childrenCategoryNames).toEqual(["select", "from"]);
+
+    const fromNode = node.getChildInCategory("from");
+    expect(fromNode).toBeDefined();
+
+    expect(fromNode.getChildrenInCategory("tables")[0].toModel()).toEqual(
+      desc.children.from[0].children.tables[0]
+    );
+    expect(fromNode.getChildrenInCategory("tables")[1].toModel()).toEqual(
+      desc.children.from[0].children.tables[1]
+    );
+    expect(fromNode.getChildrenInCategory("tables")[2].toModel()).toEqual(
+      desc.children.from[0].children.tables[2]
+    );
+    expect(steps[1].description).toEqual({
+      type: "cross",
+      tables: ["Zwischentabelle", "block"],
+    });
+  });
+
+  // SELECT *
+  // FROM tag, termin, block
+  // WHERE termin.BLOCK = block.BLOCK AND termin.TAG = tag.TAG
+  it("3: where-clause", () => {
+    const node = new Node(steps[2].ast, undefined);
+    //console.log("after where-step: \n" + JSON.stringify(node.toModel(), undefined, 2));
+
+    expect(node.childrenCategoryNames).toEqual(["select", "from", "where"]);
+    starSelectTest(steps[2]);
+    expect(node.getChildInCategory("where").toModel()).toEqual(
+      desc.children.where[0]
+    );
+
+    expect(steps[2].description).toEqual({
+      type: "where",
+      expressions: [
+        "termin.BLOCK = block.BLOCK",
+        "AND",
+        "termin.TAG = tag.TAG",
+      ],
+    });
+  });
+
+  // SELECT tag.WOCHENTAG, termin.TAG, block.STARTZEIT, block.ENDZEIT
+  // FROM tag, termin, block
+  // WHERE termin.BLOCK = block.BLOCK AND termin.TAG = tag.TAG
+  it("4: select-clause", () => {
+    const node = new Node(steps[3].ast, undefined);
+    expect(node.childrenCategoryNames.sort()).toEqual([
+      "from",
+      "select",
+      "where",
+    ]);
+
+    expect(node.getChildInCategory("select").toModel()).toEqual(
+      desc.children.select[0]
+    );
+    const fromNode = node.getChildInCategory("from");
+    expect(fromNode.getChildrenInCategory("tables")[0].toModel()).toEqual(
+      desc.children.from[0].children.tables[0]
+    );
+    expect(fromNode.getChildrenInCategory("tables")[1].toModel()).toEqual(
+      desc.children.from[0].children.tables[1]
+    );
+    expect(fromNode.getChildrenInCategory("tables")[2].toModel()).toEqual(
+      desc.children.from[0].children.tables[2]
+    );
+    expect(node.getChildInCategory("where").toModel()).toEqual(
+      desc.children.where[0]
+    );
+
+    expect(steps[3].description).toEqual({
+      type: "select",
+      expressions: [
+        "tag.WOCHENTAG",
+        "termin.TAG",
+        "block.STARTZEIT",
+        "block.ENDZEIT",
+      ],
+    });
+  });
+});
+
 // next tests:
-//  test more than one table in the from clause
 //  test right outer with on/using / without
