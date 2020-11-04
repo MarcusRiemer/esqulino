@@ -12,7 +12,7 @@ function starSelectTest(stepDesc: SqlStepDescription) {
   );
 }
 
-function testJoinNode(
+function testJoin(
   stepDesc: SqlStepDescription,
   desc: NodeDescription,
   childIndex: number,
@@ -52,7 +52,7 @@ function testJoinNode(
   );
 }
 
-function joinFilterNodeTest(
+function testJoinFilter(
   stepDesc: SqlStepDescription,
   desc: NodeDescription,
   index: number,
@@ -155,7 +155,7 @@ describe("simple join", () => {
 
   it("1: cross join", () => {
     expect(steps.length).toEqual(3);
-    testJoinNode(steps[0], desc, 0, "crossJoin");
+    testJoin(steps[0], desc, 0, "crossJoin");
     expect(steps[0].description).toEqual({
       type: "cross",
       tables: ["Charakter", "Auftritt"],
@@ -163,7 +163,7 @@ describe("simple join", () => {
   });
 
   it("2: on-clouse", () => {
-    joinFilterNodeTest(steps[1], desc, 0, "on");
+    testJoinFilter(steps[1], desc, 0, "on");
     expect(steps[1].description).toEqual({
       type: "on",
       expressions: ["Auftritt.Charakter_ID = Charakter.Charakter_ID"],
@@ -193,7 +193,7 @@ describe("query with join,group,order", () => {
   // INNER JOIN Auftritt
   it("1: cross join", () => {
     expect(steps.length).toEqual(5);
-    testJoinNode(steps[0], desc, 0, "crossJoin");
+    testJoin(steps[0], desc, 0, "crossJoin");
     expect(steps[0].description).toEqual({
       type: "cross",
       tables: ["Charakter", "Auftritt"],
@@ -204,7 +204,7 @@ describe("query with join,group,order", () => {
   // FROM Charakter
   // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
   it("2: on-clouse", () => {
-    joinFilterNodeTest(steps[1], desc, 0, "on");
+    testJoinFilter(steps[1], desc, 0, "on");
     expect(steps[1].description).toEqual({
       type: "on",
       expressions: ["Auftritt.Charakter_ID = Charakter.Charakter_ID"],
@@ -296,7 +296,7 @@ describe("two inner-joins", () => {
   it("1: cross-join", () => {
     expect(steps.length).toEqual(5);
     //crossJoinTest(steps[0], desc, 0);
-    testJoinNode(steps[0], desc, 0, "crossJoin");
+    testJoin(steps[0], desc, 0, "crossJoin");
     expect(steps[0].description).toEqual({
       type: "cross",
       tables: ["Charakter", "Auftritt"],
@@ -307,7 +307,7 @@ describe("two inner-joins", () => {
   // FROM Charakter
   // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
   it("2: on-filter", () => {
-    joinFilterNodeTest(steps[1], desc, 0, "on");
+    testJoinFilter(steps[1], desc, 0, "on");
     expect(steps[1].description).toEqual({
       type: "on",
       expressions: ["Auftritt.Charakter_ID = Charakter.Charakter_ID"],
@@ -319,7 +319,7 @@ describe("two inner-joins", () => {
   // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
   // INNER JOIN Geschichte
   it("3: second inner join", () => {
-    testJoinNode(steps[2], desc, 1, "crossJoin");
+    testJoin(steps[2], desc, 1, "crossJoin");
     expect(steps[2].description).toEqual({
       type: "cross",
       tables: ["Zwischentabelle", "Geschichte"],
@@ -331,7 +331,7 @@ describe("two inner-joins", () => {
   // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
   // INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
   it("4: second inner join with on-filter", () => {
-    joinFilterNodeTest(steps[3], desc, 1, "on");
+    testJoinFilter(steps[3], desc, 1, "on");
     expect(steps[3].description).toEqual({
       type: "on",
       expressions: ["Auftritt.Geschichte_ID = Geschichte.Geschichte_ID"],
@@ -375,7 +375,7 @@ describe("inner-join-using", () => {
   // INNER JOIN student
   it("1: cross-join", () => {
     expect(steps.length).toEqual(6);
-    testJoinNode(steps[0], desc, 0, "crossJoin");
+    testJoin(steps[0], desc, 0, "crossJoin");
     expect(steps[0].description).toEqual({
       type: "cross",
       tables: ["person", "student"],
@@ -386,7 +386,7 @@ describe("inner-join-using", () => {
   //       FROM person
   //       INNER JOIN student USING ('pin')
   it("2: using-filter", () => {
-    joinFilterNodeTest(steps[1], desc, 0, "using");
+    testJoinFilter(steps[1], desc, 0, "using");
     expect(steps[1].description).toEqual({
       type: "using",
       expressions: ["(pin)"],
@@ -398,7 +398,7 @@ describe("inner-join-using", () => {
   //       INNER JOIN student USING ('pin')
   //       INNER JOIN pruefung
   it("3: second inner join", () => {
-    testJoinNode(steps[2], desc, 1, "crossJoin");
+    testJoin(steps[2], desc, 1, "crossJoin");
     expect(steps[2].description).toEqual({
       type: "cross",
       tables: ["Zwischentabelle", "pruefung"],
@@ -410,7 +410,7 @@ describe("inner-join-using", () => {
   //     INNER JOIN student USING ('pin')
   //     INNER JOIN pruefung USING ('pin')
   it("4: second inner join with on-filter", () => {
-    joinFilterNodeTest(steps[3], desc, 1, "using");
+    testJoinFilter(steps[3], desc, 1, "using");
     expect(steps[3].description).toEqual({
       type: "using",
       expressions: ["(pin)"],
@@ -482,7 +482,7 @@ describe("left-join-using", () => {
   it("1: cross-join", () => {
     expect(steps.length).toEqual(9);
     //crossJoinTest(steps[0], desc, 0);
-    testJoinNode(steps[0], desc, 0, "crossJoin");
+    testJoin(steps[0], desc, 0, "crossJoin");
     expect(steps[0].description).toEqual({
       type: "cross",
       tables: ["krankenkasse", "person"],
@@ -493,7 +493,7 @@ describe("left-join-using", () => {
   //   FROM krankenkasse
   //     INNER JOIN person USING ('krankenkasse_id')
   it("2: using-filter", () => {
-    joinFilterNodeTest(steps[1], desc, 0, "using");
+    testJoinFilter(steps[1], desc, 0, "using");
     expect(steps[1].description).toEqual({
       type: "using",
       expressions: ["(krankenkasse_id)"],
@@ -506,7 +506,7 @@ describe("left-join-using", () => {
   it("3: left join", () => {
     //const node = new Node(steps[2].ast, undefined);
     //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
-    testJoinNode(steps[2], desc, 0, "leftOuterJoinUsing", "using");
+    testJoin(steps[2], desc, 0, "leftOuterJoinUsing", "using");
 
     expect(steps[2].description).toEqual({
       type: "outer",
@@ -521,7 +521,7 @@ describe("left-join-using", () => {
   it("4: second cross join", () => {
     //const node = new Node(steps[2].ast, undefined);
     //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
-    testJoinNode(steps[3], desc, 1, "crossJoin");
+    testJoin(steps[3], desc, 1, "crossJoin");
     expect(steps[3].description).toEqual({
       type: "cross",
       tables: ["Zwischentabelle", "student"],
@@ -533,7 +533,7 @@ describe("left-join-using", () => {
   //     LEFT JOIN person USING ('krankenkasse_id')
   //     INNER JOIN student USING ('pin')
   it("5: using-filter", () => {
-    joinFilterNodeTest(steps[4], desc, 1, "using");
+    testJoinFilter(steps[4], desc, 1, "using");
     expect(steps[4].description).toEqual({
       type: "using",
       expressions: ["(pin)"],
@@ -547,7 +547,7 @@ describe("left-join-using", () => {
   it("6: left join", () => {
     //const node = new Node(steps[2].ast, undefined);
     //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
-    testJoinNode(steps[5], desc, 1, "leftOuterJoinUsing", "using");
+    testJoin(steps[5], desc, 1, "leftOuterJoinUsing", "using");
 
     expect(steps[5].description).toEqual({
       type: "outer",
@@ -655,7 +655,7 @@ describe("outer-join", () => {
   // CROSS JOIN person
   it("1: cross-join", () => {
     expect(steps.length).toEqual(8);
-    testJoinNode(steps[0], desc, 0, "crossJoin");
+    testJoin(steps[0], desc, 0, "crossJoin");
     expect(steps[0].description).toEqual({
       type: "cross",
       tables: ["krankenkasse", "person"],
@@ -666,7 +666,7 @@ describe("outer-join", () => {
   //   FROM krankenkasse
   //     INNER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
   it("2: on-filter", () => {
-    joinFilterNodeTest(steps[1], desc, 0, "on");
+    testJoinFilter(steps[1], desc, 0, "on");
     expect(steps[1].description).toEqual({
       type: "on",
       expressions: ["krankenkasse.krankenkasse_id = person.krankenkasse_id"],
@@ -679,7 +679,7 @@ describe("outer-join", () => {
   it("3: outer join", () => {
     //const node = new Node(steps[2].ast, undefined);
     //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
-    testJoinNode(steps[2], desc, 0, "outerJoinOn", "on");
+    testJoin(steps[2], desc, 0, "outerJoinOn", "on");
 
     expect(steps[2].description).toEqual({
       type: "outer",
@@ -693,7 +693,7 @@ describe("outer-join", () => {
   //   CROSS JOIN student
   it("4: cross-join", () => {
     //crossJoinTest(steps[3], desc, 1);
-    testJoinNode(steps[3], desc, 1, "crossJoin");
+    testJoin(steps[3], desc, 1, "crossJoin");
     expect(steps[3].description).toEqual({
       type: "cross",
       tables: ["Zwischentabelle", "student"],
@@ -705,7 +705,7 @@ describe("outer-join", () => {
   //   OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
   //   CROSS JOIN student USING ('pin')
   it("5: using-filter", () => {
-    joinFilterNodeTest(steps[4], desc, 1, "using");
+    testJoinFilter(steps[4], desc, 1, "using");
     expect(steps[4].description).toEqual({
       type: "using",
       expressions: ["(pin)"],
@@ -719,7 +719,7 @@ describe("outer-join", () => {
   it("6: outer join", () => {
     //const node = new Node(steps[2].ast, undefined);
     //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
-    testJoinNode(steps[5], desc, 1, "outerJoinUsing", "using");
+    testJoin(steps[5], desc, 1, "outerJoinUsing", "using");
 
     expect(steps[5].description).toEqual({
       type: "outer",
@@ -763,7 +763,6 @@ describe("outer-join", () => {
       "select",
     ]);
 
-    // contain all select fields
     expect(node.getChildInCategory("select").toModel()).toEqual(
       desc.children.select[0]
     );
@@ -901,5 +900,125 @@ describe("from with multiple tables", () => {
   });
 });
 
-// next tests:
-//  test right outer with on/using / without
+// SELECT lkz.LAND, COUNT() - 1
+// FROM student
+// 	INNER JOIN adresse USING ('pin')
+// 	RIGHT OUTER JOIN lkz USING ('lkz')
+// GROUP BY lkz.LKZ
+describe("inner-join-right-join-group-by", () => {
+  const desc: NodeDescription = require("./spec/ast-49-inner-join-right-join-group-by.json");
+  const steps = stepwiseSqlQuery(desc);
+
+  // SELECT *
+  // FROM student
+  // 	CROSS JOIN adresse
+  it("1: cross-join", () => {
+    expect(steps.length).toEqual(7);
+    testJoin(steps[0], desc, 0, "crossJoin");
+    expect(steps[0].description).toEqual({
+      type: "cross",
+      tables: ["student", "adresse"],
+    });
+  });
+
+  // SELECT *
+  // FROM student
+  // 	INNER JOIN adresse USING ('pin')
+  it("2: using-filter", () => {
+    testJoinFilter(steps[1], desc, 0, "using");
+    expect(steps[1].description).toEqual({
+      type: "using",
+      expressions: ["(pin)"],
+    });
+  });
+
+  // SELECT *
+  // FROM student
+  // 	INNER JOIN adresse USING ('pin')
+  // 	CROSS JOIN lkz
+  it("3: second cross", () => {
+    testJoin(steps[2], desc, 1, "crossJoin");
+    expect(steps[2].description).toEqual({
+      type: "cross",
+      tables: ["Zwischentabelle", "lkz"],
+    });
+  });
+
+  // SELECT *
+  // FROM student
+  // 	INNER JOIN adresse USING ('pin')
+  // 	INNER JOIN lkz USING ('lkz')
+  it("4: second inner join using", () => {
+    testJoinFilter(steps[3], desc, 1, "using");
+    expect(steps[3].description).toEqual({
+      type: "using",
+      expressions: ["(lkz)"],
+    });
+  });
+
+  // SELECT *
+  // FROM student
+  // 	INNER JOIN adresse USING ('pin')
+  // 	RIGHT OUTER JOIN lkz USING ('lkz')
+  it("5: right join", () => {
+    //const node = new Node(steps[2].ast, undefined);
+    //console.log("right outer join: \n" + JSON.stringify(node.toModel(), undefined, 2));
+    testJoin(steps[4], desc, 1, "rightOuterJoinUsing", "using");
+
+    expect(steps[4].description).toEqual({
+      type: "outer",
+      tables: ["Zwischentabelle", "lkz"],
+    });
+  });
+
+  // SELECT *
+  // FROM student
+  // 	INNER JOIN adresse USING ('pin')
+  // 	RIGHT OUTER JOIN lkz USING ('lkz')
+  // GROUP BY lkz.LKZ
+  it("6: groupBy-clause", () => {
+    expect(steps[5]).toBeDefined();
+    const node = new Node(steps[5].ast, undefined);
+    starSelectTest(steps[5]);
+
+    expect(node.childrenCategoryNames).toEqual(["select", "from", "groupBy"]);
+    expect(node.getChildInCategory("groupBy").toModel()).toEqual(
+      desc.children.groupBy[0]
+    );
+
+    expect(steps[5].description).toEqual({
+      type: "groupBy",
+      expressions: ["lkz.LKZ"],
+      groupByEntriesDescription: require("./spec/ast-49-group-by-entries-query.json"),
+    });
+  });
+
+  // SELECT lkz.LAND, COUNT() - 1
+  // FROM student
+  // 	INNER JOIN adresse USING ('pin')
+  // 	RIGHT OUTER JOIN lkz USING ('lkz')
+  // GROUP BY lkz.LKZ
+  it("7: fields from the select-clause", () => {
+    const node = new Node(steps[6].ast, undefined);
+    expect(node.childrenCategoryNames.sort()).toEqual([
+      "from",
+      "groupBy",
+      "select",
+    ]);
+
+    expect(node.getChildInCategory("select").toModel()).toEqual(
+      desc.children.select[0]
+    );
+    expect(node.getChildInCategory("from").toModel()).toEqual(
+      desc.children.from[0]
+    );
+    expect(node.getChildInCategory("groupBy").toModel()).toEqual(
+      desc.children.groupBy[0]
+    );
+
+    expect(steps[6].description).toEqual({
+      type: "select",
+      expressions: ["lkz.LAND", "COUNT() - 1"],
+    });
+  });
+});

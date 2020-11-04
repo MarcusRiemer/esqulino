@@ -187,7 +187,6 @@ export function stepwiseSqlQuery(
 
     if (joinFilter) {
       let joinType = joinFilterType == "on" ? "innerJoinOn" : "innerJoinUsing";
-      let newDesc: NodeDescription = undefined;
 
       //replace cross -> inner join with filter
       let desc = join.toModel();
@@ -238,6 +237,7 @@ export function stepwiseSqlQuery(
       ["from", 0],
       ["joins", ++index],
     ]);
+    //console.log("after adding outer node: " + index + "\n" + JSON.stringify(t.toModel(), undefined, 2));
   }
 
   //WHERE clause
