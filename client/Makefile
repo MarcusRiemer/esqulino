@@ -7,9 +7,9 @@ include ../schema/graphql/Makefile
 # Various tools may be installed in different locations
 # * npm dependencies should not be installed globally
 # * Some platforms call the "node" binary "nodejs"
-NG_BIN = node_modules/.bin/ng
-TSC_BIN = node_modules/.bin/tsc
-XLIFFMERGE_BIN = node_modules/.bin/xliffmerge
+NG_BIN = npx ng
+TSC_BIN = npx tsc
+XLIFFMERGE_BIN = npx xliffmerge
 NODE_BIN = node
 
 BUNDLE_FILES = $(shell find dist/browser -iregex ".*\.\(js\|css\|svg\|eot\|ttf\)" 2> /dev/null)
