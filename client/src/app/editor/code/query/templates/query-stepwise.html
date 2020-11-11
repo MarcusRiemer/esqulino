@@ -1,0 +1,13 @@
+<!-- <pre>{{ (availableSteps$ | async)[0] | json }}</pre>  -->
+
+<editor-block-host
+  [codeResource]="codeResource$ | async"
+  [node]="(currentTree$ | async).rootNode"
+  [blockLanguage]="blockLanguage$ | async"
+  [readOnly]="true"
+></editor-block-host>
+
+<query-stepwise-result
+  [queryResult]="currentResult$ | async"
+  [step]="currentStep$ | async"
+></query-stepwise-result>

@@ -6,6 +6,7 @@ import { UnknownCodeResourceComponent } from "./unknown-code-resource.component"
 import { BlockEditorComponent } from "./block/block-editor.component";
 
 import { ResourceChangedGuard } from "./resource-changed.guard";
+import { QueryStepwiseComponent } from "./query/query-stepwise.component";
 
 export const codeEditorRoutes: Routes = [
   {
@@ -22,6 +23,11 @@ export const codeEditorRoutes: Routes = [
     path: ":resourceId/block",
     canActivate: [ResourceChangedGuard],
     component: BlockEditorComponent,
+  },
+  {
+    path: ":resourceId/sql-steps",
+    canActivate: [ResourceChangedGuard],
+    component: QueryStepwiseComponent,
   },
   {
     path: ":resourceId/blockly",
