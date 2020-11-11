@@ -28,7 +28,7 @@ jobs:
   steps:
   - task: Cache@2
     inputs:
-      key: '"node_modules" | "$(Agent.OS)" | client/package-lock.json'
+      key: '"v1" | "node_modules" | "$(Agent.OS)" | client/package-lock.json'
       path: 'client/node_modules'
       cacheHitVar: 'CACHE_RESTORED'
     displayName: Cache for node_modules
@@ -51,7 +51,7 @@ jobs:
   steps:
   - task: Cache@2
     inputs:
-      key: '"node_modules" | "$(Agent.OS)" | client/package-lock.json'
+      key: '"v1" | "node_modules" | "$(Agent.OS)" | client/package-lock.json'
       path: 'client/node_modules'
       cacheHitVar: 'CACHE_RESTORED'
     displayName: Cache for node_modules
@@ -74,7 +74,7 @@ jobs:
   steps:
   - task: Cache@2
     inputs:
-      key: '"node_modules" | "$(Agent.OS)" | client/package-lock.json'
+      key: '"v1" | "node_modules" | "$(Agent.OS)" | client/package-lock.json'
       path: 'client/node_modules'
       cacheHitVar: 'CACHE_RESTORED'
     displayName: Cache for node_modules
@@ -114,7 +114,7 @@ jobs:
   steps:
   - task: Cache@2
     inputs:
-      key: '"node_modules" | "$(Agent.OS)" | client/package-lock.json'
+      key: '"v1" | "node_modules" | "$(Agent.OS)" | client/package-lock.json'
       path: 'client/node_modules'
       cacheHitVar: 'CACHE_RESTORED'
     displayName: Cache for node_modules
@@ -301,7 +301,7 @@ jobs:
 
   - task: Cache@2
     inputs:
-      key: '"node_modules" | "$(Agent.OS)" | client/package-lock.json'
+      key: '"v1" | "node_modules" | "$(Agent.OS)" | client/package-lock.json'
       path: 'client/node_modules'
       cacheHitVar: 'CACHE_RESTORED'
     displayName: Cache for node_modules
