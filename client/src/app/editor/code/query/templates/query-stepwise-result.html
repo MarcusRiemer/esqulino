@@ -1,4 +1,26 @@
 <!-- TODO: Properly render depending on the current step -->
 
+<!--
 <pre>{{ step | json }}</pre>
 <pre>{{ queryResult | json }}</pre>
+ -->
+
+<div class="table-responsive-sm">
+    <table *ngIf="queryResult" class="table">
+      <thead>
+        <tr>
+          <th *ngFor="let column of queryResult.columns">{{ column }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of queryResult.rows">
+          <td *ngFor="let column of row">
+            {{ column }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<!--
+      <pre *ngIf="error" [innerText]="error | json"></pre> 
+-->
