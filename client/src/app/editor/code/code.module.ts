@@ -49,6 +49,8 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
 import { RegexTestComponent } from "./regex/regex-test.component";
 import { QueryStepwiseComponent } from "./query/query-stepwise.component";
 import { QueryStepwiseResultComponent } from "./query/query-stepwise-result.component";
+import { QueryStepwiseDescriptionComponent } from "./query/query-stepwise-description.component";
+
 
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],
@@ -82,6 +84,7 @@ import { QueryStepwiseResultComponent } from "./query/query-stepwise-result.comp
     RegexTestComponent,
     QueryStepwiseComponent,
     QueryStepwiseResultComponent,
+    QueryStepwiseDescriptionComponent
   ],
   providers: [ResourceChangedGuard],
   exports: [BlockHostComponent],
