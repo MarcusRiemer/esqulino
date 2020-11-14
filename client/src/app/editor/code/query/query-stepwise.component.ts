@@ -20,7 +20,7 @@ export class QueryStepwiseComponent {
     private _currentCodeResource: CurrentCodeResourceService,
     private _toolbarService: EditorToolbarService,
     private _queryService: QueryService,
-    private _editorComponentsService: EditorComponentsService,
+    //private _editorComponentsService: EditorComponentsService,
   ) {
     // TODO: Use _toolbarService to add navigation buttons
     // TODO: Remove created buttons on destroy, see ngOnDestroy in QueryPreviewComponent
@@ -32,7 +32,7 @@ export class QueryStepwiseComponent {
   private _btnNext: ToolbarItem = undefined;
   //public result: QueryResultRows;
 
-  private _currentStep = new BehaviorSubject<number>(0);
+  private _currentStepNum = new BehaviorSubject<number>(0);
 
   readonly codeResource$ = this._currentCodeResource.currentResource;
 
@@ -45,19 +45,33 @@ export class QueryStepwiseComponent {
   );
 
   readonly currentTree$ = combineLatest(
-    this._currentStep,
+    this._currentStepNum,
+    this.availableSteps$
+  ).pipe(
+    map(([stepNum, steps]) => {
+      
+      return steps[Math.min(stepNum,steps.length-1)] 
+    }),
+    map((step) => {
+      //this._currentCodeResource.peekResource.replaceSyntaxTree(step.ast);
+      return new Tree(step.ast);
+    })
+  );
+
+  readonly currentDescription$ = combineLatest(
+    this._currentStepNum,
     this.availableSteps$
   ).pipe(
     map(([stepNum, steps]) => {
       return steps[Math.min(stepNum,steps.length-1)] 
     }),
     map((step) => {
-      return new Tree(step.ast);
+      return step.description;
     })
   );
 
   readonly currentStep$ = combineLatest(
-    this._currentStep,
+    this._currentStepNum,
     this.availableSteps$
   ).pipe(map(([stepNum, steps]) => steps[stepNum]));
 
@@ -73,9 +87,9 @@ export class QueryStepwiseComponent {
     this._btnPrev.onClick
     //.pipe(withLatestFrom(this.availableSteps$))
     .subscribe((_) => {
-      if(this._currentStep.value > 0){
+      if(this._currentStepNum.value > 0){
         console.log("button back");
-        this._currentStep.next(this._currentStep.value - 1);
+        this._currentStepNum.next(this._currentStepNum.value - 1);
       } else {
         console.log("back not possible");
       }      
@@ -85,8 +99,10 @@ export class QueryStepwiseComponent {
     this._btnNext.onClick
     .pipe(withLatestFrom(this.availableSteps$))
     .subscribe(([_, availableSteps]) => {
-      if(this._currentStep.value < availableSteps.length) {
-        this._currentStep.next(this._currentStep.value +1);
+      if(this._currentStepNum.value < availableSteps.length-1) {
+        this._currentStepNum.next(this._currentStepNum.value +1);
+        
+        //this.codeResource$.pipe
         console.log("button forward");
       } else {
         console.log("forward not possible");

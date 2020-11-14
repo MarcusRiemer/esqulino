@@ -4,6 +4,20 @@
 <pre>{{ step | json }}</pre>
 <pre>{{ queryResult | json }}</pre>
  -->
+ <div>
+<!-- <div [class.query-preview]="queryInProgress"> -->
+  <h4 class="card-title">
+ <!--   <span *ngIf="queryInProgress" class="fa fa-refresh fa-spin fa-fw"></span> -->
+    Ergebnisvorschau
+    <ng-container *ngIf="queryResult">
+      <span *ngIf="queryResult.isPartial" class="float-right badge badge-warning">
+        {{ queryResult.subsetRowCount }} von {{ queryResult.totalRowCount }} Zeilen
+      </span>
+      <span *ngIf="!queryResult.isPartial" class="float-right badge badge-success">
+        {{ queryResult.subsetRowCount }} Zeilen
+      </span>
+    </ng-container>
+  </h4>
 
 <div class="table-responsive-sm">
     <table *ngIf="queryResult" class="table">
@@ -24,3 +38,4 @@
 <!--
       <pre *ngIf="error" [innerText]="error | json"></pre> 
 -->
+</div>

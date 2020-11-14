@@ -1,17 +1,36 @@
 import { NodeDescription, Tree, Node } from "../syntaxtree";
 
+/*
 interface SqlStepCrossJoinDescription {
-  type: "cross";
+  type: "crossJoin";
   tables: string[];
 }
 
 interface SqlStepInnerJoinDescription {
-  type: "inner";
+  type: "innerJoin";
   tables: string[];
 }
 
 interface SqlStepOuterJoinDescription {
-  type: "outer";
+  type: "outerJoin";
+  tables: string[];
+}
+*/
+export type JoinType =
+  | "crossJoin"
+  | "innerJoin"
+  | "innerJoinOn"
+  | "innerJoinUsing"
+  | "outerJoin"
+  | "leftOuterJoin"
+  | "leftOuterJoinOn"
+  | "leftOuterJoinUsing"
+  | "rightOuterJoin"
+  | "rightOuterJoinOn"
+  | "rightOuterJoinUsing";
+
+export interface SqlStepJoinDescription {
+  type: JoinType;
   tables: string[];
 }
 
@@ -49,15 +68,16 @@ interface SqlStepOrderByDescription {
 export interface SqlStepDescription {
   ast: NodeDescription;
   description:
-    | SqlStepCrossJoinDescription
+    | SqlStepJoinDescription
+  //  | SqlStepCrossJoinDescription
     | SqlStepSelectDescription
     | SqlStepWhereDescription
-    | SqlStepInnerJoinDescription
+  //  | SqlStepInnerJoinDescription
     | SqlStepOnDescription
     | SqlStepGroupByDescription
     | SqlStepOrderByDescription
-    | SqlStepUsingDescription
-    | SqlStepOuterJoinDescription;
+    | SqlStepUsingDescription;
+  //  | SqlStepOuterJoinDescription;
 }
 
 function createBaseTree(): Tree {
@@ -131,7 +151,7 @@ export function stepwiseSqlQuery(
     arr.push({
       ast: t.toModel(),
       description: {
-        type: "cross",
+        type: "crossJoin",
         tables: [desc_firstTableName, nextTable.properties.name],
       },
     });
@@ -170,7 +190,7 @@ export function stepwiseSqlQuery(
     arr.push({
       ast: t.toModel(),
       description: {
-        type: "cross",
+        type: "crossJoin",
         tables: [desc_firstTableName, joinTable.properties.name],
       },
     });
@@ -228,7 +248,8 @@ export function stepwiseSqlQuery(
       arr.push({
         ast: t.toModel(),
         description: {
-          type: "outer",
+          //type: "outerJoin",
+          type: join.typeName as JoinType,
           tables: [desc_firstTableName, joinTable.properties.name],
         },
       });
