@@ -123,29 +123,10 @@ export class RegexTestComponent {
     this.test$
   ).pipe(
     map(([regexString, testCases]) => {
-      // TODO make sure this is only called on proper test code resources and not in for example a grammar defining code resource
-      let regex: RegExp;
-      let errorMessage = "";
-      try {
-        regex = new RegExp(regexString);
-      } catch (e) {
-        errorMessage = e.message;
-      }
-
       const executed: ExecutedTestCase[] = testCases.flatMap((bench) => {
         return bench.cases.map((testCase) => {
-          if (errorMessage != "") {
-            return {
-              input: testCase.input,
-              expected: testCase.expected,
-              matches: [],
-              result: false,
-              error: errorMessage,
-              countExpectedHits: 0,
-              countSuccessfulHits: 0,
-            };
-          }
-          return runTestCase(regex, testCase);
+          // execute the testcase with the regex and return the result
+          return runTestCase(regexString, testCase);
         });
       });
 

@@ -1,14 +1,14 @@
 <table id="regexTestTable">
   <tr class="row headerRow">
-    <th class="col-md-4">Zu prüfende Eingabe</th>
+    <th class="col-md-3">Zu prüfende Eingabe</th>
     <th class="col-md-3">Erwartete Treffer</th>
+    <th class="col-md-2">Unerwartete Treffer</th>
     <th class="col-md-1 sortColumn" (click)="changeSortDirection()">
       Erfüllt?
       <span
         [ngClass]="(sortDirection == 'none') ? 'fa fa-sort' : (sortDirection == 'asc') ? 'fa fa-sort-up' : 'fa fa-sort-down'"
       ></span>
     </th>
-    <th class="col-md-1">Anzahl Erfüllt</th>
     <th class="col-md-3">evtl. Fehler</th>
   </tr>
   <tr
@@ -16,7 +16,7 @@
     *ngFor="let testCase of (executedTestCases$ | async) | tableSortingPipe: sortDirection"
     [ngClass]="(testCase.result) ? 'dataRowPassed' : 'dataRowFailed'"
   >
-    <td class="col-md-4">{{ testCase.input ? testCase.input : "" }}</td>
+    <td class="col-md-3">{{ testCase.input ? testCase.input : "" }}</td>
     <td class="col-md-3">
       <span
         *ngFor="let expectedMatch of testCase.expected.hits; let isLast=last"
@@ -31,10 +31,12 @@
         {{ isLast ? '' : ', ' }}
       </span>
     </td>
-    <td class="col-md-1">{{ testCase.result ? "ja" : "nein" }}</td>
-    <td class="col-md-1">
-      {{ testCase.countExpectedHits }}/{{ testCase.countSuccessfulHits }}
+    <td class="col-md-2">
+      <span *ngFor="let unexpectedMatch of testCase.unexpectedMatches">
+        {{ unexpectedMatch }}
+      </span>
     </td>
+    <td class="col-md-1">{{ testCase.result ? "ja" : "nein" }}</td>
     <td class="col-md-3">{{ testCase.error }}</td>
   </tr>
 </table>

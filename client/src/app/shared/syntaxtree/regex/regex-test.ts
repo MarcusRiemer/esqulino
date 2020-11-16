@@ -6,10 +6,9 @@ import { RegexTestCaseDescription } from "./regex-testbench.description";
 export interface ExecutedTestCase extends RegexTestCaseDescription {
   input: string;
   matches: string[];
+  unexpectedMatches: string[];
   result: boolean;
   error: string;
-  countExpectedHits: number;
-  countSuccessfulHits: number;
 }
 
 /**
@@ -34,6 +33,54 @@ function simplifyExpectation(
 }
 
 /**
+ * Executes a regexString and returns all matches inside the input string.
+ *
+ * @param regexString
+ * @param input
+ */
+function getRegexMatches(regexString: string, input: string): string[] {
+  let matches;
+  let matchArrays = [];
+  let regex: RegExp;
+
+  try {
+    regex = new RegExp(regexString, "g");
+  } catch (e) {
+    throw new Error("Error creating regular expression.");
+  }
+
+  while ((matches = regex.exec(input))) {
+    for (let i = 0; i < matches.length; i++) {
+      matchArrays.push(matches[i]);
+    }
+  }
+
+  return matchArrays;
+}
+
+/**
+ *
+ * @param expectedMatches
+ * @param matches
+ * @param testCase
+ */
+function validateMatches(
+  expectedMatches: string[],
+  matches: string[],
+  testCase: RegexTestCaseDescription
+) {
+  if (testCase.expected.type == "wholeMatch") {
+    return matches.length > 0 && matches[0] == testCase.input;
+  }
+  return (
+    expectedMatches.length === matches.length &&
+    expectedMatches.reduce(function (prev, value, index) {
+      return value === matches[index] ? prev : false;
+    }, true)
+  );
+}
+
+/**
  * Executes a regular expression with a supplied testcase and returns an object,
  * containing the neccescary data whether the testcase has passed and to which capacity
  *
@@ -41,23 +88,21 @@ function simplifyExpectation(
  * @param testCase
  */
 export function runTestCase(
-  regex: RegExp,
+  regexString: string,
   testCase: RegexTestCaseDescription
 ): ExecutedTestCase {
-  // TODO: Don't return the complex matches object, return normal strings
-
-  // execute the regular expression and get the resulting matches
-  let matches = regex.exec(testCase.input);
-
-  if (matches == null) {
+  let errorMessage = "";
+  let matches = getRegexMatches(regexString, testCase.input);
+  if (matches.length == 0) {
+    errorMessage = "Der Reguläre Ausdruck hatte keine Treffer.";
+    let isNoMatchType = testCase.expected.type == "noMatch";
     return {
       input: testCase.input,
       matches: [],
-      result: testCase.expected.type == "noMatch",
+      unexpectedMatches: [],
+      result: isNoMatchType,
       expected: testCase.expected,
-      error: "",
-      countSuccessfulHits: 0,
-      countExpectedHits: 0,
+      error: isNoMatchType ? "" : errorMessage,
     };
   }
 
@@ -66,36 +111,35 @@ export function runTestCase(
 
   // redundant but the compiler keeps bugging me
   if ("hits" in simplifiedExpectation) {
-    let successfulHitCount = 0;
-    const expectedMatches = simplifiedExpectation.hits;
-    const result =
-      expectedMatches.length === matches.length &&
-      expectedMatches.every(function (value, index) {
-        if (value === matches[index]) {
-          successfulHitCount++;
-          return true;
-        }
-        return false;
+    let unexpectedMatches = [];
+    let expectedMatches = simplifiedExpectation.hits;
+    const result = validateMatches(expectedMatches, matches, testCase);
+    if (!result) {
+      unexpectedMatches = expectedMatches.filter(function (value) {
+        return !matches.includes(value);
       });
+      if (unexpectedMatches.length > 0) {
+        errorMessage =
+          "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.";
+      }
+    }
 
     return {
       input: testCase.input,
-      matches: matches,
+      matches: testCase.expected.type == "wholeMatch" ? [matches[0]] : matches,
+      unexpectedMatches: unexpectedMatches,
       result: result,
       expected: simplifiedExpectation,
-      error: "",
-      countExpectedHits: simplifiedExpectation.hits.length,
-      countSuccessfulHits: successfulHitCount,
+      error: errorMessage,
     };
   }
 
   return {
     input: testCase.input,
     matches: [],
-    result: false,
+    unexpectedMatches: [],
+    result: testCase.expected.type == "noMatch",
     expected: simplifiedExpectation,
-    error: "Testfall, welcher Treffer erwarten sollte, besitzt keine Treffer.",
-    countExpectedHits: 0,
-    countSuccessfulHits: 0,
+    error: "",
   };
 }
