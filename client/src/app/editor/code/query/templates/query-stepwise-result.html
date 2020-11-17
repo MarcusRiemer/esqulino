@@ -1,9 +1,50 @@
 <!-- TODO: Properly render depending on the current step -->
 
 <!--
-<pre>{{ step | json }}</pre>
+<pre>{{ step | json }}</pre>  
 <pre>{{ queryResult | json }}</pre>
- -->
+-->
+
+<div *ngIf="groupByResult" class="card card-body mb-3">
+  <h4 class="card-title">
+    Vorschau der Gruppierung
+  </h4>
+  <div class="table-responsive-sm">
+    <table class="table" style="border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th *ngFor="let column of queryResult.columns">{{ column }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let rows of groupByResult">
+          <ng-container
+            *ngFor="let dataset of rows; let lastGroupElement = last"
+            [ngTemplateOutlet]="lastGroupElement ? lastRow : defRow"
+            [ngTemplateOutletContext]="{dataset: dataset}"
+          ></ng-container>
+        </ng-container>
+      </tbody>
+    </table>
+
+    <ng-template #defRow let-dataset="dataset">
+      <tr>
+        <td *ngFor="let column of dataset" style="border-top: 0;">
+          {{ column }}
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #lastRow let-dataset="dataset">
+      <tr style="border-bottom: 1px solid #dee2e6;">
+        <td *ngFor="let column of dataset" style="border-top: 0;">
+          {{ column }}
+        </td>
+      </tr>
+    </ng-template>
+  </div>
+</div>
+
 <div class="card card-body mb-3">
   <!-- <div [class.query-preview]="queryInProgress"> -->
   <h4 class="card-title">
@@ -44,4 +85,5 @@
   </div>
   <!--
       <pre *ngIf="error" [innerText]="error | json"></pre> 
---></div>
+  -->
+</div>
