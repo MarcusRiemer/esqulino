@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { Tree } from 'src/app/shared/syntaxtree/syntaxtree';
+import { Tree } from "../../../shared/syntaxtree/syntaxtree";
 
 import {
   SqlStepDescription,
