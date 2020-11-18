@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
+import { Tree } from 'src/app/shared/syntaxtree/syntaxtree';
 
 import {
   SqlStepDescription,
@@ -6,7 +7,6 @@ import {
 } from "../../../shared/syntaxtree/sql/sql-steps";
 
 import { QueryService, QueryResultRows } from "./query.service";
-import { Tree } from "src/app/shared";
 
 @Component({
   templateUrl: "templates/query-stepwise-result.html",

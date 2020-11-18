@@ -51,7 +51,6 @@ import { QueryStepwiseComponent } from "./query/query-stepwise.component";
 import { QueryStepwiseResultComponent } from "./query/query-stepwise-result.component";
 import { QueryStepwiseDescriptionComponent } from "./query/query-stepwise-description.component";
 
-
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],
   declarations: [
@@ -84,7 +83,7 @@ import { QueryStepwiseDescriptionComponent } from "./query/query-stepwise-descri
     RegexTestComponent,
     QueryStepwiseComponent,
     QueryStepwiseResultComponent,
-    QueryStepwiseDescriptionComponent
+    QueryStepwiseDescriptionComponent,
   ],
   providers: [ResourceChangedGuard],
   exports: [BlockHostComponent],
