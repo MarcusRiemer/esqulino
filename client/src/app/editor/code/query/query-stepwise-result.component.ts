@@ -1,15 +1,19 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 
-import { SqlStepDescription } from "../../../shared/syntaxtree/sql/sql-steps";
+import {
+  SqlStepDescription,
+  SqlStepGroupByDescription,
+} from "../../../shared/syntaxtree/sql/sql-steps";
 
-import { QueryResult, QueryResultRows } from "./query.service";
-import { EACCES } from "constants";
+import { QueryService, QueryResultRows } from "./query.service";
+import { Tree } from "src/app/shared";
 
 @Component({
   templateUrl: "templates/query-stepwise-result.html",
   selector: "query-stepwise-result",
 })
 export class QueryStepwiseResultComponent {
+  constructor(private _queryService: QueryService) {}
   @Input()
   queryResult: QueryResultRows;
 
@@ -18,39 +22,34 @@ export class QueryStepwiseResultComponent {
 
   public groupByResult;
 
-  ngOnInit() {
-    //console.log("result log on init !!!");
-  }
+  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes["step"]) {
-      //console.log("changes", changes);
-
-      let result = this.queryResult;
-
+    if (changes["queryResult"] && this.queryResult) {
       if (this.step.description.type == "groupBy") {
-        // TODO work with related orderBy clause
-          /*
-        let orderByStep = <SqlStepGroupByDescription>this.step.description;
-        let result = orderByStep.groupByEntriesDescription;
-        let expressions = this.step.description.expressions;*/
-        let expressions = this.step.description.expressions;
-
         // get rid of table name
-        let expr = expressions.map((e) => e.split(".")[1]);
+        let expr = this.step.description.expressions.map(
+          (e) => e.split(".")[1]
+        );
 
         // get indices from columnname
         let indices = [];
         expr.forEach((element) => {
-          indices.push(result.columns.indexOf(element));
+          indices.push(this.queryResult.columns.indexOf(element));
         });
 
-        this.groupByResult = this.groupByIndices(result.rows, indices);
-        /*console.log("expressions: ", expressions);
-        console.log("expr: ", expr);
-        console.log("columns: ", result.columns);
-        console.log("indexes: ", indices);
-        console.log(this.groupByResult); */
+        let corrOrderBy = <SqlStepGroupByDescription>this.step.description;
+
+        this._queryService
+          .runArbitraryQuery(
+            new Tree(corrOrderBy.correspondingOrderBy).toModel(),
+            {}
+          )
+          .subscribe((res) => {
+            if (res instanceof QueryResultRows) {
+              this.groupByResult = this.groupByIndices(res.rows, indices);
+            }
+          });
       } else if (this.groupByResult) {
         this.groupByResult = undefined;
       }

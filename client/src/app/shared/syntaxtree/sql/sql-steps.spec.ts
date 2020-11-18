@@ -281,7 +281,7 @@ describe(`SQL Steps`, () => {
       expect(steps[2].description).toEqual({
         type: "groupBy",
         expressions: ["Charakter.Charakter_ID"],
-        groupByEntriesDescription: require("./spec/ast-43-group-by-entries-query.json"),
+        correspondingOrderBy: require("./spec/ast-43-group-by-entries-query.json"),
       });
     });
 
@@ -568,7 +568,7 @@ describe(`SQL Steps`, () => {
       expect(steps[6].description).toEqual({
         type: "groupBy",
         expressions: ["krankenkasse.KRANKENKASSE_ID"],
-        groupByEntriesDescription: require("./spec/ast-46-group-by-entries-query.json"),
+        correspondingOrderBy: require("./spec/ast-46-group-by-entries-query.json"),
       });
     });
 
@@ -714,7 +714,7 @@ describe(`SQL Steps`, () => {
       expect(steps[6].description).toEqual({
         type: "groupBy",
         expressions: ["krankenkasse.KRANKENKASSE_ID"],
-        groupByEntriesDescription: require("./spec/ast-47-group-by-entries-query.json"),
+        correspondingOrderBy: require("./spec/ast-47-group-by-entries-query.json"),
       });
     });
 
@@ -944,7 +944,7 @@ describe(`SQL Steps`, () => {
       expect(steps[5].description).toEqual({
         type: "groupBy",
         expressions: ["lkz.LKZ"],
-        groupByEntriesDescription: require("./spec/ast-49-group-by-entries-query.json"),
+        correspondingOrderBy: require("./spec/ast-49-group-by-entries-query.json"),
       });
     });
 

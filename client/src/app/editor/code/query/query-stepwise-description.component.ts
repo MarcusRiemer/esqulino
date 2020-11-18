@@ -10,13 +10,9 @@ export class QueryStepwiseDescriptionComponent {
   @Input()
   step: SqlStepDescription;
 
-  descText: string = "";
+  public descText: string = "";
 
-  ngOnInit(): void {
-    this.createDescription();
-  }
-
-  ngOnChanges(model: any) {
+  ngOnChanges() {
     this.createDescription();
   }
 
@@ -24,72 +20,96 @@ export class QueryStepwiseDescriptionComponent {
     switch (this.step.description.type) {
       case "crossJoin":
         this.descText =
-          "Anwendung des Cross Join.\nKarteischen Produkt der Tabellen " +
+          "Anwendung des Cross Join. Kartesisches Produkt der Tabellen '" +
           this.step.description.tables[0] +
-          " und " +
-          this.step.description.tables[1] + ".";
+          "' und '" +
+          this.step.description.tables[1] +
+          "'.";
         break;
       case "innerJoin":
         this.descText =
-          "Anwendung des Inner Join.\nInnere Verknüpfung der Tabellen " +
+          "Anwendung des Inner Join. Innere Verknüpfung der Tabellen '" +
           this.step.description.tables[0] +
-          " und " +
-          this.step.description.tables[1];
+          "' und '" +
+          this.step.description.tables[1] +
+          "'.";
         break;
       case "outerJoin":
         this.descText =
-          "Anwendung des Outer Join.\nAüßere Verknüpfung der Tabellen " +
+          "Anwendung des Outer Join. Aüßere Verknüpfung der Tabellen '" +
           this.step.description.tables[0] +
-          " und " +
-          this.step.description.tables[1];
+          "' und '" +
+          this.step.description.tables[1] +
+          "'.";
         break;
       case "on":
         this.descText =
-          "Anwendung des ON-Filter.\nAuswertung der JOIN-Bedingung " +
+          "Anwendung des ON-Filter. Auswertung der JOIN-Bedingung '" +
           this.step.description.expressions +
-          " für jede Zeile der Tabelle.";
+          "' für jede Zeile der Tabelle.";
         break;
       case "using":
         this.descText =
-          "Anwendung des USING-Filter.\nAuswertung der JOIN-Bedingung " +
+          "Anwendung des USING-Filter.\nAuswertung der JOIN-Bedingung '" +
           this.step.description.expressions +
-          " für jede Zeile der Tabelle.";
+          "' für jede Zeile der Tabelle.";
         break;
       case "where":
         this.descText =
-          "Filterung nach der WHERE-Klausel. Auswahl der Zeilen, die das Kriterium\n";
+          "Filterung nach der WHERE-Klausel. Auswahl der Zeilen, die ";
+        this.descText +=
+          this.step.description.expressions.length > 1
+            ? "die Kriterien '"
+            : "das Kriterium '";
         this.step.description.expressions.forEach((exp) => {
-          this.descText += exp + ", ";
+          this.descText += exp + "', '";
         });
-        this.descText = this.descText.slice(0, -2);
-        this.descText += "\nerfüllen.";
+        this.descText = this.descText.slice(0, -3);
+        this.descText += " erfüllen.";
         break;
       case "groupBy":
         this.descText =
-          "Anwendung der Gruppierung.\nDazu werden die Zeilen der Tabelle entsprechend der Werte \n";
+          "Anwendung der Gruppierung. Dazu werden die Zeilen der Tabelle entsprechend der Werte '";
         this.step.description.expressions.forEach((exp) => {
-          this.descText += exp + ", ";
+          this.descText += exp + "', '";
         });
-        this.descText = this.descText.slice(0, -2);
-        this.descText += "\nin Gruppen angeordnet.";
+        this.descText = this.descText.slice(0, -3);
+        // ... zusammengefasst / aggregiert / gruppiert
+        this.descText +=
+          " in Gruppen angeordnet und im Folgenden als ein Datensatz (Zeile) in der Tabelle zusammengefast.";
         break;
       case "select":
-        this.descText =
-          "Anwendung der SELECT-Auswahl. Dazu wird eine Tabelle mit den angegeben Spalten\n";
-        this.step.description.expressions.forEach((exp) => {
-          this.descText += exp + ", ";
-        });
-        this.descText = this.descText.slice(0, -2);
-        this.descText += "\nerstellt.";
+        this.descText = "Anwendung der SELECT-Auswahl. ";
+        if (
+          this.step.description.expressions.length == 1 &&
+          this.step.description.expressions[0] == "*"
+        ) {
+          this.descText +=
+            "Durch die Angabe des Stern-Operators, werden alle Spalten der Tabelle für die Ausgabetabelle übernommen.";
+        } else {
+          this.descText += "Dazu wird eine Tabelle mit ";
+          this.descText +=
+            this.step.description.expressions.length > 1
+              ? "den angegeben Spalten '"
+              : "der angegeben Spalte '";
+          this.step.description.expressions.forEach((exp) => {
+            this.descText += exp + "', '";
+          });
+          this.descText = this.descText.slice(0, -3);
+          this.descText += " erstellt.";
+        }
         break;
       case "orderBy":
-        this.descText =
-          "Ordnen der Einträge entsprechend der Ausdrücke\n";
+        this.descText = "Ordnen der Einträge entsprechend ";
+        this.descText +=
+          this.step.description.expressions.length > 1
+            ? "der Ausdrücke '"
+            : "des Ausdrucks '";
         this.step.description.expressions.forEach((exp) => {
-          this.descText += exp + ", ";
+          this.descText += exp + "', '";
         });
-        this.descText = this.descText.slice(0, -2);
-        this.descText += "\naus der ORDER BY-Klausel.";
+        this.descText = this.descText.slice(0, -3);
+        this.descText += " aus der ORDER BY-Klausel.";
         break;
       default:
         this.descText = "TODO edit desc";

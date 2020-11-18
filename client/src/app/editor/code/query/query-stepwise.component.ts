@@ -9,8 +9,7 @@ import { Tree } from "../../../shared/syntaxtree/";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { EditorToolbarService, ToolbarItem } from "../../toolbar.service";
 
-import { QueryService, QueryResultRows, QueryResult } from "./query.service";
-import { EditorComponentsService } from "../editor-components.service";
+import { QueryService } from "./query.service";
 
 @Component({
   templateUrl: "templates/query-stepwise.html",
@@ -20,16 +19,10 @@ export class QueryStepwiseComponent {
     private _currentCodeResource: CurrentCodeResourceService,
     private _toolbarService: EditorToolbarService,
     private _queryService: QueryService
-  ) //private _editorComponentsService: EditorComponentsService,
-  {
-    // TODO: Remove created buttons on destroy, see ngOnDestroy in QueryPreviewComponent
-    // HINT: Use font-awesome 4.7.0 icon classes
-    // this._toolbarService.addButton("foo", "foo", "house");
-  }
+  ) {}
 
   private _btnPrev: ToolbarItem = undefined;
   private _btnNext: ToolbarItem = undefined;
-  public result: QueryResultRows;
 
   private _currentStepNum = new BehaviorSubject<number>(0);
 
@@ -51,7 +44,6 @@ export class QueryStepwiseComponent {
       return steps[Math.min(stepNum, steps.length - 1)];
     }),
     map((step) => {
-      //this._currentCodeResource.peekResource.replaceSyntaxTree(step.ast);
       return new Tree(step.ast);
     })
   );
@@ -73,11 +65,10 @@ export class QueryStepwiseComponent {
     this.availableSteps$
   ).pipe(map(([stepNum, steps]) => steps[stepNum]));
 
+  // ignore QueryResultError
   readonly currentResult$ = this.currentTree$.pipe(
-    flatMap((t) => this._queryService.runArbitraryQuery(t.toModel(), {})),
-    // ignore QueryResultError
-   // map((r) => this.result = <QueryResultRows>r),
-    tap(() => console.log("log query run"))
+    flatMap((t) => this._queryService.runArbitraryQuery(t.toModel(), {}))
+    //tap(() => console.log("log query run"))
   );
 
   ngOnInit() {
@@ -92,16 +83,14 @@ export class QueryStepwiseComponent {
       "arrow-right"
     );
 
-    this._btnPrev.onClick
-      //.pipe(withLatestFrom(this.availableSteps$))
-      .subscribe((_) => {
-        if (this._currentStepNum.value > 0) {
-          console.log("button back");
-          this._currentStepNum.next(this._currentStepNum.value - 1);
-        } else {
-          console.log("back not possible");
-        }
-      });
+    this._btnPrev.onClick.subscribe((_) => {
+      if (this._currentStepNum.value > 0) {
+        console.log("button back");
+        this._currentStepNum.next(this._currentStepNum.value - 1);
+      } else {
+        console.log("back not possible");
+      }
+    });
 
     this._btnNext.onClick
       .pipe(withLatestFrom(this.availableSteps$))

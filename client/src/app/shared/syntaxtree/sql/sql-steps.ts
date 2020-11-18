@@ -1,21 +1,5 @@
 import { NodeDescription, Tree, Node } from "../syntaxtree";
 
-/*
-interface SqlStepCrossJoinDescription {
-  type: "crossJoin";
-  tables: string[];
-}
-
-interface SqlStepInnerJoinDescription {
-  type: "innerJoin";
-  tables: string[];
-}
-
-interface SqlStepOuterJoinDescription {
-  type: "outerJoin";
-  tables: string[];
-}
-*/
 export type JoinType =
   | "crossJoin"
   | "innerJoin"
@@ -54,10 +38,10 @@ interface SqlStepUsingDescription {
   expressions: string[];
 }
 
-interface SqlStepGroupByDescription {
+export interface SqlStepGroupByDescription {
   type: "groupBy";
   expressions: string[];
-  groupByEntriesDescription: NodeDescription;
+  correspondingOrderBy: NodeDescription;
 }
 
 interface SqlStepOrderByDescription {
@@ -69,15 +53,12 @@ export interface SqlStepDescription {
   ast: NodeDescription;
   description:
     | SqlStepJoinDescription
-  //  | SqlStepCrossJoinDescription
     | SqlStepSelectDescription
     | SqlStepWhereDescription
-  //  | SqlStepInnerJoinDescription
     | SqlStepOnDescription
     | SqlStepGroupByDescription
     | SqlStepOrderByDescription
     | SqlStepUsingDescription;
-  //  | SqlStepOuterJoinDescription;
 }
 
 function createBaseTree(): Tree {
@@ -168,7 +149,7 @@ export function stepwiseSqlQuery(
   let index = 0;
 
   while (join) {
-    // TODO find suitable name for a virtual table and decide description-format for UI
+    // TODO find suitable name for a virtual table
     // firstTableName = firstTableName + "CROSS JOIN" + joinTable.properties.name;
     desc_firstTableName = index > 0 ? "Zwischentabelle" : desc_firstTableName;
     let joinTable = join.getChildInCategory("table");
@@ -234,8 +215,7 @@ export function stepwiseSqlQuery(
     }
 
     // TODO decide how to implement outer join
-    // current approach - just run the outer join
-    // maybe add null rows with union?
+    // current approach - just run the outer join -> maybe add null rows with union?
     if (join.typeName.toLowerCase().includes("outer")) {
       t = t.replaceNode(
         [
@@ -277,10 +257,7 @@ export function stepwiseSqlQuery(
     });
   }
 
-  //GROUP BY clause
-  // TODO - how to transform group by and display groups in the ui ???
-  // must be a own query
-  // current approach - transform group by to an order by
+  //GROUP BY clause - transform group by to an order by
   let groupNode = q.locateOrUndefined([["groupBy", 0]]);
   if (groupNode) {
     t = t.insertNode([["groupBy", 0]], groupNode.toModel());
@@ -289,8 +266,11 @@ export function stepwiseSqlQuery(
     // transform a groupNode to an orderBy node
     groupByTransformDesc.name = "orderBy";
 
-    let groupTree = t.deleteNode([["groupBy", 0]]);
-    groupTree = groupTree.insertNode([["orderBy", 0]], groupByTransformDesc);
+    let withOrderBy = t.deleteNode([["groupBy", 0]]);
+    withOrderBy = withOrderBy.insertNode(
+      [["orderBy", 0]],
+      groupByTransformDesc
+    );
 
     arr.push({
       ast: t.rootNode.toModel(),
@@ -299,13 +279,11 @@ export function stepwiseSqlQuery(
         expressions: collectExpressions(
           groupNode.getChildrenInCategory("expressions")
         ),
-        groupByEntriesDescription: groupTree.toModel(),
+        correspondingOrderBy: withOrderBy.toModel(),
       },
     });
     //console.log("goupBy transform description: " + JSON.stringify(groupTree.toModel(), undefined, 2));
   }
-
-  // HAVING clause -> needed???
 
   //SELECT clause
   let select = q.locate([["select", 0]]);
