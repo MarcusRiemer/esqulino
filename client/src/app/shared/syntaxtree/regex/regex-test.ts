@@ -69,6 +69,10 @@ function validateMatches(
   matches: string[],
   testCase: RegexTestCaseDescription
 ) {
+  // TODO aufräumen
+  if (testCase.expected.type == "noMatch") {
+    return matches.length == 0;
+  }
   if (testCase.expected.type == "wholeMatch") {
     return matches.length > 0 && matches[0] == testCase.input;
   }
@@ -79,6 +83,8 @@ function validateMatches(
     }, true)
   );
 }
+
+// TODO Error messages auslagern und global verfügbar machen
 
 /**
  * Executes a regular expression with a supplied testcase and returns an object,
@@ -93,53 +99,43 @@ export function runTestCase(
 ): ExecutedTestCase {
   let errorMessage = "";
   let matches = getRegexMatches(regexString, testCase.input);
-  if (matches.length == 0) {
-    errorMessage = "Der Reguläre Ausdruck hatte keine Treffer.";
-    let isNoMatchType = testCase.expected.type == "noMatch";
-    return {
-      input: testCase.input,
-      matches: [],
-      unexpectedMatches: [],
-      result: isNoMatchType,
-      expected: testCase.expected,
-      error: isNoMatchType ? "" : errorMessage,
-    };
-  }
 
   // if it's a whole match, simplify it into an exact match with a single hit
   const simplifiedExpectation = simplifyExpectation(testCase);
 
-  // redundant but the compiler keeps bugging me
-  if ("hits" in simplifiedExpectation) {
-    let unexpectedMatches = [];
-    let expectedMatches = simplifiedExpectation.hits;
-    const result = validateMatches(expectedMatches, matches, testCase);
-    if (!result) {
-      unexpectedMatches = expectedMatches.filter(function (value) {
-        return !matches.includes(value);
-      });
-      if (unexpectedMatches.length > 0) {
-        errorMessage =
-          "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.";
-      }
-    }
+  const isNoMatchType = testCase.expected.type == "noMatch";
 
+  let unexpectedMatches = [];
+  let expectedMatches = ("hits" in simplifiedExpectation) ? simplifiedExpectation.hits : [];
+  const result = validateMatches(expectedMatches, matches, testCase);
+  if (!result) {
+    unexpectedMatches = matches.filter(function (value) {
+      return !expectedMatches.includes(value);
+    });
+    if (unexpectedMatches.length > 0) {
+      errorMessage =
+          "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.";
+    }
+  }
+
+  if (!isNoMatchType && matches.length == 0) {
+    errorMessage = "Der Reguläre Ausdruck hatte keine Treffer.";
     return {
       input: testCase.input,
-      matches: testCase.expected.type == "wholeMatch" ? [matches[0]] : matches,
+      matches: [],
       unexpectedMatches: unexpectedMatches,
-      result: result,
       expected: simplifiedExpectation,
+      result: false,
       error: errorMessage,
     };
   }
 
   return {
     input: testCase.input,
-    matches: [],
-    unexpectedMatches: [],
-    result: testCase.expected.type == "noMatch",
-    expected: simplifiedExpectation,
-    error: "",
+    matches: testCase.expected.type == "wholeMatch" ? [matches[0]] : matches,
+    unexpectedMatches: unexpectedMatches,
+    expected: isNoMatchType ? {type: testCase.expected.type, hits: []} : simplifiedExpectation,
+    result: result,
+    error: errorMessage,
   };
 }

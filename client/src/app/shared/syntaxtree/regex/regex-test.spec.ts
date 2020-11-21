@@ -21,6 +21,44 @@ describe(`RegEx Testing`, () => {
       });
     });
 
+    it("b Regex, a input, correct test case", () => {
+      const result = runTestCase("a", {
+        input: "b",
+        expected: { type: "noMatch" },
+      });
+
+      expect(result).toEqual({
+        input: "b",
+        expected: {
+          type: "noMatch",
+          hits: []
+        },
+        matches: [],
+        unexpectedMatches: [],
+        result: true,
+        error: "",
+      });
+    });
+
+    it("a Regex, a input, incorrect test case", () => {
+      const result = runTestCase("a", {
+        input: "a",
+        expected: { type: "noMatch" },
+      });
+
+      expect(result).toEqual({
+        input: "a",
+        expected: {
+          type: "noMatch",
+          hits: []
+        },
+        matches: ["a"],
+        unexpectedMatches: ["a"],
+        result: false,
+        error: "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.",
+      });
+    });
+
     it("Hello Regex, Hello World input, correct test case", () => {
       const result = runTestCase("Hello", {
         input: "Hello World",
@@ -62,6 +100,49 @@ describe(`RegEx Testing`, () => {
         unexpectedMatches: [],
         result: true,
         error: "",
+      });
+    });
+
+    it("^a$ Regex, aa input, incorrect test case", () => {
+      const result = runTestCase("^a$", {
+        input: "aa",
+        expected: {
+          type: "wholeMatch"
+        },
+      });
+
+      expect(result).toEqual({
+        input: "aa",
+        expected: {
+          type: "exactMatch",
+          hits: ["aa"],
+        },
+        matches: [],
+        unexpectedMatches: [],
+        result: false,
+        error: "Der Reguläre Ausdruck hatte keine Treffer.",
+      });
+    });
+
+    it("\\w?aus Regex, Haus Maus Klaus input, incorrect test case", () => {
+      const result = runTestCase("\\w?aus", {
+        input: "Haus Maus Klaus",
+        expected: {
+          type: "exactMatch",
+          hits: ["Haus", "Maus"],
+        },
+      });
+
+      expect(result).toEqual({
+        input: "Haus Maus Klaus",
+        expected: {
+          type: "exactMatch",
+          hits: ["Haus", "Maus"],
+        },
+        matches: ["Haus", "Maus", "laus"],
+        unexpectedMatches: ["laus"],
+        result: false,
+        error: "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.",
       });
     });
 
