@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<div *ngIf="showFilterResult" class="card card-body mb-3">
+<div *ngIf="filterRows" class="card card-body mb-3">
   <h4 class="card-title">
     Vorschau der Filterung
   </h4>
@@ -55,7 +55,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of conditionFilterResult.rows">
+        <tr *ngFor="let row of filterRows">
           <ng-container
             *ngFor="let column of row; let i = index;"
             [ngTemplateOutlet]="indicesToMark.indexOf(i)>-1 ? mark : default"

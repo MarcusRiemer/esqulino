@@ -27,6 +27,10 @@ export class QueryStepwiseResultComponent {
 
   public groupByRows;
 
+  public filterRows;
+
+  readonly maxfilterRows = 15;
+
   public showFilterResult = false;
 
   public indicesToMark: number[];
@@ -40,7 +44,7 @@ export class QueryStepwiseResultComponent {
       changes["groupByStepResult"] &&
       this.step.description.type == "groupBy"
     ) {
-      this.showFilterResult = false;
+      this.filterRows = undefined;
       // get rid of table name
       let expr = this.step.description.expressions.map((e) => e.split(".")[1]);
 
@@ -59,6 +63,16 @@ export class QueryStepwiseResultComponent {
       ["on", "using", "where"].includes(this.step.description.type) &&
       this.conditionFilterResult
     ) {
+      this.filterRows = this.conditionFilterResult.rows.slice(
+        0,
+        this.maxfilterRows
+      );
+      if (this.filterRows.length < this.conditionFilterResult.rows.length) {
+        this.filterRows.push(
+          this.conditionFilterResult.rows[0].map((r) => "...")
+        );
+      }
+      console.log(this.filterRows);
       let desc = <SqlStepConditionFilterDescription>this.step.description;
       this.indicesToMark = this.getIndicesToMark(
         desc.columnNames,
@@ -67,7 +81,7 @@ export class QueryStepwiseResultComponent {
       this.showFilterResult = true;
     } else {
       this.groupByRows = undefined;
-      this.showFilterResult = false;
+      this.filterRows = undefined;
     }
   }
 
