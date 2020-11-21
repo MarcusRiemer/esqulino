@@ -18,30 +18,22 @@ export interface SqlStepJoinDescription {
   tables: string[];
 }
 
-interface SqlStepSelectDescription {
-  type: "select";
+export interface SqlStepConditionFilterDescription {
+  type: "on" | "using" | "where";
   expressions: string[];
-}
-
-interface SqlStepWhereDescription {
-  type: "where";
-  expressions: string[];
-}
-
-interface SqlStepOnDescription {
-  type: "on";
-  expressions: string[];
-}
-
-interface SqlStepUsingDescription {
-  type: "using";
-  expressions: string[];
+  explainAst: NodeDescription;
+  columnNames: string[];
 }
 
 export interface SqlStepGroupByDescription {
   type: "groupBy";
   expressions: string[];
   correspondingOrderBy: NodeDescription;
+}
+
+interface SqlStepSelectDescription {
+  type: "select";
+  expressions: string[];
 }
 
 interface SqlStepOrderByDescription {
@@ -53,12 +45,10 @@ export interface SqlStepDescription {
   ast: NodeDescription;
   description:
     | SqlStepJoinDescription
+    | SqlStepConditionFilterDescription
     | SqlStepSelectDescription
-    | SqlStepWhereDescription
-    | SqlStepOnDescription
     | SqlStepGroupByDescription
-    | SqlStepOrderByDescription
-    | SqlStepUsingDescription;
+    | SqlStepOrderByDescription;
 }
 
 function createBaseTree(): Tree {
@@ -90,12 +80,8 @@ function createBaseTree(): Tree {
   });
 }
 
-export function stepwiseSqlQuery(
-  q: Tree | NodeDescription // Maybe decide which representation is most helpful
-): SqlStepDescription[] {
-  q = q instanceof Tree ? q : new Tree(q);
-
-  if (q.isEmpty) {
+export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
+  if (!q || q.isEmpty) {
     // throwError?
     return [];
   }
@@ -193,6 +179,9 @@ export function stepwiseSqlQuery(
       let desc = join.toModel();
       desc.name = joinType;
 
+      // important for inserting at filter
+      let descBeforeFilter = t.toModel();
+
       t = t.replaceNode(
         [
           ["from", 0],
@@ -201,7 +190,7 @@ export function stepwiseSqlQuery(
         desc
       );
 
-      // TODO check why type doesnt accept var joinFilterType
+      //why type doesnt accept var joinFilterType ?
       arr.push({
         ast: t.toModel(),
         description: {
@@ -209,13 +198,14 @@ export function stepwiseSqlQuery(
           expressions: collectExpressions(
             join.getChildrenInCategory(joinFilterType)
           ),
+          explainAst: descBeforeFilter,
+          columnNames: collectColumnNames(join.toModel()),
         },
       });
       //console.log("after adding filter node: " + index + "\n" + JSON.stringify(t.toModel(), undefined, 2));
     }
 
-    // TODO decide how to implement outer join
-    // current approach - just run the outer join -> maybe add null rows with union?
+    // outer join approach - just run the outer join -> maybe add null rows with union?
     if (join.typeName.toLowerCase().includes("outer")) {
       t = t.replaceNode(
         [
@@ -244,6 +234,7 @@ export function stepwiseSqlQuery(
   //WHERE clause
   let whereNode = q.locateOrUndefined([["where", 0]]);
   if (whereNode) {
+    let descBeforeFilter = t.toModel();
     t = t.insertNode([["where", 0]], whereNode.toModel());
 
     arr.push({
@@ -253,6 +244,8 @@ export function stepwiseSqlQuery(
         expressions: collectExpressions(
           whereNode.getChildrenInCategory("expressions")
         ),
+        explainAst: descBeforeFilter,
+        columnNames: collectColumnNames(whereNode.toModel()),
       },
     });
   }
@@ -307,7 +300,7 @@ export function stepwiseSqlQuery(
   });
   //console.log("after select-step: \n" + JSON.stringify(t.toModel(), undefined, 2));
 
-  // TODO DISCTINCT needed??
+  // TODO DISCTINCT
 
   //ORDER BY clause
   let orderByNode = q.locateOrUndefined([["orderBy", 0]]);
@@ -368,12 +361,13 @@ function collectExpressions(nodes: Node[]): string[] {
         break;
       }
       case "parentheses": {
+        // ignore parentheses
         exp.push(
-          "(" +
-            collectExpressions(
-              node.getChildrenInCategory("expression")
-            ).toString() +
-            ")"
+          //  "(" +
+          collectExpressions(
+            node.getChildrenInCategory("expression")
+          ).toString()
+          //  + ")"
         );
         break;
       }
@@ -407,4 +401,21 @@ function collectExpressions(nodes: Node[]): string[] {
   }
   //console.log("return exp:\n" + exp);
   return exp;
+}
+
+function collectColumnNames(nodeDesc: NodeDescription): string[] {
+  // if join type is 'using' - return constant value
+  let t = new Tree(nodeDesc);
+  if (nodeDesc.name.includes("Using")) {
+    return [
+      t.locate([["using", 0]]).getChildInCategory("expression").properties
+        .value,
+    ];
+  }
+
+  let all: Node[] = t.getNodesOfType({
+    typeName: "columnName",
+    languageName: "sql",
+  });
+  return all.map((node) => node.properties.columnName);
 }

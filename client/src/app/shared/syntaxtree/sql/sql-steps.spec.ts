@@ -2,6 +2,7 @@ import {
   stepwiseSqlQuery,
   SqlStepDescription,
   SqlStepJoinDescription,
+  SqlStepConditionFilterDescription,
   JoinType,
 } from "./sql-steps";
 import { Tree, Node, NodeDescription } from "../syntaxtree";
@@ -76,7 +77,9 @@ function testJoinFilter(
   stepDesc: SqlStepDescription,
   desc: NodeDescription,
   index: number,
-  filter: string
+  filter: string,
+  prevDesc: NodeDescription,
+  columnNames: string[]
 ) {
   const srcTree = new Tree(desc);
   const node = new Node(stepDesc.ast, undefined);
@@ -122,7 +125,8 @@ function testJoinFilter(
       ["on", 0],
       ["operator", 0],
     ]);
-    expect(stepDesc.description).toEqual({
+
+    expect(<SqlStepConditionFilterDescription>stepDesc.description).toEqual({
       type: "on",
       expressions: [
         lhs.properties.refTableName +
@@ -135,6 +139,8 @@ function testJoinFilter(
           "." +
           rhs.properties.columnName,
       ],
+      explainAst: prevDesc,
+      columnNames: columnNames,
     });
   } else {
     let exp = srcTree.locate([
@@ -143,9 +149,12 @@ function testJoinFilter(
       ["using", 0],
       ["expression", 0],
     ]);
-    expect(stepDesc.description).toEqual({
+    expect(<SqlStepConditionFilterDescription>stepDesc.description).toEqual({
       type: "using",
-      expressions: ["(" + exp.properties.value + ")"],
+      //expression: "(" + exp.properties.value + ")",
+      expressions: [exp.properties.value],
+      explainAst: prevDesc,
+      columnNames: columnNames,
     });
   }
 }
@@ -158,7 +167,7 @@ describe(`SQL Steps`, () => {
 
   it("Basic select-from, not breaking down", () => {
     const desc: NodeDescription = require("./spec/ast-40-select-from.json");
-    const steps = stepwiseSqlQuery(desc);
+    const steps = stepwiseSqlQuery(new Tree(desc));
     const node = new Node(steps[0].ast, undefined);
 
     expect(steps.length).toEqual(1);
@@ -174,7 +183,7 @@ describe(`SQL Steps`, () => {
 
   describe(`simple where filter`, () => {
     const desc: NodeDescription = require("./spec/ast-41-select-from-where.json");
-    const steps = stepwiseSqlQuery(desc);
+    const steps = stepwiseSqlQuery(new Tree(desc));
 
     it("first step", () => {
       expect(steps.length).toEqual(2);
@@ -188,15 +197,17 @@ describe(`SQL Steps`, () => {
         desc.children.where[0]
       );
 
-      expect(steps[0].description).toEqual({
-        type: "where",
-        expressions: ["adresse.LKZ <> D"],
-      });
+      let cfDesc = <SqlStepConditionFilterDescription>steps[0].description;
+      expect(cfDesc.type).toEqual("where");
+      expect(cfDesc.expressions).toEqual(["adresse.LKZ <> D"]);
+      // problem: empty where node after deleteNode
+      //expect(cfDesc.explainAst).toEqual(new Tree(steps[0].ast).deleteNode([["where", 0]]).toModel());
+      expect(cfDesc.columnNames).toEqual(["LKZ"]);
     });
 
     //second step containing the fields from the select-clause and the where-clause
     it("second step", () => {
-      const node = new Node(stepwiseSqlQuery(desc)[1].ast, undefined);
+      const node = new Node(steps[1].ast, undefined);
       expect(node.childrenCategoryNames).toEqual(["select", "from", "where"]);
       // fields from select should correspond to initial-query
       expect(node.getChildInCategory("select").toModel()).toEqual(
@@ -215,9 +226,11 @@ describe(`SQL Steps`, () => {
     });
   });
 
+  // select Charakter.Charakter_Name
+  //from Charakter inner join Auftritt on Auftritt.Charakter_ID = Charakter.Charakter_ID
   describe("simple join", () => {
     const desc: NodeDescription = require("./spec/ast-42-simple-join.json");
-    const steps = stepwiseSqlQuery(desc);
+    const steps = stepwiseSqlQuery(new Tree(desc));
 
     it("1: cross join", () => {
       expect(steps.length).toEqual(3);
@@ -225,7 +238,10 @@ describe(`SQL Steps`, () => {
     });
 
     it("2: on-clouse", () => {
-      testJoinFilter(steps[1], desc, 0, "on");
+      testJoinFilter(steps[1], desc, 0, "on", steps[0].ast, [
+        "Charakter_ID",
+        "Charakter_ID",
+      ]);
     });
 
     it("3: select-clause", () => {
@@ -244,7 +260,7 @@ describe(`SQL Steps`, () => {
     //     GROUP BY Charakter.Charakter_ID
     //     ORDER BY COUNT() DESC, Charakter.Charakter_Name
     const desc: NodeDescription = require("./spec/ast-43-join-group-order.json");
-    const steps = stepwiseSqlQuery(desc);
+    const steps = stepwiseSqlQuery(new Tree(desc));
 
     // SELECT *
     // FROM Charakter
@@ -262,7 +278,10 @@ describe(`SQL Steps`, () => {
     // FROM Charakter
     // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
     it("2: on-clouse", () => {
-      testJoinFilter(steps[1], desc, 0, "on");
+      testJoinFilter(steps[1], desc, 0, "on", steps[0].ast, [
+        "Charakter_ID",
+        "Charakter_ID",
+      ]);
     });
 
     // SELECT *
@@ -326,7 +345,7 @@ describe(`SQL Steps`, () => {
         desc.children.orderBy[0]
       );
 
-      // only this enough?
+      // expect last step to ne equal to resource
       expect(node.toModel()).toEqual(desc);
 
       expect(steps[4].description).toEqual({
@@ -342,7 +361,7 @@ describe(`SQL Steps`, () => {
     // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
     // INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
     const desc: NodeDescription = require("./spec/ast-44-two-inner-joins.json");
-    const steps = stepwiseSqlQuery(desc);
+    const steps = stepwiseSqlQuery(new Tree(desc));
 
     // SELECT *
     // FROM Charakter
@@ -356,7 +375,10 @@ describe(`SQL Steps`, () => {
     // FROM Charakter
     // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
     it("2: on-filter", () => {
-      testJoinFilter(steps[1], desc, 0, "on");
+      testJoinFilter(steps[1], desc, 0, "on", steps[0].ast, [
+        "Charakter_ID",
+        "Charakter_ID",
+      ]);
     });
 
     // SELECT *
@@ -372,7 +394,10 @@ describe(`SQL Steps`, () => {
     // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
     // INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
     it("4: second inner join with on-filter", () => {
-      testJoinFilter(steps[3], desc, 1, "on");
+      testJoinFilter(steps[3], desc, 1, "on", steps[2].ast, [
+        "Geschichte_ID",
+        "Geschichte_ID",
+      ]);
     });
 
     // SELECT Charakter.Charakter_Name, Geschichte.Geschichte_Name
@@ -388,7 +413,6 @@ describe(`SQL Steps`, () => {
         desc.children.select[0]
       );
 
-      // only this enough?
       expect(node.toModel()).toEqual(desc);
 
       expect(steps[4].description).toEqual({
@@ -405,7 +429,7 @@ describe(`SQL Steps`, () => {
     // INNER JOIN pruefung USING ('pin')
     //  WHERE person.VNAME LIKE '%Alex%' AND pruefung.NOTE < 5
     const desc: NodeDescription = require("./spec/ast-45-inner-join-using.json");
-    const steps = stepwiseSqlQuery(desc);
+    const steps = stepwiseSqlQuery(new Tree(desc));
 
     // SELECT *
     // FROM person
@@ -419,7 +443,7 @@ describe(`SQL Steps`, () => {
     //       FROM person
     //       INNER JOIN student USING ('pin')
     it("2: using-filter", () => {
-      testJoinFilter(steps[1], desc, 0, "using");
+      testJoinFilter(steps[1], desc, 0, "using", steps[0].ast, ["pin"]);
     });
 
     // SELECT *
@@ -435,7 +459,7 @@ describe(`SQL Steps`, () => {
     //     INNER JOIN student USING ('pin')
     //     INNER JOIN pruefung USING ('pin')
     it("4: second inner join with on-filter", () => {
-      testJoinFilter(steps[3], desc, 1, "using");
+      testJoinFilter(steps[3], desc, 1, "using", steps[2].ast, ["pin"]);
     });
 
     // SELECT *
@@ -445,8 +469,6 @@ describe(`SQL Steps`, () => {
     //     WHERE person.VNAME LIKE '%Alex%' AND pruefung.NOTE < 5
     it("5: where-clause", () => {
       const node = new Node(steps[4].ast, undefined);
-      //console.log("after where-step: \n" + JSON.stringify(node.toModel(), undefined, 2));
-
       expect(node.childrenCategoryNames).toEqual(["select", "from", "where"]);
       starSelectTest(steps[4]);
       expect(node.getChildInCategory("where").toModel()).toEqual(
@@ -456,6 +478,9 @@ describe(`SQL Steps`, () => {
       expect(steps[4].description).toEqual({
         type: "where",
         expressions: ["person.VNAME LIKE %Alex%", "AND", "pruefung.NOTE < 5"],
+        //expressions: "person.VNAME LIKE %Alex%,AND,pruefung.NOTE < 5",
+        explainAst: steps[3].ast,
+        columnNames: ["VNAME", "NOTE"],
       });
     });
 
@@ -477,7 +502,6 @@ describe(`SQL Steps`, () => {
         desc.children.select[0]
       );
 
-      // only this enough?
       expect(node.toModel()).toEqual(desc);
 
       expect(steps[5].description).toEqual({
@@ -495,14 +519,13 @@ describe(`SQL Steps`, () => {
     //   GROUP BY krankenkasse.KRANKENKASSE_ID
     //   ORDER BY COUNT()
     const desc: NodeDescription = require("./spec/ast-46-two-left-joins.json");
-    const steps = stepwiseSqlQuery(desc);
+    const steps = stepwiseSqlQuery(new Tree(desc));
 
     // SELECT *
     // FROM krankenkasse
     //   LEFT JOIN person
     it("1: cross-join", () => {
       expect(steps.length).toEqual(9);
-      //crossJoinTest(steps[0], desc, 0);
       testJoin(steps[0], desc, 0, "crossJoin");
     });
 
@@ -510,7 +533,9 @@ describe(`SQL Steps`, () => {
     //   FROM krankenkasse
     //     INNER JOIN person USING ('krankenkasse_id')
     it("2: using-filter", () => {
-      testJoinFilter(steps[1], desc, 0, "using");
+      testJoinFilter(steps[1], desc, 0, "using", steps[0].ast, [
+        "krankenkasse_id",
+      ]);
     });
 
     // SELECT *
@@ -537,7 +562,7 @@ describe(`SQL Steps`, () => {
     //     LEFT JOIN person USING ('krankenkasse_id')
     //     INNER JOIN student USING ('pin')
     it("5: using-filter", () => {
-      testJoinFilter(steps[4], desc, 1, "using");
+      testJoinFilter(steps[4], desc, 1, "using", steps[3].ast, ["pin"]);
     });
 
     //  SELECT *
@@ -625,7 +650,7 @@ describe(`SQL Steps`, () => {
         desc.children.orderBy[0]
       );
 
-      // only this enough?
+      // expect last step to be equal to resource
       expect(node.toModel()).toEqual(desc);
 
       expect(steps[8].description).toEqual({
@@ -643,7 +668,7 @@ describe(`SQL Steps`, () => {
     // GROUP BY krankenkasse.krankenkasse_id
     // ORDER BY COUNT()
     const desc: NodeDescription = require("./spec/ast-47-outer-join.json");
-    const steps = stepwiseSqlQuery(desc);
+    const steps = stepwiseSqlQuery(new Tree(desc));
 
     // SELECT *
     // FROM krankenkasse
@@ -657,7 +682,10 @@ describe(`SQL Steps`, () => {
     //   FROM krankenkasse
     //     INNER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
     it("2: on-filter", () => {
-      testJoinFilter(steps[1], desc, 0, "on");
+      testJoinFilter(steps[1], desc, 0, "on", steps[0].ast, [
+        "krankenkasse_id",
+        "krankenkasse_id",
+      ]);
     });
 
     // SELECT *
@@ -683,7 +711,7 @@ describe(`SQL Steps`, () => {
     //   OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
     //   CROSS JOIN student USING ('pin')
     it("5: using-filter", () => {
-      testJoinFilter(steps[4], desc, 1, "using");
+      testJoinFilter(steps[4], desc, 1, "using", steps[3].ast, ["pin"]);
     });
 
     // SELECT *
@@ -754,7 +782,7 @@ describe(`SQL Steps`, () => {
     // FROM tag, termin, block
     // WHERE termin.BLOCK = block.BLOCK AND termin.TAG = tag.TAG
     const desc: NodeDescription = require("./spec/ast-48-from-multiple-tables.json");
-    const steps = stepwiseSqlQuery(desc);
+    const steps = stepwiseSqlQuery(new Tree(desc));
 
     // SELECT *
     // FROM tag, termin
@@ -817,6 +845,9 @@ describe(`SQL Steps`, () => {
           "AND",
           "termin.TAG = tag.TAG",
         ],
+        //expression: "termin.BLOCK = block.BLOCK,AND,termin.TAG = tag.TAG",
+        explainAst: steps[1].ast,
+        columnNames: ["BLOCK", "BLOCK", "TAG", "TAG"],
       });
     });
 
@@ -867,7 +898,7 @@ describe(`SQL Steps`, () => {
     // 	RIGHT OUTER JOIN lkz USING ('lkz')
     // GROUP BY lkz.LKZ
     const desc: NodeDescription = require("./spec/ast-49-inner-join-right-join-group-by.json");
-    const steps = stepwiseSqlQuery(desc);
+    const steps = stepwiseSqlQuery(new Tree(desc));
 
     // SELECT *
     // FROM student
@@ -875,21 +906,13 @@ describe(`SQL Steps`, () => {
     it("1: cross-join", () => {
       expect(steps.length).toEqual(7);
       testJoin(steps[0], desc, 0, "crossJoin");
-      // expect(steps[0].description).toEqual({
-      //   type: "cross",
-      //   tables: ["student", "adresse"],
-      // });
     });
 
     // SELECT *
     // FROM student
     // 	INNER JOIN adresse USING ('pin')
     it("2: using-filter", () => {
-      testJoinFilter(steps[1], desc, 0, "using");
-      // expect(steps[1].description).toEqual({
-      //   type: "using",
-      //   expressions: ["(pin)"],
-      // });
+      testJoinFilter(steps[1], desc, 0, "using", steps[0].ast, ["pin"]);
     });
 
     // SELECT *
@@ -909,11 +932,7 @@ describe(`SQL Steps`, () => {
     // 	INNER JOIN adresse USING ('pin')
     // 	INNER JOIN lkz USING ('lkz')
     it("4: second inner join using", () => {
-      testJoinFilter(steps[3], desc, 1, "using");
-      // expect(steps[3].description).toEqual({
-      //   type: "using",
-      //   expressions: ["(lkz)"],
-      // });
+      testJoinFilter(steps[3], desc, 1, "using", steps[2].ast, ["lkz"]);
     });
 
     // SELECT *

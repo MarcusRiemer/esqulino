@@ -1,5 +1,4 @@
-<!-- TODO: Properly render depending on the current step -->
-<div *ngIf="groupByResult" class="card card-body mb-3">
+<div *ngIf="groupByRows" class="card card-body mb-3">
   <h4 class="card-title">
     Vorschau der Gruppierung
   </h4>
@@ -11,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let rows of groupByResult">
+        <ng-container *ngFor="let rows of groupByRows">
           <ng-container
             *ngFor="let dataset of rows; let lastGroupElement = last"
             [ngTemplateOutlet]="lastGroupElement ? lastRow : defRow"
@@ -39,10 +38,61 @@
   </div>
 </div>
 
-<div class="card card-body mb-3">
-  <!-- <div [class.query-preview]="queryInProgress"> -->
+<div *ngIf="showFilterResult" class="card card-body mb-3">
   <h4 class="card-title">
-    <!--   <span *ngIf="queryInProgress" class="fa fa-refresh fa-spin fa-fw"></span> -->
+    Vorschau der Filterung
+  </h4>
+
+  <div class="table-responsive-sm">
+    <table class="table">
+      <thead>
+        <tr>
+          <ng-container
+            *ngFor="let column of conditionFilterResult.columns; let i = index;"
+            [ngTemplateOutlet]="indicesToMark.indexOf(i)>-1 ? markd : defaultd"
+            [ngTemplateOutletContext]="{column: column}"
+          ></ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of conditionFilterResult.rows">
+          <ng-container
+            *ngFor="let column of row; let i = index;"
+            [ngTemplateOutlet]="indicesToMark.indexOf(i)>-1 ? mark : default"
+            [ngTemplateOutletContext]="{column: column}"
+          ></ng-container>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #defaultd let-column="column">
+      <th>
+        {{ column }}
+      </th>
+    </ng-template>
+
+    <ng-template #markd let-column="column">
+      <th style="background-color: yellow;">
+        {{ column }}
+      </th>
+    </ng-template>
+
+    <ng-template #default let-column="column">
+      <td>
+        {{ column }}
+      </td>
+    </ng-template>
+
+    <ng-template #mark let-column="column">
+      <td style="background-color: yellow;">
+        {{ column }}
+      </td>
+    </ng-template>
+  </div>
+</div>
+
+<div class="card card-body mb-3">
+  <h4 class="card-title">
     Ergebnisvorschau
     <ng-container *ngIf="queryResult">
       <span
@@ -77,5 +127,4 @@
       </tbody>
     </table>
   </div>
-  <!-- <pre *ngIf="error" [innerText]="error | json"></pre> -->
 </div>

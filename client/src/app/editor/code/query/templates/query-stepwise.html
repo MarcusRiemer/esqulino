@@ -14,7 +14,7 @@
     [readOnly]="true"
   ></editor-block-host>
 </div>
-<!--<pre>{{ (currentDescription$ | async)| json }}</pre>-->
+
 <query-stepwise-description
   [step]="currentStep$ | async"
 ></query-stepwise-description>
@@ -22,4 +22,6 @@
 <query-stepwise-result
   [queryResult]="currentResult$ | async"
   [step]="currentStep$ | async"
+  [groupByStepResult]="groupByStepResult$ | async "
+  [conditionFilterResult]="conditionFilterResult$ | async "
 ></query-stepwise-result>

@@ -1,9 +1,8 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { Tree } from "../../../shared/syntaxtree/syntaxtree";
 
 import {
+  SqlStepConditionFilterDescription,
   SqlStepDescription,
-  SqlStepGroupByDescription,
 } from "../../../shared/syntaxtree/sql/sql-steps";
 
 import { QueryService, QueryResultRows } from "./query.service";
@@ -20,40 +19,74 @@ export class QueryStepwiseResultComponent {
   @Input()
   step: SqlStepDescription;
 
-  public groupByResult;
+  @Input()
+  groupByStepResult: QueryResultRows;
+
+  @Input()
+  conditionFilterResult: QueryResultRows;
+
+  public groupByRows;
+
+  public showFilterResult = false;
+
+  public indicesToMark: number[];
+
+  readonly maxGroupEntriesToShow = 5;
 
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes["queryResult"] && this.queryResult) {
-      if (this.step.description.type == "groupBy") {
-        // get rid of table name
-        let expr = this.step.description.expressions.map(
-          (e) => e.split(".")[1]
-        );
+    if (
+      changes["groupByStepResult"] &&
+      this.step.description.type == "groupBy"
+    ) {
+      this.showFilterResult = false;
+      // get rid of table name
+      let expr = this.step.description.expressions.map((e) => e.split(".")[1]);
 
-        // get indices from columnname
-        let indices = [];
-        expr.forEach((element) => {
-          indices.push(this.queryResult.columns.indexOf(element));
-        });
+      // get indices from columnname !!!dangerous - columnname might be from an other table
+      let indices = [];
+      expr.forEach((element) => {
+        indices.push(this.queryResult.columns.indexOf(element));
+      });
 
-        let corrOrderBy = <SqlStepGroupByDescription>this.step.description;
-
-        this._queryService
-          .runArbitraryQuery(
-            new Tree(corrOrderBy.correspondingOrderBy).toModel(),
-            {}
-          )
-          .subscribe((res) => {
-            if (res instanceof QueryResultRows) {
-              this.groupByResult = this.groupByIndices(res.rows, indices);
-            }
-          });
-      } else if (this.groupByResult) {
-        this.groupByResult = undefined;
-      }
+      this.groupByRows = this.groupByIndices(
+        this.groupByStepResult.rows,
+        indices
+      );
+    } else if (
+      changes["conditionFilterResult"] &&
+      ["on", "using", "where"].includes(this.step.description.type) &&
+      this.conditionFilterResult
+    ) {
+      let desc = <SqlStepConditionFilterDescription>this.step.description;
+      this.indicesToMark = this.getIndicesToMark(
+        desc.columnNames,
+        this.conditionFilterResult.columns
+      );
+      this.showFilterResult = true;
+    } else {
+      this.groupByRows = undefined;
+      this.showFilterResult = false;
     }
+  }
+
+  getIndicesToMark(names: string[], columns: string[]) {
+    console.log("expr: ", names);
+    return [
+      ...new Set(
+        names
+          .map((e) => {
+            let pos = -1;
+            let idx = [];
+            while ((pos = columns.indexOf(e, pos + 1)) >= 0) {
+              idx.push(pos);
+            }
+            return idx;
+          })
+          .flat()
+      ),
+    ];
   }
 
   groupByIndices(result: string[][], indices: number[]) {
@@ -65,7 +98,12 @@ export class QueryStepwiseResultComponent {
           if (!acc[group]) {
             acc[group] = [];
           }
-          acc[group].push(curr);
+          if (acc[group].length < this.maxGroupEntriesToShow) {
+            acc[group].push(curr);
+          } else if (acc[group].length == this.maxGroupEntriesToShow) {
+            acc[group].push(curr.map((c) => "..."));
+          }
+
           return acc;
         }, {})
       ),

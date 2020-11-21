@@ -1,15 +1,19 @@
 import { Component } from "@angular/core";
 
-import { map, flatMap, tap, withLatestFrom } from "rxjs/operators";
+import { map, flatMap, withLatestFrom, filter } from "rxjs/operators";
 import { BehaviorSubject, combineLatest } from "rxjs";
 
-import { stepwiseSqlQuery } from "../../../shared/syntaxtree/sql/sql-steps";
+import {
+  SqlStepGroupByDescription,
+  stepwiseSqlQuery,
+  SqlStepConditionFilterDescription,
+} from "../../../shared/syntaxtree/sql/sql-steps";
 import { Tree } from "../../../shared/syntaxtree/";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { EditorToolbarService, ToolbarItem } from "../../toolbar.service";
 
-import { QueryService } from "./query.service";
+import { QueryResultRows, QueryService } from "./query.service";
 
 @Component({
   templateUrl: "templates/query-stepwise.html",
@@ -71,6 +75,30 @@ export class QueryStepwiseComponent {
     //tap(() => console.log("log query run"))
   );
 
+  readonly groupByStepResult$ = this.currentStep$.pipe(
+    // flatMap(() => this.currentStep$),
+    filter((step) => step.description.type == "groupBy"),
+    map((step) => <SqlStepGroupByDescription>step.description),
+    flatMap((t) =>
+      this._queryService.runArbitraryQuery(
+        new Tree(t.correspondingOrderBy).toModel(),
+        {}
+      )
+    ),
+    filter((t) => t instanceof QueryResultRows)
+  );
+
+  // TODO mabe use previous step ?
+  readonly conditionFilterResult$ = this.currentStep$.pipe(
+    //flatMap(() => this.currentStep$),
+    filter((step) => ["on", "using", "where"].includes(step.description.type)),
+    map((step) => <SqlStepConditionFilterDescription>step.description),
+    flatMap((t) =>
+      this._queryService.runArbitraryQuery(new Tree(t.explainAst).toModel(), {})
+    ),
+    filter((t) => t instanceof QueryResultRows)
+  );
+
   ngOnInit() {
     this._btnPrev = this._toolbarService.addButton(
       "back",
@@ -97,14 +125,7 @@ export class QueryStepwiseComponent {
       .subscribe(([_, availableSteps]) => {
         if (this._currentStepNum.value < availableSteps.length - 1) {
           this._currentStepNum.next(this._currentStepNum.value + 1);
-
-          console.log("button forward");
-        } else {
-          console.log("forward not possible");
         }
-        /*if(this._currentStep.value >= availableSteps.length -1) {
-        this._toolbarService.removeItem("forward");
-      } */
       });
   }
 
@@ -114,8 +135,5 @@ export class QueryStepwiseComponent {
   ngOnDestroy() {
     this._toolbarService.removeItem(this._btnPrev.id);
     this._toolbarService.removeItem(this._btnNext.id);
-
-    //this._subscriptions.forEach((s) => s.unsubscribe());
-    //this._subscriptions = [];
   }
 }
