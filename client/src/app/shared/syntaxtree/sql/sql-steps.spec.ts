@@ -200,8 +200,9 @@ describe(`SQL Steps`, () => {
       let cfDesc = <SqlStepConditionFilterDescription>steps[0].description;
       expect(cfDesc.type).toEqual("where");
       expect(cfDesc.expressions).toEqual(["adresse.LKZ <> D"]);
-      // problem: empty where node after deleteNode
-      //expect(cfDesc.explainAst).toEqual(new Tree(steps[0].ast).deleteNode([["where", 0]]).toModel());
+      expect(
+        new Tree(cfDesc.explainAst).locateOrUndefined([["where", 0]])
+      ).toBeUndefined();
       expect(cfDesc.columnNames).toEqual(["LKZ"]);
     });
 
@@ -993,6 +994,78 @@ describe(`SQL Steps`, () => {
       expect(steps[6].description).toEqual({
         type: "select",
         expressions: ["lkz.LAND", "COUNT() - 1"],
+      });
+    });
+  });
+
+  describe("distinct", () => {
+    //SELECT DISTINCT veranst_termin.RAUM_ID, veranstaltung.VERANSTALTUNG_BEZ, veranst_termin.TERMIN_ID
+    //FROM veranstaltung
+    //  INNER JOIN veranst_termin USING ('VERANSTALTUNG_ID')
+    const desc: NodeDescription = require("./spec/ast-50-join-distinct.json");
+    const steps = stepwiseSqlQuery(new Tree(desc));
+
+    //SELECT *
+    //FROM veranstaltung
+    //  CROSS JOIN veranst_termin
+    it("1: cross-join", () => {
+      expect(steps.length).toEqual(4);
+      testJoin(steps[0], desc, 0, "crossJoin");
+    });
+
+    //SELECT *
+    //FROM veranstaltung
+    //  INNER JOIN veranst_termin USING ('VERANSTALTUNG_ID')
+    it("2: using-filter", () => {
+      testJoinFilter(steps[1], desc, 0, "using", steps[0].ast, [
+        "VERANSTALTUNG_ID",
+      ]);
+    });
+
+    //SELECT veranst_termin.RAUM_ID, veranstaltung.VERANSTALTUNG_BEZ, veranst_termin.TERMIN_ID
+    //FROM veranstaltung
+    //  INNER JOIN veranst_termin USING ('VERANSTALTUNG_ID')
+    it("3: fields from the select-clause without distinct", () => {
+      const node = new Node(steps[2].ast, undefined);
+      expect(node.childrenCategoryNames.sort()).toEqual(["from", "select"]);
+
+      const treeWithoutDistinct = new Tree(desc).deleteNode([
+        ["select", 0],
+        ["distinct", 0],
+      ]);
+      expect(steps[2].ast).toEqual(treeWithoutDistinct.toModel());
+
+      expect(steps[2].description).toEqual({
+        type: "select",
+        expressions: [
+          "veranst_termin.RAUM_ID",
+          "veranstaltung.VERANSTALTUNG_BEZ",
+          "veranst_termin.TERMIN_ID",
+        ],
+      });
+    });
+
+    //SELECT DISTINCT veranst_termin.RAUM_ID, veranstaltung.VERANSTALTUNG_BEZ, veranst_termin.TERMIN_ID
+    //FROM veranstaltung
+    //  INNER JOIN veranst_termin USING ('VERANSTALTUNG_ID')
+    it("4: select with distinct", () => {
+      const node = new Node(steps[3].ast, undefined);
+      expect(node.childrenCategoryNames.sort()).toEqual(["from", "select"]);
+
+      expect(node.getChildInCategory("select").toModel()).toEqual(
+        desc.children.select[0]
+      );
+      expect(node.getChildInCategory("from").toModel()).toEqual(
+        desc.children.from[0]
+      );
+
+      expect(steps[3].description).toEqual({
+        type: "distinct",
+        expressions: [
+          "veranst_termin.RAUM_ID",
+          "veranstaltung.VERANSTALTUNG_BEZ",
+          "veranst_termin.TERMIN_ID",
+        ],
       });
     });
   });

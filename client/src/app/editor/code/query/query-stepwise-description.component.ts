@@ -101,6 +101,15 @@ export class QueryStepwiseDescriptionComponent {
           this.descText += " erstellt.";
         }
         break;
+      case "distinct":
+        this.descText =
+          "Anwendung des DISTINCT. Hierbei werden alle Duplikate, die sich aus den Spalten von ";
+        this.step.description.expressions.forEach((exp) => {
+          this.descText += exp + "', '";
+        });
+        this.descText = this.descText.slice(0, -3);
+        this.descText += " ergeben, eliminiert.";
+        break;
       case "orderBy":
         this.descText = "Ordnen der Einträge entsprechend ";
         this.descText +=

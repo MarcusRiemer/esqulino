@@ -41,12 +41,18 @@ interface SqlStepOrderByDescription {
   expressions: string[];
 }
 
+interface SqlStepDistinctDescription {
+  type: "distinct";
+  expressions: string[];
+}
+
 export interface SqlStepDescription {
   ast: NodeDescription;
   description:
     | SqlStepJoinDescription
     | SqlStepConditionFilterDescription
     | SqlStepSelectDescription
+    | SqlStepDistinctDescription
     | SqlStepGroupByDescription
     | SqlStepOrderByDescription;
 }
@@ -291,16 +297,32 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
     t = t.replaceNode([["select", 0]], select.toModel());
   }
 
+  let distinct = q.locateOrUndefined([
+    ["select", 0],
+    ["distinct", 0],
+  ]);
+  let expr = collectExpressions(select.children.columns);
+  if (distinct) {
+    t = t.deleteNode(distinct.location);
+  }
   arr.push({
     ast: t.rootNode.toModel(),
     description: {
       type: "select",
-      expressions: collectExpressions(select.children.columns),
+      expressions: expr,
     },
   });
+  if (distinct) {
+    t = t.insertNode(distinct.location, distinct.toModel());
+    arr.push({
+      ast: t.rootNode.toModel(),
+      description: {
+        type: "distinct",
+        expressions: expr,
+      },
+    });
+  }
   //console.log("after select-step: \n" + JSON.stringify(t.toModel(), undefined, 2));
-
-  // TODO DISCTINCT
 
   //ORDER BY clause
   let orderByNode = q.locateOrUndefined([["orderBy", 0]]);
