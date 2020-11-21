@@ -5,14 +5,14 @@ import {
   SqlStepDescription,
 } from "../../../shared/syntaxtree/sql/sql-steps";
 
-import { QueryService, QueryResultRows } from "./query.service";
+import { QueryResultRows } from "./query.service";
 
 @Component({
   templateUrl: "templates/query-stepwise-result.html",
   selector: "query-stepwise-result",
 })
 export class QueryStepwiseResultComponent {
-  constructor(private _queryService: QueryService) {}
+  constructor() {}
   @Input()
   queryResult: QueryResultRows;
 
@@ -23,7 +23,7 @@ export class QueryStepwiseResultComponent {
   groupByStepResult: QueryResultRows;
 
   @Input()
-  conditionFilterResult: QueryResultRows;
+  prevResult: QueryResultRows;
 
   public groupByRows;
 
@@ -59,24 +59,20 @@ export class QueryStepwiseResultComponent {
         indices
       );
     } else if (
-      changes["conditionFilterResult"] &&
+      changes["prevResult"] &&
       ["on", "using", "where"].includes(this.step.description.type) &&
-      this.conditionFilterResult
+      this.prevResult
     ) {
-      this.filterRows = this.conditionFilterResult.rows.slice(
-        0,
-        this.maxfilterRows
-      );
-      if (this.filterRows.length < this.conditionFilterResult.rows.length) {
-        this.filterRows.push(
-          this.conditionFilterResult.rows[0].map((r) => "...")
-        );
+      // console.log("changes condition");
+      this.filterRows = this.prevResult.rows.slice(0, this.maxfilterRows);
+      if (this.filterRows.length < this.prevResult.rows.length) {
+        this.filterRows.push(this.prevResult.rows[0].map((r) => "..."));
       }
-      console.log(this.filterRows);
+      // console.log(this.filterRows);
       let desc = <SqlStepConditionFilterDescription>this.step.description;
       this.indicesToMark = this.getIndicesToMark(
         desc.columnNames,
-        this.conditionFilterResult.columns
+        this.prevResult.columns
       );
       this.showFilterResult = true;
     } else {

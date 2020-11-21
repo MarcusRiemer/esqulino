@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
 
-import { map, flatMap, withLatestFrom, filter } from "rxjs/operators";
+import { map, flatMap, withLatestFrom, filter, pairwise } from "rxjs/operators";
 import { BehaviorSubject, combineLatest } from "rxjs";
 
 import {
   SqlStepGroupByDescription,
   stepwiseSqlQuery,
-  SqlStepConditionFilterDescription,
 } from "../../../shared/syntaxtree/sql/sql-steps";
 import { Tree } from "../../../shared/syntaxtree/";
 
@@ -76,7 +75,6 @@ export class QueryStepwiseComponent {
   );
 
   readonly groupByStepResult$ = this.currentStep$.pipe(
-    // flatMap(() => this.currentStep$),
     filter((step) => step.description.type == "groupBy"),
     map((step) => <SqlStepGroupByDescription>step.description),
     flatMap((t) =>
@@ -88,15 +86,10 @@ export class QueryStepwiseComponent {
     filter((t) => t instanceof QueryResultRows)
   );
 
-  // TODO mabe use previous step ?
-  readonly conditionFilterResult$ = this.currentStep$.pipe(
-    //flatMap(() => this.currentStep$),
-    filter((step) => ["on", "using", "where"].includes(step.description.type)),
-    map((step) => <SqlStepConditionFilterDescription>step.description),
-    flatMap((t) =>
-      this._queryService.runArbitraryQuery(new Tree(t.explainAst).toModel(), {})
-    ),
-    filter((t) => t instanceof QueryResultRows)
+  // use previous result for visualiszation of condition filter
+  readonly prevResult$ = this.currentResult$.pipe(
+    pairwise(),
+    map((pair) => pair[0])
   );
 
   ngOnInit() {

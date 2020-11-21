@@ -48,7 +48,7 @@
       <thead>
         <tr>
           <ng-container
-            *ngFor="let column of conditionFilterResult.columns; let i = index;"
+            *ngFor="let column of prevResult.columns; let i = index;"
             [ngTemplateOutlet]="indicesToMark.indexOf(i)>-1 ? markd : defaultd"
             [ngTemplateOutletContext]="{column: column}"
           ></ng-container>

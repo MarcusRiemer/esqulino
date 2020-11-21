@@ -21,7 +21,6 @@ export interface SqlStepJoinDescription {
 export interface SqlStepConditionFilterDescription {
   type: "on" | "using" | "where";
   expressions: string[];
-  explainAst: NodeDescription;
   columnNames: string[];
 }
 
@@ -185,9 +184,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
       let desc = join.toModel();
       desc.name = joinType;
 
-      // important for inserting at filter
-      let descBeforeFilter = t.toModel();
-
       t = t.replaceNode(
         [
           ["from", 0],
@@ -204,7 +200,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
           expressions: collectExpressions(
             join.getChildrenInCategory(joinFilterType)
           ),
-          explainAst: descBeforeFilter,
           columnNames: collectColumnNames(join.toModel()),
         },
       });
@@ -224,7 +219,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
       arr.push({
         ast: t.toModel(),
         description: {
-          //type: "outerJoin",
           type: join.typeName as JoinType,
           tables: [desc_firstTableName, joinTable.properties.name],
         },
@@ -240,7 +234,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
   //WHERE clause
   let whereNode = q.locateOrUndefined([["where", 0]]);
   if (whereNode) {
-    let descBeforeFilter = t.toModel();
     t = t.insertNode([["where", 0]], whereNode.toModel());
 
     arr.push({
@@ -250,7 +243,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
         expressions: collectExpressions(
           whereNode.getChildrenInCategory("expressions")
         ),
-        explainAst: descBeforeFilter,
         columnNames: collectColumnNames(whereNode.toModel()),
       },
     });
