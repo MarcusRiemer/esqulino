@@ -18,6 +18,11 @@ export interface SqlStepJoinDescription {
   tables: string[];
 }
 
+interface SqlStepFromDescripton {
+  type: "from";
+  table: string;
+}
+
 export interface SqlStepConditionFilterDescription {
   type: "on" | "using" | "where";
   expressions: string[];
@@ -48,6 +53,7 @@ interface SqlStepDistinctDescription {
 export interface SqlStepDescription {
   ast: NodeDescription;
   description:
+    | SqlStepFromDescripton
     | SqlStepJoinDescription
     | SqlStepConditionFilterDescription
     | SqlStepSelectDescription
@@ -94,9 +100,9 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
   let arr: SqlStepDescription[] = [];
   let t = createBaseTree();
 
-  // cross joins of comma separated tables in from clause
+  // get first table as first step
   let from = q.locate([["from", 0]]);
-  let tableIndex = 1;
+
   let currentTable = from.getChildrenInCategory("tables")[0];
   let desc_firstTableName = currentTable.properties.name;
   t = t.insertNode(
@@ -106,6 +112,17 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
     ],
     currentTable.toModel()
   );
+
+  arr.push({
+    ast: t.toModel(),
+    description: {
+      type: "from",
+      table: desc_firstTableName,
+    },
+  });
+
+  // cross joins of comma separated tables in from clause
+  let tableIndex = 1;
   let nextTable = from.getChildrenInCategory("tables")[tableIndex];
   while (nextTable) {
     if (tableIndex == 2) {

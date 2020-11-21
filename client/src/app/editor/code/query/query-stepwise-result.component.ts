@@ -81,15 +81,15 @@ export class QueryStepwiseResultComponent {
     }
   }
 
-  getIndicesToMark(names: string[], columns: string[]) {
-    console.log("expr: ", names);
+  getIndicesToMark(namesToLocate: string[], columnsToLookAt: string[]) {
+    console.log("expr: ", namesToLocate);
     return [
       ...new Set(
-        names
+        namesToLocate
           .map((e) => {
             let pos = -1;
             let idx = [];
-            while ((pos = columns.indexOf(e, pos + 1)) >= 0) {
+            while ((pos = columnsToLookAt.indexOf(e, pos + 1)) >= 0) {
               idx.push(pos);
             }
             return idx;

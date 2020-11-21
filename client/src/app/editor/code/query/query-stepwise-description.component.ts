@@ -18,13 +18,19 @@ export class QueryStepwiseDescriptionComponent {
 
   createDescription() {
     switch (this.step.description.type) {
+      case "from":
+        this.descText =
+          "Verarbeitung der FROM-Klausel. Dazu wird im ersten Schritt wird die Tabelle " +
+          this.step.description.table +
+          " mit allen Ihren Spalten gebidlet.";
+        break;
       case "crossJoin":
         this.descText =
-          "Anwendung des Cross Join. Kartesisches Produkt der Tabellen '" +
+          "Anwendung des Cross Join. Hierbei wird das kartesische Produkt der Tabellen '" +
           this.step.description.tables[0] +
           "' und '" +
           this.step.description.tables[1] +
-          "'.";
+          "' gebildet.";
         break;
       case "innerJoin":
         this.descText =
@@ -50,7 +56,7 @@ export class QueryStepwiseDescriptionComponent {
         break;
       case "using":
         this.descText =
-          "Anwendung des USING-Filter.\nAuswertung der JOIN-Bedingung '" +
+          "Anwendung des USING-Filter. Auswertung der JOIN-Bedingung '" +
           this.step.description.expressions +
           "' für jede Zeile der Tabelle.";
         break;
@@ -65,7 +71,6 @@ export class QueryStepwiseDescriptionComponent {
           this.descText += exp + "', '";
         });
         this.descText = this.descText.slice(0, -3);*/
-
         this.descText += "das Kriterium " + this.step.description.expressions;
         this.descText += " erfüllen.";
         break;
