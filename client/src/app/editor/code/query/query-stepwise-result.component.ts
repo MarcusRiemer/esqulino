@@ -70,10 +70,24 @@ export class QueryStepwiseResultComponent {
       }
       // console.log(this.filterRows);
       let desc = <SqlStepConditionFilterDescription>this.step.description;
-      this.indicesToMark = this.getIndicesToMark(
-        desc.columnNames,
-        this.prevResult.columns
-      );
+      // the using join constraint requires special treatment
+      // takes first matching column of the dataset on the left-hand side of the join-operator
+      if (this.step.description.type == "using") {
+        this.indicesToMark = [];
+        this.indicesToMark.push(
+          this.prevResult.columns
+            .map((c) => c.split(".")[1])
+            .indexOf(desc.columnNames[0])
+        );
+        this.indicesToMark.push(
+          this.prevResult.columns.indexOf(desc.columnNames[1])
+        );
+      } else {
+        this.indicesToMark = this.getIndicesToMark(
+          desc.columnNames,
+          this.prevResult.columns
+        );
+      }
       this.showFilterResult = true;
     } else {
       this.groupByRows = undefined;
@@ -82,7 +96,8 @@ export class QueryStepwiseResultComponent {
   }
 
   getIndicesToMark(namesToLocate: string[], columnsToLookAt: string[]) {
-    console.log("expr: ", namesToLocate);
+    console.log("namesToLocate: ", namesToLocate);
+    console.log("columnsToLookAt: ", columnsToLookAt);
     return [
       ...new Set(
         namesToLocate

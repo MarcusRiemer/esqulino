@@ -295,16 +295,19 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
 
   //SELECT clause
   let select = q.locate([["select", 0]]);
-  if (
+  /* if (
     !(
       q.locate([
         ["select", 0],
         ["columns", 0],
       ]).typeName == "starOperator"
     )
-  ) {
+  ) { */
+  if (t.locate([["select", 0]]) != select) {
     t = t.replaceNode([["select", 0]], select.toModel());
   }
+
+  //}
 
   let distinct = q.locateOrUndefined([
     ["select", 0],
@@ -435,18 +438,20 @@ function collectExpressions(nodes: Node[]): string[] {
 }
 
 function collectColumnNames(nodeDesc: NodeDescription): string[] {
-  // if join type is 'using' - return constant value
+  // if join type is 'using' - return [usingValue, table.usingValue]
   let t = new Tree(nodeDesc);
   if (nodeDesc.name.includes("Using")) {
-    return [
-      t.locate([["using", 0]]).getChildInCategory("expression").properties
-        .value,
-    ];
+    let name = t.locate([["using", 0]]).getChildInCategory("expression")
+      .properties.value;
+
+    return [name, t.locate([["table", 0]]).properties.name + "." + name];
   }
 
   let all: Node[] = t.getNodesOfType({
     typeName: "columnName",
     languageName: "sql",
   });
-  return all.map((node) => node.properties.columnName);
+  return all.map(
+    (node) => node.properties.refTableName + "." + node.properties.columnName
+  );
 }

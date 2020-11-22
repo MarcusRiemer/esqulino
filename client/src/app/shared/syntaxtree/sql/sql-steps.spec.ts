@@ -164,16 +164,16 @@ function testJoinFilter(
       columnNames: columnNames,
     });
   } else {
-    let exp = srcTree.locate([
-      ["from", 0],
-      ["joins", index],
-      ["using", 0],
-      ["expression", 0],
-    ]);
     expect(<SqlStepConditionFilterDescription>stepDesc.description).toEqual({
       type: "using",
-      //expression: "(" + exp.properties.value + ")",
-      expressions: [exp.properties.value],
+      expressions: [
+        srcTree.locate([
+          ["from", 0],
+          ["joins", index],
+          ["using", 0],
+          ["expression", 0],
+        ]).properties.value,
+      ],
       columnNames: columnNames,
     });
   }
@@ -232,7 +232,7 @@ describe(`SQL Steps`, () => {
       let cfDesc = <SqlStepConditionFilterDescription>steps[1].description;
       expect(cfDesc.type).toEqual("where");
       expect(cfDesc.expressions).toEqual(["adresse.LKZ <> D"]);
-      expect(cfDesc.columnNames).toEqual(["LKZ"]);
+      expect(cfDesc.columnNames).toEqual(["adresse.LKZ"]);
     });
 
     //fields from the select-clause and the where-clause
@@ -272,7 +272,10 @@ describe(`SQL Steps`, () => {
     });
 
     it("on-clouse", () => {
-      testJoinFilter(steps[2], desc, 0, "on", ["Charakter_ID", "Charakter_ID"]);
+      testJoinFilter(steps[2], desc, 0, "on", [
+        "Auftritt.Charakter_ID",
+        "Charakter.Charakter_ID",
+      ]);
     });
 
     it("select-clause", () => {
@@ -311,7 +314,10 @@ describe(`SQL Steps`, () => {
     // FROM Charakter
     // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
     it("on-clouse", () => {
-      testJoinFilter(steps[2], desc, 0, "on", ["Charakter_ID", "Charakter_ID"]);
+      testJoinFilter(steps[2], desc, 0, "on", [
+        "Auftritt.Charakter_ID",
+        "Charakter.Charakter_ID",
+      ]);
     });
 
     // SELECT *
@@ -411,7 +417,10 @@ describe(`SQL Steps`, () => {
     // FROM Charakter
     // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
     it("on-filter", () => {
-      testJoinFilter(steps[2], desc, 0, "on", ["Charakter_ID", "Charakter_ID"]);
+      testJoinFilter(steps[2], desc, 0, "on", [
+        "Auftritt.Charakter_ID",
+        "Charakter.Charakter_ID",
+      ]);
     });
 
     // SELECT *
@@ -428,8 +437,8 @@ describe(`SQL Steps`, () => {
     // INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
     it("second inner join with on-filter", () => {
       testJoinFilter(steps[4], desc, 1, "on", [
-        "Geschichte_ID",
-        "Geschichte_ID",
+        "Auftritt.Geschichte_ID",
+        "Geschichte.Geschichte_ID",
       ]);
     });
 
@@ -482,7 +491,7 @@ describe(`SQL Steps`, () => {
     //       FROM person
     //       INNER JOIN student USING ('pin')
     it("using-filter", () => {
-      testJoinFilter(steps[2], desc, 0, "using", ["pin"]);
+      testJoinFilter(steps[2], desc, 0, "using", ["pin", "student.pin"]);
     });
 
     // SELECT *
@@ -498,7 +507,7 @@ describe(`SQL Steps`, () => {
     //     INNER JOIN student USING ('pin')
     //     INNER JOIN pruefung USING ('pin')
     it("second inner join with on-filter", () => {
-      testJoinFilter(steps[4], desc, 1, "using", ["pin"]);
+      testJoinFilter(steps[4], desc, 1, "using", ["pin", "pruefung.pin"]);
     });
 
     // SELECT *
@@ -517,7 +526,7 @@ describe(`SQL Steps`, () => {
       expect(steps[5].description).toEqual({
         type: "where",
         expressions: ["person.VNAME LIKE %Alex%", "AND", "pruefung.NOTE < 5"],
-        columnNames: ["VNAME", "NOTE"],
+        columnNames: ["person.VNAME", "pruefung.NOTE"],
       });
     });
 
@@ -576,7 +585,10 @@ describe(`SQL Steps`, () => {
     //   FROM krankenkasse
     //     INNER JOIN person USING ('krankenkasse_id')
     it("using-filter", () => {
-      testJoinFilter(steps[2], desc, 0, "using", ["krankenkasse_id"]);
+      testJoinFilter(steps[2], desc, 0, "using", [
+        "krankenkasse_id",
+        "person.krankenkasse_id",
+      ]);
     });
 
     // SELECT *
@@ -603,7 +615,7 @@ describe(`SQL Steps`, () => {
     //     LEFT JOIN person USING ('krankenkasse_id')
     //     INNER JOIN student USING ('pin')
     it("using-filter", () => {
-      testJoinFilter(steps[5], desc, 1, "using", ["pin"]);
+      testJoinFilter(steps[5], desc, 1, "using", ["pin", "student.pin"]);
     });
 
     //  SELECT *
@@ -730,8 +742,8 @@ describe(`SQL Steps`, () => {
     //     INNER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
     it("on-filter", () => {
       testJoinFilter(steps[2], desc, 0, "on", [
-        "krankenkasse_id",
-        "krankenkasse_id",
+        "krankenkasse.krankenkasse_id",
+        "person.krankenkasse_id",
       ]);
     });
 
@@ -758,7 +770,7 @@ describe(`SQL Steps`, () => {
     //   OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
     //   CROSS JOIN student USING ('pin')
     it("using-filter", () => {
-      testJoinFilter(steps[5], desc, 1, "using", ["pin"]);
+      testJoinFilter(steps[5], desc, 1, "using", ["pin", "student.pin"]);
     });
 
     // SELECT *
@@ -897,7 +909,7 @@ describe(`SQL Steps`, () => {
           "AND",
           "termin.TAG = tag.TAG",
         ],
-        columnNames: ["BLOCK", "BLOCK", "TAG", "TAG"],
+        columnNames: ["termin.BLOCK", "block.BLOCK", "termin.TAG", "tag.TAG"],
       });
     });
 
@@ -968,7 +980,7 @@ describe(`SQL Steps`, () => {
     // FROM student
     // 	INNER JOIN adresse USING ('pin')
     it("using-filter", () => {
-      testJoinFilter(steps[2], desc, 0, "using", ["pin"]);
+      testJoinFilter(steps[2], desc, 0, "using", ["pin", "adresse.pin"]);
     });
 
     // SELECT *
@@ -984,7 +996,7 @@ describe(`SQL Steps`, () => {
     // 	INNER JOIN adresse USING ('pin')
     // 	INNER JOIN lkz USING ('lkz')
     it("second inner join using", () => {
-      testJoinFilter(steps[4], desc, 1, "using", ["lkz"]);
+      testJoinFilter(steps[4], desc, 1, "using", ["lkz", "lkz.lkz"]);
     });
 
     // SELECT *
@@ -1074,7 +1086,10 @@ describe(`SQL Steps`, () => {
     //FROM veranstaltung
     //  INNER JOIN veranst_termin USING ('VERANSTALTUNG_ID')
     it("using-filter", () => {
-      testJoinFilter(steps[2], desc, 0, "using", ["VERANSTALTUNG_ID"]);
+      testJoinFilter(steps[2], desc, 0, "using", [
+        "VERANSTALTUNG_ID",
+        "veranst_termin.VERANSTALTUNG_ID",
+      ]);
     });
 
     //SELECT veranst_termin.RAUM_ID, veranstaltung.VERANSTALTUNG_BEZ, veranst_termin.TERMIN_ID
