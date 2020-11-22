@@ -59,6 +59,22 @@ function getRegexMatches(regexString: string, input: string): string[] {
 }
 
 /**
+ * checks whether a regexString can be interpreted as a valid
+ * regular expression
+ *
+ * @param regexString
+ */
+function validateRegExString(regexString: string) {
+  try {
+    new RegExp(regexString, "g");
+  } catch (e) {
+    return false;
+  }
+
+  return true;
+}
+
+/**
  *
  * @param expectedMatches
  * @param matches
@@ -98,15 +114,43 @@ export function runTestCase(
   testCase: RegexTestCaseDescription
 ): ExecutedTestCase {
   let errorMessage = "";
-  let matches = getRegexMatches(regexString, testCase.input);
+  const isNoMatchType = testCase.expected.type == "noMatch";
 
   // if it's a whole match, simplify it into an exact match with a single hit
   const simplifiedExpectation = simplifyExpectation(testCase);
 
-  const isNoMatchType = testCase.expected.type == "noMatch";
+  // if the regex string is empty, return and check if it's a noMatch case
+  if (regexString == "") {
+    return {
+      input: testCase.input,
+      matches: [],
+      unexpectedMatches: [],
+      expected: isNoMatchType
+        ? { type: testCase.expected.type, hits: [] }
+        : simplifiedExpectation,
+      result: isNoMatchType,
+      error: "",
+    };
+  }
 
+  // validate the regexString and return, if invalid
+  if (!validateRegExString(regexString)) {
+    return {
+      input: testCase.input,
+      matches: [],
+      unexpectedMatches: [],
+      expected: isNoMatchType
+        ? { type: testCase.expected.type, hits: [] }
+        : simplifiedExpectation,
+      result: false,
+      error: "Der eingegebene Reguläre Ausdruck ist invalide.",
+    };
+  }
+
+  let matches = getRegexMatches(regexString, testCase.input);
   let unexpectedMatches = [];
-  let expectedMatches = ("hits" in simplifiedExpectation) ? simplifiedExpectation.hits : [];
+  let expectedMatches =
+    "hits" in simplifiedExpectation ? simplifiedExpectation.hits : [];
   const result = validateMatches(expectedMatches, matches, testCase);
   if (!result) {
     unexpectedMatches = matches.filter(function (value) {
@@ -114,7 +158,7 @@ export function runTestCase(
     });
     if (unexpectedMatches.length > 0) {
       errorMessage =
-          "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.";
+        "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.";
     }
   }
 
@@ -134,7 +178,9 @@ export function runTestCase(
     input: testCase.input,
     matches: testCase.expected.type == "wholeMatch" ? [matches[0]] : matches,
     unexpectedMatches: unexpectedMatches,
-    expected: isNoMatchType ? {type: testCase.expected.type, hits: []} : simplifiedExpectation,
+    expected: isNoMatchType
+      ? { type: testCase.expected.type, hits: [] }
+      : simplifiedExpectation,
     result: result,
     error: errorMessage,
   };

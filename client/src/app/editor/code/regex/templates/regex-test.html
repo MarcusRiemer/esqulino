@@ -32,7 +32,9 @@
       </span>
     </td>
     <td class="col-md-2">
-      <span *ngFor="let unexpectedMatch of testCase.unexpectedMatches; let isLastUnexpected=last">
+      <span
+        *ngFor="let unexpectedMatch of testCase.unexpectedMatches; let isLastUnexpected=last"
+      >
         <span class="hitBox">{{ unexpectedMatch }}</span>
         {{ isLastUnexpected ? '' : ', ' }}
       </span>

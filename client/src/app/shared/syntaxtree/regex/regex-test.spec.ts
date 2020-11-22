@@ -21,6 +21,44 @@ describe(`RegEx Testing`, () => {
       });
     });
 
+    it("empty Regex, a input, correct test case", () => {
+      const result = runTestCase("", {
+        input: "a",
+        expected: { type: "noMatch" },
+      });
+
+      expect(result).toEqual({
+        input: "a",
+        expected: {
+          type: "noMatch",
+          hits: [],
+        },
+        matches: [],
+        unexpectedMatches: [],
+        result: true,
+        error: "",
+      });
+    });
+
+    it("invalid Regex, a input, incorrect test case", () => {
+      const result = runTestCase("(", {
+        input: "a",
+        expected: { type: "noMatch" },
+      });
+
+      expect(result).toEqual({
+        input: "a",
+        expected: {
+          type: "noMatch",
+          hits: [],
+        },
+        matches: [],
+        unexpectedMatches: [],
+        result: false,
+        error: "Der eingegebene Reguläre Ausdruck ist invalide.",
+      });
+    });
+
     it("b Regex, a input, correct test case", () => {
       const result = runTestCase("a", {
         input: "b",
@@ -31,7 +69,7 @@ describe(`RegEx Testing`, () => {
         input: "b",
         expected: {
           type: "noMatch",
-          hits: []
+          hits: [],
         },
         matches: [],
         unexpectedMatches: [],
@@ -50,12 +88,13 @@ describe(`RegEx Testing`, () => {
         input: "a",
         expected: {
           type: "noMatch",
-          hits: []
+          hits: [],
         },
         matches: ["a"],
         unexpectedMatches: ["a"],
         result: false,
-        error: "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.",
+        error:
+          "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.",
       });
     });
 
@@ -107,7 +146,7 @@ describe(`RegEx Testing`, () => {
       const result = runTestCase("^a$", {
         input: "aa",
         expected: {
-          type: "wholeMatch"
+          type: "wholeMatch",
         },
       });
 
@@ -142,7 +181,8 @@ describe(`RegEx Testing`, () => {
         matches: ["Haus", "Maus", "laus"],
         unexpectedMatches: ["laus"],
         result: false,
-        error: "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.",
+        error:
+          "Es wurden unerwartete Zeichen mit dem Regulärem Ausdruck getroffen.",
       });
     });
 
