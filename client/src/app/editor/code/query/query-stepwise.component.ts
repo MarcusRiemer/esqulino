@@ -82,11 +82,19 @@ export class QueryStepwiseComponent {
     // ignore QueryResultError
   );
 
-  // bug - back step
-  //previous result for visualiszation of condition filter
-  readonly prevResult$ = this.currentResult$.pipe(
-    pairwise(),
-    map((pair) => pair[0])
+  //previous result that is used for visualiszation of grouping and condition filter
+  //get the previous result by pairwise()[0] does not work when going back
+  readonly prevResult$ = combineLatest(
+    this._currentStepNum,
+    this.availableSteps$
+  ).pipe(
+    filter(([stepNum]) => stepNum > 0),
+    map(([stepNum, steps]) => {
+      return steps[stepNum - 1];
+    }),
+    flatMap((step) =>
+      this._queryService.runArbitraryQuery(new Tree(step.ast).toModel(), {})
+    )
   );
 
   /**

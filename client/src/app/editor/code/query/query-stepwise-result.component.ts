@@ -14,13 +14,10 @@ import { QueryResultRows } from "./query.service";
 export class QueryStepwiseResultComponent {
   constructor() {}
   @Input()
-  queryResult: QueryResultRows;
-
-  @Input()
   step: SqlStepDescription;
 
-  /*@Input()
-  groupByStepResult: QueryResultRows;*/
+  @Input()
+  queryResult: QueryResultRows;
 
   @Input()
   prevResult: QueryResultRows;
@@ -30,8 +27,6 @@ export class QueryStepwiseResultComponent {
 
   //a subset of all rows at a condition filter step
   public filterRows: string[][];
-
-  public showFilterResult = false;
 
   //column indices that are marked in the preview table
   public indicesToMark: number[];
@@ -63,6 +58,7 @@ export class QueryStepwiseResultComponent {
       } else if (
         ["on", "using", "where"].includes(this.step.description.type)
       ) {
+        this.groupByRows = undefined;
         this.filterRows = this.prevResult.rows.slice(
           0,
           QueryStepwiseResultComponent.FILTER_ROWS_MAX
@@ -93,8 +89,8 @@ export class QueryStepwiseResultComponent {
             this.prevResult.columns
           );
         }
-        this.showFilterResult = true;
       } else {
+        // hide preview tables for every other type
         this.groupByRows = undefined;
         this.filterRows = undefined;
       }
