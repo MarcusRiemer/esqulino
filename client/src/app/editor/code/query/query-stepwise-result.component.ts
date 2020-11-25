@@ -19,85 +19,94 @@ export class QueryStepwiseResultComponent {
   @Input()
   step: SqlStepDescription;
 
-  @Input()
-  groupByStepResult: QueryResultRows;
+  /*@Input()
+  groupByStepResult: QueryResultRows;*/
 
   @Input()
   prevResult: QueryResultRows;
 
+  //grouped data sets of a group by step, taken from a order by
   public groupByRows;
 
-  public filterRows;
-
-  readonly maxfilterRows = 15;
+  //a subset of all rows at a condition filter step
+  public filterRows: string[][];
 
   public showFilterResult = false;
 
+  //column indices that are marked in the preview table
   public indicesToMark: number[];
 
-  readonly maxGroupEntriesToShow = 5;
+  //max value for the number of rows to be displayed for a condition filter
+  private static readonly FILTER_ROWS_MAX = 15;
 
-  ngOnInit() {}
+  //max value for the number of rows to be displayed for a each group
+  private static readonly GROUP_ENTRIES_TO_SHOW_MAX = 15;
 
+  /**
+   * evaluates the current step type and creates the required data structure for the display
+   * @param changes
+   */
   ngOnChanges(changes: SimpleChanges) {
-    if (
-      changes["groupByStepResult"] &&
-      this.step.description.type == "groupBy"
-    ) {
-      this.filterRows = undefined;
-      // get rid of table name
-      let expr = this.step.description.expressions.map((e) => e.split(".")[1]);
+    //perform a grouping of data sets for a group by
+    if (changes["prevResult"]) {
+      if (this.step.description.type == "groupBy") {
+        this.filterRows = undefined;
 
-      // get indices from columnname !!!dangerous - columnname might be from an other table
-      let indices = [];
-      expr.forEach((element) => {
-        indices.push(this.queryResult.columns.indexOf(element));
-      });
+        let indices = [];
+        this.step.description.expressions.forEach((element) => {
+          indices.push(this.queryResult.columns.indexOf(element));
+        });
 
-      this.groupByRows = this.groupByIndices(
-        this.groupByStepResult.rows,
-        indices
-      );
-    } else if (
-      changes["prevResult"] &&
-      ["on", "using", "where"].includes(this.step.description.type) &&
-      this.prevResult
-    ) {
-      // console.log("changes condition");
-      this.filterRows = this.prevResult.rows.slice(0, this.maxfilterRows);
-      if (this.filterRows.length < this.prevResult.rows.length) {
-        this.filterRows.push(this.prevResult.rows[0].map((r) => "..."));
-      }
-      // console.log(this.filterRows);
-      let desc = <SqlStepConditionFilterDescription>this.step.description;
-      // the using join constraint requires special treatment
-      // takes first matching column of the dataset on the left-hand side of the join-operator
-      if (this.step.description.type == "using") {
-        this.indicesToMark = [];
-        this.indicesToMark.push(
-          this.prevResult.columns
-            .map((c) => c.split(".")[1])
-            .indexOf(desc.columnNames[0])
+        this.groupByRows = this.groupByIndices(this.prevResult.rows, indices);
+
+        // create the indices that should be marked for a on, using and where step
+      } else if (
+        ["on", "using", "where"].includes(this.step.description.type)
+      ) {
+        this.filterRows = this.prevResult.rows.slice(
+          0,
+          QueryStepwiseResultComponent.FILTER_ROWS_MAX
         );
-        this.indicesToMark.push(
-          this.prevResult.columns.indexOf(desc.columnNames[1])
-        );
+
+        // append a '...'-row if further rows follow
+        if (this.filterRows.length < this.prevResult.rows.length) {
+          this.filterRows.push(this.prevResult.rows[0].map((r) => "..."));
+        }
+
+        let desc = <SqlStepConditionFilterDescription>this.step.description;
+        // using constraint requires special treatment
+        // if on the left-hand side of the join-operatorm more than one column
+        // matches the using name, it takes first matching column
+        if (this.step.description.type == "using") {
+          this.indicesToMark = [];
+          this.indicesToMark.push(
+            this.prevResult.columns
+              .map((c) => c.split(".")[1])
+              .indexOf(desc.columnNames[0])
+          );
+          this.indicesToMark.push(
+            this.prevResult.columns.indexOf(desc.columnNames[1])
+          );
+        } else {
+          this.indicesToMark = this.getIndicesToMark(
+            desc.columnNames,
+            this.prevResult.columns
+          );
+        }
+        this.showFilterResult = true;
       } else {
-        this.indicesToMark = this.getIndicesToMark(
-          desc.columnNames,
-          this.prevResult.columns
-        );
+        this.groupByRows = undefined;
+        this.filterRows = undefined;
       }
-      this.showFilterResult = true;
-    } else {
-      this.groupByRows = undefined;
-      this.filterRows = undefined;
     }
   }
 
-  getIndicesToMark(namesToLocate: string[], columnsToLookAt: string[]) {
-    console.log("namesToLocate: ", namesToLocate);
-    console.log("columnsToLookAt: ", columnsToLookAt);
+  /**
+   * get unique indices for all appearances for given column names
+   * @param namesToLocate
+   * @param columnsToLookAt
+   */
+  private getIndicesToMark(namesToLocate: string[], columnsToLookAt: string[]) {
     return [
       ...new Set(
         namesToLocate
@@ -114,18 +123,32 @@ export class QueryStepwiseResultComponent {
     ];
   }
 
-  groupByIndices(result: string[][], indices: number[]) {
+  /**
+   * Performs a grouping of data sets for a group by
+   * @param result
+   * @param indices
+   */
+  private groupByIndices(resultRows: string[][], indices: number[]) {
     return [
       ...Object.values(
-        result.reduce((acc, curr) => {
-          const group = JSON.stringify(indices.map((x) => curr[x] || null));
+        resultRows.reduce((acc, curr) => {
+          //according group by value for each element
+          const group = JSON.stringify(indices.map((i) => curr[i] || null));
 
           if (!acc[group]) {
             acc[group] = [];
           }
-          if (acc[group].length < this.maxGroupEntriesToShow) {
+          // add to the limit of the selected maximum
+          if (
+            acc[group].length <
+            QueryStepwiseResultComponent.GROUP_ENTRIES_TO_SHOW_MAX
+          ) {
             acc[group].push(curr);
-          } else if (acc[group].length == this.maxGroupEntriesToShow) {
+          } else if (
+            acc[group].length ==
+            QueryStepwiseResultComponent.GROUP_ENTRIES_TO_SHOW_MAX
+          ) {
+            // append a '...'-row if further rows follow
             acc[group].push(curr.map((c) => "..."));
           }
 

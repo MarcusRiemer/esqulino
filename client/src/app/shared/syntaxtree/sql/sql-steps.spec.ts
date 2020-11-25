@@ -100,7 +100,6 @@ function testJoinFilter(
   desc: NodeDescription,
   index: number,
   filter: string,
-  // prevDesc: NodeDescription,
   columnNames: string[]
 ) {
   const srcTree = new Tree(desc);
@@ -182,7 +181,6 @@ function testJoinFilter(
 describe(`SQL Steps`, () => {
   it(`Empty Tree`, () => {
     expect(stepwiseSqlQuery(undefined)).toEqual([]);
-    //expect(() => stepwiseSqlQuery(undefined)).toThrowError(/Empty Tree/);
   });
 
   it("Basic select-from, not breaking down", () => {
@@ -336,7 +334,7 @@ describe(`SQL Steps`, () => {
       expect(steps[3].description).toEqual({
         type: "groupBy",
         expressions: ["Charakter.Charakter_ID"],
-        correspondingOrderBy: require("./spec/ast-43-group-by-entries-query.json"),
+        //correspondingOrderBy: require("./spec/ast-43-group-by-entries-query.json"),
       });
     });
 
@@ -595,8 +593,6 @@ describe(`SQL Steps`, () => {
     //   FROM krankenkasse
     //     LEFT JOIN person USING ('krankenkasse_id')
     it("left join", () => {
-      //const node = new Node(steps[2].ast, undefined);
-      //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
       testJoin(steps[3], desc, 0, "leftOuterJoinUsing", "using");
     });
 
@@ -605,8 +601,6 @@ describe(`SQL Steps`, () => {
     //   LEFT JOIN person USING ('krankenkasse_id')
     //   CROSS JOIN student
     it("second cross join", () => {
-      //const node = new Node(steps[2].ast, undefined);
-      //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
       testJoin(steps[4], desc, 1, "crossJoin");
     });
 
@@ -623,8 +617,6 @@ describe(`SQL Steps`, () => {
     //     LEFT JOIN person USING ('krankenkasse_id')
     //     LEFT JOIN student USING ('pin')
     it("left join", () => {
-      //const node = new Node(steps[2].ast, undefined);
-      //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
       testJoin(steps[6], desc, 1, "leftOuterJoinUsing", "using");
     });
 
@@ -646,7 +638,6 @@ describe(`SQL Steps`, () => {
       expect(steps[7].description).toEqual({
         type: "groupBy",
         expressions: ["krankenkasse.KRANKENKASSE_ID"],
-        correspondingOrderBy: require("./spec/ast-46-group-by-entries-query.json"),
       });
     });
 
@@ -691,7 +682,6 @@ describe(`SQL Steps`, () => {
     it("orderBy-clause", () => {
       expect(steps[8]).toBeDefined();
       const node = new Node(steps[9].ast, undefined);
-      //console.log("orderBy: \n" + JSON.stringify(node.toModel(), undefined, 2));
 
       expect(node.childrenCategoryNames.sort()).toEqual([
         "from",
@@ -761,7 +751,6 @@ describe(`SQL Steps`, () => {
     //   OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
     //   CROSS JOIN student
     it("cross-join", () => {
-      //crossJoinTest(steps[3], desc, 1);
       testJoin(steps[4], desc, 1, "crossJoin");
     });
 
@@ -778,8 +767,6 @@ describe(`SQL Steps`, () => {
     // OUTER JOIN person ON krankenkasse.krankenkasse_id = person.krankenkasse_id
     // OUTER JOIN student USING ('pin')
     it("outer join", () => {
-      //const node = new Node(steps[2].ast, undefined);
-      //console.log("checkOnNode: \n" + JSON.stringify(node.toModel(), undefined, 2));
       testJoin(steps[6], desc, 1, "outerJoinUsing", "using");
     });
 
@@ -801,7 +788,6 @@ describe(`SQL Steps`, () => {
       expect(steps[7].description).toEqual({
         type: "groupBy",
         expressions: ["krankenkasse.KRANKENKASSE_ID"],
-        correspondingOrderBy: require("./spec/ast-47-group-by-entries-query.json"),
       });
     });
 
@@ -1027,7 +1013,7 @@ describe(`SQL Steps`, () => {
       expect(steps[6].description).toEqual({
         type: "groupBy",
         expressions: ["lkz.LKZ"],
-        correspondingOrderBy: require("./spec/ast-49-group-by-entries-query.json"),
+        //correspondingOrderBy: require("./spec/ast-49-group-by-entries-query.json"),
       });
     });
 

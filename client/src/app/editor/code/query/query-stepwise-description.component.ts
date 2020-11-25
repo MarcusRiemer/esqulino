@@ -63,14 +63,6 @@ export class QueryStepwiseDescriptionComponent {
       case "where":
         this.descText =
           "Filterung nach der WHERE-Klausel. Auswahl der Zeilen, die ";
-        /*this.descText +=
-          this.step.description.expressions.length > 1
-            ? "die Kriterien '"
-            : "das Kriterium '";
-        this.step.description.expressions.forEach((exp) => {
-          this.descText += exp + "', '";
-        });
-        this.descText = this.descText.slice(0, -3);*/
         this.descText += "das Kriterium " + this.step.description.expressions;
         this.descText += " erfüllen.";
         break;

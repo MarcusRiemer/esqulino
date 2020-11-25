@@ -1,4 +1,4 @@
-<div *ngIf="groupByRows" class="card card-body mb-3">
+<div *ngIf="groupByRows" class="card card-body mb-3" style="overflow: scroll;">
   <h4 class="card-title">
     Vorschau der Gruppierung
   </h4>
@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<div *ngIf="filterRows" class="card card-body mb-3">
+<div *ngIf="filterRows" class="card card-body mb-3" style="overflow: scroll;">
   <h4 class="card-title">
     Vorschau der Filterung
   </h4>
@@ -91,7 +91,7 @@
   </div>
 </div>
 
-<div class="card card-body mb-3">
+<div class="card card-body mb-3" style="overflow: scroll;">
   <h4 class="card-title">
     Ergebnisvorschau
     <ng-container *ngIf="queryResult">

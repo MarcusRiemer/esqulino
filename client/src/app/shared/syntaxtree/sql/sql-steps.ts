@@ -32,7 +32,6 @@ export interface SqlStepConditionFilterDescription {
 export interface SqlStepGroupByDescription {
   type: "groupBy";
   expressions: string[];
-  correspondingOrderBy: NodeDescription;
 }
 
 interface SqlStepSelectDescription {
@@ -93,7 +92,6 @@ function createBaseTree(): Tree {
 
 export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
   if (!q || q.isEmpty) {
-    // throwError?
     return [];
   }
 
@@ -158,7 +156,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
 
   while (join) {
     // TODO find suitable name for a virtual table
-    // firstTableName = firstTableName + "CROSS JOIN" + joinTable.properties.name;
     desc_firstTableName = index > 0 ? "Zwischentabelle" : desc_firstTableName;
     let joinTable = join.getChildInCategory("table");
 
@@ -197,7 +194,7 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
     if (joinFilter) {
       let joinType = joinFilterType == "on" ? "innerJoinOn" : "innerJoinUsing";
 
-      //replace cross -> inner join with filter
+      //replace cross to an inner join with filter
       let desc = join.toModel();
       desc.name = joinType;
 
@@ -209,7 +206,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
         desc
       );
 
-      //why type doesnt accept var joinFilterType ?
       arr.push({
         ast: t.toModel(),
         description: {
@@ -223,7 +219,7 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
       //console.log("after adding filter node: " + index + "\n" + JSON.stringify(t.toModel(), undefined, 2));
     }
 
-    // outer join approach - just run the outer join -> maybe add null rows with union?
+    // outer join approach - just run the outer join
     if (join.typeName.toLowerCase().includes("outer")) {
       t = t.replaceNode(
         [
@@ -245,7 +241,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
       ["from", 0],
       ["joins", ++index],
     ]);
-    //console.log("after adding outer node: " + index + "\n" + JSON.stringify(t.toModel(), undefined, 2));
   }
 
   //WHERE clause
@@ -270,16 +265,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
   if (groupNode) {
     t = t.insertNode([["groupBy", 0]], groupNode.toModel());
 
-    let groupByTransformDesc = groupNode.toModel();
-    // transform a groupNode to an orderBy node
-    groupByTransformDesc.name = "orderBy";
-
-    let withOrderBy = t.deleteNode([["groupBy", 0]]);
-    withOrderBy = withOrderBy.insertNode(
-      [["orderBy", 0]],
-      groupByTransformDesc
-    );
-
     arr.push({
       ast: t.rootNode.toModel(),
       description: {
@@ -287,10 +272,8 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
         expressions: collectExpressions(
           groupNode.getChildrenInCategory("expressions")
         ),
-        correspondingOrderBy: withOrderBy.toModel(),
       },
     });
-    //console.log("goupBy transform description: " + JSON.stringify(groupTree.toModel(), undefined, 2));
   }
 
   //SELECT clause
@@ -306,8 +289,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
   if (t.locate([["select", 0]]) != select) {
     t = t.replaceNode([["select", 0]], select.toModel());
   }
-
-  //}
 
   let distinct = q.locateOrUndefined([
     ["select", 0],
@@ -334,7 +315,6 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
       },
     });
   }
-  //console.log("after select-step: \n" + JSON.stringify(t.toModel(), undefined, 2));
 
   //ORDER BY clause
   let orderByNode = q.locateOrUndefined([["orderBy", 0]]);
@@ -354,6 +334,10 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
   return arr;
 }
 
+/**
+ * Collects all expressions of nodes and returns them as an string array
+ * @param nodes
+ */
 function collectExpressions(nodes: Node[]): string[] {
   // typedef "sql"."expression" ::= columnName | binaryExpression | constant | parameter | functionCall | parentheses
   let exp: string[] = [];
@@ -429,14 +413,16 @@ function collectExpressions(nodes: Node[]): string[] {
       }
       default: {
         console.log("default case should not appear: " + node.typeName);
-        //return [];
       }
     }
   }
-  //console.log("return exp:\n" + exp);
   return exp;
 }
 
+/**
+ * collects all columnNames of a NodeDescription
+ * @param nodeDesc
+ */
 function collectColumnNames(nodeDesc: NodeDescription): string[] {
   // if join type is 'using' - return [usingValue, table.usingValue]
   let t = new Tree(nodeDesc);
