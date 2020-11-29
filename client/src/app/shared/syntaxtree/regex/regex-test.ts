@@ -65,6 +65,11 @@ function getRegexMatches(regexString: string, input: string): string[] {
  * @param regexString
  */
 function validateRegExString(regexString: string) {
+  // edge case alternative at the end let's the compilation of the regex crash
+  if (regexString.slice(-1) == "|") {
+    return false;
+  }
+
   try {
     new RegExp(regexString, "g");
   } catch (e) {
@@ -115,6 +120,8 @@ export function runTestCase(
 ): ExecutedTestCase {
   let errorMessage = "";
   const isNoMatchType = testCase.expected.type == "noMatch";
+
+  console.log("REGEX: " + regexString);
 
   // if it's a whole match, simplify it into an exact match with a single hit
   const simplifiedExpectation = simplifyExpectation(testCase);
