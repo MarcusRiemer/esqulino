@@ -17,7 +17,7 @@ import {
   ServerApiService,
   DatabaseQueryErrorDescription,
 } from "../../../shared";
-import { CodeResource } from "../../../shared/syntaxtree";
+import { CodeResource, NodeDescription } from "../../../shared/syntaxtree";
 import { ProjectService } from "../../project.service";
 
 export { QueryParamsDescription };
@@ -80,15 +80,23 @@ export class QueryService {
    * @param sqlResource A code resource that compiles to SQL.
    * @param params The parameters to run this query.
    */
-  runArbitraryQuery(sqlResource: CodeResource, params: QueryParamsDescription) {
+  runArbitraryQuery(
+    sqlResource: CodeResource | NodeDescription,
+    params: QueryParamsDescription
+  ) {
     let headers = new HttpHeaders({ "Content-Type": "application/json" });
 
     const url = this._server.getRunQueryUrl(
       this._projectService.cachedProject.slug
     );
 
+    const ast =
+      sqlResource instanceof CodeResource
+        ? sqlResource.syntaxTreePeek.toModel()
+        : sqlResource;
+
     const body: ArbitraryQueryRequestDescription = {
-      ast: sqlResource.syntaxTreePeek.toModel(),
+      ast,
       params: params,
     };
 

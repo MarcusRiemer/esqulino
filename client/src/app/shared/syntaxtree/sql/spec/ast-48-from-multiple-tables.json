@@ -1,0 +1,171 @@
+{
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "joins": [],
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "tag"
+                }
+              },
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "termin"
+                }
+              },
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "block"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "where": [
+        {
+          "name": "where",
+          "language": "sql",
+          "children": {
+            "expressions": [
+              {
+                "name": "binaryExpression",
+                "language": "sql",
+                "children": {
+                  "lhs": [
+                    {
+                      "name": "columnName",
+                      "language": "sql",
+                      "properties": {
+                        "columnName": "BLOCK",
+                        "refTableName": "termin"
+                      }
+                    }
+                  ],
+                  "rhs": [
+                    {
+                      "name": "columnName",
+                      "language": "sql",
+                      "properties": {
+                        "columnName": "BLOCK",
+                        "refTableName": "block"
+                      }
+                    }
+                  ],
+                  "operator": [
+                    {
+                      "name": "relationalOperator",
+                      "language": "sql",
+                      "properties": {
+                        "operator": "="
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "whereAdditional",
+                "language": "sql",
+                "properties": {
+                  "operator": "AND"
+                },
+                "children": {
+                  "expression": [
+                    {
+                      "name": "binaryExpression",
+                      "language": "sql",
+                      "children": {
+                        "lhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "columnName": "TAG",
+                              "refTableName": "termin"
+                            }
+                          }
+                        ],
+                        "rhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "columnName": "TAG",
+                              "refTableName": "tag"
+                            }
+                          }
+                        ],
+                        "operator": [
+                          {
+                            "name": "relationalOperator",
+                            "language": "sql",
+                            "properties": {
+                              "operator": "="
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "WOCHENTAG",
+                  "refTableName": "tag"
+                }
+              },
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "TAG",
+                  "refTableName": "termin"
+                }
+              },
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "STARTZEIT",
+                  "refTableName": "block"
+                }
+              },
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "ENDZEIT",
+                  "refTableName": "block"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }

@@ -31,7 +31,7 @@ RSpec.describe ProjectQueriesController, type: :request do
 
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).to eq []
-      expect(json_data["columns"]).to eq ["key", "value", "key", "value"]
+      expect(json_data["columns"]).to eq(["key", "value", "key", "value"].map {|c| "key_value." + c })
       expect(json_data["rows"][0]).to eq [3, "drei", 3, "drei"]
       expect(json_data["totalCount"]).to eq 7
     end

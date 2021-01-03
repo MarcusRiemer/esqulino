@@ -1,0 +1,95 @@
+{
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "refTableName": "Charakter",
+                  "columnName": "Charakter_Name"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "Charakter"
+                }
+              }
+            ],
+            "joins": [
+              {
+                "name": "innerJoinOn",
+                "language": "sql",
+                "children": {
+                  "table": [
+                    {
+                      "name": "tableIntroduction",
+                      "language": "sql",
+                      "properties": {
+                        "name": "Auftritt"
+                      }
+                    }
+                  ],
+                  "on": [
+                    {
+                      "name": "binaryExpression",
+                      "language": "sql",
+                      "children": {
+                        "lhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "refTableName": "Auftritt",
+                              "columnName": "Charakter_ID"
+                            }
+                          }
+                        ],
+                        "operator": [
+                          {
+                            "name": "relationalOperator",
+                            "language": "sql",
+                            "properties": {
+                              "operator": "="
+                            }
+                          }
+                        ],
+                        "rhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "refTableName": "Charakter",
+                              "columnName": "Charakter_ID"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }

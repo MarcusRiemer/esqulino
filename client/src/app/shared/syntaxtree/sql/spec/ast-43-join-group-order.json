@@ -1,0 +1,160 @@
+{
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "joins": [
+              {
+                "name": "innerJoinOn",
+                "language": "sql",
+                "children": {
+                  "on": [
+                    {
+                      "name": "binaryExpression",
+                      "language": "sql",
+                      "children": {
+                        "lhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "columnName": "Charakter_ID",
+                              "refTableName": "Auftritt"
+                            }
+                          }
+                        ],
+                        "rhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "columnName": "Charakter_ID",
+                              "refTableName": "Charakter"
+                            }
+                          }
+                        ],
+                        "operator": [
+                          {
+                            "name": "relationalOperator",
+                            "language": "sql",
+                            "properties": {
+                              "operator": "="
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "table": [
+                    {
+                      "name": "tableIntroduction",
+                      "language": "sql",
+                      "properties": {
+                        "name": "Auftritt"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "Charakter"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "functionCall",
+                "language": "sql",
+                "properties": {
+                  "name": "COUNT"
+                },
+                "children": {
+                  "arguments": [
+                    {
+                      "name": "columnName",
+                      "language": "sql",
+                      "properties": {
+                        "columnName": "Charakter_Name",
+                        "refTableName": "Charakter"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "groupBy": [
+        {
+          "name": "groupBy",
+          "language": "sql",
+          "children": {
+            "expressions": [
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "Charakter_ID",
+                  "refTableName": "Charakter"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "orderBy": [
+        {
+          "name": "orderBy",
+          "language": "sql",
+          "children": {
+            "expressions": [
+              {
+                "name": "sortOrder",
+                "language": "sql",
+                "properties": {
+                  "order": "DESC"
+                },
+                "children": {
+                  "expression": [
+                    {
+                      "name": "functionCall",
+                      "language": "sql",
+                      "properties": {
+                        "name": "COUNT"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "Charakter_Name",
+                  "refTableName": "Charakter"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
