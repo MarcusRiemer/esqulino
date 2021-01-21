@@ -23,14 +23,15 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "localize": ["en"],
+            "localize": [
+              "en"
+            ],
             "outputPath": "dist/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "aot": true,
-            "extractCss": true,
             "sourceMap": {
               "styles": true,
               "scripts": true,
@@ -51,7 +52,9 @@
               "node_modules/font-awesome/css/font-awesome.css"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["node_modules/bootstrap/scss"]
+              "includePaths": [
+                "node_modules/bootstrap/scss"
+              ]
             },
             "scripts": [],
             "showCircularDependencies": true
