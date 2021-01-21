@@ -17,7 +17,6 @@
     "@angular/platform-server": "10.1.5",
     "@angular/router": "10.1.5",
     "@nguniversal/express-engine": "10.1.0",
-    "@ngx-i18nsupport/tooling": "8.0.3",
     "@sentry/browser": "5.15.0",
     "@sentry/integrations": "5.15.0",
     "ajv": "6.12.0",
