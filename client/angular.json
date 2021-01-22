@@ -14,7 +14,7 @@
         },
         "locales": {
           "en": {
-            "translation": "src/locale/messages.en.xlf",
+            "translation": "locale/messages.en.xlf",
             "baseHref": ""
           }
         }
@@ -97,22 +97,6 @@
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "browserTarget": "blattwerkzeug-client:build"
-          }
-        },
-        "xliffmerge": {
-          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
-          "options": {
-            "xliffmergeOptions": {
-              "srcDir": "src/locale",
-              "genDir": "src/locale",
-              "i18nFile": "messages.xlf",
-              "i18nBaseFile": "messages",
-              "i18nFormat": "xlf",
-              "encoding": "UTF-8",
-              "defaultLanguage": "de",
-              "languages": ["en"],
-              "useSourceAsTarget": false
-            }
           }
         },
         "test": {
