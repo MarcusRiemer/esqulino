@@ -24,12 +24,8 @@ development:
     refresh_token: 432000 # 5 days
     access_cookie: # Is empty because of the session duration
     refresh_cookie: 1209600 # 14 days
-  auth_provider: ["Identity::Google", "Identity::Developer", "Identity::Keycloak"]
+  auth_provider: ["Identity::Developer", "Identity::Keycloak"]
   auth_provider_keys:
-    google_id: <%= ENV['GOOGLE_CLIENT_ID'] %>
-    google_secret: <%= ENV['GOOGLE_CLIENT_SECRET'] %>
-    github_id: <%= ENV['GITHUB_CLIENT_ID'] %>
-    github_secret: <%= ENV['GITHUB_CLIENT_SECRET'] %>
     keycloak_site: <%= ENV['KEYCLOAK_SITE'] || 'http://lvh.me:8080' %>
     keycloak_realm: <%= ENV['KEYCLOAK_REALM'] || 'BlattWerkzeug' %>
   seed_users:
@@ -66,12 +62,8 @@ test:
     refresh_token: 432000 # 5 days
     access_cookie: # Is empty because of the session duration
     refresh_cookie: 1209600 # 14 days
-  auth_provider: ["Identity::Google", "Identity::Developer"]
+  auth_provider: ["Identity::Developer"]
   auth_provider_keys:
-    google_id: 'GOOGLE_CLIENT_ID'
-    google_secret: 'GOOGLE_CLIENT_SECRET'
-    github_id: 'GITHUB_CLIENT_ID'
-    github_secret: 'GITHUB_CLIENT_SECRET'
   seed_users:
     guest: "00000000-0000-0000-0000-000000000001"
     system: "00000000-0000-0000-0000-000000000002"
@@ -90,7 +82,7 @@ production:
   ide_service:
     exec:
       node_binary: <%= ENV['NODE_BIN'] || '/usr/bin/node' %>
-      program: <%= ENV['CLI_PROGRAM'] || '../client/dist-live/cli/bundle.cli.js' %>
+      program: <%= ENV['CLI_PROGRAM'] || '../client/dist-live/cli/main.cli.js' %>
       mode: one_shot
   seed:
     data_dir: ../seed
@@ -102,12 +94,10 @@ production:
     refresh_token: 432000 # 5 days
     access_cookie: # Is empty because of the session duration
     refresh_cookie: 1209600 # 14 days
-  auth_provider: ["Identity::Google"]
+  auth_provider: ["Identity::Keycloak"]
   auth_provider_keys:
-    google_id: <%= ENV['GOOGLE_CLIENT_ID'] %>
-    google_secret: <%= ENV['GOOGLE_CLIENT_SECRET'] %>
-    github_id: <%= ENV['GITHUB_CLIENT_ID'] %>
-    github_secret: <%= ENV['GITHUB_CLIENT_SECRET'] %>
+      keycloak_site: <%= ENV['KEYCLOAK_SITE'] || 'http://lvh.me:8080' %>
+      keycloak_realm: <%= ENV['KEYCLOAK_REALM'] || 'BlattWerkzeug' %>
   seed_users:
     guest: "00000000-0000-0000-0000-000000000001"
     system: "00000000-0000-0000-0000-000000000002"
