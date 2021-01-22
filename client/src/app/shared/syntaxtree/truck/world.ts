@@ -12,6 +12,33 @@ import { NodeLocation } from "../syntaxtree.description";
 import { enablePatches, immerable, Patch, produceWithPatches } from "immer";
 enablePatches();
 
+/**
+ * Does nearly the same as produceWithPatches but when the recipe returns null
+ * the return value will also be null, regardless of the changes to the baseState
+ * @param baseState the initial state of an object
+ * @param recipe the modifier for this object
+ * @return the same as produceWithPatches
+ */
+function produceWithPatchesAllowNull<T>(
+  baseState: T,
+  recipe: (draft: T) => T | null
+): [T | null, Patch[]] {
+  let recipeReturnedNull = false;
+  const [newState, patches] = produceWithPatches(baseState, (draft: T) => {
+    const result = recipe(draft);
+    if (result == null) {
+      // Check if null or undefined
+      recipeReturnedNull = true;
+    }
+    return recipeReturnedNull ? draft : result;
+  });
+  if (recipeReturnedNull) {
+    const [_, nullPatches] = produceWithPatches(baseState, () => null);
+    return [null, nullPatches];
+  }
+  return [newState as T, patches];
+}
+
 // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction
 const GeneratorFunction = Object.getPrototypeOf(function* () {}).constructor;
 
@@ -350,7 +377,7 @@ export class World {
    */
   mutateState(f: (state: WorldState) => WorldState | null): WorldState | null {
     const s = this.state;
-    const [newState, patches] = produceWithPatches(s, f);
+    const [newState, patches] = produceWithPatchesAllowNull(s, f);
 
     if (patches.length == 0) {
       // If you see this warning, it could be an indication
@@ -374,9 +401,13 @@ export class World {
   public mutateStateAsPreview(
     f: (state: WorldState) => WorldState | null
   ): void {
-    const [newState, patches] = produceWithPatches(this.state, f);
+    const [newState, patches] = produceWithPatchesAllowNull(this.state, f);
 
-    this.previewChanges = patches;
+    if (!newState) {
+      this.deletePreview();
+    } else {
+      this.previewChanges = patches;
+    }
   }
 
   /**
