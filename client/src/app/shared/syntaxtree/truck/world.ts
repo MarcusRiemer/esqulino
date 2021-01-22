@@ -9,6 +9,9 @@ import {
 import { BehaviorSubject } from "rxjs";
 import { NodeLocation } from "../syntaxtree.description";
 
+import { enablePatches, immerable, Patch, produceWithPatches } from "immer";
+enablePatches();
+
 // https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction
 const GeneratorFunction = Object.getPrototypeOf(function* () {}).constructor;
 
@@ -26,6 +29,9 @@ type ExecutionProgessCallback = (loc: NodeLocation) => void;
 export class World {
   /** States of the world, where the first state is always the most recent. */
   states: Array<WorldState>;
+
+  /** Will be undefined if not in editor mode or no changes */
+  previewChanges?: Patch[];
 
   /** Duration of a step in milliseconds. */
   animationSpeed = 1000;
@@ -297,7 +303,7 @@ export class World {
     });
 
     const size = new Size(desc.size.width, desc.size.height);
-    this.states = [new WorldState(0, size, tiles, truck, 0)];
+    this.states = [new WorldState(size, tiles, truck, 0)];
   }
 
   /**
@@ -341,15 +347,43 @@ export class World {
    * function is not null.
    * @param f Function that receives a copy of the current state, makes changes
    *          if necessary and returns it.
-   * @return Changed state.
    */
-  mutateState(f: (state: WorldState) => WorldState | null): WorldState {
-    const state = f(this.state.clone());
-    if (state != null) {
-      state.prev = this.state;
-      state.step = this.states.unshift(state) - 1;
+  mutateState(f: (state: WorldState) => WorldState | null): WorldState | null {
+    const s = this.state;
+    const [newState, patches] = produceWithPatches(s, f);
+
+    if (patches.length == 0) {
+      // If you see this warning, it could be an indication
+      // that you made a new custom class and forgot to add
+      // [immerable] = true;
+      // or the functions simply did not change anything
+      console.warn("mutateState was called, but state did not change!", f);
     }
-    return state;
+
+    if (newState) {
+      this.states.unshift(newState);
+    }
+    return newState;
+  }
+
+  /**
+   * Runs a function that can modify the worldstate.
+   * All changes will be saved inside _this_.previewChanges
+   * @param f The function that will change the state
+   */
+  public mutateStateAsPreview(
+    f: (state: WorldState) => WorldState | null
+  ): void {
+    const [newState, patches] = produceWithPatches(this.state, f);
+
+    this.previewChanges = patches;
+  }
+
+  /**
+   * Deletes all _this_.previewChanges
+   */
+  public deletePreview(): void {
+    this.previewChanges = undefined;
   }
 
   /**
@@ -652,8 +686,7 @@ export class World {
  * State of a world.
  */
 export class WorldState {
-  /** Step for this state. */
-  step: number;
+  [immerable] = true;
 
   /** Time steps that are sheduled for the execution of this step.  */
   time: number;
@@ -667,32 +700,18 @@ export class WorldState {
   /** Truck. */
   truck: Truck;
 
-  /** Previous state. */
-  prev: WorldState;
-
   /**
    * Initializes a new state of the world.
-   * @param step Step for this state.
    * @param size The size of the world.
    * @param tiles Tiles from left to right and top to bottom.
    * @param truck Truck.
    * @param time Time steps that are sheduled for the execution of this step.
-   * @param prev Previous state.
    */
-  constructor(
-    step: number,
-    size: Size,
-    tiles: Tile[],
-    truck: Truck,
-    time: number = 0,
-    prev: WorldState = null
-  ) {
-    this.step = step;
-    this.time = time;
+  constructor(size: Size, tiles: Tile[], truck: Truck, time: number = 0) {
     this.size = size;
     this.tiles = tiles;
     this.truck = truck;
-    this.prev = prev;
+    this.time = time;
   }
 
   /**
@@ -700,10 +719,7 @@ export class WorldState {
    * @return time steps.
    */
   get timeStep(): number {
-    if (this.prev === null) {
-      return this.time;
-    }
-    return this.time + this.prev.timeStep;
+    return this.time;
   }
 
   /**
@@ -761,21 +777,6 @@ export class WorldState {
     }
 
     return result;
-  }
-
-  /**
-   * Creates a copy of the state.
-   * @return Copy of the state.
-   */
-  clone(): WorldState {
-    return new WorldState(
-      this.step,
-      this.size.clone(),
-      this.tiles.map((t) => t.clone()),
-      this.truck.clone(),
-      this.time,
-      this.prev
-    );
   }
 
   // Mutation functions
@@ -901,6 +902,8 @@ export class WorldState {
  * Truck.
  */
 export class Truck {
+  [immerable] = true;
+
   /** Position on the field. */
   position: Position;
 
@@ -1044,25 +1047,14 @@ export class Truck {
   turn(turnDirection: TurnDirection) {
     this.turning = turnDirection;
   }
-
-  /**
-   * Creates a copy of the truck.
-   * @return Copy of the truck.
-   */
-  clone(): Truck {
-    return new Truck(
-      this.position.clone(),
-      this.facing,
-      this.freight.slice(0),
-      this.turning
-    );
-  }
 }
 
 /**
  * Tile on the field.
  */
 export class Tile {
+  [immerable] = true;
+
   /** Position on the field. */
   position: Position;
 
@@ -1247,20 +1239,6 @@ export class Tile {
     return this.trafficLights.length > n ? this.trafficLights[n] : null;
   }
 
-  /**
-   * Creates a copy of the tile.
-   * @return Copy of the tile.
-   */
-  clone(): Tile {
-    return new Tile(
-      this.position.clone(),
-      this.openings,
-      this.freight.slice(0),
-      this.freightTarget,
-      this.trafficLights.map((t) => (t ? t.clone() : t))
-    );
-  }
-
   public reset(): boolean {
     if (this.openings === TileOpening.None) {
       return false;
@@ -1332,6 +1310,8 @@ export class Tile {
  * Traffic light.
  */
 export class TrafficLight {
+  [immerable] = true;
+
   /** Duration of the red phase in steps. */
   redPhase: number;
 
@@ -1372,20 +1352,14 @@ export class TrafficLight {
   isGreen(step: number): boolean {
     return !this.isRed(step);
   }
-
-  /**
-   * Creates a copy of the traffic light.
-   * @return Copy of the traffic light.
-   */
-  clone(): TrafficLight {
-    return new TrafficLight(this.redPhase, this.greenPhase, this.initial);
-  }
 }
 
 /**
  * Size from width and height.
  */
 export class Size {
+  [immerable] = true;
+
   /**
    * Initializes a size.
    * @param width Width.
@@ -1410,6 +1384,8 @@ export class Size {
  * 2D position.
  */
 export class Position {
+  [immerable] = true;
+
   /**
    * Initializes the position.
    * @param x X-position.

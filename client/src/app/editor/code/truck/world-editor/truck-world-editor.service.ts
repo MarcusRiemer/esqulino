@@ -117,6 +117,7 @@ export class TruckWorldEditorService implements OnDestroy {
 
   public disableEditorMode(): void {
     this._editorModeEnabled = false;
+    this._world?.deletePreview();
     this.stopDrawRoad();
     this.stopDestroyRoad();
   }

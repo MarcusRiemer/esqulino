@@ -280,14 +280,13 @@ class WorldRenderer implements ObjectRenderer {
    */
   draw(ctx: RenderingContext) {
     // Update WorldStateRenderer when state changed
-    if (this.stateRenderer.state.step > this.world.state.step) {
+    if (this.stateRenderer.lastRenderedStep > this.world.step) {
       // Don't animate undo
-      this.stateRenderer.update(this.world.state, true);
+      this.stateRenderer.update(this.world.step, this.world.state, true);
     } else {
-      while (this.stateRenderer.state.step < this.world.state.step) {
-        this.stateRenderer.update(
-          this.world.getState(this.stateRenderer.state.step + 1)
-        );
+      while (this.stateRenderer.lastRenderedStep < this.world.step) {
+        const newStep = this.stateRenderer.lastRenderedStep + 1;
+        this.stateRenderer.update(newStep, this.world.getState(newStep));
       }
     }
     this.stateRenderer.draw(ctx);
@@ -302,6 +301,9 @@ class WorldStateRenderer implements ObjectRenderer {
 
   /** World state to be drawn. */
   state: WorldState;
+
+  /** Last step that was drawn. */
+  lastRenderedStep: number;
 
   /** Parent WorldRenderer. */
   parent: WorldRenderer;
@@ -319,6 +321,8 @@ class WorldStateRenderer implements ObjectRenderer {
    */
   constructor(state: WorldState, parent: WorldRenderer) {
     this.state = state;
+    this.lastRenderedStep = 0;
+
     this.parent = parent;
 
     this.lastSize = this.state.size.clone();
@@ -339,10 +343,12 @@ class WorldStateRenderer implements ObjectRenderer {
 
   /**
    * Update state.
+   * @param step The step number.
    * @param state New state.
    * @param undo True if this is a step back.
    */
-  update(state: WorldState, undo: boolean = false) {
+  update(step: number, state: WorldState, undo: boolean = false) {
+    this.lastRenderedStep = step;
     this.state = state;
 
     if (!this.state.size.isEqual(this.lastSize)) {

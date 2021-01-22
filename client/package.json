@@ -16,6 +16,7 @@
     "@angular/platform-browser-dynamic": "11.1.0",
     "@angular/platform-server": "11.1.0",
     "@angular/router": "11.1.0",
+    "@apollo/client": "^3.3.7",
     "@nguniversal/express-engine": "11.1.0",
     "@sentry/browser": "5.15.0",
     "@sentry/integrations": "5.15.0",
@@ -29,6 +30,7 @@
     "express": "4.17.1",
     "font-awesome": "4.7.0",
     "graphql": "^15.4.0",
+    "immer": "^8.0.1",
     "jwt-decode": "^2.2.0",
     "loader-utils": "^2.0.0",
     "ng2-ace-editor": "0.3.9",
@@ -36,8 +38,7 @@
     "tslib": "^2.0.0",
     "typeface-roboto": "0.0.75",
     "typeface-roboto-mono": "0.0.75",
-    "zone.js": "~0.10.3",
-    "@apollo/client": "^3.3.7"
+    "zone.js": "~0.10.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1101.0",
