@@ -68,7 +68,7 @@ module Resolvers
         coalesce = @languages.map { |l| "#{@model_class.table_name}.#{order_key}->'#{l}'"}.join(',')
         scope = scope.order Arel.sql("COALESCE(#{coalesce}) #{order_dir}")
       else
-        scope = scope.order "#{@model_class.table_name}.#{order_key} #{order_dir}"
+        scope = scope.order Arel.sql("#{@model_class.table_name}.#{order_key} #{order_dir}")
       end
       scope
     end

@@ -62,7 +62,7 @@ gem 'graphql'
 ###########################
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0'
+gem 'rails', '~> 6.1'
 
 # Connecting to postgres databases
 gem 'pg', '~> 1.2'
@@ -95,7 +95,7 @@ end
 # Use rspec for unit test
 group :development, :test do
   gem 'database_cleaner'
-  gem 'rspec-rails', '4.0.0.beta3'
+  gem 'rspec-rails'
   gem 'rspec_junit_formatter'
   gem 'guard-rspec', require: false
   gem 'pry', '~> 0.13'
