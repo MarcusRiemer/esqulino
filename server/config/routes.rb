@@ -14,21 +14,12 @@ Rails.application.routes.draw do
     scope 'identities' do
       get '/', controller: 'identities', action: :show
       get 'list', controller: 'identities', action: :list
-      get 'confirmation/:verify_token', controller: 'identities', action: :email_confirmation
-      post 'reset_password_mail', controller: 'identities', action: :reset_password_mail
-      post 'send_verify_email', controller: 'identities', action: :send_verify_email
-      patch 'reset_password', controller: 'identities', action: :reset_password
-      patch 'change_password', controller: 'identities', action: :change_password
-      delete 'delete_identity', controller: 'identities', action: :destroy
     end
 
     scope 'user' do
       get '/', controller: 'user', action: :index
-      get 'change_primary_email/:token', controller: 'user', action: :change_primary_email
-      post 'send_change_email', controller: 'user', action: :send_change_email
+      get 'keycloak_account_settings', controller: 'user', action: :keycloak_settings
       post 'may_perform', controller: 'user', action: :may_perform
-      post 'change_roles', controller: 'user', action: :change_roles
-      patch 'change_username', controller: 'user', action: :change_username
     end
 
     scope 'auth' do

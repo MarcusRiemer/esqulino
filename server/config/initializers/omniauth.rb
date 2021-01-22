@@ -12,14 +12,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     config.path_prefix = '/api/auth'
   end
 
-  if auth_providers.include? "Identity::Password"
-    provider :identity,
-             :fields => [],
-             :on_registration => AuthController.action(:register),
-             :on_login => AuthController.action(:login_with_password),
-             :model => Identity::Password
-  end
-
   if auth_providers.include? "Identity::Developer"
     provider :developer, :fields => [:name, :email], :uid_field => :email
   end
@@ -31,9 +23,13 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              prompt: "consent"
   end
 
-  if auth_providers.include? "Identity::Github"
-    provider :github,
-             config[:auth_provider_keys][:github_id],
-             config[:auth_provider_keys][:github_secret]
+  if auth_providers.include? "Identity::Keycloak"
+    provider :keycloak_openid,
+             "blattwerkzeug-omniauth",
+             nil, # No secret required
+             client_options: {
+               site: config[:auth_provider_keys][:keycloak_site],
+               realm: config[:auth_provider_keys][:keycloak_realm]
+             }
   end
 end

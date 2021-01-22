@@ -15,24 +15,13 @@ export interface ProviderDescription {
   link?: string;
   email?: string;
   access_token_duration?: string;
-  changes: {
-    // TODO-TOM: should be renamed
-    primary: string | null;
-  };
-}
-/**
- * The description will be used for the exchange
- * of a primary e-mail and is send by an http request.
- */
-export interface ChangePrimaryEmailDescription {
-  primaryEmail: string;
 }
 
 /**
  * The information for the representation
  * of a provider-button.
  */
-export interface AvailableProvidersDescription {
+export interface AvailableProviderDescription {
   name: string;
   urlName: string;
   icon: string;

@@ -61,14 +61,9 @@ import {
   IndividualBlockLanguageDataService,
 } from "./serverdata";
 
-import { RequestResetPasswordComponent } from "./auth/request-reset-password.component";
 import { ProviderButtonComponent } from "./auth/provider-button.component";
-import { SignInComponent } from "./auth/sign-in.component";
-import { SignUpComponent } from "./auth/sign-up.component";
 import { ValidateInputComponent } from "./validate-input.component";
-import { ChangePasswordComponent } from "./auth/change-password.component";
 import { SideNavService } from "./side-nav.service";
-import { RequestVerifyEmailComponent } from "./auth/request-verify-email.component";
 import { ProvidersAllButtonsComponent } from "./auth/providers-all-buttons.component";
 import { IsUserGuard } from "./guards/is-user.guard";
 import { IsAdminGuard } from "./guards/is-admin.guard";
@@ -154,13 +149,8 @@ const materialModules = [
     UserButtonsComponent,
     LoginWrapperComponent,
     ProviderButtonComponent,
-    SignInComponent,
-    SignUpComponent,
     ValidateInputComponent,
     FocusDirective,
-    RequestResetPasswordComponent,
-    RequestVerifyEmailComponent,
-    ChangePasswordComponent,
     ValidateInputComponent,
     ProviderShowComponent,
     MayPerformComponent,
@@ -195,13 +185,8 @@ const materialModules = [
     UserButtonsComponent,
     LoginWrapperComponent,
     ProviderButtonComponent,
-    SignInComponent,
-    SignUpComponent,
     ValidateInputComponent,
     FocusDirective,
-    RequestResetPasswordComponent,
-    RequestVerifyEmailComponent,
-    ChangePasswordComponent,
     MayPerformComponent,
     ProviderShowComponent,
     MessageDialogComponent,

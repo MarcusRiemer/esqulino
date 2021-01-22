@@ -7,76 +7,6 @@ FactoryBot.define do
     association :user
   end
 
-  factory :identity_provider, class: Identity::Password, parent: :identity do
-    trait :new do
-      provider { "identity" }
-      uid { "identity@web.de" }
-      provider_data {
-        ({
-          credentials: {
-            expires: true,
-            expires_at: 3.hours.from_now
-          }
-        })
-      }
-      own_data {
-        ({
-          password: BCrypt::Password.create("1234567"),
-          verify_token: SecureRandom.uuid,
-          confirmed: false
-        })
-      }
-    end
-
-    trait :existing do
-      provider { "identity" }
-      uid { "blattwerkzeug@web.de" }
-      provider_data {
-        ({
-          name: "Tom",
-          email: "blattwerkzeug@web.de",
-          credentials: {
-            expires: true,
-            expires_at: 3.hours.from_now
-          }
-        })
-      }
-      own_data {
-        ({
-          password: BCrypt::Password.create("12345678"),
-          verify_token: SecureRandom.uuid,
-          confirmed: true,
-          password_reset_token: SecureRandom.uuid,
-          password_reset_token_exp: Time.now - 1.hour
-        })
-      }
-    end
-
-    trait :another_existing do
-      provider { "identity" }
-      uid { "another@web.de" }
-      provider_data {
-        ({
-          name: "Tom",
-          email: "another@web.de",
-          credentials: {
-            expires: true,
-            expires_at: 3.hours.from_now
-          }
-        })
-      }
-      own_data {
-        ({
-          password: BCrypt::Password.create("12345678"),
-          verify_token: SecureRandom.uuid,
-          confirmed: true,
-          password_reset_token: SecureRandom.uuid,
-          password_reset_token_exp: Time.now - 1.hour
-        })
-      }
-    end
-  end
-
   factory :developer_provider, class: Identity::Developer, parent: :identity do
     provider { "developer" }
     sequence (:uid) { |n| "developer#{n}" }
@@ -166,38 +96,6 @@ FactoryBot.define do
             token: "a_google_access_token",
             expires: true,
             expires_at: 3.hours.before.to_i
-          }
-        })
-      }
-    end
-  end
-
-  factory :github_provider, class: Identity::Github, parent: :identity do
-    trait :new do
-      provider { "github" }
-      uid { "Stackoverflow is life" }
-      provider_data {
-        ({
-          name: "Special-Name",
-          credentials: {
-            expires: false
-          }
-        })
-      }
-    end
-
-    trait :existing do
-      provider { "github" }
-      uid { "Stackoverflow is life" }
-      provider_data {
-        ({
-          name: "Special-Name",
-          email: "specialGitHubEmail@web.de",
-          urls: {
-            "Github" => "www.github.com/specialName"
-          },
-          credentials: {
-            expires: false
           }
         })
       }

@@ -1,7 +1,6 @@
 import { RouterModule, Routes } from "@angular/router";
 
 import { UserComponent } from "./user.component";
-import { ResetPasswordComponent } from "./reset-password.component";
 import { LoggedInGuard } from "./../shared/guards/logged-in.guard";
 
 export const userRoutes: Routes = [
@@ -18,10 +17,6 @@ export const userRoutes: Routes = [
           import("./settings/settings.module").then(
             (m) => m.UserSettingsModule
           ),
-      },
-      {
-        path: "reset_password/:token",
-        component: ResetPasswordComponent,
       },
     ],
   },

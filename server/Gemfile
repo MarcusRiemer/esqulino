@@ -42,6 +42,9 @@ gem 'omniauth-google-oauth2'
 # Provider with login/password
 gem 'omniauth-identity', '~> 1.1.1'
 
+# Integrate with the keycloak-server
+gem 'omniauth-keycloak'
+
 # Markdown for your ActionMailer generated emails
 gem 'maildown'
 

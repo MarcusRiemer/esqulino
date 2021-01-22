@@ -10,17 +10,10 @@ module Identity
     # Scopes to search identities of specific providers
     scope :developer, -> { where(type: 'Identity::Developer') }
     scope :google, -> { where(type: 'Identity::Google') }
-    scope :password, -> { where(type: 'Identity::Password') }
-    scope :github, -> { where(type: 'Identity::Github') }
 
     # Search for all identities with the given email
     def self.find_by_email(email)
       where("provider_data ->> 'email' = ?", email)
-    end
-
-    # Search for all identities with the given primary email token
-    def self.find_by_change_primary_email_token(token)
-      where("own_data ->> 'change_primary_email_token' = ?", token)
     end
 
     # Search for an identity with the given auth hash.
@@ -48,12 +41,10 @@ module Identity
       case auth[:provider]
       when 'developer'
         identity = ::Identity::Developer.create_with_auth(auth, user)
-      when 'identity'
-        identity = ::Identity::Password.create_with_auth(auth, user)
       when 'google_oauth2'
         identity = ::Identity::Google.create_with_auth(auth, user)
-      when 'github'
-        identity = ::Identity::Github.create_with_auth(auth, user)
+      when 'keycloakopenid'
+        identity = ::Identity::Keycloak.create_with_auth(auth, user)
       else
         raise RuntimeError.new("Unknown provider: #{auth[:provider]}")
       end
@@ -95,9 +86,6 @@ module Identity
         :email => self.email,
         :confirmed => self.confirmed?,
         :access_token_duration => self.access_token_duration ? Time.at(self.access_token_duration) : nil,
-        :changes => {
-          primary: self.change_primary_token_exp
-        }
       }).compact
     end
 
@@ -118,32 +106,6 @@ module Identity
 
     def acces_token_expires?
       return self.credentials["expires"]
-    end
-
-    # Will be created on a primary e-mail change
-    def change_primary_email_token
-      return self.own_data["change_primary_email_token"]
-    end
-
-    def change_primary_token_exp
-      return self.own_data["change_primary_token_exp"]
-    end
-
-    def set_primary_email_token
-      self.own_data["change_primary_email_token"] = SecureRandom.uuid
-      self.own_data["change_primary_token_exp"] = 30.minutes.from_now
-    end
-
-    def set_primary_email_token_expired()
-      self.own_data["change_primary_token_exp"] = Time.current - 1.hour
-    end
-
-    def primary_email_token_eql?(token)
-      return self.own_data["change_primary_email_token"].eql? token
-    end
-
-    def primary_email_token_expired?()
-      return self.own_data["change_primary_token_exp"] < Time.current
     end
   end
 end
