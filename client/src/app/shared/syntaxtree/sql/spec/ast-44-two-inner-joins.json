@@ -1,0 +1,155 @@
+{
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "joins": [
+              {
+                "name": "innerJoinOn",
+                "language": "sql",
+                "children": {
+                  "on": [
+                    {
+                      "name": "binaryExpression",
+                      "language": "sql",
+                      "children": {
+                        "lhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "columnName": "Charakter_ID",
+                              "refTableName": "Auftritt"
+                            }
+                          }
+                        ],
+                        "rhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "columnName": "Charakter_ID",
+                              "refTableName": "Charakter"
+                            }
+                          }
+                        ],
+                        "operator": [
+                          {
+                            "name": "relationalOperator",
+                            "language": "sql",
+                            "properties": {
+                              "operator": "="
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "table": [
+                    {
+                      "name": "tableIntroduction",
+                      "language": "sql",
+                      "properties": {
+                        "name": "Auftritt"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "innerJoinOn",
+                "language": "sql",
+                "children": {
+                  "on": [
+                    {
+                      "name": "binaryExpression",
+                      "language": "sql",
+                      "children": {
+                        "lhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "columnName": "Geschichte_ID",
+                              "refTableName": "Auftritt"
+                            }
+                          }
+                        ],
+                        "rhs": [
+                          {
+                            "name": "columnName",
+                            "language": "sql",
+                            "properties": {
+                              "columnName": "Geschichte_ID",
+                              "refTableName": "Geschichte"
+                            }
+                          }
+                        ],
+                        "operator": [
+                          {
+                            "name": "relationalOperator",
+                            "language": "sql",
+                            "properties": {
+                              "operator": "="
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "table": [
+                    {
+                      "name": "tableIntroduction",
+                      "language": "sql",
+                      "properties": {
+                        "name": "Geschichte"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "Charakter"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "Charakter_Name",
+                  "refTableName": "Charakter"
+                }
+              },
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "Geschichte_Name",
+                  "refTableName": "Geschichte"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }

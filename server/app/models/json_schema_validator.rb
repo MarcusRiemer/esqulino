@@ -21,7 +21,7 @@ class JsonSchemaValidator < ActiveModel::EachValidator
 
     validation_errors.each do |err|
       # We don't want to see the violated schema repeated again and again
-      record.errors[attribute] << err.except("schema", "root_schema")
+      record.errors.add(attribute, message: err.except("schema", "root_schema"))
     end
   end
 end

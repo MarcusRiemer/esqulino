@@ -1,0 +1,130 @@
+<div *ngIf="groupByRows" class="card card-body mb-3" style="overflow: scroll;">
+  <h4 class="card-title">
+    Vorschau der Gruppierung
+  </h4>
+  <div class="table-responsive-sm">
+    <table class="table" style="border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th *ngFor="let column of queryResult.columns">{{ column }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let rows of groupByRows">
+          <ng-container
+            *ngFor="let dataset of rows; let lastGroupElement = last"
+            [ngTemplateOutlet]="lastGroupElement ? lastRow : defRow"
+            [ngTemplateOutletContext]="{dataset: dataset}"
+          ></ng-container>
+        </ng-container>
+      </tbody>
+    </table>
+
+    <ng-template #defRow let-dataset="dataset">
+      <tr>
+        <td *ngFor="let column of dataset" style="border-top: 0;">
+          {{ column }}
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #lastRow let-dataset="dataset">
+      <tr style="border-bottom: 1px solid #dee2e6;">
+        <td *ngFor="let column of dataset" style="border-top: 0;">
+          {{ column }}
+        </td>
+      </tr>
+    </ng-template>
+  </div>
+</div>
+
+<div *ngIf="filterRows" class="card card-body mb-3" style="overflow: scroll;">
+  <h4 class="card-title">
+    Vorschau der Filterung
+  </h4>
+
+  <div class="table-responsive-sm">
+    <table class="table">
+      <thead>
+        <tr>
+          <ng-container
+            *ngFor="let column of prevResult.columns; let i = index;"
+            [ngTemplateOutlet]="indicesToMark.indexOf(i)>-1 ? markd : defaultd"
+            [ngTemplateOutletContext]="{column: column}"
+          ></ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of filterRows">
+          <ng-container
+            *ngFor="let column of row; let i = index;"
+            [ngTemplateOutlet]="indicesToMark.indexOf(i)>-1 ? mark : default"
+            [ngTemplateOutletContext]="{column: column}"
+          ></ng-container>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #defaultd let-column="column">
+      <th>
+        {{ column }}
+      </th>
+    </ng-template>
+
+    <ng-template #markd let-column="column">
+      <th style="background-color: yellow;">
+        {{ column }}
+      </th>
+    </ng-template>
+
+    <ng-template #default let-column="column">
+      <td>
+        {{ column }}
+      </td>
+    </ng-template>
+
+    <ng-template #mark let-column="column">
+      <td style="background-color: yellow;">
+        {{ column }}
+      </td>
+    </ng-template>
+  </div>
+</div>
+
+<div class="card card-body mb-3" style="overflow: scroll;">
+  <h4 class="card-title">
+    Ergebnisvorschau
+    <ng-container *ngIf="queryResult">
+      <span
+        *ngIf="queryResult.isPartial"
+        class="float-right badge badge-warning"
+      >
+        {{ queryResult.subsetRowCount }} von {{ queryResult.totalRowCount }}
+        Zeilen
+      </span>
+      <span
+        *ngIf="!queryResult.isPartial"
+        class="float-right badge badge-success"
+      >
+        {{ queryResult.subsetRowCount }} Zeilen
+      </span>
+    </ng-container>
+  </h4>
+
+  <div class="table-responsive-sm">
+    <table *ngIf="queryResult" class="table">
+      <thead>
+        <tr>
+          <th *ngFor="let column of queryResult.columns">{{ column }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of queryResult.rows">
+          <td *ngFor="let column of row">
+            {{ column }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

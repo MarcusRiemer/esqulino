@@ -209,6 +209,18 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
 
         columns.forEach((c, idx, arr) => {
           process.generateNode(c);
+
+          // Possible dirty hack: Force fully qualified column name
+          if (false && c.typeName === "columnName") {
+            const columnName = c.properties["columnName"];
+            const tableName = c.properties["refTableName"];
+            process.addConvertedFragment(
+              ` AS "${tableName}.${columnName}"`,
+              node
+            );
+          }
+
+          // Stick commas in between
           if (idx != arr.length - 1) {
             process.addConvertedFragment(", ", node);
           }
