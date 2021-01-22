@@ -64,6 +64,8 @@ test:
     refresh_cookie: 1209600 # 14 days
   auth_provider: ["Identity::Developer"]
   auth_provider_keys:
+    keycloak_site: <%= ENV['KEYCLOAK_SITE'] || 'http://lvh.me:8080' %>
+    keycloak_realm: <%= ENV['KEYCLOAK_REALM'] || 'BlattWerkzeug' %>
   seed_users:
     guest: "00000000-0000-0000-0000-000000000001"
     system: "00000000-0000-0000-0000-000000000002"
