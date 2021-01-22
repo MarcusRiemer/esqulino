@@ -13,7 +13,7 @@ export class ProvidersAllButtonsComponent {
   /**
    * All available providers
    */
-  readonly providers = this._userService.providerList;
+  readonly providers$ = this._userService.availableProviders.value;
 
   /**
    * Will be used for forwarding a click of the blattwerkzeug provider

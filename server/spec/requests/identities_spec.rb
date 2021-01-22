@@ -7,9 +7,8 @@ RSpec.describe "identities controller" do
 
   describe "listing response" do
     it "own identities" do
-      # Developer and Google identity
+      # Developer identity
       identity = create(:developer_provider, :existing)
-      create(:google_provider, :existing, user: identity.user)
 
       identity.user.email = identity.uid
       identity.user.save!
@@ -31,7 +30,7 @@ RSpec.describe "identities controller" do
       get "/api/identities/list"
       json_response = JSON.parse(response.body)
 
-      expect(json_response.length).to eq(2)
+      expect(json_response.length).to eq(1)
       json_response.each do |provider|
         expect(provider).to validate_against "AvailableProviderDescription"
       end

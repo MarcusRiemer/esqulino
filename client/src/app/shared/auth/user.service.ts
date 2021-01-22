@@ -62,7 +62,6 @@ export class UserService {
     .asObservable()
     .pipe(filter((u) => !!u));
 
-  readonly providerList = this._serverData.getProviders;
   readonly identities = this._cachedIdentities.asObservable();
   readonly unexpectedLogout$ = this._unexpectedLogout$.asObservable();
 
@@ -112,6 +111,8 @@ export class UserService {
     filter((u) => !!u),
     map((u) => u.providers)
   );
+
+  readonly availableProviders = this._serverData.getProviders;
 
   /**
    * Sends a http-request to check for the authorization of ui element.

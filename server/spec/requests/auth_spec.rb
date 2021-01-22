@@ -62,7 +62,7 @@ RSpec.describe "auth controller" do
       end
 
       it "new user and a new extern identity" do
-        identity = create(:google_provider, :new)
+        identity = create(:developer_provider, :new)
 
         user_count = User.all.count
         identity_count = Identity::Identity.developer.count
@@ -77,7 +77,7 @@ RSpec.describe "auth controller" do
       end
 
       it "valid jwt token, but invalid user_id (association gone wrong?)" do
-        identity = create(:google_provider, :new)
+        identity = create(:developer_provider, :new)
         set_access_token_with_invalid_user()
 
         get '/api/auth/developer/callback'

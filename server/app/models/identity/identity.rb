@@ -41,8 +41,6 @@ module Identity
       case auth[:provider]
       when 'developer'
         identity = ::Identity::Developer.create_with_auth(auth, user)
-      when 'google_oauth2'
-        identity = ::Identity::Google.create_with_auth(auth, user)
       when 'keycloakopenid'
         identity = ::Identity::Keycloak.create_with_auth(auth, user)
       else
