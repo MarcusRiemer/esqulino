@@ -1,21 +1,14 @@
 --- !ruby/object:ProjectDatabase
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 1e948646-b751-4dc3-921d-e8779be1a58c
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 1e948646-b751-4dc3-921d-e8779be1a58c
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision:
-      scale:
-      limit:
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: d47a01c7-71eb-4512-9ceb-1fbdc949385f
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: default
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: d47a01c7-71eb-4512-9ceb-1fbdc949385f
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "adresse", "columns": [{"name": "ADRESSE_ID",

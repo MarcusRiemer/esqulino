@@ -1,14 +1,14 @@
 --- !ruby/object:Project
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: pokedex
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: '"de"=>"Pokédex"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true

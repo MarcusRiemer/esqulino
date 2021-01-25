@@ -1,14 +1,14 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 7e333dff-6d1c-4042-aaa5-0cdf2cfeed7e
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: dxml
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Dynamisches XML
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 7e333dff-6d1c-4042-aaa5-0cdf2cfeed7e
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2018-05-15 18:48:12.004676000 Z

@@ -1,14 +1,14 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: f28a9a42-73c7-4214-9aba-17443acfc5ce
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: regex
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Reguläre Ausdrücke
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: f28a9a42-73c7-4214-9aba-17443acfc5ce
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2018-05-15 18:53:19.032293000 Z

@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 803ffd84-cea4-4339-907a-c8264fdf7be9
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Anzahl Pokémon je Typ
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 803ffd84-cea4-4339-907a-c8264fdf7be9
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -57,8 +50,9 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT type.name_de, COUNT()\nFROM type\n\tINNER JOIN pokemon_to_type
-    ON type.id = pokemon_to_type.type_id\n\tINNER JOIN pokemon ON pokemon.id = pokemon_to_type.pokemon_id\nGROUP
-    BY type.id\nORDER BY COUNT()"
+  value_before_type_cast: "SELECT type.name_de AS \"type.name_de\", COUNT()\nFROM
+    type\n\tINNER JOIN pokemon_to_type ON type.id = pokemon_to_type.type_id\n\tINNER
+    JOIN pokemon ON pokemon.id = pokemon_to_type.pokemon_id\nGROUP BY type.id\nORDER
+    BY COUNT()"
 new_record: false
 active_record_yaml_version: 2

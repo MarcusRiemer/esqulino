@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 11d2302f-2bb3-499d-8b60-2bbad406c6c8
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 11d2302f-2bb3-499d-8b60-2bbad406c6c8
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: f3f0b82a-b9a0-4d38-bf7a-0f7b57412fa8
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Erster Auftritt
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: f3f0b82a-b9a0-4d38-bf7a-0f7b57412fa8
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -66,10 +59,11 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT Charakter.Charakter_Name, Geschichte.Geschichte_Name,
-    MIN(Geschichte.Geschichte_Nr_Europa)\nFROM Charakter\n\tINNER JOIN Auftritt ON
-    Auftritt.Charakter_ID = Charakter.Charakter_ID\n\tINNER JOIN Geschichte ON Auftritt.Geschichte_ID
-    = Geschichte.Geschichte_ID\nGROUP BY Charakter.Charakter_ID\nORDER BY MIN(Geschichte.Geschichte_Nr_Europa)
-    ASC, Charakter.Charakter_Name ASC"
+  value_before_type_cast: "SELECT Charakter.Charakter_Name AS \"Charakter.Charakter_Name\",
+    Geschichte.Geschichte_Name AS \"Geschichte.Geschichte_Name\", MIN(Geschichte.Geschichte_Nr_Europa)\nFROM
+    Charakter\n\tINNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID\n\tINNER
+    JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID\nGROUP BY
+    Charakter.Charakter_ID\nORDER BY MIN(Geschichte.Geschichte_Nr_Europa) ASC, Charakter.Charakter_Name
+    ASC"
 new_record: false
 active_record_yaml_version: 2

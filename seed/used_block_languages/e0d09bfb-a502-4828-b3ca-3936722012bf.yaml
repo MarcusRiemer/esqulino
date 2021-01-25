@@ -1,15 +1,8 @@
 --- !ruby/object:ProjectUsesBlockLanguage
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 891dc116-890a-4e94-ac77-03139c3c65bf
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 891dc116-890a-4e94-ac77-03139c3c65bf
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: e0d09bfb-a502-4828-b3ca-3936722012bf

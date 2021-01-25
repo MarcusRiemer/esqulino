@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 22f0000d-394e-4b10-ab9e-5756bbad3b60
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Hörspieltitel mit ...
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 22f0000d-394e-4b10-ab9e-5756bbad3b60
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -48,7 +41,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT Geschichte.Geschichte_Name, Geschichte.Geschichte_Nr_Europa, Geschichte.Geschichte_Jahr_Europa
+    SELECT Geschichte.Geschichte_Name AS "Geschichte.Geschichte_Name", Geschichte.Geschichte_Nr_Europa AS "Geschichte.Geschichte_Nr_Europa", Geschichte.Geschichte_Jahr_Europa AS "Geschichte.Geschichte_Jahr_Europa"
     FROM Geschichte
     WHERE Geschichte.Geschichte_Name LIKE :titel
 new_record: false

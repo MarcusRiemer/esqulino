@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 5bd558a5-83ed-4cc9-9613-543bd6396a1e
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 5bd558a5-83ed-4cc9-9613-543bd6396a1e
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 8f516c31-f49f-477e-8081-0b1d9b2152ce
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Sprecher Von
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 8f516c31-f49f-477e-8081-0b1d9b2152ce
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -60,9 +53,10 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT COUNT(), Sprecher.Sprecher_Name, Charakter.Charakter_Name\nFROM
-    Auftritt\n\tINNER JOIN Sprecher ON Auftritt.Sprecher_ID = Sprecher.Sprecher_ID\n\tINNER
-    JOIN Charakter ON Auftritt.Charakter_ID = Charakter.Charakter_ID\nGROUP BY Sprecher.Sprecher_ID,
+  value_before_type_cast: "SELECT COUNT(), Sprecher.Sprecher_Name AS \"Sprecher.Sprecher_Name\",
+    Charakter.Charakter_Name AS \"Charakter.Charakter_Name\"\nFROM Auftritt\n\tINNER
+    JOIN Sprecher ON Auftritt.Sprecher_ID = Sprecher.Sprecher_ID\n\tINNER JOIN Charakter
+    ON Auftritt.Charakter_ID = Charakter.Charakter_ID\nGROUP BY Sprecher.Sprecher_ID,
     Charakter.Charakter_Name\nORDER BY COUNT()"
 new_record: false
 active_record_yaml_version: 2

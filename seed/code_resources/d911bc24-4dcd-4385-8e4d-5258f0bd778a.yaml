@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: d911bc24-4dcd-4385-8e4d-5258f0bd778a
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Ereignisdauer
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: d911bc24-4dcd-4385-8e4d-5258f0bd778a
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -52,7 +45,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT ereignis.bezeichnung, ereignis.beginn_jahr, ereignis.ende_jahr, ereignis.ende_jahr - ereignis.beginn_jahr
+    SELECT ereignis.bezeichnung AS "ereignis.bezeichnung", ereignis.beginn_jahr AS "ereignis.beginn_jahr", ereignis.ende_jahr AS "ereignis.ende_jahr", ereignis.ende_jahr - ereignis.beginn_jahr
     FROM ereignis
     ORDER BY ereignis.ende_jahr - ereignis.beginn_jahr
 new_record: false

@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 3763c1b1-6de7-4a62-9bcc-b7b411ac0bd1
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Gängigste Attacke
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 3763c1b1-6de7-4a62-9bcc-b7b411ac0bd1
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -51,7 +44,8 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT move.name_de, COUNT()\nFROM move\n\tINNER JOIN pokemon_to_move
-    ON move.id = pokemon_to_move.move_id\nGROUP BY move.id\nORDER BY COUNT()"
+  value_before_type_cast: "SELECT move.name_de AS \"move.name_de\", COUNT()\nFROM
+    move\n\tINNER JOIN pokemon_to_move ON move.id = pokemon_to_move.move_id\nGROUP
+    BY move.id\nORDER BY COUNT()"
 new_record: false
 active_record_yaml_version: 2

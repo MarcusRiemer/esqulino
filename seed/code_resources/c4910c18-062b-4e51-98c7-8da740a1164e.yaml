@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 891dc116-890a-4e94-ac77-03139c3c65bf
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 891dc116-890a-4e94-ac77-03139c3c65bf
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: c4910c18-062b-4e51-98c7-8da740a1164e
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: 00 HTML
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: c4910c18-062b-4e51-98c7-8da740a1164e
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",

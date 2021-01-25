@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 4975044e-80b6-441b-a43a-0d5a4af34747
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Hörspiele pro Jahr
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 4975044e-80b6-441b-a43a-0d5a4af34747
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -50,7 +43,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT Geschichte.Geschichte_Jahr_Europa, COUNT(), GROUP_CONCAT(Geschichte.Geschichte_Name)
+    SELECT Geschichte.Geschichte_Jahr_Europa AS "Geschichte.Geschichte_Jahr_Europa", COUNT(), GROUP_CONCAT(Geschichte.Geschichte_Name)
     FROM Geschichte
     GROUP BY Geschichte.Geschichte_Jahr_Europa
     ORDER BY Geschichte.Geschichte_Jahr_Europa, COUNT()

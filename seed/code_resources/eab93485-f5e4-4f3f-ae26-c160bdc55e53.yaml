@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 11d2302f-2bb3-499d-8b60-2bbad406c6c8
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 11d2302f-2bb3-499d-8b60-2bbad406c6c8
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: eab93485-f5e4-4f3f-ae26-c160bdc55e53
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Charakter mehrere Sprecher
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: eab93485-f5e4-4f3f-ae26-c160bdc55e53
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -66,10 +59,10 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT Charakter.Charakter_Name, COUNT(DISTINCT Sprecher.Sprecher_ID),
-    GROUP_CONCAT(DISTINCT Sprecher.Sprecher_Name)\nFROM Sprecher\n\tINNER JOIN Auftritt
-    ON Auftritt.Sprecher_ID = Sprecher.Sprecher_ID\n\tINNER JOIN Charakter ON Auftritt.Charakter_ID
-    = Charakter.Charakter_ID\nGROUP BY Charakter.Charakter_ID\nORDER BY COUNT(DISTINCT
-    Sprecher.Sprecher_ID) DESC"
+  value_before_type_cast: "SELECT Charakter.Charakter_Name AS \"Charakter.Charakter_Name\",
+    COUNT(DISTINCT Sprecher.Sprecher_ID), GROUP_CONCAT(DISTINCT Sprecher.Sprecher_Name)\nFROM
+    Sprecher\n\tINNER JOIN Auftritt ON Auftritt.Sprecher_ID = Sprecher.Sprecher_ID\n\tINNER
+    JOIN Charakter ON Auftritt.Charakter_ID = Charakter.Charakter_ID\nGROUP BY Charakter.Charakter_ID\nORDER
+    BY COUNT(DISTINCT Sprecher.Sprecher_ID) DESC"
 new_record: false
 active_record_yaml_version: 2

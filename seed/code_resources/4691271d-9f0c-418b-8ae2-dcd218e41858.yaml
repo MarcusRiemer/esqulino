@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 4691271d-9f0c-418b-8ae2-dcd218e41858
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Sprecher von ...
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 4691271d-9f0c-418b-8ae2-dcd218e41858
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -62,10 +55,11 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT Charakter.Charakter_Name, Geschichte.Geschichte_Name,
-    Geschichte.Geschichte_Nr_Europa, Geschichte.Geschichte_Nr_Kosmos\nFROM Charakter\n\tINNER
-    JOIN Auftritt ON Charakter.Charakter_ID = Auftritt.Charakter_ID\n\tINNER JOIN
-    Geschichte ON Geschichte.Geschichte_ID = Auftritt.Geschichte_ID\nWHERE Charakter.Charakter_Name
+  value_before_type_cast: "SELECT Charakter.Charakter_Name AS \"Charakter.Charakter_Name\",
+    Geschichte.Geschichte_Name AS \"Geschichte.Geschichte_Name\", Geschichte.Geschichte_Nr_Europa
+    AS \"Geschichte.Geschichte_Nr_Europa\", Geschichte.Geschichte_Nr_Kosmos AS \"Geschichte.Geschichte_Nr_Kosmos\"\nFROM
+    Charakter\n\tINNER JOIN Auftritt ON Charakter.Charakter_ID = Auftritt.Charakter_ID\n\tINNER
+    JOIN Geschichte ON Geschichte.Geschichte_ID = Auftritt.Geschichte_ID\nWHERE Charakter.Charakter_Name
     LIKE :name"
 new_record: false
 active_record_yaml_version: 2

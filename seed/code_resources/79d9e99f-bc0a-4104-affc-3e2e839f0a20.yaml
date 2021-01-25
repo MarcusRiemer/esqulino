@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 9b4716e7-9c02-4af2-8457-5965f58fff70
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 79d9e99f-bc0a-4104-affc-3e2e839f0a20
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Erster Auftritt
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 79d9e99f-bc0a-4104-affc-3e2e839f0a20
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -59,9 +52,10 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT MIN(Auftritt.Geschichte_ID), Charakter.Charakter_Name,
-    Geschichte.Geschichte_Name\nFROM Charakter\n\tINNER JOIN Auftritt ON Auftritt.Charakter_ID
-    = Charakter.Charakter_ID\n\tINNER JOIN Geschichte ON Auftritt.Geschichte_ID =
-    Geschichte.Geschichte_ID\nGROUP BY Charakter.Charakter_ID"
+  value_before_type_cast: "SELECT MIN(Auftritt.Geschichte_ID), Charakter.Charakter_Name
+    AS \"Charakter.Charakter_Name\", Geschichte.Geschichte_Name AS \"Geschichte.Geschichte_Name\"\nFROM
+    Charakter\n\tINNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID\n\tINNER
+    JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID\nGROUP BY
+    Charakter.Charakter_ID"
 new_record: false
 active_record_yaml_version: 2

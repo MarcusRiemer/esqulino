@@ -1,14 +1,14 @@
 --- !ruby/object:Project
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: eed33970-43fd-47ab-b9d6-5a8fafc37629
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: ltb
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: '"de"=>"Lustige Enzyklopädie"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: eed33970-43fd-47ab-b9d6-5a8fafc37629
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true

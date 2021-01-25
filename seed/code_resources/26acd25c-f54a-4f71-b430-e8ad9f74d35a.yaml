@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: cf28c9fc-f891-42b6-a1b3-e72dba2850fd
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: cf28c9fc-f891-42b6-a1b3-e72dba2850fd
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision:
-      scale:
-      limit:
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 26acd25c-f54a-4f71-b430-e8ad9f74d35a
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: 03 <e><c>
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 26acd25c-f54a-4f71-b430-e8ad9f74d35a
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "element", "children": {"elements": [{"name":

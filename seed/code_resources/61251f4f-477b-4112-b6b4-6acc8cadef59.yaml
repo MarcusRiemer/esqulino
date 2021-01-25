@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: eed33970-43fd-47ab-b9d6-5a8fafc37629
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: eed33970-43fd-47ab-b9d6-5a8fafc37629
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 61251f4f-477b-4112-b6b4-6acc8cadef59
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Anzahl Auftritte
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 61251f4f-477b-4112-b6b4-6acc8cadef59
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":
@@ -58,8 +51,8 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT charakter.name, COUNT()\nFROM geschichte\n\tINNER
-    JOIN geschichte_to_charakter ON geschichte.id = geschichte_to_charakter.geschichte_id\n\tINNER
+  value_before_type_cast: "SELECT charakter.name AS \"charakter.name\", COUNT()\nFROM
+    geschichte\n\tINNER JOIN geschichte_to_charakter ON geschichte.id = geschichte_to_charakter.geschichte_id\n\tINNER
     JOIN charakter ON charakter.id = geschichte_to_charakter.charakter_id\nGROUP BY
     charakter.id\nORDER BY COUNT() DESC"
 new_record: false
