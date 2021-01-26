@@ -4,6 +4,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 
+import { OverlayModule } from "@angular/cdk/overlay";
 import { PortalModule } from "@angular/cdk/portal";
 
 import { MatButtonModule } from "@angular/material/button";
@@ -69,7 +70,6 @@ import { IsAdminGuard } from "./guards/is-admin.guard";
 import { MayPerformComponent } from "./may-perform.component";
 import { PerformDataService } from "./authorisation/perform-data.service";
 import { MessageDialogComponent } from "./message-dialog.component";
-import { MasterGuard } from "./guards/master-guard";
 import { UnexpectedLogoutInterceptor } from "./unexpected-logout.interceptor";
 import { UserService } from "./auth/user.service";
 import { ResourceReferencesService } from "./resource-references.service";
@@ -80,7 +80,6 @@ import { PaginatorTableGraphqlComponent } from "./table/paginator-table-graphql.
 import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
-import { OverlayModule } from "@angular/cdk/overlay";
 
 const dataServices = [
   IndividualGrammarDataService,
@@ -217,7 +216,6 @@ export class SharedAppModule {
         SideNavService,
         ...dataServices,
         LoggedInGuard,
-        MasterGuard,
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,

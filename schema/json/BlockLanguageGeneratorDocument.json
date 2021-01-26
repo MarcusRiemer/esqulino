@@ -94,6 +94,28 @@
       ],
       "type": "object"
     },
+    "BlocklyComponentDescription": {
+      "additionalProperties": false,
+      "description": "Displays a blockly editor",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "blockly"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
     "CodeGeneratorComponentDescription": {
       "additionalProperties": false,
       "description": "Displays the compiled program",
@@ -246,6 +268,9 @@
         },
         {
           "$ref": "#/definitions/BlockRootComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/BlocklyComponentDescription"
         },
         {
           "$ref": "#/definitions/QueryPreviewComponentDescription"

@@ -16,15 +16,13 @@ export class Table {
   private _foreign_keys: ForeignKeyDescription[];
   private _isSystemTable: boolean;
 
-  constructor(
-    desc: TableDescription,
-    col: ColumnDescription[],
-    foreign_keys: ForeignKeyDescription[]
-  ) {
+  constructor(desc: TableDescription) {
     this._name = desc.name;
     this._isSystemTable = desc.systemTable;
-    this._columns = col.map((val) => new Column(val, ColumnStatus.unchanged));
-    this._foreign_keys = foreign_keys;
+    this._columns = desc.columns.map(
+      (val) => new Column(val, ColumnStatus.unchanged)
+    );
+    this._foreign_keys = desc.foreignKeys;
   }
 
   /**

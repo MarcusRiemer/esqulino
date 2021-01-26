@@ -1,3 +1,9 @@
+import {
+  NodeConcreteTypeDescription,
+  NodeVisualTypeDescription,
+  NodeDescription,
+} from "../../syntaxtree";
+
 export interface BlockArgsInputValue {
   type: "input_value";
   name: string;
@@ -11,7 +17,7 @@ export interface BlockArgsInputStatement {
 export interface BlockArgsLabelSerializable {
   type: "field_label_serializable";
   name: string;
-  text: string;
+  text?: string;
 }
 
 export interface BlockArgsFieldDropdown {
@@ -68,4 +74,15 @@ export interface BlocklyBlock {
   helpUrl?: string;
 
   inputsInline?: boolean;
+
+  coreType: NodeConcreteTypeDescription | NodeVisualTypeDescription;
+}
+
+/**
+ * A Blockly block that is ready to be placed on a workspace. Used to
+ * populate the sidebar.
+ */
+export interface BlocklyWorkspaceBlock {
+  type: string;
+  properties: NodeDescription["properties"];
 }

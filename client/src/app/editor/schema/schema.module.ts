@@ -3,6 +3,8 @@ import { NgModule, ModuleWithProviders } from "@angular/core";
 import { EditorSharedComponentsModule } from "../shared-components/editor-shared-components.module";
 import { RegistrationService } from "../registration.service";
 
+import { schemaEditorRouting } from "./schema.routes";
+
 import { SchemaHostComponent } from "./host.component";
 import { SchemaRedirectComponent } from "./schema-redirect.component";
 import { SchemaComponent } from "./schema.component";
@@ -16,7 +18,7 @@ import { TableEditorSidebarStackComponent } from "./table-editor-stack.sidebar";
 import { TableEditorSidebarControlsComponent } from "./table-editor-controls.sidebar";
 
 @NgModule({
-  imports: [EditorSharedComponentsModule],
+  imports: [EditorSharedComponentsModule, schemaEditorRouting],
   declarations: [
     SchemaHostComponent,
     SchemaRedirectComponent,

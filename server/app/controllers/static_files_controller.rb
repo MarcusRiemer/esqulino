@@ -17,16 +17,17 @@ class StaticFilesController < ApplicationController
       # API paths are never static pages
       render :plain => 'API endpoint triggered by fallback controller', :status => 503
     else
-      # Assume that the URL immediatly denotes a file we know
-      basepath = Rails.configuration.sqlino[:client_dir]
-      local_path = basepath.join(request_locale, requested_path)
+      # Try to use the request locale first, but try others just in case
+      possible_locales = [request_locale, "de", "en", nil]
+      local_path = locale_index_path(possible_locales.shift, requested_path)
 
-      # If we don't know that file, assume that the index file
-      # was requested
-      if requested_path.empty? or not File.exists? local_path then
-        local_path = basepath.join(request_locale, 'index.html')
+      while not possible_locales.empty? and  local_path.nil? or not File.exists? local_path
+        local_path = locale_index_path(possible_locales.shift, requested_path)
+      end
 
-        raise EsqulinoError::NoCompiledClient.new(local_path) unless File.exists? local_path
+      # Still no file found? Thats an error
+      if local_path.nil? or not File.exists? local_path
+        raise EsqulinoError::NoCompiledClient.new(local_path)
       end
 
       send_file local_path, disposition: 'inline'
@@ -42,5 +43,29 @@ class StaticFilesController < ApplicationController
     else
       render status: 404, plain: ""
     end
+  end
+
+  private
+  def locale_index_path request_locale, requested_path
+    # Assume that the URL immediatly denotes a file we know
+    basepath = Rails.configuration.sqlino[:client_dir]
+
+    local_path = if (request_locale.nil?)
+                   basepath.join(requested_path)
+                 else
+                   basepath.join(request_locale, requested_path)
+                 end
+
+    # If we don't know that file, assume that the index file
+    # was requested
+    if requested_path.empty? or not File.exists? local_path then
+      local_path = if (request_locale.nil?)
+                     basepath.join('index.html')
+                   else
+                     basepath.join(request_locale, 'index.html')
+                   end
+    end
+
+    return local_path
   end
 end

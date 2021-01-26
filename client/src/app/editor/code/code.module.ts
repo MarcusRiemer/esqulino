@@ -8,7 +8,6 @@ import { EditorSharedComponentsModule } from "../shared-components/editor-shared
 import { ResourceChangedGuard } from "./resource-changed.guard";
 import { CodeGeneratorComponent } from "./code-generator.component";
 import { CreateCodeResourceComponent } from "./create-code-resource.component";
-import { EditorComponentsService } from "./editor-components.service";
 import { LanguageModelSelectorComponent } from "./language-model-selector.component";
 import { LanguageEmittedSelectorComponent } from "./language-emitted-selector.component";
 import { CodeSidebarComponent } from "./code.sidebar";
@@ -93,7 +92,6 @@ export class CodeEditorModule {
     return {
       ngModule: CodeEditorModule,
       providers: [
-        EditorComponentsService,
         BlockDebugOptionsService,
         QueryService,
         TruckWorldService,

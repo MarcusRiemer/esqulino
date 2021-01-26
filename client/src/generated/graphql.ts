@@ -2305,7 +2305,7 @@ export class DestroyProjectGQL extends Apollo.Mutation<
 export const FrontpageListNewsDocument = gql`
   query FrontpageListNews($languages: [LanguageEnum!]) {
     news(
-      first: 1
+      first: 5
       input: {
         filter: { publishedFrom: { until: true } }
         textLength: short

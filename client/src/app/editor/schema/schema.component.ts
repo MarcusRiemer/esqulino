@@ -9,7 +9,7 @@ import { zip } from "rxjs";
 import { ServerApiService } from "../../shared";
 
 import { ProjectService, Project } from "../project.service";
-import { SchemaService } from "../schema.service";
+import { EditDatabaseSchemaService } from "../edit-database-schema.service";
 import { SidebarService } from "../sidebar.service";
 import { EditorToolbarService } from "../toolbar.service";
 
@@ -41,7 +41,7 @@ export class SchemaComponent implements OnInit {
     private _router: Router,
     private _route: ActivatedRoute,
     private _sidebarService: SidebarService,
-    private _schemaService: SchemaService,
+    private _schemaService: EditDatabaseSchemaService,
     private _serverApi: ServerApiService
   ) {}
 
