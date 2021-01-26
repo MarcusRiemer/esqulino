@@ -50,6 +50,11 @@ const GeneratorFunction = Object.getPrototypeOf(function* () {}).constructor;
  */
 type ExecutionProgessCallback = (loc: NodeLocation) => void;
 
+export interface WorldPreviewInfo {
+  state: WorldState;
+  patches: Patch[];
+}
+
 /**
  * Representation of the game world.
  */
@@ -58,7 +63,7 @@ export class World {
   states: Array<WorldState>;
 
   /** Will be undefined if not in editor mode or no changes */
-  previewChanges?: Patch[];
+  previewChanges?: WorldPreviewInfo;
 
   /** Duration of a step in milliseconds. */
   animationSpeed = 1000;
@@ -89,7 +94,7 @@ export class World {
         const trafficLight = curTile.trafficLight(
           DirectionUtil.opposite(state.truck.facingDirection)
         );
-        if (trafficLight == null || trafficLight.isGreen(this.timeStep)) {
+        if (trafficLight == null || trafficLight.isGreen(this.totalTimeSteps)) {
           state.truck.move();
           state.time = 1;
           return state;
@@ -186,7 +191,7 @@ export class World {
       const trafficLight = state
         .getTile(state.truck.position)
         .trafficLight(DirectionUtil.opposite(state.truck.facingDirection));
-      return trafficLight != null && trafficLight.isRed(this.timeStep);
+      return trafficLight != null && trafficLight.isRed(this.totalTimeSteps);
     },
 
     // Is the traffic light in front of the truck green?
@@ -194,7 +199,7 @@ export class World {
       const trafficLight = state
         .getTile(state.truck.position)
         .trafficLight(DirectionUtil.opposite(state.truck.facingDirection));
-      return trafficLight != null && trafficLight.isGreen(this.timeStep);
+      return trafficLight != null && trafficLight.isGreen(this.totalTimeSteps);
     },
 
     // Can the truck go straight?
@@ -344,12 +349,10 @@ export class World {
   /**
    * Returns the state of a particular step.
    * @param step Number of the state.
-   * @return State.
+   * @return State. Will be undefined if invalid step.
    */
   getState(step: number): WorldState {
-    return step >= 0 && step < this.states.length
-      ? this.states[this.states.length - 1 - step]
-      : null;
+    return this.states[this.states.length - 1 - step];
   }
 
   /**
@@ -364,7 +367,7 @@ export class World {
    * Returns the past time steps.
    * @return Past time steps.
    */
-  get timeStep(): number {
+  get totalTimeSteps(): number {
     return this.states.reduce((a: number, v: WorldState) => a + v.time, 0);
   }
 
@@ -379,7 +382,7 @@ export class World {
     const s = this.state;
     const [newState, patches] = produceWithPatchesAllowNull(s, f);
 
-    if (patches.length == 0) {
+    if (patches.length == 0 && f !== this.commands[Command.wait]) {
       // If you see this warning, it could be an indication
       // that you made a new custom class and forgot to add
       // [immerable] = true;
@@ -389,6 +392,22 @@ export class World {
 
     if (newState) {
       this.states.unshift(newState);
+
+      // We need to update the preview (if existing)
+      if (this.previewChanges) {
+        const [previewState, previewPatches] = produceWithPatchesAllowNull(
+          newState,
+          () => this.previewChanges.state
+        );
+        if (!previewPatches.length) {
+          this.deletePreview();
+        } else {
+          this.previewChanges = {
+            state: previewState,
+            patches: previewPatches,
+          };
+        }
+      }
     }
     return newState;
   }
@@ -403,10 +422,13 @@ export class World {
   ): void {
     const [newState, patches] = produceWithPatchesAllowNull(this.state, f);
 
-    if (!newState) {
+    if (!newState || !patches.length) {
       this.deletePreview();
     } else {
-      this.previewChanges = patches;
+      this.previewChanges = {
+        state: newState,
+        patches,
+      };
     }
   }
 
@@ -719,7 +741,7 @@ export class World {
 export class WorldState {
   [immerable] = true;
 
-  /** Time steps that are sheduled for the execution of this step.  */
+  /** Time steps that are scheduled for the execution of this step.  */
   time: number;
 
   /** Size of the world. */
@@ -743,14 +765,6 @@ export class WorldState {
     this.tiles = tiles;
     this.truck = truck;
     this.time = time;
-  }
-
-  /**
-   * Returns the time steps past in this step and all previous steps.
-   * @return time steps.
-   */
-  get timeStep(): number {
-    return this.time;
   }
 
   /**
