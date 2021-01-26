@@ -623,7 +623,7 @@ export type ProjectDatabase = {
   id: Scalars["ID"];
   name: Scalars["String"];
   project: Project;
-  schema: Scalars["JSON"];
+  schema: Array<SqlTable>;
   updatedAt: Scalars["ISO8601DateTime"];
 };
 
