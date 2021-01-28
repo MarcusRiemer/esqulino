@@ -8,7 +8,7 @@ import { UserDescription } from "../auth/user.description";
 
 import { ServerApiService } from "./serverapi.service";
 import { ServerProviderDescription } from "../auth/provider.description";
-import { AvailableProviderDescription } from "./../auth/provider.description";
+import { LoginProviderDescription } from "./../auth/provider.description";
 import {
   MayPerformRequestDescription,
   MayPerformResponseDescription,
@@ -40,10 +40,10 @@ export class ServerDataService {
     "GET " + this._serverApi.getUserIdentitiesUrl()
   );
 
-  readonly getProviders = this._serverTasks.createRequest<
-    AvailableProviderDescription[]
+  readonly availableProviders = this._serverTasks.createRequest<
+    LoginProviderDescription[]
   >(
-    this._http.get<AvailableProviderDescription[]>(
+    this._http.get<LoginProviderDescription[]>(
       this._serverApi.getProvidersUrl()
     ),
     "GET " + this._serverApi.getProvidersUrl()

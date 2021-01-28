@@ -112,8 +112,6 @@ export class UserService {
     map((u) => u.providers)
   );
 
-  readonly availableProviders = this._serverData.getProviders;
-
   /**
    * Sends a http-request to check for the authorization of ui element.
    * Server will respond with a list of authorizations

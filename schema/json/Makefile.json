@@ -6,7 +6,7 @@
 TYPESCRIPT_JSON_SCHEMA_BIN = npx ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AvailableProviderDescription.json AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceRequestUpdateDescription.json GrammarDocument.json NodeDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json QualifiedTypeName.json BlockLanguageGeneratorDocument.json BlockLanguageSidebarsDescription.json BlockLanguageEditorBlocksDescription.json BlockLanguageEditorComponentsDescription.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceRequestUpdateDescription.json GrammarDocument.json NodeDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json QualifiedTypeName.json BlockLanguageGeneratorDocument.json BlockLanguageSidebarsDescription.json BlockLanguageEditorBlocksDescription.json BlockLanguageEditorComponentsDescription.json
 
 # How to generate a JSON description from a source file
 %.json : %.ts
@@ -19,8 +19,6 @@ define CONVERT_COMMAND
 	@mv "$@.tmp" "$@"
 endef
 
-AvailableProviderDescription.json: $(SRC_PATH)/shared/auth/provider.description.ts
-	$(CONVERT_COMMAND)
 ArbitraryQueryRequestDescription.json : $(SRC_PATH)/shared/syntaxtree/sql/query.description.ts
 	$(CONVERT_COMMAND)
 AlterSchemaRequestDescription.json : $(SRC_PATH)/shared/schema/table-commands.description.ts

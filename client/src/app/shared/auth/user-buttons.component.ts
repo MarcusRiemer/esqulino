@@ -4,6 +4,8 @@ import { Component } from "@angular/core";
 
 import { first } from "rxjs/operators";
 
+import { LoginProvidersGQL } from "../../../generated/graphql";
+
 import { ServerApiService } from "../serverdata";
 
 import { AuthDialogComponent } from "./auth-dialog.component";
@@ -17,6 +19,7 @@ export class UserButtonsComponent {
   constructor(
     private _dialog: MatDialog,
     private _userService: UserService,
+    private _loginProviders: LoginProvidersGQL,
     private _router: Router,
     private _serverApi: ServerApiService
   ) {}
@@ -26,9 +29,7 @@ export class UserButtonsComponent {
    */
   public userDisplayName$ = this._userService.userDisplayName$;
 
-  get providerList() {
-    return this._userService.availableProviders.value.pipe(first()).toPromise();
-  }
+  readonly providerList = this._loginProviders.watch().result();
 
   /**
    * Opens a dialog for sign in or sign up
@@ -37,7 +38,8 @@ export class UserButtonsComponent {
   async openDialog(type: "signIn" | "signUp") {
     console.log("Attempting to show login dialog ...");
 
-    const providerList = await this.providerList;
+    const providerData = await this.providerList;
+    const providerList = providerData.data.loginProviders;
 
     // Show a Dialog if the user can choose between multiple providers
     if (providerList.length > 1) {

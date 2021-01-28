@@ -1,14 +1,14 @@
 import { EventEmitter } from "@angular/core";
 import { Component, Input, Output } from "@angular/core";
 
-import { AvailableProviderDescription } from "./provider.description";
+import { LoginProviderDescription } from "./provider.description";
 import { ServerApiService } from "../serverdata";
 @Component({
   selector: "provider-button",
   templateUrl: "./templates/provider-button.html",
 })
 export class ProviderButtonComponent {
-  @Input() provider: AvailableProviderDescription;
+  @Input() provider: LoginProviderDescription;
   @Output() trigger = new EventEmitter<void>();
 
   constructor(private _serverApi: ServerApiService) {}
