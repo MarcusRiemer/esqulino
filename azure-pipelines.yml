@@ -151,7 +151,7 @@ jobs:
 
   - task: UseRubyVersion@0
     inputs:
-      versionSpec: '>= 2.6'
+      versionSpec: '~ 2.7'
 
   - script: gem install bundler
     displayName: 'gem install bundler'
@@ -213,7 +213,7 @@ jobs:
   steps:
   - task: UseRubyVersion@0
     inputs:
-      versionSpec: '>= 2.6'
+      versionSpec: '~ 2.7'
 
   - script: gem install bundler
     displayName: 'gem install bundler'
@@ -281,7 +281,7 @@ jobs:
   steps:
   - task: UseRubyVersion@0
     inputs:
-      versionSpec: '>= 2.6'
+      versionSpec: '~ 2.7'
 
   - script: gem install bundler
     displayName: 'gem install bundler'
