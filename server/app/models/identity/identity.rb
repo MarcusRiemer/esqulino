@@ -24,11 +24,12 @@ module Identity
     # Returns a hash containing information about all available providers
     # The available providers are loaded from the sqlino file
     def self.all_client_information
-      to_return = Rails.configuration.sqlino[:auth_provider].map do |k|
-        infos = k.constantize.client_information
-        infos = infos ? infos.slice(:name, :url_name, :icon, :color) : infos
+      Rails.configuration.sqlino[:auth_provider].map do |k|
+        # Grab the class that matches the provided name
+        provider_info = k.constantize
+        # Extract the relevant client data
+        provider_info.client_information.slice(:name, :url_name, :icon, :color)
       end
-      return to_return.filter { |v| v }
     end
 
     # Creates an identity with omniauth callback or create_identity_data,

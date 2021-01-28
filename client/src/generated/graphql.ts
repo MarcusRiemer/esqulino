@@ -399,6 +399,14 @@ export type Identity = {
 
 export type LanguageEnum = "de" | "en";
 
+export type LoginProvider = {
+  __typename?: "LoginProvider";
+  color: Scalars["String"];
+  icon: Scalars["String"];
+  name: Scalars["String"];
+  urlName: Scalars["String"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   addUsedBlockLanguage?: Maybe<AddUsedBlockLanguagePayload>;
@@ -684,6 +692,7 @@ export type Query = {
   blockLanguages: BlockLanguageConnection;
   codeResources: CodeResourceConnection;
   grammars: GrammarConnection;
+  loginProviders: Array<LoginProvider>;
   news: NewsConnection;
   programmingLanguages: ProgrammingLanguageConnection;
   projects: ProjectConnection;
@@ -1554,6 +1563,17 @@ export type GrammarDescriptionItemQuery = { __typename?: "Query" } & {
       >
     >;
   };
+};
+
+export type LoginProvidersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type LoginProvidersQuery = { __typename?: "Query" } & {
+  loginProviders: Array<
+    { __typename?: "LoginProvider" } & Pick<
+      LoginProvider,
+      "name" | "color" | "icon" | "urlName"
+    >
+  >;
 };
 
 export type ProjectAddUsedBlockLanguageMutationVariables = Exact<{
@@ -2596,6 +2616,30 @@ export class GrammarDescriptionItemGQL extends Apollo.Query<
   GrammarDescriptionItemQueryVariables
 > {
   document = GrammarDescriptionItemDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const LoginProvidersDocument = gql`
+  query LoginProviders {
+    loginProviders {
+      name
+      color
+      icon
+      urlName
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class LoginProvidersGQL extends Apollo.Query<
+  LoginProvidersQuery,
+  LoginProvidersQueryVariables
+> {
+  document = LoginProvidersDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

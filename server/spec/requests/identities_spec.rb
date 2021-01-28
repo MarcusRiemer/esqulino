@@ -26,14 +26,21 @@ RSpec.describe "identities controller" do
       end
     end
 
-    it "all providers" do
-      get "/api/identities/list"
-      json_response = JSON.parse(response.body)
+    fit "all providers" do
+      send_query(query_name: "LoginProviders")
 
-      expect(json_response.length).to eq(1)
-      json_response.each do |provider|
-        expect(provider).to validate_against "AvailableProviderDescription"
-      end
+      json_data = JSON.parse(response.body)['data']['loginProviders']
+      expect(json_data.length).to eq 1
     end
+
+    # it "all providers" do
+    #   get "/api/identities/list"
+    #   json_response = JSON.parse(response.body)
+
+    #   expect(json_response.length).to eq(1)
+    #   json_response.each do |provider|
+    #     expect(provider).to validate_against "LoginProviderDescription"
+    #   end
+    # end
   end
 end
