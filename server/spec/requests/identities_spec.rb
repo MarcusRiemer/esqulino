@@ -26,7 +26,7 @@ RSpec.describe "identities controller" do
       end
     end
 
-    fit "all providers" do
+    it "all providers" do
       send_query(query_name: "LoginProviders")
 
       json_data = JSON.parse(response.body)['data']['loginProviders']

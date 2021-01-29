@@ -1,9 +1,21 @@
 module Resolvers
+  # A base class to build scoped and optimized SQL queries based on a
+  # GraphQL query. Provides basic filtering and ordering operations alongside
+  # with sparse language field selection.
   class BaseResolver
-    def initialize(model_class, context: nil, scope:, filter: nil, order: nil, languages: nil, order_field:, order_dir:)
+    def initialize(
+          model_class,
+          context: nil,
+          scope:,
+          filter: nil,
+          order: nil,
+          languages: nil,
+          order_field:,
+          order_dir:
+        )
       @model_class = model_class
       @context = context
-      @languages = set_languages(languages)
+      @languages = relevant_languages(languages)
       @order_dir = order_dir
       @order_field = order_field
       scope = select_relevant_fields(scope)
@@ -11,13 +23,17 @@ module Resolvers
       @scope = apply_order(scope, order)
     end
 
-    def set_languages(languages)
+    # Calculates the relevant languages based on the given languages
+    def relevant_languages(languages)
+      # No language given at all? Use default languages
       if languages.nil?
-        Types::Base::BaseEnum::LanguageEnum.enum_values
+        return Types::Base::BaseEnum::LanguageEnum.enum_values
+      # Explicitly asking for no language at all? Must be an error
       elsif languages.empty?
         raise GraphQL::ExecutionError, "An empty Array is not allowed as languages input field."
+      # This is fine
       else
-        languages
+        return languages
       end
     end
 
@@ -73,6 +89,9 @@ module Resolvers
       scope
     end
 
+
+
+    # Extends the scope with
     def include_related(graphql_query)
       # .includes might be the wrong function because it only makes possible to use
       # .size so the number will be determined by iterating the array not in sql
@@ -88,8 +107,8 @@ module Resolvers
       "[" + arr.map { |e| "'" + e + "'"}.join(", ") + "]"
     end
 
-    # List the requested columns except additional columns which doesn't exist in
-    # the Model like (projects codeResourceCount) also add primary key and foreign key
+    # Returns the requested columns except for transient columns which don't exist in
+    # the Model like (projects codeResourceCount). Also adds primary key and foreign key
     # columns (columns which ends with _id) to keep relations if no columns are
     # requested at all
     def relevant_columns
