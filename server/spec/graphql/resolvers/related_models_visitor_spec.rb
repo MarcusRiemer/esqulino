@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.fdescribe Resolvers::RelatedModelsVisitor do
+RSpec.describe Resolvers::RelatedModelsVisitor do
   it "Only scalars" do
     query_string = <<-EOQ
       query AdminListGrammars {
@@ -76,6 +76,27 @@ RSpec.fdescribe Resolvers::RelatedModelsVisitor do
     expect { Resolvers::RelatedModelsVisitor.calculate query_string, Grammar }.to raise_error(RuntimeError)
   end
 
+    it "One level, intermediate 'nodes'" do
+    query_string = <<-EOQ
+      query AdminListGrammars {
+        grammars {
+          nodes {
+            name
+            codeResources {
+              nodes {
+                name
+              }
+            }
+          }
+          totalCount
+        }
+      }
+    EOQ
+
+    includes = Resolvers::RelatedModelsVisitor.calculate query_string, Grammar
+    expect(includes).to eq({ "code_resources" => {} })
+  end
+
   it "Two levels nested, surrounded by scalars" do
     query_string = <<-EOQ
       query AdminListGrammars {
@@ -118,5 +139,23 @@ RSpec.fdescribe Resolvers::RelatedModelsVisitor do
     EOQ
 
     expect { Resolvers::RelatedModelsVisitor.calculate query_string, Grammar }.to raise_error(RuntimeError)
+  end
+
+  fit "Sub-selecting a non-Rails relationship" do
+    query_string = <<-EOQ
+      query Foo {
+        projects {
+          nodes {
+            name,
+            schema {
+              name
+            }
+          }
+        }
+      }
+    EOQ
+
+    includes = Resolvers::RelatedModelsVisitor.calculate query_string, Grammar
+    expect(includes).to eq({ })
   end
 end

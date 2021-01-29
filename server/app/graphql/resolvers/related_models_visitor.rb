@@ -77,7 +77,7 @@ module Resolvers
           curr_associations = curr_class.reflect_on_all_associations
 
           model_stack << stack_node
-        elsif in_model_associations
+        elsif in_model_associations and stack_node.name != "nodes"
           # Ouch, there might be a non active record association here, e.g.
           # the "nodes" layer of GrahQL ... We better treat this as
           # an error for the moment
@@ -101,6 +101,12 @@ module Resolvers
     # @param new_include [String]   The name of the new include
     # @param curr                   The nested includes hash to modify
     def add_nested_include(model_stack, new_include, curr)
+      # Don't add a type that can't possibly exist
+      # TODO: Also do this via active record
+      if new_include == "nodes"
+        return
+      end
+
       if model_stack.empty?
         curr[new_include.underscore] = Hash.new
       else

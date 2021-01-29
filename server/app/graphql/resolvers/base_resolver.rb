@@ -21,6 +21,11 @@ module Resolvers
       scope = select_relevant_fields(scope)
       scope = apply_filter(scope, filter)
       @scope = apply_order(scope, order)
+
+      # TODO: This should happen when loading queries from disk, not for every query
+      if context and context.query
+        include_related(context.query.query_string)
+      end
     end
 
     # Calculates the relevant languages based on the given languages
@@ -89,12 +94,13 @@ module Resolvers
       scope
     end
 
-    # Extends the scope with
+    # Extends the scope with appropriate Rails `#includes` hints according to
+    # the GraphQL query.
     def include_related(graphql_query)
-      # .includes might be the wrong function because it only makes possible to use
-      # .size so the number will be determined by iterating the array not in sql
-      #  https://jacopretorius.net/2017/05/dealing-with-n1-queries-in-rails.html
-      # TODO: find out which related objects are queried for and should be included
+      proposed = RelatedModelsVisitor.calculate(graphql_query, @model_class)
+      if not proposed.empty?
+        @scope = @scope.includes(proposed)
+      end
     end
 
     def escape_search_term(term)
