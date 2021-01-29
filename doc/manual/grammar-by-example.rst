@@ -24,7 +24,7 @@ A somewhat typical grammar to represent an ``if`` statement with an optional ``e
    stmt      : <var_name> = <expr>
              : | <var_name> '(' <expr_list> ')'
 
-This approach works fine for typical compilers: They need to derive a syntax tree from any stream of tokens. It is therefore important to keep an eye on all sorts of syntactical elements. This comes with its very own set of problems:
+This approach works fine for typical compilers: They need to derive a syntax tree from any stream of tokens. It is therefore required to rely on all sorts of syntactical elements, especially whitespace and reserved keywords. This comes with its very own set of problems:
 
 1) The role of whitespace has to be specified.
 2) Some separating characters have to be introduced very carefully. This is usually done using distinctive syntactic elements that are not allowed in variable names (typically all sorts of brackets and punctuation).
@@ -40,7 +40,7 @@ But BlattWerkzeug is in a different position: It is not meant to create a syntax
 2) There is no need for separation characters, only the structure of the tree.
 3) Syntax errors equate to missing nodes and can be communicated very clearly. Semantic analysis does not need to rely on heuristics on how the tree could change if the "blanks" were filled in.
 
-This entirely shifts the way one has to reason about the validation rules inside of BlattWerkzeug: There is no need to worry about the syntactic aspects of a certain language, the "grammar" that is required doesn't need to know anything about keywords or separating characters. Its sole job is to describe the structure and the semantics of trees that are valid in that specific language.
+This entirely shifts the way one has to reason about the validation rules inside of BlattWerkzeug: There is no need to worry about the syntactic aspects of a certain language, the "grammar" that is required doesn't need to know anything about keywords or separating characters. Its sole job is to describe the structure and the semantics of trees that are valid in that specific language. If keywords are included in the grammar, this is solemly for the purpose of blocks that resemble the underlying programming language or for code generation. The actual grammar validation does not use these keywords at all.
 
 Example AST: ``if``-Statement
 -----------------------------
@@ -59,7 +59,7 @@ In BlattWerkzeug, an if statement could be represented by using three child grou
 .. graphviz:: generated/ast-example-if.graphviz
    :align: center
 
-Now lets see what happens if the source is invalidated by omitting the ``predicate`` and the ``then``::
+Now lets see what happens if the source is invalidated by omitting the ``(a > b)`` predicate and the keyword ``then``::
 
   if
     writeln('foo')

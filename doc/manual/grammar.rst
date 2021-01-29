@@ -26,7 +26,7 @@ This type defines which attributes (properties or children) a certain node may h
 
 In the pretty printed form of a grammar, a node may be denoted as follows::
 
-  node "example."name" {
+  node "example"."name" {
     # Attributes ("children" or "prop")
   }
 
@@ -121,4 +121,4 @@ Top level: ``typedef``
 
 A ``typedef`` denotes a type that will never exist in a tree, it's a mere placeholder for a set of other types that could appear in the referenced position. This is useful when in certain places different but related types could be expected. Instead of repeating sets like ``{unaryExpression, binaryExpression, constant}`` again and again, a single typedef may group these common usage together.
 
-Technically this doesn't add new functionality to the grammar language as a whole.
+Technically this doesn't add new functionality to the grammar language as a whole. But it does make grammars more maintainable.

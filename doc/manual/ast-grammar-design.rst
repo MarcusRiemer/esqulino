@@ -173,3 +173,8 @@ Combing the drop strategies mentioned above may result in more then a single ope
 
 * A simple but sort of "brutal" version would be to simply show a modal popup with all alternatives. The minimal implementation of this is very straightforward, as the validation process generates trees for all strategies anyway. Quite a lot nicer would be a "diff" of the trees and then only the subsequent display of differences to chose from.
 * A possibly nicer version would be to leave "drop ghosts" in the tree: Instead of a single proper node, multiple feint 'ghost node' are inserted into the tree. These nodes require one more user interaction (e.g. a click) to actually be manifested into a proper node. This manifestations also removes all other ghosts that could possibly have been inserted, the user has therefor cleared up the ambiguity.
+
+Structural Tree Choices
+=======================
+
+There are often many different ways to describe structurally different but semantically identical trees.
