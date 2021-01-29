@@ -282,6 +282,98 @@ describe("Grammar :: Parentheses", () => {
         ]);
       });
     });
+
+    describe(`g ::= (t1 t2?)*`, () => {
+      const g: Schema.GrammarDocument = singleLanguageGrammar("spec", "root", {
+        root: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "parentheses",
+              name: "g1",
+              cardinality: "*",
+              group: {
+                type: "sequence",
+                nodeTypes: ["t1", { nodeType: "t2", occurs: "?" }],
+              },
+            },
+          ],
+        },
+        t1: {
+          type: "concrete",
+        },
+        t2: {
+          type: "concrete",
+        },
+        invalid: {
+          type: "concrete",
+        },
+      });
+
+      const v = new Validator([g]);
+
+      it(`Children: []`, () => {
+        const res = v.validateFromRoot(new AST.Tree(mkParenTree([])));
+        expect(res.errors.map((e) => e.code)).toEqual([]);
+      });
+
+      it(`Children: [invalid]`, () => {
+        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["invalid"])));
+
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+        ]);
+      });
+
+      it(`Children: [t1]`, () => {
+        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1"])));
+        expect(res.errors.map((e) => e.code)).toEqual([]);
+      });
+
+      it(`Children: [t2]`, () => {
+        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t2"])));
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+        ]);
+      });
+
+      it(`Children: [t1, t1]`, () => {
+        const res = v.validateFromRoot(new AST.Tree(mkParenTree(["t1", "t1"])));
+        expect(res.errors.map((e) => e.code)).toEqual([]);
+      });
+
+      it(`Children: [t1, t2, t1]`, () => {
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["t1", "t2", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([]);
+      });
+
+      it(`Children: [t1, t2, t1, t1]`, () => {
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["t1", "t2", "t1", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([]);
+      });
+
+      it(`Children: [t2, t1, t1, t1]`, () => {
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["t2", "t1", "t1", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+        ]);
+      });
+
+      it(`Children: [t2, t1, t2, t1]`, () => {
+        const res = v.validateFromRoot(
+          new AST.Tree(mkParenTree(["t2", "t1", "t2", "t1"]))
+        );
+        expect(res.errors.map((e) => e.code)).toEqual([
+          ErrorCodes.IllegalChildType,
+        ]);
+      });
+    });
   });
 
   describe("Allowed", () => {

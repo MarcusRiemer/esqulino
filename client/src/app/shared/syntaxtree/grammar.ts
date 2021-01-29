@@ -969,7 +969,7 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
     let numIterations = 0;
 
     // Empty expected types should not occur, but if they would
-    // this loop would run endlessly: As there is no expected type
+    // the following loop would run endlessly: As there is no expected type
     // to validate any child the child index is never incremented.
     if (this._nodeTypes.length > 0) {
       // Try to do as many iterations over the existing children as possible
