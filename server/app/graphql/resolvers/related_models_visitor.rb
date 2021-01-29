@@ -1,19 +1,17 @@
-require "rails_helper"
-
-RSpec.describe Resolvers::BaseResolver do
-
+module Resolvers
   class RelatedModelsVisitor < GraphQL::Language::Visitor
 
-    def self.calculate(query_string)
+    def self.calculate(query_string, root_model_class)
       document = GraphQL.parse(query_string)
-      vis = RelatedModelsVisitor.new(document)
+      vis = RelatedModelsVisitor.new(document, root_model_class)
       vis.visit
 
       return vis.includes
     end
 
-    def initialize(*args)
-      super
+    def initialize(document, root_model_class)
+      super(document)
+      @root_model_class = root_model_class
       @stack = []
       @includes = Hash.new
     end
@@ -42,8 +40,8 @@ RSpec.describe Resolvers::BaseResolver do
       # of the "nodes" level or have already built a stack
       if (parent.name == "nodes" or curr_stack_model_attributes.length > 0)
         if is_scalar_node node
-          # Helpful debug output to ensure that the model attribute stack seems sane
-          # puts curr_stack_model_attributes.map {|e| e.name}.join("->") + "::" + node.name
+        # Helpful debug output to ensure that the model attribute stack seems sane
+        # puts curr_stack_model_attributes.map {|e| e.name}.join("->") + "::" + node.name
         else
           # Actually add this non-scalar field to the stack
           add_nested_include(curr_stack_model_attributes, node.name, @includes)
@@ -62,18 +60,39 @@ RSpec.describe Resolvers::BaseResolver do
     # Returns a new stack that probably only contains items that have
     # matching fields in the models
     def stack_model_attributes(stack)
-      first_nodes_index = stack.find_index { |n| n.name == "nodes" }
-      if first_nodes_index
-        # Drop everything before the first "nodes", this should
-        # only be the name of the query entry point which has no
-        # counterpart in the active record models
-        model_stack = stack.drop first_nodes_index
-        # Drop all intermediate nodes
-        return model_stack.filter { |n| n.name != "nodes" }
-      else
-        return []
+      curr_class = @root_model_class
+      curr_associations = curr_class.reflect_on_all_associations
+      model_stack = []
+      in_model_associations = false
+
+      # Now walk the stack and check
+      stack.each do |stack_node|
+        matching_association = curr_associations.find {|a| a.name == stack_node.name.underscore.to_sym }
+
+        if matching_association
+          # No matter whether this is the first time: We are now in the active record chain
+          in_model_associations = true
+
+          curr_class = matching_association.klass
+          curr_associations = curr_class.reflect_on_all_associations
+
+          model_stack << stack_node
+        elsif in_model_associations
+          # Ouch, there might be a non active record association here, e.g.
+          # the "nodes" layer of GrahQL ... We better treat this as
+          # an error for the moment
+          raise RuntimeError, "Unknown attribute #{stack_node.name} in model association stack"
+        elsif stack_node.name == "nodes"
+          # The special name "nodes" denotes that the children (in the
+          # next iteration) must be models
+          in_model_associations = true
+        end
       end
+
+      return model_stack
     end
+
+
 
     # Adds the new include at the given path in the includes-hash. This
     # method assumes that all keys in the resulting hash should be in "snake_case"
@@ -91,48 +110,5 @@ RSpec.describe Resolvers::BaseResolver do
         add_nested_include(model_stack.drop(1), new_include, curr[curr_key])
       end
     end
-
-  end
-
-  it "Two levels nested, surrounded by scalars" do
-    query_string = <<-EOQ
-      query AdminListGrammars {
-        grammars {
-          nodes {
-            name
-            generatedFrom {
-              name
-              project {
-                name
-              }
-              id
-            }
-            id
-          }
-          totalCount
-        }
-      }
-    EOQ
-
-    includes = RelatedModelsVisitor.calculate query_string
-    expect(includes).to eq({ "generated_from" => { "project" => {} } })
-  end
-
-  it "One levels nested" do
-    query_string = <<-EOQ
-      query AdminListGrammars {
-        grammars {
-          nodes {
-            name
-            generatedFrom {
-              name
-            }
-          }
-        }
-      }
-    EOQ
-
-    includes = RelatedModelsVisitor.calculate query_string
-    expect(includes).to eq({ "generated_from" => {} })
   end
 end

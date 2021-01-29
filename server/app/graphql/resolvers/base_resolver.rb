@@ -89,8 +89,6 @@ module Resolvers
       scope
     end
 
-
-
     # Extends the scope with
     def include_related(graphql_query)
       # .includes might be the wrong function because it only makes possible to use
