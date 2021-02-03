@@ -103,7 +103,7 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
         grammars {
           nodes {
             name
-            generatedFrom {
+             generatedFrom {
               name
               project {
                 name
@@ -141,7 +141,7 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     expect { Resolvers::RelatedModelsVisitor.calculate query_string, Grammar }.to raise_error(RuntimeError)
   end
 
-  fit "Sub-selecting a non-Rails relationship" do
+  it "Sub-selecting a non-Rails relationship" do
     query_string = <<-EOQ
       query Foo {
         projects {
@@ -155,7 +155,68 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
       }
     EOQ
 
-    includes = Resolvers::RelatedModelsVisitor.calculate query_string, Grammar
+    includes = Resolvers::RelatedModelsVisitor.calculate query_string, Project
     expect(includes).to eq({ })
+  end
+
+  it "Deep Sub-selecting a non-Rails relationship" do
+    query_string = <<-EOQ
+      query Foo {
+        projects {
+          nodes {
+            name,
+            schema {
+              name,
+              foreign_keys {
+                name
+              }
+            }
+          }
+        }
+      }
+    EOQ
+
+    includes = Resolvers::RelatedModelsVisitor.calculate query_string, Project
+    expect(includes).to eq({ })
+  end
+
+  it "Deep Sub-selecting a non-Rails relationship in a nested relationship" do
+    query_string = <<-EOQ
+      query FullProject($id: ID!) {
+        projects(input: {filter: {id: $id}}) {
+          nodes {
+            id
+            slug
+            name
+            defaultDatabase {
+              id
+              name,
+              schema {
+                name
+                columns {
+                  index
+                  name
+                  type
+                  notNull
+                  dfltValue
+                  primary
+                }
+                foreignKeys {
+                  references {
+                    fromColumn
+                    toTable
+                    toColumn
+                  }
+                }
+                systemTable
+              }
+            }
+          }
+        }
+      }
+    EOQ
+
+    includes = Resolvers::RelatedModelsVisitor.calculate query_string, Project
+    expect(includes).to eq({ "default_database" => {} })
   end
 end
