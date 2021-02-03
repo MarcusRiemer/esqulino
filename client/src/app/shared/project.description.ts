@@ -109,11 +109,11 @@ export interface ProjectDescription extends ProjectListDescription {
  * everything that is needed in the normal editor workflow.
  */
 export interface ProjectFullDescription extends ProjectDescription {
-  schema: TableDescription[];
   codeResources: CodeResourceDescription[];
   defaultDatabase?: {
     id: string;
     name: string;
+    schema: TableDescription[];
   };
 }
 

@@ -84,7 +84,7 @@ export class Project implements Saveable {
     this._usesBlockLanguages = json.projectUsesBlockLanguages;
     this._currentDatabase = json.defaultDatabase?.name;
     this.grammarDescriptions = json.grammars;
-    this.schema = new Schema(json.schema);
+    this.schema = new Schema(json.defaultDatabase?.schema ?? []);
 
     // Map all descriptions to their concrete objects
     this._codeResources = (json.codeResources || [])

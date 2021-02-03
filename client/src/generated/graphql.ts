@@ -1453,7 +1453,38 @@ export type FullProjectQuery = { __typename?: "Query" } & {
                 { __typename?: "ProjectDatabase" } & Pick<
                   ProjectDatabase,
                   "id" | "name"
-                >
+                > & {
+                    schema: Array<
+                      { __typename?: "SqlTable" } & Pick<
+                        SqlTable,
+                        "name" | "systemTable"
+                      > & {
+                          columns: Array<
+                            { __typename?: "SqlColumn" } & Pick<
+                              SqlColumn,
+                              | "index"
+                              | "name"
+                              | "type"
+                              | "notNull"
+                              | "dfltValue"
+                              | "primary"
+                            >
+                          >;
+                          foreignKeys: Array<
+                            { __typename?: "SqlForeignKey" } & {
+                              references: Array<
+                                {
+                                  __typename?: "SqlForeignKeyReference";
+                                } & Pick<
+                                  SqlForeignKeyReference,
+                                  "fromColumn" | "toTable" | "toColumn"
+                                >
+                              >;
+                            }
+                          >;
+                        }
+                    >;
+                  }
               >;
               codeResources: Array<
                 { __typename?: "CodeResource" } & Pick<
@@ -1503,34 +1534,6 @@ export type FullProjectQuery = { __typename?: "Query" } & {
                   ProjectSource,
                   "id" | "kind" | "readOnly" | "title" | "url"
                 >
-              >;
-              schema: Array<
-                { __typename?: "SqlTable" } & Pick<
-                  SqlTable,
-                  "name" | "systemTable"
-                > & {
-                    columns: Array<
-                      { __typename?: "SqlColumn" } & Pick<
-                        SqlColumn,
-                        | "index"
-                        | "name"
-                        | "type"
-                        | "notNull"
-                        | "dfltValue"
-                        | "primary"
-                      >
-                    >;
-                    foreignKeys: Array<
-                      { __typename?: "SqlForeignKey" } & {
-                        references: Array<
-                          { __typename?: "SqlForeignKeyReference" } & Pick<
-                            SqlForeignKeyReference,
-                            "fromColumn" | "toTable" | "toColumn"
-                          >
-                        >;
-                      }
-                    >;
-                  }
               >;
             }
         >
@@ -2514,6 +2517,25 @@ export const FullProjectDocument = gql`
         defaultDatabase {
           id
           name
+          schema {
+            name
+            columns {
+              index
+              name
+              type
+              notNull
+              dfltValue
+              primary
+            }
+            foreignKeys {
+              references {
+                fromColumn
+                toTable
+                toColumn
+              }
+            }
+            systemTable
+          }
         }
         codeResources {
           id
@@ -2554,24 +2576,26 @@ export const FullProjectDocument = gql`
           title
           url
         }
-        schema {
-          name
-          columns {
-            index
+        defaultDatabase {
+          schema {
             name
-            type
-            notNull
-            dfltValue
-            primary
-          }
-          foreignKeys {
-            references {
-              fromColumn
-              toTable
-              toColumn
+            columns {
+              index
+              name
+              type
+              notNull
+              dfltValue
+              primary
             }
+            foreignKeys {
+              references {
+                fromColumn
+                toTable
+                toColumn
+              }
+            }
+            systemTable
           }
-          systemTable
         }
       }
     }
