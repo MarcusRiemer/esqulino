@@ -17,7 +17,7 @@ describe("Codegeneration", () => {
     ]);
 
     // Check whether this converter exist (and no others)
-    expect(codeGen.hasConverter(fooBar)).toBeTruthy();
+    expect(codeGen.hasExplicitConverter(fooBar)).toBeTruthy();
     expect(() =>
       codeGen.getConverter({ languageName: "phantasy", typeName: "bar" })
     ).toThrowError();

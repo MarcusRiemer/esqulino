@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
-import { flatMap, map, filter, tap } from "rxjs/operators";
+import { map, filter, tap, mergeMap } from "rxjs/operators";
 
 import { ResourceReferencesService } from "../shared/resource-references.service";
 import {
@@ -59,7 +59,7 @@ export class CurrentCodeResourceService {
    */
   readonly currentTree: Observable<Tree> = this._codeResource.pipe(
     filter((c) => !!c),
-    flatMap((c) => c.syntaxTree)
+    mergeMap((c) => c.syntaxTree)
   );
 
   /**
@@ -67,22 +67,24 @@ export class CurrentCodeResourceService {
    */
   readonly resourceBlockLanguageId: Observable<
     string
-  > = this.currentResource.pipe(flatMap((c) => c.blockLanguageId));
+  > = this.currentResource.pipe(mergeMap((c) => c.blockLanguageId));
 
   readonly blockLanguageGrammar = this.currentResource.pipe(
-    flatMap((r) => r.blockLanguageId),
-    flatMap((id) => this._individualBlockLanguageData.getLocal(id, "request")),
-    flatMap((b) => this._individualGrammarData.getLocal(b.grammarId, "request"))
+    mergeMap((r) => r.blockLanguageId),
+    mergeMap((id) => this._individualBlockLanguageData.getLocal(id, "request")),
+    mergeMap((b) =>
+      this._individualGrammarData.getLocal(b.grammarId, "request")
+    )
   );
 
   /**
    * @return The latest validation result for this resource.
    */
-  readonly validationResult = combineLatest(
+  readonly validationResult = combineLatest([
     this.currentTree,
     this._projectService.activeProject,
-    this.blockLanguageGrammar
-  ).pipe(
+    this.blockLanguageGrammar,
+  ]).pipe(
     map(([tree, project, grammar]) => {
       if (tree) {
         const validator = this._resourceReferences.getValidator(

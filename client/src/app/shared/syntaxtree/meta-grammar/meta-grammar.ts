@@ -19,6 +19,7 @@ import {
   NodeInterpolateChildrenDescription,
 } from "../grammar.description";
 import { OccursDescription, OccursString } from "../occurs.description";
+import { BlattWerkzeugError } from "../../blattwerkzeug-error";
 
 export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
   return {
@@ -233,11 +234,17 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
       const nameNode =
         n.typeName === "visualizeNode" ? n.getChildInCategory("references") : n;
 
+      if (nameNode === undefined) {
+        throw new BlattWerkzeugError(
+          `Attempted to visualize unknown node: ${JSON.stringify(n.toModel())}`
+        );
+      }
+
       const languageName = nameNode.properties["languageName"];
       const typeName = nameNode.properties["typeName"];
 
       if (!typeName || !languageName) {
-        throw new Error(
+        throw new BlattWerkzeugError(
           `Attempted to read node without qualified Type: ${JSON.stringify(
             n.toModel()
           )}`
@@ -252,7 +259,9 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
       // Ensure the type is not already taken
       const lang = toReturn.types[languageName];
       if (lang[typeName]) {
-        throw new Error(`Duplicate type "${languageName}.${typeName}"`);
+        throw new BlattWerkzeugError(
+          `Duplicate type "${languageName}.${typeName}"`
+        );
       }
 
       // Add the correct type of type

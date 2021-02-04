@@ -1,3 +1,4 @@
+import { BlattWerkzeugError } from "../blattwerkzeug-error";
 import { Node, Tree, QualifiedTypeName } from "./syntaxtree";
 
 export enum OutputSeparator {
@@ -160,18 +161,7 @@ export class CodeGeneratorProcess<TState extends {}> {
  */
 export interface NodeConverter<T extends {}> {
   /*
-   * This function is called when the node is entered. Because
-   * languages like XML need to render some special children,
-   * namingly their attributes, before the actual children, some
-   * children may be rendered as part of this step. To ensure
-   * that these children are not re-rendered as part of the body,
-   * this function should explicitly return the children to render
-   * as part of the body.
-   *
-   * @return A list of categories. The categories in this list
-   *         will be processed as part of the body of this node.
-   *         If the return value is `undefined` all children
-   *         will be processed as part of the body.
+   * This function is called when the node is entered.
    */
   init(node: Node, process: CodeGeneratorProcess<T>): void;
 
@@ -220,8 +210,8 @@ export class CodeGenerator {
     t: QualifiedTypeName,
     converter: NodeConverter<any>
   ) {
-    if (this.hasConverter(t)) {
-      throw new Error(
+    if (this.hasExplicitConverter(t)) {
+      throw new BlattWerkzeugError(
         `There is already a converter for "${t.languageName}.${t.typeName}"`
       );
     } else {
@@ -245,6 +235,7 @@ export class CodeGenerator {
     }
 
     if (rootNode) {
+      // Make a deep copy of the given state
       const stateCopy = JSON.parse(JSON.stringify(this._state));
       const process = new CodeGeneratorProcess(this, stateCopy);
       process.generateNode(rootNode);
@@ -258,7 +249,7 @@ export class CodeGenerator {
   /**
    * @return True if there is a converter for the given type.
    */
-  hasConverter(t: QualifiedTypeName) {
+  hasExplicitConverter(t: QualifiedTypeName) {
     return !!(
       this._callbacks[t.languageName] &&
       this._callbacks[t.languageName][t.typeName]
@@ -270,7 +261,7 @@ export class CodeGenerator {
    */
   getConverter(t: QualifiedTypeName) {
     if (!this._callbacks[t.languageName]) {
-      throw new Error(
+      throw new BlattWerkzeugError(
         `Language "${
           t.languageName
         }" is unknown to CodeGenerator, available languages are: [${Object.keys(
@@ -280,7 +271,7 @@ export class CodeGenerator {
     }
 
     if (!this._callbacks[t.languageName][t.typeName]) {
-      throw new Error(
+      throw new BlattWerkzeugError(
         `Type "${t.languageName}.${t.typeName}" is unknown to CodeGenerator`
       );
     }
