@@ -317,6 +317,7 @@ export type Grammar = {
   codeResources?: Maybe<CodeResourceConnection>;
   createdAt: Scalars["ISO8601DateTime"];
   foreignTypes: Scalars["JSON"];
+  foreignVisualisations: Scalars["JSON"];
   generatedFrom?: Maybe<CodeResource>;
   generatedFromId?: Maybe<Scalars["ID"]>;
   id: Scalars["ID"];
@@ -328,6 +329,7 @@ export type Grammar = {
   slug?: Maybe<Scalars["String"]>;
   types: Scalars["JSON"];
   updatedAt: Scalars["ISO8601DateTime"];
+  visualisations: Scalars["JSON"];
   visualizes?: Maybe<Array<Scalars["ID"]>>;
 };
 
@@ -1409,9 +1411,11 @@ export type FullGrammarQuery = { __typename?: "Query" } & {
             | "programmingLanguageId"
             | "slug"
             | "generatedFromId"
-            | "foreignTypes"
-            | "root"
             | "types"
+            | "foreignTypes"
+            | "visualisations"
+            | "foreignVisualisations"
+            | "root"
             | "includes"
             | "visualizes"
           > & {
@@ -1518,6 +1522,8 @@ export type FullProjectQuery = { __typename?: "Query" } & {
                   | "root"
                   | "types"
                   | "foreignTypes"
+                  | "visualisations"
+                  | "foreignVisualisations"
                   | "includes"
                   | "visualizes"
                   | "programmingLanguageId"
@@ -1561,6 +1567,8 @@ export type GrammarDescriptionItemQuery = { __typename?: "Query" } & {
             | "foreignTypes"
             | "root"
             | "types"
+            | "visualisations"
+            | "foreignVisualisations"
           >
         >
       >
@@ -2475,9 +2483,11 @@ export const FullGrammarDocument = gql`
         programmingLanguageId
         slug
         generatedFromId
-        foreignTypes
-        root
         types
+        foreignTypes
+        visualisations
+        foreignVisualisations
+        root
         includes
         visualizes
         blockLanguages {
@@ -2561,6 +2571,8 @@ export const FullProjectDocument = gql`
           root
           types
           foreignTypes
+          visualisations
+          foreignVisualisations
           includes
           visualizes
           programmingLanguageId
@@ -2627,6 +2639,8 @@ export const GrammarDescriptionItemDocument = gql`
         foreignTypes
         root
         types
+        visualisations
+        foreignVisualisations
       }
     }
   }

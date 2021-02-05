@@ -15,7 +15,7 @@ import {
 import { resolveChildOccurs } from "./grammar-util";
 import { OccursSpecificDescription, resolveOccurs } from "./occurs";
 import { QualifiedTypeName } from "./syntaxtree.description";
-import { allPresentTypes } from "./grammar-type-util";
+import { allConcreteTypes } from "./grammar-type-util";
 import { isValidId } from "../util";
 
 /**
@@ -1421,7 +1421,7 @@ export class GrammarValidator {
     });
 
     // Grammar needs to take local and foreign types into account
-    const allTypes = allPresentTypes(description);
+    const allTypes = allConcreteTypes(description);
 
     // Register all existing types
     Object.entries(allTypes).forEach(([langName, langTypes]) => {

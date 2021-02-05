@@ -2,7 +2,7 @@ import { recursiveJoin, NestedString } from "../nested-string";
 
 import { NodeDescription, QualifiedTypeName } from "./syntaxtree.description";
 import * as Desc from "./grammar.description";
-import { orderTypes, allPresentTypes } from "./grammar-type-util";
+import { orderTypes, allConcreteTypes } from "./grammar-type-util";
 import { OccursDescription } from "./occurs";
 import { NodeTailoredDescription } from "../block";
 
@@ -17,7 +17,7 @@ export function prettyPrintGrammar(
   const head = `grammar "${name}" {`;
   const tail = `}`;
 
-  const allTypes = allPresentTypes(g);
+  const allTypes = allConcreteTypes(g);
   const orderedTypes = orderTypes(g);
 
   const nodes = orderedTypes

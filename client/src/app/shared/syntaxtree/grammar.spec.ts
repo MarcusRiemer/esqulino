@@ -3,8 +3,8 @@ import { Validator } from "./validator";
 import { ErrorCodes } from "./validation-result";
 import { NodePropertyIntegerValidator } from "./grammar";
 import {
-  singleLanguageGrammar,
-  multiLanguageGrammar,
+  mkSingleLanguageGrammar,
+  mkGrammarDoc,
   comparableErrors,
 } from "./grammar.spec-util";
 import { getQualifiedTypes } from "./grammar-type-util";
@@ -23,7 +23,7 @@ import { GrammarDocument } from "./grammar.description";
  *   </body>
  * </html>
  */
-const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
+const langMiniHtml = mkSingleLanguageGrammar("mini-html", "html", {
   text: {
     type: "concrete",
     attributes: [
@@ -169,7 +169,7 @@ const langMiniHtml = singleLanguageGrammar("mini-html", "html", {
  * FROM
  * WHERE
  */
-const langMiniSql = singleLanguageGrammar("mini-sql", "root", {
+const langMiniSql = mkSingleLanguageGrammar("mini-sql", "root", {
   root: {
     type: "oneOf",
     oneOf: ["query-select", "query-delete"],
@@ -203,7 +203,7 @@ const langMiniSql = singleLanguageGrammar("mini-sql", "root", {
 /**
  * A single node that uses every possible string constraint.
  */
-const langStringConstraint = singleLanguageGrammar(
+const langStringConstraint = mkSingleLanguageGrammar(
   "string-constraint",
   "root",
   {
@@ -258,7 +258,7 @@ const langStringConstraint = singleLanguageGrammar(
 /**
  * A single node that uses every possible integer constraint.
  */
-const langIntegerConstraint = singleLanguageGrammar(
+const langIntegerConstraint = mkSingleLanguageGrammar(
   "integer-constraint",
   "root",
   {
@@ -285,7 +285,7 @@ const langIntegerConstraint = singleLanguageGrammar(
 /**
  * A single root node that uses some children with the "allowed" constraint
  */
-const langAllowedConstraint = singleLanguageGrammar(
+const langAllowedConstraint = mkSingleLanguageGrammar(
   "allowed-constraint",
   "root",
   {
@@ -324,7 +324,7 @@ const langAllowedConstraint = singleLanguageGrammar(
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langSingleSequenceConstraint = singleLanguageGrammar(
+const langSingleSequenceConstraint = mkSingleLanguageGrammar(
   "single-sequence-constraint",
   "root",
   {
@@ -345,7 +345,7 @@ const langSingleSequenceConstraint = singleLanguageGrammar(
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langSequenceConstraint = singleLanguageGrammar(
+const langSequenceConstraint = mkSingleLanguageGrammar(
   "sequence-constraint",
   "root",
   {
@@ -385,7 +385,7 @@ const langSequenceConstraint = singleLanguageGrammar(
 /**
  * A single root node that uses some children with the "sequence" constraint
  */
-const langOneOfNodes = singleLanguageGrammar("oneof-nodes", "root", {
+const langOneOfNodes = mkSingleLanguageGrammar("oneof-nodes", "root", {
   root: {
     type: "oneOf",
     oneOf: ["a", "b"],
@@ -398,7 +398,7 @@ const langOneOfNodes = singleLanguageGrammar("oneof-nodes", "root", {
 /**
  * A single node with only boolean properties.
  */
-const langBooleanConstraint = singleLanguageGrammar(
+const langBooleanConstraint = mkSingleLanguageGrammar(
   "boolean-constraint",
   "root",
   {
@@ -418,26 +418,30 @@ const langBooleanConstraint = singleLanguageGrammar(
 /**
  * A single node that may have optional properties.
  */
-const langOptionalProperty = singleLanguageGrammar("optionalProperty", "root", {
-  root: {
-    type: "concrete",
-    attributes: [
-      {
-        name: "required",
-        type: "property",
-        base: "string",
-      },
-      {
-        name: "optional",
-        type: "property",
-        base: "string",
-        isOptional: true,
-      },
-    ],
-  },
-});
+const langOptionalProperty = mkSingleLanguageGrammar(
+  "optionalProperty",
+  "root",
+  {
+    root: {
+      type: "concrete",
+      attributes: [
+        {
+          name: "required",
+          type: "property",
+          base: "string",
+        },
+        {
+          name: "optional",
+          type: "property",
+          base: "string",
+          isOptional: true,
+        },
+      ],
+    },
+  }
+);
 
-const langSimpleChoice = singleLanguageGrammar("simpleChoice", "root", {
+const langSimpleChoice = mkSingleLanguageGrammar("simpleChoice", "root", {
   root: {
     type: "concrete",
     attributes: [
@@ -452,7 +456,7 @@ const langSimpleChoice = singleLanguageGrammar("simpleChoice", "root", {
   b: { type: "concrete" },
 });
 
-const langComplexChoice = singleLanguageGrammar("complexChoice", "root", {
+const langComplexChoice = mkSingleLanguageGrammar("complexChoice", "root", {
   root: {
     type: "concrete",
     attributes: [
@@ -522,7 +526,7 @@ describe("Grammar Validation", () => {
    * clash between oneOf and complex types.
    */
   it("Grammar Empty Nodes", () => {
-    const g = singleLanguageGrammar("emptyNodes", "r", {
+    const g = mkSingleLanguageGrammar("emptyNodes", "r", {
       r: { type: "concrete" },
     });
 
@@ -1865,7 +1869,7 @@ describe("Grammar Validation", () => {
   });
 
   describe(`References`, () => {
-    const langRef = singleLanguageGrammar("ref", "root", {
+    const langRef = mkSingleLanguageGrammar("ref", "root", {
       root: {
         type: "concrete",
         attributes: [
@@ -1920,6 +1924,8 @@ describe("Grammar Validation", () => {
       const g: GrammarDocument = {
         types: {},
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
       };
 
       const v = new Validator([g]);
@@ -1937,6 +1943,8 @@ describe("Grammar Validation", () => {
           l: {},
         },
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
       };
 
       const v = new Validator([g]);
@@ -1959,6 +1967,8 @@ describe("Grammar Validation", () => {
           },
         },
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
       };
 
       const v = new Validator([g]);
@@ -1973,7 +1983,7 @@ describe("Grammar Validation", () => {
 
   describe(`Container-related`, () => {
     describe(`Property in container`, () => {
-      const g = singleLanguageGrammar("g", "r", {
+      const g = mkSingleLanguageGrammar("g", "r", {
         r: {
           type: "concrete",
           attributes: [
@@ -2015,7 +2025,7 @@ describe("Grammar Validation", () => {
     });
 
     describe(`Childgroup in container`, () => {
-      const g = singleLanguageGrammar("g", "r", {
+      const g = mkSingleLanguageGrammar("g", "r", {
         r: {
           type: "concrete",
           attributes: [
@@ -2097,7 +2107,7 @@ describe("Grammar Validation", () => {
 
   describe(`Name-related`, () => {
     it(`Name clash: Property name "foo" defined twice`, () => {
-      const g = singleLanguageGrammar("spec", "root", {
+      const g = mkSingleLanguageGrammar("spec", "root", {
         root: {
           type: "concrete",
           attributes: [
@@ -2111,7 +2121,7 @@ describe("Grammar Validation", () => {
     });
 
     it(`Name clash: Child group name "foo" defined twice`, () => {
-      const g = singleLanguageGrammar("spec", "root", {
+      const g = mkSingleLanguageGrammar("spec", "root", {
         root: {
           type: "concrete",
           attributes: [
@@ -2125,7 +2135,7 @@ describe("Grammar Validation", () => {
     });
 
     it(`Auto generated property names for visual types`, () => {
-      const g = singleLanguageGrammar("spec", "root", {
+      const g = mkSingleLanguageGrammar("spec", "root", {
         root: {
           type: "concrete",
           attributes: [
@@ -2167,6 +2177,8 @@ describe("Grammar Validation", () => {
             },
           },
         },
+        visualisations: {},
+        foreignVisualisations: {},
       };
 
       const v = new Validator([g]);
@@ -2205,6 +2217,8 @@ describe("Grammar Validation", () => {
             },
           },
         },
+        visualisations: {},
+        foreignVisualisations: {},
       };
 
       const v = new Validator([g]);
@@ -2228,28 +2242,29 @@ describe("Grammar Validation", () => {
 
   describe(`Visualisation`, () => {
     it(`Foreign type visualized`, () => {
-      const g = multiLanguageGrammar(
-        "g",
+      const g = mkGrammarDoc(
         { languageName: "g", typeName: "t1" },
         {
-          g: {
-            t1: {
-              type: "visualize",
-              attributes: [],
+          types: {
+            g: {
+              t1: {
+                type: "concrete",
+                attributes: [
+                  {
+                    type: "property",
+                    base: "integer",
+                    name: "p1",
+                  },
+                ],
+              },
             },
           },
-        },
-        {
-          g: {
-            t1: {
-              type: "concrete",
-              attributes: [
-                {
-                  type: "property",
-                  base: "integer",
-                  name: "p1",
-                },
-              ],
+          visualisations: {
+            g: {
+              t1: {
+                type: "visualize",
+                attributes: [],
+              },
             },
           },
         }
@@ -2269,39 +2284,42 @@ describe("Grammar Validation", () => {
     });
 
     it(`Visualized type but no base type`, () => {
-      const g = multiLanguageGrammar(
-        "g",
+      const g = mkGrammarDoc(
         { languageName: "g", typeName: "t1" },
         {
-          g: {
-            t1: {
-              type: "visualize",
-              attributes: [],
+          visualisations: {
+            g: {
+              t1: {
+                type: "visualize",
+                attributes: [],
+              },
             },
           },
         }
       );
 
-      expect(() => new Validator([g])).toThrowError(/g\.t1/);
+      const v = new Validator([g]);
+      expect(v.availableTypes).toEqual([]);
     });
   });
 
   describe(`Multiple Languages in Single Grammar`, () => {
     it(`Two languages, same typename, no relation`, () => {
-      const g = multiLanguageGrammar(
-        "g",
+      const g = mkGrammarDoc(
         { languageName: "g", typeName: "t1" },
         {
-          g: {
-            t1: {
-              type: "concrete",
-              attributes: [],
+          types: {
+            g: {
+              t1: {
+                type: "concrete",
+                attributes: [],
+              },
             },
-          },
-          h: {
-            t1: {
-              type: "concrete",
-              attributes: [],
+            h: {
+              t1: {
+                type: "concrete",
+                attributes: [],
+              },
             },
           },
         }
@@ -2339,31 +2357,32 @@ describe("Grammar Validation", () => {
     });
 
     it(`Two languages, same typename, g.t1 has h.t1 as child`, () => {
-      const g = multiLanguageGrammar(
-        "g",
+      const g = mkGrammarDoc(
         { languageName: "g", typeName: "t1" },
         {
-          g: {
-            t1: {
-              type: "concrete",
-              attributes: [
-                {
-                  type: "allowed",
-                  name: "t1_c1",
-                  nodeTypes: [
-                    {
-                      nodeType: { languageName: "h", typeName: "t1" },
-                      occurs: "1",
-                    },
-                  ],
-                },
-              ],
+          types: {
+            g: {
+              t1: {
+                type: "concrete",
+                attributes: [
+                  {
+                    type: "allowed",
+                    name: "t1_c1",
+                    nodeTypes: [
+                      {
+                        nodeType: { languageName: "h", typeName: "t1" },
+                        occurs: "1",
+                      },
+                    ],
+                  },
+                ],
+              },
             },
-          },
-          h: {
-            t1: {
-              type: "concrete",
-              attributes: [],
+            h: {
+              t1: {
+                type: "concrete",
+                attributes: [],
+              },
             },
           },
         }
@@ -2409,27 +2428,28 @@ describe("Grammar Validation", () => {
     });
 
     it(`Two types in two languages, root is typedef for either of them`, () => {
-      const g = multiLanguageGrammar(
-        "g",
+      const g = mkGrammarDoc(
         { languageName: "g", typeName: "root" },
         {
-          g: {
-            root: {
-              type: "oneOf",
-              oneOf: [
-                { languageName: "g", typeName: "t1" },
-                { languageName: "h", typeName: "t1" },
-              ],
+          types: {
+            g: {
+              root: {
+                type: "oneOf",
+                oneOf: [
+                  { languageName: "g", typeName: "t1" },
+                  { languageName: "h", typeName: "t1" },
+                ],
+              },
+              t1: {
+                type: "concrete",
+                attributes: [],
+              },
             },
-            t1: {
-              type: "concrete",
-              attributes: [],
-            },
-          },
-          h: {
-            t1: {
-              type: "concrete",
-              attributes: [],
+            h: {
+              t1: {
+                type: "concrete",
+                attributes: [],
+              },
             },
           },
         }
@@ -2478,7 +2498,7 @@ describe("Grammar Validation", () => {
   });
 
   describe(`getType overloads`, () => {
-    const gDesc = singleLanguageGrammar("l", "r", {
+    const gDesc = mkSingleLanguageGrammar("l", "r", {
       r: {
         type: "concrete",
         attributes: [],

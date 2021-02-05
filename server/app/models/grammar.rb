@@ -15,6 +15,8 @@ class Grammar < ApplicationRecord
   # The JSON documents needs to be a valid grammar
   validates :types, json_schema: 'NamedLanguages'
   validates :foreign_types, json_schema: 'NamedLanguages'
+  validates :visualisations, json_schema: 'VisualisedLanguages'
+  validates :foreign_visualisations, json_schema: 'VisualisedLanguages'
   validates :root, json_schema: 'QualifiedTypeName', allow_nil: true
 
   # The programming language that may define additional validation
@@ -46,7 +48,7 @@ class Grammar < ApplicationRecord
   # The parts of this model that together validate against GrammarDocument
   def document
     attributes
-      .slice("types", "foreign_types", "root")
+      .slice("types", "foreign_types", "visualisations", "foreign_visualisations", "root")
       .compact
   end
 

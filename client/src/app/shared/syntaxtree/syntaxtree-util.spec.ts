@@ -1,10 +1,10 @@
 import * as AST from "./syntaxtree";
-import { singleLanguageGrammar } from "./grammar.spec-util";
+import { mkSingleLanguageGrammar } from "./grammar.spec-util";
 import { referencedResourceIds } from "./syntaxtree-util";
 
 describe("syntaxtree-util.spec", () => {
   describe("referencedResourceIds", () => {
-    const gDesc = singleLanguageGrammar("l", "r", {
+    const gDesc = mkSingleLanguageGrammar("l", "r", {
       r: {
         type: "concrete",
         attributes: [

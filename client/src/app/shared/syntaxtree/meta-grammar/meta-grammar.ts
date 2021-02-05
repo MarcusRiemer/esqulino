@@ -17,6 +17,8 @@ import {
   NodeInterpolatePropertyDescription,
   NodeVisualTypeDescription,
   NodeInterpolateChildrenDescription,
+  NamedLanguages,
+  VisualisedLanguages,
 } from "../grammar.description";
 import { OccursDescription, OccursString } from "../occurs.description";
 import { BlattWerkzeugError } from "../../blattwerkzeug-error";
@@ -202,6 +204,8 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
   const toReturn: ReturnType<typeof readFromNode> = {
     types: {},
     foreignTypes: {},
+    visualisations: {},
+    foreignVisualisations: {},
     root: undefined,
   };
 
@@ -231,8 +235,8 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
   definedTypes
     .filter((n) => n.typeName.match(/typedef|(concrete|visualize)Node/))
     .forEach((n) => {
-      const nameNode =
-        n.typeName === "visualizeNode" ? n.getChildInCategory("references") : n;
+      const isVisual = n.typeName === "visualizeNode";
+      const nameNode = isVisual ? n.getChildInCategory("references") : n;
 
       if (nameNode === undefined) {
         throw new BlattWerkzeugError(
@@ -251,63 +255,67 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
         );
       }
 
+      const container: VisualisedLanguages | NamedLanguages = isVisual
+        ? toReturn.visualisations
+        : toReturn.types;
+
       // Ensure the language is known
-      if (!toReturn.types[languageName]) {
-        toReturn.types[languageName] = {};
+      if (!container[languageName]) {
+        container[languageName] = {};
       }
 
       // Ensure the type is not already taken
-      const lang = toReturn.types[languageName];
-      if (lang[typeName]) {
+      const langTypes = container[languageName];
+      if (langTypes[typeName]) {
         throw new BlattWerkzeugError(
-          `Duplicate type "${languageName}.${typeName}"`
+          `Duplicate node "${languageName}.${typeName}" of type "${n.typeName}"`
         );
       }
 
       // Add the correct type of type
-      switch (n.typeName) {
-        case "concreteNode": {
-          const concreteNode: NodeConcreteTypeDescription = {
-            type: "concrete",
-            attributes: [],
-          };
+      if (isVisual) {
+        const visualizeNode: NodeVisualTypeDescription = {
+          type: "visualize",
+          attributes: [],
+        };
 
-          n.getChildrenInCategory("attributes").forEach((a) =>
-            readAttributes(a, concreteNode.attributes)
-          );
+        n.getChildrenInCategory("attributes").forEach((a) =>
+          readAttributes(a, visualizeNode.attributes)
+        );
 
-          lang[typeName] = concreteNode;
-          break;
+        langTypes[typeName] = visualizeNode;
+      } else {
+        switch (n.typeName) {
+          case "concreteNode": {
+            const concreteNode: NodeConcreteTypeDescription = {
+              type: "concrete",
+              attributes: [],
+            };
+
+            n.getChildrenInCategory("attributes").forEach((a) =>
+              readAttributes(a, concreteNode.attributes)
+            );
+
+            langTypes[typeName] = concreteNode;
+            break;
+          }
+          case "typedef":
+            const references = n
+              .getChildrenInCategory("references")
+              .map(resolveSingularReference);
+
+            const oneOfNode: NodeOneOfTypeDescription = {
+              type: "oneOf",
+              oneOf: references,
+            };
+
+            langTypes[typeName] = oneOfNode;
+            break;
+          default:
+            throw Error(
+              `Unknown definition "${languageName}"."${typeName}" with type "${n.typeName}"`
+            );
         }
-        case "visualizeNode": {
-          const visualizeNode: NodeVisualTypeDescription = {
-            type: "visualize",
-            attributes: [],
-          };
-
-          n.getChildrenInCategory("attributes").forEach((a) =>
-            readAttributes(a, visualizeNode.attributes)
-          );
-
-          lang[typeName] = visualizeNode;
-          break;
-        }
-        case "typedef":
-          const references = n
-            .getChildrenInCategory("references")
-            .map(resolveSingularReference);
-
-          const oneOfNode: NodeOneOfTypeDescription = {
-            type: "oneOf",
-            oneOf: references,
-          };
-
-          lang[typeName] = oneOfNode;
-          break;
-        default:
-          throw Error(
-            `Unknown definition "${languageName}"."${typeName}" with type "${n.typeName}"`
-          );
       }
     });
 

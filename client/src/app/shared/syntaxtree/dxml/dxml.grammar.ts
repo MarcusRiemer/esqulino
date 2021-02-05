@@ -6,6 +6,8 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   programmingLanguageId: "dxml-eruby",
   root: { languageName: "dxml", typeName: "element" },
   foreignTypes: {},
+  visualisations: {},
+  foreignVisualisations: {},
   types: {
     dxml: {
       element: {

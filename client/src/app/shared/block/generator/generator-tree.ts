@@ -15,7 +15,7 @@ import {
   NodePropertyTypeDescription,
   NodeChildrenGroupDescription,
 } from "../../syntaxtree";
-import { allPresentTypes } from "../../syntaxtree/grammar-type-util";
+import { allConcreteTypes } from "../../syntaxtree/grammar-type-util";
 
 /**
  * Takes a grammar description and a description how to transform it and
@@ -25,7 +25,7 @@ export function convertGrammarTreeInstructions(
   d: TreeBlockLanguageGeneratorDescription,
   g: GrammarDocument
 ): BlockLanguageDocument {
-  const concreteTypes = allPresentTypes(g, (t) => t.type === "concrete");
+  const concreteTypes = allConcreteTypes(g, (t) => t.type === "concrete");
 
   // Some information is provided 1:1 by the generation instructions,
   // these can be copied over without further ado.

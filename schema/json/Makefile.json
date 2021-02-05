@@ -6,7 +6,7 @@
 TYPESCRIPT_JSON_SCHEMA_BIN = npx ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceRequestUpdateDescription.json GrammarDocument.json NodeDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json QualifiedTypeName.json BlockLanguageGeneratorDocument.json BlockLanguageSidebarsDescription.json BlockLanguageEditorBlocksDescription.json BlockLanguageEditorComponentsDescription.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json CodeResourceRequestUpdateDescription.json GrammarDocument.json NodeDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json VisualisedLanguages.json QualifiedTypeName.json BlockLanguageGeneratorDocument.json BlockLanguageSidebarsDescription.json BlockLanguageEditorBlocksDescription.json BlockLanguageEditorComponentsDescription.json
 
 # How to generate a JSON description from a source file
 %.json : %.ts
@@ -52,6 +52,8 @@ GrammarDocument.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 ServerProviderDescription.json : $(SRC_PATH)/shared/auth/provider.description.ts
 	$(CONVERT_COMMAND)
 UnexpectedLogoutDescription.json : $(SRC_PATH)/shared/error.description.ts
+	$(CONVERT_COMMAND)
+VisualisedLanguages.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 	$(CONVERT_COMMAND)
 NamedLanguages.json : $(SRC_PATH)/shared/syntaxtree/grammar.description.ts
 	$(CONVERT_COMMAND)

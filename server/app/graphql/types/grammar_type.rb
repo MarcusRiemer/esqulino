@@ -3,17 +3,24 @@ module Types
     field :id, ID, null: false
     field :name, String, null: false
     field :slug, String, null: true
+
     field :types, GraphQL::Types::JSON, null: false, default_value: {}
     field :foreign_types, GraphQL::Types::JSON, null: false, default_value: {}
+    field :visualisations, GraphQL::Types::JSON, null: false, default_value: {}
+    field :foreign_visualisations, GraphQL::Types::JSON, null: false, default_value: {}
     field :root, Types::Scalar::QualifiedTypeName, null: true
-    field :programming_language_id, ID, null: false
-    field :programming_language, Types::ProgrammingLanguageType, null: false
-    field :generated_from_id, ID, null: true
-    field :generated_from, Types::CodeResourceType, null: true
-    field :block_languages, Types::BlockLanguageType.connection_type, null: true
-    field :code_resources, Types::CodeResourceType.connection_type, null: true
+
     field :includes, [ID], null: true
     field :visualizes, [ID], null: true
+
+    field :programming_language_id, ID, null: false
+    field :programming_language, Types::ProgrammingLanguageType, null: false
+
+    field :generated_from_id, ID, null: true
+    field :generated_from, Types::CodeResourceType, null: true
+
+    field :block_languages, Types::BlockLanguageType.connection_type, null: true
+    field :code_resources, Types::CodeResourceType.connection_type, null: true
 
     field :createdAt, GraphQL::Types::ISO8601DateTime, null: false
     field :updatedAt, GraphQL::Types::ISO8601DateTime, null: false

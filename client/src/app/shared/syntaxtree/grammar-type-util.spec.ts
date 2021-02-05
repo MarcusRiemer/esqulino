@@ -4,19 +4,26 @@ import {
   NodeOneOfTypeDescription,
   NamedLanguages,
   NodeVisualTypeDescription,
+  isNodeOneOfTypeDescription,
+  NodeTypeDescription,
 } from "./grammar.description";
 import {
   orderTypes,
   ensureTypename,
-  allPresentTypes,
+  allConcreteTypes,
   getTypeList,
   ensureGrammarAttributeNames,
   getFullQualifiedAttributes,
   getConcreteTypes,
   getQualifiedTypes,
   resolveToConcreteTypes,
+  allVisualizableTypes,
 } from "./grammar-type-util";
-import { singleLanguageGrammar } from "./grammar.spec-util";
+import {
+  mkGrammarDoc,
+  mkSingleLanguageGrammar,
+  mkTypeGrammarDoc,
+} from "./grammar.spec-util";
 
 describe(`Grammar Type Utilities`, () => {
   describe(`getTypeList()`, () => {
@@ -750,7 +757,7 @@ describe(`Grammar Type Utilities`, () => {
 
   describe(`orderTypes`, () => {
     it(`Unknown Root`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         t1: {
           type: "concrete",
           attributes: [],
@@ -761,7 +768,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Only Root`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         r: {
           type: "concrete",
           attributes: [],
@@ -773,7 +780,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and one unreferenced type`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         r: {
           type: "concrete",
           attributes: [],
@@ -792,7 +799,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and one unreferenced type (order flipped)`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         t1: {
           type: "concrete",
           attributes: [],
@@ -811,7 +818,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and one illegal reference`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         r: {
           type: "concrete",
           attributes: [{ type: "sequence", name: "n", nodeTypes: ["illegal"] }],
@@ -831,7 +838,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and multiple references to the same thing`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         r: {
           type: "concrete",
           attributes: [
@@ -853,7 +860,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and recursive reference to self`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         r: {
           type: "concrete",
           attributes: [{ type: "choice", name: "fst", choices: ["t1"] }],
@@ -872,7 +879,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and typedef`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         t1: {
           type: "oneOf",
           oneOf: ["t2", "t3"],
@@ -901,7 +908,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root and recursive typedef`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         t1: {
           type: "oneOf",
           oneOf: ["t2", "t3", "t1", "r"],
@@ -930,7 +937,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root typedef with bizarre order`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         r: {
           type: "oneOf",
           oneOf: ["t3", "t1", "t2"],
@@ -959,7 +966,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root, one chain and unreferenced item`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         b4: {
           type: "concrete",
           attributes: [],
@@ -997,37 +1004,42 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root is foreign type`, () => {
-      const g: GrammarDocument = {
-        types: {},
-        foreignTypes: {
-          l: {
-            root: { type: "concrete", attributes: [] },
+      const g: GrammarDocument = mkGrammarDoc(
+        { languageName: "l", typeName: "root" },
+        {
+          foreignTypes: {
+            l: {
+              root: { type: "concrete", attributes: [] },
+            },
           },
-        },
-        root: { languageName: "l", typeName: "root" },
-      };
+        }
+      );
 
       const r = orderTypes(g);
       expect(r).toEqual([{ languageName: "l", typeName: "root" }]);
     });
 
     it(`Root is foreign type, references local type`, () => {
-      const g: GrammarDocument = {
-        types: {
-          l: {
-            t1: { type: "concrete", attributes: [] },
-          },
-        },
-        foreignTypes: {
-          l: {
-            root: {
-              type: "concrete",
-              attributes: [{ type: "sequence", name: "n", nodeTypes: ["t1"] }],
+      const g: GrammarDocument = mkGrammarDoc(
+        { languageName: "l", typeName: "root" },
+        {
+          types: {
+            l: {
+              t1: { type: "concrete", attributes: [] },
             },
           },
-        },
-        root: { languageName: "l", typeName: "root" },
-      };
+          foreignTypes: {
+            l: {
+              root: {
+                type: "concrete",
+                attributes: [
+                  { type: "sequence", name: "n", nodeTypes: ["t1"] },
+                ],
+              },
+            },
+          },
+        }
+      );
 
       const r = orderTypes(g);
       expect(r).toEqual([
@@ -1037,22 +1049,26 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Root is local type, references foreign type`, () => {
-      const g: GrammarDocument = {
-        types: {
-          l: {
-            root: {
-              type: "concrete",
-              attributes: [{ type: "sequence", name: "n", nodeTypes: ["t1"] }],
+      const g: GrammarDocument = mkGrammarDoc(
+        { languageName: "l", typeName: "root" },
+        {
+          types: {
+            l: {
+              root: {
+                type: "concrete",
+                attributes: [
+                  { type: "sequence", name: "n", nodeTypes: ["t1"] },
+                ],
+              },
             },
           },
-        },
-        foreignTypes: {
-          l: {
-            t1: { type: "concrete", attributes: [] },
+          foreignTypes: {
+            l: {
+              t1: { type: "concrete", attributes: [] },
+            },
           },
-        },
-        root: { languageName: "l", typeName: "root" },
-      };
+        }
+      );
 
       const r = orderTypes(g);
       expect(r).toEqual([
@@ -1062,7 +1078,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Visual containers`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         a1_3: { type: "concrete", attributes: [] },
         a1: {
           type: "concrete",
@@ -1095,7 +1111,7 @@ describe(`Grammar Type Utilities`, () => {
     });
 
     it(`Nested Visual containers`, () => {
-      const g: GrammarDocument = singleLanguageGrammar("foo", "r", {
+      const g: GrammarDocument = mkSingleLanguageGrammar("foo", "r", {
         a1_3: { type: "concrete", attributes: [] },
         a1: {
           type: "concrete",
@@ -1150,13 +1166,18 @@ describe(`Grammar Type Utilities`, () => {
     });
   });
 
-  describe(`allPresentTypes`, () => {
+  describe(`Type subsets`, () => {
     const typeEmpty: NodeConcreteTypeDescription = {
       type: "concrete",
       attributes: [],
     };
 
-    const typeVisualize: NodeVisualTypeDescription = {
+    const typeVisualizeA: NodeVisualTypeDescription = {
+      type: "visualize",
+      attributes: [],
+    };
+
+    const typeVisualizeB: NodeVisualTypeDescription = {
       type: "visualize",
       attributes: [],
     };
@@ -1171,156 +1192,264 @@ describe(`Grammar Type Utilities`, () => {
       ],
     };
 
-    it(`No type keys at all`, () => {
+    describe(`No type keys at all`, () => {
       // Technically not legal, but should be tested anyway
       const g: GrammarDocument = {} as GrammarDocument;
 
-      expect(allPresentTypes(g)).toEqual({});
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({});
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({});
+      });
     });
 
-    it(`No types at all`, () => {
-      const g: GrammarDocument = {
-        types: {},
-        foreignTypes: {},
-      };
+    describe(`No types at all`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({});
 
-      expect(allPresentTypes(g)).toEqual({});
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({});
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({});
+      });
     });
 
-    it(`Empty local language`, () => {
-      const g: GrammarDocument = {
+    describe(`Empty local language`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         types: { l: {} },
         foreignTypes: {},
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({ l: {} });
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({ l: {} });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({ l: {} });
+      });
     });
 
-    it(`Empty foreign language`, () => {
-      const g: GrammarDocument = {
+    describe(`Empty foreign language`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         types: {},
         foreignTypes: { l: {} },
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({ l: {} });
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({ l: {} });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({ l: {} });
+      });
     });
 
-    it(`Identical empty foreign and local language`, () => {
-      const g: GrammarDocument = {
+    describe(`Identical empty foreign and local language`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         types: { l: {} },
         foreignTypes: { l: {} },
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({ l: {} });
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({ l: {} });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({ l: {} });
+      });
     });
 
-    it(`Different empty foreign and local language`, () => {
-      const g: GrammarDocument = {
+    describe(`Different empty foreign and local language`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         types: { l1: {} },
         foreignTypes: { l2: {} },
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({ l1: {}, l2: {} });
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({ l1: {}, l2: {} });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({ l1: {}, l2: {} });
+      });
     });
 
-    it(`Local language with single type`, () => {
-      const g: GrammarDocument = {
+    describe(`Local language with single type`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         types: { l: { t: typeEmpty } },
-        foreignTypes: {},
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({ l: { t: typeEmpty } });
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({ l: { t: typeEmpty } });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeEmpty } });
+      });
     });
 
-    it(`Foreign language with single type`, () => {
-      const g: GrammarDocument = {
-        types: {},
+    describe(`Local language with single visualization`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
+        visualisations: { l: { t: typeVisualizeA } },
+      });
+
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({});
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeVisualizeA } });
+      });
+    });
+
+    describe(`Foreign language with single type`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         foreignTypes: { l: { t: typeEmpty } },
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({ l: { t: typeEmpty } });
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({ l: { t: typeEmpty } });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeEmpty } });
+      });
     });
 
-    it(`Local and foreign language with identical single type`, () => {
-      const g: GrammarDocument = {
+    describe(`Local and foreign language with identical single type`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         types: { l: { t: typeEmpty } },
         foreignTypes: { l: { t: typeEmpty } },
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({ l: { t: typeEmpty } });
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({ l: { t: typeEmpty } });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeEmpty } });
+      });
     });
 
-    it(`Local precedence: Termninal a`, () => {
-      const g: GrammarDocument = {
+    describe(`Local precedence: Termninal a`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         types: { l: { t: typeTerminalA } },
         foreignTypes: { l: { t: typeEmpty } },
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({ l: { t: typeTerminalA } });
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({ l: { t: typeTerminalA } });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeTerminalA } });
+      });
     });
 
-    it(`Local precedence: Empty`, () => {
-      const g: GrammarDocument = {
+    describe(`Local precedence: Empty`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         types: { l: { t: typeEmpty } },
         foreignTypes: { l: { t: typeTerminalA } },
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({ l: { t: typeEmpty } });
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({ l: { t: typeEmpty } });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeEmpty } });
+      });
     });
 
     it(`Local precedence: Termninal a, additional local`, () => {
-      const g: GrammarDocument = {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         types: { l: { t1: typeTerminalA, t2: typeTerminalA } },
         foreignTypes: { l: { t1: typeEmpty } },
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({
+      expect(allConcreteTypes(g)).toEqual({
         l: { t1: typeTerminalA, t2: typeTerminalA },
       });
     });
 
-    it(`Local precedence: Termninal a, additional foreign`, () => {
-      const g: GrammarDocument = {
+    describe(`Local precedence: Termninal a, additional foreign`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
         types: { l: { t1: typeTerminalA } },
         foreignTypes: { l: { t1: typeEmpty, t2: typeTerminalA } },
-      };
+      });
 
-      expect(allPresentTypes(g)).toEqual({
-        l: { t1: typeTerminalA, t2: typeTerminalA },
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({
+          l: { t1: typeTerminalA, t2: typeTerminalA },
+        });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({
+          l: { t1: typeTerminalA, t2: typeTerminalA },
+        });
+      });
+    });
+
+    describe(`Foreign visualization has precedence over a type`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
+        types: { l: { t1: typeEmpty } },
+        foreignVisualisations: { l: { t1: typeVisualizeA } },
+      });
+
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({
+          l: { t1: typeEmpty },
+        });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({
+          l: { t1: typeVisualizeA },
+        });
+      });
+    });
+
+    describe(`Local visualization has precedence over a type`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
+        types: { l: { t1: typeEmpty } },
+        visualisations: { l: { t1: typeVisualizeA } },
+      });
+
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({
+          l: { t1: typeEmpty },
+        });
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({
+          l: { t1: typeVisualizeA },
+        });
+      });
+    });
+
+    describe(`Local visualization has precedence over foreign visualization`, () => {
+      const g: GrammarDocument = mkTypeGrammarDoc({
+        foreignVisualisations: { l: { t1: typeVisualizeB } },
+        visualisations: { l: { t1: typeVisualizeA } },
+      });
+
+      it(`allConcreteTypes`, () => {
+        expect(allConcreteTypes(g)).toEqual({});
+      });
+      it(`allVisualizableTypes`, () => {
+        expect(allVisualizableTypes(g)).toEqual({
+          l: { t1: typeVisualizeA },
+        });
       });
     });
 
     describe(`Filter`, () => {
-      it(`Local language with single filtered visual type`, () => {
-        const g: GrammarDocument = {
-          types: { l: { t: typeVisualize } },
-          foreignTypes: {},
-        };
-
-        expect(allPresentTypes(g, (t) => t.type === "concrete")).toEqual({
-          l: {},
+      describe(`Local language with remaining non visual type`, () => {
+        const g: GrammarDocument = mkTypeGrammarDoc({
+          types: { l: { t2: typeEmpty } },
+          visualisations: { l: { t1: { ...typeVisualizeA, tags: ["a"] } } },
         });
-      });
 
-      it(`Local language with remaining non visual type`, () => {
-        const g: GrammarDocument = {
-          types: { l: { t1: typeVisualize, t2: typeEmpty } },
-          foreignTypes: {},
-        };
+        const f = (t: NodeTypeDescription) =>
+          !isNodeOneOfTypeDescription(t) && t.tags?.includes("a");
 
-        expect(allPresentTypes(g, (t) => t.type === "concrete")).toEqual({
-          l: { t2: typeEmpty },
+        it(`allConcreteTypes`, () => {
+          expect(allConcreteTypes(g, f)).toEqual({ l: {} });
         });
-      });
-
-      it(`Local language with local visualizing type but foreign concrete type`, () => {
-        const g: GrammarDocument = {
-          types: { l: { t1: typeVisualize } },
-          foreignTypes: { l: { t1: typeEmpty } },
-        };
-
-        expect(allPresentTypes(g, (t) => t.type === "concrete")).toEqual({
-          l: { t1: typeEmpty },
+        it(`allVisualizableTypes`, () => {
+          expect(allVisualizableTypes(g, f)).toEqual({
+            l: { t1: { ...typeVisualizeA, tags: ["a"] } },
+          });
         });
       });
     });

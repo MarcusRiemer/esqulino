@@ -35,6 +35,8 @@ query FullProject($id: ID!) {
         root
         types
         foreignTypes
+        visualisations
+        foreignVisualisations
         includes
         visualizes
         programmingLanguageId

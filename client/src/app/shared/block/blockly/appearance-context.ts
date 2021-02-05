@@ -6,6 +6,7 @@ import {
   QualifiedTypeName,
   typenameEquals,
   NamedLanguages,
+  VisualisedLanguages,
 } from "../../syntaxtree/";
 
 import {
@@ -28,7 +29,7 @@ export type AppearanceContext = {
     };
   };
   qualifiedTypes: QualifiedNodeTypeDescription[];
-  types: NamedLanguages;
+  types: NamedLanguages | VisualisedLanguages;
 };
 
 /**

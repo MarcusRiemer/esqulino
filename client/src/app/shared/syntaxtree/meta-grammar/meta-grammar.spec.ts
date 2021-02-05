@@ -203,6 +203,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
         root: undefined,
         foreignTypes: {},
         types: {},
+        visualisations: {},
+        foreignVisualisations: {},
       });
     });
 
@@ -226,6 +228,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {},
         includes: [],
       });
@@ -259,6 +263,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {},
         includes: ["e495ac2f-9413-4fb7-8480-d7d807bfc59a"],
       });
@@ -292,6 +298,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {},
         includes: ["e495ac2f-9413-4fb7-8480-d7d807bfc59a"],
       });
@@ -315,6 +323,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: { languageName: "l", typeName: "t" },
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {},
       });
     });
@@ -339,6 +349,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {},
       });
     });
@@ -375,6 +387,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: { l: { t: { type: "concrete", attributes: [] } } },
       });
     });
@@ -494,6 +508,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {
           l: { t: { type: "concrete", attributes: [] } },
         },
@@ -529,9 +545,9 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
-        types: {
-          l: { t: { type: "visualize", attributes: [] } },
-        },
+        visualisations: { l: { t: { type: "visualize", attributes: [] } } },
+        foreignVisualisations: {},
+        types: {},
       });
     });
 
@@ -573,13 +589,106 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
-        types: {
+        visualisations: {
           l: {
             t: {
               type: "visualize",
               attributes: [{ type: "interpolate", name: "s" }],
             },
           },
+        },
+        foreignVisualisations: {},
+        types: {},
+      });
+    });
+
+    it(`Type with visualization`, () => {
+      const g: GrammarDocument = readFromNode({
+        name: "grammar",
+        language: "MetaGrammar",
+        properties: {
+          name: "vis",
+        },
+        children: {
+          root: [
+            {
+              name: "nodeRefOne",
+              language: "MetaGrammar",
+              properties: {
+                typeName: "root",
+                languageName: "vis",
+              },
+            },
+          ],
+          nodes: [
+            {
+              name: "concreteNode",
+              language: "MetaGrammar",
+              properties: {
+                typeName: "root",
+                languageName: "vis",
+              },
+              children: {
+                attributes: [
+                  {
+                    name: "property",
+                    language: "MetaGrammar",
+                    properties: {
+                      base: "integer",
+                      name: "count",
+                    },
+                  },
+                ],
+              },
+            },
+            {
+              name: "visualizeNode",
+              language: "MetaGrammar",
+              children: {
+                references: [
+                  {
+                    name: "nodeRefOne",
+                    language: "MetaGrammar",
+                    properties: {
+                      typeName: "root",
+                      languageName: "vis",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        types: {
+          vis: {
+            root: {
+              type: "concrete",
+              attributes: [
+                {
+                  type: "property",
+                  base: "integer",
+                  name: "count",
+                },
+              ],
+            },
+          },
+        },
+        foreignTypes: {},
+        visualisations: {
+          vis: {
+            root: {
+              type: "visualize",
+              attributes: [],
+            },
+          },
+        },
+        foreignVisualisations: {},
+        root: {
+          languageName: "vis",
+          typeName: "root",
         },
       });
     });
@@ -622,7 +731,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
-        types: {
+        visualisations: {
           l: {
             t: {
               type: "visualize",
@@ -630,6 +739,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
             },
           },
         },
+        foreignVisualisations: {},
+        types: {},
       });
     });
 
@@ -674,6 +785,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {
           l: {
             t: {
@@ -723,6 +836,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {
           l1: { t: { type: "concrete", attributes: [] } },
           l2: { t: { type: "concrete", attributes: [] } },
@@ -767,6 +882,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {
           l: { t: { type: "concrete", attributes: [terminalDesc] } },
         },
@@ -810,6 +927,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {
           l: { t: { type: "concrete", attributes: [terminalDesc] } },
         },
@@ -856,6 +975,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {
           l: { t: { type: "concrete", attributes: [seqDesc] } },
         },
@@ -924,6 +1045,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {
           l: { t: { type: "concrete", attributes: [containerDesc] } },
         },
@@ -981,6 +1104,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
         types: {
           l: { t: { type: "concrete", attributes: [seqDesc] } },
         },
@@ -1059,6 +1184,8 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
       expect(g).toEqual({
         root: undefined,
+        visualisations: {},
+        foreignVisualisations: {},
         foreignTypes: {},
         types: {
           l: { t: { type: "concrete", attributes: [seqDesc] } },

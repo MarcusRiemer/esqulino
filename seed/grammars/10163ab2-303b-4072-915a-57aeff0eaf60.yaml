@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-13 14:02:45.811229000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-13 14:06:33.212333000 Z
+  value_before_type_cast: 2021-02-04 09:06:03.670093000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
@@ -28,8 +28,14 @@ concise_attributes:
   value_before_type_cast: "{}"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root
-  value_before_type_cast: '{"typeName": "A", "languageName": "included"}'
+  value_before_type_cast: '{"typeName": "C", "languageName": "included"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: extends_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
 new_record: false
 active_record_yaml_version: 2

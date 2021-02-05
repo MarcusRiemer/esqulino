@@ -12,7 +12,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "A", "languageName": "included"}}],
+    "language": "MetaGrammar", "properties": {"typeName": "C", "languageName": "included"}}],
     "nodes": [{"name": "concreteNode", "language": "MetaGrammar", "properties": {"typeName":
     "C", "languageName": "included"}}]}, "language": "MetaGrammar", "properties":
     {"name": "included"}}'
@@ -21,7 +21,7 @@ concise_attributes:
   value_before_type_cast: 2020-07-13 14:01:42.571526000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-07-13 14:06:33.117026000 Z
+  value_before_type_cast: 2021-02-04 09:06:03.478486000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -43,7 +43,7 @@ concise_attributes:
       "foreignTypes": {},
       "root": {
         "languageName": "included",
-        "typeName": "A"
+        "typeName": "C"
       }
     }
 new_record: false

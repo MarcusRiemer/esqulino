@@ -5,7 +5,7 @@ import {
   isGrammarDocument,
 } from "./grammar.description";
 import {
-  allPresentTypes,
+  allConcreteTypes,
   getTypeList,
   stableQualifiedTypename,
 } from "./grammar-type-util";
@@ -46,7 +46,7 @@ export function referencedResourceIds(
   const toReturn: string[] = [];
 
   // Ensure we are always dealing with all types
-  const allTypes = isGrammarDocument(types) ? allPresentTypes(types) : types;
+  const allTypes = isGrammarDocument(types) ? allConcreteTypes(types) : types;
 
   const impl = (n: Node) => {
     const nodeType = allTypes[n.languageName]?.[n.typeName];

@@ -17,7 +17,7 @@ import {
   internalToBlockly,
   blocklyToInternal,
 } from "../../../shared/block/blockly/sync-ast";
-import { allPresentTypes } from "../../../shared/syntaxtree/grammar-type-util";
+import { allConcreteTypes } from "../../../shared/syntaxtree/grammar-type-util";
 import { CodeResource } from "../../../shared";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
@@ -174,7 +174,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
 
         const astXmlWorkspace = internalToBlockly(
           currRes.syntaxTreePeek.toModel(),
-          allPresentTypes(g, (t) => t.type !== "visualize")
+          g.types
         );
         const loadedIds = Blockly.Xml.domToWorkspace(
           astXmlWorkspace,

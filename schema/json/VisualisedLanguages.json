@@ -1,5 +1,5 @@
 {
-  "$ref": "#/definitions/NamedLanguages",
+  "$ref": "#/definitions/VisualisedLanguages",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "ChildCardinalityDescription": {
@@ -142,20 +142,6 @@
       ],
       "type": "object"
     },
-    "NamedLanguages": {
-      "additionalProperties": {
-        "$ref": "#/definitions/NamedTypes"
-      },
-      "description": "Multiple languages with types",
-      "type": "object"
-    },
-    "NamedTypes": {
-      "additionalProperties": {
-        "$ref": "#/definitions/NodeTypeDescription"
-      },
-      "description": "Types for a single language",
-      "type": "object"
-    },
     "NodeAttributeDescription": {
       "anyOf": [
         {
@@ -195,34 +181,6 @@
         }
       ],
       "description": "All children group types that are available"
-    },
-    "NodeConcreteTypeDescription": {
-      "additionalProperties": false,
-      "description": "This is the basic description to introduce a new type for\nany kind of node. If you are familiar with schema languages\nlike XML-Schema, JSON-Schema, NG-Relax, ... this will be\n(hopefully) nothing too surprising for you.\n\nThis schema language is modeled losely after XML-Schema,\nbut enhanced with various UI-related features.\n\nThe restriction system for simple properties is modelled after\nfacets in XML-Schema: https://www.w3.org/TR/xmlschema-2/#defn-coss\n\nBuiltin types are:\n- String\n- Integer\n- Boolean\n\nThe restriction system for child nodes is also modelled losely\nafter XML schemas complex element types. An important deviation\nis that child nodes can be distribibuted in multiple groups. This\nmeans that a single node can be parent to two unrelated sub-trees.\nXML schema in contrast allows exactly nodes and attributes as\nsub-trees.\n\nThe actual attributes of this node (properties or children) are stored\nas a list because the order does matter during string serialization\nor automatic UI generation. And whilst syntactic terminal symbols are\nnot actually required at all when validating a tree, they are meaningful\nfor the automation process.\n\nOver time the grammar structure has deviated from being \"validation\nonly\", it now also contains visual information about the row layout of\nthe text based representation.",
-      "properties": {
-        "attributes": {
-          "items": {
-            "$ref": "#/definitions/NodeAttributeDescription"
-          },
-          "type": "array"
-        },
-        "tags": {
-          "items": {
-            "$ref": "#/definitions/TagDescription"
-          },
-          "type": "array"
-        },
-        "type": {
-          "enum": [
-            "concrete"
-          ],
-          "type": "string"
-        }
-      },
-      "required": [
-        "type"
-      ],
-      "type": "object"
     },
     "NodeIntegerTypeRestrictions": {
       "anyOf": [
@@ -287,29 +245,6 @@
       "required": [
         "type",
         "name"
-      ],
-      "type": "object"
-    },
-    "NodeOneOfTypeDescription": {
-      "additionalProperties": false,
-      "description": "Creates a possibility to define multiple NodeTypes as alternatives\nto each other *without* introducing an artificial node type. This\nis helpful for e.g. the root node or when using recursive definitions.",
-      "properties": {
-        "oneOf": {
-          "items": {
-            "$ref": "#/definitions/TypeReference"
-          },
-          "type": "array"
-        },
-        "type": {
-          "enum": [
-            "oneOf"
-          ],
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "oneOf"
       ],
       "type": "object"
     },
@@ -536,17 +471,6 @@
       ],
       "type": "object"
     },
-    "NodeTypeDescription": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/NodeConcreteTypeDescription"
-        },
-        {
-          "$ref": "#/definitions/NodeOneOfTypeDescription"
-        }
-      ],
-      "description": "Types may either be concrete new type or an alias grouping together multiple\nother types."
-    },
     "NodeTypesAllowedDescription": {
       "additionalProperties": false,
       "description": "Every immediate child must be part of this list of allowed types. The order\nin which these children appear in is not relevant.",
@@ -756,6 +680,34 @@
       ],
       "type": "object"
     },
+    "NodeVisualTypeDescription": {
+      "additionalProperties": false,
+      "properties": {
+        "attributes": {
+          "items": {
+            "$ref": "#/definitions/VisualNodeAttributeDescription"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "items": {
+            "$ref": "#/definitions/TagDescription"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "visualize"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "attributes"
+      ],
+      "type": "object"
+    },
     "OccursDescription": {
       "anyOf": [
         {
@@ -850,6 +802,37 @@
         }
       ],
       "description": "Simple strings are used to refer to local types that share the\nsame language name."
+    },
+    "VisualNodeAttributeDescription": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/NodeTerminalSymbolDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeVisualContainerDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeInterpolatePropertyDescription"
+        },
+        {
+          "$ref": "#/definitions/NodeInterpolateChildrenDescription"
+        }
+      ],
+      "description": "These attributes are available when visualizing things"
+    },
+    "VisualisedLanguages": {
+      "additionalProperties": {
+        "$ref": "#/definitions/VisualizedTypes"
+      },
+      "description": "Multiple languages with visualizations",
+      "type": "object"
+    },
+    "VisualizedTypes": {
+      "additionalProperties": {
+        "$ref": "#/definitions/NodeVisualTypeDescription"
+      },
+      "description": "Visualizations for a single language",
+      "type": "object"
     }
   }
 }

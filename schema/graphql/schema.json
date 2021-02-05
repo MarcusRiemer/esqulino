@@ -2564,6 +2564,24 @@
               "deprecationReason": null
             },
             {
+              "name": "foreignVisualisations",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "JSON",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "generatedFrom",
               "description": null,
               "args": [
@@ -2743,6 +2761,24 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "ISO8601DateTime",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "visualisations",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "JSON",
                   "ofType": null
                 }
               },

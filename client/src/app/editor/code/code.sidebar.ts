@@ -12,7 +12,7 @@ import {
 import { generateSidebar } from "../../shared/block/generator/sidebar";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
 import { IndividualGrammarDataService } from "../../shared/serverdata";
-import { allPresentTypes } from "../../shared/syntaxtree/grammar-type-util";
+import { allConcreteTypes } from "../../shared/syntaxtree/grammar-type-util";
 
 import { CurrentCodeResourceService } from "../current-coderesource.service";
 import { SidebarDataService } from "../sidebar-data.service";
@@ -91,7 +91,7 @@ export class CodeSidebarComponent {
     map((g) => {
       // Extract the types that can be generated meaningfully
       const toGenerate: { [grammarName: string]: string[] } = {};
-      const allTypes = allPresentTypes(g, (t) => t.type === "concrete");
+      const allTypes = allConcreteTypes(g, (t) => t.type === "concrete");
       Object.entries(allTypes).forEach(([name, types]) => {
         toGenerate[name] = [...Object.keys(types)];
       });

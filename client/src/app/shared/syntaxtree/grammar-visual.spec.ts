@@ -1,22 +1,22 @@
 import { GRAMMAR_ARITHMETIC_DESCRIPTION } from "./grammar.spec.arithmetic";
 import { GRAMMAR_BOOLEAN_DESCRIPTION } from "./grammar.spec.boolean";
 import { GRAMMAR_SQL_DESCRIPTION } from "./grammar.spec.sql";
-import { singleLanguageGrammar } from "./grammar.spec-util";
+import { mkSingleLanguageGrammar } from "./grammar.spec-util";
 
 import { hasVisualType } from "./grammar-visual";
 import * as AST from "./syntaxtree";
 import { Validator } from "./validator";
-import { allPresentTypes } from "./grammar-type-util";
+import { allConcreteTypes } from "./grammar-type-util";
 
 describe(`Visual Grammar`, () => {
   it(`isVisual() for spec languages`, () => {
     expect(
-      hasVisualType(allPresentTypes(GRAMMAR_ARITHMETIC_DESCRIPTION))
+      hasVisualType(allConcreteTypes(GRAMMAR_ARITHMETIC_DESCRIPTION))
     ).toBeFalse();
     expect(
-      hasVisualType(allPresentTypes(GRAMMAR_BOOLEAN_DESCRIPTION))
+      hasVisualType(allConcreteTypes(GRAMMAR_BOOLEAN_DESCRIPTION))
     ).toBeFalse();
-    expect(hasVisualType(allPresentTypes(GRAMMAR_SQL_DESCRIPTION))).toBeTrue();
+    expect(hasVisualType(allConcreteTypes(GRAMMAR_SQL_DESCRIPTION))).toBeTrue();
   });
 
   it(`isVisual() detects terminal symbols`, () => {
@@ -53,7 +53,7 @@ describe(`Visual Grammar`, () => {
   });
 
   it(`Parses terminals (and ignores them)`, () => {
-    const g = singleLanguageGrammar("terminal", "root", {
+    const g = mkSingleLanguageGrammar("terminal", "root", {
       root: {
         type: "concrete",
         attributes: [{ type: "terminal", name: "foo", symbol: "foo" }],
@@ -77,7 +77,7 @@ describe(`Visual Grammar`, () => {
   });
 
   it(`Parses rows and includes children`, () => {
-    const g = singleLanguageGrammar("terminal", "root", {
+    const g = mkSingleLanguageGrammar("terminal", "root", {
       root: {
         type: "concrete",
         attributes: [
@@ -109,7 +109,7 @@ describe(`Visual Grammar`, () => {
   });
 
   it(`Parses rows and includes properties`, () => {
-    const g = singleLanguageGrammar("terminal", "root", {
+    const g = mkSingleLanguageGrammar("terminal", "root", {
       root: {
         type: "concrete",
         attributes: [

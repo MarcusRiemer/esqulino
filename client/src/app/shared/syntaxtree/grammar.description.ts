@@ -3,12 +3,11 @@ import { OccursDescription } from "./occurs.description";
 import { StringUnion } from "../string-union";
 
 /**
- * Types may either be concrete new type, an alias grouping together multiple
- * other types or a visualization of an existing type.
+ * Types may either be concrete new type or an alias grouping together multiple
+ * other types.
  */
 export type NodeTypeDescription =
   | NodeConcreteTypeDescription
-  | NodeVisualTypeDescription
   | NodeOneOfTypeDescription;
 
 /**
@@ -391,6 +390,16 @@ export type NamedTypes = { [nodeName: string]: NodeTypeDescription };
 export type NamedLanguages = { [languageName: string]: NamedTypes };
 
 /**
+ * Visualizations for a single language
+ */
+export type VisualizedTypes = { [nodeName: string]: NodeVisualTypeDescription };
+
+/**
+ * Multiple languages with visualizations
+ */
+export type VisualisedLanguages = { [languageName: string]: VisualizedTypes };
+
+/**
  * The technical aspects of a grammar that are used for actual validation
  * or generation.
  */
@@ -400,6 +409,12 @@ export interface GrammarDocument {
 
   // All types that come from different languages
   foreignTypes: NamedLanguages;
+
+  // All visualizations that are defined on this language
+  visualisations: VisualisedLanguages;
+
+  // All visualizations that come from different languages
+  foreignVisualisations: VisualisedLanguages;
 
   // The type that needs to be at the root of the language.
   root?: QualifiedTypeName;

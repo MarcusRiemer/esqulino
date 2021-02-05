@@ -2,7 +2,7 @@ import {
   GrammarDocument,
   NodeAttributeDescription,
 } from "../../syntaxtree/grammar.description";
-import { singleLanguageGrammar } from "../../syntaxtree/grammar.spec-util";
+import { mkSingleLanguageGrammar } from "../../syntaxtree/grammar.spec-util";
 
 import {
   convertGrammarTreeInstructions,
@@ -104,7 +104,7 @@ describe("Tree BlockLanguage Generator", () => {
 
   describe("Whole Grammars", () => {
     it("Root node without attributes", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [],
@@ -125,7 +125,7 @@ describe("Tree BlockLanguage Generator", () => {
     });
 
     it("Root node with single property", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [
@@ -152,7 +152,7 @@ describe("Tree BlockLanguage Generator", () => {
     });
 
     it("Reads over terminals", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [
@@ -184,7 +184,7 @@ describe("Tree BlockLanguage Generator", () => {
     });
 
     it("Goes into parentheses", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [

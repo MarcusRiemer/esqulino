@@ -6,37 +6,40 @@ import {
 } from "./block-language.description";
 import { BlockLanguage } from "./block-language";
 import { VisualBlockDescriptions } from "./block.description";
+import { mkGrammarDoc } from "../syntaxtree/grammar.spec-util";
 
 const langEmptyBlocks: LanguageDefinition = {
   id: "emptyBlocks",
   name: "emptyBlocks",
   emitters: [],
   validators: [
-    {
-      types: {
-        emptyBlocks: {
-          root: {
-            type: "concrete",
-            attributes: [
-              {
-                name: "cat_a",
-                type: "allowed",
-                nodeTypes: [
-                  {
-                    nodeType: "a",
-                    occurs: "+",
-                  },
-                ],
-              },
-            ],
+    mkGrammarDoc(
+      { languageName: "emptyBlocks", typeName: "root" },
+      {
+        types: {
+          emptyBlocks: {
+            root: {
+              type: "concrete",
+              attributes: [
+                {
+                  name: "cat_a",
+                  type: "allowed",
+                  nodeTypes: [
+                    {
+                      nodeType: "a",
+                      occurs: "+",
+                    },
+                  ],
+                },
+              ],
+            },
+            a: { type: "concrete" },
+            z: { type: "concrete" },
           },
-          a: { type: "concrete" },
-          z: { type: "concrete" },
         },
-      },
-      foreignTypes: {},
-      root: { languageName: "emptyBlocks", typeName: "root" },
-    },
+        foreignTypes: {},
+      }
+    ),
   ],
 };
 

@@ -14,7 +14,7 @@ import {
   BlockArgs,
   BlocklyWorkspaceBlock,
 } from "./blockly-types";
-import { allPresentTypes } from "../../syntaxtree/grammar-type-util";
+import { allConcreteTypes } from "../../syntaxtree/grammar-type-util";
 
 import {
   AppearanceContext,
@@ -78,9 +78,7 @@ function blockContinuation(
  * Generates JSON Blockly definitions from a grammar.
  */
 export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
-  const ac = buildAppearanceContext(
-    allPresentTypes(g, (t) => t.type !== "visualize")
-  );
+  const ac = buildAppearanceContext(g.types);
 
   const toReturn: BlocklyBlock[] = [];
 
