@@ -51,8 +51,8 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT charakter.name AS \"charakter.name\", COUNT()\nFROM
-    geschichte\n\tINNER JOIN geschichte_to_charakter ON geschichte.id = geschichte_to_charakter.geschichte_id\n\tINNER
+  value_before_type_cast: "SELECT charakter.name, COUNT()\nFROM geschichte\n\tINNER
+    JOIN geschichte_to_charakter ON geschichte.id = geschichte_to_charakter.geschichte_id\n\tINNER
     JOIN charakter ON charakter.id = geschichte_to_charakter.charakter_id\nGROUP BY
     charakter.id\nORDER BY COUNT() DESC"
 new_record: false

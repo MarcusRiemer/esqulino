@@ -41,7 +41,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT termin.TAG AS "termin.TAG", block.STARTZEIT AS "block.STARTZEIT", block.ENDZEIT AS "block.ENDZEIT"
+    SELECT termin.TAG, block.STARTZEIT, block.ENDZEIT
     FROM termin, block
     WHERE termin.BLOCK = block.BLOCK
 new_record: false

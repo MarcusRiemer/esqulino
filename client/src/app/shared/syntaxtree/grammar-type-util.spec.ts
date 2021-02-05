@@ -1173,12 +1173,12 @@ describe(`Grammar Type Utilities`, () => {
     };
 
     const typeVisualizeA: NodeVisualTypeDescription = {
-      type: "visualize",
+      type: "visualise",
       attributes: [],
     };
 
     const typeVisualizeB: NodeVisualTypeDescription = {
-      type: "visualize",
+      type: "visualise",
       attributes: [],
     };
 

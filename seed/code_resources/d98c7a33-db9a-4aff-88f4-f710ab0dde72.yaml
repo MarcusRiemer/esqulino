@@ -38,7 +38,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT Geschichte.Geschichte_Name AS "Geschichte.Geschichte_Name"
+    SELECT Geschichte.Geschichte_Name
     FROM Geschichte
     WHERE Geschichte.Geschichte_Name LIKE '%Geist%'
 new_record: false

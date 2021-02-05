@@ -44,8 +44,7 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT move.name_de AS \"move.name_de\", COUNT()\nFROM
-    move\n\tINNER JOIN pokemon_to_move ON move.id = pokemon_to_move.move_id\nGROUP
-    BY move.id\nORDER BY COUNT()"
+  value_before_type_cast: "SELECT move.name_de, COUNT()\nFROM move\n\tINNER JOIN pokemon_to_move
+    ON move.id = pokemon_to_move.move_id\nGROUP BY move.id\nORDER BY COUNT()"
 new_record: false
 active_record_yaml_version: 2

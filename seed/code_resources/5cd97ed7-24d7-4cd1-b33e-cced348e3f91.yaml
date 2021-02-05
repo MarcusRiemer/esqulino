@@ -44,6 +44,15 @@ concise_attributes:
         }
       },
       "foreignTypes": {},
+      "visualisations": {
+        "includes": {
+          "test": {
+            "type": "visualize",
+            "attributes": []
+          }
+        }
+      },
+      "foreignVisualisations": {},
       "includes": [
         "10163ab2-303b-4072-915a-57aeff0eaf60"
       ]

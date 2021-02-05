@@ -45,7 +45,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT ereignis.bezeichnung AS "ereignis.bezeichnung", ereignis.beginn_jahr AS "ereignis.beginn_jahr", ereignis.ende_jahr AS "ereignis.ende_jahr", ereignis.ende_jahr - ereignis.beginn_jahr
+    SELECT ereignis.bezeichnung, ereignis.beginn_jahr, ereignis.ende_jahr, ereignis.ende_jahr - ereignis.beginn_jahr
     FROM ereignis
     ORDER BY ereignis.ende_jahr - ereignis.beginn_jahr
 new_record: false

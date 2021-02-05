@@ -545,7 +545,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       expect(g).toEqual({
         root: undefined,
         foreignTypes: {},
-        visualisations: { l: { t: { type: "visualize", attributes: [] } } },
+        visualisations: { l: { t: { type: "visualise", attributes: [] } } },
         foreignVisualisations: {},
         types: {},
       });
@@ -592,7 +592,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
         visualisations: {
           l: {
             t: {
-              type: "visualize",
+              type: "visualise",
               attributes: [{ type: "interpolate", name: "s" }],
             },
           },
@@ -680,7 +680,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
         visualisations: {
           vis: {
             root: {
-              type: "visualize",
+              type: "visualise",
               attributes: [],
             },
           },
@@ -734,7 +734,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
         visualisations: {
           l: {
             t: {
-              type: "visualize",
+              type: "visualise",
               attributes: [{ type: "each", name: "s" }],
             },
           },

@@ -97,7 +97,7 @@ export function buildAppearanceContext(
     // If we have a concrete type, it is immediatly affected
     if (
       targetTypeDesc.type === "concrete" ||
-      targetTypeDesc.type === "visualize"
+      targetTypeDesc.type === "visualise"
     ) {
       affected.push(targetTypeRef);
     }

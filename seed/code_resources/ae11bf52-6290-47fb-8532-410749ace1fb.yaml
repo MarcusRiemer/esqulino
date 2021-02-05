@@ -41,6 +41,8 @@ concise_attributes:
         }
       },
       "foreignTypes": {},
+      "visualisations": {},
+      "foreignVisualisations": {},
       "root": {
         "languageName": "included",
         "typeName": "C"

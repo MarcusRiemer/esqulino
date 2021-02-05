@@ -56,10 +56,10 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT Sprecher.Sprecher_Name AS \"Sprecher.Sprecher_Name\",
-    COUNT(Charakter.Charakter_ID), GROUP_CONCAT(Charakter.Charakter_Name)\nFROM Sprecher\n\tINNER
-    JOIN Charakter_Sprecher ON Sprecher.Sprecher_ID = Charakter_Sprecher.Sprecher_Id\n\tINNER
-    JOIN Charakter ON Charakter_Sprecher.Charakter_ID = Charakter.Charakter_ID\nGROUP
-    BY Sprecher.Sprecher_ID\nORDER BY COUNT(Charakter.Charakter_ID)"
+  value_before_type_cast: "SELECT Sprecher.Sprecher_Name, COUNT(Charakter.Charakter_ID),
+    GROUP_CONCAT(Charakter.Charakter_Name)\nFROM Sprecher\n\tINNER JOIN Charakter_Sprecher
+    ON Sprecher.Sprecher_ID = Charakter_Sprecher.Sprecher_Id\n\tINNER JOIN Charakter
+    ON Charakter_Sprecher.Charakter_ID = Charakter.Charakter_ID\nGROUP BY Sprecher.Sprecher_ID\nORDER
+    BY COUNT(Charakter.Charakter_ID)"
 new_record: false
 active_record_yaml_version: 2

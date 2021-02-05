@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-08-14 08:18:16.049875000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-02-05 12:57:46.101119000 Z
+  value_before_type_cast: 2021-02-05 14:26:00.850640000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
@@ -42,7 +42,17 @@ concise_attributes:
   name: extends_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: visualisations
-  value_before_type_cast: "{}"
+  value_before_type_cast: '{"dxml": {"element": {"type": "visualise", "attributes":
+    [{"type": "container", "children": [{"type": "container", "children": [{"type":
+    "terminal", "symbol": "<"}, {"name": "name", "type": "interpolate"}, {"name":
+    "attributes", "type": "each"}, {"type": "terminal", "symbol": ">"}], "orientation":
+    "horizontal"}, {"type": "container", "children": [{"name": "elements", "type":
+    "each"}], "orientation": "vertical"}, {"type": "container", "children": [{"type":
+    "terminal", "symbol": "</"}, {"name": "name", "type": "interpolate"}, {"type":
+    "terminal", "symbol": ">"}], "orientation": "horizontal"}], "orientation": "vertical"}]},
+    "attribute": {"type": "visualise", "attributes": [{"type": "container", "children":
+    [{"name": "name", "type": "interpolate"}, {"type": "terminal", "symbol": "="},
+    {"name": "value", "type": "interpolate"}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_visualisations
   value_before_type_cast: "{}"

@@ -176,6 +176,8 @@ concise_attributes:
         }
       },
       "foreignTypes": {},
+      "visualisations": {},
+      "foreignVisualisations": {},
       "root": {
         "languageName": "css",
         "typeName": "document"

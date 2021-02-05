@@ -347,7 +347,7 @@ export type VisualNodeAttributeDescription =
   | NodeInterpolateChildrenDescription;
 
 export interface NodeVisualTypeDescription {
-  type: "visualize";
+  type: "visualise";
   attributes: VisualNodeAttributeDescription[];
   tags?: TagDescription[];
 }
@@ -392,12 +392,12 @@ export type NamedLanguages = { [languageName: string]: NamedTypes };
 /**
  * Visualizations for a single language
  */
-export type VisualizedTypes = { [nodeName: string]: NodeVisualTypeDescription };
+export type VisualisedTypes = { [nodeName: string]: NodeVisualTypeDescription };
 
 /**
  * Multiple languages with visualizations
  */
-export type VisualisedLanguages = { [languageName: string]: VisualizedTypes };
+export type VisualisedLanguages = { [languageName: string]: VisualisedTypes };
 
 /**
  * The technical aspects of a grammar that are used for actual validation

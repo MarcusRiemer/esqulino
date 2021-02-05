@@ -166,6 +166,8 @@ concise_attributes:
         }
       },
       "foreignTypes": {},
+      "visualisations": {},
+      "foreignVisualisations": {},
       "root": {
         "languageName": "regex-testbench",
         "typeName": "root"

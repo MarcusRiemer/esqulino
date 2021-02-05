@@ -126,7 +126,7 @@ describe("Manual BlockLanguage Generator", () => {
           visualisations: {
             g1: {
               t1: {
-                type: "visualize",
+                type: "visualise",
                 attributes: [{ type: "terminal", symbol: "t1" }],
               },
             },
@@ -148,7 +148,6 @@ describe("Manual BlockLanguage Generator", () => {
       };
 
       const r = convertGrammarManualInstructions(generator, grammar);
-      debugger;
 
       expect(r.editorBlocks.length).toEqual(1);
 
@@ -584,8 +583,8 @@ describe("Manual BlockLanguage Generator", () => {
             },
           },
         },
-        visualizations: {},
-        foreignVisualizations: {},
+        visualisations: {},
+        foreignVisualisations: {},
       }
     );
 

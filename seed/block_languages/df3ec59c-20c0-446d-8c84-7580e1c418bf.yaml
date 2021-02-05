@@ -14,7 +14,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-09-02 20:45:44.140868000 Z
+  value_before_type_cast: 2021-02-05 13:59:37.195039000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: meta-grammar
@@ -213,7 +213,7 @@ concise_attributes:
     {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
     "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
     "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"children": [{"children": [{"text": "visualize", "style": {"display": "inline-flex"},
+    {"children": [{"children": [{"text": "visualise", "style": {"display": "inline-flex"},
     "blockType": "constant", "cssClasses": ["space-after", "keyword"]}, {"blockType":
     "iterator", "childGroupName": "references", "emptyDropTarget": false}, {"text":
     "{", "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType":
@@ -239,7 +239,7 @@ concise_attributes:
     {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
     "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
     "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"text": "visualizes", "style": {"display": "inline-flex"},
+    "INVALID_MIN_OCCURENCES"]}, {"text": "visualises", "style": {"display": "inline-flex"},
     "blockType": "constant", "cssClasses": ["space-after", "keyword"]}, {"blockType":
     "iterator", "childGroupName": "includes", "emptyDropTarget": false}], "blockType":
     "block", "dropTarget": {}}], "describedType": {"typeName": "grammarVisualizes",

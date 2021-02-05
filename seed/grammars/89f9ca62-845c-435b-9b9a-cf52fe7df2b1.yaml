@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-09-02 19:28:29.667744000 Z
+  value_before_type_cast: 2021-02-05 13:59:18.601457000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
@@ -98,7 +98,7 @@ concise_attributes:
     "terminal", "symbol": "}"}], "orientation": "vertical"}]}, "visualizeNode": {"type":
     "concrete", "attributes": [{"type": "container", "children": [{"type": "container",
     "children": [{"tags": ["space-after", "keyword"], "type": "terminal", "symbol":
-    "visualize"}, {"name": "references", "type": "sequence", "nodeTypes": [{"occurs":
+    "visualise"}, {"name": "references", "type": "sequence", "nodeTypes": [{"occurs":
     "1", "nodeType": "nodeRefOne"}]}, {"type": "terminal", "symbol": "{"}], "orientation":
     "horizontal"}, {"tags": ["indent"], "type": "container", "children": [{"name":
     "attributes", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": "visualAttribute"},
@@ -111,7 +111,7 @@ concise_attributes:
     "concrete", "attributes": [{"base": "string", "name": "cardinality", "type": "property",
     "restrictions": [{"type": "enum", "value": ["*", "?", "+"]}]}]}, "grammarVisualizes":
     {"type": "concrete", "attributes": [{"tags": ["space-after", "keyword"], "type":
-    "terminal", "symbol": "visualizes"}, {"name": "includes", "type": "sequence",
+    "terminal", "symbol": "visualises"}, {"name": "includes", "type": "sequence",
     "nodeTypes": [{"occurs": "1", "nodeType": "grammarRef"}]}]}, "nodeRefCardinality":
     {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
     "references", "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "nodeRef"}]},

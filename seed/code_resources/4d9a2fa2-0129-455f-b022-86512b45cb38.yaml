@@ -39,7 +39,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT geschichte.herkunftsland AS "geschichte.herkunftsland", COUNT()
+    SELECT geschichte.herkunftsland, COUNT()
     FROM geschichte
     GROUP BY geschichte.herkunftsland
     ORDER BY COUNT() DESC

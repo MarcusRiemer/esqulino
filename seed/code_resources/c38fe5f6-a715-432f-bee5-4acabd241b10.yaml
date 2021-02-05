@@ -43,7 +43,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT pokedex.name AS "pokedex.name", pokedex.nummer AS "pokedex.nummer", COUNT()
+    SELECT pokedex.name, pokedex.nummer, COUNT()
     FROM gefangen, pokedex
     WHERE gefangen.pokedex_nummer = pokedex.nummer
     GROUP BY pokedex.nummer

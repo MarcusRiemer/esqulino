@@ -39,7 +39,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT key_value.key AS "key_value.key", key_value.value AS "key_value.value", *
+    SELECT key_value.key, key_value.value, *
     FROM key_value
     WHERE key_value.key >= 3
 new_record: false

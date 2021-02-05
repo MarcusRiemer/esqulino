@@ -274,16 +274,16 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
 
       // Add the correct type of type
       if (isVisual) {
-        const visualizeNode: NodeVisualTypeDescription = {
-          type: "visualize",
+        const visualiseNode: NodeVisualTypeDescription = {
+          type: "visualise",
           attributes: [],
         };
 
         n.getChildrenInCategory("attributes").forEach((a) =>
-          readAttributes(a, visualizeNode.attributes)
+          readAttributes(a, visualiseNode.attributes)
         );
 
-        langTypes[typeName] = visualizeNode;
+        langTypes[typeName] = visualiseNode;
       } else {
         switch (n.typeName) {
           case "concreteNode": {

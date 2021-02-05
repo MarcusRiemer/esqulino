@@ -52,10 +52,9 @@ concise_attributes:
   value_before_type_cast: sql
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: "SELECT MIN(Auftritt.Geschichte_ID), Charakter.Charakter_Name
-    AS \"Charakter.Charakter_Name\", Geschichte.Geschichte_Name AS \"Geschichte.Geschichte_Name\"\nFROM
-    Charakter\n\tINNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID\n\tINNER
-    JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID\nGROUP BY
-    Charakter.Charakter_ID"
+  value_before_type_cast: "SELECT MIN(Auftritt.Geschichte_ID), Charakter.Charakter_Name,
+    Geschichte.Geschichte_Name\nFROM Charakter\n\tINNER JOIN Auftritt ON Auftritt.Charakter_ID
+    = Charakter.Charakter_ID\n\tINNER JOIN Geschichte ON Auftritt.Geschichte_ID =
+    Geschichte.Geschichte_ID\nGROUP BY Charakter.Charakter_ID"
 new_record: false
 active_record_yaml_version: 2

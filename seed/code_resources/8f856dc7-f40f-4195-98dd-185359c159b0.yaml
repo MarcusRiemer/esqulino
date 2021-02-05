@@ -41,7 +41,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT Geschichte.Geschichte_Jahr_Europa AS "Geschichte.Geschichte_Jahr_Europa", COUNT(), GROUP_CONCAT(Geschichte.Geschichte_Name)
+    SELECT Geschichte.Geschichte_Jahr_Europa, COUNT(), GROUP_CONCAT(Geschichte.Geschichte_Name)
     FROM Geschichte
     GROUP BY Geschichte.Geschichte_Jahr_Europa
     ORDER BY Geschichte.Geschichte_Jahr_Europa

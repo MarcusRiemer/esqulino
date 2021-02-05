@@ -171,7 +171,7 @@ function createWorkspaceBlock(
   // Possibly build children for this block
   if (ast.children) {
     const typeDesc = ac.types[ast.language][ast.name];
-    if (typeDesc.type === "concrete" || typeDesc.type === "visualize") {
+    if (typeDesc.type === "concrete" || typeDesc.type === "visualise") {
       Object.entries(ast.children).forEach(([groupName, children]) => {
         const childGroupDesc = getNodeAttribute(nodeDesc, groupName);
 

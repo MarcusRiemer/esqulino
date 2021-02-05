@@ -51,7 +51,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
-    SELECT Charakter.Charakter_ID AS "Charakter.Charakter_ID", Charakter.Charakter_Name AS "Charakter.Charakter_Name", COUNT(Charakter.Charakter_ID)
+    SELECT Charakter.Charakter_ID, Charakter.Charakter_Name, COUNT(Charakter.Charakter_ID)
     FROM Charakter, Auftritt
     WHERE Charakter.Charakter_ID = Auftritt.Charakter_ID
     GROUP BY Charakter.Charakter_ID

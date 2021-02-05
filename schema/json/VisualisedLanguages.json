@@ -697,7 +697,7 @@
         },
         "type": {
           "enum": [
-            "visualize"
+            "visualise"
           ],
           "type": "string"
         }
@@ -822,12 +822,12 @@
     },
     "VisualisedLanguages": {
       "additionalProperties": {
-        "$ref": "#/definitions/VisualizedTypes"
+        "$ref": "#/definitions/VisualisedTypes"
       },
       "description": "Multiple languages with visualizations",
       "type": "object"
     },
-    "VisualizedTypes": {
+    "VisualisedTypes": {
       "additionalProperties": {
         "$ref": "#/definitions/NodeVisualTypeDescription"
       },

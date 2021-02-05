@@ -61,7 +61,9 @@ concise_attributes:
   name: compiled
   value_before_type_cast: |-
     {
-      "types": {
+      "types": {},
+      "foreignTypes": {},
+      "visualisations": {
         "dxml": {
           "element": {
             "type": "visualize",
@@ -149,7 +151,7 @@ concise_attributes:
           }
         }
       },
-      "foreignTypes": {},
+      "foreignVisualisations": {},
       "root": {
         "languageName": "dxml",
         "typeName": "element"

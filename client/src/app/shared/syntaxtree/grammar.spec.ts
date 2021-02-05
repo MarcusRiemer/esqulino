@@ -2262,7 +2262,7 @@ describe("Grammar Validation", () => {
           visualisations: {
             g: {
               t1: {
-                type: "visualize",
+                type: "visualise",
                 attributes: [],
               },
             },
@@ -2290,7 +2290,7 @@ describe("Grammar Validation", () => {
           visualisations: {
             g: {
               t1: {
-                type: "visualize",
+                type: "visualise",
                 attributes: [],
               },
             },
