@@ -1,6 +1,10 @@
 module Resolvers
+  # Extracts all models that probably are in foreign tables and should be
+  # fetched using `#includes` to avoid the N+1 query problem.
   class RelatedModelsVisitor < GraphQL::Language::Visitor
 
+    # Shorthand to get a hash that is compatible with `#includes`
+    # see https://api.rubyonrails.org/classes/ActiveRecord/QueryMethods.html#method-i-includes
     def self.calculate(query_string, root_model_class)
       document = GraphQL.parse(query_string)
       vis = RelatedModelsVisitor.new(document, root_model_class)
@@ -18,6 +22,8 @@ module Resolvers
 
     attr_reader :includes
 
+    # Called for every node in the AST, must call `#super` to continue
+    # walking the AST.
     def on_field(node, parent)
       # Is this a different parent?
       if @stack.last != parent
