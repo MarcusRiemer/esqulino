@@ -55,8 +55,8 @@ test:
       program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
       mode: one_shot
   seed:
-    data_dir: ../seed-test
-    output: false
+    data_dir: ../seed
+    output: <%= ENV['TEST_SEED_OUTPUT'] || false %>
   auth_tokens:
     access_token: 180 # 3 minutes
     refresh_token: 432000 # 5 days

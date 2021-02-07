@@ -242,9 +242,17 @@ jobs:
     workingDirectory: server
     displayName: 'Debug Output'
 
+  - bash: "mkdir -p prod/projects"
+    workingDirectory: data
+    displayName: 'Create Data Folder'
+
   - bash: "make reset-live-data"
     workingDirectory: server
     displayName: 'make reset-live-data'
+    env:
+      RAILS_ENV: production
+      TEST_SEED_OUTPUT: true
+      CLI_PROGRAM: '../client/dist/cli/bundle.cli.js'
 
 - job: code_formatting
   displayName: Check Code Formatting
