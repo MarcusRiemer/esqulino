@@ -117,6 +117,7 @@ module GraphqlSpecHelper
     return json_data
   end
 
+  # Shorthand to execute free form graphql queries
   def execute_query(query: nil, variables: {}, operation_name: nil, language: ["de"])
     query = get_query(operation_name) if query.nil?
     context = {

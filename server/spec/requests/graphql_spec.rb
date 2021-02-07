@@ -27,11 +27,26 @@ RSpec.describe GraphqlController, type: :request do
       FactoryBot.create(:project, name: { en: "hello-2", de: "hallo-2" })
       FactoryBot.create(:project, name: { en: "hello-3", de: "hallo-3" })
 
-      response_data = execute_query(query: "{projects(input: {languages:[de,en]}){nodes{name}totalCount}}")['data']['projects']
-      project_names = response_data['nodes'].map { |p| p['name']}
+      response_data = execute_query(
+        query: %Q({
+          projects(input: {languages:[de,en]}){
+            nodes {
+              name
+            }
+            totalCount
+          }
+        })
+      )
 
-      expect(response_data['totalCount']).to eq(3)
-      expect(project_names).to eq([{ "de" => "hallo-1", "en" => "hello-1" }, { "de" => "hallo-2", "en" => "hello-2" }, { "de" => "hallo-3", "en" => "hello-3" }])
+
+      project_names = response_data['data']['projects']['nodes'].pluck("name")
+
+      expect(response_data['data']['projects']['totalCount']).to eq 3
+      expect(project_names).to eq([
+                                    { "de" => "hallo-1", "en" => "hello-1" },
+                                    { "de" => "hallo-2", "en" => "hello-2" },
+                                    { "de" => "hallo-3", "en" => "hello-3" }
+                                  ])
     end
 
     it 'Projects: Added languages as input parameter and expect to return only requested language' do

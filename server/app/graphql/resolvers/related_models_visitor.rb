@@ -23,10 +23,12 @@ module Resolvers
     attr_reader :includes
 
     # Called for every node in the AST, must call `#super` to continue
-    # walking the AST.
+    # walking the AST. Builds up a stack of parents to figure out which
+    # things to include, skips attributes that are not a ActiveRecord
+    # relationship.
     def on_field(node, parent)
       # Is this a different parent?
-      if @stack.last != parent
+      if not parent.name.nil? and @stack.last != parent
         # Do we need to jump unwind to a specific place?
         parent_index = @stack.find_index parent
         if parent_index
