@@ -81,8 +81,11 @@ module Resolvers
     end
 
     def apply_order(scope, value)
-      order_key = value.to_h.stringify_keys.fetch("orderField", @order_field).underscore
-      order_dir = value.to_h.stringify_keys.fetch("orderDirection", @order_dir)
+      # `#to_h` turns nil into an empty hash so we can rely on `#fetch` to
+      # give us the request specific or the fallback ordering options
+      order_key = value.to_h.fetch(:order_field, @order_field).underscore
+      order_dir = value.to_h.fetch(:order_direction, @order_dir)
+
       if is_multilingual_column? order_key
         # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
         # Using join to add comma as delimiter
