@@ -17,7 +17,7 @@ import { MatTable, MatColumnDef } from "@angular/material/table";
 import { BehaviorSubject, Observable, Subscription } from "rxjs";
 
 import { PageInfo } from "../../../generated/graphql";
-import { map } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
 
 export interface GraphQLQueryData<
   QueryItem,
@@ -93,6 +93,9 @@ export class PaginatorTableGraphqlComponent
       map((responseDocument) => responseDocument.loading)
     );
     this.data$ = this._response$.pipe(
+      // Ensuring that we have a whole response, not one where the
+      // `dataKey` might be missing from the query data
+      filter((res) => !res.partial),
       map((responseDocument) => responseDocument.data[this.queryData.dataKey])
     );
     this.totalCount$ = this.data$.pipe(map((data) => data.totalCount));
