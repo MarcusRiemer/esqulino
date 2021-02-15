@@ -36,15 +36,26 @@ export class MultiLingualInputComponent {
   public readonly mode =
     this._activeRoute.snapshot.queryParamMap.get("mode") || "single";
 
-  public get currentString() {
-    return this.editingString;
+  public get currentString(): string | undefined {
+    return this.editingString?.[this.language];
+  }
+
+  public set currentString(val: string) {
+    const changed = {};
+    changed[this.language] = val;
+
+    this.editingString = {
+      ...this.editingString,
+      ...changed,
+    };
+    this.editingStringChange.emit(this.editingString);
   }
 
   /**
    * Is there an Object with the selected language
    */
   public get isCurrentLanguageAvailable() {
-    return this.currentString && this.currentString[this.language] != undefined;
+    return this.editingString && this.language in this.editingString;
   }
 
   public get isTranslationTextarea() {
@@ -60,28 +71,25 @@ export class MultiLingualInputComponent {
     );
   }
 
-  public set currentString(val: MultiLangString) {
-    this.editingString = val;
-    this.editingStringChange.emit(this.editingString);
-  }
-
   /**
    * Add a new Object to the current String if there´s no one
    * and add an empty string to the current language
    */
-  public addObject(): void {
-    if (!this.currentString) this.currentString = {};
+  public addLanguage(newLang: string): void {
+    if (!this.editingString) {
+      this.editingString = {};
+    }
 
-    let newString = this.currentString;
-    newString[this.language] = "";
-
-    this.currentString = newString;
+    if (!(newLang in this.editingString)) {
+      this.editingString[newLang] = "";
+    }
   }
 
   /**
    * Deletes an entry of an object with the current language
    */
   public deleteLanguage(): void {
-    delete this.currentString[this.language];
+    const { [this.language]: _, ...remainingLanguages } = this.editingString;
+    this.editingString = remainingLanguages;
   }
 }

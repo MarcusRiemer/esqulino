@@ -32,6 +32,7 @@ describe("Component: MultilingualInput", () => {
     let c = await createComponent("de");
 
     const mulString: MultiLangString = {};
+    Object.freeze(mulString);
 
     c.component.editingString = mulString;
     c.component.control = "input";
@@ -46,10 +47,57 @@ describe("Component: MultilingualInput", () => {
     );
   });
 
+  it("Changing the <input>-text", async () => {
+    let c = await createComponent("de");
+
+    const mulString: MultiLangString = {
+      de: "123",
+    };
+    Object.freeze(mulString);
+
+    c.component.editingString = mulString;
+    c.component.control = "input";
+    c.component.language = "de";
+    c.component.placeholder = "Titel";
+
+    c.fixture.detectChanges();
+
+    const elemInput = c.element.querySelector("input");
+    elemInput.value = "456";
+    elemInput.dispatchEvent(new Event("input"));
+    c.fixture.detectChanges();
+
+    expect(c.component.currentString).toEqual("456");
+  });
+
+  it("Changing the <textarea>-text", async () => {
+    let c = await createComponent("de");
+
+    const mulString: MultiLangString = {
+      de: "123",
+    };
+    Object.freeze(mulString);
+
+    c.component.editingString = mulString;
+    c.component.control = "textarea";
+    c.component.language = "de";
+    c.component.placeholder = "Titel";
+
+    c.fixture.detectChanges();
+
+    const elemInput = c.element.querySelector("textarea");
+    elemInput.value = "456";
+    elemInput.dispatchEvent(new Event("input"));
+    c.fixture.detectChanges();
+
+    expect(c.component.currentString).toEqual("456");
+  });
+
   it("testing the textarea control", async () => {
     let c = await createComponent("de");
 
     const mulString: MultiLangString = {};
+    Object.freeze(mulString);
 
     c.component.editingString = mulString;
     c.component.control = "textarea";
@@ -68,6 +116,7 @@ describe("Component: MultilingualInput", () => {
     let c = await createComponent("de");
 
     const mulString: MultiLangString = {};
+    Object.freeze(mulString);
 
     c.component.editingString = mulString;
     c.component.control = "textarea";
@@ -85,6 +134,7 @@ describe("Component: MultilingualInput", () => {
     let c = await createComponent("de");
 
     const mulString: MultiLangString = { de: "Test" };
+    Object.freeze(mulString);
 
     c.component.editingString = mulString;
     c.component.placeholder = "Informationen";
@@ -114,6 +164,7 @@ describe("Component: MultilingualInput", () => {
     let c = await createComponent("de");
 
     const mulString: MultiLangString = { de: "Test" };
+    Object.freeze(mulString);
 
     c.component.editingString = mulString;
     c.component.placeholder = "Informationen";
@@ -122,10 +173,11 @@ describe("Component: MultilingualInput", () => {
     expect(c.component).toBeTruthy();
 
     expect(c.element.querySelector("input")).toBeTruthy();
-    c.element.querySelector("button").click();
+    c.component.deleteLanguage();
     c.fixture.detectChanges();
 
     expect(c.element.querySelector("input")).not.toBeTruthy();
-    expect(c.component.currentString).toEqual({});
+    expect(c.component.currentString).toBeUndefined();
+    expect(c.component.editingString).toEqual({});
   });
 });

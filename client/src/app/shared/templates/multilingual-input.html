@@ -10,7 +10,7 @@
     *ngIf="isNeedAnObject"
     [class]="isTranslationTextarea ? 'col-md-3' : 'col-md-2'"
   >
-    <button (click)="addObject()" class="btn btn-block btn-primary">
+    <button (click)="addLanguage(language)" class="btn btn-block btn-primary">
       {{ placeholder }} für "{{ language }}" hinzufügen
     </button>
   </div>
@@ -19,10 +19,9 @@
       *ngIf="isCurrentLanguageAvailable"
       type="text"
       name="edited-input"
-      [value]="currentString[language] || ''"
       class="form-control"
       [placeholder]="placeholder"
-      [(ngModel)]="editingString[language]"
+      [(ngModel)]="currentString"
     />
   </div>
   <div
@@ -47,10 +46,9 @@
         class="form-control"
         name="edited-text"
         id="edit-text"
-        [value]="currentString[language] || ''"
         rows="10"
         [placeholder]="placeholder"
-        [(ngModel)]="editingString[language]"
+        [(ngModel)]="currentString"
       ></textarea>
     </div>
   </div>
