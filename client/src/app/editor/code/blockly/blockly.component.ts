@@ -17,7 +17,6 @@ import {
   internalToBlockly,
   blocklyToInternal,
 } from "../../../shared/block/blockly/sync-ast";
-import { allConcreteTypes } from "../../../shared/syntaxtree/grammar-type-util";
 import { CodeResource } from "../../../shared";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";

@@ -14,7 +14,6 @@ import {
   BlockArgs,
   BlocklyWorkspaceBlock,
 } from "./blockly-types";
-import { allConcreteTypes } from "../../syntaxtree/grammar-type-util";
 
 import {
   AppearanceContext,

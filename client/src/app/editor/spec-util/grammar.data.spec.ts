@@ -1,14 +1,12 @@
 import { TestBed } from "@angular/core/testing";
 import { HttpTestingController } from "@angular/common/http/testing";
 
-import { GrammarDescription, GrammarListDescription } from "../../shared/";
+import { GrammarDescription } from "../../shared/";
 import { generateUUIDv4 } from "../../shared/util-browser";
 import {
   ServerApiService,
   IndividualGrammarDataService,
 } from "../../shared/serverdata";
-
-import { ListOrder, provideListResponse } from "./list.data.spec";
 
 const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",

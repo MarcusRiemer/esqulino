@@ -3,10 +3,7 @@ import { Component } from "@angular/core";
 import { map, flatMap, withLatestFrom, filter, pairwise } from "rxjs/operators";
 import { BehaviorSubject, combineLatest } from "rxjs";
 
-import {
-  SqlStepGroupByDescription,
-  stepwiseSqlQuery,
-} from "../../../shared/syntaxtree/sql/sql-steps";
+import { stepwiseSqlQuery } from "../../../shared/syntaxtree/sql/sql-steps";
 import { Tree } from "../../../shared/syntaxtree/";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";

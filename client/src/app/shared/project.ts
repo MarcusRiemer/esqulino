@@ -3,9 +3,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import {
   ProjectFullDescription,
   ProjectDescription,
-  AvailableDatabaseDescription,
   ProjectSourceDescription,
-  ProjectUpdateDescription,
   ProjectUsesBlockLanguageDescription,
 } from "./project.description";
 import { Schema } from "./schema/schema";

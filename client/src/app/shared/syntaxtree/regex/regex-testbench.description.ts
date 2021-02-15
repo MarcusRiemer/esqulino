@@ -1,4 +1,3 @@
-import { NodeDescription } from "../syntaxtree.description";
 import * as AST from "../syntaxtree";
 
 /**
