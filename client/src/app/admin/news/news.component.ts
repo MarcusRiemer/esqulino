@@ -2,7 +2,6 @@ import { Component, Inject, LOCALE_ID, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
-import { ServerDataService } from "../../shared";
 import { MultiLangString } from "../../shared/multilingual-string.description";
 import { locales } from "../../shared/change-language.component";
 import {
@@ -37,7 +36,6 @@ export class AdminNewsListComponent {
 
   constructor(
     @Inject(LOCALE_ID) readonly localeId: string,
-    private readonly _serverData: ServerDataService,
     private _router: Router,
     private _active: ActivatedRoute,
     private _performData: PerformDataService,
