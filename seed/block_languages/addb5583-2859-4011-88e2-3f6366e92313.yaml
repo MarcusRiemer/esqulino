@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-06-07 12:00:37.771821000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-31 13:29:47.011182000 Z
+  value_before_type_cast: 2021-02-12 11:10:37.669308000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic
@@ -37,7 +37,9 @@ concise_attributes:
     {"typeName": "document", "languageName": "html"}}, {"visual": [{"children": [{"style":
     {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
     "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}],
+    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"text": "<head>", "style": {"display": "inline-flex"}, "blockType": "constant"},
+    {"text": "</head>", "style": {"display": "inline-flex"}, "blockType": "constant"}],
     "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "head",
     "languageName": "html"}}, {"visual": [{"children": [{"style": {"color": "white",
     "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":

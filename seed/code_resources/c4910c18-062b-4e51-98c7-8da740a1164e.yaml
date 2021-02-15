@@ -30,20 +30,22 @@ concise_attributes:
     {"symbol": "</html>"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
     "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]}, "language":
     "MetaGrammar", "properties": {"typeName": "document", "languageName": "html"}},
-    {"name": "concreteNode", "language": "MetaGrammar", "properties": {"typeName":
-    "head", "languageName": "html"}}, {"name": "concreteNode", "children": {"attributes":
-    [{"name": "container", "children": {"attributes": [{"name": "terminal", "language":
-    "MetaGrammar", "properties": {"symbol": "<body>"}}, {"name": "children", "children":
-    {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
-    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "heading",
+    {"name": "concreteNode", "children": {"attributes": [{"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": "<head>"}}, {"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": "</head>"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "head", "languageName": "html"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "container", "children": {"attributes": [{"name":
+    "terminal", "language": "MetaGrammar", "properties": {"symbol": "<body>"}}, {"name":
+    "children", "children": {"references": [{"name": "nodeRefCardinality", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "heading", "languageName": "html"}}], "cardinality": [{"name": "knownCardinality",
+    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
+    "MetaGrammar"}, {"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "paragraph",
     "languageName": "html"}}], "cardinality": [{"name": "knownCardinality", "language":
-    "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"},
-    {"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "paragraph", "languageName":
-    "html"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
-    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language":
-    "MetaGrammar", "properties": {"base": "allowed", "name": "elements"}}, {"name":
-    "terminal", "language": "MetaGrammar", "properties": {"symbol": "</body>"}}],
+    "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"base": "allowed", "name": "elements"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "</body>"}}],
     "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
     {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
     "properties": {"typeName": "body", "languageName": "html"}}, {"name": "concreteNode",
@@ -67,7 +69,7 @@ concise_attributes:
   value_before_type_cast: 2020-06-07 11:47:56.787287000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-06-07 12:10:14.384288000 Z
+  value_before_type_cast: 2021-02-12 11:10:37.137009000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -127,7 +129,16 @@ concise_attributes:
           },
           "head": {
             "type": "concrete",
-            "attributes": []
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "<head>"
+              },
+              {
+                "type": "terminal",
+                "symbol": "</head>"
+              }
+            ]
           },
           "body": {
             "type": "concrete",

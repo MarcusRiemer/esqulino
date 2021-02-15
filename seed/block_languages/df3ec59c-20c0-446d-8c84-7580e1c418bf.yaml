@@ -14,7 +14,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-02-05 13:59:37.195039000 Z
+  value_before_type_cast: 2021-02-12 15:02:45.250533000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: meta-grammar
@@ -68,46 +68,63 @@ concise_attributes:
     "displayName": "+"}, {"defaultNode": {"name": "nodeRefCardinality", "children":
     {"references": [], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
     "properties": {"cardinality": "?"}}]}, "language": "MetaGrammar"}, "displayName":
-    "?"}], "categoryCaption": "Kardinalität"}]}, {"type": "metaDefinedTypes"}]'
+    "?"}], "categoryCaption": "Kardinalität"}, {"blocks": [{"defaultNode": {"name":
+    "tagList", "language": "MetaGrammar"}, "displayName": "Tag List"}, {"defaultNode":
+    {"name": "tag", "language": "MetaGrammar", "properties": {"tag": "keyword"}},
+    "displayName": "keyword"}, {"defaultNode": {"name": "tag", "language": "MetaGrammar",
+    "properties": {"tag": "indent"}}, "displayName": "indent"}], "categoryCaption":
+    "Tags"}]}, {"type": "metaDefinedTypes"}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: editor_blocks
   value_before_type_cast: '[{"visual": [{"children": [{"style": {"color": "white",
     "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
     "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
-    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text":
-    "each", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
-    ["space-after", "keyword"]}, {"style": {"display": "inline-flex"}, "property":
-    "name", "blockType": "input", "cssClasses": ["double-quote", "space-after"]}],
-    "blockType": "container", "orientation": "horizontal"}], "blockType": "block",
-    "dropTarget": {}}], "describedType": {"typeName": "each", "languageName": "MetaGrammar"}},
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
+    "inline-flex"}, "property": "tag", "blockType": "input"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "tag", "languageName": "MetaGrammar"}},
     {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
     "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
     "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "//", "style": {"display":
-    "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after"]}, {"style":
-    {"display": "inline-flex"}, "property": "text", "blockType": "input"}], "blockType":
-    "container", "cssClasses": ["comment"], "orientation": "horizontal"}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "comment", "languageName":
-    "MetaGrammar"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
-    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
-    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"children": [{"text":
-    "grammar", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
-    ["space-after", "keyword"]}, {"style": {"display": "inline-flex"}, "property":
-    "name", "blockType": "input", "cssClasses": ["double-quote", "space-after"]},
-    {"blockType": "iterator", "childGroupName": "includes", "emptyDropTarget": false},
-    {"blockType": "iterator", "childGroupName": "visualizes", "emptyDropTarget": false},
-    {"text": "{", "style": {"display": "inline-flex"}, "blockType": "constant"}],
-    "blockType": "container", "orientation": "horizontal"}, {"children": [{"children":
-    [{"text": "root", "style": {"display": "inline-flex"}, "blockType": "constant",
-    "cssClasses": ["space-after", "keyword"]}, {"text": "=", "style": {"display":
-    "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after"]}, {"blockType":
-    "iterator", "childGroupName": "root", "emptyDropTarget": false}], "blockType":
-    "container", "orientation": "horizontal"}, {"blockType": "iterator", "childGroupName":
-    "nodes", "emptyDropTarget": false}], "blockType": "container", "cssClasses": ["indent"],
-    "orientation": "vertical"}, {"text": "}", "style": {"display": "inline-flex"},
-    "blockType": "constant"}], "blockType": "container", "orientation": "vertical"}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "grammar",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "each", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after", "keyword"]},
+    {"style": {"display": "inline-flex"}, "property": "name", "blockType": "input",
+    "cssClasses": ["double-quote", "space-after"]}], "blockType": "container", "orientation":
+    "horizontal"}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
+    "each", "languageName": "MetaGrammar"}}, {"visual": [{"children": [{"style": {"color":
+    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
+    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
+    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children":
+    [{"text": "//", "style": {"display": "inline-flex"}, "blockType": "constant",
+    "cssClasses": ["space-after"]}, {"style": {"display": "inline-flex"}, "property":
+    "text", "blockType": "input"}], "blockType": "container", "cssClasses": ["comment"],
+    "orientation": "horizontal"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "comment", "languageName": "MetaGrammar"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"children": [{"children": [{"text": "grammar", "style": {"display": "inline-flex"},
+    "blockType": "constant", "cssClasses": ["space-after", "keyword"]}, {"style":
+    {"display": "inline-flex"}, "property": "name", "blockType": "input", "cssClasses":
+    ["double-quote", "space-after"]}, {"blockType": "iterator", "childGroupName":
+    "includes", "emptyDropTarget": false}, {"blockType": "iterator", "childGroupName":
+    "visualizes", "emptyDropTarget": false}, {"text": "{", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "container", "orientation": "horizontal"},
+    {"children": [{"children": [{"text": "root", "style": {"display": "inline-flex"},
+    "blockType": "constant", "cssClasses": ["space-after", "keyword"]}, {"text": "=",
+    "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after"]},
+    {"blockType": "iterator", "childGroupName": "root", "emptyDropTarget": false}],
+    "blockType": "container", "orientation": "horizontal"}, {"blockType": "iterator",
+    "childGroupName": "nodes", "emptyDropTarget": false}], "blockType": "container",
+    "cssClasses": ["indent"], "orientation": "vertical"}, {"text": "}", "style": {"display":
+    "inline-flex"}, "blockType": "constant"}], "blockType": "container", "orientation":
+    "vertical"}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
+    "grammar", "languageName": "MetaGrammar"}}, {"visual": [{"children": [{"style":
+    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
+    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
+    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"text": "tags", "style": {"display": "inline-flex"}, "blockType": "constant"},
+    {"blockType": "iterator", "childGroupName": "tags", "emptyDropTarget": false}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "tagList",
     "languageName": "MetaGrammar"}}, {"visual": [{"children": [{"style": {"color":
     "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
     "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
@@ -303,7 +320,12 @@ concise_attributes:
     "+"}, {"defaultNode": {"name": "nodeRefCardinality", "children": {"references":
     [], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
     {"cardinality": "?"}}]}, "language": "MetaGrammar"}, "displayName": "?"}], "categoryCaption":
-    "Kardinalität"}]}, {"type": "metaDefinedTypes"}]}'
+    "Kardinalität"}, {"type": "constant", "blocks": [{"defaultNode": {"name": "tagList",
+    "language": "MetaGrammar"}, "displayName": "Tag List"}, {"defaultNode": {"name":
+    "tag", "language": "MetaGrammar", "properties": {"tag": "keyword"}}, "displayName":
+    "keyword"}, {"defaultNode": {"name": "tag", "language": "MetaGrammar", "properties":
+    {"tag": "indent"}}, "displayName": "indent"}], "categoryCaption": "Tags"}]}, {"type":
+    "metaDefinedTypes"}]}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root_css_classes
   value_before_type_cast: "{activate-keyword,activate-comment,activate-block-outline}"

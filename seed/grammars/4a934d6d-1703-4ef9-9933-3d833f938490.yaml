@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-06-07 11:45:48.278832000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-06-07 12:10:14.578180000 Z
+  value_before_type_cast: 2021-02-12 11:10:37.651999000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
@@ -27,7 +27,8 @@ concise_attributes:
     "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "heading",
     "languageName": "html"}}, {"occurs": "*", "nodeType": {"typeName": "paragraph",
     "languageName": "html"}}]}, {"type": "terminal", "symbol": "</body>"}], "orientation":
-    "vertical"}]}, "head": {"type": "concrete", "attributes": []}, "heading": {"type":
+    "vertical"}]}, "head": {"type": "concrete", "attributes": [{"type": "terminal",
+    "symbol": "<head>"}, {"type": "terminal", "symbol": "</head>"}]}, "heading": {"type":
     "concrete", "attributes": [{"type": "container", "children": [{"type": "terminal",
     "symbol": "<h1>"}, {"base": "string", "name": "text", "type": "property"}, {"type":
     "terminal", "symbol": "</h1>"}], "orientation": "horizontal"}]}, "document": {"type":

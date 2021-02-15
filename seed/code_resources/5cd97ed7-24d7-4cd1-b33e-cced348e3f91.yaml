@@ -47,7 +47,7 @@ concise_attributes:
       "visualisations": {
         "includes": {
           "test": {
-            "type": "visualize",
+            "type": "visualise",
             "attributes": []
           }
         }
