@@ -12,6 +12,7 @@ import {
 import { insertAtAnyParent, appendAtParent } from "./drop-parent";
 import { _cardinalityAllowsInsertion } from "./drop-util";
 import { ErrorCodes } from "./validation-result";
+import { insertAsChild } from "./drop-child";
 
 export const DEFAULT_SMART_DROP_OPTIONS: SmartDropOptions = {
   allowAnyParent: true,
@@ -188,6 +189,7 @@ const algorithms: { [name in SmartDropAlgorithmNames]: SmartDropAlgorithm } = {
   allowReplace: _singleChildReplace,
   allowAppend: appendAtParent,
   allowAnyParent: insertAtAnyParent,
+  allowChild: insertAsChild,
   root: undefined,
 };
 
@@ -195,19 +197,22 @@ const algorithms: { [name in SmartDropAlgorithmNames]: SmartDropAlgorithm } = {
  * Possibly meaningful approach:
  *
  * 0) If applicable: Take the exact match and try to make it happen.
+ *    This is the case for most specifically rendered drop targets.
  * 1) Valid embraces
  * 2) Append after self (if cardinality and immediate type fits)
  * 3) Append after any parent (if cardinality and immediate type fits)
+ * 4) Insert as child (if cardinality and immediate type fits)
  *
  * TODO: This order should probably be flexible
  *
  * Basic rule: Do not build invalid trees according to cardinality. These
- * are errors that can not be fixed.
+ * are errors that can not be properly fixed by the end user.
  *
  * Edge cases that require human intervention:
  * * In an SQL SELECT statement like `SELECT col` a drop of a function like
  *   `COUNT` on `col` could either mean "add this COUNT to the list" or
- *   "COUNT(col)"
+ *   "COUNT(col)". This is solved by having "prepend" and "append" areas
+ +   as part of the drop targets.
  *
  * @param validator The rules that must hold after the drop has been placed
  * @param tree The tree to modify
@@ -256,9 +261,14 @@ export function smartDropLocation(
       runAlgorithm("allowAppend");
     }
 
-    // Possibly all insertion options
+    // Possibly all insertion that walk up the tree options
     if (options.allowAnyParent) {
       runAlgorithm("allowAnyParent");
+    }
+
+    // Possibly all insertion options that walk down the tree
+    if (options.allowChild) {
+      runAlgorithm("allowChild");
     }
 
     return toReturn;
