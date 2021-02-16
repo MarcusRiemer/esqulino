@@ -12,7 +12,6 @@ import {
 import { insertAtAnyParent, appendAtParent } from "./drop-parent";
 import { _cardinalityAllowsInsertion } from "./drop-util";
 import { ErrorCodes } from "./validation-result";
-import { insertAsChild } from "./drop-child";
 
 export const DEFAULT_SMART_DROP_OPTIONS: SmartDropOptions = {
   allowAnyParent: true,
@@ -189,7 +188,6 @@ const algorithms: { [name in SmartDropAlgorithmNames]: SmartDropAlgorithm } = {
   allowReplace: _singleChildReplace,
   allowAppend: appendAtParent,
   allowAnyParent: insertAtAnyParent,
-  allowChild: insertAsChild,
   root: undefined,
 };
 
@@ -264,11 +262,6 @@ export function smartDropLocation(
     // Possibly all insertion that walk up the tree options
     if (options.allowAnyParent) {
       runAlgorithm("allowAnyParent");
-    }
-
-    // Possibly all insertion options that walk down the tree
-    if (options.allowChild) {
-      runAlgorithm("allowChild");
     }
 
     return toReturn;
