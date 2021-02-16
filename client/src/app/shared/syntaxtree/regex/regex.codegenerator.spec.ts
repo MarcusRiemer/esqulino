@@ -30,7 +30,7 @@ export function verifyFiles<T>(
  */
 function emitTree(astDesc: NodeDescription, emitProgressCallback = false) {
   const ast = new Tree(astDesc).rootNode;
-  const codeGen = new CodeGenerator(REGEX_CONVERTER, []);
+  const codeGen = new CodeGenerator(REGEX_CONVERTER);
 
   return codeGen.emit(ast);
 }

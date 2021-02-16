@@ -17,7 +17,8 @@ describe("Codegeneration", () => {
     ]);
 
     // Check whether this converter exist (and no others)
-    expect(codeGen.hasExplicitConverter(fooBar)).toBeTruthy();
+    expect(codeGen.hasExplicitConverter(fooBar)).toBe(true);
+    expect(codeGen.hasImplicitConverter(fooBar)).toBe(false);
     expect(() =>
       codeGen.getConverter({ languageName: "phantasy", typeName: "bar" })
     ).toThrowError();
@@ -75,7 +76,7 @@ describe("Codegeneration", () => {
     ];
 
     // Run the codegenerator
-    const codeGen = new CodeGenerator(desc, [state]);
+    const codeGen = new CodeGenerator(desc, {}, [state]);
     const syntaxTree = new Node({ language: "foo", name: "bar" }, undefined);
     codeGen.emit(syntaxTree);
 
@@ -123,7 +124,7 @@ describe("Codegeneration", () => {
     ];
 
     // Run the codegenerator
-    const codeGen = new CodeGenerator(desc, [stateA, stateB]);
+    const codeGen = new CodeGenerator(desc, {}, [stateA, stateB]);
     const syntaxTree = new Node({ language: "foo", name: "bar" }, undefined);
     codeGen.emit(syntaxTree);
 

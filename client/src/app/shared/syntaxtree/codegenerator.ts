@@ -1,4 +1,6 @@
 import { BlattWerkzeugError } from "../blattwerkzeug-error";
+import { codeGeneratorFromGrammar } from "./codegenerator-automatic";
+import { NamedLanguages, VisualisedLanguages } from "./grammar.description";
 import { Node, Tree, QualifiedTypeName } from "./syntaxtree";
 
 export enum OutputSeparator {
@@ -44,6 +46,10 @@ export class CodeGeneratorProcess<TState extends {}> {
     node: Node,
     sep = OutputSeparator.NONE
   ) {
+    if (compilation === undefined) {
+      throw new BlattWerkzeugError(`Added undefined emitted string`);
+    }
+
     this._generated.push({
       depth: this._currentDepth,
       compilation: compilation,
@@ -72,11 +78,6 @@ export class CodeGeneratorProcess<TState extends {}> {
 
     const converter = this._generator.getConverter(node.qualifiedName);
     converter.init(node, this);
-
-    // Possibly finish generation
-    if (converter.finish) {
-      converter.finish(node, this);
-    }
   }
 
   emit(): string {
@@ -164,12 +165,6 @@ export interface NodeConverter<T extends {}> {
    * This function is called when the node is entered.
    */
   init(node: Node, process: CodeGeneratorProcess<T>): void;
-
-  /**
-   * A possibility to close any unfinished business from the
-   * init-function.
-   */
-  finish?: (node: Node, process: CodeGeneratorProcess<T>) => void;
 }
 
 /**
@@ -183,7 +178,7 @@ export interface NodeConverterRegistration {
 /**
  * Registers callbacks per language per type.
  */
-type RegisteredCallbacks = {
+export type RegisteredCodeGenerators = {
   [langName: string]: { [typeName: string]: NodeConverter<any> };
 };
 
@@ -191,13 +186,18 @@ type RegisteredCallbacks = {
  * Transforms an AST into its compiled string representation.
  */
 export class CodeGenerator {
-  private _callbacks: RegisteredCallbacks = {};
+  private _callbacks: RegisteredCodeGenerators = {};
   private _state?: any;
 
-  constructor(converters: NodeConverterRegistration[], state: any[] = []) {
+  constructor(
+    converters: NodeConverterRegistration[],
+    private types: NamedLanguages | VisualisedLanguages = {},
+    state: any[] = []
+  ) {
     // Merge all the given states into a single object
     this._state = Object.assign({}, ...state);
 
+    // Remember every explicit converter
     converters.forEach((c) => this.registerConverter(c.type, c.converter));
   }
 
@@ -257,11 +257,21 @@ export class CodeGenerator {
   }
 
   /**
+   * @return True, if it would be possible to implicitly generate
+   *         something for the given type.
+   */
+  hasImplicitConverter(t: QualifiedTypeName) {
+    return !!this.types?.[t.languageName]?.[t.typeName];
+  }
+
+  /**
    * @return A converter for the type in question.
    */
-  getConverter(t: QualifiedTypeName) {
+  getConverter(t: QualifiedTypeName): NodeConverter<any> {
+    let err: BlattWerkzeugError | undefined = undefined;
+
     if (!this._callbacks[t.languageName]) {
-      throw new BlattWerkzeugError(
+      err = new BlattWerkzeugError(
         `Language "${
           t.languageName
         }" is unknown to CodeGenerator, available languages are: [${Object.keys(
@@ -270,12 +280,24 @@ export class CodeGenerator {
       );
     }
 
-    if (!this._callbacks[t.languageName][t.typeName]) {
-      throw new BlattWerkzeugError(
+    if (!err && !this._callbacks[t.languageName][t.typeName]) {
+      err = new BlattWerkzeugError(
         `Type "${t.languageName}.${t.typeName}" is unknown to CodeGenerator`
       );
     }
 
-    return this._callbacks[t.languageName][t.typeName];
+    // Try to return an implicit converter if there has been an error
+    if (err) {
+      if (this.hasImplicitConverter(t)) {
+        return {
+          init: (node: Node, process: CodeGeneratorProcess<any>) =>
+            codeGeneratorFromGrammar(this.types, node, process),
+        };
+      } else {
+        throw err;
+      }
+    } else {
+      return this._callbacks[t.languageName][t.typeName];
+    }
   }
 }

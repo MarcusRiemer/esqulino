@@ -59,7 +59,9 @@ function emitTree(astDesc: NodeDescription, emitProgressCallback = false) {
   specCodegenState.emitProgressCallbacks = emitProgressCallback;
 
   const ast = new Tree(astDesc).rootNode;
-  const codeGen = new CodeGenerator(PROGRAM_NODE_CONVERTER, [specCodegenState]);
+  const codeGen = new CodeGenerator(PROGRAM_NODE_CONVERTER, {}, [
+    specCodegenState,
+  ]);
 
   return codeGen.emit(ast);
 }

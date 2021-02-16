@@ -32,6 +32,7 @@ export class Language {
     this._name = desc.name;
     this._codeGenerator = new CodeGenerator(
       desc.emitters,
+      {},
       desc.codeGeneratorState
     );
     this._validator = new Validator(desc.validators);
