@@ -393,6 +393,84 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       });
     });
 
+    it(`Empty concrete type with tag`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          nodes: [
+            {
+              language: "MetaGrammar",
+              name: "concreteNode",
+              properties: {
+                languageName: "l",
+                typeName: "t",
+              },
+              children: {
+                tags: [
+                  {
+                    language: "MetaGrammar",
+                    name: "tag",
+                    properties: {
+                      name: "t1",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
+        types: { l: { t: { type: "concrete", attributes: [], tags: ["t1"] } } },
+      });
+    });
+
+    it(`Empty concrete type with multiple tags`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          nodes: [
+            {
+              language: "MetaGrammar",
+              name: "concreteNode",
+              properties: { languageName: "l", typeName: "t" },
+              children: {
+                tags: [
+                  {
+                    language: "MetaGrammar",
+                    name: "tag",
+                    properties: { name: "t1" },
+                  },
+                  {
+                    language: "MetaGrammar",
+                    name: "tag",
+                    properties: { name: "t2" },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
+        types: {
+          l: { t: { type: "concrete", attributes: [], tags: ["t1", "t2"] } },
+        },
+      });
+    });
+
     it(`Duplicate empty concrete type`, () => {
       const n: NodeDescription = {
         language: "MetaGrammar",
@@ -1040,6 +1118,71 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
           },
         ],
         orientation: "vertical",
+      };
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
+        types: {
+          l: { t: { type: "concrete", attributes: [containerDesc] } },
+        },
+      });
+    });
+
+    it(`Type with empty container with indent-tags`, () => {
+      const g: GrammarDocument = readFromNode({
+        language: "MetaGrammar",
+        name: "grammar",
+        children: {
+          nodes: [
+            {
+              language: "MetaGrammar",
+              name: "concreteNode",
+              properties: {
+                languageName: "l",
+                typeName: "t",
+              },
+              children: {
+                attributes: [
+                  {
+                    language: "MetaGrammar",
+                    name: "container",
+                    children: {
+                      orientation: [
+                        {
+                          language: "MetaGrammar",
+                          name: "orientation",
+                          properties: {
+                            orientation: "horizontal",
+                          },
+                        },
+                      ],
+                      attributes: [],
+                      tags: [
+                        {
+                          language: "MetaGrammar",
+                          name: "tag",
+                          properties: {
+                            name: "t1",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      });
+
+      const containerDesc: NodeVisualContainerDescription = {
+        type: "container",
+        children: [],
+        tags: ["t1"],
+        orientation: "horizontal",
       };
 
       expect(g).toEqual({

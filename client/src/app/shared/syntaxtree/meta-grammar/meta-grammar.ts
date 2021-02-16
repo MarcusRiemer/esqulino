@@ -24,20 +24,28 @@ import { OccursDescription, OccursString } from "../occurs.description";
 import { BlattWerkzeugError } from "../../blattwerkzeug-error";
 
 export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
-  return {
+  const toReturn: ReturnType<typeof convertProperty> = {
     type: "property",
     base: attrNode.properties["base"] as any,
     name: attrNode.properties["name"],
   };
+
+  possiblyAddTags(attrNode, toReturn);
+
+  return toReturn;
 }
 
 export function convertInterpolate(
   attrNode: Node
 ): NodeInterpolatePropertyDescription {
-  return {
+  const toReturn: ReturnType<typeof convertInterpolate> = {
     type: "interpolate",
     name: attrNode.properties["name"],
   };
+
+  possiblyAddTags(attrNode, toReturn);
+
+  return toReturn;
 }
 
 /**
@@ -52,6 +60,8 @@ export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
   if (attrNode.properties["name"]) {
     toReturn.name = attrNode.properties["name"];
   }
+
+  possiblyAddTags(attrNode, toReturn);
 
   return toReturn;
 }
@@ -129,6 +139,8 @@ export function convertEach(
     name: attrNode.properties["name"],
   };
 
+  possiblyAddTags(attrNode, toReturn);
+
   return toReturn;
 }
 
@@ -147,7 +159,18 @@ export function convertContainer(
     readAttributes(subAttrNode, toReturn.children);
   });
 
+  possiblyAddTags(attrNode, toReturn);
+
   return toReturn;
+}
+
+export function possiblyAddTags(toParse: Node, target: { tags?: string[] }) {
+  const tags = toParse
+    .getChildrenInCategory("tags")
+    .map((t) => t.properties["name"]);
+  if (tags.length > 0) {
+    target.tags = tags;
+  }
 }
 
 /**
@@ -291,6 +314,8 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
               type: "concrete",
               attributes: [],
             };
+
+            possiblyAddTags(n, concreteNode);
 
             n.getChildrenInCategory("attributes").forEach((a) =>
               readAttributes(a, concreteNode.attributes)
