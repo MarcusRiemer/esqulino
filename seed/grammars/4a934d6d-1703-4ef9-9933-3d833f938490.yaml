@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-06-07 11:45:48.278832000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-02-12 11:10:37.651999000 Z
+  value_before_type_cast: 2021-02-16 11:25:04.993239000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
@@ -23,20 +23,26 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: types
   value_before_type_cast: '{"html": {"body": {"type": "concrete", "attributes": [{"type":
-    "container", "children": [{"type": "terminal", "symbol": "<body>"}, {"name": "elements",
-    "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "heading",
-    "languageName": "html"}}, {"occurs": "*", "nodeType": {"typeName": "paragraph",
-    "languageName": "html"}}]}, {"type": "terminal", "symbol": "</body>"}], "orientation":
+    "container", "children": [{"type": "terminal", "symbol": "<body>"}, {"tags": ["indent"],
+    "type": "container", "children": [{"name": "elements", "type": "allowed", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "heading", "languageName": "html"}},
+    {"occurs": "*", "nodeType": {"typeName": "paragraph", "languageName": "html"}}]}],
+    "orientation": "vertical"}, {"type": "terminal", "symbol": "</body>"}], "orientation":
     "vertical"}]}, "head": {"type": "concrete", "attributes": [{"type": "terminal",
     "symbol": "<head>"}, {"type": "terminal", "symbol": "</head>"}]}, "heading": {"type":
     "concrete", "attributes": [{"type": "container", "children": [{"type": "terminal",
     "symbol": "<h1>"}, {"base": "string", "name": "text", "type": "property"}, {"type":
     "terminal", "symbol": "</h1>"}], "orientation": "horizontal"}]}, "document": {"type":
-    "concrete", "attributes": [{"type": "container", "children": [{"type": "terminal",
-    "symbol": "<html>"}, {"name": "head", "type": "sequence", "nodeTypes": [{"occurs":
-    "?", "nodeType": {"typeName": "head", "languageName": "html"}}]}, {"name": "body",
-    "type": "sequence", "nodeTypes": [{"occurs": "?", "nodeType": {"typeName": "body",
-    "languageName": "html"}}]}, {"type": "terminal", "symbol": "</html>"}], "orientation":
+    "concrete", "attributes": [{"type": "container", "children": [{"type": "container",
+    "children": [{"type": "terminal", "symbol": "<"}, {"tags": ["keyword"], "type":
+    "terminal", "symbol": "html"}, {"type": "terminal", "symbol": ">"}], "orientation":
+    "horizontal"}, {"tags": ["indent"], "type": "container", "children": [{"name":
+    "head", "type": "sequence", "nodeTypes": [{"occurs": "?", "nodeType": {"typeName":
+    "head", "languageName": "html"}}]}, {"name": "body", "type": "sequence", "nodeTypes":
+    [{"occurs": "?", "nodeType": {"typeName": "body", "languageName": "html"}}]}],
+    "orientation": "vertical"}, {"type": "container", "children": [{"type": "terminal",
+    "symbol": "</"}, {"tags": ["keyword"], "type": "terminal", "symbol": "html"},
+    {"type": "terminal", "symbol": ">"}], "orientation": "horizontal"}], "orientation":
     "vertical"}]}, "paragraph": {"type": "concrete", "attributes": [{"type": "container",
     "children": [{"type": "terminal", "symbol": "<p>"}, {"base": "string", "name":
     "text", "type": "property"}, {"type": "terminal", "symbol": "</p>"}], "orientation":

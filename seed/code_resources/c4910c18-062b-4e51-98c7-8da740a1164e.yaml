@@ -14,10 +14,17 @@ concise_attributes:
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "document", "languageName":
     "html"}}], "nodes": [{"name": "concreteNode", "children": {"attributes": [{"name":
-    "container", "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "<html>"}}, {"name": "children", "children": {"references":
-    [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "head", "languageName":
+    "container", "children": {"tags": [], "attributes": [{"name": "container", "children":
+    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "<"}}, {"name": "terminal", "children": {"tags": [{"name": "tag", "language":
+    "MetaGrammar", "properties": {"name": "keyword"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": "html"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": ">"}}], "orientation": [{"name": "orientation", "language":
+    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"},
+    {"name": "container", "children": {"tags": [{"name": "tag", "language": "MetaGrammar",
+    "properties": {"name": "indent"}}], "attributes": [{"name": "children", "children":
+    {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "head", "languageName":
     "html"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
     "properties": {"cardinality": "?"}}]}, "language": "MetaGrammar"}]}, "language":
     "MetaGrammar", "properties": {"base": "sequence", "name": "head"}}, {"name": "children",
@@ -26,8 +33,15 @@ concise_attributes:
     "body", "languageName": "html"}}], "cardinality": [{"name": "knownCardinality",
     "language": "MetaGrammar", "properties": {"cardinality": "?"}}]}, "language":
     "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
-    "name": "body"}}, {"name": "terminal", "language": "MetaGrammar", "properties":
-    {"symbol": "</html>"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "name": "body"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}, {"name":
+    "container", "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "</"}}, {"name": "terminal", "children": {"tags": [{"name":
+    "tag", "language": "MetaGrammar", "properties": {"name": "keyword"}}]}, "language":
+    "MetaGrammar", "properties": {"symbol": "html"}}, {"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": ">"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
+    "MetaGrammar"}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
     "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]}, "language":
     "MetaGrammar", "properties": {"typeName": "document", "languageName": "html"}},
     {"name": "concreteNode", "children": {"attributes": [{"name": "terminal", "language":
@@ -36,40 +50,44 @@ concise_attributes:
     "properties": {"typeName": "head", "languageName": "html"}}, {"name": "concreteNode",
     "children": {"attributes": [{"name": "container", "children": {"attributes": [{"name":
     "terminal", "language": "MetaGrammar", "properties": {"symbol": "<body>"}}, {"name":
-    "children", "children": {"references": [{"name": "nodeRefCardinality", "children":
-    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
-    {"typeName": "heading", "languageName": "html"}}], "cardinality": [{"name": "knownCardinality",
-    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
-    "MetaGrammar"}, {"name": "nodeRefCardinality", "children": {"references": [{"name":
-    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "paragraph",
+    "container", "children": {"tags": [{"name": "tag", "language": "MetaGrammar",
+    "properties": {"name": "indent"}}], "attributes": [{"name": "children", "children":
+    {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "heading",
     "languageName": "html"}}], "cardinality": [{"name": "knownCardinality", "language":
-    "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]},
-    "language": "MetaGrammar", "properties": {"base": "allowed", "name": "elements"}},
-    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "</body>"}}],
+    "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"},
+    {"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "paragraph", "languageName":
+    "html"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
+    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language":
+    "MetaGrammar", "properties": {"base": "allowed", "name": "elements"}}], "orientation":
+    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
+    "vertical"}}]}, "language": "MetaGrammar"}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "</body>"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "vertical"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName": "body",
+    "languageName": "html"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "container", "children": {"attributes": [{"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": "<h1>"}}, {"name": "property", "language":
+    "MetaGrammar", "properties": {"base": "string", "name": "text"}}, {"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "</h1>"}}], "orientation":
+    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
+    "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "heading", "languageName": "html"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "container", "children": {"attributes": [{"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "<p>"}}, {"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "text"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "</p>"}}],
     "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
     {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
-    "properties": {"typeName": "body", "languageName": "html"}}, {"name": "concreteNode",
-    "children": {"attributes": [{"name": "container", "children": {"attributes": [{"name":
-    "terminal", "language": "MetaGrammar", "properties": {"symbol": "<h1>"}}, {"name":
-    "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
-    "text"}}, {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol":
-    "</h1>"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
-    "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]},
-    "language": "MetaGrammar", "properties": {"typeName": "heading", "languageName":
-    "html"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "container",
-    "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
-    {"symbol": "<p>"}}, {"name": "property", "language": "MetaGrammar", "properties":
-    {"base": "string", "name": "text"}}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "</p>"}}], "orientation": [{"name": "orientation", "language":
-    "MetaGrammar", "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]},
-    "language": "MetaGrammar", "properties": {"typeName": "paragraph", "languageName":
-    "html"}}]}, "language": "MetaGrammar", "properties": {"name": "html"}}'
+    "properties": {"typeName": "paragraph", "languageName": "html"}}]}, "language":
+    "MetaGrammar", "properties": {"name": "html"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-06-07 11:47:56.787287000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-02-12 11:10:37.137009000 Z
+  value_before_type_cast: 2021-02-16 11:25:04.484553000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -90,38 +108,81 @@ concise_attributes:
                 "orientation": "vertical",
                 "children": [
                   {
-                    "type": "terminal",
-                    "symbol": "<html>"
-                  },
-                  {
-                    "type": "sequence",
-                    "name": "head",
-                    "nodeTypes": [
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
                       {
-                        "nodeType": {
-                          "languageName": "html",
-                          "typeName": "head"
-                        },
-                        "occurs": "?"
+                        "type": "terminal",
+                        "symbol": "<"
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": "html",
+                        "tags": [
+                          "keyword"
+                        ]
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": ">"
                       }
                     ]
                   },
                   {
-                    "type": "sequence",
-                    "name": "body",
-                    "nodeTypes": [
+                    "type": "container",
+                    "orientation": "vertical",
+                    "children": [
                       {
-                        "nodeType": {
-                          "languageName": "html",
-                          "typeName": "body"
-                        },
-                        "occurs": "?"
+                        "type": "sequence",
+                        "name": "head",
+                        "nodeTypes": [
+                          {
+                            "nodeType": {
+                              "languageName": "html",
+                              "typeName": "head"
+                            },
+                            "occurs": "?"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "sequence",
+                        "name": "body",
+                        "nodeTypes": [
+                          {
+                            "nodeType": {
+                              "languageName": "html",
+                              "typeName": "body"
+                            },
+                            "occurs": "?"
+                          }
+                        ]
                       }
+                    ],
+                    "tags": [
+                      "indent"
                     ]
                   },
                   {
-                    "type": "terminal",
-                    "symbol": "</html>"
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "terminal",
+                        "symbol": "</"
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": "html",
+                        "tags": [
+                          "keyword"
+                        ]
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": ">"
+                      }
+                    ]
                   }
                 ]
               }
@@ -152,23 +213,32 @@ concise_attributes:
                     "symbol": "<body>"
                   },
                   {
-                    "type": "allowed",
-                    "name": "elements",
-                    "nodeTypes": [
+                    "type": "container",
+                    "orientation": "vertical",
+                    "children": [
                       {
-                        "nodeType": {
-                          "languageName": "html",
-                          "typeName": "heading"
-                        },
-                        "occurs": "*"
-                      },
-                      {
-                        "nodeType": {
-                          "languageName": "html",
-                          "typeName": "paragraph"
-                        },
-                        "occurs": "*"
+                        "type": "allowed",
+                        "name": "elements",
+                        "nodeTypes": [
+                          {
+                            "nodeType": {
+                              "languageName": "html",
+                              "typeName": "heading"
+                            },
+                            "occurs": "*"
+                          },
+                          {
+                            "nodeType": {
+                              "languageName": "html",
+                              "typeName": "paragraph"
+                            },
+                            "occurs": "*"
+                          }
+                        ]
                       }
+                    ],
+                    "tags": [
+                      "indent"
                     ]
                   },
                   {

@@ -13,15 +13,15 @@ concise_attributes:
   name: ast
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "document", "languageName":
-    "css"}}], "nodes": [{"name": "concreteNode", "language": "MetaGrammar", "properties":
-    {"typeName": "document", "languageName": "css"}}]}, "language": "MetaGrammar",
-    "properties": {"name": "css"}}'
+    "css"}}], "nodes": [{"name": "concreteNode", "children": {"tags": []}, "language":
+    "MetaGrammar", "properties": {"typeName": "document", "languageName": "css"}}]},
+    "language": "MetaGrammar", "properties": {"name": "css"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-06-07 11:48:04.373202000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-06-07 11:50:03.835813000 Z
+  value_before_type_cast: 2021-02-15 16:03:02.605151000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
