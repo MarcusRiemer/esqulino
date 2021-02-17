@@ -186,98 +186,213 @@ describe("Codegeneration", () => {
     expect(outer.map((c) => c.compilation)).toEqual(["1", "2"]);
   });
 
-  it("indent of first, single item", () => {
+  describe(`leading and ending seperators`, () => {
     const codeGen = new CodeGenerator([]);
-    const process = new CodeGeneratorProcess(codeGen);
     const tree = new Tree({
       language: "l",
       name: "r",
     });
 
-    process.indent(() => {
+    it(`␣a`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.SPACE_BEFORE
+      );
+      expect(process.emit()).toEqual("a");
+    });
+
+    it(`a␣`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.SPACE_AFTER
+      );
+      expect(process.emit()).toEqual("a");
+    });
+
+    it(`⏎a`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_BEFORE
+      );
+      expect(process.emit()).toEqual("a");
+    });
+
+    it(`a⏎`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_BEFORE
+      );
+      expect(process.emit()).toEqual("a");
+    });
+  });
+
+  describe(`multiple separators`, () => {
+    const codeGen = new CodeGenerator([]);
+    const tree = new Tree({
+      language: "l",
+      name: "r",
+    });
+
+    it(`␣a␣ (single root items shouldn't have spaces)`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.SPACE_AFTER | OutputSeparator.SPACE_BEFORE
+      );
+
+      expect(process.emit()).toEqual("a");
+    });
+
+    it(`a␣b␣c`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment("a", tree.rootNode);
+      process.addConvertedFragment(
+        "b",
+        tree.rootNode,
+        OutputSeparator.SPACE_AFTER | OutputSeparator.SPACE_BEFORE
+      );
+      process.addConvertedFragment("c", tree.rootNode);
+
+      expect(process.emit()).toEqual("a b c");
+    });
+
+    it(`⏎a⏎ (single root items shouldn't have spaces)`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_AFTER | OutputSeparator.NEW_LINE_BEFORE
+      );
+
+      expect(process.emit()).toEqual("a");
+    });
+
+    it(`a⏎b⏎c`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment("a", tree.rootNode);
+      process.addConvertedFragment(
+        "b",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_AFTER | OutputSeparator.NEW_LINE_BEFORE
+      );
+      process.addConvertedFragment("c", tree.rootNode);
+
+      expect(process.emit()).toEqual("a\nb\nc");
+    });
+
+    it(`Mixing spaces and newlines is forbidden`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      expect(() => {
+        process.addConvertedFragment(
+          "b",
+          tree.rootNode,
+          OutputSeparator.NEW_LINE_AFTER |
+            OutputSeparator.NEW_LINE_BEFORE |
+            OutputSeparator.SPACE_BEFORE |
+            OutputSeparator.SPACE_AFTER
+        );
+      }).toThrowError();
+    });
+  });
+
+  describe(`indent`, () => {
+    const codeGen = new CodeGenerator([]);
+    const tree = new Tree({
+      language: "l",
+      name: "r",
+    });
+
+    it("of first, single item", () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.indent(() => {
+        process.addConvertedFragment(
+          "a",
+          tree.rootNode,
+          OutputSeparator.NEW_LINE_AFTER
+        );
+      });
+
+      expect(process.emit()).toEqual("  a");
+    });
+
+    it("of first item with follow up", () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.indent(() => {
+        process.addConvertedFragment(
+          "a",
+          tree.rootNode,
+          OutputSeparator.NEW_LINE_AFTER
+        );
+        process.addConvertedFragment(
+          "b",
+          tree.rootNode,
+          OutputSeparator.NEW_LINE_AFTER
+        );
+      });
+
+      expect(process.emit()).toEqual("  a\n  b");
+    });
+
+    it("from the second line on", () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
       process.addConvertedFragment(
         "a",
         tree.rootNode,
         OutputSeparator.NEW_LINE_AFTER
       );
+
+      process.indent(() => {
+        process.addConvertedFragment("b", tree.rootNode);
+      });
+
+      expect(process.emit()).toEqual("a\n  b");
     });
 
-    expect(process.emit()).toEqual("  a");
-  });
+    it("back to depth original on later new line", () => {
+      const process = new CodeGeneratorProcess(codeGen);
 
-  it("indent of first item with follow up", () => {
-    const codeGen = new CodeGenerator([]);
-    const process = new CodeGeneratorProcess(codeGen);
-    const tree = new Tree({
-      language: "l",
-      name: "r",
-    });
-
-    process.indent(() => {
       process.addConvertedFragment(
         "a",
         tree.rootNode,
         OutputSeparator.NEW_LINE_AFTER
       );
+
+      process.indent(() => {
+        process.addConvertedFragment(
+          "b",
+          tree.rootNode,
+          OutputSeparator.NEW_LINE_AFTER
+        );
+      });
+
       process.addConvertedFragment(
-        "b",
+        "c",
         tree.rootNode,
         OutputSeparator.NEW_LINE_AFTER
       );
+
+      expect(process.emit()).toEqual("a\n  b\nc");
     });
-
-    expect(process.emit()).toEqual("  a\n  b");
-  });
-
-  it("indents from the second line on", () => {
-    const codeGen = new CodeGenerator([]);
-    const process = new CodeGeneratorProcess(codeGen);
-    const tree = new Tree({
-      language: "l",
-      name: "r",
-    });
-
-    process.addConvertedFragment(
-      "a",
-      tree.rootNode,
-      OutputSeparator.NEW_LINE_AFTER
-    );
-
-    process.indent(() => {
-      process.addConvertedFragment("b", tree.rootNode);
-    });
-
-    expect(process.emit()).toEqual("a\n  b");
-  });
-
-  it("indents back to depth original on later new line", () => {
-    const codeGen = new CodeGenerator([]);
-    const process = new CodeGeneratorProcess(codeGen);
-    const tree = new Tree({
-      language: "l",
-      name: "r",
-    });
-
-    process.addConvertedFragment(
-      "a",
-      tree.rootNode,
-      OutputSeparator.NEW_LINE_AFTER
-    );
-
-    process.indent(() => {
-      process.addConvertedFragment(
-        "b",
-        tree.rootNode,
-        OutputSeparator.NEW_LINE_AFTER
-      );
-    });
-
-    process.addConvertedFragment(
-      "c",
-      tree.rootNode,
-      OutputSeparator.NEW_LINE_AFTER
-    );
-
-    expect(process.emit()).toEqual("a\n  b\nc");
   });
 });

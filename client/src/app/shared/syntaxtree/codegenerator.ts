@@ -50,6 +50,12 @@ export class CodeGeneratorProcess<TState extends {}> {
 
   /**
    * Adds some compiled node to the current result.
+   *
+   * @param compilation The compiled string that was generated from the node
+   * @param node The node this fragment was generated from. This is useful when
+   *             debugging generator code or to provide source maps.
+   * @param sep Separators that should be applied to the fragment. May not mix
+   *            spaces and newlines.
    */
   addConvertedFragment(
     compilation: string,
@@ -74,6 +80,16 @@ export class CodeGeneratorProcess<TState extends {}> {
     if (this._generated.length === 0 && this._currentDepth > 0) {
       compilation =
         CodeGeneratorProcess.INDENT.repeat(this._currentDepth) + compilation;
+    }
+
+    // Mixing newlines and space options is not allowed
+    if ((sep & ANY_SPACE) > 0 && (sep & ANY_NEW_LINE) > 0) {
+      const msg = `Attempted to mix spaces and newlines during code generation`;
+      throw new BlattWerkzeugError(msg, {
+        compilation,
+        node,
+        sep,
+      });
     }
 
     const newNode = Object.freeze({
