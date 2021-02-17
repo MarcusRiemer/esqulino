@@ -5,7 +5,7 @@ import {
 import { Node } from "../syntaxtree";
 
 /**
- * Converts a RegEx-AST to a properly indented stringified representation.
+ * Converts a RegEx-AST to a properly stringified representation.
  */
 export const REGEX_CONVERTER: NodeConverterRegistration[] = [
   {
@@ -59,13 +59,11 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const characters = node.getChildrenInCategory("characters");
         process.addConvertedFragment(`[`, node);
-        process.indent(() => {
-          characters.forEach((c, i, a) => {
-            process.generateNode(c);
-            if (i < a.length - 1) {
-              process.addConvertedFragment(``, node);
-            }
-          });
+        characters.forEach((c, i, a) => {
+          process.generateNode(c);
+          if (i < a.length - 1) {
+            process.addConvertedFragment(``, node);
+          }
         });
         process.addConvertedFragment(`]`, node);
       },
@@ -91,13 +89,11 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const subexpressions = node.getChildrenInCategory("subexpressions");
         process.addConvertedFragment(`(`, node);
-        process.indent(() => {
-          subexpressions.forEach((c, i, a) => {
-            process.generateNode(c);
-            if (i < a.length - 1) {
-              process.addConvertedFragment(``, node);
-            }
-          });
+        subexpressions.forEach((c, i, a) => {
+          process.generateNode(c);
+          if (i < a.length - 1) {
+            process.addConvertedFragment(``, node);
+          }
         });
         process.addConvertedFragment(`)`, node);
       },
@@ -126,13 +122,12 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const bounds = node.getChildrenInCategory("bounds");
         process.addConvertedFragment(`{`, node);
-        process.indent(() => {
-          bounds.forEach((c, i, a) => {
-            process.generateNode(c);
-            if (i < a.length - 1) {
-              process.addConvertedFragment(`, `, node);
-            }
-          });
+
+        bounds.forEach((c, i, a) => {
+          process.generateNode(c);
+          if (i < a.length - 1) {
+            process.addConvertedFragment(`, `, node);
+          }
         });
         process.addConvertedFragment(`}`, node);
       },

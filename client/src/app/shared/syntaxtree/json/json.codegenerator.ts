@@ -118,7 +118,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
           process.addConvertedFragment(
             `}`,
             node,
-            OutputSeparator.NEW_LINE_BEFORE
+            OutputSeparator.NEW_LINE_BEFORE | OutputSeparator.NEW_LINE_AFTER
           );
         }
       },

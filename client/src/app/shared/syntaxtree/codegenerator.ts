@@ -5,11 +5,18 @@ import { Node, Tree, QualifiedTypeName } from "./syntaxtree";
 
 export enum OutputSeparator {
   NONE,
-  SPACE_BEFORE,
-  SPACE_AFTER,
-  NEW_LINE_BEFORE,
-  NEW_LINE_AFTER,
+  SPACE_BEFORE = 1 << 0,
+  SPACE_AFTER = 1 << 2,
+  NEW_LINE_BEFORE = 1 << 3,
+  NEW_LINE_AFTER = 1 << 4,
 }
+
+const ANY_BEFORE =
+  OutputSeparator.SPACE_BEFORE | OutputSeparator.NEW_LINE_BEFORE;
+const ANY_AFTER = OutputSeparator.SPACE_AFTER | OutputSeparator.NEW_LINE_AFTER;
+const ANY_SPACE = OutputSeparator.SPACE_BEFORE | OutputSeparator.SPACE_AFTER;
+const ANY_NEW_LINE =
+  OutputSeparator.NEW_LINE_BEFORE | OutputSeparator.NEW_LINE_AFTER;
 
 /**
  * Represents a node that has been compiled into its string
@@ -84,7 +91,9 @@ export class CodeGeneratorProcess<TState extends {}> {
 
   /**
    * Executes the given function in a context where every call to @see addConvertedFragment
-   * is done at an extra level of indentation.
+   * is done at an extra level of indentation. Also ensures that the very last fragment that
+   * is emitted sets a new line afterwards, otherwise the next level of indentation could
+   * logically continue on the same level (if it wouldn't start a newline).
    */
   indent(indentedCalls: () => void) {
     this._currentDepth++;
@@ -92,8 +101,13 @@ export class CodeGeneratorProcess<TState extends {}> {
 
     if (changes.length > 0) {
       const lastChange = changes[changes.length - 1];
-      if (lastChange.sep !== OutputSeparator.NEW_LINE_AFTER) {
-        //debugger;
+      // "Smuggle" in a new line if the indentation doesn't end with a newline
+      if ((lastChange.sep & OutputSeparator.NEW_LINE_AFTER) == 0) {
+        const index = this._generated.indexOf(lastChange);
+        this._generated.splice(index, 1, {
+          ...lastChange,
+          sep: lastChange.sep | OutputSeparator.NEW_LINE_AFTER,
+        });
       }
     }
 
@@ -146,15 +160,19 @@ export class CodeGeneratorProcess<TState extends {}> {
 
       // Are these first or last elements with irrelevant separators?
       const firstBefore =
-        gen == first &&
-        (gen.sep == OutputSeparator.NEW_LINE_BEFORE ||
-          gen.sep == OutputSeparator.SPACE_BEFORE);
+        gen === first &&
+        ((gen.sep & OutputSeparator.NEW_LINE_BEFORE) > 0 ||
+          (gen.sep & OutputSeparator.SPACE_BEFORE) > 0);
       const lastAfter =
         gen == last &&
-        (gen.sep == OutputSeparator.NEW_LINE_AFTER ||
-          gen.sep == OutputSeparator.SPACE_AFTER);
-      if (firstBefore || lastAfter) {
-        finalSep = OutputSeparator.NONE;
+        ((gen.sep & OutputSeparator.NEW_LINE_AFTER) > 0 ||
+          (gen.sep & OutputSeparator.SPACE_AFTER) > 0);
+      if (firstBefore) {
+        finalSep &= ~ANY_BEFORE;
+      }
+
+      if (lastAfter) {
+        finalSep &= ~ANY_AFTER;
       }
 
       // Does the seperator match the previous separator?
@@ -163,32 +181,40 @@ export class CodeGeneratorProcess<TState extends {}> {
         let prevSep = previous.sep;
         // Would this lead to two newlines?
         const doubleNewline =
-          prevSep == OutputSeparator.NEW_LINE_AFTER &&
-          finalSep == OutputSeparator.NEW_LINE_BEFORE;
+          (prevSep & OutputSeparator.NEW_LINE_AFTER) > 0 &&
+          (finalSep & OutputSeparator.NEW_LINE_BEFORE) > 0;
         // Or to two spaces?
         const doubleSpace =
-          prevSep == OutputSeparator.SPACE_AFTER &&
-          finalSep == OutputSeparator.SPACE_BEFORE;
+          (prevSep & OutputSeparator.SPACE_AFTER) > 0 &&
+          (finalSep & OutputSeparator.SPACE_BEFORE) > 0;
 
-        // In that case we disregard this separator
-        if (doubleNewline || doubleSpace) {
-          finalSep = OutputSeparator.NONE;
+        // In that case we disregard this leading separator
+        if (doubleNewline) {
+          finalSep &= ~OutputSeparator.NEW_LINE_BEFORE;
+        }
+        if (doubleSpace) {
+          finalSep &= ~OutputSeparator.SPACE_BEFORE;
         }
       }
 
       // Applying the separator and possibly indentation (for newlines)
-      switch (finalSep) {
-        case OutputSeparator.NEW_LINE_BEFORE:
-          return "\n" + gen.compilation;
-        case OutputSeparator.NEW_LINE_AFTER:
-          return gen.compilation + "\n";
-        case OutputSeparator.SPACE_BEFORE:
-          return " " + gen.compilation;
-        case OutputSeparator.SPACE_AFTER:
-          return gen.compilation + " ";
-        case OutputSeparator.NONE:
-          return gen.compilation;
+      let result = gen.compilation;
+
+      if ((finalSep & OutputSeparator.SPACE_BEFORE) > 0) {
+        result = " " + result;
       }
+      if ((finalSep & OutputSeparator.SPACE_AFTER) > 0) {
+        result += " ";
+      }
+
+      if ((finalSep & OutputSeparator.NEW_LINE_BEFORE) > 0) {
+        result = "\n" + result;
+      }
+      if ((finalSep & OutputSeparator.NEW_LINE_AFTER) > 0) {
+        result += "\n";
+      }
+
+      return result;
     };
 
     const INDENT = CodeGeneratorProcess.INDENT;
