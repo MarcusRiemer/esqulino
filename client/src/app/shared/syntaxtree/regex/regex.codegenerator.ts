@@ -16,13 +16,11 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
     converter: {
       init: function (node: Node, process: CodeGeneratorProcess<{}>) {
         const subexpressions = node.getChildrenInCategory("subexpressions");
-        process.indent(() => {
-          subexpressions.forEach((c, i, a) => {
-            process.generateNode(c);
-            if (i < a.length - 1) {
-              process.addConvertedFragment(``, node);
-            }
-          });
+        subexpressions.forEach((c, i, a) => {
+          process.generateNode(c);
+          if (i < a.length - 1) {
+            process.addConvertedFragment(``, node);
+          }
         });
       },
     },

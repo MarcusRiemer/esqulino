@@ -15,28 +15,31 @@ export enum OutputSeparator {
  * Represents a node that has been compiled into its string
  * representation.
  */
-interface GeneratedNode {
+export type GeneratedNode = Readonly<{
   depth: number;
   compilation: string;
   node: Node;
   sep: OutputSeparator;
-}
+}>;
 
 /**
  * Bundles data that is collected during code generation.
  */
 export class CodeGeneratorProcess<TState extends {}> {
+  private static INDENT = "  "; // The string that is used to indent stuff
+
   private _generated: GeneratedNode[] = [];
   private _currentDepth: number = 0;
 
-  constructor(private _generator: CodeGenerator, private _state?: TState) {}
-
   /**
-   * @return The user defined state
+   * Some code generation processes need to know whether sub trees
+   * did actually emit code to get things like indentation correct.
+   * These lists are managed by @see trackChanges and filled by
+   * @see addConvertedFragment.
    */
-  get state(): TState {
-    return this._state;
-  }
+  private _trackLists: GeneratedNode[][] = [];
+
+  constructor(private _generator: CodeGenerator, readonly state?: TState) {}
 
   /**
    * Adds some compiled node to the current result.
@@ -50,22 +53,72 @@ export class CodeGeneratorProcess<TState extends {}> {
       throw new BlattWerkzeugError(`Added undefined emitted string`);
     }
 
-    this._generated.push({
+    // Corner case: The depth of the first fragment may be > 0 which would
+    // indicate that `indent` was called before anything was written. This
+    // seldom happens in "real" code generators but is surprisingly common
+    // in tests. This workaround ensures that the first entry is always
+    // properly indented.
+    //
+    // Although directly modifying the input is nasty, every other workaround
+    // (like inserting "artificially generated" fragments) is also quite nasty.
+    // And not doing this would leave the nastyness of loads of testcases that
+    // need to accomodate for the special indentation rules for the first
+    // item of a sequence.
+    if (this._generated.length === 0 && this._currentDepth > 0) {
+      compilation =
+        CodeGeneratorProcess.INDENT.repeat(this._currentDepth) + compilation;
+    }
+
+    const newNode = Object.freeze({
       depth: this._currentDepth,
-      compilation: compilation,
-      node: node,
-      sep: sep,
+      compilation,
+      node,
+      sep,
     });
+
+    console.log(newNode);
+
+    this._generated.push(newNode);
+    this._trackLists.forEach((t) => t.push(newNode));
   }
 
   /**
-   * Executes the given function in a context where every call to `addConvertedFragment`
+   * Executes the given function in a context where every call to @see addConvertedFragment
    * is done at an extra level of indentation.
    */
   indent(indentedCalls: () => void) {
     this._currentDepth++;
-    indentedCalls();
+    const changes = this.trackChanges(indentedCalls);
+
+    if (changes.length > 0) {
+      const lastChange = changes[changes.length - 1];
+      if (lastChange.sep !== OutputSeparator.NEW_LINE_AFTER) {
+        //debugger;
+      }
+    }
+
     this._currentDepth--;
+  }
+
+  /**
+   * Tracks all changes that happen during the execution of the passed function.
+   */
+  trackChanges(trackedCalls: () => void): GeneratedNode[] {
+    const trackList: GeneratedNode[] = [];
+    this._trackLists.push(trackList);
+
+    trackedCalls();
+
+    const index = this._trackLists.indexOf(trackList);
+    if (index >= 0) {
+      this._trackLists.splice(index, 1);
+    } else {
+      throw new BlattWerkzeugError(
+        `CodeGeneration: Didn't find previously crated track list`
+      );
+    }
+
+    return trackList;
   }
 
   /**
@@ -105,9 +158,10 @@ export class CodeGeneratorProcess<TState extends {}> {
       }
 
       // Does the seperator match the previous separator?
-      if (i > 0 && finalSep != OutputSeparator.NONE) {
-        let prevSep = this._generated[i - 1].sep;
-        // Would this loead to two newlines?
+      const previous = this._generated[i - 1];
+      if (previous && finalSep != OutputSeparator.NONE) {
+        let prevSep = previous.sep;
+        // Would this lead to two newlines?
         const doubleNewline =
           prevSep == OutputSeparator.NEW_LINE_AFTER &&
           finalSep == OutputSeparator.NEW_LINE_BEFORE;
@@ -137,14 +191,16 @@ export class CodeGeneratorProcess<TState extends {}> {
       }
     };
 
-    const INDENT = "  "; // The string that is used to indent stuff
+    const INDENT = CodeGeneratorProcess.INDENT;
     const indent = (fragment: string, i: number, all: string[]) => {
       if (fragment.startsWith("\n")) {
         // Insert indentation characters after newline
         return (
           "\n" + INDENT.repeat(this._generated[i].depth) + fragment.substring(1)
         );
-      } else if (fragment.endsWith("\n") && i + 1 < all.length) {
+      }
+      // Is there something coming after the newline?
+      else if (fragment.endsWith("\n") && i + 1 < all.length) {
         // Insert indentation characters for the next element after newline
         return fragment + INDENT.repeat(this._generated[i + 1].depth);
       } else {

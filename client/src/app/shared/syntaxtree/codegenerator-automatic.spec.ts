@@ -2,7 +2,7 @@ import { Tree } from "./syntaxtree";
 import { CodeGenerator } from "./codegenerator";
 import { NamedLanguages } from "./grammar.description";
 
-fdescribe(`Automatic code generation`, () => {
+describe(`Automatic code generation`, () => {
   it(`Single terminal`, () => {
     const types: NamedLanguages = {
       l: {
@@ -254,6 +254,337 @@ fdescribe(`Automatic code generation`, () => {
 
       const res = g.emit(t);
       expect(res).toEqual("t1,t1");
+    });
+  });
+
+  describe(`sequence`, () => {
+    const types: NamedLanguages = {
+      l: {
+        r: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "sequence",
+              name: "a1",
+              nodeTypes: ["t1"],
+            },
+          ],
+        },
+        t1: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "terminal",
+              symbol: "t1",
+            },
+          ],
+        },
+      },
+    };
+
+    const g = new CodeGenerator([], types);
+
+    it(`empty`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("");
+    });
+
+    it(`single child`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+        children: {
+          a1: [{ language: "l", name: "t1" }],
+        },
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("t1");
+    });
+
+    it(`two children`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+        children: {
+          a1: [
+            { language: "l", name: "t1" },
+            { language: "l", name: "t1" },
+          ],
+        },
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("t1t1");
+    });
+  });
+
+  describe(`vertical container with sequence with between`, () => {
+    const types: NamedLanguages = {
+      l: {
+        r: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "vertical",
+              tags: ["indent"],
+              children: [
+                {
+                  type: "sequence",
+                  name: "a1",
+                  nodeTypes: [
+                    {
+                      occurs: "*",
+                      nodeType: "t1",
+                    },
+                  ],
+                  between: {
+                    type: "terminal",
+                    symbol: ",",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        t1: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "terminal",
+              symbol: "t1",
+            },
+          ],
+        },
+      },
+    };
+
+    const g = new CodeGenerator([], types);
+
+    it(`empty`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("");
+    });
+
+    it(`single child`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+        children: {
+          a1: [{ language: "l", name: "t1" }],
+        },
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("  t1");
+    });
+
+    it(`two children`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+        children: {
+          a1: [
+            { language: "l", name: "t1" },
+            { language: "l", name: "t1" },
+          ],
+        },
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("  t1,\n  t1");
+    });
+  });
+
+  describe(`vertical container with leading terminal sequence with between`, () => {
+    const types: NamedLanguages = {
+      l: {
+        r: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "terminal",
+              symbol: "c:",
+              tags: ["newline-after"],
+            },
+            {
+              type: "container",
+              orientation: "vertical",
+              tags: ["indent"],
+              children: [
+                {
+                  type: "sequence",
+                  name: "a1",
+                  nodeTypes: [
+                    {
+                      occurs: "*",
+                      nodeType: "t1",
+                    },
+                  ],
+                  between: {
+                    type: "terminal",
+                    symbol: ",",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        t1: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "terminal",
+              symbol: "t1",
+            },
+          ],
+        },
+      },
+    };
+
+    const g = new CodeGenerator([], types);
+
+    it(`empty`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("c:");
+    });
+
+    it(`single child`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+        children: {
+          a1: [{ language: "l", name: "t1" }],
+        },
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("c:\n  t1");
+    });
+
+    it(`two children`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+        children: {
+          a1: [
+            { language: "l", name: "t1" },
+            { language: "l", name: "t1" },
+          ],
+        },
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("c:\n  t1,\n  t1");
+    });
+  });
+
+  describe(`vertical container with leading and following terminal sequence with between`, () => {
+    const types: NamedLanguages = {
+      l: {
+        r: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "terminal",
+              symbol: "=>",
+              tags: ["newline-after"],
+            },
+            {
+              type: "container",
+              orientation: "vertical",
+              tags: ["indent"],
+              children: [
+                {
+                  type: "sequence",
+                  name: "a1",
+                  nodeTypes: [
+                    {
+                      occurs: "*",
+                      nodeType: "t1",
+                    },
+                  ],
+                  between: {
+                    type: "terminal",
+                    symbol: ",",
+                  },
+                },
+              ],
+            },
+            {
+              type: "terminal",
+              symbol: "<=",
+              tags: ["newline-after"],
+            },
+          ],
+        },
+        t1: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "terminal",
+              symbol: "t1",
+            },
+          ],
+        },
+      },
+    };
+
+    const g = new CodeGenerator([], types);
+
+    it(`empty`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("=>\n<=");
+    });
+
+    it(`single child`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+        children: {
+          a1: [{ language: "l", name: "t1" }],
+        },
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("=>\n  t1\n<=");
+    });
+
+    it(`two children`, () => {
+      const t = new Tree({
+        language: "l",
+        name: "r",
+        children: {
+          a1: [
+            { language: "l", name: "t1" },
+            { language: "l", name: "t1" },
+          ],
+        },
+      });
+
+      const res = g.emit(t);
+      expect(res).toEqual("=>\n  t1,\n  t1\n<=");
     });
   });
 });
