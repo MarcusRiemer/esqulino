@@ -87,8 +87,9 @@ module Resolvers
       order_dir = value.to_h.fetch(:order_direction, @order_dir)
 
       if is_multilingual_column? order_key
-        # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
-        # Using join to add comma as delimiter
+        # Use @languages arr and order key to make an SQL statement like
+        #   name->'de',name->'en',name->'it',name->'fr'
+        # which will (together with COALESCE) pick the first matching language
         coalesce = @languages.map { |l| "#{@model_class.table_name}.#{order_key}->'#{l}'"}.join(',')
         scope = scope.order Arel.sql("COALESCE(#{coalesce}) #{order_dir}")
       else

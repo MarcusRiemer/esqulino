@@ -34,8 +34,8 @@ module Types
 
     class OrderType < Types::Base::BaseInputObject
       graphql_name 'GrammarOrderType'
-      argument :orderField, OrderFieldEnum, required: false
-      argument :orderDirection, Types::Base::BaseEnum::OrderDirectionEnum, required: false
+      argument :order_field, OrderFieldEnum, required: false
+      argument :order_direction, Types::Base::BaseEnum::OrderDirectionEnum, required: false
     end
 
     class MultilingualColumnsEnum < Types::Base::BaseEnum
