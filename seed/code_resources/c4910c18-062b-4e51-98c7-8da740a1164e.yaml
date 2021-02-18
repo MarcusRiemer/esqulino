@@ -5,7 +5,7 @@ concise_attributes:
   value_before_type_cast: 891dc116-890a-4e94-ac77-03139c3c65bf
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 00 HTML
+  value_before_type_cast: 00 HTML Structure
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: c4910c18-062b-4e51-98c7-8da740a1164e
@@ -45,39 +45,78 @@ concise_attributes:
     "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]}, "language":
     "MetaGrammar", "properties": {"typeName": "document", "languageName": "html"}},
     {"name": "concreteNode", "children": {"attributes": [{"name": "terminal", "language":
-    "MetaGrammar", "properties": {"symbol": "<head>"}}, {"name": "terminal", "language":
-    "MetaGrammar", "properties": {"symbol": "</head>"}}]}, "language": "MetaGrammar",
-    "properties": {"typeName": "head", "languageName": "html"}}, {"name": "concreteNode",
-    "children": {"attributes": [{"name": "container", "children": {"attributes": [{"name":
-    "terminal", "language": "MetaGrammar", "properties": {"symbol": "<body>"}}, {"name":
-    "container", "children": {"tags": [{"name": "tag", "language": "MetaGrammar",
-    "properties": {"name": "indent"}}], "attributes": [{"name": "children", "children":
-    {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
-    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "heading",
-    "languageName": "html"}}], "cardinality": [{"name": "knownCardinality", "language":
-    "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"},
-    {"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "paragraph", "languageName":
+    "MetaGrammar", "properties": {"symbol": "<"}}, {"name": "terminal", "children":
+    {"tags": [{"name": "tag", "language": "MetaGrammar", "properties": {"name": "keyword"}}]},
+    "language": "MetaGrammar", "properties": {"symbol": "head"}}, {"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": ">"}}, {"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "</head>"}}]}, "language":
+    "MetaGrammar", "properties": {"typeName": "head", "languageName": "html"}}, {"name":
+    "concreteNode", "children": {"attributes": [{"name": "container", "children":
+    {"attributes": [{"name": "container", "children": {"attributes": [{"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "<"}}, {"name": "terminal",
+    "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "keyword"}}]}, "language": "MetaGrammar", "properties": {"symbol": "body"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": ">"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}, {"name": "container",
+    "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "indent"}}], "attributes": [{"name": "children", "children": {"references":
+    [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "heading", "languageName":
     "html"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
-    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language":
-    "MetaGrammar", "properties": {"base": "allowed", "name": "elements"}}], "orientation":
-    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
-    "vertical"}}]}, "language": "MetaGrammar"}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "</body>"}}], "orientation": [{"name": "orientation",
+    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}, {"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "paragraph", "languageName": "html"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "allowed", "name": "elements"}}], "orientation": [{"name": "orientation",
     "language": "MetaGrammar", "properties": {"orientation": "vertical"}}]}, "language":
-    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName": "body",
-    "languageName": "html"}}, {"name": "concreteNode", "children": {"attributes":
-    [{"name": "container", "children": {"attributes": [{"name": "terminal", "language":
-    "MetaGrammar", "properties": {"symbol": "<h1>"}}, {"name": "property", "language":
-    "MetaGrammar", "properties": {"base": "string", "name": "text"}}, {"name": "terminal",
-    "language": "MetaGrammar", "properties": {"symbol": "</h1>"}}], "orientation":
+    "MetaGrammar"}, {"name": "container", "children": {"attributes": [{"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "</"}}, {"name": "terminal",
+    "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "keyword"}}]}, "language": "MetaGrammar", "properties": {"symbol": "body"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": ">"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}], "orientation":
+    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
+    "vertical"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "body", "languageName": "html"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "container", "children": {"attributes": [{"name": "container",
+    "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "<"}}, {"name": "terminal", "children": {"tags": [{"name": "tag", "language":
+    "MetaGrammar", "properties": {"name": "keyword"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": "h1"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": ">"}}], "orientation": [{"name": "orientation", "language":
+    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"},
+    {"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
+    "name": "text"}}, {"name": "container", "children": {"attributes": [{"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "</"}}, {"name": "terminal",
+    "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "keyword"}}]}, "language": "MetaGrammar", "properties": {"symbol": "h1"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": ">"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}], "orientation":
     [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
     "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
     {"typeName": "heading", "languageName": "html"}}, {"name": "concreteNode", "children":
-    {"attributes": [{"name": "container", "children": {"attributes": [{"name": "terminal",
-    "language": "MetaGrammar", "properties": {"symbol": "<p>"}}, {"name": "property",
-    "language": "MetaGrammar", "properties": {"base": "string", "name": "text"}},
-    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "</p>"}}],
+    {"attributes": [{"name": "container", "children": {"attributes": [{"name": "container",
+    "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "<"}}, {"name": "terminal", "children": {"tags": [{"name": "tag", "language":
+    "MetaGrammar", "properties": {"name": "keyword"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": "p"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": ">"}}], "orientation": [{"name": "orientation", "language":
+    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"},
+    {"name": "container", "children": {"tags": [{"name": "tag", "language": "MetaGrammar",
+    "properties": {"name": "indent"}}], "attributes": [{"name": "property", "language":
+    "MetaGrammar", "properties": {"base": "string", "name": "text"}}], "orientation":
+    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
+    "vertical"}}]}, "language": "MetaGrammar"}, {"name": "container", "children":
+    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "</"}}, {"name": "terminal", "children": {"tags": [{"name": "tag",
+    "language": "MetaGrammar", "properties": {"name": "keyword"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": "p"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": ">"}}], "orientation": [{"name": "orientation", "language":
+    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}],
     "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
     {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
     "properties": {"typeName": "paragraph", "languageName": "html"}}]}, "language":
@@ -87,7 +126,7 @@ concise_attributes:
   value_before_type_cast: 2020-06-07 11:47:56.787287000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-02-16 11:25:04.484553000 Z
+  value_before_type_cast: 2021-02-18 14:13:56.898707000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -193,7 +232,18 @@ concise_attributes:
             "attributes": [
               {
                 "type": "terminal",
-                "symbol": "<head>"
+                "symbol": "<"
+              },
+              {
+                "type": "terminal",
+                "symbol": "head",
+                "tags": [
+                  "keyword"
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": ">"
               },
               {
                 "type": "terminal",
@@ -209,8 +259,25 @@ concise_attributes:
                 "orientation": "vertical",
                 "children": [
                   {
-                    "type": "terminal",
-                    "symbol": "<body>"
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "terminal",
+                        "symbol": "<"
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": "body",
+                        "tags": [
+                          "keyword"
+                        ]
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": ">"
+                      }
+                    ]
                   },
                   {
                     "type": "container",
@@ -242,8 +309,25 @@ concise_attributes:
                     ]
                   },
                   {
-                    "type": "terminal",
-                    "symbol": "</body>"
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "terminal",
+                        "symbol": "</"
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": "body",
+                        "tags": [
+                          "keyword"
+                        ]
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": ">"
+                      }
+                    ]
                   }
                 ]
               }
@@ -257,8 +341,25 @@ concise_attributes:
                 "orientation": "horizontal",
                 "children": [
                   {
-                    "type": "terminal",
-                    "symbol": "<h1>"
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "terminal",
+                        "symbol": "<"
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": "h1",
+                        "tags": [
+                          "keyword"
+                        ]
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": ">"
+                      }
+                    ]
                   },
                   {
                     "type": "property",
@@ -266,8 +367,25 @@ concise_attributes:
                     "name": "text"
                   },
                   {
-                    "type": "terminal",
-                    "symbol": "</h1>"
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "terminal",
+                        "symbol": "</"
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": "h1",
+                        "tags": [
+                          "keyword"
+                        ]
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": ">"
+                      }
+                    ]
                   }
                 ]
               }
@@ -281,17 +399,60 @@ concise_attributes:
                 "orientation": "vertical",
                 "children": [
                   {
-                    "type": "terminal",
-                    "symbol": "<p>"
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "terminal",
+                        "symbol": "<"
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": "p",
+                        "tags": [
+                          "keyword"
+                        ]
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": ">"
+                      }
+                    ]
                   },
                   {
-                    "type": "property",
-                    "base": "string",
-                    "name": "text"
+                    "type": "container",
+                    "orientation": "vertical",
+                    "children": [
+                      {
+                        "type": "property",
+                        "base": "string",
+                        "name": "text"
+                      }
+                    ],
+                    "tags": [
+                      "indent"
+                    ]
                   },
                   {
-                    "type": "terminal",
-                    "symbol": "</p>"
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "terminal",
+                        "symbol": "</"
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": "p",
+                        "tags": [
+                          "keyword"
+                        ]
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": ">"
+                      }
+                    ]
                   }
                 ]
               }

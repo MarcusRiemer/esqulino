@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-06-07 12:00:37.771821000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-02-16 11:25:13.923577000 Z
+  value_before_type_cast: 2021-02-18 14:14:09.183313000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic
@@ -45,37 +45,59 @@ concise_attributes:
     [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
     "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
     "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"text": "<head>", "style": {"display": "inline-flex"},
-    "blockType": "constant"}, {"text": "</head>", "style": {"display": "inline-flex"},
-    "blockType": "constant"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "head", "languageName": "html"}}, {"visual": [{"children": [{"style":
-    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
-    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"children": [{"text": "<body>", "style": {"display": "inline-flex"}, "blockType":
-    "constant"}, {"children": [{"blockType": "iterator", "childGroupName": "elements",
-    "emptyDropTarget": false}], "blockType": "container", "cssClasses": ["indent"],
-    "orientation": "vertical"}, {"text": "</body>", "style": {"display": "inline-flex"},
-    "blockType": "constant"}], "blockType": "container", "orientation": "vertical"}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "body",
-    "languageName": "html"}}, {"visual": [{"children": [{"style": {"color": "white",
-    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
-    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
-    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text":
-    "<h1>", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"style":
-    {"display": "inline-flex"}, "property": "text", "blockType": "input"}, {"text":
-    "</h1>", "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType":
+    "INVALID_MIN_OCCURENCES"]}, {"text": "<", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"text": "head", "style": {"display": "inline-flex"},
+    "blockType": "constant", "cssClasses": ["keyword"]}, {"text": ">", "style": {"display":
+    "inline-flex"}, "blockType": "constant"}, {"text": "</head>", "style": {"display":
+    "inline-flex"}, "blockType": "constant"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "head", "languageName": "html"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"children": [{"text": "<", "style":
+    {"display": "inline-flex"}, "blockType": "constant"}, {"text": "body", "style":
+    {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword"]},
+    {"text": ">", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "container", "orientation": "horizontal"}, {"children": [{"blockType":
+    "iterator", "childGroupName": "elements", "emptyDropTarget": false}], "blockType":
+    "container", "cssClasses": ["indent"], "orientation": "vertical"}, {"children":
+    [{"text": "</", "style": {"display": "inline-flex"}, "blockType": "constant"},
+    {"text": "body", "style": {"display": "inline-flex"}, "blockType": "constant",
+    "cssClasses": ["keyword"]}, {"text": ">", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "container", "orientation": "horizontal"}],
+    "blockType": "container", "orientation": "vertical"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "body", "languageName": "html"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"children": [{"text": "<", "style":
+    {"display": "inline-flex"}, "blockType": "constant"}, {"text": "h1", "style":
+    {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword"]},
+    {"text": ">", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "container", "orientation": "horizontal"}, {"style": {"display":
+    "inline-flex"}, "property": "text", "blockType": "input"}, {"children": [{"text":
+    "</", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"text":
+    "h1", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
+    ["keyword"]}, {"text": ">", "style": {"display": "inline-flex"}, "blockType":
+    "constant"}], "blockType": "container", "orientation": "horizontal"}], "blockType":
     "container", "orientation": "horizontal"}], "blockType": "block", "dropTarget":
     {}}], "describedType": {"typeName": "heading", "languageName": "html"}}, {"visual":
     [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
     "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
     "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "<p>", "style": {"display":
-    "inline-flex"}, "blockType": "constant"}, {"style": {"display": "inline-flex"},
-    "property": "text", "blockType": "input"}, {"text": "</p>", "style": {"display":
-    "inline-flex"}, "blockType": "constant"}], "blockType": "container", "orientation":
-    "vertical"}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
-    "paragraph", "languageName": "html"}}]'
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"children": [{"text": "<", "style":
+    {"display": "inline-flex"}, "blockType": "constant"}, {"text": "p", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword"]}, {"text":
+    ">", "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType":
+    "container", "orientation": "horizontal"}, {"children": [{"style": {"display":
+    "inline-flex"}, "property": "text", "blockType": "input"}], "blockType": "container",
+    "cssClasses": ["indent"], "orientation": "vertical"}, {"children": [{"text": "</",
+    "style": {"display": "inline-flex"}, "blockType": "constant"}, {"text": "p", "style":
+    {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword"]},
+    {"text": ">", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "container", "orientation": "horizontal"}], "blockType": "container",
+    "orientation": "vertical"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "paragraph", "languageName": "html"}}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: editor_components
   value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "validator"},
