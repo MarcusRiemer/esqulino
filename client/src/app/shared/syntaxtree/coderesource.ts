@@ -51,9 +51,7 @@ export class CodeResource extends ProjectResource {
   /**
    * @return An observable value of the language this id uses.
    */
-  get emittedLanguageId(): Observable<string> {
-    return this._emittedLanguageId;
-  }
+  readonly emittedLanguageId = this._blockLanguageId.asObservable();
 
   /**
    * @return A snapshot of the language that is currently in use.
@@ -74,20 +72,18 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The language that is currently in use
    */
-  get emittedLanguage() {
-    return this._emittedLanguageId.pipe(
-      map((l) => this.resourceReferences.getCoreProgrammingLanguage(l))
-    );
-  }
+  readonly emittedLanguage = this._emittedLanguageId.pipe(
+    map((l) => this.resourceReferences.getCoreProgrammingLanguage(l))
+  );
 
   /**
    * @return The language that is currently in use
    */
-  get blockLanguage(): Observable<BlockLanguage> {
-    return this._blockLanguageId.pipe(
-      map((l) => this.resourceReferences.getBlockLanguage(l, "throw"))
-    );
-  }
+  readonly blockLanguage: Observable<
+    BlockLanguage
+  > = this._blockLanguageId.pipe(
+    map((l) => this.resourceReferences.getBlockLanguage(l, "throw"))
+  );
 
   /**
    * @param newId The ID of the new emitted language this resource adheres to.
@@ -101,9 +97,9 @@ export class CodeResource extends ProjectResource {
   /**
    * @return An observable value of the language this id uses.
    */
-  get blockLanguageId(): Observable<string> {
-    return this._blockLanguageId;
-  }
+  readonly blockLanguageId: Observable<
+    string
+  > = this._blockLanguageId.asObservable();
 
   /**
    * @return The ID of the language this resource uses.
@@ -137,9 +133,7 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The tree that describes the code of this resource.
    */
-  get syntaxTree(): Observable<Tree> {
-    return this._tree;
-  }
+  readonly syntaxTree: Observable<Tree> = this._tree.asObservable();
 
   /**
    * Replaces the node at the given location.
