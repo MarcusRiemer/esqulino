@@ -10,8 +10,9 @@ import {
   SelectionListBlockLanguagesGQL,
   ProjectAddUsedBlockLanguageGQL,
   ProjectRemoveUsedBlockLanguageGQL,
+  StoreProjectSeedGQL,
 } from "../../../generated/graphql";
-import { map } from "rxjs/operators";
+import { first, map } from "rxjs/operators";
 
 @Component({
   templateUrl: "templates/settings.html",
@@ -45,7 +46,8 @@ export class SettingsComponent {
     private _selectBlockLanguagesGQL: SelectionListBlockLanguagesGQL,
     private _addUsedBlockLanguage: ProjectAddUsedBlockLanguageGQL,
     private _removeUsedBlockLanguage: ProjectRemoveUsedBlockLanguageGQL,
-    private _performData: PerformDataService
+    private _performData: PerformDataService,
+    private _storeSeed: StoreProjectSeedGQL
   ) {}
 
   /**
@@ -80,7 +82,7 @@ export class SettingsComponent {
     this._subscriptionRefs.push(subRef);
 
     // Wiring up the delete button
-    let btnDelete = this._toolbarService.addButton(
+    const btnDelete = this._toolbarService.addButton(
       "delete",
       "Löschen",
       "trash",
@@ -95,6 +97,28 @@ export class SettingsComponent {
         if (res) {
           this._router.navigateByUrl("/");
         }
+      }
+    });
+    this._subscriptionRefs.push(subRef);
+
+    // Wiring up the store seed button
+    const btnStoreSeed = this._toolbarService.addButton(
+      "store-seed",
+      "Store Seed",
+      "archive",
+      undefined,
+      this._performData.project.storeSeed(this.project.id)
+    );
+    subRef = btnStoreSeed.onClick.subscribe(async (_) => {
+      if (confirm("Dieses Projekt zu den Seed-Daten speichern?")) {
+        btnStoreSeed.isInProgress = true;
+        const result = await this._storeSeed
+          .mutate({ projectIds: [this.project.id] })
+          .pipe(first())
+          .toPromise();
+
+        btnStoreSeed.isInProgress = false;
+        alert(JSON.stringify(result));
       }
     });
     this._subscriptionRefs.push(subRef);

@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { filter, map, shareReplay, startWith, switchMap } from "rxjs/operators";
 import { UserService } from "./auth/user.service";
 
 import { MayPerformRequestDescription } from "./may-perform.description";
@@ -7,30 +9,27 @@ import { MayPerformRequestDescription } from "./may-perform.description";
   selector: "may-perform",
   templateUrl: "./templates/may-perform.html",
 })
-export class MayPerformComponent implements OnInit {
-  @Input() payload: MayPerformRequestDescription;
+export class MayPerformComponent implements OnChanges {
+  @Input()
+  payload: MayPerformRequestDescription;
+
+  private _payload$ = new BehaviorSubject<MayPerformRequestDescription>(
+    undefined
+  );
 
   constructor(private _userService: UserService) {}
 
-  private _mayPerform: boolean;
-
-  public get mayPerform(): boolean {
-    return this._mayPerform;
-  }
-
-  public set mayPerform(mayPerform: boolean) {
-    this._mayPerform = mayPerform;
-  }
-
-  public ngOnInit(): void {
-    // When a button needs no permission, payload will be undefined
-    if (this.payload) {
-      this._userService.mayPerform$(this.payload).subscribe(
-        (w) => (this.mayPerform = w.perform),
-        (_) => console.log("Unauthorized may-perform")
-      );
-    } else {
-      this.mayPerform = true;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["payload"]) {
+      this._payload$.next(this.payload);
     }
   }
+
+  readonly mayPerform$ = this._payload$.pipe(
+    filter((payload) => !!payload),
+    switchMap((req) => this._userService.mayPerform$(req)),
+    map((res) => res.perform),
+    startWith(false),
+    shareReplay(1)
+  );
 }

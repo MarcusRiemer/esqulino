@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { first, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
 import { ProjectService } from "../project.service";
@@ -25,7 +27,8 @@ export class CreateCodeResourceComponent {
     private _projectService: ProjectService,
     private _codeResourceService: CodeResourceService,
     private _router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _performData: PerformDataService
   ) {}
 
   /**
@@ -44,6 +47,13 @@ export class CreateCodeResourceComponent {
       }
     });
   }
+
+  /**
+   * These permissions are required to add a code resource
+   */
+  readonly createCodeResourcePermission = this._performData.project.update(
+    this._projectService.cachedProject.id
+  );
 
   /**
    * @return The BlockLanguages that are available for creation.

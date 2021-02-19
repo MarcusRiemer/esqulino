@@ -6,6 +6,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Observable } from "rxjs";
 import { map, switchMap, first, combineLatest } from "rxjs/operators";
 
+import { PerformDataService } from "../../../shared/authorisation/perform-data.service";
 import { EditorComponentDescription } from "../../../shared/block/block-language.description";
 import { IndividualBlockLanguageDataService } from "../../../shared/serverdata";
 import { MessageDialogComponent } from "../../../shared/message-dialog.component";
@@ -53,7 +54,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _debugOptions: BlockDebugOptionsService,
     private _individualBlockLanguageData: IndividualBlockLanguageDataService,
     private _sidebarService: SidebarService,
-    private _matDialog: MatDialog
+    private _matDialog: MatDialog,
+    private _performData: PerformDataService
   ) {}
 
   ngOnInit(): void {
@@ -74,6 +76,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     // Reacting to saving
     this._toolbarService.savingEnabled = true;
     let btnSave = this._toolbarService.saveItem;
+    btnSave.performDesc = this._performData.project.update(this.peekProject.id);
 
     btnSave.onClick.subscribe((_) => {
       btnSave.isInProgress = true;
@@ -88,7 +91,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       "clone",
       "Klonen",
       "files-o",
-      "o"
+      undefined,
+      this._performData.project.update(this.peekProject.id)
     );
     btnClone.onClick.subscribe((_) => {
       this._codeResourceService
@@ -105,7 +109,8 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       "delete",
       "Löschen",
       "trash",
-      "w"
+      undefined,
+      this._performData.project.update(this.peekProject.id)
     );
     btnDelete.onClick.subscribe(async (_) => {
       const confirmed = await MessageDialogComponent.confirm(this._matDialog, {
