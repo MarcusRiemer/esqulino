@@ -10,7 +10,15 @@ class Mutations::CreateCodeResourceMutation < Mutations::BaseMutation
   field :grammar, Types::GrammarType, null: true
   field :errors, [String], null: false
 
-  def resolve(name:, ast: nil, project:, blockLanguage:, programmingLanguage:, compiled: nil, grammars: nil)
+  def resolve(
+        name:,
+        ast: nil,
+        project:,
+        blockLanguage:,
+        programmingLanguage:,
+        compiled: nil,
+        grammars: nil)
+
     code_resource = CodeResource.new(
       name: name,
       ast: ast,

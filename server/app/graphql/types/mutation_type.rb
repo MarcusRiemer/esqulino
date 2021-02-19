@@ -15,5 +15,7 @@ module Types
     field :update_project, mutation: Mutations::Projects::UpdateProject
     field :add_used_block_language, mutation: Mutations::Projects::AddUsedBlockLanguage
     field :remove_used_block_language, mutation: Mutations::Projects::RemoveUsedBlockLanguage
+
+    field :store_project_seed, mutation: Mutations::SeedData::StoreProject
   end
 end

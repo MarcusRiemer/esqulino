@@ -144,6 +144,8 @@ module Seed
           store_dependencies(processed)
         end
       end
+
+      return processed
     end
 
     # calls the dependent model on parent using send and serialize it
