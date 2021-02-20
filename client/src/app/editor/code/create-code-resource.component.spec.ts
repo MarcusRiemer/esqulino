@@ -24,8 +24,11 @@ import {
   IndividualBlockLanguageDataService,
   IndividualGrammarDataService,
 } from "../../shared/serverdata";
+import { UserService } from "../../shared/auth/user.service";
 import { CodeResourceDescription } from "../../shared/syntaxtree";
 import { EmptyComponent } from "../../shared/empty.component";
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { specExpectMayPerform } from "../../shared/auth/may-perform.spec-util";
 
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
@@ -34,9 +37,8 @@ import { CodeResourceService } from "../coderesource.service";
 import { RegistrationService } from "../registration.service";
 
 import { CreateCodeResourceComponent } from "./create-code-resource.component";
-
 describe(`CreateCodeResourceComponent`, () => {
-  async function createComponent() {
+  async function createComponent(permissionToCreate = true) {
     await TestBed.configureTestingModule({
       imports: [
         ApolloTestingModule,
@@ -63,19 +65,31 @@ describe(`CreateCodeResourceComponent`, () => {
           useClass: ResourceReferencesOnlineService,
         },
         FullProjectGQL,
+        UserService,
+        PerformDataService,
       ],
       declarations: [CreateCodeResourceComponent, EmptyComponent],
     }).compileComponents();
+
+    const projectService = TestBed.inject(ProjectService);
+
+    // Ensure that there is a test project loaded
+    await specLoadProject(projectService);
 
     let fixture = TestBed.createComponent(CreateCodeResourceComponent);
     let component = fixture.componentInstance;
     fixture.detectChanges();
 
+    await fixture.whenStable();
+
+    // Allow or deny operation
+    specExpectMayPerform("first", permissionToCreate);
+
     return {
       fixture,
       component,
       element: fixture.nativeElement as HTMLElement,
-      projectService: TestBed.inject(ProjectService),
+      projectService,
       httpTesting: TestBed.inject(HttpTestingController),
       serverApi: TestBed.inject(ServerApiService),
     };

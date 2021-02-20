@@ -1,15 +1,22 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { filter, map, shareReplay, startWith, switchMap } from "rxjs/operators";
-import { UserService } from "./auth/user.service";
 
+import { MayPerformService } from "./auth/may-perform.service";
 import { MayPerformRequestDescription } from "./may-perform.description";
 
+/**
+ * Wraps components to be shown or not shown depending on the
+ * result of a "may perform" request.
+ */
 @Component({
   selector: "may-perform",
   templateUrl: "./templates/may-perform.html",
 })
 export class MayPerformComponent implements OnChanges {
+  /**
+   * The permissions to check.
+   */
   @Input()
   payload: MayPerformRequestDescription;
 
@@ -17,8 +24,11 @@ export class MayPerformComponent implements OnChanges {
     undefined
   );
 
-  constructor(private _userService: UserService) {}
+  constructor(private _mayPerform: MayPerformService) {
+    debugger;
+  }
 
+  // Used to feed the Subject for the permission request
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["payload"]) {
       this._payload$.next(this.payload);
@@ -27,7 +37,7 @@ export class MayPerformComponent implements OnChanges {
 
   readonly mayPerform$ = this._payload$.pipe(
     filter((payload) => !!payload),
-    switchMap((req) => this._userService.mayPerform$(req)),
+    switchMap((req) => this._mayPerform.mayPerform$(req)),
     map((res) => res.perform),
     startWith(false),
     shareReplay(1)

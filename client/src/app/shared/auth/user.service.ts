@@ -8,12 +8,7 @@ import { map, first, catchError, filter } from "rxjs/operators";
 import { ServerDataService } from "../serverdata/server-data.service";
 import { UserDescription } from "./user.description";
 import { ServerProviderDescription } from "./provider.description";
-import {
-  MayPerformResponseDescription,
-  MayPerformRequestDescription,
-} from "./../may-perform.description";
 import { AuthDialogComponent } from "./auth-dialog.component";
-import { MayPerformGQL } from "src/generated/graphql";
 
 @Injectable()
 export class UserService {
@@ -25,8 +20,7 @@ export class UserService {
   constructor(
     private _serverData: ServerDataService,
     private _snackBar: MatSnackBar,
-    private _matDialog: MatDialog,
-    private _mayPerform: MayPerformGQL
+    private _matDialog: MatDialog
   ) {
     // Trigger retrieval of initial user data
     this._serverData.getUserData.value
@@ -113,20 +107,6 @@ export class UserService {
     filter((u) => !!u),
     map((u) => u.providers)
   );
-
-  /**
-   * Sends a http-request to check for the authorization of ui element.
-   * Server will respond with a list of authorizations
-   */
-  public mayPerform$(
-    data: MayPerformRequestDescription
-  ): Observable<MayPerformResponseDescription> {
-    return this._mayPerform
-      .watch({
-        input: data,
-      })
-      .valueChanges.pipe(map((res) => res.data.mayPerform));
-  }
 
   /**
    * Log out a logged in user
