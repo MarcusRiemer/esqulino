@@ -409,6 +409,17 @@ export type LoginProvider = {
   urlName: Scalars["String"];
 };
 
+export type MayPerform = {
+  __typename?: "MayPerform";
+  perform: Scalars["Boolean"];
+};
+
+export type MayPerformInputType = {
+  resourceType: Scalars["String"];
+  resourceId?: Maybe<Scalars["ID"]>;
+  policyAction: Scalars["String"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   addUsedBlockLanguage?: Maybe<AddUsedBlockLanguagePayload>;
@@ -700,6 +711,7 @@ export type Query = {
   codeResources: CodeResourceConnection;
   grammars: GrammarConnection;
   loginProviders: Array<LoginProvider>;
+  mayPerform: MayPerform;
   news: NewsConnection;
   programmingLanguages: ProgrammingLanguageConnection;
   projects: ProjectConnection;
@@ -728,6 +740,10 @@ export type QueryGrammarsArgs = {
   first?: Maybe<Scalars["Int"]>;
   last?: Maybe<Scalars["Int"]>;
   input?: Maybe<GrammarInputType>;
+};
+
+export type QueryMayPerformArgs = {
+  input: MayPerformInputType;
 };
 
 export type QueryNewsArgs = {
@@ -1612,6 +1628,14 @@ export type LoginProvidersQuery = { __typename?: "Query" } & {
       "name" | "color" | "icon" | "urlName"
     >
   >;
+};
+
+export type MayPerformQueryVariables = Exact<{
+  input: MayPerformInputType;
+}>;
+
+export type MayPerformQuery = { __typename?: "Query" } & {
+  mayPerform: { __typename?: "MayPerform" } & Pick<MayPerform, "perform">;
 };
 
 export type ProjectAddUsedBlockLanguageMutationVariables = Exact<{
@@ -2721,6 +2745,27 @@ export class LoginProvidersGQL extends Apollo.Query<
   LoginProvidersQueryVariables
 > {
   document = LoginProvidersDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const MayPerformDocument = gql`
+  query MayPerform($input: MayPerformInputType!) {
+    mayPerform(input: $input) {
+      perform
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class MayPerformGQL extends Apollo.Query<
+  MayPerformQuery,
+  MayPerformQueryVariables
+> {
+  document = MayPerformDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

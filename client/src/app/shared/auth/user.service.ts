@@ -13,6 +13,7 @@ import {
   MayPerformRequestDescription,
 } from "./../may-perform.description";
 import { AuthDialogComponent } from "./auth-dialog.component";
+import { MayPerformGQL } from "src/generated/graphql";
 
 @Injectable()
 export class UserService {
@@ -24,7 +25,8 @@ export class UserService {
   constructor(
     private _serverData: ServerDataService,
     private _snackBar: MatSnackBar,
-    private _matDialog: MatDialog
+    private _matDialog: MatDialog,
+    private _mayPerform: MayPerformGQL
   ) {
     // Trigger retrieval of initial user data
     this._serverData.getUserData.value
@@ -119,10 +121,11 @@ export class UserService {
   public mayPerform$(
     data: MayPerformRequestDescription
   ): Observable<MayPerformResponseDescription> {
-    return this._serverData.mayPerform$(data).pipe(
-      first(),
-      map((r) => r[0])
-    );
+    return this._mayPerform
+      .watch({
+        input: data,
+      })
+      .valueChanges.pipe(map((res) => res.data.mayPerform));
   }
 
   /**

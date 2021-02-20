@@ -19,7 +19,6 @@ Rails.application.routes.draw do
     scope 'user' do
       get '/', controller: 'user', action: :index
       get 'keycloak_account_settings', controller: 'user', action: :keycloak_settings
-      post 'may_perform', controller: 'user', action: :may_perform
     end
 
     scope 'auth' do

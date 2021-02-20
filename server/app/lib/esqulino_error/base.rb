@@ -18,8 +18,7 @@ module EsqulinoError
       super msg
     end
 
-    # Used by Sinatra to serialize this error in a meaningful
-    # representation for clients.
+    # Used to serialize this error in a meaningful representation for clients.
     def to_json(options)
       self.to_liquid.to_json(options)
     end

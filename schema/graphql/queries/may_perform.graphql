@@ -1,0 +1,5 @@
+query MayPerform($input: MayPerformInputType!) {
+  mayPerform(input: $input) {
+    perform
+  }
+}

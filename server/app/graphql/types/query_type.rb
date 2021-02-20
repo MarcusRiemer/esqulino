@@ -46,6 +46,14 @@ module Types
       Resolvers::ProjectsResolver::new(context: @context, **input).scope
     end
 
+    # Endpoint for authorisation requests
+    field :may_perform, Types::MayPerformType, null: false do
+      argument :input, Types::MayPerformType::InputType, required: true
+    end
+    def may_perform(input: )
+      Resolvers::MayPerform.check(@context, input)
+    end
+
     # Related Block Languages are implemented immediatly here
     field :related_block_languages, [Types::BlockLanguageType], null: false do
       argument :grammarId, ID, required: true
