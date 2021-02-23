@@ -1,8 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-import {
-  ApolloTestingController,
-  ApolloTestingModule,
-} from "apollo-angular/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
 import { first } from "rxjs/operators";
 import { MayPerformGQL } from "src/generated/graphql";
 
@@ -24,15 +21,20 @@ describe(`MayPerformComponent`, () => {
 
     component.payload = req;
 
+    component.ngOnChanges({
+      payload: {
+        firstChange: true,
+        currentValue: req,
+        previousValue: undefined,
+        isFirstChange: () => true,
+      },
+    });
     fixture.detectChanges();
     await fixture.whenRenderingDone();
-
-    const controller = TestBed.inject(ApolloTestingController);
 
     return {
       fixture,
       component,
-      controller,
       element: fixture.nativeElement as HTMLElement,
     };
   }
@@ -50,6 +52,7 @@ describe(`MayPerformComponent`, () => {
     });
 
     specExpectMayPerform("first", true);
+    await t.fixture.whenRenderingDone();
 
     expect(await t.component.showContent$.pipe(first()).toPromise()).toEqual(
       true
@@ -63,6 +66,7 @@ describe(`MayPerformComponent`, () => {
     });
 
     specExpectMayPerform("first", false);
+    await t.fixture.whenRenderingDone();
 
     expect(await t.component.showContent$.pipe(first()).toPromise()).toEqual(
       false
@@ -78,6 +82,7 @@ describe(`MayPerformComponent`, () => {
     t.component.showOnForbidden = true;
 
     specExpectMayPerform("first", false);
+    await t.fixture.whenRenderingDone();
 
     expect(await t.component.showContent$.pipe(first()).toPromise()).toEqual(
       true
@@ -93,6 +98,7 @@ describe(`MayPerformComponent`, () => {
     t.component.showOnForbidden = true;
 
     specExpectMayPerform("first", true);
+    await t.fixture.whenRenderingDone();
 
     expect(await t.component.showContent$.pipe(first()).toPromise()).toEqual(
       false

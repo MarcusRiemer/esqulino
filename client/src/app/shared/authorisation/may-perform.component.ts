@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { filter, map, shareReplay, startWith, switchMap } from "rxjs/operators";
 
@@ -13,7 +19,7 @@ import { MayPerformRequestDescription } from "./may-perform.description";
   selector: "may-perform",
   templateUrl: "./templates/may-perform.html",
 })
-export class MayPerformComponent implements OnChanges {
+export class MayPerformComponent implements OnChanges, OnInit {
   /**
    * The permissions to check.
    */
@@ -28,6 +34,10 @@ export class MayPerformComponent implements OnChanges {
   );
 
   constructor(private _mayPerform: MayPerformService) {}
+
+  ngOnInit(): void {
+    this._payload$.next(this.payload);
+  }
 
   // Used to feed the Subject for the permission request
   ngOnChanges(changes: SimpleChanges): void {
