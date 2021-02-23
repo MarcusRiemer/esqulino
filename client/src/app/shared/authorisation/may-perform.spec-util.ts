@@ -1,7 +1,11 @@
 import { TestBed } from "@angular/core/testing";
 import { ApolloTestingController } from "apollo-angular/testing";
-import { MayPerformDocument } from "src/generated/graphql";
 
+import { MayPerformDocument } from "../../../generated/graphql";
+
+/**
+ * Mocks the result of an expected `MayPerform` request.
+ */
 export function specExpectMayPerform(
   variables: Record<string, unknown> | "first",
   result: boolean

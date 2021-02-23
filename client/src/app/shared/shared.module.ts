@@ -67,7 +67,7 @@ import { SideNavService } from "./side-nav.service";
 import { ProvidersAllButtonsComponent } from "./auth/providers-all-buttons.component";
 import { IsUserGuard } from "./guards/is-user.guard";
 import { IsAdminGuard } from "./guards/is-admin.guard";
-import { MayPerformComponent } from "./may-perform.component";
+import { MayPerformComponent } from "./authorisation/may-perform.component";
 import { PerformDataService } from "./authorisation/perform-data.service";
 import { MessageDialogComponent } from "./message-dialog.component";
 import { UnexpectedLogoutInterceptor } from "./unexpected-logout.interceptor";
@@ -80,6 +80,7 @@ import { PaginatorTableGraphqlComponent } from "./table/paginator-table-graphql.
 import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
+import { MayPerformService } from "./authorisation/may-perform.service";
 
 const dataServices = [
   IndividualGrammarDataService,
@@ -219,6 +220,7 @@ export class SharedAppModule {
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
+        MayPerformService,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,

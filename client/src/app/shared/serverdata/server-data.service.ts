@@ -12,7 +12,7 @@ import { LoginProviderDescription } from "./../auth/provider.description";
 import {
   MayPerformRequestDescription,
   MayPerformResponseDescription,
-} from "./../may-perform.description";
+} from "../authorisation/may-perform.description";
 import { ServerTasksService } from "./server-tasks.service";
 
 /**

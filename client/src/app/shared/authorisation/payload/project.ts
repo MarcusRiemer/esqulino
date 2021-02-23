@@ -1,4 +1,4 @@
-import { MayPerformRequestDescription } from "../../may-perform.description";
+import { MayPerformRequestDescription } from "../may-perform.description";
 import { ResourcesData } from "./resources";
 export class ProjectPerformData extends ResourcesData {
   constructor() {

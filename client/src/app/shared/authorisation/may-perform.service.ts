@@ -8,7 +8,7 @@ import { MayPerformGQL } from "../../../generated/graphql";
 import {
   MayPerformResponseDescription,
   MayPerformRequestDescription,
-} from "./../may-perform.description";
+} from "./may-perform.description";
 
 @Injectable()
 export class MayPerformService {

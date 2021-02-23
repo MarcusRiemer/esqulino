@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { filter, map, shareReplay, startWith, switchMap } from "rxjs/operators";
 
-import { MayPerformService } from "./auth/may-perform.service";
+import { MayPerformService } from "./may-perform.service";
 import { MayPerformRequestDescription } from "./may-perform.description";
 
 /**
@@ -20,6 +20,9 @@ export class MayPerformComponent implements OnChanges {
   @Input()
   payload: MayPerformRequestDescription;
 
+  @Input()
+  showOnForbidden = false;
+
   private _payload$ = new BehaviorSubject<MayPerformRequestDescription>(
     undefined
   );
@@ -33,10 +36,10 @@ export class MayPerformComponent implements OnChanges {
     }
   }
 
-  readonly mayPerform$ = this._payload$.pipe(
+  readonly showContent$ = this._payload$.pipe(
     filter((payload) => !!payload),
     switchMap((req) => this._mayPerform.mayPerform$(req)),
-    map((res) => res.perform),
+    map((res) => res.perform === !this.showOnForbidden),
     startWith(false),
     shareReplay(1)
   );

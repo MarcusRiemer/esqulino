@@ -24,11 +24,11 @@ import {
   IndividualBlockLanguageDataService,
   IndividualGrammarDataService,
 } from "../../shared/serverdata";
-import { MayPerformService } from "../../shared/auth/may-perform.service";
+import { MayPerformService } from "../../shared/authorisation/may-perform.service";
 import { CodeResourceDescription } from "../../shared/syntaxtree";
 import { EmptyComponent } from "../../shared/empty.component";
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
-import { specExpectMayPerform } from "../../shared/auth/may-perform.spec-util";
+import { specExpectMayPerform } from "../../shared/authorisation/may-perform.spec-util";
 import { Project, ProjectFullDescription } from "../../shared/project";
 
 import { EditorToolbarService } from "../toolbar.service";
@@ -38,7 +38,7 @@ import { CodeResourceService } from "../coderesource.service";
 import { RegistrationService } from "../registration.service";
 
 import { CreateCodeResourceComponent } from "./create-code-resource.component";
-import { MayPerformComponent } from "src/app/shared/may-perform.component";
+import { MayPerformComponent } from "src/app/shared/authorisation/may-perform.component";
 
 describe(`CreateCodeResourceComponent`, () => {
   async function createComponent(
