@@ -24,9 +24,7 @@ export class MayPerformComponent implements OnChanges {
     undefined
   );
 
-  constructor(private _mayPerform: MayPerformService) {
-    debugger;
-  }
+  constructor(private _mayPerform: MayPerformService) {}
 
   // Used to feed the Subject for the permission request
   ngOnChanges(changes: SimpleChanges): void {

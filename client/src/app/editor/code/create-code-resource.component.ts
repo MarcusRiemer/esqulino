@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { first, switchMap } from "rxjs/operators";
+import { filter, first, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
@@ -59,6 +59,7 @@ export class CreateCodeResourceComponent {
    * @return The BlockLanguages that are available for creation.
    */
   readonly availableBlockLanguages$ = this._projectService.activeProject.pipe(
+    filter((p) => !!p),
     switchMap((p) => of(p.projectBlockLanguages))
   );
 

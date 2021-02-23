@@ -10,8 +10,6 @@ export function specExpectMayPerform(
 
   testingController
     .expectOne((op) => {
-      debugger;
-
       if (op.query !== MayPerformDocument) {
         return false;
       }
