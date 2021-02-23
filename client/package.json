@@ -68,6 +68,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "karma-junit-reporter": "2.0.1",
+    "karma-sabarivka-reporter": "^3.2.5",
     "prettier": "2.0.2",
     "prettydiff": "^101.2.6",
     "tslint": "~6.1.0",
