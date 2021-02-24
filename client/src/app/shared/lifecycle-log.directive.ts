@@ -2,6 +2,8 @@ import { Directive, OnInit, OnDestroy, Input } from "@angular/core";
 import { Subject } from "rxjs";
 import { debounceTime } from "rxjs/operators";
 
+import { environment } from "../../environments/environment";
+
 type ComponentCounter = Record<string, number>;
 
 /**
@@ -30,15 +32,19 @@ export class LifecycleLogDirective implements OnInit, OnDestroy {
   lifecycleLog = "default";
 
   ngOnInit(): void {
-    LifecycleLogDirective.InitCounter[this.lifecycleLog] =
-      (LifecycleLogDirective.InitCounter[this.lifecycleLog] ?? 0) + 1;
-    LifecycleLogDirective.logMessage();
+    if (environment.debugLogging.lifecycle) {
+      LifecycleLogDirective.InitCounter[this.lifecycleLog] =
+        (LifecycleLogDirective.InitCounter[this.lifecycleLog] ?? 0) + 1;
+      LifecycleLogDirective.logMessage();
+    }
   }
 
   ngOnDestroy(): void {
-    LifecycleLogDirective.DestroyCounter[this.lifecycleLog] =
-      (LifecycleLogDirective.DestroyCounter[this.lifecycleLog] ?? 0) + 1;
-    LifecycleLogDirective.logMessage();
+    if (environment.debugLogging.lifecycle) {
+      LifecycleLogDirective.DestroyCounter[this.lifecycleLog] =
+        (LifecycleLogDirective.DestroyCounter[this.lifecycleLog] ?? 0) + 1;
+      LifecycleLogDirective.logMessage();
+    }
   }
 
   private static logMessage() {

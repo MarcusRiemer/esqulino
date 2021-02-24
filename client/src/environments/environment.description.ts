@@ -44,4 +44,10 @@ export interface EnvironmentDescription {
     token: string;
     name: string;
   }[];
+
+  // Turning on and off some debug utilities
+  debugLogging: {
+    changeDetection: boolean;
+    lifecycle: boolean;
+  };
 }
