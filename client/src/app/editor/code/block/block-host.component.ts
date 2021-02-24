@@ -40,9 +40,25 @@ export class BlockHostComponent implements OnChanges {
   validationContext: any = undefined;
 
   @HostBinding("class")
-  get hostCssClasses() {
+  hostCssClasses = this._hostCssClasses;
+
+  private get _hostCssClasses() {
     const usedBlockLanguage = this._renderedCodeResourceService.blockLanguage;
-    return usedBlockLanguage.rootCssClasses.join(" ");
+    if (usedBlockLanguage) {
+      return usedBlockLanguage.rootCssClasses.join(" ");
+    } else {
+      return "";
+    }
+  }
+
+  rootNodeTypeName = this._rootNodeTypeName;
+
+  private get _rootNodeTypeName() {
+    if (this.node) {
+      return stableQualifiedTypename(this.node);
+    } else {
+      return "missing block host node";
+    }
   }
 
   constructor(
@@ -56,6 +72,9 @@ export class BlockHostComponent implements OnChanges {
       this.readOnly,
       this.validationContext || {}
     );
+
+    this.hostCssClasses = this._hostCssClasses;
+    this.rootNodeTypeName = this._rootNodeTypeName;
   }
 
   readonly renderDataAvailable$ = this._renderedCodeResourceService

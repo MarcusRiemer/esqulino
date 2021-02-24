@@ -82,6 +82,7 @@ import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
 import { MayPerformService } from "./authorisation/may-perform.service";
 import { LifecycleLogDirective } from "./lifecycle-log.directive";
+import { ChangeDetectionLogDirective } from "./change-detection-log.directive";
 
 const dataServices = [
   IndividualGrammarDataService,
@@ -163,6 +164,7 @@ const materialModules = [
     ConditionalDisplayDirective,
     ServerTasksComponent,
     LifecycleLogDirective,
+    ChangeDetectionLogDirective,
   ],
   exports: [
     CommonModule,
@@ -199,6 +201,7 @@ const materialModules = [
     ServerTasksComponent,
     ConditionalDisplayDirective,
     LifecycleLogDirective,
+    ChangeDetectionLogDirective,
   ],
 })
 export class SharedAppModule {
