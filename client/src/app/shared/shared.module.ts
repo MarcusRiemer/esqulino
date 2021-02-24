@@ -81,6 +81,7 @@ import { ConditionalDisplayDirective } from "./table/directives/conditional-disp
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
 import { MayPerformService } from "./authorisation/may-perform.service";
+import { LifecycleLogDirective } from "./lifecycle-log.directive";
 
 const dataServices = [
   IndividualGrammarDataService,
@@ -161,6 +162,7 @@ const materialModules = [
     PaginatorTableGraphqlComponent,
     ConditionalDisplayDirective,
     ServerTasksComponent,
+    LifecycleLogDirective,
   ],
   exports: [
     CommonModule,
@@ -196,6 +198,7 @@ const materialModules = [
     PaginatorTableGraphqlComponent,
     ServerTasksComponent,
     ConditionalDisplayDirective,
+    LifecycleLogDirective,
   ],
 })
 export class SharedAppModule {
