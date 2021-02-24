@@ -5,6 +5,7 @@ import {
   HostListener,
   HostBinding,
   Optional,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 
 import { combineLatest, Observable } from "rxjs";
@@ -44,6 +45,7 @@ export type BackgroundState = "executed" | "replaced" | "neutral";
 @Component({
   templateUrl: "templates/block-render-block.html",
   selector: `editor-block-render-block`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderBlockComponent {
   /**

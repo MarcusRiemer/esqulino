@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import {
   trigger,
   state,
@@ -146,6 +146,7 @@ const CSS_ALPHA = "0.3";
       ]),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderDropTargetComponent {
   /**

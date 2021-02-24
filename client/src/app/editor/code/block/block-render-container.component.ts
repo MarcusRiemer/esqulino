@@ -1,4 +1,9 @@
-import { Component, Input, HostBinding } from "@angular/core";
+import {
+  Component,
+  Input,
+  HostBinding,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 
 import { Node, printableNodeDebug } from "../../../shared/syntaxtree";
 import { VisualBlockDescriptions } from "../../../shared/block";
@@ -6,6 +11,7 @@ import { VisualBlockDescriptions } from "../../../shared/block";
 @Component({
   templateUrl: "templates/block-render-container.html",
   selector: `editor-block-container`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderContainerComponent {
   @Input()

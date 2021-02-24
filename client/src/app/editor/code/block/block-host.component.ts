@@ -1,9 +1,16 @@
-import { Component, Input, HostBinding, OnChanges } from "@angular/core";
+import {
+  Component,
+  Input,
+  HostBinding,
+  OnChanges,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 
 import { Node, CodeResource } from "../../../shared/syntaxtree";
 import { BlockLanguage } from "../../../shared/block";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
+import { stableQualifiedTypename } from "src/app/shared/syntaxtree/grammar-type-util";
 
 /**
  * Renders all editor blocks that are mandated by the given node.
@@ -12,6 +19,7 @@ import { RenderedCodeResourceService } from "./rendered-coderesource.service";
   templateUrl: "templates/block-host.html",
   selector: `editor-block-host`,
   providers: [RenderedCodeResourceService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockHostComponent implements OnChanges {
   @Input()

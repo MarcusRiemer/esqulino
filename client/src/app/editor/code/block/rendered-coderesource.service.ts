@@ -120,12 +120,12 @@ export class RenderedCodeResourceService implements OnDestroy {
    */
   readonly dataAvailable$: Observable<boolean> = this._resourcesFetched;
 
-  readonly validationResult$ = combineLatest(
+  readonly validationResult$ = combineLatest([
     this.dataAvailable$,
     this.validator$,
     this.syntaxTree$,
-    this.validationContext$
-  ).pipe(
+    this.validationContext$,
+  ]).pipe(
     filter(([available, ..._]) => available),
     distinctUntilChanged(),
     map(([_, v, t, vc]) =>

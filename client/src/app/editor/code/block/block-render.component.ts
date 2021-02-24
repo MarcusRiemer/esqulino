@@ -1,4 +1,9 @@
-import { Component, Input, HostBinding } from "@angular/core";
+import {
+  Component,
+  Input,
+  HostBinding,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import {
   trigger,
   state,
@@ -40,6 +45,7 @@ import { RenderedCodeResourceService } from "./rendered-coderesource.service";
       transition("false <=> true", animate(200)),
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderComponent {
   @Input() public node: Node;

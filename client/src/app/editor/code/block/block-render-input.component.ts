@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 import { Node } from "../../../shared/syntaxtree";
 import { VisualBlockDescriptions } from "../../../shared/block";
@@ -14,6 +14,7 @@ type VisualizedDatatype = "string" | "boolean" | "enum";
 @Component({
   templateUrl: "templates/block-render-input.html",
   selector: `editor-block-render-input`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderInputComponent {
   @Input() public node: Node;

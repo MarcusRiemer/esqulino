@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 import { map, tap } from "rxjs/operators";
 
@@ -13,6 +13,7 @@ import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 @Component({
   templateUrl: "templates/block-render-error.html",
   selector: `editor-block-render-error`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderErrorComponent {
   @Input()

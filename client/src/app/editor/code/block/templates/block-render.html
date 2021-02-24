@@ -1,5 +1,4 @@
-<ng-container [ngSwitch]="visual.blockType"
-              [lifecycleLog]="visual.blockType">
+<ng-container [ngSwitch]="visual.blockType" [lifecycleLog]="visual.blockType">
   <!-- Show a constant value directly specified in the block description -->
   <span
     class="constant"
@@ -27,17 +26,17 @@
 
   <!-- Allowing the user to edit a value -->
   <editor-block-render-input
-      *ngSwitchCase="'input'"
-      [node]="node"
-      [visual]="visual"
+    *ngSwitchCase="'input'"
+    [node]="node"
+    [visual]="visual"
   ></editor-block-render-input>
   <!-- Iterate over children of a node -->
   <editor-block-render-drop-target
-      *ngSwitchCase="'dropTarget'"
-      [node]="node"
-      [dropLocation]="node.location"
-      [visual]="visual"
-      [ngClass]="visual.cssClasses"
+    *ngSwitchCase="'dropTarget'"
+    [node]="node"
+    [dropLocation]="node.location"
+    [visual]="visual"
+    [ngClass]="visual.cssClasses"
   ></editor-block-render-drop-target>
   <!-- Iterate over children of a node -->
   <ng-container *ngSwitchCase="'iterator'">
