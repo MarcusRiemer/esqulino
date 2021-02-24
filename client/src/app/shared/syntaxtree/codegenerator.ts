@@ -99,8 +99,6 @@ export class CodeGeneratorProcess<TState extends {}> {
       sep,
     });
 
-    console.log(newNode);
-
     this._generated.push(newNode);
     this._trackLists.forEach((t) => t.push(newNode));
   }
