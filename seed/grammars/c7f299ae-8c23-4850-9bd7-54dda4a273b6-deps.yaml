@@ -2,3 +2,9 @@
 - - "../seed/programming_language"
   - meta-grammar
   - !ruby/class 'Seed::ProgrammingLanguageSeed'
+- - "../seed/grammars"
+  - 10163ab2-303b-4072-915a-57aeff0eaf60
+  - !ruby/class 'Seed::GrammarSeed'
+- - "../seed/grammar_references"
+  - 95f4067c-721a-403a-9a98-ba6d1b913845
+  - !ruby/class 'Seed::GrammarReferenceSeed'

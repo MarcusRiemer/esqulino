@@ -50,8 +50,6 @@ concise_attributes:
   name: root
   value_before_type_cast: '{"typeName": "value", "languageName": "json"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: extends_id
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: visualisations
   value_before_type_cast: "{}"
 - !ruby/object:ActiveModel::Attribute::FromDatabase

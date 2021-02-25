@@ -67,9 +67,6 @@ concise_attributes:
   name: root
   value_before_type_cast: '{"typeName": "document", "languageName": "html"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: extends_id
-  value_before_type_cast: f08946d5-7eda-428b-b10d-7feb6e602296
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: visualisations
   value_before_type_cast: "{}"
 - !ruby/object:ActiveModel::Attribute::FromDatabase

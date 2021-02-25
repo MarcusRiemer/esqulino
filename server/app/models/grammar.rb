@@ -1,7 +1,7 @@
 # Basic building block of any language.
 class Grammar < ApplicationRecord
-  # In progress: Pulling out model type
-  self.ignored_columns = ['model']
+  # In progress: Pulling out model type and old "extends" system
+  self.ignored_columns = ['model', 'extends_id']
 
   # A user defined name
   validates :name, presence: true
