@@ -4,6 +4,7 @@ query AdminMetaCodeResources($programmingLanguageId: ID!) {
       id
       name
       project {
+        id
         name
       }
     }

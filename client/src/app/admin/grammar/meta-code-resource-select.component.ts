@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, Input } from "@angular/core";
 import { AdminMetaCodeResourcesGQL } from "../../../generated/graphql";
-import { map } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
+import { BehaviorSubject, combineLatest } from "rxjs";
 
 /**
  * Allows the selection of a single meta code resource (or none).
@@ -15,28 +16,42 @@ export class MetaCodeResourceSelectComponent {
 
   constructor(private _metaCodeResourcesGQL: AdminMetaCodeResourcesGQL) {}
 
+  private readonly metaCodeResourcesQuery$ = this._metaCodeResourcesGQL.watch({
+    programmingLanguageId: "meta-grammar",
+  });
+
   /**
    * The code resources that are available.
    */
-  readonly metaCodeResources$ = this._metaCodeResourcesGQL
-    .watch({ programmingLanguageId: "meta-grammar" })
-    .valueChanges.pipe(map((response) => response.data.codeResources.nodes));
+  readonly metaCodeResources$ = this.metaCodeResourcesQuery$.valueChanges.pipe(
+    map((response) => response.data.codeResources.nodes)
+  );
 
-  private _selectedCodeResourceId: string;
+  private _selectedCodeResourceId = new BehaviorSubject<string>(undefined);
+
+  /**
+   * The code resource that is currently selected
+   */
+  readonly selectedCodeResource$ = combineLatest([
+    this._selectedCodeResourceId,
+    this.metaCodeResources$,
+  ]).pipe(
+    map(([selectedId, availabe]) => availabe.find((c) => c.id == selectedId))
+  );
 
   /**
    * @return The code resource id that is currently set
    */
   @Input()
   get selectedCodeResourceId() {
-    return this._selectedCodeResourceId;
+    return this._selectedCodeResourceId.value;
   }
 
   /**
    * Changes the selected code resource id and informs listeners.
    */
   set selectedCodeResourceId(val: string) {
-    this._selectedCodeResourceId = val;
+    this._selectedCodeResourceId.next(val);
     this.selectedCodeResourceIdChange.emit(val);
   }
 }

@@ -76,6 +76,7 @@ describe("MetaCodeResourceSelect", () => {
         id: "0",
         name: "zero",
         project: {
+          id: "76b1c8b3-7feb-4d77-96a7-a79523c2d58d",
           name: { de: "de", en: "en" },
         },
       },
@@ -99,6 +100,7 @@ describe("MetaCodeResourceSelect", () => {
         id: "0000",
         name: "zero",
         project: {
+          id: "76b1c8b3-7feb-4d77-96a7-a79523c2d58d",
           name: { de: "de", en: "en" },
         },
       },

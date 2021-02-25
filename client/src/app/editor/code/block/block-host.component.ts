@@ -8,9 +8,9 @@ import {
 
 import { Node, CodeResource } from "../../../shared/syntaxtree";
 import { BlockLanguage } from "../../../shared/block";
+import { stableQualifiedTypename } from "../../../shared/syntaxtree/grammar-type-util";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
-import { stableQualifiedTypename } from "src/app/shared/syntaxtree/grammar-type-util";
 
 /**
  * Renders all editor blocks that are mandated by the given node.

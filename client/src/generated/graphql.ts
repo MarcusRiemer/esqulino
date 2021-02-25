@@ -1116,7 +1116,12 @@ export type AdminMetaCodeResourcesQuery = { __typename?: "Query" } & {
           { __typename?: "CodeResource" } & Pick<
             CodeResource,
             "id" | "name"
-          > & { project: { __typename?: "Project" } & Pick<Project, "name"> }
+          > & {
+              project: { __typename?: "Project" } & Pick<
+                Project,
+                "id" | "name"
+              >;
+            }
         >
       >
     >;
@@ -2068,6 +2073,7 @@ export const AdminMetaCodeResourcesDocument = gql`
         id
         name
         project {
+          id
           name
         }
       }
