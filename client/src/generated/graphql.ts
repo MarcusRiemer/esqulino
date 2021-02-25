@@ -1113,7 +1113,10 @@ export type AdminMetaCodeResourcesQuery = { __typename?: "Query" } & {
     nodes?: Maybe<
       Array<
         Maybe<
-          { __typename?: "CodeResource" } & Pick<CodeResource, "id" | "name">
+          { __typename?: "CodeResource" } & Pick<
+            CodeResource,
+            "id" | "name"
+          > & { project: { __typename?: "Project" } & Pick<Project, "name"> }
         >
       >
     >;
@@ -2064,6 +2067,9 @@ export const AdminMetaCodeResourcesDocument = gql`
       nodes {
         id
         name
+        project {
+          name
+        }
       }
     }
   }

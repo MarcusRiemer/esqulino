@@ -1,9 +1,6 @@
-import { IdentifiableResourceDescription } from "../../shared/resource.description";
+import { AdminMetaCodeResourcesQuery } from "../../../generated/graphql";
 
 /**
  * List data for a code resource that describes a grammar.
  */
-export interface MetaCodeResourceListDescription
-  extends IdentifiableResourceDescription {
-  name: string;
-}
+export type MetaCodeResourceListDescription = AdminMetaCodeResourcesQuery["codeResources"]["nodes"][0];

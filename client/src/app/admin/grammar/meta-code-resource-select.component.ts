@@ -20,7 +20,7 @@ export class MetaCodeResourceSelectComponent {
    */
   readonly metaCodeResources$ = this._metaCodeResourcesGQL
     .watch({ programmingLanguageId: "meta-grammar" })
-    .valueChanges.pipe(map((respone) => respone.data.codeResources.nodes));
+    .valueChanges.pipe(map((response) => response.data.codeResources.nodes));
 
   private _selectedCodeResourceId: string;
 

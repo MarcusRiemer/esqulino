@@ -1,23 +1,34 @@
+import { LOCALE_ID } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
-
-import { MetaCodeResourceSelectComponent } from "./meta-code-resource-select.component";
-
-import { ServerApiService } from "../../shared";
-import { MetaCodeResourceListDescription } from "./meta-code-resource.description";
-import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 import {
   ApolloTestingController,
   ApolloTestingModule,
 } from "apollo-angular/testing";
+
 import { AdminMetaCodeResourcesDocument } from "../../../generated/graphql";
+
+import { NaturalLanguagesService } from "../../natural-languages.service";
+import { LinkService } from "../../link.service";
+import { ServerApiService } from "../../shared";
+import { CurrentLanguagePipe } from "../../shared/current-language.pipe";
+import { MetaCodeResourceListDescription } from "./meta-code-resource.description";
+import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
+
+import { MetaCodeResourceSelectComponent } from "./meta-code-resource-select.component";
 
 describe("MetaCodeResourceSelect", () => {
   async function createComponent(preSelectedId = undefined) {
     await TestBed.configureTestingModule({
       imports: [ApolloTestingModule, FormsModule],
-      providers: [ServerApiService, ServerTasksService],
-      declarations: [MetaCodeResourceSelectComponent],
+      providers: [
+        ServerApiService,
+        ServerTasksService,
+        { provide: LOCALE_ID, useValue: "en" },
+        NaturalLanguagesService,
+        LinkService,
+      ],
+      declarations: [MetaCodeResourceSelectComponent, CurrentLanguagePipe],
     }).compileComponents();
 
     let fixture = TestBed.createComponent(MetaCodeResourceSelectComponent);
@@ -64,6 +75,9 @@ describe("MetaCodeResourceSelect", () => {
       {
         id: "0",
         name: "zero",
+        project: {
+          name: { de: "de", en: "en" },
+        },
       },
     ];
 
@@ -76,9 +90,7 @@ describe("MetaCodeResourceSelect", () => {
     const selectElement = fixture.element.querySelector("select");
     expect(selectElement.selectedIndex).toEqual(-1);
     expect(selectElement.children.length).toEqual(2);
-    expect(selectElement.children[1].textContent.trim()).toEqual(
-      response[0].name
-    );
+    expect(selectElement.children[1].textContent.trim()).toEqual("en - zero");
   });
 
   it(`Pre-selects in a list with a single item`, async () => {
@@ -86,6 +98,9 @@ describe("MetaCodeResourceSelect", () => {
       {
         id: "0000",
         name: "zero",
+        project: {
+          name: { de: "de", en: "en" },
+        },
       },
     ];
 
@@ -102,8 +117,6 @@ describe("MetaCodeResourceSelect", () => {
 
     expect(selectElement.selectedIndex).toEqual(1);
     expect(selectElement.children.length).toEqual(2);
-    expect(selectElement.children[1].textContent.trim()).toEqual(
-      response[0].name
-    );
+    expect(selectElement.children[1].textContent.trim()).toEqual("en - zero");
   });
 });

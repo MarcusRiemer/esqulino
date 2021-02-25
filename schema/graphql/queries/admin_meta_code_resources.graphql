@@ -1,8 +1,11 @@
 query AdminMetaCodeResources($programmingLanguageId: ID!) {
-    codeResources(input: {filter: {programmingLanguageId: $programmingLanguageId}}) {
-        nodes {
-            id
-            name
-        }
+  codeResources(input: {filter: {programmingLanguageId: $programmingLanguageId}}) {
+    nodes {
+      id
+      name
+      project {
+        name
+      }
     }
+  }
 }
