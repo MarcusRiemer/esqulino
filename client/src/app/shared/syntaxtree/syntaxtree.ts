@@ -492,16 +492,14 @@ export class Tree {
     if (loc.length === 0) {
       return new Tree(desc);
     } else {
-      // Build the description of the current tree to replace the new node in it
-      let newDescription = this.toModel();
+      const newTree: Tree = produce(this, (draft) => {
+        const parent = draft.locate(loc.slice(0, loc.length - 1));
+        let [parentCat, parentIndex] = loc[loc.length - 1];
 
-      // Walking up the tree to the parent of the node to replace
-      let parent = locateNode(newDescription, loc.slice(0, loc.length - 1));
-      let [parentCat, parentIndex] = loc[loc.length - 1];
+        parent.children[parentCat][parentIndex] = new Node(desc, parent);
+      });
 
-      // Actually replace the node and build the new tree
-      parent.children[parentCat][parentIndex] = desc;
-      return new Tree(newDescription);
+      return newTree;
     }
   }
 
