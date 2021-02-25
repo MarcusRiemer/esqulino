@@ -6,6 +6,7 @@ import {
   locateNode,
 } from "./syntaxtree.description";
 import { arrayEqual } from "../util";
+import produce, { immerable } from "immer";
 
 export {
   NodeDescription,
@@ -127,10 +128,27 @@ export type NodeChildren = { [childrenCategory: string]: Node[] };
  * checks can only be made at runtime.
  */
 export class Node {
-  private _nodeName: string;
-  private _nodeLanguage: string;
-  private _nodeProperties: NodeProperties;
-  private _nodeChildren: NodeChildren;
+  [immerable] = true;
+
+  /**
+   * @return The name of the type this node should be validated against.
+   */
+  readonly typeName: string;
+
+  /**
+   * @return The name of the language containing the type this node should be validated against.
+   */
+  readonly languageName: string;
+
+  /**
+   * @return All children in all categories.
+   */
+  readonly children: NodeChildren;
+
+  /**
+   * @return All properties with keys and values.
+   */
+  readonly properties: NodeProperties;
 
   private _nodeParent: Node | Tree;
 
@@ -139,30 +157,26 @@ export class Node {
    * properties and to construct any children.
    */
   constructor(desc: NodeDescription, parent: Node | Tree) {
-    this._nodeName = desc.name;
-    this._nodeLanguage = desc.language;
+    this.typeName = desc.name;
+    this.languageName = desc.language;
     this._nodeParent = parent;
 
-    // We don't want any undefined fields during runtime
-    this._nodeProperties = {};
-    this._nodeChildren = {};
-
-    // Load properties (if there are any)
-    if (desc.properties) {
-      // Make a deep copy of those properties, just in case ...
-      this._nodeProperties = JSON.parse(JSON.stringify(desc.properties));
-    }
+    // Take over read only properties
+    this.properties = Object.freeze(desc.properties ?? {});
 
     // Load children (if there are any)
+    this.children = {};
     if (desc.children) {
       // Load all children in all categories
       for (let categoryName in desc.children) {
         const category = desc.children[categoryName];
-        this._nodeChildren[categoryName] = category.map(
+        this.children[categoryName] = category.map(
           (childDesc) => new Node(childDesc, this)
         );
       }
     }
+
+    Object.freeze(this);
   }
 
   /**
@@ -177,32 +191,18 @@ export class Node {
 
     // Carry over properties (if there are any)
     if (this.hasProperties) {
-      toReturn.properties = JSON.parse(JSON.stringify(this._nodeProperties));
+      toReturn.properties = JSON.parse(JSON.stringify(this.properties));
     }
 
     // Carry over children (if there are any)
-    if (Object.keys(this._nodeChildren).length > 0) {
+    if (Object.keys(this.children).length > 0) {
       toReturn.children = {};
-      Object.entries(this._nodeChildren).forEach(([name, children]) => {
+      Object.entries(this.children).forEach(([name, children]) => {
         toReturn.children[name] = children.map((child) => child.toModel());
       });
     }
 
     return toReturn;
-  }
-
-  /**
-   * @return The name of the type this node should be validated against.
-   */
-  get typeName(): string {
-    return this._nodeName;
-  }
-
-  /**
-   * @return The name of the language containing the type this node should be validated against.
-   */
-  get languageName(): string {
-    return this._nodeLanguage;
   }
 
   /**
@@ -219,7 +219,7 @@ export class Node {
    * @return All children in that category or an empty list if the category does not exist.
    */
   getChildrenInCategory(categoryName: string): Node[] {
-    const result = this._nodeChildren[categoryName];
+    const result = this.children[categoryName];
     if (result) {
       return result;
     } else {
@@ -244,36 +244,22 @@ export class Node {
    * @return The names of the available categories.
    */
   get childrenCategoryNames() {
-    return Object.keys(this._nodeChildren);
+    return Object.keys(this.children);
   }
 
   /**
    * @return True if this node has any children in any category
    */
   get hasChildren() {
-    const categories = Object.values(this._nodeChildren);
+    const categories = Object.values(this.children);
     return categories.some((c) => c.length > 0);
-  }
-
-  /**
-   * @return All children in all categories.
-   */
-  get children() {
-    return this._nodeChildren;
   }
 
   /**
    * @return True if this node has any properties.
    */
   get hasProperties() {
-    return Object.keys(this._nodeProperties).length > 0;
-  }
-
-  /**
-   * @return All properties with keys and values.
-   */
-  get properties(): NodeProperties {
-    return this._nodeProperties;
+    return Object.keys(this.properties).length > 0;
   }
 
   /**
@@ -370,7 +356,7 @@ export class Node {
     }
 
     // Does any child node match?
-    Object.values(this._nodeChildren).forEach((children) => {
+    Object.values(this.children).forEach((children) => {
       children.forEach((child) => {
         toReturn.push(...child.getNodesOfType(typename));
       });
@@ -399,12 +385,16 @@ export class Node {
  * of syntaxtrees.
  */
 export class Tree {
+  [immerable] = true;
+
   private _root: Node;
 
   constructor(rootDesc?: NodeDescription) {
     if (rootDesc) {
       this._root = new Node(rootDesc, this);
     }
+
+    Object.freeze(this);
   }
 
   /**
@@ -592,17 +582,12 @@ export class Tree {
    * @return The modified tree.
    */
   setProperty(loc: NodeLocation, key: string, value: string): Tree {
-    let newDescription = this.toModel();
-    let node = locateNode(newDescription, loc);
+    const newTree = produce(this, (draft) => {
+      const targetNode = draft.locate(loc);
+      targetNode.properties[key] = value.toString();
+    });
 
-    // The property object itself might not exist
-    if (!node.properties) {
-      node.properties = {};
-    }
-
-    node.properties[key] = value.toString();
-
-    return new Tree(newDescription);
+    return newTree;
   }
 
   /**
