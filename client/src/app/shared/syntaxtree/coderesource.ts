@@ -51,7 +51,7 @@ export class CodeResource extends ProjectResource {
   /**
    * @return An observable value of the language this id uses.
    */
-  readonly emittedLanguageId = this._blockLanguageId.asObservable();
+  readonly emittedLanguageId$ = this._blockLanguageId.asObservable();
 
   /**
    * @return A snapshot of the language that is currently in use.
@@ -72,14 +72,14 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The language that is currently in use
    */
-  readonly emittedLanguage = this._emittedLanguageId.pipe(
+  readonly emittedLanguage$ = this._emittedLanguageId.pipe(
     map((l) => this.resourceReferences.getCoreProgrammingLanguage(l))
   );
 
   /**
    * @return The language that is currently in use
    */
-  readonly blockLanguage: Observable<
+  readonly blockLanguage$: Observable<
     BlockLanguage
   > = this._blockLanguageId.pipe(
     map((l) => this.resourceReferences.getBlockLanguage(l, "throw"))
@@ -97,7 +97,7 @@ export class CodeResource extends ProjectResource {
   /**
    * @return An observable value of the language this id uses.
    */
-  readonly blockLanguageId: Observable<
+  readonly blockLanguageId$: Observable<
     string
   > = this._blockLanguageId.asObservable();
 
@@ -133,7 +133,7 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The tree that describes the code of this resource.
    */
-  readonly syntaxTree: Observable<Tree> = this._tree.asObservable();
+  readonly syntaxTree$: Observable<Tree> = this._tree.asObservable();
 
   /**
    * Replaces the node at the given location.
@@ -260,9 +260,9 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The latest generated code for this resource.
    */
-  readonly generatedCode: Observable<string> = combineLatest([
-    this.syntaxTree,
-    this.emittedLanguage,
+  readonly generatedCode$: Observable<string> = combineLatest([
+    this.syntaxTree$,
+    this.emittedLanguage$,
   ]).pipe(
     map(([tree, lang]) => {
       if (tree && !tree.isEmpty && lang) {

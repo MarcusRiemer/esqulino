@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 
-import { map, flatMap, withLatestFrom, filter, pairwise } from "rxjs/operators";
+import { map, withLatestFrom, filter, mergeMap } from "rxjs/operators";
 import { BehaviorSubject, combineLatest } from "rxjs";
 
 import { stepwiseSqlQuery } from "../../../shared/syntaxtree/sql/sql-steps";
@@ -9,7 +9,7 @@ import { Tree } from "../../../shared/syntaxtree/";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { EditorToolbarService, ToolbarItem } from "../../toolbar.service";
 
-import { QueryResultRows, QueryService } from "./query.service";
+import { QueryService } from "./query.service";
 
 /**
  * Controls the execution of database queries based on the current step
@@ -33,8 +33,12 @@ export class QueryStepwiseComponent {
 
   readonly codeResource$ = this._currentCodeResource.currentResource;
 
+  readonly generatedCode$ = this.codeResource$.pipe(
+    mergeMap((c) => c.generatedCode$)
+  );
+
   readonly blockLanguage$ = this.codeResource$.pipe(
-    flatMap((c) => c.blockLanguage)
+    mergeMap((c) => c.blockLanguage$)
   );
 
   //all steps related to the initial query
@@ -43,10 +47,10 @@ export class QueryStepwiseComponent {
   );
 
   //tree for the current step
-  readonly currentTree$ = combineLatest(
+  readonly currentTree$ = combineLatest([
     this._currentStepNum,
-    this.availableSteps$
-  ).pipe(
+    this.availableSteps$,
+  ]).pipe(
     map(([stepNum, steps]) => {
       return steps[Math.min(stepNum, steps.length - 1)];
     }),
@@ -56,10 +60,10 @@ export class QueryStepwiseComponent {
   );
 
   //description for the current step
-  readonly currentDescription$ = combineLatest(
+  readonly currentDescription$ = combineLatest([
     this._currentStepNum,
-    this.availableSteps$
-  ).pipe(
+    this.availableSteps$,
+  ]).pipe(
     map(([stepNum, steps]) => {
       return steps[Math.min(stepNum, steps.length - 1)];
     }),
@@ -68,28 +72,28 @@ export class QueryStepwiseComponent {
     })
   );
 
-  readonly currentStep$ = combineLatest(
+  readonly currentStep$ = combineLatest([
     this._currentStepNum,
-    this.availableSteps$
-  ).pipe(map(([stepNum, steps]) => steps[stepNum]));
+    this.availableSteps$,
+  ]).pipe(map(([stepNum, steps]) => steps[stepNum]));
 
   //query result for the current step
   readonly currentResult$ = this.currentTree$.pipe(
-    flatMap((t) => this._queryService.runArbitraryQuery(t.toModel(), {}))
+    mergeMap((t) => this._queryService.runArbitraryQuery(t.toModel(), {}))
     // ignore QueryResultError
   );
 
   //previous result that is used for visualiszation of grouping and condition filter
   //get the previous result by pairwise()[0] does not work when going back
-  readonly prevResult$ = combineLatest(
+  readonly prevResult$ = combineLatest([
     this._currentStepNum,
-    this.availableSteps$
-  ).pipe(
+    this.availableSteps$,
+  ]).pipe(
     filter(([stepNum]) => stepNum > 0),
     map(([stepNum, steps]) => {
       return steps[stepNum - 1];
     }),
-    flatMap((step) =>
+    mergeMap((step) =>
       this._queryService.runArbitraryQuery(new Tree(step.ast).toModel(), {})
     )
   );

@@ -59,7 +59,7 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
 
   // All parameters that are part of the current tree
   readonly queryParameterNames = this._currentQuery.pipe(
-    flatMap((c) => c.syntaxTree),
+    flatMap((c) => c.syntaxTree$),
     map(extractQueryParameterNames)
   );
 

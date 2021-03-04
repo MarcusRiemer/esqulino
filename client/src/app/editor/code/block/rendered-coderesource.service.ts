@@ -80,7 +80,7 @@ export class RenderedCodeResourceService implements OnDestroy {
   );
 
   readonly syntaxTree$: Observable<Tree> = this._codeResource.pipe(
-    flatMap((c) => c.syntaxTree)
+    flatMap((c) => c.syntaxTree$)
   );
 
   readonly blockLanguage$ = this._blockLanguage.pipe(

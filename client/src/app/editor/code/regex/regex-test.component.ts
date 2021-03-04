@@ -38,7 +38,7 @@ export class RegexTestComponent {
   );
 
   readonly regexCompiled$ = this.regexResource$.pipe(
-    switchMap((res) => res.generatedCode)
+    switchMap((res) => res.generatedCode$)
   );
 
   /**

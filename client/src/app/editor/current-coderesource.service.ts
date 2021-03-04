@@ -59,7 +59,7 @@ export class CurrentCodeResourceService {
    */
   readonly currentTree: Observable<Tree> = this._codeResource.pipe(
     filter((c) => !!c),
-    mergeMap((c) => c.syntaxTree)
+    mergeMap((c) => c.syntaxTree$)
   );
 
   /**
@@ -67,10 +67,10 @@ export class CurrentCodeResourceService {
    */
   readonly resourceBlockLanguageId: Observable<
     string
-  > = this.currentResource.pipe(mergeMap((c) => c.blockLanguageId));
+  > = this.currentResource.pipe(mergeMap((c) => c.blockLanguageId$));
 
   readonly blockLanguageGrammar = this.currentResource.pipe(
-    mergeMap((r) => r.blockLanguageId),
+    mergeMap((r) => r.blockLanguageId$),
     mergeMap((id) => this._individualBlockLanguageData.getLocal(id, "request")),
     mergeMap((b) =>
       this._individualGrammarData.getLocal(b.grammarId, "request")
@@ -107,8 +107,9 @@ export class CurrentCodeResourceService {
   /**
    *
    */
-  readonly currentExecutionLocation: Observable<NodeLocation> = this
-    ._executionLocation;
+  readonly currentExecutionLocation$: Observable<
+    NodeLocation
+  > = this._executionLocation.asObservable();
 
   /**
    * The currently loaded resource

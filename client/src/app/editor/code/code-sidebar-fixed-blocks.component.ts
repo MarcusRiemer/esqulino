@@ -20,7 +20,7 @@ export class CodeSidebarFixedBlocksComponent {
     public readonly codeResource: CodeResource
   ) {}
 
-  readonly currentBlockLanguage$ = this.codeResource.blockLanguage;
+  readonly currentBlockLanguage$ = this.codeResource.blockLanguage$;
 
   readonly fixedBlockSidebars$ = this.currentBlockLanguage$.pipe(
     map((b) =>

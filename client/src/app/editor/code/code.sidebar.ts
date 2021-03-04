@@ -68,7 +68,7 @@ export class CodeSidebarComponent {
   readonly currentCodeResource$ = this._currentCodeResource.currentResource;
 
   readonly currentBlockLanguageId$ = this.currentCodeResource$.pipe(
-    flatMap((res) => res.blockLanguageId)
+    flatMap((res) => res.blockLanguageId$)
   );
 
   readonly hasBlockLanguage$ = this.currentBlockLanguageId$.pipe(

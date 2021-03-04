@@ -181,7 +181,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * These editor components should be shown
    */
   readonly editorComponentDescriptions = this.currentResource.pipe(
-    switchMap((c) => c.blockLanguageId),
+    switchMap((c) => c.blockLanguageId$),
     switchMap((id) =>
       this._individualBlockLanguageData.getLocal(id, "request")
     ),

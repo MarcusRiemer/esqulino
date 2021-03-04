@@ -13,7 +13,7 @@ export class JsonAstComponent {
   constructor(private _currentCodeResource: CurrentCodeResourceService) {}
 
   readonly jsonTree$ = this._currentCodeResource.currentResource.pipe(
-    switchMap((c) => c.syntaxTree),
+    switchMap((c) => c.syntaxTree$),
     map((t) => t.toModel())
   );
 }

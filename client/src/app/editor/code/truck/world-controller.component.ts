@@ -116,7 +116,7 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
   }
 
   get generatedCode() {
-    return this._currentCodeResource.peekResource.generatedCode
+    return this._currentCodeResource.peekResource.generatedCode$
       .pipe(first())
       .toPromise();
   }
