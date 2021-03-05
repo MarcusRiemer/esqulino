@@ -29,7 +29,7 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
  * Generates a valid grammar description with a unique ID, that uses
  * the given data (if provided) and uses default data
  */
-export const buildGrammar = (
+export const mkGrammarDescription = (
   override?: Partial<GrammarDescription>
 ): GrammarDescription => {
   const id = override?.id ?? generateUUIDv4();

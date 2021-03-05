@@ -29,7 +29,7 @@ import {
   ensureLocalBlockLanguageRequest,
   buildBlockLanguage,
   ensureLocalGrammarRequest,
-  buildGrammar,
+  mkGrammarDescription,
 } from "../../spec-util";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
@@ -58,7 +58,9 @@ describe("BlockHostComponent", () => {
       declarations: [FocusDirective, ...BLOCK_RENDER_COMPONENTS],
     }).compileComponents();
 
-    const grammarDesc = await ensureLocalGrammarRequest(buildGrammar({}));
+    const grammarDesc = await ensureLocalGrammarRequest(
+      mkGrammarDescription({})
+    );
 
     const blockLangDesc = await ensureLocalBlockLanguageRequest(
       buildBlockLanguage({

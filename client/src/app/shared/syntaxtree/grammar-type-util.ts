@@ -535,6 +535,7 @@ export function allVisualizableTypes(
   g: Desc.GrammarDocument,
   filter: FilterType = undefined
 ): Desc.NamedLanguages | Desc.VisualisedLanguages {
+  // Using a set because we don't want any duplicates
   const allLangKeys = new Set([
     ...Object.keys(g.types ?? []),
     ...Object.keys(g.foreignTypes ?? []),

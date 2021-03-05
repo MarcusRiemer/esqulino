@@ -47,7 +47,7 @@ export class TruckWorldEditorService implements OnDestroy {
     );
 
     this._currentCodeResource.currentResource.subscribe((currentProgram) => {
-      if (currentProgram.emittedLanguageIdPeek === "truck-world") {
+      if (currentProgram.runtimeLanguageId === "truck-world") {
         this.enableEditorMode();
       } else if (this._editorModeEnabled) {
         this.disableEditorMode();

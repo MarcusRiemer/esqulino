@@ -1,9 +1,5 @@
-import {
-  CodeGenerator,
-  CodeGeneratorProcess,
-  NodeConverterRegistration,
-  OutputSeparator,
-} from "./codegenerator";
+import { CodeGenerator, NodeConverterRegistration } from "./codegenerator";
+import { CodeGeneratorProcess, OutputSeparator } from "./codegenerator-process";
 import { Tree, Node } from "./syntaxtree";
 
 describe("Codegeneration", () => {

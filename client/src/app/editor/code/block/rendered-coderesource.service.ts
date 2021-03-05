@@ -111,7 +111,7 @@ export class RenderedCodeResourceService implements OnDestroy {
     this.codeResource$
   ).pipe(
     map(([g, c]) =>
-      this._resourceReferences.getValidator(c.emittedLanguageIdPeek, g.id)
+      this._resourceReferences.getValidator(c.runtimeLanguageId, g.id)
     )
   );
 

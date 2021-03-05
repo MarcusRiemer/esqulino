@@ -1,5 +1,5 @@
 import { BlattWerkzeugError } from "../blattwerkzeug-error";
-import { CodeGeneratorProcess, OutputSeparator } from "./codegenerator";
+import { CodeGeneratorProcess, OutputSeparator } from "./codegenerator-process";
 import { stableQualifiedTypename } from "./grammar-type-util";
 import {
   NamedLanguages,

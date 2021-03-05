@@ -115,7 +115,9 @@ async function findGrammar(slug: string) {
  * Retrieves a single Language by its name
  */
 function findLanguage(id: string) {
-  const desc = Object.values(AvailableLanguages).find((l) => l.id == id);
+  const desc = Object.values(AvailableLanguages).find(
+    (l) => l.programmingLanguageId == id
+  );
   if (desc) return desc;
   else {
     throw new Error(`Unknown language ${id}`);

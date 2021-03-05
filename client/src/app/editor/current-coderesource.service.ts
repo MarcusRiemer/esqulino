@@ -88,7 +88,7 @@ export class CurrentCodeResourceService {
     map(([tree, project, grammar]) => {
       if (tree) {
         const validator = this._resourceReferences.getValidator(
-          this.peekResource.emittedLanguageIdPeek,
+          this.peekResource.runtimeLanguageId,
           grammar.id
         );
         return validator.validateFromRoot(

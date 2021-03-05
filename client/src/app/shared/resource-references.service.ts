@@ -88,6 +88,32 @@ export abstract class ResourceReferencesService {
   }
 
   /**
+   * @param grammarId The Id of the grammar that must be available
+   * @param programmingLanguageId The Id of the internal programming language
+   */
+  getGrammarProgrammingLanguage(
+    grammarId: string,
+    programmingLanguageId: string
+  ) {
+    const programmingLanguage = this.getCoreProgrammingLanguage(
+      programmingLanguageId
+    );
+
+    const grammarDescription = this.getGrammarDescription(
+      grammarId,
+      "undefined"
+    );
+
+    if (!grammarDescription) {
+      throw new Error(
+        `Could not construct Language for "${programmingLanguageId}" with grammar ${grammarId} on the fly: Grammar missing`
+      );
+    }
+
+    return programmingLanguage.cloneWithGrammar(grammarDescription);
+  }
+
+  /**
    * @param programmingLanguageId The id of the core language
    * @return The language as defined in the core, does not validate any grammar!
    */

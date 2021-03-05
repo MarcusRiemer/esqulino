@@ -54,7 +54,7 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
 
   // A code resource that is guaranteed to be a SQL query
   private _currentQuery = this._currentCodeResource.currentResource.pipe(
-    filter((c) => c.emittedLanguageIdPeek == "sql")
+    filter((c) => c.runtimeLanguageId == "sql")
   );
 
   // All parameters that are part of the current tree

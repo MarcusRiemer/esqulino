@@ -7,6 +7,7 @@ import {
   ValidationResult,
 } from "./validation-result";
 import { GrammarValidator, NodeType } from "./grammar";
+import { BlattWerkzeugError } from "../blattwerkzeug-error";
 
 /**
  * A validator that uses custom code to generate errors.
@@ -178,7 +179,7 @@ export class Validator {
     }
 
     if (!this.isKnownType(languageName, typename)) {
-      throw new Error(
+      throw new BlattWerkzeugError(
         `Validator does not know type "${languageName}.${typename}"`
       );
     } else {

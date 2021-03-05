@@ -1,7 +1,5 @@
-import {
-  NodeConverterRegistration,
-  CodeGeneratorProcess,
-} from "../codegenerator";
+import { NodeConverterRegistration } from "../codegenerator";
+import { CodeGeneratorProcess } from "../codegenerator-process";
 import { Node } from "../syntaxtree";
 
 /**

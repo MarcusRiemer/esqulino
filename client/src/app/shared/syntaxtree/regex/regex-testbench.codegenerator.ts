@@ -1,8 +1,8 @@
+import { NodeConverterRegistration } from "../codegenerator";
 import {
-  NodeConverterRegistration,
   CodeGeneratorProcess,
   OutputSeparator,
-} from "../codegenerator";
+} from "../codegenerator-process";
 import { Node } from "../syntaxtree";
 import { readFromNode } from "./regex-testbench.description";
 

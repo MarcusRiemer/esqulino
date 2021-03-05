@@ -42,7 +42,7 @@ import {
   ensureLocalBlockLanguageRequest,
   buildBlockLanguage,
   ensureLocalGrammarRequest,
-  buildGrammar,
+  mkGrammarDescription,
 } from "../../../spec-util";
 import { CurrentCodeResourceService } from "../../../current-coderesource.service";
 
@@ -87,7 +87,7 @@ describe(`Render Generated BlockLanguages`, () => {
     }).compileComponents();
 
     const grammarDesc = await ensureLocalGrammarRequest(
-      buildGrammar(grammarDoc)
+      mkGrammarDescription(grammarDoc)
     );
     const listBlockLanguage: BlockLanguageListDescription = buildBlockLanguage({
       grammarId: grammarDesc.id,
