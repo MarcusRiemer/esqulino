@@ -6,7 +6,6 @@ import {
   locateNode,
 } from "./syntaxtree.description";
 import { arrayEqual } from "../util";
-import produce, { immerable } from "immer";
 
 export {
   NodeDescription,
@@ -128,8 +127,6 @@ export type NodeChildren = { [childrenCategory: string]: Node[] };
  * checks can only be made at runtime.
  */
 export class Node {
-  [immerable] = true;
-
   /**
    * @return The name of the type this node should be validated against.
    */
@@ -385,8 +382,6 @@ export class Node {
  * of syntaxtrees.
  */
 export class Tree {
-  [immerable] = true;
-
   private _root: Node;
 
   constructor(rootDesc?: NodeDescription) {
@@ -582,12 +577,17 @@ export class Tree {
    * @return The modified tree.
    */
   setProperty(loc: NodeLocation, key: string, value: string): Tree {
-    const newTree = produce(this, (draft) => {
-      const targetNode = draft.locate(loc);
-      targetNode.properties[key] = value.toString();
-    });
+    let newDescription = this.toModel();
+    let node = locateNode(newDescription, loc);
 
-    return newTree;
+    // The property object itself might not exist
+    if (!node.properties) {
+      node.properties = {};
+    }
+
+    node.properties[key] = value.toString();
+
+    return new Tree(newDescription);
   }
 
   /**

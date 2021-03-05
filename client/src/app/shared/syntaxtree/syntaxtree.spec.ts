@@ -890,6 +890,33 @@ describe("AST: Basic Operations", () => {
     expect(curr.rootNode.properties["b"]).toBeDefined();
   });
 
+  it("Adding new properties to a child", () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        c: [
+          {
+            language: "lang",
+            name: "c1",
+          },
+        ],
+      },
+    };
+
+    const prev = new Tree(treeDesc);
+    const curr = prev.addProperty([["c", 0]], "a");
+
+    expect(curr.isEmpty).toEqual(false);
+    expect(prev).not.toBe(curr);
+
+    const childNode = curr.rootNode.children["c"][0];
+    expect(childNode.properties["a"]).toBeDefined();
+
+    // Location fails badly if the tree is somehow damaged
+    expect(childNode.location).toEqual([["c", 0]]);
+  });
+
   it("Error: Adding new duplicate properties", () => {
     const treeDesc: NodeDescription = {
       language: "lang",
