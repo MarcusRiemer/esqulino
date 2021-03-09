@@ -127,6 +127,7 @@ const materialModules = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
     PortalModule,
@@ -169,6 +170,7 @@ const materialModules = [
   exports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     PortalModule,
     HttpClientModule,

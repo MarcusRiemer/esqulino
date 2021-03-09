@@ -1,0 +1,13 @@
+mutation CreateProgrammingLanguageProject(
+  $projectName: String!,
+  $languageName: String!
+  $description: String!,
+) {
+  createProgrammingLanguageProject(input: {
+    projectName: $projectName,
+    languageName: $languageName,
+    description: $description
+  }) {
+    id
+  }
+}
