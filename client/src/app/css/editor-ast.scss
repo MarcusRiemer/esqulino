@@ -51,7 +51,10 @@ editor-block-host {
         display: contents;
     }
 
-
+    /* Don't put drop targets exclusively on their own line */
+    editor-block-render-drop-target {
+        display: inline-block;
+    }
 
     /* An actual block being rendered */
     editor-block-render-block {
