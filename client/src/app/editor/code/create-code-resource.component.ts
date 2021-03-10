@@ -70,15 +70,12 @@ export class CreateCodeResourceComponent {
     const p = this._projectService.cachedProject;
     const b = p.getBlockLanguage(this.blockLanguageId);
 
-    const res = await this._codeResourceService
-      .createCodeResource(
-        p,
-        this.resourceName,
-        this.blockLanguageId,
-        b.defaultProgrammingLanguageId
-      )
-      .pipe(first())
-      .toPromise();
+    const res = await this._codeResourceService.createCodeResource(
+      p,
+      this.resourceName,
+      this.blockLanguageId,
+      b.defaultProgrammingLanguageId
+    );
 
     p.addCodeResource(res);
     this._router.navigate([res.id], { relativeTo: this._route.parent });

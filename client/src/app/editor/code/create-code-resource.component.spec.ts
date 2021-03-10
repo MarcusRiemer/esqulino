@@ -10,7 +10,10 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Overlay } from "@angular/cdk/overlay";
 
-import { ApolloTestingModule } from "apollo-angular/testing";
+import {
+  ApolloTestingController,
+  ApolloTestingModule,
+} from "apollo-angular/testing";
 
 import { FullProjectGQL } from "../../../generated/graphql";
 
@@ -106,6 +109,7 @@ describe(`CreateCodeResourceComponent`, () => {
       project,
       httpTesting: TestBed.inject(HttpTestingController),
       serverApi: TestBed.inject(ServerApiService),
+      apolloTesting: TestBed.inject(ApolloTestingController),
     };
   }
 
@@ -184,9 +188,15 @@ describe(`CreateCodeResourceComponent`, () => {
     const created = t.component.createCodeResource();
 
     // Mimic a successful response
-    t.httpTesting
-      .expectOne(t.serverApi.getCodeResourceBaseUrl(t.project.id))
-      .flush(r);
+    t.apolloTesting
+      .expectOne((req) => req.operationName === "CreateCodeResource")
+      .flush({
+        data: {
+          createCodeResource: {
+            codeResource: r,
+          },
+        },
+      });
 
     // Ensure the creation has actually happened
     await created;
