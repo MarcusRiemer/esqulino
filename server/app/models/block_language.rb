@@ -4,6 +4,14 @@ class BlockLanguage < ApplicationRecord
   # In progress: Pulling out model type
   self.ignored_columns = ['model']
 
+  # ID of the meta block language
+  def self.meta_grammar_id
+    Rails.application.config_for(:sqlino)
+      .fetch(:seed)
+      .fetch(:meta)
+      .fetch(:block)
+  end
+
   # Every language must have a name and a family assigned
   validates :name, presence: true
 

@@ -3,6 +3,14 @@ class Grammar < ApplicationRecord
   # In progress: Pulling out model type and old "extends" system
   self.ignored_columns = ['model', 'extends_id']
 
+  # ID of the meta grammar
+  def self.meta_grammar_id
+    Rails.application.config_for(:sqlino)
+      .fetch(:seed)
+      .fetch(:meta)
+      .fetch(:grammar)
+  end
+
   # A user defined name
   validates :name, presence: true
 

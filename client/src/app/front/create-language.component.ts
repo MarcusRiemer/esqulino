@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import {
-  CreateProgrammingLanguageProjectGQL,
-  CreateProgrammingLanguageProjectInput,
+  CreateProgrammingLanguageGQL,
+  CreateProgrammingLanguageInput,
 } from "../../generated/graphql";
 
 @Component({
@@ -21,7 +21,7 @@ export class CreateLanguageComponent {
 
   inProgress = false;
 
-  constructor(private _serverEndpoint: CreateProgrammingLanguageProjectGQL) {}
+  constructor(private _serverEndpoint: CreateProgrammingLanguageGQL) {}
 
   submit() {
     console.log(this.creationInput);

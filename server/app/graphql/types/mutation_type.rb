@@ -11,7 +11,7 @@ module Types
     field :update_news, mutation: Mutations::News::UpdateNews
     field :destroy_news, mutation: Mutations::News::DestroyNews
     field :create_project, mutation: Mutations::Projects::CreateProject
-    field :create_programming_language_project, mutation: Mutations::CreateProgrammingLanguageProject
+    field :create_programming_language, mutation: Mutations::CreateProgrammingLanguage
     field :destroy_project, mutation: Mutations::Projects::DestroyProject
     field :update_project, mutation: Mutations::Projects::UpdateProject
     field :add_used_block_language, mutation: Mutations::Projects::AddUsedBlockLanguage

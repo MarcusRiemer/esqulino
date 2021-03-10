@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { CreateLanguageComponent } from './create-language.component';
+import { CreateLanguageComponent } from "./create-language.component";
 
-describe('CreateLanguageComponent', () => {
+describe("CreateLanguageComponent", () => {
   let component: CreateLanguageComponent;
   let fixture: ComponentFixture<CreateLanguageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateLanguageComponent ]
-    })
-    .compileComponents();
+      declarations: [CreateLanguageComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('CreateLanguageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
