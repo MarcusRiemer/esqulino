@@ -1139,7 +1139,11 @@ export type AdminListProjectsQuery = { __typename?: "Query" } & {
             { __typename?: "Project" } & Pick<
               Project,
               "id" | "name" | "slug" | "codeResourceCount"
-            >
+            > & {
+                user?: Maybe<
+                  { __typename?: "User" } & Pick<User, "displayName">
+                >;
+              }
           >
         >
       >;
@@ -2129,6 +2133,9 @@ export const AdminListProjectsDocument = gql`
         name
         slug
         codeResourceCount
+        user {
+          displayName
+        }
       }
       totalCount
       pageInfo {

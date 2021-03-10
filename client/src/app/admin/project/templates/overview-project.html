@@ -25,4 +25,10 @@
       <code>{{ typed(project).codeResourceCount }}</code>
     </td>
   </ng-container>
+  <ng-container matColumnDef="userName">
+    <th mat-header-cell *matHeaderCellDef>Benutzer</th>
+    <td mat-cell *matCellDef="let project">
+      <code>{{ typed(project).user.displayName }}</code>
+    </td>
+  </ng-container>
 </app-table-paginator-graphql>
