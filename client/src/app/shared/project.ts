@@ -79,7 +79,7 @@ export class Project implements Saveable {
     this._indexPageId = json.indexPageId;
     this._projectImageId = json.preview;
     this._sources = json.projectSources || []; // Sources may be undefined
-    this._usesBlockLanguages = json.projectUsesBlockLanguages;
+    this._usesBlockLanguages = [...json.projectUsesBlockLanguages];
     this._currentDatabase = json.defaultDatabase?.name;
     this.grammarDescriptions = json.grammars;
     this.schema = new Schema(json.defaultDatabase?.schema ?? []);
