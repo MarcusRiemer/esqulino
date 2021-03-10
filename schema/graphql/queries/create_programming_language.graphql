@@ -1,12 +1,27 @@
 mutation CreateProgrammingLanguage(
   $projectId: ID!,
   $languageName: String!,
+  $runtimeLanguageId: String!,
 ) {
   createProgrammingLanguage(input: {
     projectId: $projectId,
     languageName: $languageName,
+    runtimeLanguageId: $runtimeLanguageId
   }) {
-    grammarId
-    grammarCodeResourceId
+    grammar {
+      id
+      name
+      types
+      visualisations
+      foreignTypes
+      foreignVisualisations
+    }
+    grammarCodeResource {
+      id
+      name
+      ast
+      blockLanguageId
+      programmingLanguageId
+    }
   }
 }
