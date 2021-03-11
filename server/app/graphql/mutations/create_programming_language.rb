@@ -84,13 +84,14 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
           )
         end
 
-      return {
+      # Don't return out of the transaction-block, this would
+      # leave a lingering transaction
+      next ({
         grammar: grammar,
         grammar_code_resource: grammar_code_resource,
         initial_code_resource: initial_code_resource,
         used_block_language: used_block_language,
-      }
-
+      })
     end
   end
 end

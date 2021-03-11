@@ -46,17 +46,16 @@ RSpec.describe Mutations::CreateProgrammingLanguage do
     expect(Project.count).to eq 1
     p = Project.first
 
-
-
-    expect(CodeResource.count).to eq 1
-    code_resource = CodeResource.first
-    expect(code_resource.name).to eq "l"
-    expect(code_resource.programming_language.id).to eq "meta-grammar"
+    # Grammar and initial code resource
+    expect(CodeResource.count).to eq 2
+    grammar_code_resource = CodeResource.find_by!(id: res[:grammar_code_resource][:id])
+    expect(grammar_code_resource.name).to eq "Grammar: l"
+    expect(grammar_code_resource.programming_language.id).to eq "meta-grammar"
 
     # Meta grammar and created grammar
     expect(Grammar.count).to eq 2
-    grammar = Grammar.where.not(id: Grammar.meta_grammar_id).first
-    expect(grammar.generated_from).to eq code_resource
+    grammar = Grammar.find_by!(id: res[:grammar][:id])
+    expect(grammar.generated_from).to eq grammar_code_resource
     expect(grammar.name).to eq "l"
     expect(grammar.programming_language.id).to eq "meta-grammar"
 
