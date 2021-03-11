@@ -1,7 +1,5 @@
 # Manages operations on block languages
 class BlockLanguagesController < ApplicationController
-  include PaginationHelper
-
   # Find a single block language by ID or by slug
   def show
     needle = id_params[:id]
