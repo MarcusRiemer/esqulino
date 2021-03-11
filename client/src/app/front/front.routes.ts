@@ -3,7 +3,6 @@ import { Routes, RouterModule } from "@angular/router";
 import { AboutComponent } from "./about.component";
 import { AboutAcademiaComponent } from "./academia.component";
 import { CreateProjectComponent } from "./create-project.component";
-import { CreateLanguageComponent } from "./create-language.component";
 import { FrontComponent, indexItems } from "./front.component";
 import { ImprintComponent } from "./imprint.component";
 import { ProjectListComponent } from "./project-list.component";
@@ -24,7 +23,6 @@ export const frontRoutes: Routes = [
     children: [
       { path: "academia", component: AboutAcademiaComponent },
       { path: "create/project", component: CreateProjectComponent },
-      { path: "create/language", component: CreateLanguageComponent },
       { path: "development", component: DevelopmentComponent },
       { path: "projects", component: ProjectListComponent },
       { path: "imprint", component: ImprintComponent },

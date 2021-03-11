@@ -1,0 +1,54 @@
+<div class="card mb-3">
+  <form (ngSubmit)="submit()" [formGroup]="creationInput" class="card-body">
+    <h4 class="card-title">Neue Blocksprache anlegen</h4>
+
+    <div class="form-group row">
+      <label for="languageName" class="col-sm-2 form-control-label">
+        Name der neuen Blocksprache
+      </label>
+      <div class="col-sm-10">
+        <input
+          id="languageName"
+          class="form-control"
+          type="text"
+          formControlName="newLanguageName"
+        />
+        <small class="text-muted">
+          Dieser Name wird für die angelegten Coderessourcen verwendet.
+        </small>
+        <div
+          *ngIf="newLanguageName.invalid && (newLanguageName.dirty || newLanguageName.touched)"
+          class="alert alert-danger"
+        >
+          Mindestens zwei Buchstaben
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="runtimeLanguage" class="col-sm-2 form-control-label">
+        Zielsprache / Laufzeitumgebung
+      </label>
+      <div class="col-sm-10">
+        <input
+          id="runtimeLanguage"
+          class="form-control"
+          type="text"
+          formControlName="runtimeLanguage"
+        />
+        <small class="text-muted">
+          Sofern anwendbar: Die reale Programmiersprache, die mit der
+          Blocksprache nachgestellt werden soll.
+        </small>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="!creationInput.valid"
+      class="btn btn-primary btn-block"
+    >
+      Blocksprache Erstellen!
+    </button>
+  </form>
+</div>

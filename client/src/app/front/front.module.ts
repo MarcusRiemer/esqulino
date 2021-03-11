@@ -18,7 +18,6 @@ import { PrivacyComponent } from "./privacy.component";
 import { VideoDisplayComponent } from "./video-display.component";
 import { VersionComponent } from "./version.component";
 import { DevelopmentComponent } from "./development.component";
-import { CreateLanguageComponent } from "./create-language.component";
 
 @NgModule({
   imports: [CommonModule, SharedAppModule, frontRouting],
@@ -36,7 +35,6 @@ import { CreateLanguageComponent } from "./create-language.component";
     PrivacyComponent,
     VersionComponent,
     DevelopmentComponent,
-    CreateLanguageComponent,
   ],
   exports: [],
   providers: [],

@@ -16,6 +16,7 @@ import { CodeResourceService } from "../coderesource.service";
  */
 @Component({
   templateUrl: "templates/create-code-resource.html",
+  selector: "create-code-resource",
 })
 export class CreateCodeResourceComponent {
   public resourceName: string;

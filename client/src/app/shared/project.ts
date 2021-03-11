@@ -78,19 +78,19 @@ export class Project implements Saveable {
     this._description = json.description;
     this._indexPageId = json.indexPageId;
     this._projectImageId = json.preview;
-    this._sources = json.projectSources || []; // Sources may be undefined
+    this._sources = json.projectSources ?? []; // Sources may be undefined
     this._usesBlockLanguages = [...json.projectUsesBlockLanguages];
     this._currentDatabase = json.defaultDatabase?.name;
     this.grammarDescriptions = json.grammars;
     this.schema = new Schema(json.defaultDatabase?.schema ?? []);
 
     // Map all descriptions to their concrete objects
-    this._codeResources = (json.codeResources || [])
+    this._codeResources = (json.codeResources ?? [])
       .map((val) => new CodeResource(val, this.resourceReferences))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
 
     // Construct relevant block languages
-    this._blockLanguages = (json.blockLanguages || []).map(
+    this._blockLanguages = (json.blockLanguages ?? []).map(
       (val) => new BlockLanguage(val)
     );
   }
