@@ -27,7 +27,9 @@
     <!-- Rendering Dividers -->
     <mat-divider *ngSwitchCase="'divider'"></mat-divider>
     <!-- Rendering Headers -->
-    <h3 *ngSwitchCase="'header'" mat-subheader>{{ nav.text | currentLanguage }}</h3>
+    <h3 *ngSwitchCase="'header'" mat-subheader>
+      {{ nav.text | currentLanguage }}
+    </h3>
     <!-- Rendering fillers -->
     <div *ngSwitchCase="'fill'" class="fill"></div>
   </ng-container>

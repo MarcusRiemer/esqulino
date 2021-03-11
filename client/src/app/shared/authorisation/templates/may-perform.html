@@ -1,2 +1,4 @@
-<ng-content *ngIf="!payload || (showContent$ | async); else denied"></ng-content>
+<ng-content
+  *ngIf="!payload || (showContent$ | async); else denied"
+></ng-content>
 <ng-template #denied><ng-content select="[denied]"></ng-content></ng-template>

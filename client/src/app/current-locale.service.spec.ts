@@ -1,8 +1,8 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { CurrentLocaleService } from './current-locale.service';
+import { CurrentLocaleService } from "./current-locale.service";
 
-describe('CurrentLocaleService', () => {
+describe("CurrentLocaleService", () => {
   let service: CurrentLocaleService;
 
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('CurrentLocaleService', () => {
     service = TestBed.inject(CurrentLocaleService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

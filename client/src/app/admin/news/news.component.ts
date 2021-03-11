@@ -1,17 +1,20 @@
-import { Component, Inject, LOCALE_ID, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { PerformDataService } from "../../shared/authorisation/perform-data.service";
-import { MultiLangString } from "../../shared/multilingual-string.description";
-import { locales } from "../../shared/change-language.component";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+
+import { BehaviorSubject } from "rxjs";
+
 import {
   AdminListNewsGQL,
   AdminListNewsQuery,
 } from "../../../generated/graphql";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { BehaviorSubject } from "rxjs";
-import { CurrentLocaleService } from "src/app/current-locale.service";
+
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { MultiLangString } from "../../shared/multilingual-string.description";
+import { locales } from "../../shared/change-language.component";
+import { CurrentLocaleService } from "../../current-locale.service";
 
 // TODO: Should be beautified and used
 type Query = ReturnType<AdminListNewsGQL["watch"]>;
