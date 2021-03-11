@@ -13,7 +13,7 @@
         class="fa fa-fw fa-{{ nav.icon }}"
         aria-hidden="true"
       ></span>
-      {{nav.text[locale]}}
+      {{ nav.text | currentLanguage }}
     </a>
     <!-- Rendering external links -->
     <a *ngSwitchCase="'external'" mat-list-item [href]="nav.url">
@@ -22,12 +22,12 @@
         class="fa fa-fw fa-{{ nav.icon }}"
         aria-hidden="true"
       ></span>
-      {{nav.text[locale]}}
+      {{nav.text | currentLanguage }}
     </a>
     <!-- Rendering Dividers -->
     <mat-divider *ngSwitchCase="'divider'"></mat-divider>
     <!-- Rendering Headers -->
-    <h3 *ngSwitchCase="'header'" mat-subheader>{{ nav.text[locale] }}</h3>
+    <h3 *ngSwitchCase="'header'" mat-subheader>{{ nav.text | currentLanguage }}</h3>
     <!-- Rendering fillers -->
     <div *ngSwitchCase="'fill'" class="fill"></div>
   </ng-container>

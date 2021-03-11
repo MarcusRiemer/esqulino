@@ -2,12 +2,10 @@ import { Component } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
-import { CodeResource } from "src/app/shared";
 
-import {
-  CreateProgrammingLanguageGQL,
-  CreateProgrammingLanguageInput,
-} from "../../../generated/graphql";
+import { CreateProgrammingLanguageGQL } from "../../../generated/graphql";
+
+import { CodeResource } from "../../shared";
 
 import { ProjectService } from "../project.service";
 

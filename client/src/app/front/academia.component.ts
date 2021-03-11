@@ -1,5 +1,7 @@
-import { Component, Inject, LOCALE_ID } from "@angular/core";
+import { Component } from "@angular/core";
 import { of } from "rxjs";
+
+import { CurrentLocaleService } from "../current-locale.service";
 
 import { Theses } from "./academica-data/theses";
 
@@ -10,11 +12,11 @@ import { Theses } from "./academica-data/theses";
   templateUrl: "templates/academia.html",
 })
 export class AboutAcademiaComponent {
+  constructor(private readonly _lang: CurrentLocaleService) {}
+
   readonly theses = of(
-    Theses.filter((t) => t.language === this.localeId).sort(
+    Theses.filter((t) => t.language === this._lang.localeId).sort(
       (a, b) => b.date.getTime() - a.date.getTime()
     )
   );
-
-  constructor(@Inject(LOCALE_ID) private readonly localeId: string) {}
 }

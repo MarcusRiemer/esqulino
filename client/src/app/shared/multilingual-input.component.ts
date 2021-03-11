@@ -1,32 +1,26 @@
 import { ActivatedRoute } from "@angular/router";
-import {
-  Component,
-  Input,
-  LOCALE_ID,
-  Inject,
-  Output,
-  EventEmitter,
-} from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 
 import { locales } from "./change-language.component";
 import { MultiLangString } from "./multilingual-string.description";
+import { CurrentLocaleService } from "../current-locale.service";
 
 @Component({
   selector: "multilingual-input",
   templateUrl: "./templates/multilingual-input.html",
 })
 export class MultiLingualInputComponent {
+  constructor(
+    private readonly _lang: CurrentLocaleService,
+    private _activeRoute: ActivatedRoute
+  ) {}
+
+  @Input() language: string = this._lang.localeId;
   @Input() editingString: MultiLangString;
   @Input() control: string = "input";
-  @Input() language: string = this.localeId;
   @Input() placeholder: string = "";
 
   @Output() editingStringChange = new EventEmitter<MultiLangString>();
-
-  constructor(
-    @Inject(LOCALE_ID) readonly localeId: string,
-    private _activeRoute: ActivatedRoute
-  ) {}
 
   public readonly languages = locales;
 

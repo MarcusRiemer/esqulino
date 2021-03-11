@@ -11,6 +11,7 @@ import {
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { BehaviorSubject } from "rxjs";
+import { CurrentLocaleService } from "src/app/current-locale.service";
 
 // TODO: Should be beautified and used
 type Query = ReturnType<AdminListNewsGQL["watch"]>;
@@ -35,11 +36,11 @@ export class AdminNewsListComponent {
   sort: MatSort;
 
   constructor(
-    @Inject(LOCALE_ID) readonly localeId: string,
-    private _router: Router,
-    private _active: ActivatedRoute,
-    private _performData: PerformDataService,
-    private _newsGQL: AdminListNewsGQL
+    private readonly _lang: CurrentLocaleService,
+    private readonly _router: Router,
+    private readonly _active: ActivatedRoute,
+    private readonly _performData: PerformDataService,
+    private readonly _newsGQL: AdminListNewsGQL
   ) {}
 
   readonly languages = locales;
@@ -70,7 +71,7 @@ export class AdminNewsListComponent {
     { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
   );
 
-  public selectedLanguage: string = this.localeId;
+  public selectedLanguage: string = this._lang.localeId;
   public selectedEditor: string = "single";
   private _filter$ = new BehaviorSubject<string>("");
   //need searchFor to fire ngModelChange event
