@@ -15,8 +15,7 @@ export class MayPerformService {
   constructor(private _mayPerform: MayPerformGQL) {}
 
   /**
-   * Sends a http-request to check for the authorization of ui element.
-   * Server will respond with a list of authorizations
+   * Sends a request to check for the authorization of ui element.
    */
   public mayPerform$(
     data: MayPerformRequestDescription

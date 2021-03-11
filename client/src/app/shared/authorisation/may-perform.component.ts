@@ -13,7 +13,9 @@ import { MayPerformRequestDescription } from "./may-perform.description";
 
 /**
  * Wraps components to be shown or not shown depending on the
- * result of a "may perform" request.
+ * result of a "may perform" request. You may specify a single
+ * attribute "denied" to display contents in the case of a
+ * "forbidden" response.
  */
 @Component({
   selector: "may-perform",
