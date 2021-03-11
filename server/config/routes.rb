@@ -34,7 +34,7 @@ Rails.application.routes.draw do
       scope ':project_id' do
         get 'preview', controller: 'projects', action: :preview_image
 
-        resources :code_resources, only: [:create, :update, :destroy], param: "code_resource_id"
+        resources :code_resources, only: [:update, :destroy], param: "code_resource_id"
         post 'code_resources/:code_resource_id/clone', controller: 'code_resources', action: 'clone'
 
         # Everything that does something with the database content via a query

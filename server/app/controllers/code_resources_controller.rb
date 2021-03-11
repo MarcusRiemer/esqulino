@@ -11,19 +11,6 @@ class CodeResourcesController < ApplicationController
       .list_by_programming_language(params[:programming_language_id])
   end
 
-  # Create a new resource that is part of a specific project
-  def create
-    project_id = params[:project_id]
-    proj = Project.find_by_slug_or_id! project_id
-
-    res = proj.code_resources.new(code_resource_create_params)
-    if res.save
-      render :json => res.to_full_api_response, :status => 200
-    else
-      render :json => { 'errors' => res.errors }, :status => 400
-    end
-  end
-
   # Updates a specific resource. As other models in the database may
   # depend on this specific resource, they may be updated as well.
   def update
@@ -67,14 +54,5 @@ class CodeResourcesController < ApplicationController
       c = CodeResource.find(params[:code_resource_id])
       raise EsqulinoError::CodeResourceReferenced.new(c)
     end
-  end
-
-  private
-
-  # Possible parameters when creating
-  def code_resource_create_params
-    params
-      .permit(:name, :programmingLanguageId, :blockLanguageId, :ast => {})
-      .transform_keys { |k| k.underscore }
   end
 end
