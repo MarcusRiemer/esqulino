@@ -70,7 +70,9 @@ test:
     mock: true
     exec:
       node_binary: <%= ENV['NODE_BIN'] || '/usr/bin/node' %>
-      program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/main.cli.js' %>
+      # Use the bundled version (with dependencies) on the testserver because
+      # it has no `node_modules` folder available.
+      program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
       mode: one_shot
 
 
