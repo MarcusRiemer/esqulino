@@ -5,6 +5,8 @@ import {
   NamedLanguages,
   NodeAttributeDescription,
   NodeConcreteTypeDescription,
+  NodeInterpolatePropertyDescription,
+  NodePropertyTypeDescription,
   NodeTerminalSymbolDescription,
   NodeVisualTypeDescription,
   VisualisedLanguages,
@@ -93,6 +95,7 @@ const SEPARATOR_TAGS = new Set([
   "newline-before",
   "space-after",
   "space-before",
+  "space-around",
 ]);
 function tagToSeparator(node: Node, tags?: string[]): OutputSeparator {
   const separatorTags = (tags ?? []).filter((t) => SEPARATOR_TAGS.has(t));
@@ -115,23 +118,43 @@ function tagToSeparator(node: Node, tags?: string[]): OutputSeparator {
         return OutputSeparator.SPACE_AFTER;
       case "space-before":
         return OutputSeparator.SPACE_BEFORE;
+      case "space-around":
+        return OutputSeparator.SPACE_BEFORE | OutputSeparator.SPACE_AFTER;
     }
   }
 }
 
 /**
+ * May return the quoted value if there are tags demanding this.
+ */
+function valueToPossiblyQuote(value: string, tags?: string[]): string {
+  if ((tags ?? []).includes("double-quote")) {
+    return `"${value}"`;
+  } else {
+    return value;
+  }
+}
+
+/**
  * Converts a terminal, with respect to all tags that may affect a terminal.
+ *
+ * @param newLine Used for separators
  */
 function convertTerminal(
-  t: NodeTerminalSymbolDescription,
+  t:
+    | NodeTerminalSymbolDescription
+    | NodeInterpolatePropertyDescription
+    | NodePropertyTypeDescription,
   node: Node,
   process: CodeGeneratorProcess<any>,
   newLine = false
 ) {
+  const val = t.type === "terminal" ? t.symbol : node.properties[t.name];
+
   const sep = newLine
     ? OutputSeparator.NEW_LINE_AFTER
     : tagToSeparator(node, t.tags);
-  process.addConvertedFragment(t.symbol, node, sep);
+  process.addConvertedFragment(valueToPossiblyQuote(val, t.tags), node, sep);
 }
 
 /**
@@ -146,11 +169,13 @@ function processAttributes(
   process: CodeGeneratorProcess<any>,
   parentOrientation: "horizontal" | "vertical"
 ) {
+  // Breaks after the given action if the action has lead to some
+  // kind of emitted code.
   const possiblyBreakAfter = (action: () => void) => {
     const changes = process.trackChanges(action);
     if (changes.length > 0 && parentOrientation === "vertical") {
       const lastChange = changes[changes.length - 1];
-      if (lastChange.sep !== OutputSeparator.NEW_LINE_AFTER) {
+      if ((lastChange.sep & OutputSeparator.NEW_LINE_AFTER) === 0) {
         process.addConvertedFragment("", node, OutputSeparator.NEW_LINE_AFTER);
       }
     }
@@ -158,18 +183,12 @@ function processAttributes(
 
   attributes.forEach((a) => {
     switch (a.type) {
-      // May be converted more or less immediatly
-      case "terminal": {
+      // Are converted by directly printing out some strings
+      case "terminal":
+      case "property":
+      case "interpolate": {
         possiblyBreakAfter(() => {
           convertTerminal(a, node, process);
-        });
-        break;
-      }
-      // May be converted more or less immediatly
-      case "property": {
-        possiblyBreakAfter(() => {
-          const val = node.properties[a.name];
-          process.addConvertedFragment(val, node);
         });
         break;
       }
@@ -178,7 +197,8 @@ function processAttributes(
       // to the running emit process
       case "allowed":
       case "sequence":
-      case "parentheses": {
+      case "parentheses":
+      case "each": {
         const children = node.getChildrenInCategory(a.name);
         const between = "between" in a ? a.between : undefined;
 

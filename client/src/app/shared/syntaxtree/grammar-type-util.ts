@@ -525,8 +525,8 @@ export function allConcreteTypes(
 }
 
 /**
- * Extracts all types from the given document, with locally defined
- * types taking precedence over foreign types.
+ * Extracts all types from the given document, with visual types taking precedence over
+ * structural types and locally defined types taking precedence over foreign types.
  *
  * @param g The whole grammar that has the types in question.
  * @param filter An optional filter to exclude some types
@@ -546,12 +546,13 @@ export function allVisualizableTypes(
   const toReturn: Desc.NamedLanguages = {};
 
   allLangKeys.forEach((lang) => {
+    // Most important type last
     toReturn[lang] = Object.assign(
       {},
-      objectFilter(g.foreignTypes[lang] ?? {}, filter),
-      objectFilter(g.types[lang] ?? {}, filter),
-      objectFilter(g.foreignVisualisations[lang] ?? {}, filter),
-      objectFilter(g.visualisations[lang] ?? {}, filter)
+      objectFilter(g.foreignTypes?.[lang] ?? {}, filter),
+      objectFilter(g.types?.[lang] ?? {}, filter),
+      objectFilter(g.foreignVisualisations?.[lang] ?? {}, filter),
+      objectFilter(g.visualisations?.[lang] ?? {}, filter)
     );
   });
 

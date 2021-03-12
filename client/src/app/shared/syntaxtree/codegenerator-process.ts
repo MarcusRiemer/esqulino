@@ -249,17 +249,23 @@ export class CodeGeneratorProcess<TState extends {}> {
 
     const INDENT = CodeGeneratorProcess.INDENT;
     const indent = (fragment: string, i: number, all: string[]) => {
-      if (fragment.startsWith("\n")) {
-        // Insert indentation characters after newline
+      // Adds the newline first and the content after the newline as indented.
+      // This case should only apply if something actually follows the newline.
+      // In that case the indentation of the following fragment is relevant and
+      // that is covered by the next case.
+      if (fragment !== "\n" && fragment.startsWith("\n")) {
         return (
           "\n" + INDENT.repeat(this._generated[i].depth) + fragment.substring(1)
         );
       }
-      // Is there something coming after the newline?
+      // Is there something coming after the newline? In that case we prepare
+      // the proper level of indentation for the next fragment.
       else if (fragment.endsWith("\n") && i + 1 < all.length) {
         // Insert indentation characters for the next element after newline
         return fragment + INDENT.repeat(this._generated[i + 1].depth);
-      } else {
+      }
+      // Go on, there is nothing to indent here
+      else {
         return fragment;
       }
     };
