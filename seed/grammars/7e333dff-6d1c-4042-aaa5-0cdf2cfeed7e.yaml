@@ -17,7 +17,7 @@ concise_attributes:
   value_before_type_cast: 2020-05-27 18:14:34.448723000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
-  value_before_type_cast: dxml-eruby
+  value_before_type_cast: generic
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: generated_from_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase

@@ -25,7 +25,7 @@ concise_attributes:
   value_before_type_cast: e4ad4071-ab82-4687-be04-4d19a7ecae36
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
-  value_before_type_cast: dxml-eruby
+  value_before_type_cast: generic
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
   value_before_type_cast: |-
