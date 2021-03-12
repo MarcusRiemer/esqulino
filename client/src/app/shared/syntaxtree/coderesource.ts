@@ -57,9 +57,7 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The language that is currently in use
    */
-  readonly blockLanguage$: Observable<
-    BlockLanguage
-  > = this._blockLanguageId$.pipe(
+  readonly blockLanguage$: Observable<BlockLanguage> = this._blockLanguageId$.pipe(
     map((l) => this.resourceReferences.getBlockLanguage(l, "throw"))
   );
 
@@ -87,9 +85,7 @@ export class CodeResource extends ProjectResource {
   /**
    * @return An observable value of the language this id uses.
    */
-  readonly blockLanguageId$: Observable<
-    string
-  > = this._blockLanguageId$.asObservable();
+  readonly blockLanguageId$: Observable<string> = this._blockLanguageId$.asObservable();
 
   /**
    * @return The ID of the language this resource uses.

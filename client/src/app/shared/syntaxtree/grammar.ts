@@ -1020,9 +1020,7 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
    * @return The actual range of children that could occur.
    */
   validCardinality(): OccursSpecificDescription {
-    const childCardinality: OccursSpecificDescription = this._nodeTypes.reduce<
-      OccursSpecificDescription
-    >(
+    const childCardinality: OccursSpecificDescription = this._nodeTypes.reduce<OccursSpecificDescription>(
       (akku, curr): OccursSpecificDescription => {
         return {
           maxOccurs: akku.maxOccurs + curr.maxOccurs,

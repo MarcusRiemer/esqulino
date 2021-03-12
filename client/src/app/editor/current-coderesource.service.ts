@@ -65,9 +65,9 @@ export class CurrentCodeResourceService {
   /**
    * The block language that is configured on the resource.
    */
-  readonly resourceBlockLanguageId: Observable<
-    string
-  > = this.currentResource.pipe(mergeMap((c) => c.blockLanguageId$));
+  readonly resourceBlockLanguageId: Observable<string> = this.currentResource.pipe(
+    mergeMap((c) => c.blockLanguageId$)
+  );
 
   readonly blockLanguageGrammar = this.currentResource.pipe(
     mergeMap((r) => r.blockLanguageId$),
@@ -107,9 +107,7 @@ export class CurrentCodeResourceService {
   /**
    *
    */
-  readonly currentExecutionLocation$: Observable<
-    NodeLocation
-  > = this._executionLocation.asObservable();
+  readonly currentExecutionLocation$: Observable<NodeLocation> = this._executionLocation.asObservable();
 
   /**
    * The currently loaded resource

@@ -193,9 +193,7 @@ export class TruckWorldEditorService implements OnDestroy {
   }
 
   private placeTrafficLight(): void {
-    const trafficLightFeature = this._feature.getValue() as TruckFeature<
-      TruckTileFeatureType.TrafficLight
-    >;
+    const trafficLightFeature = this._feature.getValue() as TruckFeature<TruckTileFeatureType.TrafficLight>;
     const option = trafficLightFeature.options;
     const { pos, direction } = this._mouse.peekCurrentPosition;
     this.mutateWorldAndCode(this._world, (s) =>

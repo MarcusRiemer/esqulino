@@ -242,9 +242,7 @@ export interface BlockLanguageListItemDescription
   generated: boolean;
 }
 
-export type BlockLanguageListResponseDescription = JsonApiListResponse<
-  BlockLanguageListItemDescription
->;
+export type BlockLanguageListResponseDescription = JsonApiListResponse<BlockLanguageListItemDescription>;
 
 export function isBlockLanguageDescription(
   obj: any

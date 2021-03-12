@@ -31,9 +31,7 @@ export class ServerDataService {
     "GET " + this._serverApi.getUserDataUrl()
   );
 
-  readonly getIdentities = this._serverTasks.createRequest<
-    ServerProviderDescription
-  >(
+  readonly getIdentities = this._serverTasks.createRequest<ServerProviderDescription>(
     this._http.get<ServerProviderDescription>(
       this._serverApi.getUserIdentitiesUrl()
     ),

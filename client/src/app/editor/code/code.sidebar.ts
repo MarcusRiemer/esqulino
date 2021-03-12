@@ -84,9 +84,7 @@ export class CodeSidebarComponent {
     map((id) => this._resourceReferences.getBlockLanguage(id, "throw"))
   );
 
-  private readonly _fallbackSidebarDescription$: Observable<
-    FixedBlocksSidebarDescription
-  > = this.currentBlockLanguage$.pipe(
+  private readonly _fallbackSidebarDescription$: Observable<FixedBlocksSidebarDescription> = this.currentBlockLanguage$.pipe(
     flatMap((b) => this._grammarData.getLocal(b.grammarId, "request")),
     map((g) => {
       // Extract the types that can be generated meaningfully

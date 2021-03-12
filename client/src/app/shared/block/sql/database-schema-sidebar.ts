@@ -48,9 +48,7 @@ export class DatabaseSchemaSidebar implements Sidebar {
 
   readonly portalComponentTypeId = "databaseSchema";
 
-  readonly currentBlocks: Observable<
-    FixedBlocksSidebarCategoryDescription
-  > = this._schema.pipe(
+  readonly currentBlocks: Observable<FixedBlocksSidebarCategoryDescription> = this._schema.pipe(
     map((tables) => ({
       categoryCaption: "SQL Schema",
       blocks: tables.flatMap((t) => mapTable(t)),
