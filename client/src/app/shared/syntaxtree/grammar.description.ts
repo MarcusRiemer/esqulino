@@ -468,7 +468,7 @@ export function isNodeOneOfTypeDescription(
 export function isNodeVisualTypeDescription(
   arg: any
 ): arg is NodeVisualTypeDescription {
-  return arg instanceof Object && arg.type === "visualize";
+  return arg instanceof Object && arg.type === "visualise";
 }
 
 export function isVisualizableType(
