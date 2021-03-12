@@ -7,6 +7,10 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
 };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -1449,7 +1453,7 @@ export type DestroyProjectMutation = { __typename?: "Mutation" } & {
 };
 
 export type FrontpageListNewsQueryVariables = Exact<{
-  languages?: Maybe<Array<LanguageEnum>>;
+  languages?: Maybe<Array<LanguageEnum> | LanguageEnum>;
 }>;
 
 export type FrontpageListNewsQuery = { __typename?: "Query" } & {
@@ -1505,7 +1509,7 @@ export type FrontpageListProjectsQuery = { __typename?: "Query" } & {
 
 export type FrontpageSingleNewsQueryVariables = Exact<{
   id: Scalars["ID"];
-  languages?: Maybe<Array<LanguageEnum>>;
+  languages?: Maybe<Array<LanguageEnum> | LanguageEnum>;
 }>;
 
 export type FrontpageSingleNewsQuery = { __typename?: "Query" } & {
@@ -1852,7 +1856,7 @@ export type SelectionListGrammarsCreateBlockLanguageQuery = {
 };
 
 export type StoreProjectSeedMutationVariables = Exact<{
-  projectIds: Array<Scalars["String"]>;
+  projectIds: Array<Scalars["String"]> | Scalars["String"];
 }>;
 
 export type StoreProjectSeedMutation = { __typename?: "Mutation" } & {
@@ -1898,7 +1902,7 @@ export type UpdateGrammarMutationVariables = Exact<{
   root?: Maybe<Scalars["QualifiedTypeName"]>;
   programmingLanguageId?: Maybe<Scalars["ID"]>;
   generatedFromId?: Maybe<Scalars["ID"]>;
-  blockLanguageIds?: Maybe<Array<Scalars["ID"]>>;
+  blockLanguageIds?: Maybe<Array<Scalars["ID"]> | Scalars["ID"]>;
 }>;
 
 export type UpdateGrammarMutation = { __typename?: "Mutation" } & {
