@@ -28,6 +28,6 @@ concise_attributes:
   value_before_type_cast: generic
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: <e a="b"></e>
+  value_before_type_cast: Generic Language without code generator
 new_record: false
 active_record_yaml_version: 2
