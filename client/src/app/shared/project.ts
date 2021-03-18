@@ -16,6 +16,7 @@ import { isValidId } from "./util";
 import { MultiLangString } from "./multilingual-string.description";
 
 import { UpdateProjectInput } from "../../generated/graphql";
+import { BlattWerkzeugError } from "./blattwerkzeug-error";
 
 export { ProjectDescription, ProjectFullDescription };
 
@@ -257,7 +258,16 @@ export class Project implements Saveable {
   /**
    *
    */
-  addUsedBlockLanguage(blockLanguageId: string, usageId: string) {
+  async addUsedBlockLanguage(blockLanguageId: string, usageId: string) {
+    await this.resourceReferences.ensureResources({
+      id: blockLanguageId,
+      type: "blockLanguage",
+    });
+
+    this._blockLanguages.push(
+      this.resourceReferences.getBlockLanguage(blockLanguageId, "throw")
+    );
+
     this._usesBlockLanguages.push({
       id: usageId,
       blockLanguageId: blockLanguageId,

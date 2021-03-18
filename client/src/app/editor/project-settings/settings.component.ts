@@ -36,6 +36,11 @@ export class SettingsComponent {
     .valueChanges.pipe(map((result) => result.data.blockLanguages.nodes));
 
   /**
+   * Block languages shouldn't be addable multiple times
+   */
+  addBlockLanguageInProgress = false;
+
+  /**
    * Used for dependency injection.
    */
   constructor(
@@ -136,16 +141,24 @@ export class SettingsComponent {
    * Reference a block language from this project.
    */
   async addUsedBlockLanguage(blockLanguageId: string) {
-    const res = await this._addUsedBlockLanguage
-      .mutate({
-        blockLanguageId,
-        projectId: this.project.id,
-      })
-      .toPromise();
+    try {
+      this.addBlockLanguageInProgress = true;
+      const res = await this._addUsedBlockLanguage
+        .mutate({
+          blockLanguageId,
+          projectId: this.project.id,
+        })
+        .toPromise();
 
-    const used =
-      res.data.addUsedBlockLanguage.result.projectUsesBlockLanguage.id;
-    this.project.addUsedBlockLanguage(blockLanguageId, used);
+      const used =
+        res.data.addUsedBlockLanguage.result.projectUsesBlockLanguage.id;
+      this.project.addUsedBlockLanguage(blockLanguageId, used);
+    } catch (e: any) {
+      let msg = e?.networkError?.error?.error?.message ?? e.toString();
+      alert(msg);
+    } finally {
+      this.addBlockLanguageInProgress = false;
+    }
   }
 
   /**

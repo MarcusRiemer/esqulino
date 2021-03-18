@@ -105,7 +105,8 @@
         </option>
       </select>
       <button
-        (click)="addUsedBlockLanguage(selectedBlockLanguage.value)"
+          (click)="addUsedBlockLanguage(selectedBlockLanguage.value)"
+          [disabled]="addBlockLanguageInProgress"
         class="btn btn-primary"
       >
         <span class="fa fa-link fa-fw" aria-hidden="true"></span>
