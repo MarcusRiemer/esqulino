@@ -62,7 +62,6 @@ class BlockLanguage < ApplicationRecord
     regenerated = ide_service.emit_generated_blocks(self)
     if regenerated
       model_attributes = regenerated.slice(
-        "root_css_classes",
         "sidebars",
         "editor_blocks",
         "editor_components",
@@ -96,9 +95,6 @@ class BlockLanguage < ApplicationRecord
   # Computes a hash that may be sent back to the client if only superficial
   # information is required. This usually happens when the client attempts
   # to list available block languages.
-  #
-  # @param options {include_list_calculations [boolean]}
-  #   True, if certain calculated values should be part of the response
   def to_list_api_response(options: {})
     response = self.to_json_api_response
                    .except("editorBlocks", "sidebars", "editorComponents", "rootCssClasses", "localGeneratorInstructions")

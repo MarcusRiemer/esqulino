@@ -34,16 +34,16 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
         programming_language_id: "meta-grammar",
         block_language_id: BlockLanguage.meta_grammar_id,
         ast: {
-          "name": "grammar",
-              "language": "MetaGrammar",
-              "properties": {
-                              "name": "a"
-                            },
-              "children": {
-                            "root": [],
-                           "nodes": []
-                          }
-        }
+          "name" => "grammar",
+          "language" => "MetaGrammar",
+          "properties" => {
+            "name" => language_name
+          },
+          "children" => {
+            "root" => [],
+            "nodes" => []
+          }
+        },
       )
 
       # Create a backing grammar. This touches the database because
@@ -64,7 +64,8 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
         default_programming_language_id: runtime_language_id,
         local_generator_instructions: {
           "type": "manual"
-        }
+        },
+        root_css_classes: ["activate-block-outline", "activate-keyword"]
       )
       block_language.regenerate_from_grammar!
       block_language.save!
@@ -87,11 +88,11 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
       # Don't return out of the transaction-block, this would
       # leave a lingering transaction
       next ({
-        grammar: grammar,
-        grammar_code_resource: grammar_code_resource,
-        initial_code_resource: initial_code_resource,
-        used_block_language: used_block_language,
-      })
+              grammar: grammar,
+              grammar_code_resource: grammar_code_resource,
+              initial_code_resource: initial_code_resource,
+              used_block_language: used_block_language,
+            })
     end
   end
 end
