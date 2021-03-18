@@ -15,11 +15,13 @@ import { ProjectService } from "../project.service";
 })
 export class CreateLanguageComponent {
   creationInput = new FormGroup({
-    newLanguageName: new FormControl("", [
-      Validators.required,
-      Validators.minLength(2),
-    ]),
-    runtimeLanguage: new FormControl("generic", [Validators.required]),
+    newLanguageName: new FormControl("", {
+      validators: [Validators.required, Validators.minLength(2)],
+    }),
+    runtimeLanguage: new FormControl("generic", {
+      validators: [Validators.required],
+      updateOn: "blur",
+    }),
   });
 
   inProgress = false;
