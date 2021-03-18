@@ -13,7 +13,7 @@ import {
   CodeResource,
   Validator,
   ValidationResult,
-  Tree,
+  SyntaxTree,
   speakingResourceName,
 } from "../../../shared";
 import { BlockLanguage } from "../../../shared/block";
@@ -52,7 +52,7 @@ export class RenderedCodeResourceService implements OnDestroy {
 
   // The validator must be accessible on the fly, so it must be a BehaviorSubject. The data
   // that flows in is connected by the constructor.
-  private readonly _syntaxTree = new BehaviorSubject<Tree>(undefined);
+  private readonly _syntaxTree = new BehaviorSubject<SyntaxTree>(undefined);
 
   // All manual subscriptions that are part of this service
   private _subscriptions: Subscription[] = [];
@@ -79,7 +79,7 @@ export class RenderedCodeResourceService implements OnDestroy {
     distinctUntilChanged()
   );
 
-  readonly syntaxTree$: Observable<Tree> = this._codeResource.pipe(
+  readonly syntaxTree$: Observable<SyntaxTree> = this._codeResource.pipe(
     flatMap((c) => c.syntaxTree$)
   );
 

@@ -1,6 +1,6 @@
 import { NodeConverterRegistration } from "../codegenerator";
 import { CodeGeneratorProcess } from "../codegenerator-process";
-import { Node } from "../syntaxtree";
+import { SyntaxNode } from "../syntaxtree";
 
 /**
  * Converts a RegEx-AST to a properly stringified representation.
@@ -12,7 +12,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "expression",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const subexpressions = node.getChildrenInCategory("subexpressions");
         subexpressions.forEach((c, i, a) => {
           process.generateNode(c);
@@ -29,7 +29,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "characters",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`${node.properties["chars"]}`, node);
       },
     },
@@ -40,7 +40,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "knownCharacterClass",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(
           `\\${node.properties["characterClass"]}`,
           node
@@ -54,7 +54,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "characterRange",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const characters = node.getChildrenInCategory("characters");
         process.addConvertedFragment(`[`, node);
         characters.forEach((c, i, a) => {
@@ -73,7 +73,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "alternative",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`|`, node);
       },
     },
@@ -84,7 +84,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "group",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const subexpressions = node.getChildrenInCategory("subexpressions");
         process.addConvertedFragment(`(`, node);
         subexpressions.forEach((c, i, a) => {
@@ -103,7 +103,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "quantifierClass",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(
           `${node.properties["quantifierClass"]}`,
           node
@@ -117,7 +117,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "quantifierRange",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const bounds = node.getChildrenInCategory("bounds");
         process.addConvertedFragment(`{`, node);
 
@@ -137,7 +137,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "lineTails",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`${node.properties["tail"]}`, node);
       },
     },
@@ -148,7 +148,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "number",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`${node.properties["number"]}`, node);
       },
     },
@@ -159,7 +159,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "empty",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(``, node);
       },
     },
@@ -170,7 +170,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "negation",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`^`, node);
       },
     },
@@ -181,7 +181,7 @@ export const REGEX_CONVERTER: NodeConverterRegistration[] = [
       typeName: "anyCharacter",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`.`, node);
       },
     },

@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 
 import {
-  Node,
+  SyntaxNode,
   Orientation,
   printableNodeDebug,
 } from "../../../shared/syntaxtree";
@@ -23,7 +23,7 @@ const DEFAULT_ORIENTATION: Orientation = "vertical";
 })
 export class BlockRenderContainerComponent implements OnChanges {
   @Input()
-  public node: Node;
+  public node: SyntaxNode;
   @Input()
   public visual: VisualBlockDescriptions.EditorContainer;
 

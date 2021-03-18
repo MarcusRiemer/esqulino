@@ -6,7 +6,7 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 
-import { Node, CodeResource } from "../../../shared/syntaxtree";
+import { SyntaxNode, CodeResource } from "../../../shared/syntaxtree";
 import { BlockLanguage } from "../../../shared/block";
 import { stableQualifiedTypename } from "../../../shared/syntaxtree/grammar-type-util";
 
@@ -29,7 +29,7 @@ export class BlockHostComponent implements OnChanges {
    * The node that represents the root of the tree to display.
    */
   @Input()
-  node: Node;
+  node: SyntaxNode;
 
   /**
    * The block language to display this tree. If left undefined, the block language

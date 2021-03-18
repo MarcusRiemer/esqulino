@@ -41,7 +41,7 @@ export abstract class NodeType {
    * @param ast The part of the tree that needs to be validated.
    * @param context Collects errors, hints, ... during validation.
    */
-  abstract validate(ast: AST.Node, context: ValidationContext): void;
+  abstract validate(ast: AST.SyntaxNode, context: ValidationContext): void;
 
   /**
    * @return True if this instance could be used to validate something
@@ -221,7 +221,7 @@ export class NodeConcreteType extends NodeType {
    * Validates this node and (if applicable) it's children
    * and other properties.
    */
-  validate(ast: AST.Node, context: ValidationContext) {
+  validate(ast: AST.SyntaxNode, context: ValidationContext) {
     // Does the type of the given node match the type we expect?
     if (
       this.languageName == ast.languageName &&
@@ -241,7 +241,7 @@ export class NodeConcreteType extends NodeType {
   /**
    * Validates this node itself and all existing children.
    */
-  private validateImpl(ast: AST.Node, context: ValidationContext) {
+  private validateImpl(ast: AST.SyntaxNode, context: ValidationContext) {
     // Check all required children
     this.allowedChildrenCategoryNames.forEach((categoryName) => {
       const catChildren = ast.getChildrenInCategory(categoryName);
@@ -355,7 +355,11 @@ class NodeTypeChildren {
   /**
    * Checks the given children.
    */
-  validate(parent: AST.Node, children: AST.Node[], context: ValidationContext) {
+  validate(
+    parent: AST.SyntaxNode,
+    children: AST.SyntaxNode[],
+    context: ValidationContext
+  ) {
     // Check the top-level structure of the children
     const validChildren = this._childValidator.validateChildren(
       parent,
@@ -418,10 +422,10 @@ abstract class NodeComplexTypeChildrenValidator {
    * Delegates further checks to an implementation defined variation
    */
   validateChildren(
-    parent: AST.Node,
-    ast: AST.Node[],
+    parent: AST.SyntaxNode,
+    ast: AST.SyntaxNode[],
     context: ValidationContext
-  ): AST.Node[] {
+  ): AST.SyntaxNode[] {
     return this.validateChildrenImpl(parent, ast, context);
   }
 
@@ -432,10 +436,10 @@ abstract class NodeComplexTypeChildrenValidator {
    * @return All children that are in valid positions and should be checked further.
    */
   protected abstract validateChildrenImpl(
-    parent: AST.Node,
-    ast: AST.Node[],
+    parent: AST.SyntaxNode,
+    ast: AST.SyntaxNode[],
     context: ValidationContext
-  ): AST.Node[];
+  ): AST.SyntaxNode[];
 
   /**
    * Determines whether the given type would be an *immediate* fit for this
@@ -534,13 +538,13 @@ class ChildCardinality {
 type ChildrenValidationFunc = (
   nodeTypes: ChildCardinality[],
   group: NodeTypeChildren,
-  parent: AST.Node,
-  children: AST.Node[],
+  parent: AST.SyntaxNode,
+  children: AST.SyntaxNode[],
   firstIndex: number,
   context: ValidationContext
 ) => {
   firstUncheckedIndex: number;
-  validNodes: AST.Node[];
+  validNodes: AST.SyntaxNode[];
 };
 
 /**
@@ -552,13 +556,13 @@ type ChildrenValidationFunc = (
 const validateSequence: ChildrenValidationFunc = (
   nodeTypes: ChildCardinality[],
   group: NodeTypeChildren,
-  parent: AST.Node,
-  children: AST.Node[],
+  parent: AST.SyntaxNode,
+  children: AST.SyntaxNode[],
   firstIndex: number,
   context: ValidationContext
 ) => {
   // These indices are expected
-  const validIndices: AST.Node[] = [];
+  const validIndices: AST.SyntaxNode[] = [];
 
   // Used to step through all children of `ast`
   let childIndex = firstIndex;
@@ -651,10 +655,10 @@ class NodeComplexTypeChildrenSequence extends NodeComplexTypeChildrenValidator {
    * Ensures the sequence is correct
    */
   validateChildrenImpl(
-    parent: AST.Node,
-    children: AST.Node[],
+    parent: AST.SyntaxNode,
+    children: AST.SyntaxNode[],
     context: ValidationContext
-  ): AST.Node[] {
+  ): AST.SyntaxNode[] {
     // The actual sequence validation walks over the existing node types
     let res = validateSequence(
       this._nodeTypes,
@@ -706,15 +710,15 @@ const validateAllowed: ChildrenValidationFunc = function (
   this: void,
   nodeTypes: ChildCardinality[],
   group: NodeTypeChildren,
-  parent: AST.Node,
-  children: AST.Node[],
+  parent: AST.SyntaxNode,
+  children: AST.SyntaxNode[],
   firstIndex: number,
   context: ValidationContext
 ) {
   let index = firstIndex;
 
   // These children are expected
-  const toReturn: AST.Node[] = [];
+  const toReturn: AST.SyntaxNode[] = [];
   // Initially no node has occured so far
   const occurences: number[] = nodeTypes.map((_) => 0);
 
@@ -793,8 +797,8 @@ class NodeComplexTypeChildrenAllowed extends NodeComplexTypeChildrenValidator {
    * Ensures that every child has at least a matching type.
    */
   validateChildrenImpl(
-    parent: AST.Node,
-    children: AST.Node[],
+    parent: AST.SyntaxNode,
+    children: AST.SyntaxNode[],
     context: ValidationContext
   ) {
     const res = validateAllowed(
@@ -848,10 +852,10 @@ class NodeComplexTypeChildrenChoice extends NodeComplexTypeChildrenValidator {
    * Runs the choice validation against a certain node.
    */
   protected validateChildrenImpl(
-    parent: AST.Node,
-    ast: AST.Node[],
+    parent: AST.SyntaxNode,
+    ast: AST.SyntaxNode[],
     context: ValidationContext
-  ): AST.Node[] {
+  ): AST.SyntaxNode[] {
     if (ast.length === 0) {
       // TODO: Tell category
       context.addError(ErrorCodes.NoChoiceNodeAvailable, parent, {});
@@ -959,12 +963,12 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
    * Checks whether the grouping is valid and appears an appropriate number of times.
    */
   protected validateChildrenImpl(
-    p: AST.Node,
-    children: AST.Node[],
+    p: AST.SyntaxNode,
+    children: AST.SyntaxNode[],
     c: ValidationContext
-  ): AST.Node[] {
+  ): AST.SyntaxNode[] {
     let currChildIndex = 0;
-    let validNodes: AST.Node[] = [];
+    let validNodes: AST.SyntaxNode[] = [];
 
     let numIterations = 0;
 
@@ -1058,7 +1062,7 @@ abstract class NodePropertyValidator {
   }
 
   abstract validate(
-    node: AST.Node,
+    node: AST.SyntaxNode,
     value: string,
     context: ValidationContext
   ): void;
@@ -1072,7 +1076,11 @@ export class NodePropertyBooleanValidator extends NodePropertyValidator {
     super(desc);
   }
 
-  validate(node: AST.Node, value: string, context: ValidationContext): void {
+  validate(
+    node: AST.SyntaxNode,
+    value: string,
+    context: ValidationContext
+  ): void {
     if (value != "true" && value != "false") {
       context.addError(ErrorCodes.IllegalPropertyType, node, {
         condition: `"${value}" must be either "true" or "false"`,
@@ -1098,7 +1106,11 @@ export class NodePropertyIntegerValidator extends NodePropertyValidator {
     return typeof value === "string" && /^-?[0-9]+$/.test(value);
   }
 
-  validate(node: AST.Node, value: unknown, context: ValidationContext): void {
+  validate(
+    node: AST.SyntaxNode,
+    value: unknown,
+    context: ValidationContext
+  ): void {
     if (!this.validValue(value)) {
       context.addError(ErrorCodes.IllegalPropertyType, node, {
         condition: `"${value}" must be a string that looks like an integer`,
@@ -1140,7 +1152,7 @@ export class NodePropertyStringValidator extends NodePropertyValidator {
     }
   }
 
-  validate(node: AST.Node, value: string, context: ValidationContext) {
+  validate(node: AST.SyntaxNode, value: string, context: ValidationContext) {
     this._restrictions.forEach((restriction) => {
       switch (restriction.type as string) {
         case "length":
@@ -1198,7 +1210,11 @@ export class NodePropertyReferenceValidator extends NodePropertyValidator {
     this._referenceType = desc.base;
   }
 
-  validate(node: AST.Node, idValue: string, context: ValidationContext): void {
+  validate(
+    node: AST.SyntaxNode,
+    idValue: string,
+    context: ValidationContext
+  ): void {
     if (isValidId(idValue)) {
       context.addReference(this._referenceType, idValue);
     } else {
@@ -1264,7 +1280,7 @@ class NodeOneOfType extends NodeType {
   /**
    * Checks whether the given node is one of the nodes.
    */
-  validate(ast: AST.Node, context: ValidationContext): void {
+  validate(ast: AST.SyntaxNode, context: ValidationContext): void {
     // The "oneOf" node is not really a node that could be used anywhere
     if (
       this.languageName === ast.languageName &&
@@ -1350,7 +1366,7 @@ class TypeReference {
   /**
    * Validates using the underlying reference.
    */
-  validate(ast: AST.Node, context: ValidationContext): void {
+  validate(ast: AST.SyntaxNode, context: ValidationContext): void {
     this.type.validate(ast, context);
   }
 
@@ -1455,7 +1471,7 @@ export class GrammarValidator {
    * Validates the given tree in the given context. Ensures that a valid
    * type is used as the root.
    */
-  validateFromRoot(ast: AST.Node, context: ValidationContext) {
+  validateFromRoot(ast: AST.SyntaxNode, context: ValidationContext) {
     if (!this.rootType) {
       context.addError(ErrorCodes.UnspecifiedRoot, ast);
     } else if (!this.rootType.isResolveable) {
@@ -1476,13 +1492,17 @@ export class GrammarValidator {
   /**
    * @return The type with the matching name.
    */
-  getType(n: AST.Node): NodeConcreteType;
+  getType(n: AST.SyntaxNode): NodeConcreteType;
   getType(languageName: string, typename: string): NodeType;
-  getType(nodeOrLang: string | AST.Node, givenTypename?: string) {
+  getType(nodeOrLang: string | AST.SyntaxNode, givenTypename?: string) {
     const languageName =
-      nodeOrLang instanceof AST.Node ? nodeOrLang.languageName : nodeOrLang;
+      nodeOrLang instanceof AST.SyntaxNode
+        ? nodeOrLang.languageName
+        : nodeOrLang;
     const typename =
-      nodeOrLang instanceof AST.Node ? nodeOrLang.typeName : givenTypename;
+      nodeOrLang instanceof AST.SyntaxNode
+        ? nodeOrLang.typeName
+        : givenTypename;
 
     if (!this.isKnownType(languageName, typename)) {
       throw new Error(

@@ -3,7 +3,7 @@ import {
   CodeGeneratorProcess,
   OutputSeparator,
 } from "../codegenerator-process";
-import { Node } from "../syntaxtree";
+import { SyntaxNode } from "../syntaxtree";
 
 import { readFromNode } from "./meta-grammar";
 
@@ -14,7 +14,7 @@ export const GRAMMAR_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "grammar",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const grammarDocument = readFromNode(node.toModel());
         process.addConvertedFragment(
           JSON.stringify(grammarDocument, undefined, 2),

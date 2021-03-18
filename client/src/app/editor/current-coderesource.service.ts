@@ -7,7 +7,7 @@ import { ResourceReferencesService } from "../shared/resource-references.service
 import {
   CodeResource,
   NodeLocation,
-  Tree,
+  SyntaxTree,
   ValidationResult,
 } from "../shared/syntaxtree";
 import {
@@ -57,7 +57,7 @@ export class CurrentCodeResourceService {
   /**
    * Informs interested components about the tree behind the current resource
    */
-  readonly currentTree: Observable<Tree> = this._codeResource.pipe(
+  readonly currentTree: Observable<SyntaxTree> = this._codeResource.pipe(
     filter((c) => !!c),
     mergeMap((c) => c.syntaxTree$)
   );

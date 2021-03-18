@@ -5,7 +5,7 @@ import { ProjectResource } from "../resource";
 import { ResourceReferencesService } from "../resource-references.service";
 
 import { CodeResourceDescription } from "./coderesource.description";
-import { Tree, NodeDescription, NodeLocation } from "./syntaxtree";
+import { SyntaxTree, NodeDescription, NodeLocation } from "./syntaxtree";
 import { embraceNode } from "./drop-embrace";
 import { BlockLanguage } from "../block/block-language";
 
@@ -24,7 +24,7 @@ export * from "./coderesource.description";
  * be reflected in the code resource.
  */
 export class CodeResource extends ProjectResource {
-  private _tree$ = new BehaviorSubject<Tree>(new Tree(undefined));
+  private _tree$ = new BehaviorSubject<SyntaxTree>(new SyntaxTree(undefined));
 
   private _runtimeLanguageId$ = new BehaviorSubject<string>(undefined);
 
@@ -36,7 +36,7 @@ export class CodeResource extends ProjectResource {
   ) {
     super(desc, resourceReferences);
 
-    this._tree$.next(new Tree(desc.ast));
+    this._tree$.next(new SyntaxTree(desc.ast));
     this._runtimeLanguageId$.next(desc.programmingLanguageId);
     this._blockLanguageId$.next(desc.blockLanguageId);
   }
@@ -112,14 +112,14 @@ export class CodeResource extends ProjectResource {
   /**
    * @return A peek at the tree that describes the code of this resource.
    */
-  get syntaxTreePeek(): Tree {
+  get syntaxTreePeek(): SyntaxTree {
     return this._tree$.value;
   }
 
   /**
    * @return The tree that describes the code of this resource.
    */
-  readonly syntaxTree$: Observable<Tree> = this._tree$.asObservable();
+  readonly syntaxTree$: Observable<SyntaxTree> = this._tree$.asObservable();
 
   /**
    * Replaces the node at the given location.
@@ -234,11 +234,11 @@ export class CodeResource extends ProjectResource {
   /**
    * @param tree The new tree that describes this resource.
    */
-  replaceSyntaxTree(tree: Tree | NodeDescription) {
-    if (tree instanceof Tree) {
+  replaceSyntaxTree(tree: SyntaxTree | NodeDescription) {
+    if (tree instanceof SyntaxTree) {
       this._tree$.next(tree);
     } else {
-      this._tree$.next(new Tree(tree));
+      this._tree$.next(new SyntaxTree(tree));
     }
     this.markSaveRequired();
   }

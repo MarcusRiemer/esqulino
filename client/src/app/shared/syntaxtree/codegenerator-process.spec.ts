@@ -1,4 +1,4 @@
-import { Node } from "./syntaxtree";
+import { SyntaxNode } from "./syntaxtree";
 import {
   CodeConverterProvider,
   CodeGeneratorProcess,
@@ -13,7 +13,7 @@ const SPEC_FAIL_PROVIDER: CodeConverterProvider = {
   },
 };
 
-const SPEC_NODE = new Node(
+const SPEC_NODE = new SyntaxNode(
   {
     language: "spec",
     name: "root",

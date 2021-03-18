@@ -3,7 +3,7 @@ import {
   CodeGeneratorProcess,
   OutputSeparator,
 } from "../codegenerator-process";
-import { Node } from "../syntaxtree";
+import { SyntaxNode } from "../syntaxtree";
 import { readFromNode } from "./regex-testbench.description";
 
 /**
@@ -16,7 +16,7 @@ export const TESTBENCH_CONVERTER: NodeConverterRegistration[] = [
       typeName: "root",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const testbenchDocument = readFromNode(node);
         process.addConvertedFragment(
           JSON.stringify(testbenchDocument, undefined, 2),

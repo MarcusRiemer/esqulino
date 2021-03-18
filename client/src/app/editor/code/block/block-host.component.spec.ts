@@ -13,7 +13,7 @@ import { FocusDirective } from "../../../shared/focus-element.directive";
 import {
   LanguageService,
   NodeDescription,
-  Tree,
+  SyntaxTree,
   CodeResource,
 } from "../../../shared";
 import {
@@ -96,7 +96,7 @@ describe("BlockHostComponent", () => {
       undefined
     );
 
-    component.node = new Tree(nodeDesc).rootNode;
+    component.node = new SyntaxTree(nodeDesc).rootNode;
     component.blockLanguage = blockLanguage;
     component.codeResource = codeResource;
 

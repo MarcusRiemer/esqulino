@@ -4,7 +4,7 @@ import { Subscription } from "rxjs";
 import { first, filter, finalize, flatMap, map } from "rxjs/operators";
 
 import { DatabaseQueryErrorDescription } from "../../../shared";
-import { Tree } from "../../../shared/syntaxtree";
+import { SyntaxTree } from "../../../shared/syntaxtree";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { EditorToolbarService, ToolbarItem } from "../../toolbar.service";
@@ -18,7 +18,7 @@ import {
 /**
  * Extracts the names of required query parameters out of a syntaxtree.
  */
-function extractQueryParameterNames(tree: Tree) {
+function extractQueryParameterNames(tree: SyntaxTree) {
   const names = tree
     .getNodesOfType({ languageName: "sql", typeName: "parameter" })
     .map((n) => n.properties["name"]);

@@ -1,7 +1,7 @@
 import { GRAMMAR_BOOLEAN_DESCRIPTION } from "./grammar.spec.boolean";
 import { NodeDescription } from "./syntaxtree.description";
 import { _exactMatches, _singleChildReplace } from "./drop";
-import { Tree } from "./syntaxtree";
+import { SyntaxTree } from "./syntaxtree";
 import { Validator } from "./validator";
 
 describe("Drop", () => {
@@ -26,7 +26,7 @@ describe("Drop", () => {
       ];
 
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const treeIn = new Tree(parentDesc);
+      const treeIn = new SyntaxTree(parentDesc);
 
       expect(_exactMatches(v, treeIn, [], candidates)).toEqual([]);
       expect(_exactMatches(v, treeIn, [["expr", 0]], candidates)).toEqual([]);
@@ -54,7 +54,7 @@ describe("Drop", () => {
       ];
 
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const treeIn = new Tree(parentDesc);
+      const treeIn = new SyntaxTree(parentDesc);
 
       expect(_exactMatches(v, treeIn, [], candidates)).toEqual([]);
       expect(_exactMatches(v, treeIn, [["expr", 0]], candidates)).toEqual([
@@ -101,7 +101,7 @@ describe("Drop", () => {
       ];
 
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const treeIn = new Tree(parentDesc);
+      const treeIn = new SyntaxTree(parentDesc);
 
       expect(_exactMatches(v, treeIn, [], candidates)).toEqual([]);
       expect(_exactMatches(v, treeIn, [["expr", 0]], candidates)).toEqual([]);
@@ -137,7 +137,7 @@ describe("Drop", () => {
       ];
 
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const treeIn = new Tree(parentDesc);
+      const treeIn = new SyntaxTree(parentDesc);
 
       expect(_exactMatches(v, treeIn, [], candidates)).toEqual([]);
       expect(_exactMatches(v, treeIn, [["lhs", 0]], candidates)).toEqual([
@@ -173,7 +173,7 @@ describe("Drop", () => {
       ];
 
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const treeIn = new Tree();
+      const treeIn = new SyntaxTree();
 
       expect(_exactMatches(v, treeIn, [], candidates))
         .withContext("Two constants and a noMatch at root")
@@ -221,7 +221,7 @@ describe("Drop", () => {
       ];
 
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const treeIn = new Tree(parentDesc);
+      const treeIn = new SyntaxTree(parentDesc);
 
       expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
       expect(_singleChildReplace(v, treeIn, [["expr", 0]], candidates)).toEqual(
@@ -251,7 +251,7 @@ describe("Drop", () => {
       ];
 
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const treeIn = new Tree(parentDesc);
+      const treeIn = new SyntaxTree(parentDesc);
 
       expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
       expect(_singleChildReplace(v, treeIn, [["expr", 0]], candidates)).toEqual(
@@ -287,7 +287,7 @@ describe("Drop", () => {
       ];
 
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const treeIn = new Tree(parentDesc);
+      const treeIn = new SyntaxTree(parentDesc);
 
       expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
       expect(_singleChildReplace(v, treeIn, [["expr", 0]], candidates)).toEqual(
@@ -338,7 +338,7 @@ describe("Drop", () => {
       ];
 
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const treeIn = new Tree(parentDesc);
+      const treeIn = new SyntaxTree(parentDesc);
 
       expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
       expect(_singleChildReplace(v, treeIn, [["lhs", 0]], candidates)).toEqual(
@@ -398,7 +398,7 @@ describe("Drop", () => {
       ];
 
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const treeIn = new Tree(parentDesc);
+      const treeIn = new SyntaxTree(parentDesc);
 
       expect(_singleChildReplace(v, treeIn, [], candidates)).toEqual([]);
       expect(_singleChildReplace(v, treeIn, [["lhs", 0]], candidates)).toEqual(

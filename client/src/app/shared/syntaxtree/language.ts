@@ -1,5 +1,5 @@
 import { NodeConverterRegistration } from "./codegenerator";
-import { Tree, NodeDescription, QualifiedTypeName } from "./syntaxtree";
+import { SyntaxTree, NodeDescription, QualifiedTypeName } from "./syntaxtree";
 import { Validator, SubValidator } from "./validator";
 import { ValidationResult } from "./validation-result";
 import { CodeGenerator } from "./codegenerator";
@@ -90,8 +90,8 @@ export class Language {
    * @param desc The description of the tree
    * @return The described tree
    */
-  createTree(desc: NodeDescription): Tree {
-    return new Tree(desc);
+  createTree(desc: NodeDescription): SyntaxTree {
+    return new SyntaxTree(desc);
   }
 
   /**
@@ -103,7 +103,7 @@ export class Language {
    *   is the SQL validator which requires knowledge about the schema.
    * @return A result object containing all errors
    */
-  validateTree(ast: Tree, additionalContext: any = {}): ValidationResult {
+  validateTree(ast: SyntaxTree, additionalContext: any = {}): ValidationResult {
     return this.validator.validateFromRoot(ast, additionalContext);
   }
 
@@ -113,7 +113,7 @@ export class Language {
    * @param ast The root of the tree to generate
    * @return A string representation of the tree.
    */
-  emitTree(ast: Tree): string {
+  emitTree(ast: SyntaxTree): string {
     return this.codeGenerator.emit(ast);
   }
 

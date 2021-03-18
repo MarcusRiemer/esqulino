@@ -1,5 +1,5 @@
 import { NodeDescription, QualifiedTypeName } from "../syntaxtree.description";
-import { Tree, Node } from "../syntaxtree";
+import { SyntaxTree, SyntaxNode } from "../syntaxtree";
 import {
   NodePropertyTypeDescription,
   NodeTerminalSymbolDescription,
@@ -23,7 +23,9 @@ import {
 import { OccursDescription, OccursString } from "../occurs.description";
 import { BlattWerkzeugError } from "../../blattwerkzeug-error";
 
-export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
+export function convertProperty(
+  attrNode: SyntaxNode
+): NodePropertyTypeDescription {
   const toReturn: ReturnType<typeof convertProperty> = {
     type: "property",
     base: attrNode.properties["base"] as any,
@@ -36,7 +38,7 @@ export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
 }
 
 export function convertInterpolate(
-  attrNode: Node
+  attrNode: SyntaxNode
 ): NodeInterpolatePropertyDescription {
   const toReturn: ReturnType<typeof convertInterpolate> = {
     type: "interpolate",
@@ -51,7 +53,9 @@ export function convertInterpolate(
 /**
  * Converts a node that represents a terminal symbol to a description.
  */
-export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
+export function convertTerminal(
+  attrNode: SyntaxNode
+): NodeTerminalSymbolDescription {
   const toReturn: ReturnType<typeof convertTerminal> = {
     type: "terminal",
     symbol: attrNode.properties["symbol"],
@@ -66,7 +70,7 @@ export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
   return toReturn;
 }
 
-export function convertNodeRefOne(ref: Node): QualifiedTypeName {
+export function convertNodeRefOne(ref: SyntaxNode): QualifiedTypeName {
   if (!ref) {
     throw new Error(`convertNodeRefOne called with falsy value: ${ref}`);
   } else if (ref.typeName === "nodeRefOne") {
@@ -81,7 +85,7 @@ export function convertNodeRefOne(ref: Node): QualifiedTypeName {
   }
 }
 
-export function convertOccurs(ref: Node): OccursDescription {
+export function convertOccurs(ref: SyntaxNode): OccursDescription {
   if (!ref) {
     throw new Error(`convertOccurs called with falsy value: ${ref}`);
   }
@@ -94,14 +98,18 @@ export function convertOccurs(ref: Node): OccursDescription {
   }
 }
 
-function convertNodeRefCardinality(ref: Node): ChildCardinalityDescription {
+function convertNodeRefCardinality(
+  ref: SyntaxNode
+): ChildCardinalityDescription {
   return {
     nodeType: convertNodeRefOne(ref.getChildInCategory("references")),
     occurs: convertOccurs(ref.getChildInCategory("cardinality")),
   };
 }
 
-export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
+export function convertChildren(
+  attrNode: SyntaxNode
+): NodeChildrenGroupDescription {
   const toReturn: ReturnType<typeof convertChildren> = {
     type: attrNode.properties["base"] as any,
     name: attrNode.properties["name"],
@@ -132,7 +140,7 @@ export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
 }
 
 export function convertEach(
-  attrNode: Node
+  attrNode: SyntaxNode
 ): NodeInterpolateChildrenDescription {
   const toReturn: ReturnType<typeof convertEach> = {
     type: "each",
@@ -145,7 +153,7 @@ export function convertEach(
 }
 
 export function convertContainer(
-  attrNode: Node
+  attrNode: SyntaxNode
 ): NodeVisualContainerDescription {
   const orientationNode = attrNode.getChildInCategory("orientation");
 
@@ -164,7 +172,10 @@ export function convertContainer(
   return toReturn;
 }
 
-export function possiblyAddTags(toParse: Node, target: { tags?: string[] }) {
+export function possiblyAddTags(
+  toParse: SyntaxNode,
+  target: { tags?: string[] }
+) {
   const tags = toParse
     .getChildrenInCategory("tags")
     .map((t) => t.properties["name"]);
@@ -178,7 +189,7 @@ export function possiblyAddTags(toParse: Node, target: { tags?: string[] }) {
  * target list.
  */
 export function readAttributes(
-  attrNode: Node,
+  attrNode: SyntaxNode,
   target: NodeAttributeDescription[]
 ) {
   switch (attrNode.typeName) {
@@ -206,7 +217,9 @@ export function readAttributes(
 /**
  * Converts the given node to a type reference that has no cardinality.
  */
-export function resolveSingularReference(refNode: Node): QualifiedTypeName {
+export function resolveSingularReference(
+  refNode: SyntaxNode
+): QualifiedTypeName {
   switch (refNode.typeName) {
     case "nodeRefOne":
       return {
@@ -232,7 +245,7 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
     root: undefined,
   };
 
-  const tree = new Tree(node);
+  const tree = new SyntaxTree(node);
 
   // Extract the root this tree defines
   const nodeRoot = tree.rootNode.getChildInCategory("root");

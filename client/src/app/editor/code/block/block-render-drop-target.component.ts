@@ -12,7 +12,7 @@ import { map } from "rxjs/operators";
 
 import { locationIsOnPath } from "../../../shared/util";
 import {
-  Node,
+  SyntaxNode,
   NodeLocation,
   ErrorCodes,
   ErrorMissingChild,
@@ -152,7 +152,7 @@ export class BlockRenderDropTargetComponent {
   /**
    * If applicable: The node that has something dropped on to it.
    */
-  @Input() public node?: Node;
+  @Input() public node?: SyntaxNode;
 
   /**
    * The visualisation parameters for this block.

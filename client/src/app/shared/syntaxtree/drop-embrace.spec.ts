@@ -1,4 +1,4 @@
-import { Node, NodeDescription, Tree } from "./syntaxtree";
+import { SyntaxNode, NodeDescription, SyntaxTree } from "./syntaxtree";
 import { Validator } from "./validator";
 import {
   embraceNode,
@@ -30,7 +30,7 @@ describe("Drop Embrace", () => {
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
       const res = _findPossibleLocations(
-        new Node(parentDesc, undefined),
+        new SyntaxNode(parentDesc, undefined),
         fillType,
         v
       );
@@ -52,7 +52,7 @@ describe("Drop Embrace", () => {
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
       const res = _findPossibleLocations(
-        new Node(parentDesc, undefined),
+        new SyntaxNode(parentDesc, undefined),
         fillType,
         v
       );
@@ -75,7 +75,7 @@ describe("Drop Embrace", () => {
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
       const res = _findPossibleLocations(
-        new Node(parentDesc, undefined),
+        new SyntaxNode(parentDesc, undefined),
         fillType,
         v
       );
@@ -106,7 +106,7 @@ describe("Drop Embrace", () => {
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
       const res = _findPossibleLocations(
-        new Node(parentDesc, undefined),
+        new SyntaxNode(parentDesc, undefined),
         fillType,
         v
       );
@@ -137,7 +137,7 @@ describe("Drop Embrace", () => {
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
       const res = _findPossibleLocations(
-        new Node(parentDesc, undefined),
+        new SyntaxNode(parentDesc, undefined),
         fillType,
         v
       );
@@ -176,7 +176,7 @@ describe("Drop Embrace", () => {
       const v = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
       const res = _findPossibleLocations(
-        new Node(parentDesc, undefined),
+        new SyntaxNode(parentDesc, undefined),
         fillType,
         v
       );
@@ -204,7 +204,7 @@ describe("Drop Embrace", () => {
         },
       };
 
-      const embracedNode = new Tree(inTreeDesc).rootNode;
+      const embracedNode = new SyntaxTree(inTreeDesc).rootNode;
 
       const res = _localEmbrace(embracedNode, embracingDescription, [
         ["expr", 0],
@@ -246,7 +246,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const targetNode = new Tree(inTreeDesc).rootNode;
+      const targetNode = new SyntaxTree(inTreeDesc).rootNode;
       const res = _findMatchInCandidate(
         validator,
         targetNode,
@@ -285,7 +285,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const targetNode = new Tree(inTreeDesc).rootNode;
+      const targetNode = new SyntaxTree(inTreeDesc).rootNode;
       const res = _findMatchInCandidate(
         validator,
         targetNode,
@@ -311,7 +311,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const prev = new Tree(undefined);
+      const prev = new SyntaxTree(undefined);
       const curr = embraceNode(validator, prev, [], embraceCandidates);
 
       const expTreeDesc: NodeDescription = {
@@ -351,7 +351,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const prev = new Tree(inTreeDesc);
+      const prev = new SyntaxTree(inTreeDesc);
       const curr = embraceNode(validator, prev, [], embraceCandidates);
 
       const expTreeDesc: NodeDescription = {
@@ -403,7 +403,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const prev = new Tree(inTreeDesc);
+      const prev = new SyntaxTree(inTreeDesc);
       const curr = embraceNode(validator, prev, [], embraceCandidates);
 
       const expTreeDesc: NodeDescription = {
@@ -439,7 +439,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const prev = new Tree(inTreeDesc);
+      const prev = new SyntaxTree(inTreeDesc);
       const curr = embraceNode(validator, prev, [], embraceCandidates);
 
       const expTreeDesc: NodeDescription = {
@@ -484,7 +484,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const prev = new Tree(inTreeDesc);
+      const prev = new SyntaxTree(inTreeDesc);
       const curr = embraceNode(validator, prev, [], embraceCandidates);
 
       const expTreeDesc: NodeDescription = {
@@ -529,7 +529,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const prev = new Tree(inTreeDesc);
+      const prev = new SyntaxTree(inTreeDesc);
       const curr = embraceNode(validator, prev, [], embraceCandidates);
 
       const expTreeDesc: NodeDescription = {
@@ -561,7 +561,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const prev = new Tree(inTreeDesc);
+      const prev = new SyntaxTree(inTreeDesc);
       const curr = embraceNode(validator, prev, [], embraceCandidates);
 
       expect(curr.toModel()).toEqual(inTreeDesc);
@@ -595,7 +595,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const prev = new Tree(inTreeDesc);
+      const prev = new SyntaxTree(inTreeDesc);
       const curr = embraceNode(validator, prev, [], embraceCandidates);
 
       const expTreeDesc: NodeDescription = {
@@ -637,7 +637,7 @@ describe("Drop Embrace", () => {
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
 
-      const prev = new Tree(inTreeDesc);
+      const prev = new SyntaxTree(inTreeDesc);
       const curr = embraceNode(validator, prev, [], embraceCandidates);
 
       const expTreeDesc: NodeDescription = {

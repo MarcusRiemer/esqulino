@@ -1,5 +1,5 @@
 import { CodeGenerator } from "../codegenerator";
-import { Node, NodeDescription, Tree } from "../syntaxtree";
+import { SyntaxNode, NodeDescription, SyntaxTree } from "../syntaxtree";
 import { Validator } from "../validator";
 import { printableError } from "../validation-result";
 
@@ -25,7 +25,7 @@ function verifyEmitted<T>(fileName: string, transform: (obj: T) => string) {
 }
 
 function emitTree(astDesc: NodeDescription) {
-  const ast = new Node(astDesc, undefined);
+  const ast = new SyntaxNode(astDesc, undefined);
   const codeGen = new CodeGenerator(NODE_CONVERTER);
 
   return codeGen.emit(ast);
@@ -33,7 +33,7 @@ function emitTree(astDesc: NodeDescription) {
 
 function validate(fileName: string, isValid: boolean) {
   const astDesc = require(`./spec/${fileName}.json`);
-  const ast = new Tree(astDesc);
+  const ast = new SyntaxTree(astDesc);
 
   const validator = new Validator([GRAMMAR_DESCRIPTION]);
   const result = validator.validateFromRoot(ast);

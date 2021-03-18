@@ -1,6 +1,6 @@
 import { CodeGenerator, NodeConverterRegistration } from "./codegenerator";
 import { CodeGeneratorProcess, OutputSeparator } from "./codegenerator-process";
-import { Tree, Node } from "./syntaxtree";
+import { SyntaxTree, SyntaxNode } from "./syntaxtree";
 
 describe("Codegeneration", () => {
   it("Converters are registered correctly", () => {
@@ -60,7 +60,7 @@ describe("Codegeneration", () => {
       {
         type: { languageName: "foo", typeName: "bar" },
         converter: {
-          init: function (_: Node, process: CodeGeneratorProcess<State>) {
+          init: function (_: SyntaxNode, process: CodeGeneratorProcess<State>) {
             // Read and write the state
             process.state.bar += 1;
             process.state.foo += "bar";
@@ -74,7 +74,10 @@ describe("Codegeneration", () => {
 
     // Run the codegenerator
     const codeGen = new CodeGenerator(desc, {}, [state]);
-    const syntaxTree = new Node({ language: "foo", name: "bar" }, undefined);
+    const syntaxTree = new SyntaxNode(
+      { language: "foo", name: "bar" },
+      undefined
+    );
     codeGen.emit(syntaxTree);
 
     // This is how the state must look if the mutations were applied correctly
@@ -105,7 +108,7 @@ describe("Codegeneration", () => {
         type: { languageName: "foo", typeName: "bar" },
         converter: {
           init: function (
-            _: Node,
+            _: SyntaxNode,
             process: CodeGeneratorProcess<StateA & StateB>
           ) {
             // Read and write the state
@@ -122,7 +125,10 @@ describe("Codegeneration", () => {
 
     // Run the codegenerator
     const codeGen = new CodeGenerator(desc, {}, [stateA, stateB]);
-    const syntaxTree = new Node({ language: "foo", name: "bar" }, undefined);
+    const syntaxTree = new SyntaxNode(
+      { language: "foo", name: "bar" },
+      undefined
+    );
     codeGen.emit(syntaxTree);
 
     // This is how the state must look if the mutations were applied correctly
@@ -141,7 +147,7 @@ describe("Codegeneration", () => {
 
   it("Empty Tree", () => {
     const codeGen = new CodeGenerator([]);
-    const tree = new Tree(undefined);
+    const tree = new SyntaxTree(undefined);
 
     expect(() => codeGen.emit(tree)).toThrowError();
   });
@@ -149,7 +155,7 @@ describe("Codegeneration", () => {
   it("tracks changes", () => {
     const codeGen = new CodeGenerator([]);
     const process = new CodeGeneratorProcess(codeGen);
-    const tree = new Tree({
+    const tree = new SyntaxTree({
       language: "l",
       name: "r",
     });
@@ -165,7 +171,7 @@ describe("Codegeneration", () => {
   it("tracks nested changes", () => {
     const codeGen = new CodeGenerator([]);
     const process = new CodeGeneratorProcess(codeGen);
-    const tree = new Tree({
+    const tree = new SyntaxTree({
       language: "l",
       name: "r",
     });
@@ -184,7 +190,7 @@ describe("Codegeneration", () => {
 
   describe(`leading and ending seperators`, () => {
     const codeGen = new CodeGenerator([]);
-    const tree = new Tree({
+    const tree = new SyntaxTree({
       language: "l",
       name: "r",
     });
@@ -236,7 +242,7 @@ describe("Codegeneration", () => {
 
   describe(`multiple separators`, () => {
     const codeGen = new CodeGenerator([]);
-    const tree = new Tree({
+    const tree = new SyntaxTree({
       language: "l",
       name: "r",
     });
@@ -311,7 +317,7 @@ describe("Codegeneration", () => {
 
   describe(`indent`, () => {
     const codeGen = new CodeGenerator([]);
-    const tree = new Tree({
+    const tree = new SyntaxTree({
       language: "l",
       name: "r",
     });

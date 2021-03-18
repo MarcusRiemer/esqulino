@@ -1,5 +1,5 @@
 import { BlattWerkzeugError } from "../blattwerkzeug-error";
-import { Node, QualifiedTypeName } from "./syntaxtree";
+import { SyntaxNode, QualifiedTypeName } from "./syntaxtree";
 
 export enum OutputSeparator {
   NONE,
@@ -23,7 +23,7 @@ const ANY_NEW_LINE =
 export type GeneratedNode = Readonly<{
   depth: number;
   compilation: string;
-  node: Node;
+  node: SyntaxNode;
   sep: OutputSeparator;
 }>;
 
@@ -35,7 +35,7 @@ export interface NodeConverter<T extends {}> {
   /*
    * This function is called when the node is entered.
    */
-  init(node: Node, process: CodeGeneratorProcess<T>): void;
+  init(node: SyntaxNode, process: CodeGeneratorProcess<T>): void;
 }
 
 export interface CodeConverterProvider {
@@ -75,7 +75,7 @@ export class CodeGeneratorProcess<TState extends {}> {
    */
   addConvertedFragment(
     compilation: string,
-    node: Node,
+    node: SyntaxNode,
     sep = OutputSeparator.NONE
   ) {
     if (compilation === undefined) {
@@ -168,7 +168,7 @@ export class CodeGeneratorProcess<TState extends {}> {
   /**
    * Generates code for the given node
    */
-  generateNode(node: Node) {
+  generateNode(node: SyntaxNode) {
     if (!node) {
       throw new Error("Can't generate node for falsy value");
     }

@@ -2,7 +2,7 @@ import { BlattWerkzeugError } from "../blattwerkzeug-error";
 import { codeGeneratorFromGrammar } from "./codegenerator-automatic";
 import { CodeGeneratorProcess, NodeConverter } from "./codegenerator-process";
 import { NamedLanguages, VisualisedLanguages } from "./grammar.description";
-import { Node, Tree, QualifiedTypeName } from "./syntaxtree";
+import { SyntaxNode, SyntaxTree, QualifiedTypeName } from "./syntaxtree";
 
 /**
  * Used to register a NodeConverter for a certain type.
@@ -68,12 +68,12 @@ export class CodeGenerator {
   /**
    * @param ast The tree to emit.
    */
-  emit(ast: Node | Tree): string {
-    let rootNode: Node = undefined;
+  emit(ast: SyntaxNode | SyntaxTree): string {
+    let rootNode: SyntaxNode = undefined;
 
-    if (ast instanceof Tree && !ast.isEmpty) {
+    if (ast instanceof SyntaxTree && !ast.isEmpty) {
       rootNode = ast.rootNode;
-    } else if (ast instanceof Node) {
+    } else if (ast instanceof SyntaxNode) {
       rootNode = ast;
     }
 
@@ -133,7 +133,7 @@ export class CodeGenerator {
     if (err) {
       if (this.hasImplicitConverter(t)) {
         return {
-          init: (node: Node, process: CodeGeneratorProcess<any>) =>
+          init: (node: SyntaxNode, process: CodeGeneratorProcess<any>) =>
             codeGeneratorFromGrammar(this.types, node, process),
         };
       } else {

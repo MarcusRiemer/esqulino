@@ -1,5 +1,5 @@
 import { CodeGenerator } from "../codegenerator";
-import { NodeDescription, Tree } from "../syntaxtree";
+import { NodeDescription, SyntaxTree } from "../syntaxtree";
 
 import { REGEX_CONVERTER } from "./regex.codegenerator";
 
@@ -29,7 +29,7 @@ export function verifyFiles<T>(
  * Calculates the string representation of the given AST
  */
 function emitTree(astDesc: NodeDescription, emitProgressCallback = false) {
-  const ast = new Tree(astDesc).rootNode;
+  const ast = new SyntaxTree(astDesc).rootNode;
   const codeGen = new CodeGenerator(REGEX_CONVERTER);
 
   return codeGen.emit(ast);

@@ -18,7 +18,7 @@ import {
 } from "rxjs/operators";
 
 import {
-  Node,
+  SyntaxNode,
   locationEquals,
   locationMatchingLength,
 } from "../../../shared/syntaxtree";
@@ -52,7 +52,7 @@ export class BlockRenderBlockComponent {
    * The node to be rendered
    */
   @Input()
-  public node: Node;
+  public node: SyntaxNode;
 
   /**
    * The visualisation parameters for this block.

@@ -25,16 +25,16 @@ export function typenameEquals(lhs: QualifiedTypeName, rhs: QualifiedTypeName) {
 /**
  * @return A human friendly name to read
  */
-export function printableTypename(n: Node | NodeDescription): string {
-  const langName = n instanceof Node ? n.languageName : n.language;
-  const typeName = n instanceof Node ? n.typeName : n.name;
+export function printableTypename(n: SyntaxNode | NodeDescription): string {
+  const langName = n instanceof SyntaxNode ? n.languageName : n.language;
+  const typeName = n instanceof SyntaxNode ? n.typeName : n.name;
   return `"${langName}.${typeName}"`;
 }
 
 /**
  * @return Possibly helpful information about the node during debugging
  */
-export function printableNodeDebug(n: Node) {
+export function printableNodeDebug(n: SyntaxNode) {
   const path = JSON.stringify(n.location);
   return `${printableTypename(n)} at ${path}`;
 }
@@ -118,7 +118,7 @@ type NodeProperties = { [propertyName: string]: string };
 /**
  * Children of a node are always sorted.
  */
-export type NodeChildren = { [childrenCategory: string]: Node[] };
+export type NodeChildren = { [childrenCategory: string]: SyntaxNode[] };
 
 /**
  * The core building block of the AST is this class. It contains
@@ -126,7 +126,7 @@ export type NodeChildren = { [childrenCategory: string]: Node[] };
  * are no compile-time checks to do any kind of validation, these
  * checks can only be made at runtime.
  */
-export class Node {
+export class SyntaxNode {
   /**
    * @return The name of the type this node should be validated against.
    */
@@ -147,13 +147,13 @@ export class Node {
    */
   readonly properties: NodeProperties;
 
-  private _nodeParent: Node | Tree;
+  private _nodeParent: SyntaxNode | SyntaxTree;
 
   /**
    * The constructor is responsible to transfer relevant description
    * properties and to construct any children.
    */
-  constructor(desc: NodeDescription, parent: Node | Tree) {
+  constructor(desc: NodeDescription, parent: SyntaxNode | SyntaxTree) {
     this.typeName = desc.name;
     this.languageName = desc.language;
     this._nodeParent = parent;
@@ -168,7 +168,7 @@ export class Node {
       for (let categoryName in desc.children) {
         const category = desc.children[categoryName];
         this.children[categoryName] = category.map(
-          (childDesc) => new Node(childDesc, this)
+          (childDesc) => new SyntaxNode(childDesc, this)
         );
       }
     }
@@ -215,7 +215,7 @@ export class Node {
   /**
    * @return All children in that category or an empty list if the category does not exist.
    */
-  getChildrenInCategory(categoryName: string): Node[] {
+  getChildrenInCategory(categoryName: string): SyntaxNode[] {
     const result = this.children[categoryName];
     if (result) {
       return result;
@@ -228,7 +228,7 @@ export class Node {
    * @return The single child in a specific category, or undefined if no such child
    *         or category exists.
    */
-  getChildInCategory(categoryName: string): Node {
+  getChildInCategory(categoryName: string): SyntaxNode {
     const result = this.getChildrenInCategory(categoryName);
     if (result.length > 0) {
       return result[0];
@@ -262,8 +262,8 @@ export class Node {
   /**
    * @return The node parenting this one.
    */
-  get nodeParent(): Node {
-    if (this._nodeParent instanceof Node) {
+  get nodeParent(): SyntaxNode {
+    if (this._nodeParent instanceof SyntaxNode) {
       return this._nodeParent;
     } else {
       return undefined;
@@ -286,13 +286,13 @@ export class Node {
   /**
    * @return The tree this node is a part of.
    */
-  get tree(): Tree {
+  get tree(): SyntaxTree {
     let p: any = this._nodeParent;
-    while (p && !(p instanceof Tree)) {
+    while (p && !(p instanceof SyntaxTree)) {
       p = p._nodeParent;
     }
 
-    if (p instanceof Tree) {
+    if (p instanceof SyntaxTree) {
       return p;
     } else {
       return undefined;
@@ -312,7 +312,7 @@ export class Node {
    */
   private treePathImpl(prev: NodeLocation): NodeLocation {
     // The root node uses the empty path
-    if (this._nodeParent instanceof Tree) {
+    if (this._nodeParent instanceof SyntaxTree) {
       return prev;
     } else {
       // Take all categories of the parent object
@@ -343,9 +343,9 @@ export class Node {
    *
    * @return An array of with nodes that match the given type.
    */
-  getNodesOfType(typename: QualifiedTypeName): Node[] {
+  getNodesOfType(typename: QualifiedTypeName): SyntaxNode[] {
     // Initial assumption: No matching node
-    let toReturn: Node[] = [];
+    let toReturn: SyntaxNode[] = [];
 
     // Is this node of a matching type?
     if (typenameEquals(this.qualifiedName, typename)) {
@@ -381,12 +381,12 @@ export class Node {
  * Acts as a "virtual" element above the root to ease manipulations
  * of syntaxtrees.
  */
-export class Tree {
-  private _root: Node;
+export class SyntaxTree {
+  private _root: SyntaxNode;
 
   constructor(rootDesc?: NodeDescription) {
     if (rootDesc) {
-      this._root = new Node(rootDesc, this);
+      this._root = new SyntaxNode(rootDesc, this);
     }
 
     Object.freeze(this);
@@ -395,7 +395,7 @@ export class Tree {
   /**
    * @return The root for the tree.
    */
-  get rootNode(): Node {
+  get rootNode(): SyntaxNode {
     if (this.isEmpty) {
       throw new Error("No root node available, tree is empty");
     }
@@ -436,14 +436,14 @@ export class Tree {
   /**
    * @return The node at the given location.
    */
-  locate(loc: NodeLocation): Node {
+  locate(loc: NodeLocation): SyntaxNode {
     if (this.isEmpty) {
       throw new Error(
         `SyntaxTree: Could not locate ${JSON.stringify(loc)} in an empty tree`
       );
     }
 
-    let current: Node = this._root;
+    let current: SyntaxNode = this._root;
     loc.forEach(([categoryName, childIndex], i) => {
       const children = current.children[categoryName];
       if (children && childIndex < children.length && childIndex >= 0) {
@@ -466,7 +466,7 @@ export class Tree {
   /**
    * @return The node at the given location or `undefined` if no such node exists.
    */
-  locateOrUndefined(loc: NodeLocation): Node | undefined {
+  locateOrUndefined(loc: NodeLocation): SyntaxNode | undefined {
     try {
       return this.locate(loc);
     } catch {
@@ -481,11 +481,11 @@ export class Tree {
    * @param desc The new node to insert at its place
    * @return The modified tree.
    */
-  replaceNode(loc: NodeLocation, desc: NodeDescription): Tree {
+  replaceNode(loc: NodeLocation, desc: NodeDescription): SyntaxTree {
     // Replacing the root needs to work different because there is no parent
     // that needs a child replaced.
     if (loc.length === 0) {
-      return new Tree(desc);
+      return new SyntaxTree(desc);
     } else {
       // Build the description of the current tree to replace the new node in it
       let newDescription = this.toModel();
@@ -496,7 +496,7 @@ export class Tree {
 
       // Actually replace the node and build the new tree
       parent.children[parentCat][parentIndex] = desc;
-      return new Tree(newDescription);
+      return new SyntaxTree(newDescription);
     }
   }
 
@@ -507,7 +507,7 @@ export class Tree {
    * @param desc The node to insert
    * @return The modified tree
    */
-  insertNode(loc: NodeLocation, desc: NodeDescription): Tree {
+  insertNode(loc: NodeLocation, desc: NodeDescription): SyntaxTree {
     // The root can only be replaced, not extended.
     if (loc.length === 0) {
       // Inserting is equivalent to replacing on an empty tree
@@ -537,7 +537,7 @@ export class Tree {
       // Append the node in the category and build the new tree
       let cat = parent.children[parentCat];
       cat.splice(parentIndex, 0, desc);
-      return new Tree(newDescription);
+      return new SyntaxTree(newDescription);
     }
   }
 
@@ -547,10 +547,10 @@ export class Tree {
    * @param loc The location of the deletion.
    * @return The modified tree
    */
-  deleteNode(loc: NodeLocation): Tree {
+  deleteNode(loc: NodeLocation): SyntaxTree {
     // The root can only be replaced, not deleted.
     if (loc.length === 0) {
-      return new Tree(undefined);
+      return new SyntaxTree(undefined);
     } else {
       // Build the description of the current tree to insert the new node in it
       let newDescription = this.toModel();
@@ -563,7 +563,7 @@ export class Tree {
       // Actually delete the node
       parent.children[parentCat].splice(parentIndex, 1);
 
-      return new Tree(newDescription);
+      return new SyntaxTree(newDescription);
     }
   }
 
@@ -576,7 +576,7 @@ export class Tree {
    * @param value The new value of the property.
    * @return The modified tree.
    */
-  setProperty(loc: NodeLocation, key: string, value: string): Tree {
+  setProperty(loc: NodeLocation, key: string, value: string): SyntaxTree {
     let newDescription = this.toModel();
     let node = locateNode(newDescription, loc);
 
@@ -587,7 +587,7 @@ export class Tree {
 
     node.properties[key] = value.toString();
 
-    return new Tree(newDescription);
+    return new SyntaxTree(newDescription);
   }
 
   /**
@@ -597,7 +597,7 @@ export class Tree {
    * @param key The name of the property.
    * @return The modified tree.
    */
-  addProperty(loc: NodeLocation, key: string): Tree {
+  addProperty(loc: NodeLocation, key: string): SyntaxTree {
     let newDescription = this.toModel();
     let node = locateNode(newDescription, loc);
 
@@ -620,7 +620,7 @@ export class Tree {
    * @param newKey The new name of the property.
    * @return The modified tree.
    */
-  renameProperty(loc: NodeLocation, key: string, newKey: string): Tree {
+  renameProperty(loc: NodeLocation, key: string, newKey: string): SyntaxTree {
     let newDescription = this.toModel();
     let node = locateNode(newDescription, loc);
 
@@ -643,7 +643,7 @@ export class Tree {
     node.properties[newKey] = node.properties[key];
     delete node.properties[key];
 
-    return new Tree(newDescription);
+    return new SyntaxTree(newDescription);
   }
 
   /**
@@ -653,7 +653,7 @@ export class Tree {
    * @param key The name of the child group.
    * @return The modified tree.
    */
-  addChildGroup(loc: NodeLocation, key: string): Tree {
+  addChildGroup(loc: NodeLocation, key: string): SyntaxTree {
     let newDescription = this.toModel();
     let node = locateNode(newDescription, loc);
 
@@ -671,7 +671,7 @@ export class Tree {
 
     node.children[key] = [];
 
-    return new Tree(newDescription);
+    return new SyntaxTree(newDescription);
   }
 
   /**
@@ -679,7 +679,7 @@ export class Tree {
    *
    * @return An array of nodes that match the given type.
    */
-  getNodesOfType(typename: QualifiedTypeName): Node[] {
+  getNodesOfType(typename: QualifiedTypeName): SyntaxNode[] {
     if (this.isEmpty) {
       return [];
     } else {

@@ -4,7 +4,7 @@ import { map, withLatestFrom, filter, mergeMap } from "rxjs/operators";
 import { BehaviorSubject, combineLatest } from "rxjs";
 
 import { stepwiseSqlQuery } from "../../../shared/syntaxtree/sql/sql-steps";
-import { Tree } from "../../../shared/syntaxtree/";
+import { SyntaxTree } from "../../../shared/syntaxtree/";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { EditorToolbarService, ToolbarItem } from "../../toolbar.service";
@@ -55,7 +55,7 @@ export class QueryStepwiseComponent {
       return steps[Math.min(stepNum, steps.length - 1)];
     }),
     map((step) => {
-      return new Tree(step.ast);
+      return new SyntaxTree(step.ast);
     })
   );
 
@@ -94,7 +94,10 @@ export class QueryStepwiseComponent {
       return steps[stepNum - 1];
     }),
     mergeMap((step) =>
-      this._queryService.runArbitraryQuery(new Tree(step.ast).toModel(), {})
+      this._queryService.runArbitraryQuery(
+        new SyntaxTree(step.ast).toModel(),
+        {}
+      )
     )
   );
 

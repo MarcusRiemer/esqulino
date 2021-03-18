@@ -4,7 +4,7 @@ import {
   NodeTypesSequenceDescription,
   NodeVisualContainerDescription,
 } from "../grammar.description";
-import { Node } from "../syntaxtree";
+import { SyntaxNode } from "../syntaxtree";
 import { NodeDescription } from "../syntaxtree.description";
 
 import {
@@ -19,7 +19,7 @@ import {
 describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
   describe(`Utility Functions`, () => {
     it(`property`, () => {
-      const n = new Node(
+      const n = new SyntaxNode(
         {
           language: "MetaGrammar",
           name: "property",
@@ -39,7 +39,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
     });
 
     it(`interpolate`, () => {
-      const n = new Node(
+      const n = new SyntaxNode(
         {
           language: "MetaGrammar",
           name: "interpolate",
@@ -57,7 +57,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
     });
 
     it(`Named Terminal`, () => {
-      const n = new Node(
+      const n = new SyntaxNode(
         {
           language: "MetaGrammar",
           name: "terminal",
@@ -77,7 +77,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
     });
 
     it(`Unnamed Terminal`, () => {
-      const n = new Node(
+      const n = new SyntaxNode(
         {
           language: "MetaGrammar",
           name: "terminal",
@@ -94,7 +94,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
 
     describe(`convertOccurs`, () => {
       const createKnownCardinality = (k: string) =>
-        new Node(
+        new SyntaxNode(
           {
             language: "MetaGrammar",
             name: "knownCardinality",
@@ -132,7 +132,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       });
 
       it(`mismatched node`, () => {
-        const n = new Node(
+        const n = new SyntaxNode(
           {
             language: "MetaGrammar",
             name: "unrelated",
@@ -162,7 +162,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
         if (refName) {
           desc.properties["typeName"] = refName;
         }
-        return new Node(desc, undefined);
+        return new SyntaxNode(desc, undefined);
       };
 
       it(`Node with "a"."b"`, () => {
@@ -179,7 +179,7 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       });
 
       it(`mismatched node`, () => {
-        const n = new Node(
+        const n = new SyntaxNode(
           {
             language: "MetaGrammar",
             name: "unrelated",

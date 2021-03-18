@@ -1,4 +1,4 @@
-import { Tree } from "./syntaxtree";
+import { SyntaxTree } from "./syntaxtree";
 import { CodeGenerator } from "./codegenerator";
 import { allVisualizableTypes } from "./grammar-type-util";
 
@@ -22,7 +22,7 @@ export function verifyFiles(grammarName: string, astName: string) {
 
     const types = allVisualizableTypes(grammar);
     const generator = new CodeGenerator([], types);
-    expect(generator.emit(new Tree(ast))).toEqual(expected);
+    expect(generator.emit(new SyntaxTree(ast))).toEqual(expected);
   });
 }
 

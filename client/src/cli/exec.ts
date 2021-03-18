@@ -2,7 +2,7 @@ import { URL } from "url";
 
 import { httpRequest } from "./request-promise";
 
-import { Tree } from "../app/shared/syntaxtree/syntaxtree";
+import { SyntaxTree } from "../app/shared/syntaxtree/syntaxtree";
 
 import { ServerApi } from "../app/shared/serverdata/serverapi";
 
@@ -180,7 +180,7 @@ export async function executeCommand(
         if (command.languageId !== "generic") {
           try {
             const l = findLanguage(command.languageId);
-            const t = new Tree(command.ast);
+            const t = new SyntaxTree(command.ast);
             return l.emitTree(t);
           } catch (e) {
             if (e instanceof BlattWerkzeugError) {

@@ -1,4 +1,4 @@
-import { Tree, Node, printableTypename } from "./syntaxtree";
+import { SyntaxTree, SyntaxNode, printableTypename } from "./syntaxtree";
 import {
   NamedLanguages,
   GrammarDocument,
@@ -15,23 +15,25 @@ import { NodeDescription } from "./syntaxtree.description";
  * Calculates all resource IDs that are referenced in the given AST.
  */
 export function referencedResourceIds(
-  ast: Tree | Node | NodeDescription,
+  ast: SyntaxTree | SyntaxNode | NodeDescription,
   types: NamedLanguages | GrammarDocument,
   searched: "codeResourceReference" | "grammarReference"
 ): string[] {
-  const resolveAstArg = (ast: Tree | Node | NodeDescription): Node => {
+  const resolveAstArg = (
+    ast: SyntaxTree | SyntaxNode | NodeDescription
+  ): SyntaxNode => {
     if (!ast) {
       return undefined;
-    } else if (ast instanceof Tree) {
+    } else if (ast instanceof SyntaxTree) {
       if (ast.isEmpty) {
         return undefined;
       } else {
         return ast.rootNode;
       }
-    } else if (ast instanceof Node) {
+    } else if (ast instanceof SyntaxNode) {
       return ast;
     } else {
-      return new Node(ast, undefined);
+      return new SyntaxNode(ast, undefined);
     }
   };
 
@@ -48,7 +50,7 @@ export function referencedResourceIds(
   // Ensure we are always dealing with all types
   const allTypes = isGrammarDocument(types) ? allConcreteTypes(types) : types;
 
-  const impl = (n: Node) => {
+  const impl = (n: SyntaxNode) => {
     const nodeType = allTypes[n.languageName]?.[n.typeName];
 
     // Ensure the type exists in the given grammar

@@ -11,13 +11,13 @@ import {
   NodeVisualTypeDescription,
   VisualisedLanguages,
 } from "./grammar.description";
-import { Node } from "./syntaxtree";
+import { SyntaxNode } from "./syntaxtree";
 
 /**
  * Errors that occur during automatic code generation.
  */
 export class AutomaticCodeGenerationError extends BlattWerkzeugError {
-  public constructor(node: Node, message?: string) {
+  public constructor(node: SyntaxNode, message?: string) {
     super(
       stableQualifiedTypename(node) +
         " at " +
@@ -34,7 +34,7 @@ export class AutomaticCodeGenerationError extends BlattWerkzeugError {
  */
 function codeGenType(
   types: NamedLanguages | VisualisedLanguages,
-  node: Node
+  node: SyntaxNode
 ):
   | NodeConcreteTypeDescription
   | NodeVisualTypeDescription
@@ -56,7 +56,7 @@ function codeGenType(
 
 export function isCodeGenType(
   types: NamedLanguages | VisualisedLanguages,
-  node: Node
+  node: SyntaxNode
 ): boolean {
   const r = codeGenType(types, node);
   return !(r instanceof AutomaticCodeGenerationError);
@@ -64,7 +64,7 @@ export function isCodeGenType(
 
 export function ensureCodeGenType(
   types: NamedLanguages | VisualisedLanguages,
-  node: Node
+  node: SyntaxNode
 ) {
   const r = codeGenType(types, node);
   if (r instanceof AutomaticCodeGenerationError) {
@@ -97,7 +97,7 @@ const SEPARATOR_TAGS = new Set([
   "space-before",
   "space-around",
 ]);
-function tagToSeparator(node: Node, tags?: string[]): OutputSeparator {
+function tagToSeparator(node: SyntaxNode, tags?: string[]): OutputSeparator {
   const separatorTags = (tags ?? []).filter((t) => SEPARATOR_TAGS.has(t));
 
   if (separatorTags.length > 1) {
@@ -145,7 +145,7 @@ function convertTerminal(
     | NodeTerminalSymbolDescription
     | NodeInterpolatePropertyDescription
     | NodePropertyTypeDescription,
-  node: Node,
+  node: SyntaxNode,
   process: CodeGeneratorProcess<any>,
   newLine = false
 ) {
@@ -165,7 +165,7 @@ function convertTerminal(
 function processAttributes(
   attributes: NodeAttributeDescription[],
   types: NamedLanguages | VisualisedLanguages,
-  node: Node,
+  node: SyntaxNode,
   process: CodeGeneratorProcess<any>,
   parentOrientation: "horizontal" | "vertical"
 ) {
@@ -258,7 +258,7 @@ function processAttributes(
  */
 export function codeGeneratorFromGrammar(
   types: NamedLanguages | VisualisedLanguages,
-  node: Node,
+  node: SyntaxNode,
   process: CodeGeneratorProcess<any>
 ) {
   const t = ensureCodeGenType(types, node);

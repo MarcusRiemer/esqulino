@@ -3,7 +3,7 @@ import {
   CodeGeneratorProcess,
   OutputSeparator,
 } from "../codegenerator-process";
-import { Node } from "../syntaxtree";
+import { SyntaxNode } from "../syntaxtree";
 
 export const WORLD_NODE_CONVERTER: NodeConverterRegistration[] = [
   {
@@ -12,7 +12,7 @@ export const WORLD_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "world",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(
           JSON.stringify(node.toModel()),
           node,

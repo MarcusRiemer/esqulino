@@ -18,7 +18,7 @@ import { FocusDirective } from "../../../../shared/focus-element.directive";
 import {
   LanguageService,
   NodeDescription,
-  Tree,
+  SyntaxTree,
   CodeResource,
   GrammarDocument,
 } from "../../../../shared";
@@ -131,7 +131,7 @@ describe(`Render Generated BlockLanguages`, () => {
       undefined
     );
 
-    component.node = new Tree(nodeDesc).rootNode;
+    component.node = new SyntaxTree(nodeDesc).rootNode;
     component.blockLanguage = blockLanguage;
     component.codeResource = codeResource;
 

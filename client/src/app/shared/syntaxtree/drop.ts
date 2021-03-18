@@ -1,6 +1,6 @@
 import { NodeLocation, NodeDescription } from "./syntaxtree.description";
 import { Validator } from "./validator";
-import { Tree } from "./syntaxtree";
+import { SyntaxTree } from "./syntaxtree";
 import { embraceMatches } from "./drop-embrace";
 import {
   SmartDropLocation,
@@ -36,7 +36,7 @@ const ROOT_ERRORS: string[] = [
  */
 export function _exactMatches(
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): (InsertDropLocation | ReplaceDropLocation)[] {
@@ -83,7 +83,7 @@ export function _exactMatches(
     return candidates
       .filter((candidate) => {
         // Build a tree and see whether any of the candidates is "cardinality-valid" on its own.
-        const possibleTree = new Tree(candidate);
+        const possibleTree = new SyntaxTree(candidate);
         if (possibleTree.isEmpty) {
           return false;
         }
@@ -122,7 +122,7 @@ export function _exactMatches(
  */
 export function _singleChildReplace(
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): ReplaceDropLocation[] {
@@ -176,7 +176,7 @@ export function _singleChildReplace(
 // The signature of an algorithm that may compute smart drops
 type SmartDropAlgorithm = (
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   loc: NodeLocation,
   candidates: NodeDescription[]
 ) => SmartDropLocation[];
@@ -220,7 +220,7 @@ const algorithms: { [name in SmartDropAlgorithmNames]: SmartDropAlgorithm } = {
 export function smartDropLocation(
   options: SmartDropOptions,
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): SmartDropLocation[] {

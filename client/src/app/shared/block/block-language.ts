@@ -1,5 +1,5 @@
 import {
-  Tree,
+  SyntaxTree,
   NodeDescription,
   Language,
   QualifiedTypeName,
@@ -126,7 +126,7 @@ export class BlockLanguage implements Forward.BlockLanguage {
   /**
    * @return True, if the given tree can be rendered
    */
-  canRenderTree(tree: Tree): boolean {
+  canRenderTree(tree: SyntaxTree): boolean {
     const types = Array.from(tree.typesPresent).map(
       (type) => JSON.parse(type) as QualifiedTypeName
     );
@@ -134,7 +134,7 @@ export class BlockLanguage implements Forward.BlockLanguage {
     return types.every((type) => this.hasEditorBlock(type));
   }
 
-  missingVisualBlocks(tree: Tree) {
+  missingVisualBlocks(tree: SyntaxTree) {
     const types = Array.from(tree.typesPresent).map(
       (type) => JSON.parse(type) as QualifiedTypeName
     );

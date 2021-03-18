@@ -3,12 +3,15 @@ import {
   CodeGeneratorProcess,
   OutputSeparator,
 } from "../codegenerator-process";
-import { Node } from "../syntaxtree";
+import { SyntaxNode } from "../syntaxtree";
 
 /**
  * Helper function to generate all SQL components of a node
  */
-function generateComponents(node: Node, process: CodeGeneratorProcess<{}>) {
+function generateComponents(
+  node: SyntaxNode,
+  process: CodeGeneratorProcess<{}>
+) {
   const componentNames = [
     "insert",
     "select",
@@ -41,7 +44,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "columnName",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const columnName = node.properties["columnName"];
         const refTableName = node.properties["refTableName"];
 
@@ -59,7 +62,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "constant",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const value = node.properties["value"];
         if (isNaN(parseFloat(value))) {
           // The value is not a number, put in in quotes
@@ -77,7 +80,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "parameter",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const name = node.properties["name"];
         process.addConvertedFragment(`:${name}`, node);
       },
@@ -89,7 +92,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "starOperator",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment("*", node);
       },
     },
@@ -100,7 +103,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "functionCall",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(node.properties["name"], node);
         process.addConvertedFragment("(", node);
 
@@ -132,7 +135,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "relationalOperator",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const operator = node.properties["operator"];
         process.addConvertedFragment(operator, node);
       },
@@ -144,7 +147,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "binaryExpression",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         node
           .getChildrenInCategory("lhs")
           .forEach((c) => process.generateNode(c));
@@ -165,7 +168,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "parentheses",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment("(", node);
         node
           .getChildrenInCategory("expression")
@@ -180,7 +183,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "expression",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const expr = node.getChildrenInCategory("expression");
         expr.forEach((e) => process.generateNode(e));
       },
@@ -192,7 +195,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "select",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`SELECT `, node);
 
         const distinct = node.getChildrenInCategory("distinct");
@@ -234,7 +237,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "distinct",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment("DISTINCT", node);
       },
     },
@@ -245,7 +248,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "tableIntroduction",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const name = node.properties["name"];
         const alias = node.properties["alias"];
         if (alias) {
@@ -262,7 +265,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "crossJoin",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`JOIN `, node);
         node
           .getChildrenInCategory("table")
@@ -276,7 +279,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "innerJoinOn",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`INNER JOIN `, node);
         node
           .getChildrenInCategory("table")
@@ -294,7 +297,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "innerJoinUsing",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const tableIntro = node.children["table"][0];
         const usingExpr = node.children["using"][0];
 
@@ -313,7 +316,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "from",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`FROM `, node);
 
         node.getChildrenInCategory("tables").forEach((c, idx, arr) => {
@@ -336,7 +339,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "where",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const expressions = node.getChildrenInCategory("expressions");
         const head = expressions[0];
         const tail = expressions.slice(1);
@@ -359,7 +362,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "whereAdditional",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         const op = node.properties["operator"];
         const expr = node.children["expression"][0];
 
@@ -376,7 +379,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "groupBy",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`GROUP BY `, node);
 
         node.getChildrenInCategory("expressions").forEach((c, idx, arr) => {
@@ -394,7 +397,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "orderBy",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.addConvertedFragment(`ORDER BY `, node);
 
         node.getChildrenInCategory("expressions").forEach((c, idx, arr) => {
@@ -412,7 +415,7 @@ export const NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "sortOrder",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<{}>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
         process.generateNode(node.getChildrenInCategory("expression")[0]);
         process.addConvertedFragment(" " + node.properties.order, node);
       },

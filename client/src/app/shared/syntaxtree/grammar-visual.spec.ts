@@ -62,7 +62,7 @@ describe(`Visual Grammar`, () => {
 
     const v = new Validator([g]);
 
-    const ast = new AST.Tree({
+    const ast = new AST.SyntaxTree({
       language: "terminal",
       name: "root",
     });
@@ -94,7 +94,7 @@ describe(`Visual Grammar`, () => {
 
     const v = new Validator([g]);
 
-    const ast = new AST.Tree({
+    const ast = new AST.SyntaxTree({
       language: "terminal",
       name: "root",
     });
@@ -126,7 +126,7 @@ describe(`Visual Grammar`, () => {
 
     const v = new Validator([g]);
 
-    const ast = new AST.Tree({
+    const ast = new AST.SyntaxTree({
       language: "terminal",
       name: "root",
     });

@@ -1,4 +1,4 @@
-import { Tree } from "./syntaxtree";
+import { SyntaxTree } from "./syntaxtree";
 import { CodeGenerator } from "./codegenerator";
 import { NamedLanguages, VisualisedLanguages } from "./grammar.description";
 
@@ -24,7 +24,7 @@ describe(`Automatic code generation`, () => {
       true
     );
 
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "l",
       name: "r",
     });
@@ -58,7 +58,7 @@ describe(`Automatic code generation`, () => {
       true
     );
 
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "l",
       name: "r",
     });
@@ -92,7 +92,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`with present property at runtime`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         properties: {
@@ -105,7 +105,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`with missing property at runtime`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
@@ -138,7 +138,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`with present property at runtime`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         properties: {
@@ -151,7 +151,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`with missing property at runtime`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
@@ -192,7 +192,7 @@ describe(`Automatic code generation`, () => {
     const g = new CodeGenerator([], types);
 
     it(`with present property at runtime`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         properties: {
@@ -235,7 +235,7 @@ describe(`Automatic code generation`, () => {
     const g = new CodeGenerator([], types);
 
     it(`with present property at runtime`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         properties: {
@@ -278,7 +278,7 @@ describe(`Automatic code generation`, () => {
     const g = new CodeGenerator([], types);
 
     it(`empty`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
@@ -288,7 +288,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`single child`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -301,7 +301,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`two children`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -354,7 +354,7 @@ describe(`Automatic code generation`, () => {
     const g = new CodeGenerator([], types);
 
     it(`empty`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
@@ -364,7 +364,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`single child`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -377,7 +377,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`two children`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -421,7 +421,7 @@ describe(`Automatic code generation`, () => {
     const g = new CodeGenerator([], types);
 
     it(`empty`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
@@ -431,7 +431,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`single child`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -444,7 +444,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`two children`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -504,7 +504,7 @@ describe(`Automatic code generation`, () => {
     const g = new CodeGenerator([], types);
 
     it(`empty`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
@@ -514,7 +514,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`single child`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -527,7 +527,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`two children`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -592,7 +592,7 @@ describe(`Automatic code generation`, () => {
     const g = new CodeGenerator([], types);
 
     it(`empty`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
@@ -602,7 +602,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`single child`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -615,7 +615,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`two children`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -685,7 +685,7 @@ describe(`Automatic code generation`, () => {
     const g = new CodeGenerator([], types);
 
     it(`empty`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
@@ -695,7 +695,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`single child`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {
@@ -708,7 +708,7 @@ describe(`Automatic code generation`, () => {
     });
 
     it(`two children`, () => {
-      const t = new Tree({
+      const t = new SyntaxTree({
         language: "l",
         name: "r",
         children: {

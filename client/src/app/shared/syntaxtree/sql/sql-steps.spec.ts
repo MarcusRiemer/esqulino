@@ -5,10 +5,10 @@ import {
   SqlStepConditionFilterDescription,
   JoinType,
 } from "./sql-steps";
-import { Tree, Node, NodeDescription } from "../syntaxtree";
+import { SyntaxTree, SyntaxNode, NodeDescription } from "../syntaxtree";
 
 function starSelectTest(stepDesc: SqlStepDescription) {
-  const node = new Node(stepDesc.ast, undefined);
+  const node = new SyntaxNode(stepDesc.ast, undefined);
   expect(node.typeName).toEqual("querySelect");
   expect(node.getChildrenInCategory("select").length).toEqual(1);
   const selectNode = node.getChildInCategory("select");
@@ -23,7 +23,7 @@ function testFromTable(
   desc: NodeDescription,
   tableName: string
 ) {
-  const node = new Node(stepDesc.ast, undefined);
+  const node = new SyntaxNode(stepDesc.ast, undefined);
   expect(node.childrenCategoryNames).toEqual(["select", "from"]);
   expect(node.getChildInCategory("from").childrenCategoryNames).toEqual([
     "tables",
@@ -47,7 +47,7 @@ function testJoin(
   nodeTyp: string,
   filterName?: string
 ) {
-  const node = new Node(stepDesc.ast, undefined);
+  const node = new SyntaxNode(stepDesc.ast, undefined);
 
   expect(node.childrenCategoryNames).toEqual(["select", "from"]);
   starSelectTest(stepDesc);
@@ -102,8 +102,8 @@ function testJoinFilter(
   filter: string,
   columnNames: string[]
 ) {
-  const srcTree = new Tree(desc);
-  const node = new Node(stepDesc.ast, undefined);
+  const srcTree = new SyntaxTree(desc);
+  const node = new SyntaxNode(stepDesc.ast, undefined);
   starSelectTest(stepDesc);
 
   expect(node.childrenCategoryNames).toEqual(["select", "from"]);
@@ -185,8 +185,8 @@ describe(`SQL Steps`, () => {
 
   it("Basic select-from, not breaking down", () => {
     const desc: NodeDescription = require("./spec/ast-40-select-from.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
-    let node = new Node(steps[0].ast, undefined);
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
+    let node = new SyntaxNode(steps[0].ast, undefined);
 
     expect(steps.length).toEqual(2);
 
@@ -198,7 +198,7 @@ describe(`SQL Steps`, () => {
       table: "Charakter",
     });
 
-    node = new Node(steps[1].ast, undefined);
+    node = new SyntaxNode(steps[1].ast, undefined);
     starSelectTest(steps[1]);
     expect(node.toModel()).toEqual(desc);
 
@@ -210,7 +210,7 @@ describe(`SQL Steps`, () => {
 
   describe(`simple where filter`, () => {
     const desc: NodeDescription = require("./spec/ast-41-select-from-where.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
 
     it("first from table", () => {
       expect(steps.length).toEqual(3);
@@ -218,7 +218,7 @@ describe(`SQL Steps`, () => {
     });
 
     it("where step", () => {
-      const node = new Node(steps[1].ast, undefined);
+      const node = new SyntaxNode(steps[1].ast, undefined);
       expect(node.childrenCategoryNames).toEqual(["select", "from", "where"]);
 
       starSelectTest(steps[1]);
@@ -235,7 +235,7 @@ describe(`SQL Steps`, () => {
 
     //fields from the select-clause and the where-clause
     it("select step", () => {
-      const node = new Node(steps[2].ast, undefined);
+      const node = new SyntaxNode(steps[2].ast, undefined);
       expect(node.childrenCategoryNames).toEqual(["select", "from", "where"]);
       // fields from select should correspond to initial-query
       expect(node.getChildInCategory("select").toModel()).toEqual(
@@ -258,7 +258,7 @@ describe(`SQL Steps`, () => {
     // select Charakter.Charakter_Name
     // from Charakter inner join Auftritt on Auftritt.Charakter_ID = Charakter.Charakter_ID
     const desc: NodeDescription = require("./spec/ast-42-simple-join.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
 
     it("first from table", () => {
       expect(steps.length).toEqual(4);
@@ -292,7 +292,7 @@ describe(`SQL Steps`, () => {
     //     GROUP BY Charakter.Charakter_ID
     //     ORDER BY COUNT() DESC, Charakter.Charakter_Name
     const desc: NodeDescription = require("./spec/ast-43-join-group-order.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
 
     // SELECT *
     // FROM Charakter
@@ -324,7 +324,7 @@ describe(`SQL Steps`, () => {
     // GROUP BY Charakter.Charakter_ID
     it("groupBy-clouse", () => {
       expect(steps[3]).toBeDefined();
-      const node = new Node(steps[3].ast, undefined);
+      const node = new SyntaxNode(steps[3].ast, undefined);
       starSelectTest(steps[2]);
       expect(node.childrenCategoryNames).toEqual(["select", "from", "groupBy"]);
       expect(node.getChildInCategory("groupBy").toModel()).toEqual(
@@ -343,7 +343,7 @@ describe(`SQL Steps`, () => {
     //   INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
     // GROUP BY Charakter.Charakter_ID
     it("select-clause", () => {
-      const node = new Node(steps[4].ast, undefined);
+      const node = new SyntaxNode(steps[4].ast, undefined);
       expect(node.childrenCategoryNames.sort()).toEqual([
         "from",
         "groupBy",
@@ -367,7 +367,7 @@ describe(`SQL Steps`, () => {
     // ORDER BY COUNT() DESC, Charakter.Charakter_Name
     it("orderBy-clause", () => {
       expect(steps[5]).toBeDefined();
-      const node = new Node(steps[5].ast, undefined);
+      const node = new SyntaxNode(steps[5].ast, undefined);
 
       expect(node.childrenCategoryNames.sort()).toEqual([
         "from",
@@ -395,7 +395,7 @@ describe(`SQL Steps`, () => {
     // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
     // INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
     const desc: NodeDescription = require("./spec/ast-44-two-inner-joins.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
 
     // SELECT *
     // FROM Charakter
@@ -445,7 +445,7 @@ describe(`SQL Steps`, () => {
     // INNER JOIN Auftritt ON Auftritt.Charakter_ID = Charakter.Charakter_ID
     // INNER JOIN Geschichte ON Auftritt.Geschichte_ID = Geschichte.Geschichte_ID
     it("fields from the select-clause", () => {
-      const node = new Node(steps[5].ast, undefined);
+      const node = new SyntaxNode(steps[5].ast, undefined);
       expect(node.childrenCategoryNames.sort()).toEqual(["from", "select"]);
 
       // contain all select fields
@@ -469,7 +469,7 @@ describe(`SQL Steps`, () => {
     // INNER JOIN pruefung USING ('pin')
     //  WHERE person.VNAME LIKE '%Alex%' AND pruefung.NOTE < 5
     const desc: NodeDescription = require("./spec/ast-45-inner-join-using.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
 
     // SELECT *
     // FROM person
@@ -514,7 +514,7 @@ describe(`SQL Steps`, () => {
     //       INNER JOIN pruefung USING ('pin')
     //     WHERE person.VNAME LIKE '%Alex%' AND pruefung.NOTE < 5
     it("where-clause", () => {
-      const node = new Node(steps[5].ast, undefined);
+      const node = new SyntaxNode(steps[5].ast, undefined);
       expect(node.childrenCategoryNames).toEqual(["select", "from", "where"]);
       starSelectTest(steps[5]);
       expect(node.getChildInCategory("where").toModel()).toEqual(
@@ -534,7 +534,7 @@ describe(`SQL Steps`, () => {
     //       INNER JOIN pruefung USING ('pin')
     //     WHERE person.VNAME LIKE '%Alex%' AND pruefung.NOTE < 5
     it("fields from the select-clause", () => {
-      const node = new Node(steps[6].ast, undefined);
+      const node = new SyntaxNode(steps[6].ast, undefined);
       expect(node.childrenCategoryNames.sort()).toEqual([
         "from",
         "select",
@@ -563,7 +563,7 @@ describe(`SQL Steps`, () => {
     //   GROUP BY krankenkasse.KRANKENKASSE_ID
     //   ORDER BY COUNT()
     const desc: NodeDescription = require("./spec/ast-46-two-left-joins.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
 
     // SELECT *
     // FROM krankenkasse
@@ -627,7 +627,7 @@ describe(`SQL Steps`, () => {
     // GROUP BY krankenkasse.KRANKENKASSE_ID
     it("groupBy-clause", () => {
       expect(steps[7]).toBeDefined();
-      const node = new Node(steps[7].ast, undefined);
+      const node = new SyntaxNode(steps[7].ast, undefined);
       starSelectTest(steps[7]);
 
       expect(node.childrenCategoryNames).toEqual(["select", "from", "groupBy"]);
@@ -648,8 +648,8 @@ describe(`SQL Steps`, () => {
     //   GROUP BY krankenkasse.KRANKENKASSE_ID
     it("fields from the select-clause", () => {
       //TODO test the other nodes ?
-      const t = new Tree(desc);
-      const node = new Node(steps[8].ast, undefined);
+      const t = new SyntaxTree(desc);
+      const node = new SyntaxNode(steps[8].ast, undefined);
       expect(node.childrenCategoryNames.sort()).toEqual([
         "from",
         "groupBy",
@@ -681,7 +681,7 @@ describe(`SQL Steps`, () => {
     //   ORDER BY COUNT()
     it("orderBy-clause", () => {
       expect(steps[8]).toBeDefined();
-      const node = new Node(steps[9].ast, undefined);
+      const node = new SyntaxNode(steps[9].ast, undefined);
 
       expect(node.childrenCategoryNames.sort()).toEqual([
         "from",
@@ -711,7 +711,7 @@ describe(`SQL Steps`, () => {
     // GROUP BY krankenkasse.krankenkasse_id
     // ORDER BY COUNT()
     const desc: NodeDescription = require("./spec/ast-47-outer-join.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
 
     // SELECT *
     // FROM krankenkasse
@@ -777,7 +777,7 @@ describe(`SQL Steps`, () => {
     // GROUP BY krankenkasse.krankenkasse_id
     it("groupBy-clause", () => {
       expect(steps[7]).toBeDefined();
-      const node = new Node(steps[7].ast, undefined);
+      const node = new SyntaxNode(steps[7].ast, undefined);
       starSelectTest(steps[7]);
 
       expect(node.childrenCategoryNames).toEqual(["select", "from", "groupBy"]);
@@ -798,7 +798,7 @@ describe(`SQL Steps`, () => {
     // GROUP BY krankenkasse.krankenkasse_id
     it("fields from the select-clause", () => {
       //const t = new Tree(desc);
-      const node = new Node(steps[8].ast, undefined);
+      const node = new SyntaxNode(steps[8].ast, undefined);
       expect(node.childrenCategoryNames.sort()).toEqual([
         "from",
         "groupBy",
@@ -827,7 +827,7 @@ describe(`SQL Steps`, () => {
     // FROM tag, termin, block
     // WHERE termin.BLOCK = block.BLOCK AND termin.TAG = tag.TAG
     const desc: NodeDescription = require("./spec/ast-48-from-multiple-tables.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
 
     // SELECT *
     // FROM tag
@@ -839,7 +839,7 @@ describe(`SQL Steps`, () => {
     // SELECT *
     // FROM tag, termin
     it("cross-join", () => {
-      const node = new Node(steps[1].ast, undefined);
+      const node = new SyntaxNode(steps[1].ast, undefined);
       starSelectTest(steps[1]);
       expect(node.childrenCategoryNames).toEqual(["select", "from"]);
 
@@ -857,7 +857,7 @@ describe(`SQL Steps`, () => {
     // SELECT *
     // FROM tag, termin, block
     it("cross-join", () => {
-      const node = new Node(steps[2].ast, undefined);
+      const node = new SyntaxNode(steps[2].ast, undefined);
       starSelectTest(steps[2]);
       expect(node.childrenCategoryNames).toEqual(["select", "from"]);
 
@@ -879,7 +879,7 @@ describe(`SQL Steps`, () => {
     // FROM tag, termin, block
     // WHERE termin.BLOCK = block.BLOCK AND termin.TAG = tag.TAG
     it("where-clause", () => {
-      const node = new Node(steps[3].ast, undefined);
+      const node = new SyntaxNode(steps[3].ast, undefined);
       //console.log("after where-step: \n" + JSON.stringify(node.toModel(), undefined, 2));
 
       expect(node.childrenCategoryNames).toEqual(["select", "from", "where"]);
@@ -903,7 +903,7 @@ describe(`SQL Steps`, () => {
     // FROM tag, termin, block
     // WHERE termin.BLOCK = block.BLOCK AND termin.TAG = tag.TAG
     it("select-clause", () => {
-      const node = new Node(steps[4].ast, undefined);
+      const node = new SyntaxNode(steps[4].ast, undefined);
       expect(node.childrenCategoryNames.sort()).toEqual([
         "from",
         "select",
@@ -946,7 +946,7 @@ describe(`SQL Steps`, () => {
     // 	RIGHT OUTER JOIN lkz USING ('lkz')
     // GROUP BY lkz.LKZ
     const desc: NodeDescription = require("./spec/ast-49-inner-join-right-join-group-by.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
 
     // SELECT *
     // FROM student
@@ -1002,7 +1002,7 @@ describe(`SQL Steps`, () => {
     // GROUP BY lkz.LKZ
     it("groupBy-clause", () => {
       expect(steps[6]).toBeDefined();
-      const node = new Node(steps[6].ast, undefined);
+      const node = new SyntaxNode(steps[6].ast, undefined);
       starSelectTest(steps[6]);
 
       expect(node.childrenCategoryNames).toEqual(["select", "from", "groupBy"]);
@@ -1023,7 +1023,7 @@ describe(`SQL Steps`, () => {
     // 	RIGHT OUTER JOIN lkz USING ('lkz')
     // GROUP BY lkz.LKZ
     it("fields from the select-clause", () => {
-      const node = new Node(steps[7].ast, undefined);
+      const node = new SyntaxNode(steps[7].ast, undefined);
       expect(node.childrenCategoryNames.sort()).toEqual([
         "from",
         "groupBy",
@@ -1052,7 +1052,7 @@ describe(`SQL Steps`, () => {
     //FROM veranstaltung
     //  INNER JOIN veranst_termin USING ('VERANSTALTUNG_ID')
     const desc: NodeDescription = require("./spec/ast-50-join-distinct.json");
-    const steps = stepwiseSqlQuery(new Tree(desc));
+    const steps = stepwiseSqlQuery(new SyntaxTree(desc));
 
     // SELECT *
     // FROM veranstaltung
@@ -1082,10 +1082,10 @@ describe(`SQL Steps`, () => {
     //FROM veranstaltung
     //  INNER JOIN veranst_termin USING ('VERANSTALTUNG_ID')
     it("fields from the select-clause without distinct", () => {
-      const node = new Node(steps[3].ast, undefined);
+      const node = new SyntaxNode(steps[3].ast, undefined);
       expect(node.childrenCategoryNames.sort()).toEqual(["from", "select"]);
 
-      const treeWithoutDistinct = new Tree(desc).deleteNode([
+      const treeWithoutDistinct = new SyntaxTree(desc).deleteNode([
         ["select", 0],
         ["distinct", 0],
       ]);
@@ -1105,7 +1105,7 @@ describe(`SQL Steps`, () => {
     //FROM veranstaltung
     //  INNER JOIN veranst_termin USING ('VERANSTALTUNG_ID')
     it("select with distinct", () => {
-      const node = new Node(steps[4].ast, undefined);
+      const node = new SyntaxNode(steps[4].ast, undefined);
       expect(node.childrenCategoryNames.sort()).toEqual(["from", "select"]);
 
       expect(node.getChildInCategory("select").toModel()).toEqual(

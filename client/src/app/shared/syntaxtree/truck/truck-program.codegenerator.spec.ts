@@ -1,5 +1,5 @@
 import { CodeGenerator } from "../codegenerator";
-import { NodeDescription, Tree } from "../syntaxtree";
+import { NodeDescription, SyntaxTree } from "../syntaxtree";
 
 import {
   PROGRAM_NODE_CONVERTER,
@@ -58,7 +58,7 @@ function emitTree(astDesc: NodeDescription, emitProgressCallback = false) {
   const specCodegenState = Object.assign({}, DEFAULT_STATE);
   specCodegenState.emitProgressCallbacks = emitProgressCallback;
 
-  const ast = new Tree(astDesc).rootNode;
+  const ast = new SyntaxTree(astDesc).rootNode;
   const codeGen = new CodeGenerator(PROGRAM_NODE_CONVERTER, {}, [
     specCodegenState,
   ]);

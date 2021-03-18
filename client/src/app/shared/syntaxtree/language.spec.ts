@@ -2,7 +2,7 @@ import { mkGrammarDescription } from "../../editor/spec-util";
 import { BlattWerkzeugError } from "../blattwerkzeug-error";
 import { NodeTerminalSymbolDescription } from "./grammar.description";
 import { Language } from "./language";
-import { Tree } from "./syntaxtree";
+import { SyntaxTree } from "./syntaxtree";
 
 const EMPTY_LANGUAGE = new Language({
   id: "empty",
@@ -39,7 +39,7 @@ const VIS_SINGLE_ROOT_GRAMMAR = mkGrammarDescription({
   },
 });
 
-const SINGLE_ROOT_TREE = new Tree({
+const SINGLE_ROOT_TREE = new SyntaxTree({
   language: "l",
   name: "r",
 });

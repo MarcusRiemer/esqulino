@@ -98,7 +98,7 @@ export type ErrorData =
  */
 export interface ValidationError {
   code: string;
-  node: AST.Node;
+  node: AST.SyntaxNode;
   data: ErrorData;
 }
 
@@ -153,7 +153,11 @@ export class ValidationContext {
 
   constructor(public additional: Readonly<any> = {}) {}
 
-  addError(code: ErrorCodes | string, node: AST.Node, data: ErrorData = {}) {
+  addError(
+    code: ErrorCodes | string,
+    node: AST.SyntaxNode,
+    data: ErrorData = {}
+  ) {
     this._errors.push({ code, node, data });
   }
 
@@ -193,7 +197,7 @@ export class ValidationResult {
   /**
    * @return All errors that happened on the given node.
    */
-  getErrorsOn(node: AST.Node) {
+  getErrorsOn(node: AST.SyntaxNode) {
     return this.errors.filter((e) => e.node === node);
   }
 

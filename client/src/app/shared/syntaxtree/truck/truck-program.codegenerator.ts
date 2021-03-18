@@ -3,7 +3,7 @@ import {
   CodeGeneratorProcess,
   OutputSeparator,
 } from "../codegenerator-process";
-import { Node } from "../syntaxtree";
+import { SyntaxNode } from "../syntaxtree";
 
 /**
  * Converts `str` to camel case.
@@ -42,7 +42,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "sensor",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         const sensorName = camelize(node.properties["type"]);
         process.addConvertedFragment("truck." + sensorName + "()", node);
       },
@@ -54,7 +54,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "negateExpression",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         process.addConvertedFragment("!", node);
         node
           .getChildrenInCategory("expr")
@@ -68,7 +68,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "relationalOperator",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         const operators = {
           AND: "&&",
           OR: "||",
@@ -86,7 +86,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "booleanConstant",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         process.addConvertedFragment(node.properties["value"].toString(), node);
       },
     },
@@ -97,7 +97,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "booleanBinaryExpression",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         process.addConvertedFragment("(", node);
         node
           .getChildrenInCategory("lhs")
@@ -120,7 +120,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "procedureCall",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         if (process.state.emitProgressCallbacks) {
           const invokeCallback = `truck._progress(${JSON.stringify(
             node.location
@@ -155,7 +155,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "if",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         process.addConvertedFragment("if (", node);
         node
           .getChildrenInCategory("pred")
@@ -187,7 +187,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "ifElseIf",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         process.addConvertedFragment("else if (", node);
         node
           .getChildrenInCategory("pred")
@@ -212,7 +212,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "ifElse",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         process.addConvertedFragment(
           "else {",
           node,
@@ -233,7 +233,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "loopFor",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         if (typeof process.state.loopCounter === "undefined") {
           process.state.loopCounter = DEFAULT_STATE.loopCounter;
         }
@@ -260,7 +260,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "loopWhile",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         process.addConvertedFragment("while (", node);
         node
           .getChildrenInCategory("pred")
@@ -290,7 +290,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "procedureParameter",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         process.addConvertedFragment(camelize(node.properties["name"]), node);
       },
     },
@@ -301,7 +301,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "procedureDeclaration",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         process.addConvertedFragment("truck.", node);
         process.addConvertedFragment(camelize(node.properties["name"]), node);
         process.addConvertedFragment(" = function*(", node);
@@ -336,7 +336,7 @@ export const PROGRAM_NODE_CONVERTER: NodeConverterRegistration[] = [
       typeName: "program",
     },
     converter: {
-      init: function (node: Node, process: CodeGeneratorProcess<State>) {
+      init: function (node: SyntaxNode, process: CodeGeneratorProcess<State>) {
         node
           .getChildrenInCategory("procedures")
           .forEach((c) => process.generateNode(c));

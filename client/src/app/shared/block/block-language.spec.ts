@@ -1,4 +1,4 @@
-import { Tree, LanguageDefinition, Language } from "../syntaxtree";
+import { SyntaxTree, LanguageDefinition, Language } from "../syntaxtree";
 
 import {
   BlockLanguageDescription,
@@ -147,7 +147,7 @@ describe("Block Language", () => {
 
   it("Rejects to render a tree with only unknown types", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "l",
       name: "n1",
     });
@@ -157,7 +157,7 @@ describe("Block Language", () => {
 
   it("Rejects to render a tree with only partially known types", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "emptyBlocks",
       name: "root",
       children: {
@@ -170,7 +170,7 @@ describe("Block Language", () => {
 
   it("Promises to render a tree with only known types", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "emptyBlocks",
       name: "root",
       children: {

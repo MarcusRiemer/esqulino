@@ -532,7 +532,7 @@ describe("Grammar Validation", () => {
 
     const v = new Validator([g]);
 
-    const ast = new AST.Tree({
+    const ast = new AST.SyntaxTree({
       language: "emptyNodes",
       name: "r",
     });
@@ -544,7 +544,7 @@ describe("Grammar Validation", () => {
   it("Empty Tree", () => {
     const v = new Validator([langStringConstraint]);
 
-    const ast = new AST.Tree(undefined);
+    const ast = new AST.SyntaxTree(undefined);
     const res = v.validateFromRoot(ast);
     expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.Empty]);
   });
@@ -564,7 +564,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
@@ -585,7 +585,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(5);
@@ -618,7 +618,7 @@ describe("Grammar Validation", () => {
     astDesc.properties["minInclusive"] = 1 as any;
     astDesc.properties["maxInclusive"] = "asdf" as any;
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
@@ -636,7 +636,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
@@ -654,7 +654,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
@@ -671,7 +671,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const astTrue = new AST.Node(astDescTrue, undefined);
+    const astTrue = new AST.SyntaxNode(astDescTrue, undefined);
     const resTrue = v.validateFromRoot(astTrue);
     expect(resTrue.isValid).toBeTruthy();
 
@@ -683,7 +683,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const astFalse = new AST.Node(astDescFalse, undefined);
+    const astFalse = new AST.SyntaxNode(astDescFalse, undefined);
     const resFalse = v.validateFromRoot(astFalse);
     expect(resFalse.isValid).toBeTruthy();
 
@@ -695,7 +695,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const astInvalid = new AST.Node(astDescInvalid, undefined);
+    const astInvalid = new AST.SyntaxNode(astDescInvalid, undefined);
     const resInvalid = v.validateFromRoot(astInvalid);
     expect(resInvalid.errors.length).toEqual(1);
     expect(resInvalid.errors[0].code).toEqual(ErrorCodes.IllegalPropertyType);
@@ -712,7 +712,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.isValid).toBeTruthy();
@@ -726,7 +726,7 @@ describe("Grammar Validation", () => {
       name: "root",
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
@@ -741,7 +741,7 @@ describe("Grammar Validation", () => {
       name: "root",
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
@@ -756,7 +756,7 @@ describe("Grammar Validation", () => {
       name: "c",
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
@@ -884,7 +884,7 @@ describe("Grammar Validation", () => {
       name: "root",
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.MissingChild]);
@@ -904,7 +904,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.SuperflousChild]);
@@ -921,7 +921,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.map((e) => e.code)).toEqual([
@@ -937,7 +937,7 @@ describe("Grammar Validation", () => {
       name: "root",
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(3);
@@ -986,7 +986,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
@@ -1030,7 +1030,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
@@ -1069,7 +1069,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
@@ -1103,7 +1103,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
@@ -1141,7 +1141,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
@@ -1183,7 +1183,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
@@ -1229,7 +1229,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.SuperflousChild]);
@@ -1271,7 +1271,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
@@ -1363,7 +1363,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
@@ -1385,7 +1385,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
@@ -1415,7 +1415,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(0);
@@ -1445,7 +1445,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(2);
@@ -1469,7 +1469,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Tree(astDesc);
+    const ast = new AST.SyntaxTree(astDesc);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
@@ -1491,7 +1491,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Tree(astDesc);
+    const ast = new AST.SyntaxTree(astDesc);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors).toEqual([]);
@@ -1513,7 +1513,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Tree(astDesc);
+    const ast = new AST.SyntaxTree(astDesc);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
@@ -1539,7 +1539,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Tree(astDesc);
+    const ast = new AST.SyntaxTree(astDesc);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
@@ -1623,7 +1623,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
     expect(res.errors.length).toEqual(1);
   });
@@ -1636,7 +1636,7 @@ describe("Grammar Validation", () => {
       name: "irrelevant",
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
@@ -1658,7 +1658,7 @@ describe("Grammar Validation", () => {
       name: "query-select",
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(3, res);
@@ -1709,7 +1709,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
     const res = v.validateFromRoot(ast);
 
     expect(res.errors.length).toEqual(1);
@@ -1724,7 +1724,7 @@ describe("Grammar Validation", () => {
       name: "html",
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
 
     const res = v.validateFromRoot(ast);
     expect(res.errors.length).toEqual(2, res);
@@ -1761,7 +1761,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
 
     const res = v.validateFromRoot(ast);
     expect(res.errors.length).toEqual(0, res);
@@ -1796,7 +1796,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
 
     const res = v.validateFromRoot(ast);
     expect(res.errors.length).toEqual(0, res);
@@ -1827,7 +1827,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
 
     const res = v.validateFromRoot(ast);
     expect(res.errors.length).toEqual(1, res);
@@ -1853,7 +1853,7 @@ describe("Grammar Validation", () => {
       },
     };
 
-    const ast = new AST.Node(astDesc, undefined);
+    const ast = new AST.SyntaxNode(astDesc, undefined);
 
     const res = v.validateFromRoot(ast);
     expect(res.isValid).toBeFalsy();
@@ -1893,7 +1893,7 @@ describe("Grammar Validation", () => {
         },
       };
 
-      const ast = new AST.Node(astDesc, undefined);
+      const ast = new AST.SyntaxNode(astDesc, undefined);
 
       const res = v.validateFromRoot(ast);
       expect(res.errors).toEqual([]);
@@ -1910,7 +1910,7 @@ describe("Grammar Validation", () => {
         },
       };
 
-      const ast = new AST.Node(astDesc, undefined);
+      const ast = new AST.SyntaxNode(astDesc, undefined);
 
       const res = v.validateFromRoot(ast);
       expect(res.errors.map((e) => e.code)).toEqual([
@@ -1930,7 +1930,7 @@ describe("Grammar Validation", () => {
 
       const v = new Validator([g]);
 
-      const ast = new AST.Tree({ language: "l", name: "t" });
+      const ast = new AST.SyntaxTree({ language: "l", name: "t" });
       const res = v.validateFromRoot(ast);
       expect(res.errors.map((e) => e.code)).toEqual([
         ErrorCodes.UnknownRootLanguage,
@@ -1949,7 +1949,7 @@ describe("Grammar Validation", () => {
 
       const v = new Validator([g]);
 
-      const ast = new AST.Tree({ language: "l", name: "t" });
+      const ast = new AST.SyntaxTree({ language: "l", name: "t" });
       const res = v.validateFromRoot(ast);
       expect(res.errors.map((e) => e.code)).toEqual([
         ErrorCodes.UnspecifiedRoot,
@@ -1973,7 +1973,7 @@ describe("Grammar Validation", () => {
 
       const v = new Validator([g]);
 
-      const ast = new AST.Tree({ language: "l", name: "t" });
+      const ast = new AST.SyntaxTree({ language: "l", name: "t" });
       const res = v.validateFromRoot(ast);
       expect(res.errors.map((e) => e.code)).toEqual([
         ErrorCodes.UnspecifiedRoot,
@@ -2004,7 +2004,7 @@ describe("Grammar Validation", () => {
           name: "r",
         };
 
-        const res = v.validateFromRoot(new AST.Node(astDesc, undefined));
+        const res = v.validateFromRoot(new AST.SyntaxNode(astDesc, undefined));
         expect(res.errors.map((e) => e.code)).toEqual([
           ErrorCodes.MissingProperty,
         ]);
@@ -2019,7 +2019,7 @@ describe("Grammar Validation", () => {
           },
         };
 
-        const res = v.validateFromRoot(new AST.Node(astDesc, undefined));
+        const res = v.validateFromRoot(new AST.SyntaxNode(astDesc, undefined));
         expect(res.errors.map((e) => e.code)).toEqual([]);
       });
     });
@@ -2055,7 +2055,7 @@ describe("Grammar Validation", () => {
           name: "r",
         };
 
-        const res = v.validateFromRoot(new AST.Node(astDesc, undefined));
+        const res = v.validateFromRoot(new AST.SyntaxNode(astDesc, undefined));
         expect(res.errors.map((e) => e.code)).toEqual([
           ErrorCodes.MissingChild,
         ]);
@@ -2075,7 +2075,7 @@ describe("Grammar Validation", () => {
           },
         };
 
-        const res = v.validateFromRoot(new AST.Node(astDesc, undefined));
+        const res = v.validateFromRoot(new AST.SyntaxNode(astDesc, undefined));
         expect(res.errors.map((e) => e.code)).toEqual([]);
       });
 
@@ -2097,7 +2097,7 @@ describe("Grammar Validation", () => {
           },
         };
 
-        const res = v.validateFromRoot(new AST.Node(astDesc, undefined));
+        const res = v.validateFromRoot(new AST.SyntaxNode(astDesc, undefined));
         expect(res.errors.map((e) => e.code)).toEqual([
           ErrorCodes.SuperflousChild,
         ]);
@@ -2277,7 +2277,7 @@ describe("Grammar Validation", () => {
         name: "t1",
       };
 
-      const ast = new AST.Tree(astDesc);
+      const ast = new AST.SyntaxTree(astDesc);
       expect(comparableErrors(v.validateFromRoot(ast))).toEqual([
         { code: ErrorCodes.MissingProperty, location: [] },
       ]);
@@ -2352,7 +2352,7 @@ describe("Grammar Validation", () => {
         children: {},
       };
 
-      const ast = new AST.Tree(astDesc);
+      const ast = new AST.SyntaxTree(astDesc);
       expect(comparableErrors(v.validateFromRoot(ast))).toEqual([]);
     });
 
@@ -2422,7 +2422,7 @@ describe("Grammar Validation", () => {
         },
       };
 
-      const ast = new AST.Tree(astDesc);
+      const ast = new AST.SyntaxTree(astDesc);
       const res = v.validateFromRoot(ast);
       expect(comparableErrors(res)).toEqual([]);
     });
@@ -2488,7 +2488,7 @@ describe("Grammar Validation", () => {
       ];
 
       validDescs.forEach((astDesc) => {
-        const ast = new AST.Tree(astDesc);
+        const ast = new AST.SyntaxTree(astDesc);
         const res = v.validateFromRoot(ast);
         expect(comparableErrors(res))
           .withContext(JSON.stringify(astDesc))
@@ -2508,7 +2508,7 @@ describe("Grammar Validation", () => {
     const g = new Validator([gDesc]).getGrammarValidator("l");
 
     it(`Works with a node that has an existing type`, () => {
-      const n = new AST.Tree({
+      const n = new AST.SyntaxTree({
         language: "l",
         name: "r",
       }).rootNode;
@@ -2520,7 +2520,7 @@ describe("Grammar Validation", () => {
     });
 
     it(`Throws on missing types`, () => {
-      const n = new AST.Tree({
+      const n = new AST.SyntaxTree({
         language: "l",
         name: "nonexistant",
       }).rootNode;

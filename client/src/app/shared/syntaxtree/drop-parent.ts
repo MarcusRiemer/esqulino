@@ -4,7 +4,7 @@ import {
   QualifiedTypeName,
 } from "./syntaxtree.description";
 import { Validator } from "./validator";
-import { Tree } from "./syntaxtree";
+import { SyntaxTree } from "./syntaxtree";
 import { InsertDropLocation } from "./drop.description";
 import { _cardinalityAllowsInsertion } from "./drop-util";
 
@@ -19,7 +19,7 @@ import { _cardinalityAllowsInsertion } from "./drop-util";
  */
 export function insertAtAnyParent(
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): InsertDropLocation[] {
@@ -105,7 +105,7 @@ export function insertAtAnyParent(
  */
 export function appendAtParent(
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): InsertDropLocation[] {

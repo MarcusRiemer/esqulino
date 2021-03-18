@@ -11,7 +11,7 @@ import { map, distinctUntilChanged } from "rxjs/operators";
 
 import { AnalyticsService, TrackCategory } from "../shared/analytics.service";
 import {
-  Node,
+  SyntaxNode,
   NodeDescription,
   NodeLocation,
   CodeResource,
@@ -41,7 +41,7 @@ export interface DragSidebar {
  * nodes in the tree.
  */
 export interface DragTree {
-  node: Node;
+  node: SyntaxNode;
   codeResource: CodeResource;
 }
 
@@ -51,7 +51,7 @@ export interface DragTree {
  */
 export interface CurrentDrag {
   // The node that is currently hovered over.
-  hoverNode?: Node;
+  hoverNode?: SyntaxNode;
   // Is the node currently hovering over something for deletion?
   hoverTrash: boolean;
   // The location that would be dropped at
@@ -103,7 +103,7 @@ export class DragService {
   // no visual feedback is provided because the `mouseenter`-event did not fire.
   private _bufferedDragOver?: {
     dropLocation: NodeLocation;
-    node: Node | undefined;
+    node: SyntaxNode | undefined;
     smartDropOptions: SmartDropOptions;
   } = undefined;
 
@@ -270,7 +270,7 @@ export class DragService {
   public informDraggedOver(
     evt: MouseEvent,
     dropLocation: NodeLocation,
-    node: Node | undefined,
+    node: SyntaxNode | undefined,
     smartDropOptions: SmartDropOptions
   ) {
     // Ensure that no other block tells the same story
@@ -294,7 +294,7 @@ export class DragService {
    */
   private informDraggedOverImpl(
     dropLocation: NodeLocation,
-    node: Node | undefined,
+    node: SyntaxNode | undefined,
     smartDropOptions: SmartDropOptions
   ) {
     const dragData = this._currentDrag.value;

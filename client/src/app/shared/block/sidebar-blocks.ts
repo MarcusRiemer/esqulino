@@ -1,4 +1,4 @@
-import { NodeDescription, Tree } from "../syntaxtree";
+import { NodeDescription, SyntaxTree } from "../syntaxtree";
 
 import {
   FixedBlocksSidebarDescription,
@@ -14,7 +14,7 @@ import { Sidebar } from "./sidebar";
  * resulting node is a static and may be inserted to a tree.
  */
 export function tailorBlockDescription(
-  ast: Tree,
+  ast: SyntaxTree,
   proposal: NodeTailoredDescription
 ): NodeDescription {
   const properties: NodeDescription["properties"] = {};
@@ -90,7 +90,7 @@ export class FixedSidebarBlock {
     }
   }
 
-  tailoredBlockDescription(ast: Tree) {
+  tailoredBlockDescription(ast: SyntaxTree) {
     return this.defaultNode.map((b) => tailorBlockDescription(ast, b));
   }
 }

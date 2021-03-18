@@ -13,7 +13,7 @@ import {
 } from "@angular/animations";
 
 import {
-  Node,
+  SyntaxNode,
   NodeLocation,
   locationIncLastIndex,
 } from "../../../shared/syntaxtree";
@@ -48,7 +48,7 @@ import { RenderedCodeResourceService } from "./rendered-coderesource.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderComponent {
-  @Input() public node: Node;
+  @Input() public node: SyntaxNode;
   @Input() public visual: VisualBlockDescriptions.EditorBlockBase;
 
   @HostBinding("class")
@@ -130,7 +130,7 @@ export class BlockRenderComponent {
   /**
    * @return The visual editor block that should be used to represent the given node.
    */
-  iteratorGetEditorBlock(node: Node) {
+  iteratorGetEditorBlock(node: SyntaxNode) {
     return this._renderData.blockLanguage.getEditorBlock(node.qualifiedName);
   }
 
