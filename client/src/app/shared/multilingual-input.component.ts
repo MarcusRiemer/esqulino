@@ -4,10 +4,12 @@ import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { locales } from "./change-language.component";
 import { MultiLangString } from "./multilingual-string.description";
 import { CurrentLocaleService } from "../current-locale.service";
+import produce from "immer";
 
 @Component({
   selector: "multilingual-input",
   templateUrl: "./templates/multilingual-input.html",
+  styleUrls: ["./multilingual-input.component.scss"],
 })
 export class MultiLingualInputComponent {
   constructor(
@@ -35,13 +37,10 @@ export class MultiLingualInputComponent {
   }
 
   public set currentString(val: string) {
-    const changed = {};
-    changed[this.language] = val;
+    this.editingString = produce(this.editingString ?? {}, (edited) => {
+      edited[this.language] = val;
+    });
 
-    this.editingString = {
-      ...this.editingString,
-      ...changed,
-    };
     this.editingStringChange.emit(this.editingString);
   }
 
@@ -57,26 +56,13 @@ export class MultiLingualInputComponent {
   }
 
   /**
-   * Check if there is an Object needed
-   */
-  public get isNeedAnObject() {
-    return (
-      !this.currentString || this.currentString[this.language] == undefined
-    );
-  }
-
-  /**
    * Add a new Object to the current String if there´s no one
    * and add an empty string to the current language
    */
   public addLanguage(newLang: string): void {
-    if (!this.editingString) {
-      this.editingString = {};
-    }
-
-    if (!(newLang in this.editingString)) {
-      this.editingString[newLang] = "";
-    }
+    this.editingString = produce(this.editingString ?? {}, (edited) => {
+      edited[newLang] = "";
+    });
   }
 
   /**
