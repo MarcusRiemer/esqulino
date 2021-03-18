@@ -1,14 +1,21 @@
-<img
-  *ngIf="currentImage"
-  src="{{currentImage.url}}"
-  alt="{{currentImage.name}}"
-/>
-<select
-  [(ngModel)]="projectImageId"
-  id="project-image"
-  class="form-control custom-select"
->
-  <option *ngFor="let image of images" [value]="image.id">
-    {{image.name}}
-  </option>
-</select>
+<ng-container *ngIf="hasImages; else noImages">
+  <img
+    *ngIf="currentImage"
+    src="{{currentImage.url}}"
+    alt="{{currentImage.name}}"
+  />
+  <select
+    [(ngModel)]="projectImageId"
+    id="project-image"
+    class="form-control custom-select"
+  >
+    <option *ngFor="let image of images" [value]="image.id">
+      {{image.name}}
+    </option>
+  </select>
+</ng-container>
+<ng-template #noImages>
+  <div>
+    Keine Bilder vorhanden
+  </div>
+</ng-template>

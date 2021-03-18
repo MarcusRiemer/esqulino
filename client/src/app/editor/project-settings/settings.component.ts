@@ -92,7 +92,7 @@ export class SettingsComponent {
     subRef = btnDelete.onClick.subscribe(async (_) => {
       // Don't delete without asking the user
       if (confirm("Dieses Projekt löschen?")) {
-        const res = await this._projectService.deleteProject(this.project.slug);
+        const res = await this._projectService.deleteProject(this.project.id);
         // Go back to title after deleting
         if (res) {
           this._router.navigateByUrl("/");

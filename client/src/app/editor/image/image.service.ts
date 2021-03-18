@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
-import { map } from "rxjs/operators";
+import { first, map } from "rxjs/operators";
 
 import { ServerApiService } from "../../shared";
 
@@ -22,19 +22,20 @@ export class ImageService {
     private _http: HttpClient
   ) {}
 
-  loadImageList() {
+  async loadImageList() {
     let project = this._projectService.cachedProject;
 
-    this._http
+    this._imageList = await this._http
       .get<AvailableImageDescription[]>(
-        this._serverApi.getImageListUrl(project.slug)
+        this._serverApi.getImageListUrl(project.id)
       )
       .pipe(
+        first(),
         map((res) =>
           res.map((img) => new AvailableImage(this._serverApi, project, img))
         )
       )
-      .subscribe((res) => (this._imageList = res));
+      .toPromise();
   }
 
   get images() {
