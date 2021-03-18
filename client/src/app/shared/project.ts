@@ -110,6 +110,9 @@ export class Project implements Saveable {
     return this._id;
   }
 
+  /**
+   * Checks whether the given identifier identifies this project
+   */
   hasSlugOrId(slugOrId: string) {
     if (isValidId(slugOrId)) {
       return this.id == slugOrId;

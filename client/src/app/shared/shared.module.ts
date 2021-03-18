@@ -83,6 +83,7 @@ import { ServerTasksService } from "./serverdata/server-tasks.service";
 import { MayPerformService } from "./authorisation/may-perform.service";
 import { LifecycleLogDirective } from "./lifecycle-log.directive";
 import { ChangeDetectionLogDirective } from "./change-detection-log.directive";
+import { UrlFriendlyIdPipe } from "./url-friendly-id.pipe";
 
 const dataServices = [
   IndividualGrammarDataService,
@@ -166,6 +167,7 @@ const materialModules = [
     ServerTasksComponent,
     LifecycleLogDirective,
     ChangeDetectionLogDirective,
+    UrlFriendlyIdPipe,
   ],
   exports: [
     CommonModule,
@@ -204,6 +206,7 @@ const materialModules = [
     ConditionalDisplayDirective,
     LifecycleLogDirective,
     ChangeDetectionLogDirective,
+    UrlFriendlyIdPipe,
   ],
 })
 export class SharedAppModule {
