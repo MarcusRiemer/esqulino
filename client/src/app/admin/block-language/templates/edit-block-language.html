@@ -17,6 +17,15 @@
     <span class="fa fa-cogs" aria-hidden="true"></span>
     Blocksprache Regenerieren
   </button>
+
+  <button
+      (click)="onStoreSeed()"
+      [disabled]="!(mayStoreSeed$ | async)"
+      mat-button
+  >
+    <span class="fa fa-archive" aria-hidden="true"></span>
+    Seed speichern
+  </button>
 </ng-template>
 
 <form *ngIf="editedSubject">
