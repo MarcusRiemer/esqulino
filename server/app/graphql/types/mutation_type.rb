@@ -8,6 +8,7 @@ module Types
     field :create_block_language, mutation: Mutations::BlockLanguage::CreateBlockLanguage
     field :update_block_language, mutation: Mutations::BlockLanguage::UpdateBlockLanguage
     field :destroy_block_language, mutation: Mutations::BlockLanguage::DestroyBlockLanguage
+    field :store_block_language_seed, mutation: Mutations::SeedData::StoreBlockLanguage
 
     field :create_news, mutation: Mutations::News::CreateNews
     field :update_news, mutation: Mutations::News::UpdateNews

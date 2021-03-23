@@ -2,13 +2,7 @@ class Mutations::SeedData::StoreProject < Mutations::BaseMutation
   # The IDs or slugs of project that should be saved
   argument :projects, [String], required: true
 
-  # Something that was stored during the seeding operation
-  class StoredSeed < Types::Base::BaseObject
-    field :id, ID, null: false
-    field :type, String, null: false
-  end
-
-  field :affected_ids, [[StoredSeed]], null: true
+  field :affected_ids, [[Types::Response::AffectedResource]], null: true
   field :errors, [String], null: false
 
   def resolve(projects:)
@@ -25,7 +19,7 @@ class Mutations::SeedData::StoreProject < Mutations::BaseMutation
       project_set.map do |stored|
         {
           id: stored[1],
-          type: stored[2].name
+          type: stored[2].name.demodulize
         }
       end
     end

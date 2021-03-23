@@ -1,21 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe GraphqlController, type: :request do
+  # These specs rely on
+  # * an existing guest user
+  before(:each) do
+    create(:user, :guest)
+  end
+
   describe 'Basic error handling' do
     it 'no query, only invalid name' do
-      response = execute_query(operation_name: "ThisOperationWillNeverExist")
-
-      aggregate_failures do
-        expect(response.fetch("errors", [])).not_to eq [{ "message" => "No query string was present" }]
-      end
+      expect {
+        execute_query(operation_name: "ThisOperationWillNeverExist", expect_no_errors: false)
+      }.to raise_error(ArgumentError)
     end
 
     it 'no query, only valid name' do
-      response = execute_query(operation_name: "RegenerateForeignTypes")
-
-      aggregate_failures do
-        expect(response.fetch("errors", [])).not_to eq [{ "message" => "No query string was present" }]
-      end
+      expect {
+        execute_query(operation_name: "RegenerateForeignTypes", expect_no_errors: false)
+      }.not_to raise_error(ArgumentError)
     end
   end
 
@@ -62,14 +64,14 @@ RSpec.describe GraphqlController, type: :request do
     it 'Projects: Added not provided language as input parameter and should return error' do
       FactoryBot.create(:project, name: { en: "hello-1", de: "hallo-1" })
 
-      response_data = execute_query(query: "{projects(input: {languages:[test]}){nodes{name}}}")
+      response_data = execute_query(query: "{projects(input: {languages:[test]}){nodes{name}}}", expect_no_errors: false)
 
       expect(response_data.has_key? "errors").to be true
     end
     it 'Projects: Added empty languages as input parameter and should return error' do
       FactoryBot.create(:project, name: { en: "hello-1", de: "hallo-1" })
 
-      response_data = execute_query(query: "{projects(input: {languages:[]}){nodes{name}}}")
+      response_data = execute_query(query: "{projects(input: {languages:[]}){nodes{name}}}", expect_no_errors: false)
       expect(response_data.has_key? "errors").to be true
     end
 
@@ -105,7 +107,7 @@ RSpec.describe GraphqlController, type: :request do
     it 'Projects: Added not provided filter field as input parameter and should return error' do
       FactoryBot.create(:project, name: { en: "hello-1", de: "hallo-1" })
       query = "{projects(input: {filter:{test:\"hello-1\"}}){nodes{name}}}"
-      response_data = execute_query(query: query)
+      response_data = execute_query(query: query, expect_no_errors: false)
 
       expect(response_data.has_key? "errors").to be true
     end
@@ -125,7 +127,7 @@ RSpec.describe GraphqlController, type: :request do
       FactoryBot.create(:project, name: { en: "hello-1", de: "hallo-1" })
 
       query = "{projects(input: {order:{orderField:test,orderDirection:asc}}){nodes{name}}}"
-      response_data = execute_query(query: query)
+      response_data = execute_query(query: query, expect_no_errors: false)
 
       expect(response_data.has_key? "errors").to be true
     end
@@ -134,7 +136,7 @@ RSpec.describe GraphqlController, type: :request do
       FactoryBot.create(:project, name: { en: "hello-1", de: "hallo-1" })
 
       query = "{projects(input: {order:{orderField:name,orderDirection:test}}){nodes{name}}}"
-      response_data = execute_query(query: query)
+      response_data = execute_query(query: query, expect_no_errors: false)
 
       expect(response_data.has_key? "errors").to be true
     end
@@ -143,7 +145,7 @@ RSpec.describe GraphqlController, type: :request do
       FactoryBot.create(:project, name: { en: "hello-1", de: "hallo-1" })
 
       query = "{projects(input: {test:test}){nodes{name}}}"
-      response_data = execute_query(query: query)
+      response_data = execute_query(query: query, expect_no_errors: false)
 
       expect(response_data.has_key? "errors").to be true
     end
@@ -152,7 +154,7 @@ RSpec.describe GraphqlController, type: :request do
       FactoryBot.create(:project, name: { en: "hello-1", de: "hallo-1" })
 
       query = "{projects{nodes{test}}}"
-      response_data = execute_query(query: query)
+      response_data = execute_query(query: query, expect_no_errors: false)
 
       expect(response_data.has_key? "errors").to be true
     end
