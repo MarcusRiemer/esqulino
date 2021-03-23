@@ -84,6 +84,7 @@ import { MayPerformService } from "./authorisation/may-perform.service";
 import { LifecycleLogDirective } from "./lifecycle-log.directive";
 import { ChangeDetectionLogDirective } from "./change-detection-log.directive";
 import { UrlFriendlyIdPipe } from "./url-friendly-id.pipe";
+import { AffectedResourcesDialogComponent } from "./affected-resources-dialog.component";
 
 const dataServices = [
   IndividualGrammarDataService,
@@ -168,6 +169,7 @@ const materialModules = [
     LifecycleLogDirective,
     ChangeDetectionLogDirective,
     UrlFriendlyIdPipe,
+    AffectedResourcesDialogComponent,
   ],
   exports: [
     CommonModule,
@@ -207,6 +209,7 @@ const materialModules = [
     LifecycleLogDirective,
     ChangeDetectionLogDirective,
     UrlFriendlyIdPipe,
+    AffectedResourcesDialogComponent,
   ],
 })
 export class SharedAppModule {

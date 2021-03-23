@@ -1,0 +1,9 @@
+<h4 *ngIf="data.header">{{ data.header }}</h4>
+<table class="table">
+  <tbody>
+    <tr *ngFor="let a of data.affected">
+      <td>{{ a.type }}</td>
+      <td>{{ a.id }}</td>
+    </tr>
+  </tbody>
+</table>

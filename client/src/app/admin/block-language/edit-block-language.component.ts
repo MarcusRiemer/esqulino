@@ -10,6 +10,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ToolbarService } from "../../shared/toolbar.service";
 import { MessageDialogComponent } from "../../shared/message-dialog.component";
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { AffectedResourcesDialogComponent } from "../../shared/affected-resources-dialog.component";
 
 import { EditBlockLanguageService } from "./edit-block-language.service";
 import {
@@ -151,6 +152,11 @@ export class EditBlockLanguageComponent implements AfterViewInit {
       })
       .toPromise();
 
+    AffectedResourcesDialogComponent.show(
+      this._matDialog,
+      result.data.storeBlockLanguageSeed.affectedIds[0],
+      $localize`:@@message.block-stored-seeds:Die folgenden Daten wurden im Seed abgelegt:`
+    );
     console.log(result);
   }
 

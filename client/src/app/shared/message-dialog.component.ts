@@ -22,7 +22,8 @@ interface MessageDialogOptions {
 export class MessageDialogComponent {
   constructor(
     readonly _dialogRef: MatDialogRef<MessageDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private readonly _data: MessageDialogOptions
+    @Inject(MAT_DIALOG_DATA)
+    private readonly _data: MessageDialogOptions
   ) {}
 
   readonly data = this._data.messages;
