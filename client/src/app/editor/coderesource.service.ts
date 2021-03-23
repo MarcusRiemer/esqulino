@@ -11,7 +11,10 @@ import {
   first,
 } from "rxjs/operators";
 
-import { CreateCodeResourceGQL } from "../../generated/graphql";
+import {
+  CreateCodeResourceGQL,
+  UpdateCodeResourceGQL,
+} from "../../generated/graphql";
 
 import { ServerApiService } from "../shared";
 import { CodeResource } from "../shared/syntaxtree";
@@ -30,7 +33,8 @@ export class CodeResourceService {
   constructor(
     private _http: HttpClient,
     private _server: ServerApiService,
-    private _create: CreateCodeResourceGQL
+    private _create: CreateCodeResourceGQL,
+    private _update: UpdateCodeResourceGQL
   ) {}
 
   /**
@@ -85,31 +89,25 @@ export class CodeResourceService {
   /**
    * Sends a updated code resource to the server
    */
-  updateCodeResource(project: Project, resource: CodeResource) {
-    const url = this._server.getCodeResourceUrl(project.slug, resource.id);
+  updateCodeResource(resource: CodeResource) {
+    const toReturn = this._update
+      .mutate({
+        id: resource.id,
+        name: resource.name,
+        programmingLanguageId: resource.runtimeLanguageId,
+        blockLanguageId: resource.blockLanguageIdPeek,
+        // Must use `null` instead of `undefined` to send the key if the AST is empty
+        ast: resource.syntaxTreePeek.toModel() ?? null,
+      })
+      .pipe(
+        catchError(this.handleError),
+        delay(250),
+        tap((_) => resource.markSaved()),
+        shareReplay(1),
+        first()
+      );
 
-    // The actual document that should be sent
-    const requestModel = resource.toModel();
-
-    // The actual document may not contain the ID (that's part of the URL)
-    delete requestModel.id;
-
-    // If there is no ast present: Ensure that an empty AST is transferred
-    if (resource.syntaxTreePeek.isEmpty) {
-      requestModel.ast = null;
-    }
-
-    const request: CodeResourceRequestUpdateDescription = {
-      resource: requestModel,
-    };
-
-    const toReturn = this._http.put(url, request).pipe(
-      catchError(this.handleError),
-      delay(250),
-      tap((_) => resource.markSaved())
-    );
-
-    return toReturn;
+    return toReturn.toPromise();
   }
 
   /**

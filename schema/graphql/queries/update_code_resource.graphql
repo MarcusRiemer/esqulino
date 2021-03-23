@@ -1,0 +1,22 @@
+mutation UpdateCodeResource(
+  $id: ID!,
+  $name: String!,
+  $ast: NodeDescription,
+  $blockLanguageId: ID!,
+  $programmingLanguageId: ID!,
+) {
+  updateCodeResource(input: {
+    id: $id,
+    name: $name,
+    ast: $ast,
+    blockLanguageId: $blockLanguageId,
+    programmingLanguageId: $programmingLanguageId,
+  }) {
+    codeResource {
+      name,
+      ast,
+      blockLanguageId,
+      programmingLanguageId,
+    }
+  }
+}

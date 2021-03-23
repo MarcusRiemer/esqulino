@@ -27,16 +27,6 @@ RSpec.describe Mutations::SeedData::StoreProject do
     }
   end
 
-  def init_args(user:)
-    {
-      context: {
-        user: user
-      },
-      object: nil,
-      field: nil,
-    }
-  end
-
   context "forbidden for" do
     it "guest" do
       expect {

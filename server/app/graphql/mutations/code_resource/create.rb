@@ -1,4 +1,8 @@
-class Mutations::CreateCodeResource < Mutations::BaseMutation
+class Mutations::CodeResource::Create < Mutations::BaseMutation
+  def self.default_graphql_name
+    "CodeResourceCreate"
+  end
+
   argument :name, String, required: true
   argument :project_id, ID, required: true
   argument :block_language_id, ID, required: true

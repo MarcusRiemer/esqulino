@@ -78,12 +78,10 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     let btnSave = this._toolbarService.saveItem;
     btnSave.performDesc = this._performData.project.update(this.peekProject.id);
 
-    btnSave.onClick.subscribe((_) => {
+    btnSave.onClick.subscribe(async () => {
       btnSave.isInProgress = true;
-      this._codeResourceService
-        .updateCodeResource(this.peekProject, this.peekResource)
-        .pipe(first())
-        .subscribe((_) => (btnSave.isInProgress = false));
+      await this._codeResourceService.updateCodeResource(this.peekResource);
+      btnSave.isInProgress = false;
     });
 
     // Making a copy
