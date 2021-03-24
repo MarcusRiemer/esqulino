@@ -10,7 +10,7 @@ interface UrlFriendlyEntity {
   pure: true,
 })
 export class UrlFriendlyIdPipe implements PipeTransform {
-  transform(value: UrlFriendlyEntity, ...args: unknown[]): unknown {
+  transform(value: UrlFriendlyEntity): unknown {
     return value.slug ?? value.id;
   }
 }

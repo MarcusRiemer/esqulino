@@ -144,13 +144,18 @@ export class ProjectService {
    * @param proj The project with the relevant description.
    */
   storeProjectDescription(proj: Project) {
-    const desc = proj.toUpdateRequest();
-
-    const toReturn = this._updateProject.mutate(desc).pipe(
-      catchError(this.passThroughError),
-      delay(250),
-      tap((_) => proj.markSaved())
-    );
+    const toReturn = this._updateProject
+      .mutate({
+        id: proj.id,
+        description: proj.description,
+        name: proj.name,
+        preview: proj.projectImageId,
+      })
+      .pipe(
+        catchError(this.passThroughError),
+        delay(250),
+        tap((_) => proj.markSaved())
+      );
 
     return toReturn;
   }

@@ -125,6 +125,14 @@ export interface ProjectUsesBlockLanguageDescription {
   blockLanguageId: string;
 }
 
+export function isProjectUsesBlockLanguageDescription(
+  value: unknown
+): value is ProjectUsesBlockLanguageDescription {
+  return (
+    typeof value === "object" && "id" in value && "blockLanguageId" in value
+  );
+}
+
 export type ProjectUpdateUsedBlockLanguage =
   | { blockLanguageId: string }
   | { id: string; _destroy: boolean };

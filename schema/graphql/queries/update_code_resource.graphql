@@ -29,6 +29,7 @@ mutation UpdateCodeResource(
         rootCssClasses
         grammarId
         defaultProgrammingLanguageId
+        __typename
       }
 
       ... on Grammar {
@@ -42,6 +43,7 @@ mutation UpdateCodeResource(
         includes
         visualizes
         programmingLanguageId
+        __typename
       }
     }
   }

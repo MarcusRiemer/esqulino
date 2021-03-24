@@ -80,7 +80,10 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
 
     btnSave.onClick.subscribe(async () => {
       btnSave.isInProgress = true;
-      await this._codeResourceService.updateCodeResource(this.peekResource);
+      await this._codeResourceService.updateCodeResource(
+        this.peekProject,
+        this.peekResource
+      );
       btnSave.isInProgress = false;
     });
 

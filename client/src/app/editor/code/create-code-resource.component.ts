@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { filter, first, switchMap } from "rxjs/operators";
-import { of } from "rxjs";
+import { filter, first, map } from "rxjs/operators";
 
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 
@@ -61,7 +60,12 @@ export class CreateCodeResourceComponent {
    */
   readonly availableBlockLanguages$ = this._projectService.activeProject.pipe(
     filter((p) => !!p),
-    switchMap((p) => of(p.projectBlockLanguages))
+    map((p) =>
+      p.usesBlockLanguages.map((u) => ({
+        id: u.blockLanguageId,
+        type: "blockLanguage",
+      }))
+    )
   );
 
   /**
@@ -69,7 +73,10 @@ export class CreateCodeResourceComponent {
    */
   async createCodeResource() {
     const p = this._projectService.cachedProject;
-    const b = p.getBlockLanguage(this.blockLanguageId);
+    const b = p.resourceReferences.getBlockLanguage(
+      this.blockLanguageId,
+      "throw"
+    );
 
     const res = await this._codeResourceService.createCodeResource(
       p,

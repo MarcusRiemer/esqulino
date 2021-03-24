@@ -89,7 +89,7 @@ export class CodeResourceService {
   /**
    * Sends a updated code resource to the server
    */
-  updateCodeResource(resource: CodeResource) {
+  async updateCodeResource(project: Project, resource: CodeResource) {
     const toReturn = this._update
       .mutate({
         id: resource.id,
@@ -107,7 +107,16 @@ export class CodeResourceService {
         first()
       );
 
-    return toReturn.toPromise();
+    const result = await toReturn.toPromise();
+    const affected = result.data.updateCodeResource.affected.map((a) => ({
+      name: a.name,
+      id: a.id,
+      type: a.__typename,
+    }));
+
+    console.log("Update affected: ", affected);
+
+    return result;
   }
 
   /**

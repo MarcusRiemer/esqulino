@@ -85,6 +85,7 @@ import { LifecycleLogDirective } from "./lifecycle-log.directive";
 import { ChangeDetectionLogDirective } from "./change-detection-log.directive";
 import { UrlFriendlyIdPipe } from "./url-friendly-id.pipe";
 import { AffectedResourcesDialogComponent } from "./affected-resources-dialog.component";
+import { DisplayResourcePipe } from "./display-resource.pipe";
 
 const dataServices = [
   IndividualGrammarDataService,
@@ -170,6 +171,7 @@ const materialModules = [
     ChangeDetectionLogDirective,
     UrlFriendlyIdPipe,
     AffectedResourcesDialogComponent,
+    DisplayResourcePipe,
   ],
   exports: [
     CommonModule,
@@ -210,6 +212,7 @@ const materialModules = [
     ChangeDetectionLogDirective,
     UrlFriendlyIdPipe,
     AffectedResourcesDialogComponent,
+    DisplayResourcePipe,
   ],
 })
 export class SharedAppModule {
