@@ -18,5 +18,31 @@ mutation UpdateCodeResource(
       blockLanguageId,
       programmingLanguageId,
     }
+    affected {
+      ... on BlockLanguage {
+        id
+        name
+        sidebars
+        editorBlocks
+        editorComponents
+        localGeneratorInstructions
+        rootCssClasses
+        grammarId
+        defaultProgrammingLanguageId
+      }
+
+      ... on Grammar {
+        id
+        name
+        root
+        types
+        foreignTypes
+        visualisations
+        foreignVisualisations
+        includes
+        visualizes
+        programmingLanguageId
+      }
+    }
   }
 }

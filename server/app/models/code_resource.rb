@@ -104,6 +104,33 @@ class CodeResource < ApplicationRecord
     end
   end
 
+  # Takes the given attributes and updates immediate dependants if
+  # any attribute leads to a change in this attribute
+  #
+  # @return [Array<Grammar|CodeResource|BlockLanguage>] All dependants that have been regenerated
+  def update_this_and_dependants!(**attributes)
+    # Making changes to the code resource **must** be accompanied by
+    # changes in deriving resources, otherwise the system could get out
+    # of sync quite badly.
+    ApplicationRecord.transaction do
+      # Do the actual update of the code resource
+      self.attributes = attributes
+
+      has_changed = changed?
+      save!
+
+      if has_changed
+        # Do updates on dependant resources
+        affected = regenerate_immediate_dependants!
+        affected.each { |a| a.save! }
+
+        affected
+      else
+        []
+      end
+    end
+  end
+
   # Takes the current syntaxtree and asks the IDE service for the
   # compiled representation.
   #
