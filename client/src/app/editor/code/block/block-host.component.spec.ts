@@ -100,7 +100,7 @@ describe("BlockHostComponent", () => {
     component.blockLanguage = blockLanguage;
     component.codeResource = codeResource;
 
-    renderData._updateRenderData(codeResource, blockLanguage, false, {});
+    await renderData._updateRenderData(codeResource, blockLanguage, false, {});
 
     fixture.detectChanges();
     await fixture.whenStable();

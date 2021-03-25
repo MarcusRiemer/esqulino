@@ -58,12 +58,12 @@ export class BlockRootComponent {
   /**
    * The block language that should be used to display the code resource.
    */
-  readonly currentBlockLanguage$: Observable<BlockLanguage> = combineLatest(
+  readonly currentBlockLanguage$: Observable<BlockLanguage> = combineLatest([
     this._currentCodeResource.resourceBlockLanguageId,
-    this._debugOptions.showEditableAst.value$
-  ).pipe(
+    this._debugOptions.showEditableAst.value$,
+  ]).pipe(
     map(async ([blockLangId, showInternalAst]) => {
-      const blockLang = this._resourceReferences.getBlockLanguage(
+      const blockLang = await this._resourceReferences.getBlockLanguage(
         blockLangId,
         "undefined"
       );

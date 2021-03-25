@@ -73,8 +73,8 @@ export class BlockHostComponent implements OnChanges {
     private _renderedCodeResourceService: RenderedCodeResourceService
   ) {}
 
-  ngOnChanges() {
-    this._renderedCodeResourceService._updateRenderData(
+  async ngOnChanges() {
+    await this._renderedCodeResourceService._updateRenderData(
       this.codeResource,
       this.blockLanguage,
       this.readOnly,

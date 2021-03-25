@@ -10,10 +10,6 @@ import {
   SyntaxTree,
   ValidationResult,
 } from "../shared/syntaxtree";
-import {
-  IndividualBlockLanguageDataService,
-  IndividualGrammarDataService,
-} from "../shared/serverdata";
 
 import { ProjectService } from "./project.service";
 
@@ -34,9 +30,7 @@ export class CurrentCodeResourceService {
 
   constructor(
     private _projectService: ProjectService,
-    private _resourceReferences: ResourceReferencesService,
-    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
-    private _individualGrammarData: IndividualGrammarDataService
+    private _resourceReferences: ResourceReferencesService
   ) {}
 
   /**
@@ -66,14 +60,28 @@ export class CurrentCodeResourceService {
    * The block language that is configured on the resource.
    */
   readonly resourceBlockLanguageId: Observable<string> = this.currentResource.pipe(
+    filter((c) => !!c),
     mergeMap((c) => c.blockLanguageId$)
   );
 
-  readonly blockLanguageGrammar = this.currentResource.pipe(
-    mergeMap((r) => r.blockLanguageId$),
-    mergeMap((id) => this._individualBlockLanguageData.getLocal(id, "request")),
+  readonly blockLanguage = this.resourceBlockLanguageId.pipe(
+    mergeMap((id) => this._resourceReferences.getBlockLanguage(id, "undefined"))
+  );
+
+  readonly blockLanguageGrammar = this.blockLanguage.pipe(
     mergeMap((b) =>
-      this._individualGrammarData.getLocal(b.grammarId, "request")
+      this._resourceReferences.getGrammarDescription(b.grammarId, "throw")
+    )
+  );
+
+  readonly validator$ = combineLatest([
+    this.currentResource,
+    this.blockLanguage,
+  ]).pipe(
+    // Both arguments must be available to have a validator
+    filter(([c, b]) => !!c && !!b),
+    mergeMap(([c, b]) =>
+      this._resourceReferences.getValidator(c.runtimeLanguageId, b.grammarId)
     )
   );
 
@@ -83,14 +91,10 @@ export class CurrentCodeResourceService {
   readonly validationResult = combineLatest([
     this.currentTree,
     this._projectService.activeProject,
-    this.blockLanguageGrammar,
+    this.validator$,
   ]).pipe(
-    map(([tree, project, grammar]) => {
+    map(([tree, project, validator]) => {
       if (tree) {
-        const validator = this._resourceReferences.getValidator(
-          this.peekResource.runtimeLanguageId,
-          grammar.id
-        );
         return validator.validateFromRoot(
           tree,
           project.additionalValidationContext

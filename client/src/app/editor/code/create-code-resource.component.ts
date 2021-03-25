@@ -73,7 +73,7 @@ export class CreateCodeResourceComponent {
    */
   async createCodeResource() {
     const p = this._projectService.cachedProject;
-    const b = p.resourceReferences.getBlockLanguage(
+    const b = await p.resourceReferences.getBlockLanguage(
       this.blockLanguageId,
       "throw"
     );

@@ -8,6 +8,7 @@ import { CodeResourceDescription } from "./coderesource.description";
 import { SyntaxTree, NodeDescription, NodeLocation } from "./syntaxtree";
 import { embraceNode } from "./drop-embrace";
 import { BlockLanguage } from "../block/block-language";
+import { Validator } from "./validator";
 
 export * from "./coderesource.description";
 
@@ -48,17 +49,28 @@ export class CodeResource extends ProjectResource {
     return this._runtimeLanguageId$.value;
   }
 
-  get validatorPeek() {
+  async validatorPeek() {
+    const bl = await this.blockLanguagePeek;
     return this.resourceReferences.getValidator(
       this.runtimeLanguageId,
-      this.blockLanguagePeek.grammarId
+      bl.grammarId
     );
   }
+
   /**
    * @return The language that is currently in use
    */
   readonly blockLanguage$: Observable<BlockLanguage> = this._blockLanguageId$.pipe(
-    map((l) => this.resourceReferences.getBlockLanguage(l, "throw"))
+    mergeMap((l) => this.resourceReferences.getBlockLanguage(l, "throw"))
+  );
+
+  readonly validator$: Observable<Validator> = combineLatest([
+    this._runtimeLanguageId$,
+    this.blockLanguage$,
+  ]).pipe(
+    mergeMap(([runtimeLangId, b]) =>
+      this.resourceReferences.getValidator(runtimeLangId, b.grammarId)
+    )
   );
 
   /**
@@ -69,7 +81,7 @@ export class CodeResource extends ProjectResource {
     this.blockLanguage$,
   ]).pipe(
     tap(console.log),
-    map(([l, b]) =>
+    mergeMap(([l, b]) =>
       this.resourceReferences.getGrammarProgrammingLanguage(b.grammarId, l)
     )
   );
@@ -155,14 +167,18 @@ export class CodeResource extends ProjectResource {
    *       insert at the only possible location which must be provided
    *       entirely.
    */
-  embraceNode(loc: NodeLocation, desc: NodeDescription[]) {
+  embraceNode(
+    validator: Validator,
+    loc: NodeLocation,
+    desc: NodeDescription[]
+  ) {
     console.log(
       `Embracing node at ${JSON.stringify(loc)} with ${desc.length} candidates`,
       desc
     );
 
     this.replaceSyntaxTree(
-      embraceNode(this.validatorPeek, this.syntaxTreePeek, loc, desc)
+      embraceNode(validator, this.syntaxTreePeek, loc, desc)
     );
   }
 

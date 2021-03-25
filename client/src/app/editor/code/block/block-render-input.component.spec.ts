@@ -83,7 +83,7 @@ describe("BlockRenderInputComponent", () => {
     component.node = codeResource.syntaxTreePeek.rootNode;
     component.visual = visual;
 
-    renderData._updateRenderData(codeResource, blockLanguage, false, {});
+    await renderData._updateRenderData(codeResource, blockLanguage, false, {});
 
     fixture.detectChanges();
 

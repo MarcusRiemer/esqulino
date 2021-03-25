@@ -2,7 +2,7 @@ import { ComponentPortal } from "@angular/cdk/portal";
 import { Component } from "@angular/core";
 
 import { Observable, combineLatest } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
+import { map, mergeMap } from "rxjs/operators";
 
 import {
   FixedBlocksSidebar,
@@ -68,11 +68,11 @@ export class CodeSidebarComponent {
   readonly currentCodeResource$ = this._currentCodeResource.currentResource;
 
   readonly currentBlockLanguageId$ = this.currentCodeResource$.pipe(
-    flatMap((res) => res.blockLanguageId$)
+    mergeMap((res) => res.blockLanguageId$)
   );
 
   readonly hasBlockLanguage$ = this.currentBlockLanguageId$.pipe(
-    flatMap((id) =>
+    mergeMap((id) =>
       this._resourceReferences.ensureResources({ type: "blockLanguage", id })
     )
   );
@@ -81,11 +81,11 @@ export class CodeSidebarComponent {
    * The block language that is currently in use.
    */
   readonly currentBlockLanguage$ = this.currentBlockLanguageId$.pipe(
-    map((id) => this._resourceReferences.getBlockLanguage(id, "throw"))
+    mergeMap((id) => this._resourceReferences.getBlockLanguage(id, "throw"))
   );
 
   private readonly _fallbackSidebarDescription$: Observable<FixedBlocksSidebarDescription> = this.currentBlockLanguage$.pipe(
-    flatMap((b) => this._grammarData.getLocal(b.grammarId, "request")),
+    mergeMap((b) => this._grammarData.getLocal(b.grammarId, "request")),
     map((g) => {
       // Extract the types that can be generated meaningfully
       const toGenerate: { [grammarName: string]: string[] } = {};
@@ -107,10 +107,10 @@ export class CodeSidebarComponent {
     })
   );
 
-  readonly fallbackSidebar$: Observable<FixedBlocksSidebar> = combineLatest(
+  readonly fallbackSidebar$: Observable<FixedBlocksSidebar> = combineLatest([
     this.currentBlockLanguage$,
-    this._fallbackSidebarDescription$
-  ).pipe(map(([_b, desc]) => new FixedBlocksSidebar(desc)));
+    this._fallbackSidebarDescription$,
+  ]).pipe(map(([_b, desc]) => new FixedBlocksSidebar(desc)));
 
   /**
    * The actual sidebars that need to be spawned for the current language.

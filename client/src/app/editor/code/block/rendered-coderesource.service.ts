@@ -4,7 +4,7 @@ import { BehaviorSubject, combineLatest, Observable, Subscription } from "rxjs";
 import {
   filter,
   distinctUntilChanged,
-  flatMap,
+  mergeMap,
   map,
   shareReplay,
 } from "rxjs/operators";
@@ -21,7 +21,6 @@ import {
   ResourceReferencesService,
   RequiredResource,
 } from "../../../shared/resource-references.service";
-import { IndividualGrammarDataService } from "../../../shared/serverdata";
 
 /**
  * This service is provided at the root component that is used to render a coderesource.
@@ -57,10 +56,7 @@ export class RenderedCodeResourceService implements OnDestroy {
   // All manual subscriptions that are part of this service
   private _subscriptions: Subscription[] = [];
 
-  constructor(
-    private _resourceReferences: ResourceReferencesService,
-    private _grammarData: IndividualGrammarDataService
-  ) {
+  constructor(private _resourceReferences: ResourceReferencesService) {
     const subValidator = this.validator$.subscribe(this._validator);
     const subTree = this.syntaxTree$.subscribe(this._syntaxTree);
 
@@ -80,7 +76,7 @@ export class RenderedCodeResourceService implements OnDestroy {
   );
 
   readonly syntaxTree$: Observable<SyntaxTree> = this._codeResource.pipe(
-    flatMap((c) => c.syntaxTree$)
+    mergeMap((c) => c.syntaxTree$)
   );
 
   readonly blockLanguage$ = this._blockLanguage.pipe(
@@ -100,17 +96,19 @@ export class RenderedCodeResourceService implements OnDestroy {
   );
 
   private readonly _blockLanguageGrammar$ = this.blockLanguage$.pipe(
-    flatMap((b) => this._grammarData.getLocal(b.grammarId, "request"))
+    mergeMap((b) =>
+      this._resourceReferences.getGrammarDescription(b.grammarId, "throw")
+    )
   );
 
   /**
    * @return The validator that should be used based on the current block language.
    */
-  readonly validator$: Observable<Validator> = combineLatest(
+  readonly validator$: Observable<Validator> = combineLatest([
     this._blockLanguageGrammar$,
-    this.codeResource$
-  ).pipe(
-    map(([g, c]) =>
+    this.codeResource$,
+  ]).pipe(
+    mergeMap(([g, c]) =>
       this._resourceReferences.getValidator(c.runtimeLanguageId, g.id)
     )
   );
@@ -154,13 +152,14 @@ export class RenderedCodeResourceService implements OnDestroy {
     return this._syntaxTree.value;
   }
 
-  _updateRenderData(
+  async _updateRenderData(
     codeResource: CodeResource,
     blockLanguage: BlockLanguage,
     readOnly: boolean,
     validationContext: any
   ) {
-    const newBlockLang = blockLanguage || codeResource.blockLanguagePeek;
+    const newBlockLang =
+      blockLanguage || (await codeResource.blockLanguagePeek);
     const requiredResources: RequiredResource[] = [
       { type: "grammar", id: newBlockLang.grammarId },
     ];

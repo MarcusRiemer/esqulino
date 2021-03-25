@@ -121,7 +121,7 @@
       *ngFor="let used of project.usesBlockLanguages;"
       class="list-group-item"
     >
-      <h5 class="card-title">{{ used | displayResource }}</h5>
+      <h5 class="card-title">{{ used | displayResource | async }}</h5>
       <button
         *ngIf="used.id"
         (click)="removeUsedBlockLanguage(used.blockLanguageId, used.id)"

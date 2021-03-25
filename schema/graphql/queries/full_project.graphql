@@ -30,6 +30,19 @@ query FullProject($id: ID!) {
         visualizes
         programmingLanguageId
       }
+      # Not required by the project constructor, but by specifying
+      # it here it ends up in the apollo cache
+      blockLanguages {
+        id
+        name
+        sidebars
+        editorBlocks
+        editorComponents
+        localGeneratorInstructions
+        rootCssClasses
+        grammarId
+        defaultProgrammingLanguageId
+      }
       projectUsesBlockLanguages {
         id
         blockLanguageId

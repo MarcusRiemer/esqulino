@@ -19,7 +19,7 @@ import { BlockDebugOptionsService } from "../../block-debug-options.service";
 import { ProjectService } from "../../project.service";
 import { SidebarService } from "../../sidebar.service";
 
-import { CodeSidebarComponent } from "../code.sidebar";
+import { CodeSidebarComponent } from "../code-sidebar.component";
 import { EditorComponentsService } from "../editor-components.service";
 
 interface PlacedEditorComponent {

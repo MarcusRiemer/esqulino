@@ -1,15 +1,14 @@
 import { Injectable } from "@angular/core";
 
+import { FullBlockLanguageGQL, FullGrammarGQL } from "../../generated/graphql";
+
 import {
   ResourceReferencesService,
   RequiredResource,
 } from "./resource-references.service";
 import { LanguageService } from "./language.service";
-import {
-  IndividualBlockLanguageDataService,
-  IndividualGrammarDataService,
-} from "./serverdata";
 import { BlockLanguage } from "./block";
+import { first, map } from "rxjs/operators";
 
 /**
  * Provides access to the most recent state of all resources that are available through
@@ -21,39 +20,39 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
 
   constructor(
     private _languageService: LanguageService,
-    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
-    private _individualGrammarData: IndividualGrammarDataService
+    private _blockLanguage: FullBlockLanguageGQL,
+    private _grammar: FullGrammarGQL
   ) {
     super();
   }
 
-  getBlockLanguage(id: string, onMissing: "undefined" | "throw") {
+  async getBlockLanguage(id: string, onMissing: "undefined" | "throw") {
     if (!this._blockLanguages[id]) {
-      const desc = this._individualBlockLanguageData.getLocal(id, "undefined");
-      if (!desc) {
-        if (onMissing === "throw") {
-          throw new Error(
-            `Could not construct block language "${id}" on the fly`
-          );
-        } else {
-          return undefined;
-        }
-      }
+      const blockLanguage = await this._blockLanguage
+        .fetch({ id })
+        .pipe(
+          first(),
+          map((res) => res.data.blockLanguages.nodes[0]),
+          map((desc) => new BlockLanguage(desc))
+        )
+        .toPromise();
 
-      const blockLanguage = new BlockLanguage(desc);
-      this._blockLanguages[desc.id] = blockLanguage;
+      this._blockLanguages[blockLanguage.id] = blockLanguage;
     }
 
     return this._blockLanguages[id];
   }
 
   getGrammarDescription(id: string, onMissing: "undefined" | "throw") {
-    const g = this._individualGrammarData.getLocal(id, "undefined");
-    if (!g && onMissing === "throw") {
-      throw new Error(`Could not retriebe grammar "${id}" on the fly`);
-    } else {
-      return g;
-    }
+    const g = this._grammar
+      .fetch({ id })
+      .pipe(
+        first(),
+        map((res) => res.data.grammars.nodes[0])
+      )
+      .toPromise();
+
+    return g;
   }
 
   getCoreProgrammingLanguage(programmingLanguageId: string) {
@@ -64,9 +63,9 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
     const requests: Promise<any>[] = req.map((r) => {
       switch (r.type) {
         case "blockLanguage":
-          return this._individualBlockLanguageData.getLocal(r.id, "request");
+          return this.getBlockLanguage(r.id, "undefined");
         case "grammar":
-          return this._individualGrammarData.getLocal(r.id, "request");
+          return this.getGrammarDescription(r.id, "undefined");
         case "blockLanguageGrammar":
           return this.ensureBlockLanguageGrammar(r.id);
         default:

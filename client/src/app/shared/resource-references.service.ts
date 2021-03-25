@@ -46,30 +46,30 @@ export abstract class ResourceReferencesService {
   abstract getBlockLanguage(
     id: string,
     onMissing: "undefined" | "throw"
-  ): BlockLanguage;
+  ): Promise<BlockLanguage>;
 
   /**
    * @param id The ID of the requested grammar
    * @param onMissing What should be done in the case of a missing resource?
    * @return The grammar with the requested ID
    */
-  protected abstract getGrammarDescription(
+  abstract getGrammarDescription(
     id: string,
     onMissing: "undefined" | "throw"
-  ): GrammarDescription;
+  ): Promise<GrammarDescription>;
 
   /**
    * @param programmingLanguageId The core language to use, may define static code validators
    * @param grammarId The grammar to verify against
    * @return A validator that checks for both kinds of errors
    */
-  getValidator(programmingLanguageId: string, grammarId: string) {
+  async getValidator(programmingLanguageId: string, grammarId: string) {
     const programmingLanguage = this.getCoreProgrammingLanguage(
       programmingLanguageId
     );
     const specializedValidators =
       programmingLanguage.validator.specializedValidators;
-    const grammarDescription = this.getGrammarDescription(
+    const grammarDescription = await this.getGrammarDescription(
       grammarId,
       "undefined"
     );
@@ -91,7 +91,7 @@ export abstract class ResourceReferencesService {
    * @param grammarId The Id of the grammar that must be available
    * @param programmingLanguageId The Id of the internal programming language
    */
-  getGrammarProgrammingLanguage(
+  async getGrammarProgrammingLanguage(
     grammarId: string,
     programmingLanguageId: string
   ) {
@@ -99,7 +99,7 @@ export abstract class ResourceReferencesService {
       programmingLanguageId
     );
 
-    const grammarDescription = this.getGrammarDescription(
+    const grammarDescription = await this.getGrammarDescription(
       grammarId,
       "undefined"
     );
@@ -147,8 +147,8 @@ export abstract class ResourceReferencesService {
   /**
    * Helper method to check whether the block language and the referenced grammar are available
    */
-  protected hasBlockLanguageGrammar(blockLanguageId: string) {
-    const blockLang = this.getBlockLanguage(blockLanguageId, "undefined");
+  protected async hasBlockLanguageGrammar(blockLanguageId: string) {
+    const blockLang = await this.getBlockLanguage(blockLanguageId, "undefined");
     if (!blockLang) {
       return false;
     }
@@ -168,7 +168,7 @@ export abstract class ResourceReferencesService {
       return false;
     }
     // We know that the block language must exist, so we may as well throw
-    const blockLang = this.getBlockLanguage(blockLanguageId, "throw");
+    const blockLang = await this.getBlockLanguage(blockLanguageId, "throw");
 
     return this.ensureResources({ type: "grammar", id: blockLang.grammarId });
   }

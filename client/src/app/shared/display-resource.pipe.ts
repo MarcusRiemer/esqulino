@@ -22,21 +22,21 @@ export function isResourceReference(
 export class DisplayResourcePipe implements PipeTransform {
   public constructor(private readonly _resources: ResourceReferencesService) {}
 
-  transform(
+  async transform(
     value: ResourceReference | ProjectUsesBlockLanguageDescription
-  ): string {
+  ): Promise<string> {
     value = isProjectUsesBlockLanguageDescription(value)
       ? { id: value.blockLanguageId, type: "BlockLanguage" }
       : value;
 
-    const resolved = this.resolve(value);
+    const resolved = await this.resolve(value);
     return resolved?.name ?? value.id;
   }
 
-  private resolve(value: ResourceReference) {
+  private async resolve(value: ResourceReference) {
     switch (value.type) {
       case "BlockLanguage":
-        return this._resources.getBlockLanguage(value.id, "undefined");
+        return await this._resources.getBlockLanguage(value.id, "undefined");
       default:
         return undefined;
     }

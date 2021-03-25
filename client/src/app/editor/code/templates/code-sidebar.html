@@ -14,7 +14,7 @@
       <p>
         <strong>
           Die Blocksprache
-          <q>{{ (currentBlockLanguage$ | async).name }}</q>
+          <q>{{ (currentBlockLanguage$ | async)?.name }}</q>
           hat keine Seitenleiste definiert!
         </strong>
         Vermutlich ist das einfach ein Fehler des Sprachdesigners, auf jeden
@@ -25,7 +25,7 @@
         Du kennst dich mit den Interna von Blocksprachen aus? Dann kannst du
         versuchen den Fehler
         <a
-          [routerLink]="['/admin/block-language/',  (currentBlockLanguage$ | async).id]"
+          [routerLink]="['/admin/block-language/',  (currentBlockLanguage$ | async)?.id]"
         >
           im Admin-Editor zu beheben
         </a>
