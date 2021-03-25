@@ -32,7 +32,9 @@ import { CodeResourceDescription } from "../../shared/syntaxtree";
 import { EmptyComponent } from "../../shared/empty.component";
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 import { specExpectMayPerform } from "../../shared/authorisation/may-perform.spec-util";
+import { MayPerformComponent } from "../../shared/authorisation/may-perform.component";
 import { Project, ProjectFullDescription } from "../../shared/project";
+import { DisplayResourcePipe } from "../../shared/display-resource.pipe";
 
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
@@ -41,12 +43,11 @@ import { CodeResourceService } from "../coderesource.service";
 import { RegistrationService } from "../registration.service";
 
 import { CreateCodeResourceComponent } from "./create-code-resource.component";
-import { MayPerformComponent } from "src/app/shared/authorisation/may-perform.component";
 
 describe(`CreateCodeResourceComponent`, () => {
   async function createComponent(
     projectCreationParams?: Partial<ProjectFullDescription>,
-    permissionToCreate?: boolean
+    permissionToCreate: boolean = true
   ) {
     await TestBed.configureTestingModule({
       imports: [
@@ -81,6 +82,7 @@ describe(`CreateCodeResourceComponent`, () => {
         CreateCodeResourceComponent,
         EmptyComponent,
         MayPerformComponent,
+        DisplayResourcePipe,
       ],
     }).compileComponents();
 
@@ -94,12 +96,12 @@ describe(`CreateCodeResourceComponent`, () => {
     let component = fixture.componentInstance;
     fixture.detectChanges();
 
-    if (permissionToCreate !== undefined) {
-      // Allow or deny operation
-      specExpectMayPerform("first", permissionToCreate);
-    }
+    // Allow or deny operation
+    specExpectMayPerform("first", permissionToCreate);
 
+    fixture.detectChanges();
     await fixture.whenStable();
+    fixture.detectChanges();
 
     return {
       fixture,

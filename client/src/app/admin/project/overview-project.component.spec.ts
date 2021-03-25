@@ -133,8 +133,6 @@ describe("OverviewProjectComponent", () => {
     const tableElement = t.element.querySelector("table");
     const i1Row = tableElement.querySelector("tbody > tr");
 
-    debugger;
-
     expect(i1Row.textContent).toMatch(
       response.data.projects.nodes[0].name["en"]
     );
