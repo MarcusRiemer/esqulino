@@ -1719,20 +1719,6 @@ export type FullProjectQuery = { __typename?: "Query" } & {
                   | "programmingLanguageId"
                 >
               >;
-              blockLanguages: Array<
-                { __typename?: "BlockLanguage" } & Pick<
-                  BlockLanguage,
-                  | "id"
-                  | "name"
-                  | "sidebars"
-                  | "editorBlocks"
-                  | "editorComponents"
-                  | "localGeneratorInstructions"
-                  | "rootCssClasses"
-                  | "grammarId"
-                  | "defaultProgrammingLanguageId"
-                >
-              >;
               grammars: Array<
                 { __typename?: "Grammar" } & Pick<
                   Grammar,
@@ -1991,7 +1977,7 @@ export type UpdateCodeResourceMutation = { __typename?: "Mutation" } & {
         "name" | "ast" | "blockLanguageId" | "programmingLanguageId"
       >;
       affected: Array<
-        | ({ __typename?: "BlockLanguage" } & Pick<
+        | ({ __typename: "BlockLanguage" } & Pick<
             BlockLanguage,
             | "id"
             | "name"
@@ -2003,7 +1989,7 @@ export type UpdateCodeResourceMutation = { __typename?: "Mutation" } & {
             | "grammarId"
             | "defaultProgrammingLanguageId"
           >)
-        | ({ __typename?: "Grammar" } & Pick<
+        | ({ __typename: "Grammar" } & Pick<
             Grammar,
             | "id"
             | "name"
@@ -2973,17 +2959,6 @@ export const FullProjectDocument = gql`
           blockLanguageId
           programmingLanguageId
         }
-        blockLanguages {
-          id
-          name
-          sidebars
-          editorBlocks
-          editorComponents
-          localGeneratorInstructions
-          rootCssClasses
-          grammarId
-          defaultProgrammingLanguageId
-        }
         grammars {
           id
           name
@@ -3397,6 +3372,7 @@ export const UpdateCodeResourceDocument = gql`
           rootCssClasses
           grammarId
           defaultProgrammingLanguageId
+          __typename
         }
         ... on Grammar {
           id
@@ -3409,6 +3385,7 @@ export const UpdateCodeResourceDocument = gql`
           includes
           visualizes
           programmingLanguageId
+          __typename
         }
       }
     }

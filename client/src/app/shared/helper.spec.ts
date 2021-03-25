@@ -23,7 +23,6 @@ export function emptyProject(
       name: "specDb",
       schema: [],
     },
-    blockLanguages: [],
     grammars: [],
     codeResources: [],
     projectSources: [],

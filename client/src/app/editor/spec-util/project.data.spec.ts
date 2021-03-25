@@ -20,7 +20,6 @@ type FullProjectGQLResponse =
 
 const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
   id: "28066939-7d53-40de-a89b-95bf37c982be",
-  blockLanguages: [],
   codeResources: [],
   description: { en: "Default Empty Project" },
   grammars: [],

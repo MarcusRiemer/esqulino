@@ -18,17 +18,6 @@ query FullProject($id: ID!) {
         blockLanguageId
         programmingLanguageId
       }
-      blockLanguages {
-        id
-        name
-        sidebars
-        editorBlocks
-        editorComponents
-        localGeneratorInstructions
-        rootCssClasses
-        grammarId
-        defaultProgrammingLanguageId
-      }
       grammars {
         id
         name

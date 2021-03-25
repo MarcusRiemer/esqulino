@@ -17,7 +17,11 @@ import {
 
 import { FullProjectGQL } from "../../../generated/graphql";
 
-import { specLoadProject, buildBlockLanguage } from "../../editor/spec-util";
+import {
+  specLoadProject,
+  buildBlockLanguage,
+  provideBlockLanguageList,
+} from "../../editor/spec-util";
 
 import { ResourceReferencesService } from "../../shared/resource-references.service";
 import { ResourceReferencesOnlineService } from "../../shared/resource-references-online.service";
@@ -33,7 +37,6 @@ import { EmptyComponent } from "../../shared/empty.component";
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 import { specExpectMayPerform } from "../../shared/authorisation/may-perform.spec-util";
 import { MayPerformComponent } from "../../shared/authorisation/may-perform.component";
-import { Project, ProjectFullDescription } from "../../shared/project";
 import { DisplayResourcePipe } from "../../shared/display-resource.pipe";
 
 import { EditorToolbarService } from "../toolbar.service";
@@ -43,10 +46,11 @@ import { CodeResourceService } from "../coderesource.service";
 import { RegistrationService } from "../registration.service";
 
 import { CreateCodeResourceComponent } from "./create-code-resource.component";
+import { BlockLanguageDescription } from "src/app/shared/block/block-language.description";
 
 describe(`CreateCodeResourceComponent`, () => {
   async function createComponent(
-    projectCreationParams?: Partial<ProjectFullDescription>,
+    blockLanguages: BlockLanguageDescription[] = [],
     permissionToCreate: boolean = true
   ) {
     await TestBed.configureTestingModule({
@@ -87,13 +91,13 @@ describe(`CreateCodeResourceComponent`, () => {
     }).compileComponents();
 
     const projectService = TestBed.inject(ProjectService);
-    let project: Project = undefined;
-    if (projectCreationParams !== undefined) {
-      project = await specLoadProject(projectService, projectCreationParams);
-    }
 
-    let fixture = TestBed.createComponent(CreateCodeResourceComponent);
-    let component = fixture.componentInstance;
+    const project = await specLoadProject(projectService, {});
+
+    provideBlockLanguageList(blockLanguages);
+
+    const fixture = TestBed.createComponent(CreateCodeResourceComponent);
+    const component = fixture.componentInstance;
     fixture.detectChanges();
 
     // Allow or deny operation
@@ -116,14 +120,14 @@ describe(`CreateCodeResourceComponent`, () => {
   }
 
   it(`Has empty inputs without data`, async () => {
-    let t = await createComponent({}, true);
+    let t = await createComponent([], true);
 
     expect(t.component.blockLanguageId).toBeUndefined();
     expect(t.component.resourceName).toBeUndefined();
   });
 
   it(`Has empty inputs when not allowed to create`, async () => {
-    let t = await createComponent({}, false);
+    let t = await createComponent([], false);
 
     expect(t.component.blockLanguageId).toBeUndefined();
     expect(t.component.resourceName).toBeUndefined();
@@ -131,21 +135,14 @@ describe(`CreateCodeResourceComponent`, () => {
 
   it(`Shows the default block language`, async () => {
     let t = await createComponent(
-      {
-        blockLanguages: [
-          {
-            id: "1",
-            name: "B1",
-            sidebars: [],
-            editorBlocks: [],
-            editorComponents: [],
-            defaultProgrammingLanguageId: "spec",
-            rootCssClasses: [],
-            grammarId: "4330b41a-294b-43be-b1d0-679df35a7c87",
-            localGeneratorInstructions: { type: "manual" },
-          },
-        ],
-      },
+      [
+        buildBlockLanguage({
+          id: "1",
+          name: "B1",
+          defaultProgrammingLanguageId: "spec",
+          grammarId: "4330b41a-294b-43be-b1d0-679df35a7c87",
+        }),
+      ],
       true
     );
 
@@ -156,12 +153,10 @@ describe(`CreateCodeResourceComponent`, () => {
     const b = buildBlockLanguage();
 
     let t = await createComponent(
-      {
-        blockLanguages: [
-          b,
-          buildBlockLanguage(), // Two languages available
-        ],
-      },
+      [
+        b,
+        buildBlockLanguage(), // Two languages available
+      ],
       true
     );
 
@@ -171,9 +166,7 @@ describe(`CreateCodeResourceComponent`, () => {
   it(`Creating a new resource results in a HTTP request and a redirect`, async () => {
     const b = buildBlockLanguage();
 
-    const t = await createComponent({
-      blockLanguages: [b],
-    });
+    const t = await createComponent([b]);
 
     const r: CodeResourceDescription = {
       id: "a292fae1-aad7-4cfe-9646-6210a6814eab",

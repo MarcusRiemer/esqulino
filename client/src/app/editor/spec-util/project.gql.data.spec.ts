@@ -2,7 +2,6 @@ import { generateUUIDv4 } from "../../shared/util-browser";
 import {
   AdminListProjectsQuery,
   FrontpageListProjectsQuery,
-  Project,
 } from "../../../generated/graphql";
 
 export type AdminProjectGQLResponse = { data: AdminListProjectsQuery };

@@ -13,7 +13,6 @@ import { LinkService } from "../../link.service";
 import { ServerApiService } from "../../shared";
 import { CurrentLanguagePipe } from "../../shared/current-language.pipe";
 import { MetaCodeResourceListDescription } from "./meta-code-resource.description";
-import { ServerTasksService } from "../../shared/serverdata/server-tasks.service";
 
 import { MetaCodeResourceSelectComponent } from "./meta-code-resource-select.component";
 
@@ -23,7 +22,6 @@ describe("MetaCodeResourceSelect", () => {
       imports: [ApolloTestingModule, FormsModule],
       providers: [
         ServerApiService,
-        ServerTasksService,
         { provide: LOCALE_ID, useValue: "en" },
         NaturalLanguagesService,
         LinkService,

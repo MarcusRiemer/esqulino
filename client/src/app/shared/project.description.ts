@@ -98,7 +98,6 @@ export interface ProjectListDescription {
  */
 export interface ProjectDescription extends ProjectListDescription {
   projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[];
-  blockLanguages: BlockLanguageDescription[];
   grammars: GrammarDescription[];
   projectSources: ProjectSourceDescription[];
 }
