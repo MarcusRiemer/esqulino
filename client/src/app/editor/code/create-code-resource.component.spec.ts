@@ -15,22 +15,22 @@ import {
   ApolloTestingModule,
 } from "apollo-angular/testing";
 
-import { FullProjectGQL } from "../../../generated/graphql";
+import {
+  FullBlockLanguageGQL,
+  FullProjectGQL,
+} from "../../../generated/graphql";
 
 import {
+  specBuildBlockLanguage,
+  specCacheBlockLanguage,
   specLoadProject,
-  buildBlockLanguage,
-  provideBlockLanguageList,
 } from "../../editor/spec-util";
 
 import { ResourceReferencesService } from "../../shared/resource-references.service";
 import { ResourceReferencesOnlineService } from "../../shared/resource-references-online.service";
 
 import { ServerApiService, LanguageService } from "../../shared";
-import {
-  IndividualBlockLanguageDataService,
-  IndividualGrammarDataService,
-} from "../../shared/serverdata";
+import { IndividualGrammarDataService } from "../../shared/serverdata";
 import { MayPerformService } from "../../shared/authorisation/may-perform.service";
 import { CodeResourceDescription } from "../../shared/syntaxtree";
 import { EmptyComponent } from "../../shared/empty.component";
@@ -38,6 +38,7 @@ import { PerformDataService } from "../../shared/authorisation/perform-data.serv
 import { specExpectMayPerform } from "../../shared/authorisation/may-perform.spec-util";
 import { MayPerformComponent } from "../../shared/authorisation/may-perform.component";
 import { DisplayResourcePipe } from "../../shared/display-resource.pipe";
+import { FullBlockLanguage } from "../../shared/serverdata/gql-cache";
 
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
@@ -46,11 +47,10 @@ import { CodeResourceService } from "../coderesource.service";
 import { RegistrationService } from "../registration.service";
 
 import { CreateCodeResourceComponent } from "./create-code-resource.component";
-import { BlockLanguageDescription } from "src/app/shared/block/block-language.description";
 
-describe(`CreateCodeResourceComponent`, () => {
+fdescribe(`CreateCodeResourceComponent`, () => {
   async function createComponent(
-    blockLanguages: BlockLanguageDescription[] = [],
+    blockLanguages: FullBlockLanguage[] = [],
     permissionToCreate: boolean = true
   ) {
     await TestBed.configureTestingModule({
@@ -70,7 +70,6 @@ describe(`CreateCodeResourceComponent`, () => {
         SidebarService,
         ProjectService,
         CodeResourceService,
-        IndividualBlockLanguageDataService,
         IndividualGrammarDataService,
         MatSnackBar,
         Overlay,
@@ -79,6 +78,7 @@ describe(`CreateCodeResourceComponent`, () => {
           useClass: ResourceReferencesOnlineService,
         },
         FullProjectGQL,
+        FullBlockLanguageGQL,
         PerformDataService,
         MayPerformService,
       ],
@@ -92,9 +92,18 @@ describe(`CreateCodeResourceComponent`, () => {
 
     const projectService = TestBed.inject(ProjectService);
 
-    const project = await specLoadProject(projectService, {});
+    const projectId = "19846df6-2839-4368-a888-7ce620c53346";
+    const project = await specLoadProject(projectService, {
+      id: projectId,
+      projectUsesBlockLanguages: blockLanguages.map((b) => ({
+        blockLanguageId: b.id,
+        id: projectId,
+      })),
+    });
 
-    provideBlockLanguageList(blockLanguages);
+    blockLanguages.forEach((b) => {
+      specCacheBlockLanguage(b);
+    });
 
     const fixture = TestBed.createComponent(CreateCodeResourceComponent);
     const component = fixture.componentInstance;
@@ -133,11 +142,13 @@ describe(`CreateCodeResourceComponent`, () => {
     expect(t.component.resourceName).toBeUndefined();
   });
 
-  it(`Shows the default block language`, async () => {
+  fit(`Shows the default block language`, async () => {
+    const id = "cbc49d11-40e5-4ab6-9549-64959488c1eb";
+
     let t = await createComponent(
       [
-        buildBlockLanguage({
-          id: "1",
+        specBuildBlockLanguage({
+          id,
           name: "B1",
           defaultProgrammingLanguageId: "spec",
           grammarId: "4330b41a-294b-43be-b1d0-679df35a7c87",
@@ -146,16 +157,17 @@ describe(`CreateCodeResourceComponent`, () => {
       true
     );
 
-    expect(t.component.blockLanguageId).toEqual("1");
+    expect(t.component.blockLanguageId).toEqual(id);
+    expect(t.element.innerText).toContain("B1");
   });
 
   it(`Shows the first availabe block language as default`, async () => {
-    const b = buildBlockLanguage();
+    const b = specBuildBlockLanguage();
 
     let t = await createComponent(
       [
         b,
-        buildBlockLanguage(), // Two languages available
+        specBuildBlockLanguage(), // Two languages available
       ],
       true
     );
@@ -164,7 +176,7 @@ describe(`CreateCodeResourceComponent`, () => {
   });
 
   it(`Creating a new resource results in a HTTP request and a redirect`, async () => {
-    const b = buildBlockLanguage();
+    const b = specBuildBlockLanguage();
 
     const t = await createComponent([b]);
 

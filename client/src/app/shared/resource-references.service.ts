@@ -5,6 +5,7 @@ import { Validator } from "./syntaxtree/validator";
 import { Language } from "./syntaxtree/language";
 import { StringUnion } from "./string-union";
 import { GrammarDescription } from "./syntaxtree";
+import { FetchPolicy } from "@apollo/client/core";
 
 /**
  * Valid values for resources that may be required
@@ -31,6 +32,11 @@ export function isRequiredResource(obj: any): obj is RequiredResource {
   );
 }
 
+export interface RetrievalOptions {
+  onMissing?: "undefined" | "throw";
+  fetchPolicy?: FetchPolicy;
+}
+
 /**
  * As resources are sometimes heavily interleaved, a generic way to access those is required.
  * In earlier iterations this was the responsibility of the `Project` class, but this horribly
@@ -45,7 +51,7 @@ export abstract class ResourceReferencesService {
    */
   abstract getBlockLanguage(
     id: string,
-    onMissing: "undefined" | "throw"
+    options?: RetrievalOptions
   ): Promise<BlockLanguage>;
 
   /**
@@ -135,7 +141,7 @@ export abstract class ResourceReferencesService {
     return req.every((r) => {
       switch (r.type) {
         case "blockLanguage":
-          return !!this.getBlockLanguage(r.id, "undefined");
+          return !!this.getBlockLanguage(r.id, { onMissing: "undefined" });
         case "grammar":
           return !!this.getGrammarDescription(r.id, "undefined");
         case "blockLanguageGrammar":
@@ -148,7 +154,9 @@ export abstract class ResourceReferencesService {
    * Helper method to check whether the block language and the referenced grammar are available
    */
   protected async hasBlockLanguageGrammar(blockLanguageId: string) {
-    const blockLang = await this.getBlockLanguage(blockLanguageId, "undefined");
+    const blockLang = await this.getBlockLanguage(blockLanguageId, {
+      onMissing: "undefined",
+    });
     if (!blockLang) {
       return false;
     }
@@ -168,7 +176,9 @@ export abstract class ResourceReferencesService {
       return false;
     }
     // We know that the block language must exist, so we may as well throw
-    const blockLang = await this.getBlockLanguage(blockLanguageId, "throw");
+    const blockLang = await this.getBlockLanguage(blockLanguageId, {
+      onMissing: "throw",
+    });
 
     return this.ensureResources({ type: "grammar", id: blockLang.grammarId });
   }

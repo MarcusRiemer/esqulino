@@ -3,18 +3,23 @@ import { Component } from "@angular/core";
 import { Observable, combineLatest } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
+import * as Apollo from "apollo-angular";
+
 import { BlockLanguage } from "../../../shared/block";
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 import { convertGrammarTreeInstructions } from "../../../shared/block/generator/generator-tree";
-import {
-  IndividualGrammarDataService,
-  IndividualBlockLanguageDataService,
-} from "../../../shared/serverdata";
+import { IndividualGrammarDataService } from "../../../shared/serverdata";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { DragService } from "../../drag.service";
 import { BlockDebugOptionsService } from "../../block-debug-options.service";
 import { ProjectService } from "../../project.service";
+import {
+  FullBlockLanguageDocument,
+  FullBlockLanguageQuery,
+} from "src/generated/graphql";
+import { BlockLanguageDescription } from "src/app/shared/block/block-language.description";
+import { cacheFullBlockLanguage } from "src/app/shared/serverdata/gql-cache";
 
 /**
  * Root of a block editor. Displays either the syntaxtree or a friendly message to
@@ -31,7 +36,7 @@ export class BlockRootComponent {
     private _resourceReferences: ResourceReferencesService,
     private _projectService: ProjectService,
     private _grammarData: IndividualGrammarDataService,
-    private _blockLangData: IndividualBlockLanguageDataService
+    private _apollo: Apollo.Apollo
   ) {}
 
   /**
@@ -65,7 +70,7 @@ export class BlockRootComponent {
     map(async ([blockLangId, showInternalAst]) => {
       const blockLang = await this._resourceReferences.getBlockLanguage(
         blockLangId,
-        "undefined"
+        { onMissing: "undefined" }
       );
       if (!blockLang) {
         throw new Error(
@@ -93,9 +98,12 @@ export class BlockRootComponent {
   ): Promise<BlockLanguage> {
     // If a block language exists for the given grammar ID: This language
     // was automatically generated for that grammar.
-    let blockLangDesc = this._blockLangData.getLocal(grammarId, "undefined");
+    let blockLang = await this._resourceReferences.getBlockLanguage(grammarId, {
+      fetchPolicy: "cache-only",
+      onMissing: "undefined",
+    });
     // Was the block language for that grammar created already?
-    if (!blockLangDesc) {
+    if (!blockLang) {
       // Nope, we build it on the fly
       console.log(
         `Generating AST block language for grammar with ID "${grammarId}"`
@@ -107,17 +115,26 @@ export class BlockRootComponent {
         { type: "tree" },
         grammar
       );
-      blockLangDesc = Object.assign(blockLangModel, {
+
+      const blockLangDesc: FullBlockLanguageQuery["blockLanguages"]["nodes"][0] = {
+        __typename: "BlockLanguage",
         id: grammarId,
         grammarId: grammarId,
         name: `Automatically generated from "${grammar.name}"`,
         defaultProgrammingLanguageId: grammar.programmingLanguageId,
-      });
+        sidebars: blockLangModel.sidebars,
+        editorBlocks: blockLangModel.editorBlocks,
+        editorComponents: blockLangModel.editorComponents,
+        rootCssClasses: blockLangModel.rootCssClasses,
+        createdAt: Date(),
+        updatedAt: Date(),
+      };
 
-      // Make the block language available to the rendered trees
-      this._blockLangData.setLocal(blockLangDesc);
+      cacheFullBlockLanguage(this._apollo, blockLangDesc);
+
+      return new BlockLanguage(blockLangDesc);
+    } else {
+      return blockLang;
     }
-
-    return new BlockLanguage(blockLangDesc);
   }
 }

@@ -23,7 +23,6 @@ import {
   GrammarDocument,
 } from "../../../../shared";
 import {
-  IndividualBlockLanguageDataService,
   IndividualGrammarDataService,
   ServerApiService,
 } from "../../../../shared/serverdata";
@@ -39,8 +38,8 @@ import {
 import { DragService } from "../../../drag.service";
 import { TrashService } from "../../../trash.service";
 import {
-  ensureLocalBlockLanguageRequest,
-  buildBlockLanguage,
+  specCacheBlockLanguage,
+  specBuildBlockLanguage,
   ensureLocalGrammarRequest,
   mkGrammarDescription,
 } from "../../../spec-util";
@@ -65,7 +64,6 @@ describe(`Render Generated BlockLanguages`, () => {
         NoopAnimationsModule,
       ],
       providers: [
-        IndividualBlockLanguageDataService,
         DragService,
         IndividualGrammarDataService,
         LanguageService,
@@ -89,20 +87,22 @@ describe(`Render Generated BlockLanguages`, () => {
     const grammarDesc = await ensureLocalGrammarRequest(
       mkGrammarDescription(grammarDoc)
     );
-    const listBlockLanguage: BlockLanguageListDescription = buildBlockLanguage({
-      grammarId: grammarDesc.id,
-    });
-    const genBlockLanguage = generateBlockLanguage(
-      listBlockLanguage,
+    const listBlockLanguage: BlockLanguageListDescription = specBuildBlockLanguage(
       {
-        type: "tree",
-      },
-      grammarDoc
+        grammarId: grammarDesc.id,
+      }
+    );
+    const genBlockLanguage = specBuildBlockLanguage(
+      generateBlockLanguage(
+        listBlockLanguage,
+        {
+          type: "tree",
+        },
+        grammarDoc
+      )
     );
 
-    const blockLangDesc = await ensureLocalBlockLanguageRequest(
-      genBlockLanguage
-    );
+    const blockLangDesc = specCacheBlockLanguage(genBlockLanguage);
 
     let fixture = TestBed.createComponent(BlockHostComponent);
     let component = fixture.componentInstance;

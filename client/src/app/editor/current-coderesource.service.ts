@@ -64,11 +64,11 @@ export class CurrentCodeResourceService {
     mergeMap((c) => c.blockLanguageId$)
   );
 
-  readonly blockLanguage = this.resourceBlockLanguageId.pipe(
-    mergeMap((id) => this._resourceReferences.getBlockLanguage(id, "undefined"))
+  readonly blockLanguage$ = this.resourceBlockLanguageId.pipe(
+    mergeMap((id) => this._resourceReferences.getBlockLanguage(id))
   );
 
-  readonly blockLanguageGrammar = this.blockLanguage.pipe(
+  readonly blockLanguageGrammar$ = this.blockLanguage$.pipe(
     mergeMap((b) =>
       this._resourceReferences.getGrammarDescription(b.grammarId, "throw")
     )
@@ -76,7 +76,7 @@ export class CurrentCodeResourceService {
 
   readonly validator$ = combineLatest([
     this.currentResource,
-    this.blockLanguage,
+    this.blockLanguage$,
   ]).pipe(
     // Both arguments must be available to have a validator
     filter(([c, b]) => !!c && !!b),

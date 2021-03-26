@@ -81,7 +81,7 @@ export class CodeSidebarComponent {
    * The block language that is currently in use.
    */
   readonly currentBlockLanguage$ = this.currentBlockLanguageId$.pipe(
-    mergeMap((id) => this._resourceReferences.getBlockLanguage(id, "throw"))
+    mergeMap((id) => this._resourceReferences.getBlockLanguage(id))
   );
 
   private readonly _fallbackSidebarDescription$: Observable<FixedBlocksSidebarDescription> = this.currentBlockLanguage$.pipe(

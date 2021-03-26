@@ -61,7 +61,7 @@ export class CodeResource extends ProjectResource {
    * @return The language that is currently in use
    */
   readonly blockLanguage$: Observable<BlockLanguage> = this._blockLanguageId$.pipe(
-    mergeMap((l) => this.resourceReferences.getBlockLanguage(l, "throw"))
+    mergeMap((l) => this.resourceReferences.getBlockLanguage(l))
   );
 
   readonly validator$: Observable<Validator> = combineLatest([
@@ -107,10 +107,7 @@ export class CodeResource extends ProjectResource {
   }
 
   get blockLanguagePeek() {
-    return this.resourceReferences.getBlockLanguage(
-      this.blockLanguageIdPeek,
-      "undefined"
-    );
+    return this.resourceReferences.getBlockLanguage(this.blockLanguageIdPeek);
   }
 
   /**

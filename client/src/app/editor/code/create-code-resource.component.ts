@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { filter, first, map } from "rxjs/operators";
 
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { ResourceReference } from "../../shared/display-resource.pipe";
 
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
@@ -61,10 +62,12 @@ export class CreateCodeResourceComponent {
   readonly availableBlockLanguages$ = this._projectService.activeProject.pipe(
     filter((p) => !!p),
     map((p) =>
-      p.usesBlockLanguages.map((u) => ({
-        id: u.blockLanguageId,
-        type: "blockLanguage",
-      }))
+      p.usesBlockLanguages.map(
+        (u): ResourceReference => ({
+          id: u.blockLanguageId,
+          type: "BlockLanguage",
+        })
+      )
     )
   );
 
@@ -73,10 +76,7 @@ export class CreateCodeResourceComponent {
    */
   async createCodeResource() {
     const p = this._projectService.cachedProject;
-    const b = await p.resourceReferences.getBlockLanguage(
-      this.blockLanguageId,
-      "throw"
-    );
+    const b = await p.resourceReferences.getBlockLanguage(this.blockLanguageId);
 
     const res = await this._codeResourceService.createCodeResource(
       p,

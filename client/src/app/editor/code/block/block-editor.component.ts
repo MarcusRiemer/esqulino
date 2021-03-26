@@ -8,7 +8,6 @@ import { map, switchMap, first, combineLatest } from "rxjs/operators";
 
 import { PerformDataService } from "../../../shared/authorisation/perform-data.service";
 import { EditorComponentDescription } from "../../../shared/block/block-language.description";
-import { IndividualBlockLanguageDataService } from "../../../shared/serverdata";
 import { MessageDialogComponent } from "../../../shared/message-dialog.component";
 
 import { EditorToolbarService } from "../../toolbar.service";
@@ -52,7 +51,6 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _editorComponentsService: EditorComponentsService,
     private _debugOptions: BlockDebugOptionsService,
-    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
     private _sidebarService: SidebarService,
     private _matDialog: MatDialog,
     private _performData: PerformDataService
@@ -182,10 +180,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
    * These editor components should be shown
    */
   readonly editorComponentDescriptions = this.currentResource.pipe(
-    switchMap((c) => c.blockLanguageId$),
-    switchMap((id) =>
-      this._individualBlockLanguageData.getLocal(id, "request")
-    ),
+    switchMap((c) => c.blockLanguage$),
     combineLatest(
       this._debugOptions.showDropDebug.value$,
       this._debugOptions.showJsonAst.value$,

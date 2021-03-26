@@ -7,6 +7,8 @@ query FullProject($id: ID!) {
       description
       public
       indexPageId
+      createdAt
+      updatedAt
       defaultDatabase {
         id
         name
@@ -29,6 +31,8 @@ query FullProject($id: ID!) {
         includes
         visualizes
         programmingLanguageId
+        createdAt
+        updatedAt
       }
       # Not required by the project constructor, but by specifying
       # it here it ends up in the apollo cache
@@ -42,6 +46,8 @@ query FullProject($id: ID!) {
         rootCssClasses
         grammarId
         defaultProgrammingLanguageId
+        createdAt
+        updatedAt
       }
       projectUsesBlockLanguages {
         id

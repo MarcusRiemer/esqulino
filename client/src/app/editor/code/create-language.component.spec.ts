@@ -8,10 +8,7 @@ import { LanguageService, ServerApiService } from "../../shared";
 import { EmptyComponent } from "../../shared/empty.component";
 import { ResourceReferencesOnlineService } from "../../shared/resource-references-online.service";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
-import {
-  IndividualBlockLanguageDataService,
-  IndividualGrammarDataService,
-} from "../../shared/serverdata";
+import { IndividualGrammarDataService } from "../../shared/serverdata";
 import { ProjectService } from "../project.service";
 import { CreateLanguageComponent } from "./create-language.component";
 
@@ -38,7 +35,6 @@ describe("CreateLanguageComponent", () => {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
         },
-        IndividualBlockLanguageDataService,
         IndividualGrammarDataService,
       ],
       declarations: [CreateLanguageComponent],

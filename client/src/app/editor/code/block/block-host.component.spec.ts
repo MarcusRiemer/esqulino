@@ -5,6 +5,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from "@angular/common/http/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
 
 import { first } from "rxjs/operators";
 
@@ -17,7 +18,6 @@ import {
   CodeResource,
 } from "../../../shared";
 import {
-  IndividualBlockLanguageDataService,
   IndividualGrammarDataService,
   ServerApiService,
 } from "../../../shared/serverdata";
@@ -26,8 +26,8 @@ import { ResourceReferencesService } from "../../../shared/resource-references.s
 
 import { DragService } from "../../drag.service";
 import {
-  ensureLocalBlockLanguageRequest,
-  buildBlockLanguage,
+  specCacheBlockLanguage,
+  specBuildBlockLanguage,
   ensureLocalGrammarRequest,
   mkGrammarDescription,
 } from "../../spec-util";
@@ -35,6 +35,7 @@ import {
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 import { BlockHostComponent } from "./block-host.component";
 import { BLOCK_RENDER_COMPONENTS } from "./index";
+import { FullBlockLanguageGQL } from "src/generated/graphql";
 
 describe("BlockHostComponent", () => {
   async function createComponent(
@@ -42,9 +43,13 @@ describe("BlockHostComponent", () => {
     editorBlocks: EditorBlockDescription[]
   ) {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, MatSnackBarModule, HttpClientTestingModule],
+      imports: [
+        FormsModule,
+        MatSnackBarModule,
+        HttpClientTestingModule,
+        ApolloTestingModule,
+      ],
       providers: [
-        IndividualBlockLanguageDataService,
         DragService,
         IndividualGrammarDataService,
         LanguageService,
@@ -54,6 +59,7 @@ describe("BlockHostComponent", () => {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
         },
+        FullBlockLanguageGQL,
       ],
       declarations: [FocusDirective, ...BLOCK_RENDER_COMPONENTS],
     }).compileComponents();
@@ -62,8 +68,8 @@ describe("BlockHostComponent", () => {
       mkGrammarDescription({})
     );
 
-    const blockLangDesc = await ensureLocalBlockLanguageRequest(
-      buildBlockLanguage({
+    const blockLangDesc = specCacheBlockLanguage(
+      specBuildBlockLanguage({
         editorBlocks,
         grammarId: grammarDesc.id,
       })

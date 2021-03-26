@@ -18,14 +18,18 @@ type FullProjectGQLResponse =
   | { data: FullProjectQuery }
   | { errors: ReadonlyArray<GraphQLError> };
 
-const DEFAULT_EMPTY_PROJECT: ProjectFullDescription = {
+const DEFAULT_EMPTY_PROJECT: FullProjectQuery["projects"]["nodes"][0] = {
   id: "28066939-7d53-40de-a89b-95bf37c982be",
+  __typename: "Project",
   codeResources: [],
   description: { en: "Default Empty Project" },
   grammars: [],
   name: { en: "Project" },
   projectSources: [],
   projectUsesBlockLanguages: [],
+  blockLanguages: [],
+  createdAt: Date(),
+  updatedAt: Date(),
   defaultDatabase: {
     id: "4861f7ad-53c6-481f-b4a7-2b19aeffb021",
     name: "specDb",

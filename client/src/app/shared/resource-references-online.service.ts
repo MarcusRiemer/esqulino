@@ -1,14 +1,28 @@
 import { Injectable } from "@angular/core";
 
+import { first, map, tap } from "rxjs/operators";
+import { throwError } from "rxjs";
+
 import { FullBlockLanguageGQL, FullGrammarGQL } from "../../generated/graphql";
 
 import {
   ResourceReferencesService,
   RequiredResource,
+  RetrievalOptions,
 } from "./resource-references.service";
 import { LanguageService } from "./language.service";
 import { BlockLanguage } from "./block";
-import { first, map } from "rxjs/operators";
+import { BlattWerkzeugError } from "./blattwerkzeug-error";
+
+export class ResourceRetrievalError extends BlattWerkzeugError {
+  constructor(
+    readonly resourceType: "BlockLanguageDescription" | "GrammarDescription",
+    readonly id: string,
+    readonly retrievalOptions: RetrievalOptions
+  ) {
+    super(`Error retrieving ${resourceType} "${id}"`);
+  }
+}
 
 /**
  * Provides access to the most recent state of all resources that are available through
@@ -26,18 +40,45 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
     super();
   }
 
-  async getBlockLanguage(id: string, onMissing: "undefined" | "throw") {
+  async getBlockLanguage(
+    id: string,
+    { onMissing = "throw", fetchPolicy = "cache-first" }: RetrievalOptions = {}
+  ) {
     if (!this._blockLanguages[id]) {
-      const blockLanguage = await this._blockLanguage
-        .fetch({ id })
+      await this._blockLanguage
+        .fetch({ id }, { fetchPolicy })
         .pipe(
           first(),
-          map((res) => res.data.blockLanguages.nodes[0]),
-          map((desc) => new BlockLanguage(desc))
+          map((res) => {
+            const nodes = res.data?.blockLanguages?.nodes ?? [];
+            if (nodes.length === 0) {
+              switch (onMissing) {
+                case "throw":
+                  return throwError(
+                    new ResourceRetrievalError("BlockLanguageDescription", id, {
+                      onMissing,
+                      fetchPolicy,
+                    })
+                  );
+                case "undefined":
+                  return undefined;
+              }
+            } else if (nodes.length === 1) {
+              const bl = new BlockLanguage(nodes[0]);
+              // Nasty: A side effect to store the value for later
+              //        This might be a very dumb idea
+              this._blockLanguages[bl.id] = bl;
+              return bl;
+            } else {
+              return throwError(
+                new BlattWerkzeugError(
+                  "Impossible: Got ${nodes.length} results for ID"
+                )
+              );
+            }
+          })
         )
         .toPromise();
-
-      this._blockLanguages[blockLanguage.id] = blockLanguage;
     }
 
     return this._blockLanguages[id];
@@ -63,7 +104,7 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
     const requests: Promise<any>[] = req.map((r) => {
       switch (r.type) {
         case "blockLanguage":
-          return this.getBlockLanguage(r.id, "undefined");
+          return this.getBlockLanguage(r.id, { onMissing: "undefined" });
         case "grammar":
           return this.getGrammarDescription(r.id, "undefined");
         case "blockLanguageGrammar":

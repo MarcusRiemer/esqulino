@@ -1,0 +1,8 @@
+query NameBlockLanguage ($id: ID!) {
+  blockLanguages(input: {filter: {id: $id}}) {
+    nodes {
+      id
+      name
+    }
+  }
+}

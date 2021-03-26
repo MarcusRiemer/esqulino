@@ -1,7 +1,7 @@
 import { FormsModule } from "@angular/forms";
 import { TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
 
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
@@ -13,7 +13,6 @@ import {
   CodeResource,
 } from "../../../shared";
 import {
-  IndividualBlockLanguageDataService,
   IndividualGrammarDataService,
   ServerApiService,
 } from "../../../shared/serverdata";
@@ -30,9 +29,8 @@ describe("BlockRenderInputComponent", () => {
     visual: VisualBlockDescriptions.EditorInput
   ) {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, MatSnackBarModule, HttpClientTestingModule],
+      imports: [FormsModule, MatSnackBarModule, ApolloTestingModule],
       providers: [
-        IndividualBlockLanguageDataService,
         IndividualGrammarDataService,
         LanguageService,
         RenderedCodeResourceService,

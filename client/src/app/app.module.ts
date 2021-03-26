@@ -1,6 +1,6 @@
 import { APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLink } from "apollo-angular/http";
-import { InMemoryCache } from "@apollo/client/core";
+import { ApolloClientOptions, InMemoryCache } from "@apollo/client/core";
 import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import { BrowserModule, Title } from "@angular/platform-browser";
@@ -89,19 +89,18 @@ if (environment.sentry && environment.sentry.active) {
     NaturalLanguagesService,
     {
       provide: APOLLO_OPTIONS,
-      useFactory: (httpLink: HttpLink) => {
-        return {
-          cache: new InMemoryCache(),
-          link: httpLink.create({
-            uri: "/api/graphql",
-          }),
-          defaultOptions: {
-            watchQuery: {
-              errorPolicy: "all",
-            },
+      useFactory: (httpLink: HttpLink): ApolloClientOptions<any> => ({
+        connectToDevTools: true,
+        cache: new InMemoryCache(),
+        link: httpLink.create({
+          uri: "/api/graphql",
+        }),
+        defaultOptions: {
+          watchQuery: {
+            errorPolicy: "all",
           },
-        };
-      },
+        },
+      }),
       deps: [HttpLink],
     },
   ],

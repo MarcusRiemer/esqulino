@@ -1,11 +1,11 @@
 import { TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
 
 import { first } from "rxjs/operators";
 
 import {
-  IndividualBlockLanguageDataService,
   IndividualGrammarDataService,
   ServerApiService,
 } from "../../../shared/serverdata";
@@ -23,8 +23,8 @@ import { VisualBlockDescriptions, BlockLanguage } from "../../../shared/block";
 import {
   ensureLocalGrammarRequest,
   mkGrammarDescription,
-  ensureLocalBlockLanguageRequest,
-  buildBlockLanguage,
+  specBuildBlockLanguage,
+  specCacheBlockLanguage,
 } from "../../spec-util";
 import { DragService } from "../../drag.service";
 
@@ -38,9 +38,12 @@ describe(`BlockRenderErrorComponent`, () => {
     visual: VisualBlockDescriptions.EditorErrorIndicator
   ) {
     await TestBed.configureTestingModule({
-      imports: [MatSnackBarModule, HttpClientTestingModule],
+      imports: [
+        MatSnackBarModule,
+        HttpClientTestingModule,
+        ApolloTestingModule,
+      ],
       providers: [
-        IndividualBlockLanguageDataService,
         DragService,
         IndividualGrammarDataService,
         LanguageService,
@@ -62,8 +65,8 @@ describe(`BlockRenderErrorComponent`, () => {
       mkGrammarDescription({ types: { spec: types } })
     );
 
-    const blockLangDesc = await ensureLocalBlockLanguageRequest(
-      buildBlockLanguage({
+    const blockLangDesc = specCacheBlockLanguage(
+      specBuildBlockLanguage({
         editorBlocks: [
           {
             describedType: { languageName: "spec", typeName: "root" },

@@ -33,7 +33,7 @@
                 *ngFor="let lang of availableBlockLanguages$ | async"
                 [value]="lang.id"
               >
-                {{ lang.name }} ({{ lang.id }})
+                {{ lang | displayResource | async }} ({{ lang.id }})
               </option>
             </select>
             <small class="text-muted">

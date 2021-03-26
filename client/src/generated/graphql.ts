@@ -1670,7 +1670,14 @@ export type FullProjectQuery = { __typename?: "Query" } & {
         Maybe<
           { __typename?: "Project" } & Pick<
             Project,
-            "id" | "slug" | "name" | "description" | "public" | "indexPageId"
+            | "id"
+            | "slug"
+            | "name"
+            | "description"
+            | "public"
+            | "indexPageId"
+            | "createdAt"
+            | "updatedAt"
           > & {
               defaultDatabase?: Maybe<
                 { __typename?: "ProjectDatabase" } & Pick<
@@ -1732,6 +1739,24 @@ export type FullProjectQuery = { __typename?: "Query" } & {
                   | "includes"
                   | "visualizes"
                   | "programmingLanguageId"
+                  | "createdAt"
+                  | "updatedAt"
+                >
+              >;
+              blockLanguages: Array<
+                { __typename?: "BlockLanguage" } & Pick<
+                  BlockLanguage,
+                  | "id"
+                  | "name"
+                  | "sidebars"
+                  | "editorBlocks"
+                  | "editorComponents"
+                  | "localGeneratorInstructions"
+                  | "rootCssClasses"
+                  | "grammarId"
+                  | "defaultProgrammingLanguageId"
+                  | "createdAt"
+                  | "updatedAt"
                 >
               >;
               projectUsesBlockLanguages: Array<
@@ -1798,6 +1823,22 @@ export type MayPerformQueryVariables = Exact<{
 
 export type MayPerformQuery = { __typename?: "Query" } & {
   mayPerform: { __typename?: "MayPerform" } & Pick<MayPerform, "perform">;
+};
+
+export type NameBlockLanguageQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type NameBlockLanguageQuery = { __typename?: "Query" } & {
+  blockLanguages: { __typename?: "BlockLanguageConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "BlockLanguage" } & Pick<BlockLanguage, "id" | "name">
+        >
+      >
+    >;
+  };
 };
 
 export type ProjectAddUsedBlockLanguageMutationVariables = Exact<{
@@ -2929,6 +2970,8 @@ export const FullProjectDocument = gql`
         description
         public
         indexPageId
+        createdAt
+        updatedAt
         defaultDatabase {
           id
           name
@@ -2970,6 +3013,21 @@ export const FullProjectDocument = gql`
           includes
           visualizes
           programmingLanguageId
+          createdAt
+          updatedAt
+        }
+        blockLanguages {
+          id
+          name
+          sidebars
+          editorBlocks
+          editorComponents
+          localGeneratorInstructions
+          rootCssClasses
+          grammarId
+          defaultProgrammingLanguageId
+          createdAt
+          updatedAt
         }
         projectUsesBlockLanguages {
           id
@@ -3093,6 +3151,30 @@ export class MayPerformGQL extends Apollo.Query<
   MayPerformQueryVariables
 > {
   document = MayPerformDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const NameBlockLanguageDocument = gql`
+  query NameBlockLanguage($id: ID!) {
+    blockLanguages(input: { filter: { id: $id } }) {
+      nodes {
+        id
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class NameBlockLanguageGQL extends Apollo.Query<
+  NameBlockLanguageQuery,
+  NameBlockLanguageQueryVariables
+> {
+  document = NameBlockLanguageDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
