@@ -17,6 +17,8 @@ import * as Integrations from "@sentry/integrations";
 import { environment } from "../environments/environment";
 
 import { SharedAppModule } from "./shared/shared.module";
+import { urlParamsFromObject } from "./shared/util-browser";
+
 import { FrontModule } from "./front/front.module";
 
 import { SqlScratchComponent } from "./app.component";
@@ -92,8 +94,15 @@ if (environment.sentry && environment.sentry.active) {
       useFactory: (httpLink: HttpLink): ApolloClientOptions<any> => ({
         connectToDevTools: true,
         cache: new InMemoryCache(),
+
         link: httpLink.create({
-          uri: "/api/graphql",
+          // Don't send the query string over the wire
+          includeQuery: false,
+          // Put name of operation in URL to ease debugging
+          uri: ({ operationName, variables }) =>
+            `/api/graphql/${operationName}?${urlParamsFromObject(
+              variables["input"] ?? variables
+            )}`,
         }),
         defaultOptions: {
           watchQuery: {

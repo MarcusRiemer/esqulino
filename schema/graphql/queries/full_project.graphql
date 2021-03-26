@@ -35,7 +35,7 @@ query FullProject($id: ID!) {
         updatedAt
       }
       # Not required by the project constructor, but by specifying
-      # it here it ends up in the apollo cache
+      # it here ensures it ends up in the apollo cache
       blockLanguages {
         id
         name

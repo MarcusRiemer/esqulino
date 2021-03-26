@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   end
   # Second stop: The API for the editor
   scope '/api' do
-    post "graphql", to: "graphql#execute"
+    # Query names are optionally part of the route to have a better
+    # overview in the request debugger
+    post "graphql(/:operation_name)", to: "graphql#execute"
 
     # Allow a special unrestricted graphql endpoint for development with GraphiQL
     if Rails.env.development?

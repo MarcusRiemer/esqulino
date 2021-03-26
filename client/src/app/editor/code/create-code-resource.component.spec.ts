@@ -48,7 +48,7 @@ import { RegistrationService } from "../registration.service";
 
 import { CreateCodeResourceComponent } from "./create-code-resource.component";
 
-fdescribe(`CreateCodeResourceComponent`, () => {
+describe(`CreateCodeResourceComponent`, () => {
   async function createComponent(
     blockLanguages: FullBlockLanguage[] = [],
     permissionToCreate: boolean = true
@@ -142,7 +142,7 @@ fdescribe(`CreateCodeResourceComponent`, () => {
     expect(t.component.resourceName).toBeUndefined();
   });
 
-  fit(`Shows the default block language`, async () => {
+  it(`Shows the default block language`, async () => {
     const id = "cbc49d11-40e5-4ab6-9549-64959488c1eb";
 
     let t = await createComponent(
