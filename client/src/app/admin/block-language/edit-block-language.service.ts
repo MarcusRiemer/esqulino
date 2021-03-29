@@ -50,7 +50,7 @@ export class EditBlockLanguageService {
         switchMap((id: string) =>
           this._singleBlockLanguageGQL
             .fetch({ id: id }, { fetchPolicy: "network-only" })
-            .pipe(pluck("data", "blockLanguages", "nodes", 0))
+            .pipe(pluck("data", "blockLanguage"))
         )
       )
       .subscribe((blockLanguage) => {

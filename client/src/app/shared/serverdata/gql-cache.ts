@@ -5,7 +5,7 @@ import {
   FullBlockLanguageQuery,
 } from "../../../generated/graphql";
 
-export type FullBlockLanguage = FullBlockLanguageQuery["blockLanguages"]["nodes"][0];
+export type FullBlockLanguage = FullBlockLanguageQuery["blockLanguage"];
 
 export function cacheFullBlockLanguage(
   apollo: Apollo.Apollo,
@@ -14,9 +14,7 @@ export function cacheFullBlockLanguage(
   // Make the block language available to the rendered trees
   const cache = apollo.client.cache;
   const queryData: FullBlockLanguageQuery = {
-    blockLanguages: {
-      nodes: [blockLangDesc],
-    },
+    blockLanguage: blockLangDesc,
   };
   apollo.client.writeQuery({
     id: cache.identify({

@@ -129,13 +129,13 @@ RSpec.describe BlockLanguagesController, type: :request do
       expect(response).to have_http_status(200)
 
       json_data = JSON.parse(response.body)
-      block_lang_node = json_data['data']['blockLanguages']['nodes'][0]
+      block_lang_node = json_data['data']['blockLanguage']
 
       expect(block_lang_node["id"]).to eq b.id
     end
 
     it 'non existing languages' do
-      send_query(query_name: "FullBlockLanguage", variables: { id: "0" })
+      send_query(query_name: "FullBlockLanguage", variables: { id: "0" }, expect_no_errors: false)
 
       expect(response).to have_http_status(200)
       json_data = JSON.parse(response.body)

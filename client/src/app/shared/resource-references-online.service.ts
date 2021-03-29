@@ -50,8 +50,14 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
         .pipe(
           first(),
           map((res) => {
-            const nodes = res.data?.blockLanguages?.nodes ?? [];
-            if (nodes.length === 0) {
+            const blockLangDesc = res.data?.blockLanguage;
+            if (blockLangDesc) {
+              const bl = new BlockLanguage(blockLangDesc);
+              // Nasty: A side effect to store the value for later
+              //        This might be a very dumb idea
+              this._blockLanguages[bl.id] = bl;
+              return bl;
+            } else {
               switch (onMissing) {
                 case "throw":
                   return throwError(
@@ -63,18 +69,6 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
                 case "undefined":
                   return undefined;
               }
-            } else if (nodes.length === 1) {
-              const bl = new BlockLanguage(nodes[0]);
-              // Nasty: A side effect to store the value for later
-              //        This might be a very dumb idea
-              this._blockLanguages[bl.id] = bl;
-              return bl;
-            } else {
-              return throwError(
-                new BlattWerkzeugError(
-                  "Impossible: Got ${nodes.length} results for ID"
-                )
-              );
             }
           })
         )

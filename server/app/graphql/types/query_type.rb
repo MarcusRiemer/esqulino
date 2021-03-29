@@ -6,12 +6,20 @@ module Types
       ProgrammingLanguage.all
     end
 
-    # Endpoint for block languages
+    # Endpoint for paginated block languages
     field :block_languages, Types::BlockLanguageType.connection_type, null: false do
       argument :input, Types::BlockLanguageType::InputType, required: false
     end
     def block_languages(input: {})
-      Resolvers::BlockLanguageResolver::new(context: @context, **input).scope
+      Resolvers::BlockLanguageResolver.connection(input, @context)
+    end
+
+    # Endpoint for single block language
+    field :block_language, Types::BlockLanguageType, null: false do
+      argument :id, ID, required: true
+    end
+    def block_language(id:)
+      Resolvers::BlockLanguageResolver.single(id, @context)
     end
 
     # Endpoint for grammars

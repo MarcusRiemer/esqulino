@@ -391,7 +391,7 @@ RSpec.describe Grammar, type: :model do
       expect(grammar.regenerate_from_code_resource!(ide_service)).to eq []
     end
 
-    fit "regenerates a dependant block language" do
+    it "regenerates a dependant block language" do
       resource = FactoryBot.create(:code_resource, :grammar_single_type)
       grammar = FactoryBot.create(:grammar, generated_from: resource)
       block_lang = FactoryBot.create(:block_language, :auto_generated_blocks, grammar: grammar)

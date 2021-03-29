@@ -1,12 +1,13 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { map, startWith } from "rxjs/operators";
 import { Observable, of } from "rxjs";
-import { NameBlockLanguageGQL } from "src/generated/graphql";
 import {
   isProjectUsesBlockLanguageDescription,
   ProjectUsesBlockLanguageDescription,
 } from "./project.description";
 import { FetchPolicy } from "@apollo/client/core";
+
+import { NameBlockLanguageGQL } from "../../generated/graphql";
 
 export interface ResourceReference {
   id: string;
@@ -19,7 +20,7 @@ export function isResourceReference(
   return typeof value === "object" && "id" in value && "type" in value;
 }
 
-const FETCH_POLICY: FetchPolicy = "cache-only";
+const FETCH_POLICY: FetchPolicy = "cache-first";
 
 @Pipe({
   name: "displayResource",
@@ -46,7 +47,7 @@ export class DisplayResourcePipe implements PipeTransform {
           .fetch({ id: value.id }, { fetchPolicy: FETCH_POLICY })
           .pipe(
             map((res) => {
-              return res.data.blockLanguages?.nodes?.[0].name ?? "???";
+              return res.data.blockLanguage?.name ?? "???";
             }),
             startWith(value.id)
           );

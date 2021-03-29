@@ -116,7 +116,7 @@ export class BlockRootComponent {
         grammar
       );
 
-      const blockLangDesc: FullBlockLanguageQuery["blockLanguages"]["nodes"][0] = {
+      const blockLangDesc: FullBlockLanguageQuery["blockLanguage"] = {
         __typename: "BlockLanguage",
         id: grammarId,
         grammarId: grammarId,

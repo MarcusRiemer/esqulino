@@ -93,7 +93,23 @@ if (environment.sentry && environment.sentry.active) {
       provide: APOLLO_OPTIONS,
       useFactory: (httpLink: HttpLink): ApolloClientOptions<any> => ({
         connectToDevTools: true,
-        cache: new InMemoryCache(),
+        cache: new InMemoryCache({
+          typePolicies: {
+            Query: {
+              fields: {
+                blockLanguage: (_, { toReference, variables }) => {
+                  if (variables?.id) {
+                    console.log("blockLanguage: toReference", variables);
+                    return toReference({
+                      __typename: "BlockLanguage",
+                      id: variables.id,
+                    });
+                  }
+                },
+              },
+            },
+          },
+        }),
 
         link: httpLink.create({
           // Don't send the query string over the wire
