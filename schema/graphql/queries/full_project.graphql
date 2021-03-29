@@ -1,85 +1,83 @@
 query FullProject($id: ID!) {
-  projects(input: {filter: {id: $id}}) {
-    nodes {
+  project(id: $id) {
+    id
+    slug
+    name
+    description
+    public
+    indexPageId
+    createdAt
+    updatedAt
+    defaultDatabase {
       id
-      slug
       name
-      description
-      public
-      indexPageId
+    }
+    codeResources {
+      id
+      name
+      ast
+      blockLanguageId
+      programmingLanguageId
+    }
+    grammars {
+      id
+      name
+      root
+      types
+      foreignTypes
+      visualisations
+      foreignVisualisations
+      includes
+      visualizes
+      programmingLanguageId
       createdAt
       updatedAt
-      defaultDatabase {
-        id
+    }
+    # Not required by the project constructor, but by specifying
+    # it here ensures it ends up in the apollo cache
+    blockLanguages {
+      id
+      name
+      sidebars
+      editorBlocks
+      editorComponents
+      localGeneratorInstructions
+      rootCssClasses
+      grammarId
+      defaultProgrammingLanguageId
+      createdAt
+      updatedAt
+    }
+    projectUsesBlockLanguages {
+      id
+      blockLanguageId
+    }
+    projectSources {
+      id
+      kind
+      readOnly
+      title
+      url
+    }
+    defaultDatabase {
+      schema {
         name
-      }
-      codeResources {
-        id
-        name
-        ast
-        blockLanguageId
-        programmingLanguageId
-      }
-      grammars {
-        id
-        name
-        root
-        types
-        foreignTypes
-        visualisations
-        foreignVisualisations
-        includes
-        visualizes
-        programmingLanguageId
-        createdAt
-        updatedAt
-      }
-      # Not required by the project constructor, but by specifying
-      # it here ensures it ends up in the apollo cache
-      blockLanguages {
-        id
-        name
-        sidebars
-        editorBlocks
-        editorComponents
-        localGeneratorInstructions
-        rootCssClasses
-        grammarId
-        defaultProgrammingLanguageId
-        createdAt
-        updatedAt
-      }
-      projectUsesBlockLanguages {
-        id
-        blockLanguageId
-      }
-      projectSources {
-        id
-        kind
-        readOnly
-        title
-        url
-      }
-      defaultDatabase {
-        schema {
+        columns {
+          index
           name
-          columns {
-            index
-            name
-            type
-            notNull
-            dfltValue
-            primary
-          }
-          foreignKeys {
-            references {
-              fromColumn
-              toTable
-              toColumn
-            }
-          }
-          systemTable
+          type
+          notNull
+          dfltValue
+          primary
         }
+        foreignKeys {
+          references {
+            fromColumn
+            toTable
+            toColumn
+          }
+        }
+        systemTable
       }
     }
   }

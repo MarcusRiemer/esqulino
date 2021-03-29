@@ -17,19 +17,25 @@ class Resolvers::BlockLanguageResolver < Resolvers::BaseResolver
       order = { order_field: "slug", order_direction: "asc" }
     end
 
-    super(BlockLanguage, context: context, scope: scope, filter: filter, order: order, languages: languages, order_dir: order[:order_direction], order_field: order[:order_field])
+    super(
+      BlockLanguage,
+      context: context,
+      scope: scope,
+      filter: filter,
+      order: order,
+      languages: languages,
+      order_dir: order[:order_direction],
+      order_field: order[:order_field]
+    )
   end
 
   def self.connection(input = {}, context = nil)
-    Resolvers::BlockLanguageResolver::new(context: context, **input).scope
+    new(context: context, **input).scope
   end
 
   def self.single(id, context = nil)
-    Resolvers::BlockLanguageResolver::new(
-      context: context,
-      filter: {
-        id: id
-      }
-    ).scope.first
+    new(context: context, filter: { id: id })
+      .scope
+      .first
   end
 end
