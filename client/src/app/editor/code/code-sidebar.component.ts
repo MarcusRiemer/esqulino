@@ -2,7 +2,9 @@ import { ComponentPortal } from "@angular/cdk/portal";
 import { Component } from "@angular/core";
 
 import { Observable, combineLatest } from "rxjs";
-import { map, mergeMap } from "rxjs/operators";
+import { map, mergeMap, pluck } from "rxjs/operators";
+
+import { FullGrammarGQL } from "../../../generated/graphql";
 
 import {
   FixedBlocksSidebar,
@@ -11,7 +13,6 @@ import {
 } from "../../shared/block";
 import { generateSidebar } from "../../shared/block/generator/sidebar";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
-import { IndividualGrammarDataService } from "../../shared/serverdata";
 import { allConcreteTypes } from "../../shared/syntaxtree/grammar-type-util";
 
 import { CurrentCodeResourceService } from "../current-coderesource.service";
@@ -61,7 +62,7 @@ export class CodeSidebarComponent {
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
     private _resourceReferences: ResourceReferencesService,
-    private _grammarData: IndividualGrammarDataService,
+    private _grammarData: FullGrammarGQL,
     private _sidebarDataService: SidebarDataService
   ) {}
 
@@ -85,7 +86,8 @@ export class CodeSidebarComponent {
   );
 
   private readonly _fallbackSidebarDescription$: Observable<FixedBlocksSidebarDescription> = this.currentBlockLanguage$.pipe(
-    mergeMap((b) => this._grammarData.getLocal(b.grammarId, "request")),
+    mergeMap((b) => this._grammarData.fetch({ id: b.grammarId })),
+    pluck("data", "grammar"),
     map((g) => {
       // Extract the types that can be generated meaningfully
       const toGenerate: { [grammarName: string]: string[] } = {};

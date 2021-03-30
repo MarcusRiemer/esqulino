@@ -4,9 +4,10 @@ import { BehaviorSubject, combineLatest, Observable, Subscription } from "rxjs";
 import {
   filter,
   distinctUntilChanged,
-  mergeMap,
   map,
   shareReplay,
+  switchMap,
+  tap,
 } from "rxjs/operators";
 
 import {
@@ -76,7 +77,7 @@ export class RenderedCodeResourceService implements OnDestroy {
   );
 
   readonly syntaxTree$: Observable<SyntaxTree> = this._codeResource.pipe(
-    mergeMap((c) => c.syntaxTree$)
+    switchMap((c) => c.syntaxTree$)
   );
 
   readonly blockLanguage$ = this._blockLanguage.pipe(
@@ -96,9 +97,12 @@ export class RenderedCodeResourceService implements OnDestroy {
   );
 
   private readonly _blockLanguageGrammar$ = this.blockLanguage$.pipe(
-    mergeMap((b) =>
+    switchMap((b) =>
       this._resourceReferences.getGrammarDescription(b.grammarId, "throw")
-    )
+    ),
+    tap((grammarDesc) => {
+      console.log("Got grammar description to render", grammarDesc);
+    })
   );
 
   /**
@@ -108,9 +112,10 @@ export class RenderedCodeResourceService implements OnDestroy {
     this._blockLanguageGrammar$,
     this.codeResource$,
   ]).pipe(
-    mergeMap(([g, c]) =>
+    switchMap(([g, c]) =>
       this._resourceReferences.getValidator(c.runtimeLanguageId, g.id)
-    )
+    ),
+    shareReplay(1)
   );
 
   /**

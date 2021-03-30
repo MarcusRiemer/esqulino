@@ -9,12 +9,15 @@ import {
   ApolloTestingController,
 } from "apollo-angular/testing";
 
-import { FullProjectGQL, FullProjectDocument } from "../../generated/graphql";
+import {
+  FullProjectGQL,
+  FullProjectDocument,
+  FullGrammarGQL,
+} from "../../generated/graphql";
 
 import { ResourceReferencesService } from "../shared/resource-references.service";
 import { ResourceReferencesOnlineService } from "../shared/resource-references-online.service";
 import { LanguageService, ServerApiService } from "../shared";
-import { IndividualGrammarDataService } from "../shared/serverdata";
 import { generateUUIDv4 } from "../shared/util-browser";
 
 import { ProjectService } from "./project.service";
@@ -30,7 +33,7 @@ describe(`ProjectService`, () => {
         LanguageService,
         ServerApiService,
         ProjectService,
-        IndividualGrammarDataService,
+        FullGrammarGQL,
         MatSnackBar,
         Overlay,
         {

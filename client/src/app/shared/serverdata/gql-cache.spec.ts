@@ -42,7 +42,7 @@ export function cacheFullBlockLanguage(apollo: Apollo, blockLangDesc: any) {
   console.log("Explicitly added to GraphQL Cache:", blockLangDesc);
 }
 
-fdescribe("GQL Cache", () => {
+xdescribe("GQL Cache", () => {
   async function createModule() {
     await TestBed.configureTestingModule({
       imports: [ApolloTestingModule],

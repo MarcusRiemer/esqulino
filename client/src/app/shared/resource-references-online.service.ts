@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 
-import { first, map, tap } from "rxjs/operators";
+import { first, map } from "rxjs/operators";
 import { throwError } from "rxjs";
 
 import { FullBlockLanguageGQL, FullGrammarGQL } from "../../generated/graphql";
@@ -83,7 +83,7 @@ export class ResourceReferencesOnlineService extends ResourceReferencesService {
       .fetch({ id })
       .pipe(
         first(),
-        map((res) => res.data.grammars.nodes[0])
+        map((res) => res.data.grammar)
       )
       .toPromise();
 

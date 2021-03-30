@@ -17,13 +17,13 @@ import {
 
 import {
   FullBlockLanguageGQL,
+  FullGrammarGQL,
   FullProjectGQL,
   NameBlockLanguageGQL,
 } from "../../../generated/graphql";
 
 import {
   specBuildBlockLanguage,
-  specCacheBlockLanguage,
   specLoadProject,
 } from "../../editor/spec-util";
 
@@ -31,7 +31,6 @@ import { ResourceReferencesService } from "../../shared/resource-references.serv
 import { ResourceReferencesOnlineService } from "../../shared/resource-references-online.service";
 
 import { ServerApiService, LanguageService } from "../../shared";
-import { IndividualGrammarDataService } from "../../shared/serverdata";
 import { MayPerformService } from "../../shared/authorisation/may-perform.service";
 import { CodeResourceDescription } from "../../shared/syntaxtree";
 import { EmptyComponent } from "../../shared/empty.component";
@@ -71,7 +70,7 @@ describe(`CreateCodeResourceComponent`, () => {
         SidebarService,
         ProjectService,
         CodeResourceService,
-        IndividualGrammarDataService,
+        FullGrammarGQL,
         MatSnackBar,
         Overlay,
         {

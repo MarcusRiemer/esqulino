@@ -77,7 +77,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
               { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
             ).valueChanges
         ),
-        pluck("data", "grammars", "nodes", 0)
+        pluck("data", "grammar")
       )
       .subscribe((g) => {
         // The response object contains additional properties that

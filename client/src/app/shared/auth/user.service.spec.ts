@@ -182,23 +182,17 @@ describe(`UserService`, () => {
     let unexpectedCalls = 0;
 
     service.userData$.pipe(tap((_) => userDataCalls++)).subscribe();
-
     httpTestingController.expectOne(serverApi.getUserDataUrl()).flush(user);
 
     expect(userDataCalls).withContext("First Subscription").toEqual(1);
 
     service.unexpectedLogout$.pipe(tap((_) => unexpectedCalls++)).subscribe();
-
     const loggedOut = service.userData$.pipe(first()).toPromise();
-
     const userData = await loggedOut;
-
     service.onUnexpectedLogout(userData);
 
     expect(unexpectedCalls).withContext("Event was triggerd").toEqual(1);
-
     expect(userDataCalls).withContext("Side Subscription").toEqual(2);
-
     expect(userData).toEqual(user);
   });
 });

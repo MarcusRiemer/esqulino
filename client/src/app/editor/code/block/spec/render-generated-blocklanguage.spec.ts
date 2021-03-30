@@ -11,7 +11,10 @@ import { first } from "rxjs/operators";
 
 import { ApolloTestingModule } from "apollo-angular/testing";
 
-import { FullProjectGQL } from "../../../../../generated/graphql";
+import {
+  FullGrammarGQL,
+  FullProjectGQL,
+} from "../../../../../generated/graphql";
 
 import { BlockLanguage } from "../../../../shared/block";
 import { FocusDirective } from "../../../../shared/focus-element.directive";
@@ -22,10 +25,7 @@ import {
   CodeResource,
   GrammarDocument,
 } from "../../../../shared";
-import {
-  IndividualGrammarDataService,
-  ServerApiService,
-} from "../../../../shared/serverdata";
+import { ServerApiService } from "../../../../shared/serverdata";
 import { ResourceReferencesOnlineService } from "../../../../shared/resource-references-online.service";
 import { ResourceReferencesService } from "../../../../shared/resource-references.service";
 import { generateBlockLanguage } from "../../../../shared/block/generator/generator";
@@ -65,7 +65,7 @@ describe(`Render Generated BlockLanguages`, () => {
       ],
       providers: [
         DragService,
-        IndividualGrammarDataService,
+        FullGrammarGQL,
         LanguageService,
         RenderedCodeResourceService,
         CurrentCodeResourceService,

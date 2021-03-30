@@ -1,25 +1,24 @@
 import { Component } from "@angular/core";
 
 import { Observable, combineLatest } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import { first, map, pluck, switchMap } from "rxjs/operators";
 
 import * as Apollo from "apollo-angular";
+
+import {
+  FullBlockLanguageQuery,
+  FullGrammarGQL,
+} from "../../../../generated/graphql";
 
 import { BlockLanguage } from "../../../shared/block";
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 import { convertGrammarTreeInstructions } from "../../../shared/block/generator/generator-tree";
-import { IndividualGrammarDataService } from "../../../shared/serverdata";
+import { cacheFullBlockLanguage } from "../../../shared/serverdata/gql-cache";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { DragService } from "../../drag.service";
 import { BlockDebugOptionsService } from "../../block-debug-options.service";
 import { ProjectService } from "../../project.service";
-import {
-  FullBlockLanguageDocument,
-  FullBlockLanguageQuery,
-} from "src/generated/graphql";
-import { BlockLanguageDescription } from "src/app/shared/block/block-language.description";
-import { cacheFullBlockLanguage } from "src/app/shared/serverdata/gql-cache";
 
 /**
  * Root of a block editor. Displays either the syntaxtree or a friendly message to
@@ -35,7 +34,7 @@ export class BlockRootComponent {
     private _debugOptions: BlockDebugOptionsService,
     private _resourceReferences: ResourceReferencesService,
     private _projectService: ProjectService,
-    private _grammarData: IndividualGrammarDataService,
+    private _grammarData: FullGrammarGQL,
     private _apollo: Apollo.Apollo
   ) {}
 
@@ -110,7 +109,10 @@ export class BlockRootComponent {
       );
 
       // There is a possibility that the grammar hasn't been loaded yet.
-      const grammar = await this._grammarData.getLocal(grammarId, "request");
+      const grammar = await this._grammarData
+        .fetch({ id: grammarId })
+        .pipe(pluck("data", "grammar"), first())
+        .toPromise();
       const blockLangModel = convertGrammarTreeInstructions(
         { type: "tree" },
         grammar

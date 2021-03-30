@@ -38,12 +38,20 @@ module Types
       Resolvers::BlockLanguageResolver.single(id, @context)
     end
 
-    # Endpoint for grammars
+    # Endpoint for paginated grammars
     field :grammars, Types::GrammarType.connection_type, null: false do
       argument :input, Types::GrammarType::InputType, required: false
     end
     def grammars(input: {})
-      Resolvers::GrammarsResolver::new(context: @context, **input).scope
+      Resolvers::GrammarsResolver.connection(input, @context)
+    end
+
+    # Endpoint for single grammar
+    field :grammar, Types::GrammarType, null: false do
+      argument :id, ID, required: true
+    end
+    def grammar(id:)
+      Resolvers::GrammarsResolver.single(id, @context)
     end
 
     # Endpoint for code resources

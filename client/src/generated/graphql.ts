@@ -468,7 +468,7 @@ export type Identity = {
   user: User;
 };
 
-export type LanguageEnum = "de" | "en";
+export type LanguageEnum = "en" | "de";
 
 export type LoginProvider = {
   __typename?: "LoginProvider";
@@ -799,6 +799,7 @@ export type Query = {
   blockLanguage: BlockLanguage;
   blockLanguages: BlockLanguageConnection;
   codeResources: CodeResourceConnection;
+  grammar: Grammar;
   grammars: GrammarConnection;
   loginProviders: Array<LoginProvider>;
   mayPerform: MayPerform;
@@ -827,6 +828,10 @@ export type QueryCodeResourcesArgs = {
   first?: Maybe<Scalars["Int"]>;
   last?: Maybe<Scalars["Int"]>;
   input?: Maybe<CodeResourceInputType>;
+};
+
+export type QueryGrammarArgs = {
+  id: Scalars["ID"];
 };
 
 export type QueryGrammarsArgs = {
@@ -1621,44 +1626,36 @@ export type FullGrammarQueryVariables = Exact<{
 }>;
 
 export type FullGrammarQuery = { __typename?: "Query" } & {
-  grammars: { __typename?: "GrammarConnection" } & {
-    nodes?: Maybe<
-      Array<
-        Maybe<
-          { __typename?: "Grammar" } & Pick<
-            Grammar,
-            | "id"
-            | "name"
-            | "programmingLanguageId"
-            | "slug"
-            | "generatedFromId"
-            | "types"
-            | "foreignTypes"
-            | "visualisations"
-            | "foreignVisualisations"
-            | "root"
-            | "includes"
-            | "visualizes"
-          > & {
-              blockLanguages?: Maybe<
-                { __typename?: "BlockLanguageConnection" } & {
-                  nodes?: Maybe<
-                    Array<
-                      Maybe<
-                        { __typename?: "BlockLanguage" } & Pick<
-                          BlockLanguage,
-                          "id" | "name"
-                        >
-                      >
-                    >
-                  >;
-                }
-              >;
-            }
-        >
-      >
-    >;
-  };
+  grammar: { __typename?: "Grammar" } & Pick<
+    Grammar,
+    | "id"
+    | "name"
+    | "programmingLanguageId"
+    | "slug"
+    | "generatedFromId"
+    | "types"
+    | "foreignTypes"
+    | "visualisations"
+    | "foreignVisualisations"
+    | "root"
+    | "includes"
+    | "visualizes"
+  > & {
+      blockLanguages?: Maybe<
+        { __typename?: "BlockLanguageConnection" } & {
+          nodes?: Maybe<
+            Array<
+              Maybe<
+                { __typename?: "BlockLanguage" } & Pick<
+                  BlockLanguage,
+                  "id" | "name"
+                >
+              >
+            >
+          >;
+        }
+      >;
+    };
 };
 
 export type FullProjectQueryVariables = Exact<{
@@ -2903,25 +2900,23 @@ export class FullBlockLanguageGQL extends Apollo.Query<
 }
 export const FullGrammarDocument = gql`
   query FullGrammar($id: ID!) {
-    grammars(input: { filter: { id: $id } }) {
-      nodes {
-        id
-        name
-        programmingLanguageId
-        slug
-        generatedFromId
-        types
-        foreignTypes
-        visualisations
-        foreignVisualisations
-        root
-        includes
-        visualizes
-        blockLanguages {
-          nodes {
-            id
-            name
-          }
+    grammar(id: $id) {
+      id
+      name
+      programmingLanguageId
+      slug
+      generatedFromId
+      types
+      foreignTypes
+      visualisations
+      foreignVisualisations
+      root
+      includes
+      visualizes
+      blockLanguages {
+        nodes {
+          id
+          name
         }
       }
     }

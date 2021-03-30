@@ -3842,13 +3842,13 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "de",
+              "name": "en",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "en",
+              "name": "de",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -6721,6 +6721,39 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "CodeResourceConnection",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "grammar",
+              "description": null,
+              "args": [
+                {
+                  "name": "id",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Grammar",
                   "ofType": null
                 }
               },

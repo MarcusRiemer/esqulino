@@ -8,9 +8,9 @@ import {
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 
-import { first, map, tap } from "rxjs/operators";
+import { first, map, pluck, tap } from "rxjs/operators";
+import { FullGrammarGQL } from "../../../generated/graphql";
 
-import { IndividualGrammarDataService } from "../../shared/serverdata";
 import { ScopeTraitAdd } from "../../shared/block/generator/traits.description";
 import {
   FullNodeAttributeDescription,
@@ -49,7 +49,7 @@ interface TargetBlock {
 export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
   constructor(
     private _editedBlockLanguageService: EditBlockLanguageService,
-    private _individualGrammarData: IndividualGrammarDataService
+    private _individualGrammarData: FullGrammarGQL
   ) {}
 
   /**
@@ -81,23 +81,24 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
   /**
    * Used to get hold of the grammar that is used by this block language.
    */
-  ngOnInit() {
-    this._individualGrammarData
-      .getSingle(this._editedBlockLanguageService.editedSubject.grammarId)
+  async ngOnInit() {
+    const languages = await this._individualGrammarData
+      .fetch({ id: this._editedBlockLanguageService.editedSubject.grammarId })
       .pipe(
+        pluck("data", "grammar"),
         first(),
         map((g) => allConcreteTypes(g))
       )
-      .subscribe((languages) => {
-        this.allPossibleAttributes = getFullQualifiedAttributes(languages);
-        this.allPossibleBlocks = getConcreteTypes(languages).map((b) => {
-          return {
-            grammar: b.languageName,
-            type: b.typeName,
-            index: 0,
-          };
-        });
-      });
+      .toPromise();
+
+    this.allPossibleAttributes = getFullQualifiedAttributes(languages);
+    this.allPossibleBlocks = getConcreteTypes(languages).map((b) => {
+      return {
+        grammar: b.languageName,
+        type: b.typeName,
+        index: 0,
+      };
+    });
   }
 
   /**

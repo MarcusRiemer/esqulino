@@ -3,6 +3,8 @@ import { TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { ApolloTestingModule } from "apollo-angular/testing";
 
+import { FullGrammarGQL } from "../../../../generated/graphql";
+
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
 import { VisualBlockDescriptions, BlockLanguage } from "../../../shared/block";
@@ -12,10 +14,7 @@ import {
   NodeDescription,
   CodeResource,
 } from "../../../shared";
-import {
-  IndividualGrammarDataService,
-  ServerApiService,
-} from "../../../shared/serverdata";
+import { ServerApiService } from "../../../shared/serverdata";
 
 import { ProjectService } from "../../project.service";
 
@@ -31,7 +30,7 @@ describe("BlockRenderInputComponent", () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule, MatSnackBarModule, ApolloTestingModule],
       providers: [
-        IndividualGrammarDataService,
+        FullGrammarGQL,
         LanguageService,
         RenderedCodeResourceService,
         ServerApiService,

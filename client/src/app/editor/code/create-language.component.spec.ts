@@ -3,12 +3,14 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { ApolloTestingModule } from "apollo-angular/testing";
-import { CreateProgrammingLanguageGQL } from "../../../generated/graphql";
+import {
+  CreateProgrammingLanguageGQL,
+  FullGrammarGQL,
+} from "../../../generated/graphql";
 import { LanguageService, ServerApiService } from "../../shared";
 import { EmptyComponent } from "../../shared/empty.component";
 import { ResourceReferencesOnlineService } from "../../shared/resource-references-online.service";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
-import { IndividualGrammarDataService } from "../../shared/serverdata";
 import { ProjectService } from "../project.service";
 import { CreateLanguageComponent } from "./create-language.component";
 
@@ -35,7 +37,7 @@ describe("CreateLanguageComponent", () => {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
         },
-        IndividualGrammarDataService,
+        FullGrammarGQL,
       ],
       declarations: [CreateLanguageComponent],
     }).compileComponents();

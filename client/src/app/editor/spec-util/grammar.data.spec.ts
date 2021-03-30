@@ -1,12 +1,10 @@
 import { TestBed } from "@angular/core/testing";
-import { HttpTestingController } from "@angular/common/http/testing";
 
 import { GrammarDescription } from "../../shared/";
 import { generateUUIDv4 } from "../../shared/util-browser";
-import {
-  ServerApiService,
-  IndividualGrammarDataService,
-} from "../../shared/serverdata";
+import { ApolloTestingController } from "apollo-angular/testing";
+import { FullGrammarDocument } from "src/generated/graphql";
+import { ResourceReferencesService } from "src/app/shared/resource-references.service";
 
 const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
@@ -42,15 +40,22 @@ export const mkGrammarDescription = (
 export const ensureLocalGrammarRequest = (
   response: GrammarDescription
 ): Promise<GrammarDescription> => {
-  const httpTestingController = TestBed.inject(HttpTestingController);
-  const serverApi = TestBed.inject(ServerApiService);
-  const grammarData = TestBed.inject(IndividualGrammarDataService);
+  const testingController = TestBed.inject(ApolloTestingController);
+  const resourceReferences = TestBed.inject(ResourceReferencesService);
 
-  const toReturn = grammarData.getLocal(response.id, "request");
+  const toReturn = resourceReferences.getGrammarDescription(
+    response.id,
+    "throw"
+  );
 
-  httpTestingController
-    .expectOne(serverApi.individualGrammarUrl(response.id))
-    .flush(response);
+  testingController
+    .expectOne(
+      (op) =>
+        op.query === FullGrammarDocument && op.variables.id === response.id
+    )
+    .flush({
+      data: { grammar: response },
+    });
 
   return toReturn;
 };

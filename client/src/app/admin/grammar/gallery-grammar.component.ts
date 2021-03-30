@@ -2,13 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 
-import { Observable, from } from "rxjs";
-import { map, switchMap, startWith } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { map, switchMap, startWith, pluck } from "rxjs/operators";
 
-import {
-  IndividualGrammarDataService,
-  ServerApiService,
-} from "../../shared/serverdata";
+import { FullGrammarGQL } from "../../../generated/graphql";
+
+import { ServerApiService } from "../../shared/serverdata";
 import {
   GrammarDescription,
   CodeResource,
@@ -27,7 +26,7 @@ export class GalleryGrammarComponent implements OnInit {
   constructor(
     private _http: HttpClient,
     private _activatedRoute: ActivatedRoute,
-    private _grammarData: IndividualGrammarDataService,
+    private _grammarData: FullGrammarGQL,
     private _serverApi: ServerApiService,
     private _resourceReferences: ResourceReferencesService
   ) {}
@@ -46,7 +45,9 @@ export class GalleryGrammarComponent implements OnInit {
    * than the version on the server.
    */
   readonly grammar$: Observable<GrammarDescription> = this.grammarId$.pipe(
-    switchMap((id) => from(this._grammarData.getLocal(id, "request")))
+    switchMap((id) =>
+      this._grammarData.fetch({ id }).pipe(pluck("data", "grammar"))
+    )
   );
 
   /**

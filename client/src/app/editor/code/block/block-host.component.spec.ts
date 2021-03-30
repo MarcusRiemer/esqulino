@@ -9,6 +9,11 @@ import { ApolloTestingModule } from "apollo-angular/testing";
 
 import { first } from "rxjs/operators";
 
+import {
+  FullBlockLanguageGQL,
+  FullGrammarGQL,
+} from "../../../../generated/graphql";
+
 import { BlockLanguage, EditorBlockDescription } from "../../../shared/block";
 import { FocusDirective } from "../../../shared/focus-element.directive";
 import {
@@ -17,10 +22,7 @@ import {
   SyntaxTree,
   CodeResource,
 } from "../../../shared";
-import {
-  IndividualGrammarDataService,
-  ServerApiService,
-} from "../../../shared/serverdata";
+import { ServerApiService } from "../../../shared/serverdata";
 import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 
@@ -35,7 +37,6 @@ import {
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 import { BlockHostComponent } from "./block-host.component";
 import { BLOCK_RENDER_COMPONENTS } from "./index";
-import { FullBlockLanguageGQL } from "src/generated/graphql";
 
 describe("BlockHostComponent", () => {
   async function createComponent(
@@ -51,7 +52,7 @@ describe("BlockHostComponent", () => {
       ],
       providers: [
         DragService,
-        IndividualGrammarDataService,
+        FullGrammarGQL,
         LanguageService,
         RenderedCodeResourceService,
         ServerApiService,

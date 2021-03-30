@@ -56,8 +56,6 @@ import { LoggedInGuard } from "./guards/logged-in.guard";
 import { ProviderShowComponent } from "./provider-show.component";
 import { EmptyComponent } from "./empty.component";
 
-import { IndividualGrammarDataService } from "./serverdata";
-
 import { ProviderButtonComponent } from "./auth/provider-button.component";
 import { ValidateInputComponent } from "./validate-input.component";
 import { SideNavService } from "./side-nav.service";
@@ -80,8 +78,6 @@ import { ChangeDetectionLogDirective } from "./change-detection-log.directive";
 import { UrlFriendlyIdPipe } from "./url-friendly-id.pipe";
 import { AffectedResourcesDialogComponent } from "./affected-resources-dialog.component";
 import { DisplayResourcePipe } from "./display-resource.pipe";
-
-const dataServices = [IndividualGrammarDataService];
 
 const materialModules = [
   MatToolbarModule,
@@ -218,7 +214,6 @@ export class SharedAppModule {
         LanguageService,
         ToolbarService,
         SideNavService,
-        ...dataServices,
         LoggedInGuard,
         IsUserGuard,
         PerformDataService,

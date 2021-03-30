@@ -6,9 +6,11 @@ import { ApolloTestingModule } from "apollo-angular/testing";
 import { first } from "rxjs/operators";
 
 import {
-  IndividualGrammarDataService,
-  ServerApiService,
-} from "../../../shared/serverdata";
+  FullBlockLanguageGQL,
+  FullGrammarGQL,
+} from "../../../../generated/graphql";
+
+import { ServerApiService } from "../../../shared/serverdata";
 
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
@@ -45,10 +47,11 @@ describe(`BlockRenderErrorComponent`, () => {
       ],
       providers: [
         DragService,
-        IndividualGrammarDataService,
         LanguageService,
         ServerApiService,
         RenderedCodeResourceService,
+        FullGrammarGQL,
+        FullBlockLanguageGQL,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,
@@ -61,6 +64,7 @@ describe(`BlockRenderErrorComponent`, () => {
     const component = fixture.componentInstance;
     const renderData = TestBed.inject(RenderedCodeResourceService);
 
+    // WRONG: Must use GraphQL service
     const grammarDesc = await ensureLocalGrammarRequest(
       mkGrammarDescription({ types: { spec: types } })
     );
@@ -105,8 +109,12 @@ describe(`BlockRenderErrorComponent`, () => {
       .withContext("Must have all data to render")
       .toEqual(true);
 
+    console.log("###  Reached ###");
+
     const validator = await renderData.validator$.pipe(first()).toPromise();
     expect(validator).toBeDefined();
+
+    console.log("### Not Reached ###");
 
     const promisedTree = await renderData.syntaxTree$.pipe(first()).toPromise();
     expect(promisedTree).toBeDefined();
@@ -141,9 +149,7 @@ describe(`BlockRenderErrorComponent`, () => {
     );
 
     expect(c.element.childElementCount).toEqual(0);
-
     expect(c.validationResult.errors).withContext("All errors").toEqual([]);
-
     expect(c.componentErrors).withContext("Component errors").toEqual([]);
   });
 });

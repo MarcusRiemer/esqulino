@@ -1,23 +1,21 @@
 query FullGrammar($id: ID!) {
-  grammars(input: {filter: {id: $id}}) {
-    nodes {
-      id
-      name
-      programmingLanguageId
-      slug
-      generatedFromId
-      types
-      foreignTypes
-      visualisations
-      foreignVisualisations
-      root
-      includes
-      visualizes
-      blockLanguages {
-        nodes {
-          id
-          name
-        }
+  grammar(id: $id) {
+    id
+    name
+    programmingLanguageId
+    slug
+    generatedFromId
+    types
+    foreignTypes
+    visualisations
+    foreignVisualisations
+    root
+    includes
+    visualizes
+    blockLanguages {
+      nodes {
+        id
+        name
       }
     }
   }
