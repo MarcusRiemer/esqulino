@@ -121,6 +121,12 @@ if (environment.sentry && environment.sentry.active) {
             )}`,
         }),
         defaultOptions: {
+          mutate: {
+            errorPolicy: "all",
+          },
+          query: {
+            errorPolicy: "all",
+          },
           watchQuery: {
             errorPolicy: "all",
           },

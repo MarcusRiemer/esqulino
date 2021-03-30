@@ -12,15 +12,15 @@ export function cacheFullBlockLanguage(
   blockLangDesc: FullBlockLanguage
 ) {
   // Make the block language available to the rendered trees
-  const cache = apollo.client.cache;
   const queryData: FullBlockLanguageQuery = {
-    blockLanguage: blockLangDesc,
+    blockLanguage: Object.assign(
+      { __typename: "BlockLanguage" },
+      blockLangDesc
+    ),
   };
-  apollo.client.writeQuery({
-    id: cache.identify({
-      __typename: "BlockLanguage",
-      id: blockLangDesc.id,
-    }),
+  // Don't need to provide explicitly linked ID as it is contained
+  // in the given ID and the __typename
+  apollo.client.cache.writeQuery({
     query: FullBlockLanguageDocument,
     data: queryData,
     variables: { id: blockLangDesc.id },

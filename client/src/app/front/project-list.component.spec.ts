@@ -12,7 +12,7 @@ import {
   buildEmptyProjectResponse,
   buildFrontendProjectResponse,
   FrontendProjectGQLResponse,
-} from "../editor/spec-util/project.gql.data.spec";
+} from "../editor/spec-util/";
 import { ProjectListItemComponent } from "./project-list-item.component";
 import { LanguageService } from "../shared";
 import { NaturalLanguagesService } from "../natural-languages.service";

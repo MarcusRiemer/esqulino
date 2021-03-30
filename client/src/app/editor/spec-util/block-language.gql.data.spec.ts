@@ -47,7 +47,7 @@ export const specCacheBlockLanguage = (response: FullBlockLanguage) => {
   return response;
 };
 
-type BlockLanguageGQLResponse = {
+type BlockLanguageAdminResponse = {
   data: AdminListBlockLanguagesQuery;
   errors: ReadonlyArray<GraphQLError>;
 };
@@ -63,7 +63,7 @@ const ADMIN_LIST_BLOCKLANGUAGE: AdminListBlockLanguageNode = {
 
 const wrapBlockLanguageData = (
   data: AdminListBlockLanguageNode[]
-): BlockLanguageGQLResponse => {
+): BlockLanguageAdminResponse => {
   return {
     errors: [],
     data: {
@@ -87,7 +87,7 @@ const wrapBlockLanguageData = (
  */
 export const buildSingleBlockLanguageResponse = (
   override?: AdminListBlockLanguageNode
-): BlockLanguageGQLResponse => {
+): BlockLanguageAdminResponse => {
   const blockLanguages: AdminListBlockLanguageNode[] = [];
   blockLanguages.push(
     Object.assign({}, ADMIN_LIST_BLOCKLANGUAGE, override || {}, {
@@ -100,6 +100,6 @@ export const buildSingleBlockLanguageResponse = (
 /**
  * Generates an empty project response
  */
-export const buildEmptyBlockLanguageResponse = (): BlockLanguageGQLResponse => {
+export const buildEmptyBlockLanguageResponse = (): BlockLanguageAdminResponse => {
   return wrapBlockLanguageData([]);
 };

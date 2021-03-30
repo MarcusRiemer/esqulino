@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { map, startWith } from "rxjs/operators";
+import { map, startWith, take } from "rxjs/operators";
 import { Observable, of } from "rxjs";
 import {
   isProjectUsesBlockLanguageDescription,
@@ -20,10 +20,15 @@ export function isResourceReference(
   return typeof value === "object" && "id" in value && "type" in value;
 }
 
-const FETCH_POLICY: FetchPolicy = "cache-first";
+const FETCH_POLICY: FetchPolicy = "cache-only";
 
+/**
+ * Attempts to find an automatic way of presenting a user centric
+ * version of any kind of reference.
+ */
 @Pipe({
   name: "displayResource",
+  pure: true,
 })
 export class DisplayResourcePipe implements PipeTransform {
   public constructor(
@@ -49,7 +54,8 @@ export class DisplayResourcePipe implements PipeTransform {
             map((res) => {
               return res.data.blockLanguage?.name ?? "???";
             }),
-            startWith(value.id)
+            startWith(value.id),
+            take(2)
           );
       default:
         return of(value.id);

@@ -12,13 +12,13 @@ import { generateUUIDv4 } from "../../shared/util-browser";
 import { ApolloTestingController } from "apollo-angular/testing";
 import { GraphQLError } from "graphql";
 
-type FullProjectNode = FullProjectQuery["projects"]["nodes"][0];
+type FullProjectNode = FullProjectQuery["project"];
 
 type FullProjectGQLResponse =
   | { data: FullProjectQuery }
   | { errors: ReadonlyArray<GraphQLError> };
 
-const DEFAULT_EMPTY_PROJECT: FullProjectQuery["projects"]["nodes"][0] = {
+const DEFAULT_EMPTY_PROJECT: FullProjectNode = {
   id: "28066939-7d53-40de-a89b-95bf37c982be",
   __typename: "Project",
   codeResources: [],
@@ -40,19 +40,17 @@ const DEFAULT_EMPTY_PROJECT: FullProjectQuery["projects"]["nodes"][0] = {
   slug: null,
 };
 
-const wrapProjectData = (data: FullProjectNode[]): FullProjectGQLResponse => {
+const wrapProjectData = (data: FullProjectNode): FullProjectGQLResponse => {
   return {
     data: {
-      projects: {
-        nodes: data,
-      },
+      project: data,
     },
   };
 };
 
 export const specLoadProject = (
   projectService: ProjectService,
-  override?: Partial<ProjectFullDescription>
+  override?: Partial<FullProjectNode>
 ): Promise<Project> => {
   const testingController = TestBed.inject(ApolloTestingController);
 
@@ -60,7 +58,7 @@ export const specLoadProject = (
   const p = Object.assign({}, DEFAULT_EMPTY_PROJECT, override || {}, { id });
 
   const toReturn = projectService.setActiveProject(p.id, true);
-  const wrappedData = wrapProjectData([p]);
+  const wrappedData = wrapProjectData(p);
 
   testingController
     .expectOne(

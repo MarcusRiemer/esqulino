@@ -18,6 +18,7 @@ import {
 import {
   FullBlockLanguageGQL,
   FullProjectGQL,
+  NameBlockLanguageGQL,
 } from "../../../generated/graphql";
 
 import {
@@ -79,6 +80,7 @@ describe(`CreateCodeResourceComponent`, () => {
         },
         FullProjectGQL,
         FullBlockLanguageGQL,
+        NameBlockLanguageGQL,
         PerformDataService,
         MayPerformService,
       ],
@@ -99,10 +101,7 @@ describe(`CreateCodeResourceComponent`, () => {
         blockLanguageId: b.id,
         id: projectId,
       })),
-    });
-
-    blockLanguages.forEach((b) => {
-      specCacheBlockLanguage(b);
+      blockLanguages,
     });
 
     const fixture = TestBed.createComponent(CreateCodeResourceComponent);
