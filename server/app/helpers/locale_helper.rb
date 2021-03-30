@@ -1,11 +1,8 @@
 # Utility methods to pick the correct locale
 module LocaleHelper
+  # The languages that BlattWerkzeug supports
   def self.allowed_languages
-    return [:de, :en]
-  end
-
-  def self.allowed_languages_s
-    return self.allowed_languages.map { |l| l.to_s }
+    Types::Base::BaseEnum::LanguageEnum.values.keys
   end
 
   # Determines the locale of a request. If no locale can be determined,
