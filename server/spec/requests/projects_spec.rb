@@ -12,7 +12,7 @@ RSpec.describe ProjectsController, type: :request do
         variables: { "id" => p.id }
       )
 
-      node = data["data"]["projects"]["nodes"][0];
+      node = data["data"]["project"];
       expect(node["id"]).to eq p.id
     end
 
@@ -24,11 +24,12 @@ RSpec.describe ProjectsController, type: :request do
         variables: { "id" => p.slug }
       )
 
-      node = data["data"]["projects"]["nodes"][0];
+      node = data["data"]["project"];
       expect(node["id"]).to eq p.id
     end
 
     it 'project with database schema (no foreign keys)' do
+      # This previously crashed because of a bug with the schema visualization
       db = create(:project_database, :table_key_value)
       p = db.project
 
@@ -37,11 +38,12 @@ RSpec.describe ProjectsController, type: :request do
         variables: { "id" => p.id }
       )
 
-      node = data["data"]["projects"]["nodes"][0];
+      node = data["data"]["project"];
       expect(node["id"]).to eq p.id
     end
 
     it 'project with database schema (with foreign keys)' do
+      # This previously crashed because of a bug with the schema visualization
       db = create(:project_database, :tables_references)
       p = db.project
 
@@ -50,18 +52,8 @@ RSpec.describe ProjectsController, type: :request do
         variables: { "id" => p.id }
       )
 
-      node = data["data"]["projects"]["nodes"][0];
+      node = data["data"]["project"];
       expect(node["id"]).to eq p.id
-    end
-
-    it 'empty list on non existant projects' do
-      data = send_query(
-        query_name: "FullProject",
-        variables: { "id" => "ed0b2730-bb75-462b-aadc-6cfc03e6ef02" }
-      )
-
-      expect(data.fetch("errors", [])).to eq []
-      expect(data["data"]["projects"]["nodes"]).to eq []
     end
   end
 
