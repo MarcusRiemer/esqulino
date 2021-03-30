@@ -3,7 +3,7 @@ class ProjectMailer < ApplicationMailer
   def created_admin
     @locale = locale
     @project_id = @params[:project].id
-    @project_name = @params[:project].name[locale]
+    @project_name = LocaleHelper.first_matching_text(@params[:project].name, [@locale])
     @project_visitor_url = "http://#{@project_id}.#{project_site_url}"
     @project_editor_url = "http://#{project_editor_url}/editor/#{@project_id}"
 

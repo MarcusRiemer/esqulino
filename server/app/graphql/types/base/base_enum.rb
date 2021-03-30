@@ -7,8 +7,8 @@ module Types
     class LanguageEnum < Types::Base::BaseEnum
       graphql_name 'LanguageEnum'
       # Available Languages
-      value 'de'
       value 'en'
+      value 'de'
     end
 
     class OrderDirectionEnum < Types::Base::BaseEnum
