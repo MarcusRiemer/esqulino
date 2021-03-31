@@ -11,7 +11,7 @@ class ValidLanguagesValidator < ActiveModel::EachValidator
     unwanted_languages = value.keys - LocaleHelper.allowed_languages_s
 
     if not unwanted_languages.empty?
-      record.errors[attribute] << "Unwanted Languages: #{unwanted_languages}"
+      record.errors.add(attribute, messag: "Unwanted Languages: #{unwanted_languages}")
     end
   end
 end

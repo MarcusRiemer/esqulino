@@ -12,7 +12,9 @@ module Seed
       super(
         seed_id,
         dependencies = {
-          "programming_language" => ProgrammingLanguageSeed
+          "programming_language" => ProgrammingLanguageSeed,
+          "targeted_grammars" => GrammarSeed,
+          "grammar_reference_origins" => GrammarReferenceSeed,
         },
         defer_referential_checks = true
       )

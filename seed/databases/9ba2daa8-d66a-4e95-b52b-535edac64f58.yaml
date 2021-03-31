@@ -1,21 +1,14 @@
 --- !ruby/object:ProjectDatabase
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision:
-      scale:
-      limit:
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 9ba2daa8-d66a-4e95-b52b-535edac64f58
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: default
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 9ba2daa8-d66a-4e95-b52b-535edac64f58
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "chapter", "columns": [{"name": "chapter_id",

@@ -1,14 +1,14 @@
 --- !ruby/object:Project
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 5bd558a5-83ed-4cc9-9613-543bd6396a1e
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: Test
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: '"de"=>"Test"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 5bd558a5-83ed-4cc9-9613-543bd6396a1e
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false

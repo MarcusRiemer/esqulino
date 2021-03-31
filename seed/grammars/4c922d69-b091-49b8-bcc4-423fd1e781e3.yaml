@@ -1,13 +1,13 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 4c922d69-b091-49b8-bcc4-423fd1e781e3
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Documentation Examples
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 4c922d69-b091-49b8-bcc4-423fd1e781e3
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-08-23 09:29:51.024269000 Z
@@ -46,6 +46,10 @@ concise_attributes:
   name: root
   value_before_type_cast: '{"typeName": "Document", "languageName": "allowed"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: extends_id
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
 new_record: false
 active_record_yaml_version: 2

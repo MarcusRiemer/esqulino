@@ -1,21 +1,14 @@
 --- !ruby/object:ProjectDatabase
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: '0583e928-3c8a-4f5a-9587-9fd69fe55534'
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: '0583e928-3c8a-4f5a-9587-9fd69fe55534'
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision:
-      scale:
-      limit:
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: bdd01223-0d02-42a0-ac88-fa34150258ae
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: default
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: bdd01223-0d02-42a0-ac88-fa34150258ae
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "gefangen", "columns": [{"name": "gefangen_id",

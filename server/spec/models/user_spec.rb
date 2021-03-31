@@ -16,31 +16,6 @@ RSpec.describe User, type: :model do
     expect(User.guest.role_names).to eq ['guest']
   end
 
-  describe 'has_confirmed_password_identity?' do
-    it 'without any identity' do
-      u = create(:user)
-      expect(u.has_confirmed_password_identity?).to eq false
-    end
-
-    it 'with only google identity' do
-      u = create(:user)
-      create(:google_provider, user: u)
-      expect(u.has_confirmed_password_identity?).to eq false
-    end
-
-    it 'with unconfirmed password identity' do
-      u = create(:user)
-      create(:identity_provider, :new, user: u)
-      expect(u.has_confirmed_password_identity?).to eq false
-    end
-
-    it 'with confirmed password identity' do
-      u = create(:user)
-      create(:identity_provider, :existing, user: u)
-      expect(u.has_confirmed_password_identity?).to eq true
-    end
-  end
-
   describe 'promoting guests to admin' do
     before { create(:user, id: User.guest_id) }
 

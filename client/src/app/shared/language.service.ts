@@ -19,7 +19,7 @@ export class LanguageService {
    * @return IDs of all available language models.
    */
   get availableLanguageIds() {
-    return this.availableLanguages.map((m) => m.id);
+    return this.availableLanguages.map((m) => m.programmingLanguageId);
   }
 
   /**
@@ -27,7 +27,9 @@ export class LanguageService {
    * @return The specific Language that was asked for.
    */
   getLanguage(id: string) {
-    const toReturn = this.availableLanguages.find((l) => l.id === id);
+    const toReturn = this.availableLanguages.find(
+      (l) => l.programmingLanguageId === id
+    );
     if (!toReturn) {
       const available = this.availableLanguageIds.join(", ");
       throw new Error(

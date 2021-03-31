@@ -1,10 +1,10 @@
-import { Tree, NodeDescription, NodeLocation } from "../syntaxtree";
+import { SyntaxTree, NodeDescription, NodeLocation } from "../syntaxtree";
 import { tailorBlockDescription } from "./sidebar-blocks";
 import { NodeTailoredDescription } from "./block.description";
 
 describe(`tailorBlockDescription()`, () => {
   it(`Doesn't change an empty node`, () => {
-    const t = new Tree({ language: "spec", name: "root" });
+    const t = new SyntaxTree({ language: "spec", name: "root" });
     const n: NodeDescription = {
       language: "spec",
       name: "used",
@@ -14,7 +14,7 @@ describe(`tailorBlockDescription()`, () => {
   });
 
   it(`Doesn't change a node with no tailored properties`, () => {
-    const t = new Tree({ language: "spec", name: "root" });
+    const t = new SyntaxTree({ language: "spec", name: "root" });
     const n: NodeDescription = {
       language: "spec",
       name: "used",
@@ -26,7 +26,7 @@ describe(`tailorBlockDescription()`, () => {
     expect(tailorBlockDescription(t, n)).toEqual(n);
   });
 
-  const tRootWitha1 = new Tree({
+  const tRootWitha1 = new SyntaxTree({
     language: "spec",
     name: "root",
     properties: {
@@ -54,7 +54,7 @@ describe(`tailorBlockDescription()`, () => {
   });
 
   it(`Resolves property "a" with falsy value from root`, () => {
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "spec",
       name: "root",
       properties: {
@@ -134,7 +134,7 @@ describe(`tailorBlockDescription()`, () => {
     );
   });
 
-  const tRootTwoLeafs = new Tree({
+  const tRootTwoLeafs = new SyntaxTree({
     language: "spec",
     name: "root",
     properties: {

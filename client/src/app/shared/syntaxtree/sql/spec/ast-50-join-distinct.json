@@ -1,0 +1,97 @@
+{
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "RAUM_ID",
+                  "refTableName": "veranst_termin"
+                }
+              },
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "VERANSTALTUNG_BEZ",
+                  "refTableName": "veranstaltung"
+                }
+              },
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "TERMIN_ID",
+                  "refTableName": "veranst_termin"
+                }
+              }
+            ],
+            "distinct": [
+              {
+                "name": "distinct",
+                "language": "sql"
+              }
+            ]
+          }
+        }
+      ],
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "veranstaltung"
+                }
+              }
+            ],
+            "joins": [
+              {
+                "name": "innerJoinUsing",
+                "language": "sql",
+                "children": {
+                  "table": [
+                    {
+                      "name": "tableIntroduction",
+                      "language": "sql",
+                      "properties": {
+                        "name": "veranst_termin"
+                      }
+                    }
+                  ],
+                  "using": [
+                    {
+                      "name": "parentheses",
+                      "language": "sql",
+                      "children": {
+                        "expression": [
+                          {
+                            "name": "constant",
+                            "language": "sql",
+                            "properties": {
+                              "value": "VERANSTALTUNG_ID"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }

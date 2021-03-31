@@ -5,9 +5,7 @@
       class="news-avatar"
       mat-card-avatar
     />
-    <mat-card-title>
-      {{news.title[locale]}}
-    </mat-card-title>
+    <mat-card-title>{{news.title[locale]}}</mat-card-title>
     <mat-card-subtitle i18n="@@newsPublicationDate">
       Neuigkeiten vom {{news.publishedFrom | date:'dd.MM.yyyy'}}
     </mat-card-subtitle>

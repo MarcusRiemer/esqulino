@@ -1,0 +1,25 @@
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins/_breakpoints";
+
+:host {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+@include media-breakpoint-down(sm) {
+    :host {
+        flex-direction: column;
+    }
+}
+
+.custom-select, .delete-language {
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: content;
+}
+
+.add-language, input {
+    flex-grow: 1;
+}

@@ -1,13 +1,13 @@
 --- !ruby/object:BlockLanguage
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 8dfa6990-c1b1-4d96-8f7c-b55d9d88e5a3
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Meta CSS
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 8dfa6990-c1b1-4d96-8f7c-b55d9d88e5a3
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-06-07 12:00:15.215200000 Z

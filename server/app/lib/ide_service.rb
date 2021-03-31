@@ -33,11 +33,11 @@ class BaseIdeService
   def emit_generated_blocks(block_language)
     generator_description = block_language.local_generator_instructions
     if (generator_description)
+      # Ensure for all documents that wee are not passing in any garbage
       ensure_valid_document(
         "BlockLanguageGeneratorDocument",
         generator_description
       )
-
       grammar_description = ensure_valid_document(
         "GrammarDocument",
         block_language.grammar.document.transform_keys { |k| k.camelize(:lower) }
@@ -47,6 +47,7 @@ class BaseIdeService
         block_language.to_list_api_response
       )
 
+      # All documents seem fine, lets execute the request
       json_result = execute_request({
                                       "type" => "emitGeneratedBlocks",
                                       "block_language" => block_language_description,

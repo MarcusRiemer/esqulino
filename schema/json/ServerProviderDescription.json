@@ -9,21 +9,6 @@
         "access_token_duration": {
           "type": "string"
         },
-        "changes": {
-          "additionalProperties": false,
-          "properties": {
-            "primary": {
-              "type": [
-                "string",
-                "null"
-              ]
-            }
-          },
-          "required": [
-            "primary"
-          ],
-          "type": "object"
-        },
         "confirmed": {
           "type": "boolean"
         },
@@ -43,8 +28,7 @@
       "required": [
         "id",
         "type",
-        "confirmed",
-        "changes"
+        "confirmed"
       ],
       "type": "object"
     },

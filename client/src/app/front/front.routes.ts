@@ -22,7 +22,7 @@ export const frontRoutes: Routes = [
     component: FrontComponent,
     children: [
       { path: "academia", component: AboutAcademiaComponent },
-      { path: "create", component: CreateProjectComponent },
+      { path: "create/project", component: CreateProjectComponent },
       { path: "development", component: DevelopmentComponent },
       { path: "projects", component: ProjectListComponent },
       { path: "imprint", component: ImprintComponent },

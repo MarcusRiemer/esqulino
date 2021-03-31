@@ -1,0 +1,19 @@
+{
+  "name": "element",
+  "language": "dxml",
+  "properties": {
+    "name": "e"
+  },
+  "children": {
+    "elements": [
+      {
+        "name": "element",
+        "language": "dxml",
+        "properties": {
+          "name": "c"
+        }
+      }
+    ],
+    "attributes": []
+  }
+}

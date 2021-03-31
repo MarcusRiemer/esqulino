@@ -16,11 +16,10 @@ import {
 
 export { Project, ProjectFullDescription };
 
-export function fromGraphQL(descInQuery: FullProjectQuery) {
-  const descIn = descInQuery.projects.nodes[0];
-  const toReturn: ProjectFullDescription = descIn;
-
-  return toReturn;
+export function fromGraphQL(
+  descInQuery: FullProjectQuery
+): ProjectFullDescription {
+  return descInQuery.projects.nodes[0];
 }
 
 /**

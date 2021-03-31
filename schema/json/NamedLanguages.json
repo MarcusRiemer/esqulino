@@ -542,13 +542,10 @@
           "$ref": "#/definitions/NodeConcreteTypeDescription"
         },
         {
-          "$ref": "#/definitions/NodeVisualTypeDescription"
-        },
-        {
           "$ref": "#/definitions/NodeOneOfTypeDescription"
         }
       ],
-      "description": "Types may either be concrete new type, an alias grouping together multiple\nother types or a visualization of an existing type."
+      "description": "Types may either be concrete new type or an alias grouping together multiple\nother types."
     },
     "NodeTypesAllowedDescription": {
       "additionalProperties": false,
@@ -759,34 +756,6 @@
       ],
       "type": "object"
     },
-    "NodeVisualTypeDescription": {
-      "additionalProperties": false,
-      "properties": {
-        "attributes": {
-          "items": {
-            "$ref": "#/definitions/VisualNodeAttributeDescription"
-          },
-          "type": "array"
-        },
-        "tags": {
-          "items": {
-            "$ref": "#/definitions/TagDescription"
-          },
-          "type": "array"
-        },
-        "type": {
-          "enum": [
-            "visualize"
-          ],
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "attributes"
-      ],
-      "type": "object"
-    },
     "OccursDescription": {
       "anyOf": [
         {
@@ -881,23 +850,6 @@
         }
       ],
       "description": "Simple strings are used to refer to local types that share the\nsame language name."
-    },
-    "VisualNodeAttributeDescription": {
-      "anyOf": [
-        {
-          "$ref": "#/definitions/NodeTerminalSymbolDescription"
-        },
-        {
-          "$ref": "#/definitions/NodeVisualContainerDescription"
-        },
-        {
-          "$ref": "#/definitions/NodeInterpolatePropertyDescription"
-        },
-        {
-          "$ref": "#/definitions/NodeInterpolateChildrenDescription"
-        }
-      ],
-      "description": "These attributes are available when visualizing things"
     }
   }
 }

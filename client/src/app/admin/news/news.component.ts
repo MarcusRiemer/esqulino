@@ -1,17 +1,20 @@
-import { Component, Inject, LOCALE_ID, ViewChild } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { PerformDataService } from "../../shared/authorisation/perform-data.service";
-import { ServerDataService } from "../../shared";
-import { MultiLangString } from "../../shared/multilingual-string.description";
-import { locales } from "../../shared/change-language.component";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+
+import { BehaviorSubject } from "rxjs";
+
 import {
   AdminListNewsGQL,
   AdminListNewsQuery,
 } from "../../../generated/graphql";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { BehaviorSubject } from "rxjs";
+
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { MultiLangString } from "../../shared/multilingual-string.description";
+import { locales } from "../../shared/change-language.component";
+import { CurrentLocaleService } from "../../current-locale.service";
 
 // TODO: Should be beautified and used
 type Query = ReturnType<AdminListNewsGQL["watch"]>;
@@ -36,12 +39,11 @@ export class AdminNewsListComponent {
   sort: MatSort;
 
   constructor(
-    @Inject(LOCALE_ID) readonly localeId: string,
-    private readonly _serverData: ServerDataService,
-    private _router: Router,
-    private _active: ActivatedRoute,
-    private _performData: PerformDataService,
-    private _newsGQL: AdminListNewsGQL
+    private readonly _lang: CurrentLocaleService,
+    private readonly _router: Router,
+    private readonly _active: ActivatedRoute,
+    private readonly _performData: PerformDataService,
+    private readonly _newsGQL: AdminListNewsGQL
   ) {}
 
   readonly languages = locales;
@@ -72,7 +74,7 @@ export class AdminNewsListComponent {
     { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
   );
 
-  public selectedLanguage: string = this.localeId;
+  public selectedLanguage: string = this._lang.localeId;
   public selectedEditor: string = "single";
   private _filter$ = new BehaviorSubject<string>("");
   //need searchFor to fire ngModelChange event

@@ -6,7 +6,7 @@
   >
     <!-- Ensuring there is a tree -->
     <ng-container
-      *ngIf="(currentResource.syntaxTree | async); let currentTree;"
+      *ngIf="(currentResource.syntaxTree$ | async); let currentTree;"
     >
       <!-- If the tree is empty, allow the user to populate it -->
       <div

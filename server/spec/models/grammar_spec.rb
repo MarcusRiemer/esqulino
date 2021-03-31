@@ -41,41 +41,25 @@ RSpec.describe Grammar, type: :model do
 
   context "document" do
     it "Empty" do
-      res = FactoryBot.build(:grammar, root: nil, types: nil, foreign_types: nil)
-      expect(res.document).to eq Hash.new
+      res = FactoryBot.build(:grammar)
+      expect(res.document).to eq({
+                                   "foreign_types"=>{},
+                                   "foreign_visualisations"=>{},
+                                   "types"=>{},
+                                   "visualisations"=>{}
+                                 })
     end
 
-    it "root" do
+    it "With root" do
       root = { "languageName" => "l", "typeName" => "t" }
-      res = FactoryBot.build(
-        :grammar,
-        root: root,
-        types: nil,
-        foreign_types: nil
-      )
-      expect(res.document).to eq({ "root" => root })
-    end
-
-    it "root and types" do
-      root = { "languageName" => "l", "typeName" => "t" }
-      res = FactoryBot.build(
-        :grammar,
-        root: root,
-        types: Hash.new,
-        foreign_types: nil
-      )
-      expect(res.document).to eq({ "root" => root, "types" => Hash.new })
-    end
-
-    it "root, types and foreign_types" do
-      root = { "languageName" => "l", "typeName" => "t" }
-      res = FactoryBot.build(
-        :grammar,
-        root: root,
-        types: Hash.new,
-        foreign_types: Hash.new
-      )
-      expect(res.document).to eq({ "root" => root, "types" => Hash.new, "foreign_types" => Hash.new })
+      res = FactoryBot.build(:grammar, root: root)
+      expect(res.document).to eq({
+                                   "root" => root,
+                                   "foreign_types"=>{},
+                                   "foreign_visualisations"=>{},
+                                   "types"=>{},
+                                   "visualisations"=>{}
+                                 })
     end
   end
 
@@ -83,6 +67,13 @@ RSpec.describe Grammar, type: :model do
     let(:type_empty) {
       {
         "type" => "concrete",
+        "attributes" => []
+      }
+    }
+
+    let(:type_visualise) {
+      {
+        "type" => "",
         "attributes" => []
       }
     }
@@ -248,6 +239,16 @@ RSpec.describe Grammar, type: :model do
       end
 
       it "The extended grammar has a local type" do
+        origin = FactoryBot.create(:grammar)
+        target = FactoryBot.create(:grammar, types: { "l" => { "t" => type_empty } })
+        origin.grammar_reference_origins.create(target: target, reference_type: :include_types)
+
+        origin.refresh_from_references!
+
+        expect(origin.foreign_types).to eq({ "l" => { "t" => type_empty } })
+      end
+
+      it "The extended grammar has a local visualization" do
         origin = FactoryBot.create(:grammar)
         target = FactoryBot.create(:grammar, types: { "l" => { "t" => type_empty } })
         origin.grammar_reference_origins.create(target: target, reference_type: :include_types)

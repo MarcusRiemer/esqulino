@@ -22,7 +22,7 @@ export class TruckWorldService {
     private _projectService: ProjectService
   ) {
     this._currentCodeResource.currentResource.subscribe((currentProgram) => {
-      if (currentProgram.emittedLanguageIdPeek === "truck-world") {
+      if (currentProgram.runtimeLanguageId === "truck-world") {
         // Current program is a world
         this._worldIds[currentProgram.id] = currentProgram.id;
         this._currentWorldId.next(currentProgram.id);

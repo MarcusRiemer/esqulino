@@ -1,14 +1,14 @@
 --- !ruby/object:Project
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: events
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: '"de"=>"Ereignisse", "en"=>"Events"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true

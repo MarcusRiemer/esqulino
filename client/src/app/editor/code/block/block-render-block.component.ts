@@ -5,6 +5,7 @@ import {
   HostListener,
   HostBinding,
   Optional,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 
 import { combineLatest, Observable } from "rxjs";
@@ -17,7 +18,7 @@ import {
 } from "rxjs/operators";
 
 import {
-  Node,
+  SyntaxNode,
   locationEquals,
   locationMatchingLength,
 } from "../../../shared/syntaxtree";
@@ -44,13 +45,14 @@ export type BackgroundState = "executed" | "replaced" | "neutral";
 @Component({
   templateUrl: "templates/block-render-block.html",
   selector: `editor-block-render-block`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderBlockComponent {
   /**
    * The node to be rendered
    */
   @Input()
-  public node: Node;
+  public node: SyntaxNode;
 
   /**
    * The visualisation parameters for this block.
@@ -176,7 +178,7 @@ export class BlockRenderBlockComponent {
   /**
    * Determines whether a certain codeblock is currently beeing executed.
    */
-  readonly isOnExecutionPath = this._currentCodeResource.currentExecutionLocation.pipe(
+  readonly isOnExecutionPath = this._currentCodeResource.currentExecutionLocation$.pipe(
     map((loc) => {
       const matchingLength = locationMatchingLength(this.node.location, loc);
       return (
@@ -192,7 +194,7 @@ export class BlockRenderBlockComponent {
   /**
    * Determines whether a certain codeblock is currently beeing executed.
    */
-  readonly isCurrentlyExecuted$ = this._currentCodeResource.currentExecutionLocation.pipe(
+  readonly isCurrentlyExecuted$ = this._currentCodeResource.currentExecutionLocation$.pipe(
     // Even if the node is properly initialized, the input property may be missing
     // because it is initialized later
     filter((_) => !!this.node),

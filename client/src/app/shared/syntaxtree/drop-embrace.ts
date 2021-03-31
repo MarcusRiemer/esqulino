@@ -3,7 +3,7 @@ import {
   NodeLocation,
   QualifiedTypeName,
 } from "./syntaxtree.description";
-import { Tree, Node } from "./syntaxtree";
+import { SyntaxTree, SyntaxNode } from "./syntaxtree";
 import { Validator } from "./validator";
 import { EmbraceDropLocation } from "./drop.description";
 
@@ -15,7 +15,7 @@ import { EmbraceDropLocation } from "./drop.description";
  * - AND currently empty
  */
 export function _findPossibleLocations(
-  parentNode: Node,
+  parentNode: SyntaxNode,
   fillType: QualifiedTypeName,
   validator: Validator
 ): NodeLocation[] {
@@ -40,11 +40,11 @@ export function _findPossibleLocations(
  * given location in the embracing node.
  */
 export function _localEmbrace(
-  embracedNode: Node,
+  embracedNode: SyntaxNode,
   embracingDescription: NodeDescription,
   insertionLocation: NodeLocation
 ): NodeDescription {
-  const embracingNode = new Tree(embracingDescription);
+  const embracingNode = new SyntaxTree(embracingDescription);
   const newTree = embracingNode.insertNode(
     insertionLocation,
     embracedNode.toModel()
@@ -64,11 +64,11 @@ export function _localEmbrace(
  */
 export function _findMatchInCandidate(
   validator: Validator,
-  targetNode: Node,
+  targetNode: SyntaxNode,
   candidates: NodeDescription[]
 ): [NodeDescription, NodeLocation] | undefined {
   for (const candidate of candidates) {
-    const candidateNode = new Tree(candidate).rootNode;
+    const candidateNode = new SyntaxTree(candidate).rootNode;
     const holes = _findPossibleLocations(
       candidateNode,
       targetNode.qualifiedName,
@@ -93,7 +93,7 @@ export function _findMatchInCandidate(
  */
 export function embraceMatches(
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): EmbraceDropLocation[] {
@@ -101,7 +101,7 @@ export function embraceMatches(
   if (targetNode) {
     const toReturn: EmbraceDropLocation[] = [];
     candidates.forEach((candidate) => {
-      const candidateNode = new Tree(candidate).rootNode;
+      const candidateNode = new SyntaxTree(candidate).rootNode;
       const holes = _findPossibleLocations(
         candidateNode,
         targetNode.qualifiedName,
@@ -136,10 +136,10 @@ export function embraceMatches(
  */
 export function embraceNode(
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   loc: NodeLocation,
   candidates: NodeDescription[]
-): Tree {
+): SyntaxTree {
   // Is there nothing at the embrace target? In that case we have a normal
   // insertion at the given location
   const targetNode = tree.locateOrUndefined(loc);
@@ -184,7 +184,7 @@ export function embraceNode(
  */
 export function canEmbraceNode(
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   loc: NodeLocation,
   candidates: NodeDescription[]
 ): boolean {

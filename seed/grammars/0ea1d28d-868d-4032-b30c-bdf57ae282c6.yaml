@@ -1,13 +1,13 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 0ea1d28d-868d-4032-b30c-bdf57ae282c6
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Meta RegEx Testbench
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 0ea1d28d-868d-4032-b30c-bdf57ae282c6
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-07-28 21:02:21.772590000 Z
@@ -43,6 +43,10 @@ concise_attributes:
   name: root
   value_before_type_cast: '{"typeName": "root", "languageName": "regex-testbench"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: extends_id
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
 new_record: false
 active_record_yaml_version: 2

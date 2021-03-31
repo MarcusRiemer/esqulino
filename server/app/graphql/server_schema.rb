@@ -1,14 +1,10 @@
 class ServerSchema < GraphQL::Schema
   default_max_page_size 100
-  # required
+
+  # Required basic schema parts
   mutation(Types::MutationType)
   query(Types::QueryType)
 
-  # optional
-  # Opt in to the new runtime (default in future graphql-ruby versions)
-  use GraphQL::Execution::Interpreter
-  use GraphQL::Analysis::AST
-
-  # Add built-in connections for pagination
-  use GraphQL::Pagination::Connections
+  # No need to allow introspection for live environments
+  disable_introspection_entry_points if Rails.env.production?
 end

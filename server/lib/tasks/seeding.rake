@@ -50,6 +50,12 @@ namespace :blattwerkzeug do
     task :store, [:grammar_id] => :environment do |t, args|
       m.store_grammar args[:grammar_id]
     end
+
+
+    desc 'Serialize all grammars to their seed representation'
+    task :store_all => :environment do |t, args|
+      m.store_all_grammars
+    end
   end
 
   namespace :block_language do

@@ -11,6 +11,7 @@ RSpec.describe GrammarReference, type: :model do
                        reference_type: "include_types")
 
     expect(GrammarReference.include_types).to eq([reference])
+    expect(GrammarReference.visualize).to eq([])
   end
 
   it 'visualizes' do
@@ -22,6 +23,7 @@ RSpec.describe GrammarReference, type: :model do
                        target: target,
                        reference_type: "visualize")
 
+    expect(GrammarReference.include_types).to eq([])
     expect(GrammarReference.visualize).to eq([reference])
   end
 end

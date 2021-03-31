@@ -1,7 +1,6 @@
 # Manages operations on grammars
 class GrammarsController < ApplicationController
   include UserHelper
-  include PaginationHelper
   include JsonSchemaHelper
 
   # Find a single grammar

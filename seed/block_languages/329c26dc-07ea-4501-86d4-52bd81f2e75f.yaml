@@ -1,14 +1,14 @@
 --- !ruby/object:BlockLanguage
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: trucklino-program
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Trucklino Program
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 329c26dc-07ea-4501-86d4-52bd81f2e75f
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2019-01-09 12:30:41.478228000 Z

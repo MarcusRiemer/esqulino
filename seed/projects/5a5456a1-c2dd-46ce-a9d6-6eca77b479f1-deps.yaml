@@ -18,6 +18,9 @@
   - '08575dd1-7cde-40fc-b489-6d57a5114768'
   - *2
 - - "../seed/code_resources"
+  - ee006a2d-501a-42b0-9c19-9f7bb4df45ba
+  - *2
+- - "../seed/code_resources"
   - d12623a9-3608-489f-b2d5-cc26a25e783c
   - *2
 - - "../seed/code_resources"
@@ -37,9 +40,6 @@
   - *2
 - - "../seed/code_resources"
   - 489fe72d-918e-462b-95ef-9763560cb1c5
-  - *2
-- - "../seed/code_resources"
-  - ee006a2d-501a-42b0-9c19-9f7bb4df45ba
   - *2
 - - "../seed/code_resources"
   - 11c9d88b-1d82-4a81-918a-b5bf8b19e2b9

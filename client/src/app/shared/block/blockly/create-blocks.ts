@@ -6,16 +6,24 @@ import {
   EnumRestrictionDescription,
   Orientation,
   QualifiedTypeName,
+  NodeDescription,
 } from "../../syntaxtree/";
 
-import { BlocklyBlock, BlockArgs } from "./blockly-types";
-import { allPresentTypes } from "../../syntaxtree/grammar-type-util";
+import {
+  BlocklyBlock,
+  BlockArgs,
+  BlocklyWorkspaceBlock,
+} from "./blockly-types";
 
 import {
   AppearanceContext,
   blockOrientation,
   buildAppearanceContext,
 } from "./appearance-context";
+import {
+  FixedBlocksSidebarCategoryDescription,
+  isNodeDerivedPropertyDescription,
+} from "../block.description";
 
 function anyTag(a: NodeAttributeDescription, ...tag: string[]) {
   if (!a.tags) {
@@ -69,9 +77,7 @@ function blockContinuation(
  * Generates JSON Blockly definitions from a grammar.
  */
 export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
-  const ac = buildAppearanceContext(
-    allPresentTypes(g, (t) => t.type !== "visualize")
-  );
+  const ac = buildAppearanceContext(g.types);
 
   const toReturn: BlocklyBlock[] = [];
 
@@ -153,8 +159,21 @@ export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
                   });
                   addPlaceholder();
                   break;
+                case "codeResourceReference":
+                case "grammarReference":
+                  args.push({
+                    name: attr.name,
+                    type: "field_label_serializable",
+                  });
+                  addPlaceholder();
+                  break;
                 default:
-                  messageString += "<<" + attr.name + ":" + attr.base + ">> ";
+                  messageString +=
+                    "<<" +
+                    (attr as any).name +
+                    ":" +
+                    (attr as any).base +
+                    ">> ";
               }
               break;
             case "terminal":
@@ -185,6 +204,7 @@ export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
           message0: messageString || t.languageName + "." + t.typeName,
           args0: args,
           tooltip: t.languageName + "." + t.typeName,
+          coreType: t,
         },
         blockConnectors(t, ac)
       );
@@ -202,4 +222,36 @@ export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
   );
 
   return toReturn;
+}
+
+export function createWorkspaceBlocksFromSidebar(
+  s: FixedBlocksSidebarCategoryDescription
+): BlocklyWorkspaceBlock[] {
+  return (
+    s.blocks
+      // Take the only or the last available node (as it will be the most specific)
+      .map((b) =>
+        Array.isArray(b.defaultNode) ? b.defaultNode[0] : b.defaultNode
+      )
+      // Remove anything that requires tailoring
+      .filter(
+        (n): n is NodeDescription =>
+          !Object.values(n.properties).some((p) =>
+            isNodeDerivedPropertyDescription(p)
+          )
+      )
+      .map((b) => {
+        return {
+          type: b.language + "." + b.name,
+          properties: b.properties,
+        };
+      })
+  );
+}
+
+export function workspaceBlockToXml(b: BlocklyWorkspaceBlock): string {
+  const properties = Object.entries(b.properties).map(
+    ([k, v]) => `<field name="${k}">${v}</field>`
+  );
+  return `<block type="${b.type}">${properties.join()}</block>`;
 }

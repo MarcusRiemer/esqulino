@@ -1,8 +1,10 @@
-import { Component, Inject, LOCALE_ID } from "@angular/core";
+import { Component } from "@angular/core";
 import { of } from "rxjs";
 
-import { ProjectProposals } from "./academica-data/project-proposals";
 import { KnownLangString } from "../shared/multilingual-string.description";
+import { CurrentLocaleService } from "../current-locale.service";
+
+import { ProjectProposals } from "./academica-data/project-proposals";
 
 interface DevelopmentLink {
   icon: string;
@@ -92,10 +94,10 @@ const DevelopmentLinks: DevelopmentLink[] = [
   templateUrl: "templates/development.html",
 })
 export class DevelopmentComponent {
-  constructor(@Inject(LOCALE_ID) readonly localeId: string) {}
+  constructor(private readonly _lang: CurrentLocaleService) {}
 
   readonly projectProposals = of(
-    ProjectProposals.filter((p) => p.language === this.localeId)
+    ProjectProposals.filter((p) => p.language === this._lang.localeId)
   );
 
   readonly developmentLinks = of(DevelopmentLinks);

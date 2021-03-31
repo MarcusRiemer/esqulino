@@ -1,0 +1,133 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 34e411af-0bac-4d62-b40f-b188bf53efba
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Grammar: Exp'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: ab09ba24-f1b9-442d-8e94-d35d525a74a4
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Exp", "languageName": "Exp"}}],
+    "nodes": [{"name": "typedef", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Const", "languageName":
+    "Exp"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "BinOp", "languageName": "Exp"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "Exp", "languageName": "Exp"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "property", "language": "MetaGrammar", "properties": {"base": "integer",
+    "name": "Val"}}]}, "language": "MetaGrammar", "properties": {"typeName": "Const",
+    "languageName": "Exp"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
+    "terminal", "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "keyword"}}]}, "language": "MetaGrammar", "properties": {"symbol": "("}},
+    {"name": "children", "children": {"references": [{"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "Exp", "languageName": "Exp"}}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "lhs"}}, {"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "op"}}, {"name":
+    "children", "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "Exp", "languageName": "Exp"}}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "rhs"}}, {"name": "terminal", "children":
+    {"tags": [{"name": "tag", "language": "MetaGrammar", "properties": {"name": "keyword"}}]},
+    "language": "MetaGrammar", "properties": {"symbol": ")"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "BinOp", "languageName": "Exp"}}]}, "language": "MetaGrammar",
+    "properties": {"name": "Exp"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-03-18 21:26:41.653243000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-03-18 21:33:31.437858000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "Exp": {
+          "Exp": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "Exp",
+                "typeName": "Const"
+              },
+              {
+                "languageName": "Exp",
+                "typeName": "BinOp"
+              }
+            ]
+          },
+          "Const": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "integer",
+                "name": "Val"
+              }
+            ]
+          },
+          "BinOp": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "terminal",
+                "symbol": "(",
+                "tags": [
+                  "keyword"
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "lhs",
+                "nodeTypes": [
+                  {
+                    "languageName": "Exp",
+                    "typeName": "Exp"
+                  }
+                ]
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "op"
+              },
+              {
+                "type": "sequence",
+                "name": "rhs",
+                "nodeTypes": [
+                  {
+                    "languageName": "Exp",
+                    "typeName": "Exp"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": ")",
+                "tags": [
+                  "keyword"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "visualisations": {},
+      "foreignVisualisations": {},
+      "root": {
+        "languageName": "Exp",
+        "typeName": "Exp"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

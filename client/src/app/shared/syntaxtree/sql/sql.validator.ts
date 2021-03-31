@@ -55,7 +55,7 @@ const FUNCTION_ARGUMENT_COUNT: Readonly<{
  * in the `FROM` component.
  */
 export class SqlValidator extends SpecializedValidator {
-  validateFromRoot(ast: AST.Node, context: ValidationContext) {
+  validateFromRoot(ast: AST.SyntaxNode, context: ValidationContext) {
     // Most in depth checks require a schema
     if (isDatabaseSchemaAdditionalContext(context.additional)) {
       const schema = context.additional.databaseSchema;
@@ -80,7 +80,7 @@ export class SqlValidator extends SpecializedValidator {
    * - All columns only mention existing columns on existing tables
    */
   private validateNamesAgainstSchema(
-    ast: AST.Node,
+    ast: AST.SyntaxNode,
     schema: Schema,
     context: ValidationContext
   ) {
@@ -121,7 +121,7 @@ export class SqlValidator extends SpecializedValidator {
   }
 
   private validateReferenceNamesExistingAndUnique(
-    ast: AST.Node,
+    ast: AST.SyntaxNode,
     context: ValidationContext
   ) {
     // Collects all names that seem to be available
@@ -173,7 +173,7 @@ export class SqlValidator extends SpecializedValidator {
    * Attempts to guess whether an aggregation function is used meaningfully.
    */
   private validateAggregationGroupBy(
-    ast: AST.Node,
+    ast: AST.SyntaxNode,
     context: ValidationContext
   ) {
     // Are there any calls to aggregation functions without GROUP BY?
@@ -197,7 +197,10 @@ export class SqlValidator extends SpecializedValidator {
     }
   }
 
-  private validateNumberOfArguments(ast: AST.Node, context: ValidationContext) {
+  private validateNumberOfArguments(
+    ast: AST.SyntaxNode,
+    context: ValidationContext
+  ) {
     ast
       .getNodesOfType({ languageName: "sql", typeName: "functionCall" })
       .forEach((callNode) => {

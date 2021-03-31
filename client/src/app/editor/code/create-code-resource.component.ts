@@ -1,8 +1,10 @@
 import { Component } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { first, switchMap } from "rxjs/operators";
+import { filter, first, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
+
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
@@ -14,6 +16,7 @@ import { CodeResourceService } from "../coderesource.service";
  */
 @Component({
   templateUrl: "templates/create-code-resource.html",
+  selector: "create-code-resource",
 })
 export class CreateCodeResourceComponent {
   public resourceName: string;
@@ -25,7 +28,8 @@ export class CreateCodeResourceComponent {
     private _projectService: ProjectService,
     private _codeResourceService: CodeResourceService,
     private _router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _performData: PerformDataService
   ) {}
 
   /**
@@ -46,9 +50,17 @@ export class CreateCodeResourceComponent {
   }
 
   /**
+   * These permissions are required to add a code resource
+   */
+  readonly createCodeResourcePermission = this._performData.project.update(
+    this._projectService.cachedProject.id
+  );
+
+  /**
    * @return The BlockLanguages that are available for creation.
    */
   readonly availableBlockLanguages$ = this._projectService.activeProject.pipe(
+    filter((p) => !!p),
     switchMap((p) => of(p.projectBlockLanguages))
   );
 
@@ -59,15 +71,12 @@ export class CreateCodeResourceComponent {
     const p = this._projectService.cachedProject;
     const b = p.getBlockLanguage(this.blockLanguageId);
 
-    const res = await this._codeResourceService
-      .createCodeResource(
-        p,
-        this.resourceName,
-        this.blockLanguageId,
-        b.defaultProgrammingLanguageId
-      )
-      .pipe(first())
-      .toPromise();
+    const res = await this._codeResourceService.createCodeResource(
+      p,
+      this.resourceName,
+      this.blockLanguageId,
+      b.defaultProgrammingLanguageId
+    );
 
     p.addCodeResource(res);
     this._router.navigate([res.id], { relativeTo: this._route.parent });

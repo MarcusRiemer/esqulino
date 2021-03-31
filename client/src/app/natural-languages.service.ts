@@ -1,9 +1,10 @@
-import { Injectable, Inject, LOCALE_ID } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 import { Location, DOCUMENT } from "@angular/common";
 
 import { LinkService } from "./link.service";
 import { environment } from "../environments/environment";
 import { MultiLangString } from "./shared/multilingual-string.description";
+import { CurrentLocaleService } from "./current-locale.service";
 
 /**
  * @return The unicode string that represents a flag for the given locale
@@ -27,17 +28,18 @@ export class NaturalLanguagesService {
   constructor(
     private readonly _location: Location,
     private readonly _linkService: LinkService,
+    private readonly currentLocale: CurrentLocaleService,
     @Inject(DOCUMENT)
-    private readonly document: Document,
-    @Inject(LOCALE_ID)
-    private readonly _localeId: string
+    private readonly document: Document
   ) {}
+
+  readonly localeId = this.currentLocale.localeId;
 
   public readonly availableLanguages = environment.availableLanguages;
 
   updateRootLangAttribute() {
     const htmlElement = this.document.querySelector("html");
-    htmlElement.lang = this._localeId;
+    htmlElement.lang = this.localeId;
   }
 
   updateAlternateUrls() {
@@ -81,10 +83,10 @@ export class NaturalLanguagesService {
 
     // Match of current language?
     if (
-      presentLanguages.includes(this._localeId) &&
-      value[this._localeId] != null
+      presentLanguages.includes(this.localeId) &&
+      value[this.localeId] != null
     ) {
-      return this._localeId;
+      return this.localeId;
     }
 
     // Try configured languages

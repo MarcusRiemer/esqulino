@@ -4,6 +4,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 
+import { OverlayModule } from "@angular/cdk/overlay";
 import { PortalModule } from "@angular/cdk/portal";
 
 import { MatButtonModule } from "@angular/material/button";
@@ -60,21 +61,15 @@ import {
   IndividualBlockLanguageDataService,
 } from "./serverdata";
 
-import { RequestResetPasswordComponent } from "./auth/request-reset-password.component";
 import { ProviderButtonComponent } from "./auth/provider-button.component";
-import { SignInComponent } from "./auth/sign-in.component";
-import { SignUpComponent } from "./auth/sign-up.component";
 import { ValidateInputComponent } from "./validate-input.component";
-import { ChangePasswordComponent } from "./auth/change-password.component";
 import { SideNavService } from "./side-nav.service";
-import { RequestVerifyEmailComponent } from "./auth/request-verify-email.component";
 import { ProvidersAllButtonsComponent } from "./auth/providers-all-buttons.component";
 import { IsUserGuard } from "./guards/is-user.guard";
 import { IsAdminGuard } from "./guards/is-admin.guard";
-import { MayPerformComponent } from "./may-perform.component";
+import { MayPerformComponent } from "./authorisation/may-perform.component";
 import { PerformDataService } from "./authorisation/perform-data.service";
 import { MessageDialogComponent } from "./message-dialog.component";
-import { MasterGuard } from "./guards/master-guard";
 import { UnexpectedLogoutInterceptor } from "./unexpected-logout.interceptor";
 import { UserService } from "./auth/user.service";
 import { ResourceReferencesService } from "./resource-references.service";
@@ -85,7 +80,10 @@ import { PaginatorTableGraphqlComponent } from "./table/paginator-table-graphql.
 import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
 import { ServerTasksComponent } from "./server-tasks.component";
 import { ServerTasksService } from "./serverdata/server-tasks.service";
-import { OverlayModule } from "@angular/cdk/overlay";
+import { MayPerformService } from "./authorisation/may-perform.service";
+import { LifecycleLogDirective } from "./lifecycle-log.directive";
+import { ChangeDetectionLogDirective } from "./change-detection-log.directive";
+import { UrlFriendlyIdPipe } from "./url-friendly-id.pipe";
 
 const dataServices = [
   IndividualGrammarDataService,
@@ -130,6 +128,7 @@ const materialModules = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
     PortalModule,
@@ -155,13 +154,8 @@ const materialModules = [
     UserButtonsComponent,
     LoginWrapperComponent,
     ProviderButtonComponent,
-    SignInComponent,
-    SignUpComponent,
     ValidateInputComponent,
     FocusDirective,
-    RequestResetPasswordComponent,
-    RequestVerifyEmailComponent,
-    ChangePasswordComponent,
     ValidateInputComponent,
     ProviderShowComponent,
     MayPerformComponent,
@@ -171,10 +165,14 @@ const materialModules = [
     PaginatorTableGraphqlComponent,
     ConditionalDisplayDirective,
     ServerTasksComponent,
+    LifecycleLogDirective,
+    ChangeDetectionLogDirective,
+    UrlFriendlyIdPipe,
   ],
   exports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     PortalModule,
     HttpClientModule,
@@ -196,13 +194,8 @@ const materialModules = [
     UserButtonsComponent,
     LoginWrapperComponent,
     ProviderButtonComponent,
-    SignInComponent,
-    SignUpComponent,
     ValidateInputComponent,
     FocusDirective,
-    RequestResetPasswordComponent,
-    RequestVerifyEmailComponent,
-    ChangePasswordComponent,
     MayPerformComponent,
     ProviderShowComponent,
     MessageDialogComponent,
@@ -211,6 +204,9 @@ const materialModules = [
     PaginatorTableGraphqlComponent,
     ServerTasksComponent,
     ConditionalDisplayDirective,
+    LifecycleLogDirective,
+    ChangeDetectionLogDirective,
+    UrlFriendlyIdPipe,
   ],
 })
 export class SharedAppModule {
@@ -232,10 +228,10 @@ export class SharedAppModule {
         SideNavService,
         ...dataServices,
         LoggedInGuard,
-        MasterGuard,
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
+        MayPerformService,
         {
           provide: ResourceReferencesService,
           useClass: ResourceReferencesOnlineService,

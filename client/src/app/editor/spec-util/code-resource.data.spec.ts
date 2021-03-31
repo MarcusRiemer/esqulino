@@ -9,7 +9,15 @@ export const buildMetaCodeResourceListItem = (
 ): MetaCodeResourceListDescription => {
   return Object.assign(
     {},
-    { name: "Empty Meta Code Resource" },
+    {
+      name: "Empty Meta Code Resource",
+      project: {
+        name: {
+          de: "deutsch",
+          en: "english",
+        },
+      },
+    },
     override || {},
     { id: generateUUIDv4() }
   );

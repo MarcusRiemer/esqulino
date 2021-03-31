@@ -1,14 +1,14 @@
 --- !ruby/object:Project
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 5c8569ae-f318-4e07-8766-6e5902e066d7
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: db-sequence
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: '"de"=>"Test: Sequence DB"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 5c8569ae-f318-4e07-8766-6e5902e066d7
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false

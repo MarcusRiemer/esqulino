@@ -14,9 +14,7 @@ const urlResolver = (serverApi: ServerApiService) => {
  * Cached access to individual grammars
  */
 @Injectable()
-export class IndividualGrammarDataService extends IndividualData<
-  GrammarDescription
-> {
+export class IndividualGrammarDataService extends IndividualData<GrammarDescription> {
   constructor(serverApi: ServerApiService, http: HttpClient) {
     super(http, urlResolver(serverApi), "Grammar");
   }

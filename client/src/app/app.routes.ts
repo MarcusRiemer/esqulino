@@ -1,14 +1,13 @@
 import { Routes, RouterModule } from "@angular/router";
 
-import { editorRoutes } from "./editor/editor.routes";
 import { frontRoutes } from "./front/front.routes";
 import { IsAdminGuard } from "./shared/guards/is-admin.guard";
-import { MasterGuard } from "./shared/guards/master-guard";
 
 const AppRoutes: Routes = [
   {
     path: "editor/:projectId",
-    children: editorRoutes,
+    loadChildren: () =>
+      import("./editor/editor.module").then((m) => m.EditorModuleWithRoutes),
   },
   {
     path: "about",
@@ -24,10 +23,7 @@ const AppRoutes: Routes = [
     path: "admin",
     loadChildren: () =>
       import("./admin/admin.module").then((m) => m.AdminModule),
-    data: {
-      guards: [IsAdminGuard],
-    },
-    canActivate: [MasterGuard],
+    canActivate: [IsAdminGuard],
   },
   {
     path: "",

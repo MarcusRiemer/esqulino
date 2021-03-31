@@ -12,9 +12,10 @@ import {
 import { generateSidebar } from "../../shared/block/generator/sidebar";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
 import { IndividualGrammarDataService } from "../../shared/serverdata";
-import { allPresentTypes } from "../../shared/syntaxtree/grammar-type-util";
+import { allConcreteTypes } from "../../shared/syntaxtree/grammar-type-util";
 
 import { CurrentCodeResourceService } from "../current-coderesource.service";
+import { SidebarDataService } from "../sidebar-data.service";
 
 import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.component";
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
@@ -60,13 +61,14 @@ export class CodeSidebarComponent {
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
     private _resourceReferences: ResourceReferencesService,
-    private _grammarData: IndividualGrammarDataService
+    private _grammarData: IndividualGrammarDataService,
+    private _sidebarDataService: SidebarDataService
   ) {}
 
   readonly currentCodeResource$ = this._currentCodeResource.currentResource;
 
   readonly currentBlockLanguageId$ = this.currentCodeResource$.pipe(
-    flatMap((res) => res.blockLanguageId)
+    flatMap((res) => res.blockLanguageId$)
   );
 
   readonly hasBlockLanguage$ = this.currentBlockLanguageId$.pipe(
@@ -82,14 +84,12 @@ export class CodeSidebarComponent {
     map((id) => this._resourceReferences.getBlockLanguage(id, "throw"))
   );
 
-  private readonly _fallbackSidebarDescription$: Observable<
-    FixedBlocksSidebarDescription
-  > = this.currentBlockLanguage$.pipe(
+  private readonly _fallbackSidebarDescription$: Observable<FixedBlocksSidebarDescription> = this.currentBlockLanguage$.pipe(
     flatMap((b) => this._grammarData.getLocal(b.grammarId, "request")),
     map((g) => {
       // Extract the types that can be generated meaningfully
       const toGenerate: { [grammarName: string]: string[] } = {};
-      const allTypes = allPresentTypes(g, (t) => t.type === "concrete");
+      const allTypes = allConcreteTypes(g, (t) => t.type === "concrete");
       Object.entries(allTypes).forEach(([name, types]) => {
         toGenerate[name] = [...Object.keys(types)];
       });
@@ -110,18 +110,20 @@ export class CodeSidebarComponent {
   readonly fallbackSidebar$: Observable<FixedBlocksSidebar> = combineLatest(
     this.currentBlockLanguage$,
     this._fallbackSidebarDescription$
-  ).pipe(map(([b, desc]) => new FixedBlocksSidebar(b, desc)));
+  ).pipe(map(([_b, desc]) => new FixedBlocksSidebar(desc)));
 
   /**
    * The actual sidebars that need to be spawned for the current language.
    */
   readonly portalInstances$ = this.currentBlockLanguage$.pipe(
-    map((blockLanguage) =>
-      blockLanguage.sidebars.map((s) => {
-        return new ComponentPortal(
-          resolvePortalComponentId(s.portalComponentTypeId)
-        );
-      })
+    map((b) =>
+      this._sidebarDataService
+        .instantiateSidebars(b.sidebarDesriptions)
+        .map((s) => {
+          return new ComponentPortal(
+            resolvePortalComponentId(s.portalComponentTypeId)
+          );
+        })
     )
   );
 }

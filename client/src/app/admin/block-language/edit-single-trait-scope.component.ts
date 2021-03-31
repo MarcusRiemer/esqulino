@@ -16,7 +16,7 @@ import {
   FullNodeAttributeDescription,
   getFullQualifiedAttributes,
   getConcreteTypes,
-  allPresentTypes,
+  allConcreteTypes,
 } from "../../shared/syntaxtree/grammar-type-util";
 
 import { EditBlockLanguageService } from "./edit-block-language.service";
@@ -86,7 +86,7 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
       .getSingle(this._editedBlockLanguageService.editedSubject.grammarId)
       .pipe(
         first(),
-        map((g) => allPresentTypes(g))
+        map((g) => allConcreteTypes(g))
       )
       .subscribe((languages) => {
         this.allPossibleAttributes = getFullQualifiedAttributes(languages);

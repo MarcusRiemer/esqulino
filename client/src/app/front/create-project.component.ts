@@ -1,4 +1,4 @@
-import { Component, LOCALE_ID, Inject } from "@angular/core";
+import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { BehaviorSubject } from "rxjs";
@@ -10,6 +10,7 @@ import {
 } from "../shared/project.description";
 import { MultiLangString } from "../shared/multilingual-string.description";
 import { CreateProjectGQL } from "../../generated/graphql";
+import { CurrentLocaleService } from "../current-locale.service";
 
 @Component({
   templateUrl: "templates/create-project.html",
@@ -29,8 +30,7 @@ export class CreateProjectComponent {
   public constructor(
     private _createProjectGQL: CreateProjectGQL,
     private _router: Router,
-    @Inject(LOCALE_ID)
-    private readonly _localeId: string
+    private readonly _locale: CurrentLocaleService
   ) {}
 
   // Defines how a valid slug could look like
@@ -55,7 +55,7 @@ export class CreateProjectComponent {
       this._requested$.next(true);
 
       const localizedName: MultiLangString = {};
-      localizedName[this._localeId] = this.localizedName;
+      localizedName[this._locale.localeId] = this.localizedName;
       this.params.name = localizedName;
       try {
         const res = await this._createProjectGQL

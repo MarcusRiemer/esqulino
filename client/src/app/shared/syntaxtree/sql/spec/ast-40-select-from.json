@@ -1,0 +1,37 @@
+{
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "starOperator",
+                "language": "sql"
+              }
+            ]
+          }
+        }
+      ],
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "Charakter"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }

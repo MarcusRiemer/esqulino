@@ -10,19 +10,15 @@
     <div mat-card-avatar>
       <i class="fa fa-{{ link.icon }} fa-3x" aria-hidden="true"></i>
     </div>
-    <mat-card-title>
-      {{ link.title[localeId] }}
-    </mat-card-title>
+    <mat-card-title>{{ link.title | currentLanguage }}</mat-card-title>
     <mat-card-subtitle>
       <a [href]="link.href">
         <img *ngIf="link.titleBadgeImage" [src]="link.titleBadgeImage" />
-        {{ link.subtitle[localeId] }}
+        {{ link.subtitle | currentLanguage }}
       </a>
     </mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content>
-    {{ link.content[localeId] }}
-  </mat-card-content>
+  <mat-card-content>{{ link.content | currentLanguage }}</mat-card-content>
 </mat-card>
 
 <h1 i18n="@@projectProposalsHeadline">Projektvorschläge</h1>
@@ -87,9 +83,7 @@
   class="academia-item"
   [id]="proposal.id"
 >
-  <mat-card-title>
-    {{ proposal.title }}
-  </mat-card-title>
+  <mat-card-title>{{ proposal.title }}</mat-card-title>
   <mat-card-content>
     <div [innerHTML]="proposal.text"></div>
     <p>

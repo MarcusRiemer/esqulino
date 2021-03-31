@@ -13,7 +13,7 @@ import { FocusDirective } from "../../../shared/focus-element.directive";
 import {
   LanguageService,
   NodeDescription,
-  Tree,
+  SyntaxTree,
   CodeResource,
 } from "../../../shared";
 import {
@@ -29,7 +29,7 @@ import {
   ensureLocalBlockLanguageRequest,
   buildBlockLanguage,
   ensureLocalGrammarRequest,
-  buildGrammar,
+  mkGrammarDescription,
 } from "../../spec-util";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
@@ -58,7 +58,9 @@ describe("BlockHostComponent", () => {
       declarations: [FocusDirective, ...BLOCK_RENDER_COMPONENTS],
     }).compileComponents();
 
-    const grammarDesc = await ensureLocalGrammarRequest(buildGrammar({}));
+    const grammarDesc = await ensureLocalGrammarRequest(
+      mkGrammarDescription({})
+    );
 
     const blockLangDesc = await ensureLocalBlockLanguageRequest(
       buildBlockLanguage({
@@ -94,7 +96,7 @@ describe("BlockHostComponent", () => {
       undefined
     );
 
-    component.node = new Tree(nodeDesc).rootNode;
+    component.node = new SyntaxTree(nodeDesc).rootNode;
     component.blockLanguage = blockLanguage;
     component.codeResource = codeResource;
 

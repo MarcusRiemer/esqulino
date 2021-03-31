@@ -1,0 +1,57 @@
+--- !ruby/object:News
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 76cb6bd9-6f9c-4f86-9d74-9cab530c6294
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: title
+  value_before_type_cast: '"de"=>"Hallo Blockly", "en"=>"Hello Blockly"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: text
+  value_before_type_cast: |-
+    "de"=>"Dem eingebauten Block-Editor wird in Zukunft als Alternative ein Blockly basierter Editor zur Seite gestellt. Die Integration ist beileibe noch nicht abgeschlossen, erste Tests zeigen aber, dass das Grammatik-Format hinreichend universell ist um daraus auch Blockly-Editoren zu erzeugen.
+
+    <div class=\"row\">
+    <div class=\"col-lg-6\">
+    <a href=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-sql.png\">
+    <img alt=\"Blockly Prototyp für SQL\" class=\"img-fluid\" src=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-sql.png\">
+    </a>
+    </div>
+    <div class=\"col-lg-6\">
+    <a href=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-trucklino.png\">
+    <img alt=\"Blockly Prototyp für Trucklino\" class=\"img-fluid\" src=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-trucklino.png\">
+    </a>
+    </div>
+    </div>
+
+    Mit den nächsten Aktualisierungen sollen sich in gewohnter Blockly-Manier unabhängige Blöcke wie z.B. Funktionen frei platzieren lassen.", "en"=>"The built-in block editor will be joined by a Blockly-based editor as an alternative in the future. The integration is by no means finished yet, but first tests show that the grammar format is sufficiently universal to create Blockly editors from it.
+
+
+    <div class=\"row\">
+    <div class=\"col-lg-6\">
+    <a href=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-sql.png\">
+    <img alt=\"Blockly Prototyp für SQL\" class=\"img-fluid\" src=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-sql.png\">
+    </a>
+    </div>
+    <div class=\"col-lg-6\">
+    <a href=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-trucklino.png\">
+    <img alt=\"Blockly Prototyp für Trucklino\" class=\"img-fluid\" src=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-trucklino.png\">
+    </a>
+    </div>
+    </div>
+
+    With the next updates it should be possible to freely place independent blocks (such as functions) in the usual Blockly manner."
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: published_from
+  value_before_type_cast: 2021-01-27 00:00:00.000000000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-01-28 09:25:31.707674000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-01-28 09:33:10.162178000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: user_id
+  value_before_type_cast: 00000000-0000-0000-0000-000000000001
+new_record: false
+active_record_yaml_version: 2

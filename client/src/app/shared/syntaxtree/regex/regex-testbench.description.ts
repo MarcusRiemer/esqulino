@@ -1,4 +1,3 @@
-import { NodeDescription } from "../syntaxtree.description";
 import * as AST from "../syntaxtree";
 
 /**
@@ -32,7 +31,7 @@ export interface RegexTestCaseDescription {
 /**
  * Reads a RegEx-testbench from a Syntaxtree.
  */
-export function readFromNode(ast: AST.Node): RegexTestBenchDescription {
+export function readFromNode(ast: AST.SyntaxNode): RegexTestBenchDescription {
   const toReturn = {
     cases: ast.getChildrenInCategory("cases").map(readCaseNode),
   };
@@ -40,7 +39,7 @@ export function readFromNode(ast: AST.Node): RegexTestBenchDescription {
   return toReturn;
 }
 
-function readCaseNode(ast: AST.Node): RegexTestCaseDescription {
+function readCaseNode(ast: AST.SyntaxNode): RegexTestCaseDescription {
   switch (ast.typeName) {
     case "caseSingle": {
       return {
@@ -64,6 +63,6 @@ function readCaseNode(ast: AST.Node): RegexTestCaseDescription {
   }
 }
 
-function readStringNode(ast: AST.Node): string {
+function readStringNode(ast: AST.SyntaxNode): string {
   return ast.properties["value"];
 }

@@ -92,6 +92,14 @@ export interface BlockRootComponentDescription
 }
 
 /**
+ * Displays a blockly editor
+ */
+export interface BlocklyComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "blockly";
+}
+
+/**
  * Displays a readonly JSON version of the AST
  */
 export interface JsonAstComponentDescription
@@ -177,6 +185,7 @@ export interface TruckWorldEditorMenuComponentDescription
 export type EditorComponentDescription =
   | CodeResourceSettingsComponentDescription
   | BlockRootComponentDescription
+  | BlocklyComponentDescription
   | QueryPreviewComponentDescription
   | ValidatorComponentDescription
   | CodeGeneratorComponentDescription
@@ -233,9 +242,7 @@ export interface BlockLanguageListItemDescription
   generated: boolean;
 }
 
-export type BlockLanguageListResponseDescription = JsonApiListResponse<
-  BlockLanguageListItemDescription
->;
+export type BlockLanguageListResponseDescription = JsonApiListResponse<BlockLanguageListItemDescription>;
 
 export function isBlockLanguageDescription(
   obj: any

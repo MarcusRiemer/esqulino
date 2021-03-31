@@ -1,5 +1,4 @@
 class AuthController < ApplicationController
-  include AuthHelper
   include UserHelper
   include LocaleHelper
 

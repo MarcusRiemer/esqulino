@@ -6,9 +6,11 @@ query FullGrammar($id: ID!) {
       programmingLanguageId
       slug
       generatedFromId
-      foreignTypes
-      root
       types
+      foreignTypes
+      visualisations
+      foreignVisualisations
+      root
       includes
       visualizes
       blockLanguages {

@@ -11,7 +11,6 @@ import { first, tap } from "rxjs/operators";
 
 import { UserService } from "./user.service";
 import { UserDescription } from "./user.description";
-import { ServerProviderDescription } from "./provider.description";
 
 import { ServerDataService } from "../serverdata/server-data.service";
 import { ServerApiService } from "../serverdata/serverapi.service";
@@ -32,20 +31,6 @@ function mkGuestResponse() {
     displayName: "Guest",
     roles: ["guest"],
     email: null,
-  };
-}
-
-function mkIdentitiesResponse(): ServerProviderDescription {
-  return {
-    providers: [
-      {
-        id: "121212121212121212",
-        type: "github",
-        confirmed: true,
-        changes: { primary: null },
-      },
-    ],
-    primary: "blattwerkzeug.de",
   };
 }
 
@@ -187,63 +172,6 @@ describe(`UserService`, () => {
     expect(numCalls)
       .withContext("Server errors could push a new user state, is this good?")
       .toEqual(0);
-  });
-
-  it("Sign up and sign in", async () => {
-    const service = instantiate();
-    const httpTestingController = TestBed.inject(HttpTestingController);
-    const serverApi = TestBed.inject(ServerApiService);
-    const guest = mkGuestResponse();
-    const user = mkUserResponse("Tom");
-    const login = { email: "", username: "", password: "" };
-
-    let callCounter = 0;
-
-    service.userData$.pipe(tap((_) => callCounter++)).subscribe();
-
-    const signUp = service.signUp$(login).pipe(first()).toPromise();
-
-    httpTestingController.expectOne(serverApi.getSignUpUrl()).flush(guest);
-
-    const guestData = await signUp;
-
-    expect(callCounter).withContext("Single Subscription active").toEqual(0);
-
-    expect(guestData).toEqual(guest);
-
-    const signIn = service.signIn$(login).pipe(first()).toPromise();
-
-    httpTestingController
-      .expectOne(serverApi.getSignInUrl("identity"))
-      .flush(user);
-
-    const userData = await signIn;
-
-    expect(userData).toEqual(user);
-    expect(callCounter).withContext("Update after sign in").toEqual(1);
-  });
-
-  it("addEmail", async () => {
-    const service = instantiate();
-    const httpTestingController = TestBed.inject(HttpTestingController);
-    const serverApi = TestBed.inject(ServerApiService);
-    const identities = mkIdentitiesResponse();
-    const addEmailData = { email: "", password: "" };
-
-    let callCounter = 0;
-
-    service.identities.pipe(tap((_) => callCounter++)).subscribe();
-
-    expect(callCounter).toEqual(1);
-
-    const addEmail = service.addEmail$(addEmailData).pipe(first()).toPromise();
-
-    httpTestingController.expectOne(serverApi.getSignUpUrl()).flush(identities);
-
-    const response = await addEmail;
-
-    expect(response).toEqual(identities);
-    expect(callCounter).toEqual(2);
   });
 
   it("unexpectedLogout", async () => {

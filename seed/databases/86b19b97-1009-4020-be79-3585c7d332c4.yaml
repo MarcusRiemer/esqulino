@@ -1,21 +1,14 @@
 --- !ruby/object:ProjectDatabase
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 357f9a1c-7db5-420c-bd9a-7ee7d49545d4
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision:
-      scale:
-      limit:
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 86b19b97-1009-4020-be79-3585c7d332c4
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: default
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 86b19b97-1009-4020-be79-3585c7d332c4
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "ereignis", "columns": [{"name": "ereignis_id",

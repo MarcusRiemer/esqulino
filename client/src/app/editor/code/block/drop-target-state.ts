@@ -2,7 +2,7 @@ import {
   QualifiedTypeName,
   NodeLocation,
   Validator,
-  Tree,
+  SyntaxTree,
 } from "../../../shared/syntaxtree";
 import { embraceNode } from "../../../shared/syntaxtree/drop-embrace";
 import { _cardinalityAllowsInsertion } from "../../../shared/syntaxtree/drop-util";
@@ -29,7 +29,7 @@ function dropLocationChildGroupName(loc: NodeLocation): string {
 /**
  * @return true, if the targeted child group has any children.
  */
-export function dropLocationHasChildren(tree: Tree, loc: NodeLocation) {
+export function dropLocationHasChildren(tree: SyntaxTree, loc: NodeLocation) {
   if (loc.length > 0) {
     const dropLocation = loc.slice(0, -1);
     const dropCategory = dropLocationChildGroupName(loc);
@@ -46,7 +46,7 @@ export function dropLocationHasChildren(tree: Tree, loc: NodeLocation) {
 const isLegalImmediateChild = (
   drag: CurrentDrag,
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   loc: NodeLocation
 ) => {
   if (!drag || loc.length === 0) {
@@ -97,7 +97,7 @@ const isLegalImmediateChild = (
  */
 export const _isChildRequiredSchema = (
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   dropLocation: NodeLocation
 ) => {
   // Only empty trees want insertions at the root
@@ -124,7 +124,7 @@ function _buildExpression(
   drag: CurrentDrag,
   dropLocation: NodeLocation,
   validator: Validator,
-  tree: Tree,
+  tree: SyntaxTree,
   visibilityExpr: VisualBlockDescriptions.VisibilityExpression
 ): () => boolean {
   // Would the new tree ba a completly valid tree?
@@ -175,7 +175,7 @@ export function targetState(
   drag: CurrentDrag,
   dropLocation: NodeLocation,
   validator: Validator,
-  tree: Tree
+  tree: SyntaxTree
 ): DragTargetState {
   // Does the description come with a visibility expression? If not assume isEmpty
   let visibilityExpr: VisualBlockDescriptions.VisibilityExpression = {

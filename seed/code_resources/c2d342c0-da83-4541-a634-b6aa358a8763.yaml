@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 32056357-a38a-4258-9046-b8814cc35a55
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 32056357-a38a-4258-9046-b8814cc35a55
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: c2d342c0-da83-4541-a634-b6aa358a8763
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Beitrag mit Kommentaren
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: c2d342c0-da83-4541-a634-b6aa358a8763
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "querySelect", "children": {"from": [{"name":

@@ -70,8 +70,13 @@ export class OverviewBlockLanguageComponent
     "actions",
   ];
   async onDeleteBlockLanguage(id: string) {
-    await this._destroyBlockLanguage.mutate({ id: id }).toPromise();
-    this.query.refetch();
+    const res = await this._destroyBlockLanguage.mutate({ id: id }).toPromise();
+    const errors = res.data.destroyBlockLanguage?.errors;
+    if (errors.length > 0) {
+      alert(errors);
+    } else {
+      this.query.refetch();
+    }
   }
 
   onRefresh() {

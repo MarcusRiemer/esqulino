@@ -9,6 +9,8 @@ query GrammarDescriptionItem($id: ID!) {
       foreignTypes
       root
       types
+      visualisations
+      foreignVisualisations
     }
   }
 }

@@ -148,9 +148,7 @@
               <div class="text-muted" *ngIf="!colSelected(i) else normalHeader">
                 {{ col }}
               </div>
-              <ng-template #normalHeader>
-                {{ col }}
-              </ng-template>
+              <ng-template #normalHeader>{{ col }}</ng-template>
             </th>
           </tr>
         </thead>
@@ -161,9 +159,7 @@
               <div class="text-muted" *ngIf="!colSelected(j) else normalCol">
                 {{ row[j] }}
               </div>
-              <ng-template #normalCol>
-                {{ row[j] }}
-              </ng-template>
+              <ng-template #normalCol>{{ row[j] }}</ng-template>
             </td>
           </tr>
         </tbody>

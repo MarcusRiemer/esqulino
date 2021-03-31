@@ -22,7 +22,7 @@ import { VisualBlockDescriptions, BlockLanguage } from "../../../shared/block";
 
 import {
   ensureLocalGrammarRequest,
-  buildGrammar,
+  mkGrammarDescription,
   ensureLocalBlockLanguageRequest,
   buildBlockLanguage,
 } from "../../spec-util";
@@ -59,7 +59,7 @@ describe(`BlockRenderErrorComponent`, () => {
     const renderData = TestBed.inject(RenderedCodeResourceService);
 
     const grammarDesc = await ensureLocalGrammarRequest(
-      buildGrammar({ types: { spec: types } })
+      mkGrammarDescription({ types: { spec: types } })
     );
 
     const blockLangDesc = await ensureLocalBlockLanguageRequest(

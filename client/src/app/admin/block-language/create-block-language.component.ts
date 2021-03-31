@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 
 import { map, first, pluck } from "rxjs/operators";

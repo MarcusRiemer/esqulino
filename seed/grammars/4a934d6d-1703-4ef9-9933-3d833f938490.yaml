@@ -1,19 +1,19 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 4a934d6d-1703-4ef9-9933-3d833f938490
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Meta HTML
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 4a934d6d-1703-4ef9-9933-3d833f938490
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-06-07 11:45:48.278832000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-06-07 12:10:14.578180000 Z
+  value_before_type_cast: 2021-02-18 14:13:57.563383000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
@@ -23,23 +23,43 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: types
   value_before_type_cast: '{"html": {"body": {"type": "concrete", "attributes": [{"type":
-    "container", "children": [{"type": "terminal", "symbol": "<body>"}, {"name": "elements",
-    "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "heading",
-    "languageName": "html"}}, {"occurs": "*", "nodeType": {"typeName": "paragraph",
-    "languageName": "html"}}]}, {"type": "terminal", "symbol": "</body>"}], "orientation":
-    "vertical"}]}, "head": {"type": "concrete", "attributes": []}, "heading": {"type":
-    "concrete", "attributes": [{"type": "container", "children": [{"type": "terminal",
-    "symbol": "<h1>"}, {"base": "string", "name": "text", "type": "property"}, {"type":
-    "terminal", "symbol": "</h1>"}], "orientation": "horizontal"}]}, "document": {"type":
-    "concrete", "attributes": [{"type": "container", "children": [{"type": "terminal",
-    "symbol": "<html>"}, {"name": "head", "type": "sequence", "nodeTypes": [{"occurs":
-    "?", "nodeType": {"typeName": "head", "languageName": "html"}}]}, {"name": "body",
-    "type": "sequence", "nodeTypes": [{"occurs": "?", "nodeType": {"typeName": "body",
-    "languageName": "html"}}]}, {"type": "terminal", "symbol": "</html>"}], "orientation":
-    "vertical"}]}, "paragraph": {"type": "concrete", "attributes": [{"type": "container",
-    "children": [{"type": "terminal", "symbol": "<p>"}, {"base": "string", "name":
-    "text", "type": "property"}, {"type": "terminal", "symbol": "</p>"}], "orientation":
-    "vertical"}]}}}'
+    "container", "children": [{"type": "container", "children": [{"type": "terminal",
+    "symbol": "<"}, {"tags": ["keyword"], "type": "terminal", "symbol": "body"}, {"type":
+    "terminal", "symbol": ">"}], "orientation": "horizontal"}, {"tags": ["indent"],
+    "type": "container", "children": [{"name": "elements", "type": "allowed", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "heading", "languageName": "html"}},
+    {"occurs": "*", "nodeType": {"typeName": "paragraph", "languageName": "html"}}]}],
+    "orientation": "vertical"}, {"type": "container", "children": [{"type": "terminal",
+    "symbol": "</"}, {"tags": ["keyword"], "type": "terminal", "symbol": "body"},
+    {"type": "terminal", "symbol": ">"}], "orientation": "horizontal"}], "orientation":
+    "vertical"}]}, "head": {"type": "concrete", "attributes": [{"type": "terminal",
+    "symbol": "<"}, {"tags": ["keyword"], "type": "terminal", "symbol": "head"}, {"type":
+    "terminal", "symbol": ">"}, {"type": "terminal", "symbol": "</head>"}]}, "heading":
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"type":
+    "container", "children": [{"type": "terminal", "symbol": "<"}, {"tags": ["keyword"],
+    "type": "terminal", "symbol": "h1"}, {"type": "terminal", "symbol": ">"}], "orientation":
+    "horizontal"}, {"base": "string", "name": "text", "type": "property"}, {"type":
+    "container", "children": [{"type": "terminal", "symbol": "</"}, {"tags": ["keyword"],
+    "type": "terminal", "symbol": "h1"}, {"type": "terminal", "symbol": ">"}], "orientation":
+    "horizontal"}], "orientation": "horizontal"}]}, "document": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"type": "container", "children":
+    [{"type": "terminal", "symbol": "<"}, {"tags": ["keyword"], "type": "terminal",
+    "symbol": "html"}, {"type": "terminal", "symbol": ">"}], "orientation": "horizontal"},
+    {"tags": ["indent"], "type": "container", "children": [{"name": "head", "type":
+    "sequence", "nodeTypes": [{"occurs": "?", "nodeType": {"typeName": "head", "languageName":
+    "html"}}]}, {"name": "body", "type": "sequence", "nodeTypes": [{"occurs": "?",
+    "nodeType": {"typeName": "body", "languageName": "html"}}]}], "orientation": "vertical"},
+    {"type": "container", "children": [{"type": "terminal", "symbol": "</"}, {"tags":
+    ["keyword"], "type": "terminal", "symbol": "html"}, {"type": "terminal", "symbol":
+    ">"}], "orientation": "horizontal"}], "orientation": "vertical"}]}, "paragraph":
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"type":
+    "container", "children": [{"type": "terminal", "symbol": "<"}, {"tags": ["keyword"],
+    "type": "terminal", "symbol": "p"}, {"type": "terminal", "symbol": ">"}], "orientation":
+    "horizontal"}, {"tags": ["indent"], "type": "container", "children": [{"base":
+    "string", "name": "text", "type": "property"}], "orientation": "vertical"}, {"type":
+    "container", "children": [{"type": "terminal", "symbol": "</"}, {"tags": ["keyword"],
+    "type": "terminal", "symbol": "p"}, {"type": "terminal", "symbol": ">"}], "orientation":
+    "horizontal"}], "orientation": "vertical"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"
@@ -47,7 +67,10 @@ concise_attributes:
   name: root
   value_before_type_cast: '{"typeName": "document", "languageName": "html"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: extends_id
-  value_before_type_cast: f08946d5-7eda-428b-b10d-7feb6e602296
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
 new_record: false
 active_record_yaml_version: 2

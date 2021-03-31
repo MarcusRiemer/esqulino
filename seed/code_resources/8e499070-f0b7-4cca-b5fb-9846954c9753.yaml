@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 5a5456a1-c2dd-46ce-a9d6-6eca77b479f1
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision: 
-      scale: 
-      limit: 
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 8e499070-f0b7-4cca-b5fb-9846954c9753
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Welt - Aufgabe 2
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 8e499070-f0b7-4cca-b5fb-9846954c9753
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "world", "children": {"size": [{"name": "vec2",

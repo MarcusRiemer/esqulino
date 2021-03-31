@@ -2,7 +2,16 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 import { Observable } from "rxjs";
-import { catchError, delay, map, tap, shareReplay } from "rxjs/operators";
+import {
+  catchError,
+  delay,
+  map,
+  tap,
+  shareReplay,
+  first,
+} from "rxjs/operators";
+
+import { CreateCodeResourceGQL } from "../../generated/graphql";
 
 import { ServerApiService } from "../shared";
 import { CodeResource } from "../shared/syntaxtree";
@@ -18,7 +27,11 @@ export class CodeResourceService {
    * @param _http Used to do HTTP requests
    * @param _server Used to figure out paths for HTTP requests
    */
-  constructor(private _http: HttpClient, private _server: ServerApiService) {}
+  constructor(
+    private _http: HttpClient,
+    private _server: ServerApiService,
+    private _create: CreateCodeResourceGQL
+  ) {}
 
   /**
    * Asks the server to create a new block resource.
@@ -29,22 +42,28 @@ export class CodeResourceService {
     blockLanguageId: string,
     programmingLanguageId: string
   ) {
-    const url = this._server.getCodeResourceBaseUrl(project.id);
+    const toReturn = this._create
+      .mutate({
+        projectId: project.id,
+        name: name,
+        programmingLanguageId: programmingLanguageId,
+        blockLanguageId: blockLanguageId,
+      })
+      .pipe(
+        catchError(this.handleError),
+        delay(250),
+        map(
+          (res) =>
+            new CodeResource(
+              res.data.createCodeResource.codeResource,
+              project.resourceReferences
+            )
+        ),
+        shareReplay(1),
+        first()
+      );
 
-    const body = {
-      name: name,
-      programmingLanguageId: programmingLanguageId,
-      blockLanguageId: blockLanguageId,
-    };
-
-    const toReturn = this._http.post<CodeResourceDescription>(url, body).pipe(
-      catchError(this.handleError),
-      delay(250),
-      map((res) => new CodeResource(res, project.resourceReferences)),
-      shareReplay(1)
-    );
-
-    return toReturn;
+    return toReturn.toPromise();
   }
 
   /**

@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: 8b9fbc28-29f1-4fc2-91aa-9fe93593e571
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision:
-      scale:
-      limit:
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 92ca693e-18de-46a4-8890-6932d6c40df9
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: 01 a - More Tests
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 92ca693e-18de-46a4-8890-6932d6c40df9
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "root", "children": {"cases": [{"name": "caseSingle",

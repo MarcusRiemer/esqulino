@@ -18,7 +18,6 @@ import { environment } from "../environments/environment";
 
 import { SharedAppModule } from "./shared/shared.module";
 import { FrontModule } from "./front/front.module";
-import { EditorModule } from "./editor/editor.module";
 
 import { SqlScratchComponent } from "./app.component";
 import { routing } from "./app.routes";
@@ -78,7 +77,6 @@ if (environment.sentry && environment.sentry.active) {
     // Actual Application
     SharedAppModule.forRoot(),
     FrontModule,
-    EditorModule,
     UserModule,
     routing,
   ],

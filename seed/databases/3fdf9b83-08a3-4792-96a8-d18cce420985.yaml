@@ -1,21 +1,14 @@
 --- !ruby/object:ProjectDatabase
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: bf050cd0-e969-4b2b-9462-47be5a225f7b
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision:
-      scale:
-      limit:
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 3fdf9b83-08a3-4792-96a8-d18cce420985
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: default
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 3fdf9b83-08a3-4792-96a8-d18cce420985
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: schema
   value_before_type_cast: '[{"name": "move", "columns": [{"name": "id", "type": "INTEGER",
@@ -27,7 +20,7 @@ concise_attributes:
     false}, {"name": "move_to_type", "columns": [{"name": "move_id", "type": "INTEGER",
     "index": 0, "notNull": false, "primary": true, "dfltValue": null}, {"name": "type_id",
     "type": "INTEGER", "index": 1, "notNull": false, "primary": true, "dfltValue":
-    null}], "foreignKeys": [{"references": [{"toTable": "type", "toColumn": null,
+    null}], "foreignKeys": [{"references": [{"toTable": "type", "toColumn": "id",
     "fromColumn": "type_id"}]}, {"references": [{"toTable": "move", "toColumn": "id",
     "fromColumn": "move_id"}]}], "systemTable": false}, {"name": "pokemon", "columns":
     [{"name": "id", "type": "INTEGER", "index": 0, "notNull": false, "primary": true,
@@ -60,6 +53,6 @@ concise_attributes:
   value_before_type_cast: 2019-08-10 11:06:37.700147000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-08-22 21:58:29.741649000 Z
+  value_before_type_cast: 2021-01-25 14:06:45.724564000 Z
 new_record: false
 active_record_yaml_version: 2

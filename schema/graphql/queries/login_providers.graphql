@@ -1,0 +1,8 @@
+query LoginProviders {
+  loginProviders {
+    name,
+    color,
+    icon,
+    urlName
+  }
+}

@@ -1,14 +1,14 @@
 --- !ruby/object:Project
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: cyoa
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: '"de"=>"Abenteuer", "en"=>"Adventure"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 8ecf6bb1-02d1-4c04-8875-f1da62b7f720
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true

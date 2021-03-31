@@ -1,4 +1,4 @@
-import { Tree, LanguageDefinition, Language } from "../syntaxtree";
+import { SyntaxTree, LanguageDefinition, Language } from "../syntaxtree";
 
 import {
   BlockLanguageDescription,
@@ -6,37 +6,40 @@ import {
 } from "./block-language.description";
 import { BlockLanguage } from "./block-language";
 import { VisualBlockDescriptions } from "./block.description";
+import { mkGrammarDoc } from "../syntaxtree/grammar.spec-util";
 
 const langEmptyBlocks: LanguageDefinition = {
   id: "emptyBlocks",
   name: "emptyBlocks",
   emitters: [],
   validators: [
-    {
-      types: {
-        emptyBlocks: {
-          root: {
-            type: "concrete",
-            attributes: [
-              {
-                name: "cat_a",
-                type: "allowed",
-                nodeTypes: [
-                  {
-                    nodeType: "a",
-                    occurs: "+",
-                  },
-                ],
-              },
-            ],
+    mkGrammarDoc(
+      { languageName: "emptyBlocks", typeName: "root" },
+      {
+        types: {
+          emptyBlocks: {
+            root: {
+              type: "concrete",
+              attributes: [
+                {
+                  name: "cat_a",
+                  type: "allowed",
+                  nodeTypes: [
+                    {
+                      nodeType: "a",
+                      occurs: "+",
+                    },
+                  ],
+                },
+              ],
+            },
+            a: { type: "concrete" },
+            z: { type: "concrete" },
           },
-          a: { type: "concrete" },
-          z: { type: "concrete" },
         },
-      },
-      foreignTypes: {},
-      root: { languageName: "emptyBlocks", typeName: "root" },
-    },
+        foreignTypes: {},
+      }
+    ),
   ],
 };
 
@@ -131,7 +134,7 @@ describe("Block Language", () => {
       typeName: "z",
     });
 
-    expect(lm.sidebars.length).toEqual(2);
+    expect(lm.sidebarDesriptions.length).toEqual(2);
     expect(lm.hasMultipleSidebars).toBeTruthy();
 
     expect(
@@ -144,7 +147,7 @@ describe("Block Language", () => {
 
   it("Rejects to render a tree with only unknown types", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "l",
       name: "n1",
     });
@@ -154,7 +157,7 @@ describe("Block Language", () => {
 
   it("Rejects to render a tree with only partially known types", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "emptyBlocks",
       name: "root",
       children: {
@@ -167,7 +170,7 @@ describe("Block Language", () => {
 
   it("Promises to render a tree with only known types", () => {
     const lm = new BlockLanguage(langModelEmptyBlocks);
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "emptyBlocks",
       name: "root",
       children: {

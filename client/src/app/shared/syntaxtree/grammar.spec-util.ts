@@ -2,11 +2,12 @@ import {
   GrammarDocument,
   NamedTypes,
   NamedLanguages,
+  VisualisedLanguages,
 } from "./grammar.description";
 import { QualifiedTypeName, NodeLocation } from "./syntaxtree.description";
 import { ValidationResult } from "./validation-result";
 
-export function singleLanguageGrammar(
+export function mkSingleLanguageGrammar(
   langName: string,
   rootType: string,
   types: NamedTypes
@@ -15,6 +16,8 @@ export function singleLanguageGrammar(
     root: { languageName: langName, typeName: rootType },
     types: {},
     foreignTypes: {},
+    visualisations: {},
+    foreignVisualisations: {},
   };
 
   // Types can't be assigned in the expression above because
@@ -24,16 +27,45 @@ export function singleLanguageGrammar(
   return toReturn;
 }
 
-export function multiLanguageGrammar(
-  _langName: string,
+export function mkGrammarDoc(
   root: QualifiedTypeName,
-  types: NamedLanguages,
-  foreignTypes: NamedLanguages = {}
+  {
+    types = {},
+    foreignTypes = {},
+    visualisations = {},
+    foreignVisualisations = {},
+  }: {
+    types?: NamedLanguages;
+    foreignTypes?: NamedLanguages;
+    visualisations?: VisualisedLanguages;
+    foreignVisualisations?: VisualisedLanguages;
+  }
 ): GrammarDocument {
   return {
     types,
     foreignTypes,
+    visualisations,
+    foreignVisualisations,
     root,
+  };
+}
+
+export function mkTypeGrammarDoc({
+  types = {},
+  foreignTypes = {},
+  visualisations = {},
+  foreignVisualisations = {},
+}: {
+  types?: NamedLanguages;
+  foreignTypes?: NamedLanguages;
+  visualisations?: VisualisedLanguages;
+  foreignVisualisations?: VisualisedLanguages;
+}): GrammarDocument {
+  return {
+    types,
+    foreignTypes,
+    visualisations,
+    foreignVisualisations,
   };
 }
 

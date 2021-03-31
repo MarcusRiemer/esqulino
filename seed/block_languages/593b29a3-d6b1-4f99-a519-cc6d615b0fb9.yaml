@@ -1,14 +1,14 @@
 --- !ruby/object:BlockLanguage
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 593b29a3-d6b1-4f99-a519-cc6d615b0fb9
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: json
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Generated JSON
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 593b29a3-d6b1-4f99-a519-cc6d615b0fb9
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-03-26 20:58:53.201139000 Z

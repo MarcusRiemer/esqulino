@@ -1,14 +1,14 @@
 --- !ruby/object:Project
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 1e948646-b751-4dc3-921d-e8779be1a58c
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
   value_before_type_cast: fhw-abbild
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: '"de"=>"FH Abbild"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 1e948646-b751-4dc3-921d-e8779be1a58c
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: true

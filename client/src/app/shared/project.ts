@@ -3,9 +3,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import {
   ProjectFullDescription,
   ProjectDescription,
-  AvailableDatabaseDescription,
   ProjectSourceDescription,
-  ProjectUpdateDescription,
   ProjectUsesBlockLanguageDescription,
 } from "./project.description";
 import { Schema } from "./schema/schema";
@@ -18,6 +16,7 @@ import { isValidId } from "./util";
 import { MultiLangString } from "./multilingual-string.description";
 
 import { UpdateProjectInput } from "../../generated/graphql";
+import { BlattWerkzeugError } from "./blattwerkzeug-error";
 
 export { ProjectDescription, ProjectFullDescription };
 
@@ -80,19 +79,19 @@ export class Project implements Saveable {
     this._description = json.description;
     this._indexPageId = json.indexPageId;
     this._projectImageId = json.preview;
-    this._sources = json.projectSources || []; // Sources may be undefined
-    this._usesBlockLanguages = json.projectUsesBlockLanguages;
+    this._sources = json.projectSources ?? []; // Sources may be undefined
+    this._usesBlockLanguages = [...json.projectUsesBlockLanguages];
     this._currentDatabase = json.defaultDatabase?.name;
     this.grammarDescriptions = json.grammars;
-    this.schema = new Schema(json.schema);
+    this.schema = new Schema(json.defaultDatabase?.schema ?? []);
 
     // Map all descriptions to their concrete objects
-    this._codeResources = (json.codeResources || [])
+    this._codeResources = (json.codeResources ?? [])
       .map((val) => new CodeResource(val, this.resourceReferences))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
 
     // Construct relevant block languages
-    this._blockLanguages = (json.blockLanguages || []).map(
+    this._blockLanguages = (json.blockLanguages ?? []).map(
       (val) => new BlockLanguage(val)
     );
   }
@@ -112,6 +111,9 @@ export class Project implements Saveable {
     return this._id;
   }
 
+  /**
+   * Checks whether the given identifier identifies this project
+   */
   hasSlugOrId(slugOrId: string) {
     if (isValidId(slugOrId)) {
       return this.id == slugOrId;
@@ -256,7 +258,16 @@ export class Project implements Saveable {
   /**
    *
    */
-  addUsedBlockLanguage(blockLanguageId: string, usageId: string) {
+  async addUsedBlockLanguage(blockLanguageId: string, usageId: string) {
+    await this.resourceReferences.ensureResources({
+      id: blockLanguageId,
+      type: "blockLanguage",
+    });
+
+    this._blockLanguages.push(
+      this.resourceReferences.getBlockLanguage(blockLanguageId, "throw")
+    );
+
     this._usesBlockLanguages.push({
       id: usageId,
       blockLanguageId: blockLanguageId,

@@ -292,6 +292,11 @@ class ProjectDatabase < ApplicationRecord
   def execute_sql_raw(read_only = true)
     db = db_connection(read_only)
     db.execute("PRAGMA foreign_keys = ON")
+    # This is deprecated, but for our use case it is mightily handy to get back
+    # fully qualified columnnames from SQLite
+    # https://www.sqlite.org/pragma.html#pragma_full_column_names
+    db.execute("PRAGMA short_column_names = OFF")
+    db.execute("PRAGMA full_column_names = ON")
     yield db
     db.execute("PRAGMA foreign_keys = OFF")
   end

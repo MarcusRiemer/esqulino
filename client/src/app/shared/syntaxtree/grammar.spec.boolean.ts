@@ -11,6 +11,8 @@ export const GRAMMAR_BOOLEAN_DESCRIPTION: GrammarDescription = {
   slug: "test-expr",
   root: { languageName: "expr", typeName: "booleanExpression" },
   foreignTypes: {},
+  visualisations: {},
+  foreignVisualisations: {},
   types: {
     expr: {
       booleanExpression: {

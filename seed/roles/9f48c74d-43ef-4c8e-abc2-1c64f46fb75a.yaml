@@ -1,11 +1,11 @@
 --- !ruby/object:Role
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 9f48c74d-43ef-4c8e-abc2-1c64f46fb75a
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: admin
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 9f48c74d-43ef-4c8e-abc2-1c64f46fb75a
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: resource_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase

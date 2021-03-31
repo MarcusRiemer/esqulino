@@ -1,5 +1,8 @@
 import { GrammarDocument } from "../../syntaxtree/grammar.description";
-import { singleLanguageGrammar } from "../../syntaxtree/grammar.spec-util";
+import {
+  mkGrammarDoc,
+  mkSingleLanguageGrammar,
+} from "../../syntaxtree/grammar.spec-util";
 
 import { VisualBlockDescriptions } from "../block.description";
 import { BlockLanguageDocument } from "../block-language.description";
@@ -28,7 +31,7 @@ function expectMappedAttribute(
 describe("Manual BlockLanguage Generator", () => {
   describe("Whole Grammars", () => {
     it("Grammar with only unnamed terminal symbols", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [{ type: "terminal", symbol: "t" }],
@@ -49,7 +52,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Grammar with unnamed container", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [
@@ -82,7 +85,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Grammar with unnamed container that has custom tags", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [
@@ -117,28 +120,27 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Grammar with foreign empty node that is visualized with unnamed terminal symbols", () => {
-      const grammar: GrammarDocument = {
-        root: {
-          languageName: "g1",
-          typeName: "t1",
-        },
-        types: {
-          g1: {
-            t1: {
-              type: "visualize",
-              attributes: [{ type: "terminal", symbol: "t1" }],
+      const grammar: GrammarDocument = mkGrammarDoc(
+        { languageName: "g1", typeName: "t1" },
+        {
+          visualisations: {
+            g1: {
+              t1: {
+                type: "visualise",
+                attributes: [{ type: "terminal", symbol: "t1" }],
+              },
             },
           },
-        },
-        foreignTypes: {
-          g1: {
-            t1: {
-              type: "concrete",
-              attributes: [],
+          foreignTypes: {
+            g1: {
+              t1: {
+                type: "concrete",
+                attributes: [],
+              },
             },
           },
-        },
-      };
+        }
+      );
 
       const generator: BlockLanguageGeneratorDocument = {
         type: "manual",
@@ -154,7 +156,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Grammar with multiple unnamed containers for a single block", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [
@@ -206,7 +208,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with no generation instructions", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [],
@@ -224,7 +226,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with parametrized instructions and missing values", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [
@@ -259,7 +261,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with two blocks for a single type", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [
@@ -300,7 +302,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with one partial block for a single type", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [
@@ -337,7 +339,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("Almost empty grammar with parametrized instructions and supplied values", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [
@@ -394,7 +396,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("No blocks for 'oneOf'-types", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "oneOf",
           oneOf: ["t2", "t3"],
@@ -420,7 +422,7 @@ describe("Manual BlockLanguage Generator", () => {
     });
 
     it("All iterators, a constant and a property", () => {
-      const grammar: GrammarDocument = singleLanguageGrammar("g1", "t1", {
+      const grammar: GrammarDocument = mkSingleLanguageGrammar("g1", "t1", {
         t1: {
           type: "concrete",
           attributes: [
@@ -529,5 +531,70 @@ describe("Manual BlockLanguage Generator", () => {
         } as Partial<VisualBlockDescriptions.EditorInput>)
       );
     });
+  });
+
+  it("Practical Sample: DXML", () => {
+    const grammar: GrammarDocument = mkGrammarDoc(
+      { languageName: "dxml", typeName: "element" },
+      {
+        types: {},
+        foreignTypes: {
+          dxml: {
+            text: {
+              type: "concrete",
+              attributes: [{ base: "string", name: "value", type: "property" }],
+            },
+            element: {
+              type: "concrete",
+              attributes: [
+                { base: "string", name: "name", type: "property" },
+                {
+                  name: "attributes",
+                  type: "sequence",
+                  nodeTypes: [
+                    {
+                      occurs: "*",
+                      nodeType: { typeName: "attribute", languageName: "dxml" },
+                    },
+                  ],
+                },
+                {
+                  name: "elements",
+                  type: "sequence",
+                  nodeTypes: [
+                    {
+                      occurs: "*",
+                      nodeType: { typeName: "text", languageName: "dxml" },
+                    },
+                    {
+                      occurs: "*",
+                      nodeType: { typeName: "element", languageName: "dxml" },
+                    },
+                  ],
+                },
+              ],
+            },
+            attribute: {
+              type: "concrete",
+              attributes: [
+                { base: "string", name: "name", type: "property" },
+                { base: "string", name: "value", type: "property" },
+              ],
+            },
+          },
+        },
+        visualisations: {},
+        foreignVisualisations: {},
+      }
+    );
+
+    const generator: BlockLanguageGeneratorDocument = {
+      type: "manual",
+      editorComponents: [],
+    };
+
+    const r = convertGrammarManualInstructions(generator, grammar);
+
+    expect(r.editorBlocks.length).toEqual(3);
   });
 });

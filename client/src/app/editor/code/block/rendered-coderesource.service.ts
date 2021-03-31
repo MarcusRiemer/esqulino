@@ -13,7 +13,7 @@ import {
   CodeResource,
   Validator,
   ValidationResult,
-  Tree,
+  SyntaxTree,
   speakingResourceName,
 } from "../../../shared";
 import { BlockLanguage } from "../../../shared/block";
@@ -52,7 +52,7 @@ export class RenderedCodeResourceService implements OnDestroy {
 
   // The validator must be accessible on the fly, so it must be a BehaviorSubject. The data
   // that flows in is connected by the constructor.
-  private readonly _syntaxTree = new BehaviorSubject<Tree>(undefined);
+  private readonly _syntaxTree = new BehaviorSubject<SyntaxTree>(undefined);
 
   // All manual subscriptions that are part of this service
   private _subscriptions: Subscription[] = [];
@@ -79,8 +79,8 @@ export class RenderedCodeResourceService implements OnDestroy {
     distinctUntilChanged()
   );
 
-  readonly syntaxTree$: Observable<Tree> = this._codeResource.pipe(
-    flatMap((c) => c.syntaxTree)
+  readonly syntaxTree$: Observable<SyntaxTree> = this._codeResource.pipe(
+    flatMap((c) => c.syntaxTree$)
   );
 
   readonly blockLanguage$ = this._blockLanguage.pipe(
@@ -111,7 +111,7 @@ export class RenderedCodeResourceService implements OnDestroy {
     this.codeResource$
   ).pipe(
     map(([g, c]) =>
-      this._resourceReferences.getValidator(c.emittedLanguageIdPeek, g.id)
+      this._resourceReferences.getValidator(c.runtimeLanguageId, g.id)
     )
   );
 
@@ -120,12 +120,12 @@ export class RenderedCodeResourceService implements OnDestroy {
    */
   readonly dataAvailable$: Observable<boolean> = this._resourcesFetched;
 
-  readonly validationResult$ = combineLatest(
+  readonly validationResult$ = combineLatest([
     this.dataAvailable$,
     this.validator$,
     this.syntaxTree$,
-    this.validationContext$
-  ).pipe(
+    this.validationContext$,
+  ]).pipe(
     filter(([available, ..._]) => available),
     distinctUntilChanged(),
     map(([_, v, t, vc]) =>

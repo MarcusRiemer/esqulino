@@ -1,10 +1,10 @@
 --- !ruby/object:ProgrammingLanguage
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: regex
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Reguläre Ausdrücke
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: regex
 new_record: false
 active_record_yaml_version: 2

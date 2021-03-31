@@ -3,7 +3,7 @@ import { trigger, style, animate, transition } from "@angular/animations";
 
 import { PortalInjector, ComponentPortal } from "@angular/cdk/portal";
 
-import { NodeDescription, Tree } from "../shared/syntaxtree";
+import { NodeDescription, SyntaxTree } from "../shared/syntaxtree";
 
 import { CurrentCodeResourceService } from "./current-coderesource.service";
 
@@ -44,7 +44,7 @@ export class DraggedBlockComponent {
 
   readonly codeResource = this._currentCodeResource.peekResource;
 
-  readonly draggedTree = new Tree(this._dropBlockData.desc);
+  readonly draggedTree = new SyntaxTree(this._dropBlockData.desc);
 
   /**
    * Constructor function that deals with all the dynamically typed injection

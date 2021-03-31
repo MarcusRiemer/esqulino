@@ -34,6 +34,7 @@ import {
 } from "../../editor/spec-util";
 import { PaginatorTableGraphqlComponent } from "../../shared/table/paginator-table-graphql.component";
 import { ConditionalDisplayDirective } from "../../shared/table/directives/conditional-display.directive";
+import { UrlFriendlyIdPipe } from "../../shared/url-friendly-id.pipe";
 
 describe("OverviewProjectComponent", () => {
   async function createComponent(localeId: string = "en") {
@@ -63,6 +64,7 @@ describe("OverviewProjectComponent", () => {
         CurrentLanguagePipe,
         PaginatorTableGraphqlComponent,
         ConditionalDisplayDirective,
+        UrlFriendlyIdPipe,
       ],
     }).compileComponents();
 
@@ -126,14 +128,18 @@ describe("OverviewProjectComponent", () => {
 
     await t.fixture.whenStable();
     t.fixture.detectChanges();
+    await t.fixture.whenRenderingDone();
 
     const tableElement = t.element.querySelector("table");
     const i1Row = tableElement.querySelector("tbody > tr");
 
+    debugger;
+
     expect(i1Row.textContent).toMatch(
       response.data.projects.nodes[0].name["en"]
     );
-    expect(i1Row.textContent).toMatch(response.data.projects.nodes[0].id);
+    // Prefers slug over id
+    expect(i1Row.textContent).toMatch(response.data.projects.nodes[0].slug);
   });
 
   it(`reloads data on refresh`, async () => {

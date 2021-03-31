@@ -4,7 +4,7 @@ import {
   NodeLocationStep,
 } from "./syntaxtree.description";
 import { Validator } from "./validator";
-import { Node } from "./syntaxtree";
+import { SyntaxNode } from "./syntaxtree";
 import { ErrorCodes } from "./validation-result";
 
 // These errors signal cardinality errors that would be triggered
@@ -20,7 +20,7 @@ const CARDINALITY_ERRORS: string[] = [
  */
 export function _cardinalityAllowsInsertion(
   validator: Validator,
-  node: Node,
+  node: SyntaxNode,
   candidate: NodeDescription,
   categoryName: string,
   index: number
@@ -62,7 +62,7 @@ export function _cardinalityAllowsInsertion(
 /**
  * @return True, if the node is in a hole with no place for other nodes.
  */
-export function nodeIsInSingularHole(validator: Validator, node: Node) {
+export function nodeIsInSingularHole(validator: Validator, node: SyntaxNode) {
   if (node.nodeParent) {
     const parent = node.nodeParent;
     const parentType = validator.getType(parent.languageName, parent.typeName);

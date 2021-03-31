@@ -7,7 +7,7 @@ class Mutations::BlockLanguage::DestroyBlockLanguage < Mutations::BlockLanguage:
       destroy_block_language(block_language)
     rescue ActiveRecord::RecordNotFound
       {
-        news: nil,
+        blockLanguage: nil,
         errors: ["Couldn't find BlockLanguage with 'id'=#{id}"]
       }
     end

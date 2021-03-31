@@ -1,5 +1,5 @@
 import { CodeGenerator } from "../codegenerator";
-import { Node, NodeDescription } from "../syntaxtree";
+import { SyntaxNode, NodeDescription } from "../syntaxtree";
 import { Validator } from "../validator";
 import { ErrorCodes } from "../validation-result";
 
@@ -13,7 +13,7 @@ describe("Language: RegEx", () => {
       name: "expression",
     };
 
-    const ast = new Node(astDesc, undefined);
+    const ast = new SyntaxNode(astDesc, undefined);
 
     const v = new Validator([GRAMMAR_DESCRIPTION]);
     const res = v.validateFromRoot(ast);
@@ -39,7 +39,7 @@ describe("Language: RegEx", () => {
       },
     };
 
-    const ast = new Node(astDesc, undefined);
+    const ast = new SyntaxNode(astDesc, undefined);
 
     const v = new Validator([GRAMMAR_DESCRIPTION]);
     const res = v.validateFromRoot(ast);

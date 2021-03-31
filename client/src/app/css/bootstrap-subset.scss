@@ -40,3 +40,10 @@
 //@import "carousel";
 @import "utilities";
 //@import "print";
+
+/* Using bootstraps styles for angulars form validation */
+input, textarea, select {
+    &.ng-invalid.ng-touched , &.ng-invalid.ng-dirty{
+        border-color: $form-feedback-invalid-color;
+    }
+}

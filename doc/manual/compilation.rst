@@ -15,8 +15,8 @@ Environment Dependencies
 
 At its core the server is a "typical" Ruby on Rails application which relies on the following software. The given versions are a known konfiguration, more recent versions will probably work as well.
 
-* Ruby >= 2.5.0 (`Because of Rails 6.0 <http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#ruby-versions>`_)
-* Postgres >= 9.4 (Because of JSON support)
+* Ruby >= 2.7.0
+* Postgres >= 10 (Requires ``jsonb``, ``hstore`` and ``NOTIFY`` support)
 * ImageMagick 7.0.8 (Version 6 should work as well)
 * FileMagick 5.32
 * GraphViz 2.40.1

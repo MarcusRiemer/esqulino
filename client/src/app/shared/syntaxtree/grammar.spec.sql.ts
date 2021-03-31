@@ -15,6 +15,8 @@ export const GRAMMAR_SQL_DESCRIPTION: Schema.GrammarDescription = {
   programmingLanguageId: "sql",
   root: { languageName: "sql", typeName: "query" },
   foreignTypes: {},
+  visualisations: {},
+  foreignVisualisations: {},
   types: {
     sql: {
       from: {
@@ -534,7 +536,7 @@ describe("Complex Spec Grammar: SQL", () => {
         name: "querySelect",
       };
 
-      const ast = new AST.Node(astDesc, undefined);
+      const ast = new AST.SyntaxNode(astDesc, undefined);
       const res = v.validateFromRoot(ast);
 
       expect(res.errors.length).toEqual(2);
@@ -583,7 +585,7 @@ describe("Complex Spec Grammar: SQL", () => {
         },
       };
 
-      const ast = new AST.Node(astDesc, undefined);
+      const ast = new AST.SyntaxNode(astDesc, undefined);
       const res = v.validateFromRoot(ast);
 
       expect(res.errors.length).toEqual(0);
@@ -647,7 +649,7 @@ describe("Complex Spec Grammar: SQL", () => {
         },
       };
 
-      const ast = new AST.Node(astDesc, undefined);
+      const ast = new AST.SyntaxNode(astDesc, undefined);
       const res = v.validateFromRoot(ast);
 
       expect(res.errors.length).toEqual(0);
@@ -756,7 +758,7 @@ describe("Complex Spec Grammar: SQL", () => {
         },
       };
 
-      const ast = new AST.Node(astDesc, undefined);
+      const ast = new AST.SyntaxNode(astDesc, undefined);
       const res = v.validateFromRoot(ast);
 
       expect(res.errors).toEqual([]);
@@ -910,7 +912,7 @@ describe("Complex Spec Grammar: SQL", () => {
         },
       };
 
-      const ast = new AST.Node(astDesc, undefined);
+      const ast = new AST.SyntaxNode(astDesc, undefined);
       const res = v.validateFromRoot(ast);
 
       expect(res.errors).toEqual([]);
@@ -942,7 +944,7 @@ describe("Complex Spec Grammar: SQL", () => {
     };
 
     const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
-    const res = v.validateFromRoot(new AST.Tree(astDesc));
+    const res = v.validateFromRoot(new AST.SyntaxTree(astDesc));
 
     expect(res.errors.map((e) => e.code)).toEqual([
       ErrorCodes.SuperflousChild,
@@ -1020,7 +1022,7 @@ describe("Complex Spec Grammar: SQL", () => {
     ];
 
     const v = new Validator([GRAMMAR_SQL_DESCRIPTION]);
-    const ast = new AST.Tree(astDesc);
+    const ast = new AST.SyntaxTree(astDesc);
 
     expect(
       smartDropLocation({ allowAnyParent: true }, v, ast, [], dropCandidates)

@@ -1,22 +1,16 @@
 <ng-container *ngIf="(currentResource | async); let currentResource">
   <div class="row">
-    <div class="col-sm-6">
-      Name:
-    </div>
+    <div class="col-sm-6">Name:</div>
     <div class="col-sm-6">
       <input [(ngModel)]="currentResource.name" class="form-control" />
     </div>
-    <div class="col-sm-6">
-      Generierte Sprache:
-    </div>
+    <div class="col-sm-6">Generierte Sprache:</div>
     <div class="col-sm-6">
       <language-emitted-selector
         [codeResource]="currentResource"
       ></language-emitted-selector>
     </div>
-    <div class="col-sm-6">
-      Blocksprache:
-    </div>
+    <div class="col-sm-6">Blocksprache:</div>
     <div class="col-sm-6">
       <language-model-selector
         [codeResource]="currentResource"

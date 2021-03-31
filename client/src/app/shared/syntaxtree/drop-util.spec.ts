@@ -1,5 +1,5 @@
 import { NodeDescription, NodeLocation } from "./syntaxtree.description";
-import { Tree } from "./syntaxtree";
+import { SyntaxTree } from "./syntaxtree";
 import { Validator } from "./validator";
 import {
   _cardinalityAllowsInsertion,
@@ -51,7 +51,7 @@ describe("Drop Utils", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inNode = new Tree(inTreeDesc).rootNode;
+      const inNode = new SyntaxTree(inTreeDesc).rootNode;
 
       expect(validator.validateFromRoot(inNode).errors).toEqual([]);
 
@@ -108,7 +108,7 @@ describe("Drop Utils", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inNode = new Tree(inTreeDesc).rootNode;
+      const inNode = new SyntaxTree(inTreeDesc).rootNode;
 
       expect(
         validator.validateFromRoot(inNode).errors.map((e) => e.code)
@@ -153,7 +153,7 @@ describe("Drop Utils", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inNode = new Tree(inTreeDesc).rootNode;
+      const inNode = new SyntaxTree(inTreeDesc).rootNode;
 
       // Insertion is valid at both sides
       expect(
@@ -186,7 +186,7 @@ describe("Drop Utils", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inNode = new Tree(inTreeDesc).rootNode;
+      const inNode = new SyntaxTree(inTreeDesc).rootNode;
 
       // Insertion is invalid whereever we look
       expect(
@@ -225,7 +225,7 @@ describe("Drop Utils", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inNode = new Tree(inTreeDesc).rootNode;
+      const inNode = new SyntaxTree(inTreeDesc).rootNode;
 
       // Insertion is invalid whereever we look
       expect(
@@ -265,7 +265,7 @@ describe("Drop Utils", () => {
       };
 
       const validator = new Validator([GRAMMAR_SQL_DESCRIPTION]);
-      const inNode = new Tree(inTreeDesc).rootNode;
+      const inNode = new SyntaxTree(inTreeDesc).rootNode;
 
       expect(
         _cardinalityAllowsInsertion(validator, inNode, candidateDesc, "lhs", 0)
@@ -322,7 +322,7 @@ describe("Drop Utils", () => {
       };
 
       const validator = new Validator([GRAMMAR_SQL_DESCRIPTION]);
-      const tree = new Tree(inTreeDesc);
+      const tree = new SyntaxTree(inTreeDesc);
 
       expect(
         nodeIsInSingularHole(validator, tree.locate([["select", 0]]))

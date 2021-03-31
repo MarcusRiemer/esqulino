@@ -3,11 +3,10 @@ import {
   Input,
   Output,
   EventEmitter,
-  LOCALE_ID,
-  Inject,
   SimpleChanges,
   OnChanges,
 } from "@angular/core";
+import { CurrentLocaleService } from "../current-locale.service";
 
 import { MultiLangString } from "./multilingual-string.description";
 
@@ -16,16 +15,16 @@ import { MultiLangString } from "./multilingual-string.description";
   templateUrl: "./templates/multilingual-editor.html",
 })
 export class MultiLingualEditorComponent implements OnChanges {
+  constructor(private readonly _lang: CurrentLocaleService) {}
+
   @Input() original: MultiLangString;
   @Input() translated: MultiLangString;
   @Input() control: string = "input";
-  @Input() language: string = this.localeID;
+  @Input() language: string = this._lang.localeId;
   @Input() placeholder: string = "";
 
   @Output() originalChange = new EventEmitter<MultiLangString>();
   @Output() translatedChange = new EventEmitter<MultiLangString>();
-
-  constructor(@Inject(LOCALE_ID) readonly localeID: string) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (!changes["original"].isFirstChange())

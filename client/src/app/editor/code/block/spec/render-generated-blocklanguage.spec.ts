@@ -18,7 +18,7 @@ import { FocusDirective } from "../../../../shared/focus-element.directive";
 import {
   LanguageService,
   NodeDescription,
-  Tree,
+  SyntaxTree,
   CodeResource,
   GrammarDocument,
 } from "../../../../shared";
@@ -42,13 +42,14 @@ import {
   ensureLocalBlockLanguageRequest,
   buildBlockLanguage,
   ensureLocalGrammarRequest,
-  buildGrammar,
+  mkGrammarDescription,
 } from "../../../spec-util";
 import { CurrentCodeResourceService } from "../../../current-coderesource.service";
 
 import { RenderedCodeResourceService } from "../rendered-coderesource.service";
 import { BlockHostComponent } from "../block-host.component";
 import { BLOCK_RENDER_COMPONENTS } from "../index";
+import { mkGrammarDoc } from "src/app/shared/syntaxtree/grammar.spec-util";
 
 describe(`Render Generated BlockLanguages`, () => {
   async function createComponent(
@@ -86,7 +87,7 @@ describe(`Render Generated BlockLanguages`, () => {
     }).compileComponents();
 
     const grammarDesc = await ensureLocalGrammarRequest(
-      buildGrammar(grammarDoc)
+      mkGrammarDescription(grammarDoc)
     );
     const listBlockLanguage: BlockLanguageListDescription = buildBlockLanguage({
       grammarId: grammarDesc.id,
@@ -130,7 +131,7 @@ describe(`Render Generated BlockLanguages`, () => {
       undefined
     );
 
-    component.node = new Tree(nodeDesc).rootNode;
+    component.node = new SyntaxTree(nodeDesc).rootNode;
     component.blockLanguage = blockLanguage;
     component.codeResource = codeResource;
 
@@ -179,28 +180,30 @@ describe(`Render Generated BlockLanguages`, () => {
   }
 
   describe(`Grammar 0: Root with single required child`, () => {
-    const grammarDesc: GrammarDocument = {
-      foreignTypes: {},
-      types: {
-        l: {
-          r: {
-            type: "concrete",
-            attributes: [
-              {
-                type: "allowed",
-                name: "c",
-                nodeTypes: [{ languageName: "l", typeName: "t1" }],
-              },
-            ],
-          },
-          t1: {
-            type: "concrete",
-            attributes: [{ type: "terminal", symbol: "t1" }],
+    const grammarDesc: GrammarDocument = mkGrammarDoc(
+      { languageName: "l", typeName: "r" },
+      {
+        foreignTypes: {},
+        types: {
+          l: {
+            r: {
+              type: "concrete",
+              attributes: [
+                {
+                  type: "allowed",
+                  name: "c",
+                  nodeTypes: [{ languageName: "l", typeName: "t1" }],
+                },
+              ],
+            },
+            t1: {
+              type: "concrete",
+              attributes: [{ type: "terminal", symbol: "t1" }],
+            },
           },
         },
-      },
-      root: { languageName: "l", typeName: "r" },
-    };
+      }
+    );
 
     it(`Child provided`, async () => {
       const treeDesc: NodeDescription = {
@@ -245,34 +248,36 @@ describe(`Render Generated BlockLanguages`, () => {
   });
 
   describe(`Grammar 0: Root with single required child in container`, () => {
-    const grammarDesc: GrammarDocument = {
-      foreignTypes: {},
-      types: {
-        l: {
-          r: {
-            type: "concrete",
-            attributes: [
-              {
-                type: "container",
-                orientation: "vertical",
-                children: [
-                  {
-                    type: "allowed",
-                    name: "c",
-                    nodeTypes: [{ languageName: "l", typeName: "t1" }],
-                  },
-                ],
-              },
-            ],
-          },
-          t1: {
-            type: "concrete",
-            attributes: [{ type: "terminal", symbol: "t1" }],
+    const grammarDesc: GrammarDocument = mkGrammarDoc(
+      { languageName: "l", typeName: "r" },
+      {
+        foreignTypes: {},
+        types: {
+          l: {
+            r: {
+              type: "concrete",
+              attributes: [
+                {
+                  type: "container",
+                  orientation: "vertical",
+                  children: [
+                    {
+                      type: "allowed",
+                      name: "c",
+                      nodeTypes: [{ languageName: "l", typeName: "t1" }],
+                    },
+                  ],
+                },
+              ],
+            },
+            t1: {
+              type: "concrete",
+              attributes: [{ type: "terminal", symbol: "t1" }],
+            },
           },
         },
-      },
-      root: { languageName: "l", typeName: "r" },
-    };
+      }
+    );
 
     it(`Child provided`, async () => {
       const treeDesc: NodeDescription = {

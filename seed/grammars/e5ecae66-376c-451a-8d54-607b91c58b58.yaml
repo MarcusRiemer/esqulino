@@ -1,0 +1,47 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Exp
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: e5ecae66-376c-451a-8d54-607b91c58b58
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-03-18 21:26:41.872815000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-03-18 21:33:31.968360000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: ab09ba24-f1b9-442d-8e94-d35d525a74a4
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"Exp": {"Exp": {"type": "oneOf", "oneOf": [{"typeName":
+    "Const", "languageName": "Exp"}, {"typeName": "BinOp", "languageName": "Exp"}]},
+    "BinOp": {"type": "concrete", "attributes": [{"tags": ["keyword"], "type": "terminal",
+    "symbol": "("}, {"name": "lhs", "type": "sequence", "nodeTypes": [{"typeName":
+    "Exp", "languageName": "Exp"}]}, {"base": "string", "name": "op", "type": "property"},
+    {"name": "rhs", "type": "sequence", "nodeTypes": [{"typeName": "Exp", "languageName":
+    "Exp"}]}, {"tags": ["keyword"], "type": "terminal", "symbol": ")"}]}, "Const":
+    {"type": "concrete", "attributes": [{"base": "integer", "name": "Val", "type":
+    "property"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "Exp", "languageName": "Exp"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
+new_record: false
+active_record_yaml_version: 2

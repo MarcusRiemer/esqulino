@@ -8,7 +8,12 @@
       [ngClass]="editorComponent.columnClasses"
     >
       <div class="card card-body mb-3">
-        <ng-template [cdkPortalOutlet]="editorComponent.portal"></ng-template>
+        <ng-container
+          *ngIf="editorComponent.portal | async as portal; else noPortal"
+        >
+          <ng-template [cdkPortalOutlet]="portal"></ng-template>
+        </ng-container>
+        <ng-template #noPortal>Loading ...</ng-template>
       </div>
     </div>
   </div>

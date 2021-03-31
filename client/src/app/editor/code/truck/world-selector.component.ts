@@ -25,7 +25,7 @@ export class WorldSelectorComponent {
   get availableWorlds() {
     const codeResources = this._projectService.cachedProject.codeResources;
     return codeResources.filter(
-      (res) => res.emittedLanguageIdPeek == "truck-world"
+      (res) => res.runtimeLanguageId == "truck-world"
     );
   }
 

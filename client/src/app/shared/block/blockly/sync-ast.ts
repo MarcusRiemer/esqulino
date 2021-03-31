@@ -47,6 +47,19 @@ export function blocklyToInternal(
   return toReturn;
 }
 
+/**
+ * Most value strings can be passed down as is. But boolean values are
+ * written in UPPERCASE in Blockly and lowercase in the integrated AST.
+ */
+function parsePropertyValue(propValue: string) {
+  const BOOLEAN_VALUES = ["TRUE", "FALSE"];
+  if (BOOLEAN_VALUES.includes(propValue)) {
+    return propValue.toLowerCase();
+  } else {
+    return propValue;
+  }
+}
+
 function parseBlock(
   blockNode: Element,
   continuationChildGroup: NodeDescription[] | undefined
@@ -61,7 +74,7 @@ function parseBlock(
   // Parse all assigned properties
   const properties: NodeDescription["properties"] = {};
   getImmediateChildrenByTagName(blockNode, "field").forEach((f) => {
-    properties[f.getAttribute("name")] = f.textContent;
+    properties[f.getAttribute("name")] = parsePropertyValue(f.textContent);
   });
 
   if (Object.keys(properties).length > 0) {
@@ -158,7 +171,7 @@ function createWorkspaceBlock(
   // Possibly build children for this block
   if (ast.children) {
     const typeDesc = ac.types[ast.language][ast.name];
-    if (typeDesc.type === "concrete" || typeDesc.type === "visualize") {
+    if (typeDesc.type === "concrete" || typeDesc.type === "visualise") {
       Object.entries(ast.children).forEach(([groupName, children]) => {
         const childGroupDesc = getNodeAttribute(nodeDesc, groupName);
 

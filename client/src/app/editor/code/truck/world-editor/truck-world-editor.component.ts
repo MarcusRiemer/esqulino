@@ -21,7 +21,6 @@ export class TruckWorldEditorComponent implements OnInit, OnDestroy {
 
   constructor(
     private _truckWorld: TruckWorldService,
-    private _ngZone: NgZone,
     private _editor: TruckWorldEditorService
   ) {}
 

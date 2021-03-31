@@ -35,6 +35,8 @@ query FullProject($id: ID!) {
         root
         types
         foreignTypes
+        visualisations
+        foreignVisualisations
         includes
         visualizes
         programmingLanguageId
@@ -50,24 +52,26 @@ query FullProject($id: ID!) {
         title
         url
       }
-      schema {
-        name
-        columns {
-          index
+      defaultDatabase {
+        schema {
           name
-          type
-          notNull
-          dfltValue
-          primary
-        }
-        foreignKeys {
-          references {
-            fromColumn
-            toTable
-            toColumn
+          columns {
+            index
+            name
+            type
+            notNull
+            dfltValue
+            primary
           }
+          foreignKeys {
+            references {
+              fromColumn
+              toTable
+              toColumn
+            }
+          }
+          systemTable
         }
-        systemTable
       }
     }
   }

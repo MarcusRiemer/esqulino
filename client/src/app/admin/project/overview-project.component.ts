@@ -18,7 +18,7 @@ type DataKey = Exclude<keyof AdminListProjectsQuery, "__typename">;
 //       a type argument to Observable
 type ListItem = AdminListProjectsQuery[DataKey]["nodes"][0];
 
-type ColumnName = keyof ListItem | "totalCount";
+type ColumnName = keyof ListItem | "totalCount" | "userName";
 
 /**
  *
@@ -65,6 +65,7 @@ export class OverviewProjectComponent
     "slug",
     "totalCount",
     "id",
+    "userName",
   ];
 
   get queryData() {

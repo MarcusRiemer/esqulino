@@ -27,4 +27,8 @@ export const environment: EnvironmentDescription = {
     { token: "de", name: "Deutsch" },
     { token: "en", name: "English" },
   ],
+  debugLogging: {
+    changeDetection: false,
+    lifecycle: false,
+  },
 };

@@ -21,7 +21,7 @@ export class IsAdminGuard implements CanActivate {
   public async canActivate(): Promise<boolean | UrlTree> {
     const roles = await this._userService.roles$.pipe(first()).toPromise();
 
-    console.log(`Current roles: ${roles}`);
+    console.log(`IsAdminGuard check with current roles: ${roles}`);
     // If the user is not an administrator, redirect him to the frontpage
     if (!roles.includes(Roles.Admin)) {
       // Waiting for a login

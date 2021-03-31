@@ -6,7 +6,7 @@ import { Table, Column } from "../../../shared/schema";
 import { SIDEBAR_MODEL_TOKEN } from "../../editor.token";
 
 import { DragService } from "../../drag.service";
-import { SchemaService } from "../../schema.service";
+import { EditDatabaseSchemaService } from "../../edit-database-schema.service";
 
 @Component({
   templateUrl: "templates/database-schema-sidebar.html",
@@ -16,7 +16,7 @@ export class DatabaseSchemaSidebarComponent {
     @Inject(SIDEBAR_MODEL_TOKEN)
     private _codeResource: CodeResource,
     private _dragService: DragService,
-    private _schemaService: SchemaService
+    private _schemaService: EditDatabaseSchemaService
   ) {}
 
   /**

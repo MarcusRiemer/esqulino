@@ -1,0 +1,162 @@
+{
+    "name": "querySelect",
+    "language": "sql",
+    "children": {
+      "from": [
+        {
+          "name": "from",
+          "language": "sql",
+          "children": {
+            "joins": [
+              {
+                "name": "innerJoinUsing",
+                "language": "sql",
+                "children": {
+                  "table": [
+                    {
+                      "name": "tableIntroduction",
+                      "language": "sql",
+                      "properties": {
+                        "name": "adresse"
+                      }
+                    }
+                  ],
+                  "using": [
+                    {
+                      "name": "parentheses",
+                      "language": "sql",
+                      "children": {
+                        "expression": [
+                          {
+                            "name": "constant",
+                            "language": "sql",
+                            "properties": {
+                              "value": "pin"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "rightOuterJoinUsing",
+                "language": "sql",
+                "children": {
+                  "table": [
+                    {
+                      "name": "tableIntroduction",
+                      "language": "sql",
+                      "properties": {
+                        "name": "lkz"
+                      }
+                    }
+                  ],
+                  "using": [
+                    {
+                      "name": "parentheses",
+                      "language": "sql",
+                      "children": {
+                        "expression": [
+                          {
+                            "name": "constant",
+                            "language": "sql",
+                            "properties": {
+                              "value": "lkz"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "tables": [
+              {
+                "name": "tableIntroduction",
+                "language": "sql",
+                "properties": {
+                  "name": "student"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "where": [],
+      "select": [
+        {
+          "name": "select",
+          "language": "sql",
+          "children": {
+            "columns": [
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "LAND",
+                  "refTableName": "lkz"
+                }
+              },
+              {
+                "name": "binaryExpression",
+                "language": "sql",
+                "children": {
+                  "lhs": [
+                    {
+                      "name": "functionCall",
+                      "language": "sql",
+                      "properties": {
+                        "name": "COUNT"
+                      },
+                      "children": {
+                        "arguments": []
+                      }
+                    }
+                  ],
+                  "rhs": [
+                    {
+                      "name": "constant",
+                      "language": "sql",
+                      "properties": {
+                        "value": "1"
+                      }
+                    }
+                  ],
+                  "operator": [
+                    {
+                      "name": "relationalOperator",
+                      "language": "sql",
+                      "properties": {
+                        "operator": "-"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "groupBy": [
+        {
+          "name": "groupBy",
+          "language": "sql",
+          "children": {
+            "expressions": [
+              {
+                "name": "columnName",
+                "language": "sql",
+                "properties": {
+                  "columnName": "LKZ",
+                  "refTableName": "lkz"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }

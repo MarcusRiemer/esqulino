@@ -1,0 +1,55 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Exp
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: c1f8a9fc-ea72-4392-a1dc-36c8528d060a
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-03-18 21:26:42.052078000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-03-18 21:33:31.977290000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: e5ecae66-376c-451a-8d54-607b91c58b58
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: sidebars
+  value_before_type_cast: "[]"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_blocks
+  value_before_type_cast: '[{"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
+    "inline-flex"}, "property": "Val", "blockType": "input"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "Const", "languageName": "Exp"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"text": "(", "style": {"display": "inline-flex"},
+    "blockType": "constant", "cssClasses": ["keyword"]}, {"blockType": "iterator",
+    "childGroupName": "lhs", "emptyDropTarget": false}, {"style": {"display": "inline-flex"},
+    "property": "op", "blockType": "input"}, {"blockType": "iterator", "childGroupName":
+    "rhs", "emptyDropTarget": false}, {"text": ")", "style": {"display": "inline-flex"},
+    "blockType": "constant", "cssClasses": ["keyword"]}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "BinOp", "languageName": "Exp"}}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_components
+  value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "validator"},
+    {"componentType": "generated-code"}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: local_generator_instructions
+  value_before_type_cast: '{"type": "manual"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root_css_classes
+  value_before_type_cast: "{activate-block-outline,activate-keyword}"
+new_record: false
+active_record_yaml_version: 2

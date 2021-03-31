@@ -11,9 +11,7 @@ const urlResolver = (serverApi: ServerApiService) => {
 };
 
 @Injectable()
-export class IndividualBlockLanguageDataService extends IndividualData<
-  BlockLanguageDescription
-> {
+export class IndividualBlockLanguageDataService extends IndividualData<BlockLanguageDescription> {
   constructor(serverApi: ServerApiService, http: HttpClient) {
     super(http, urlResolver(serverApi), "BlockLanguage");
   }

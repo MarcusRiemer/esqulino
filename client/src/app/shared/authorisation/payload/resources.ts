@@ -1,5 +1,5 @@
 import { BasePerformData } from "./base";
-import { MayPerformRequestDescription } from "../../may-perform.description";
+import { MayPerformRequestDescription } from "../may-perform.description";
 
 export class ResourcesData extends BasePerformData {
   public update(resourceId: string): MayPerformRequestDescription {

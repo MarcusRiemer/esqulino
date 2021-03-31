@@ -1,14 +1,12 @@
 import { TestBed } from "@angular/core/testing";
 import { HttpTestingController } from "@angular/common/http/testing";
 
-import { GrammarDescription, GrammarListDescription } from "../../shared/";
+import { GrammarDescription } from "../../shared/";
 import { generateUUIDv4 } from "../../shared/util-browser";
 import {
   ServerApiService,
   IndividualGrammarDataService,
 } from "../../shared/serverdata";
-
-import { ListOrder, provideListResponse } from "./list.data.spec";
 
 const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
@@ -16,6 +14,8 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   programmingLanguageId: "generic",
   root: { languageName: "spec", typeName: "root" },
   foreignTypes: {},
+  foreignVisualisations: {},
+  visualisations: {},
   types: {
     spec: {
       root: {
@@ -29,7 +29,7 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
  * Generates a valid grammar description with a unique ID, that uses
  * the given data (if provided) and uses default data
  */
-export const buildGrammar = (
+export const mkGrammarDescription = (
   override?: Partial<GrammarDescription>
 ): GrammarDescription => {
   const id = override?.id ?? generateUUIDv4();

@@ -1,21 +1,22 @@
 import { Routes } from "@angular/router";
 
-import { CreateCodeResourceComponent } from "./create-code-resource.component";
 import { UnknownCodeResourceComponent } from "./unknown-code-resource.component";
 
 import { BlockEditorComponent } from "./block/block-editor.component";
 
 import { ResourceChangedGuard } from "./resource-changed.guard";
+import { QueryStepwiseComponent } from "./query/query-stepwise.component";
+import { CreateOverviewComponent } from "./create-overview.component";
 
 export const codeEditorRoutes: Routes = [
   {
     path: "create",
     pathMatch: "full",
-    component: CreateCodeResourceComponent,
+    component: CreateOverviewComponent,
   },
   {
     path: ":resourceId",
-    redirectTo: ":resourceId/blockly",
+    redirectTo: ":resourceId/block",
     pathMatch: "full",
   },
   {
@@ -24,9 +25,14 @@ export const codeEditorRoutes: Routes = [
     component: BlockEditorComponent,
   },
   {
+    path: ":resourceId/sql-steps",
+    canActivate: [ResourceChangedGuard],
+    component: QueryStepwiseComponent,
+  },
+  {
     path: ":resourceId/blockly",
-    loadChildren: () =>
-      import("./blockly/blockly.module").then((m) => m.BlocklyEditorModule),
+    canActivate: [ResourceChangedGuard],
+    component: BlockEditorComponent,
   },
   {
     path: ":resourceId/unknown",

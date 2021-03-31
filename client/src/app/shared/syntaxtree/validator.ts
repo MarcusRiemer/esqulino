@@ -7,6 +7,7 @@ import {
   ValidationResult,
 } from "./validation-result";
 import { GrammarValidator, NodeType } from "./grammar";
+import { BlattWerkzeugError } from "../blattwerkzeug-error";
 
 /**
  * A validator that uses custom code to generate errors.
@@ -16,7 +17,10 @@ export abstract class SpecializedValidator {
    * @param ast The root node where the validation should start.
    * @param context Main point of interaction during validation.
    */
-  abstract validateFromRoot(ast: AST.Node, context: ValidationContext): void;
+  abstract validateFromRoot(
+    ast: AST.SyntaxNode,
+    context: ValidationContext
+  ): void;
 }
 
 export type SpecializedValidatorConstructor = typeof SpecializedValidator;
@@ -86,12 +90,15 @@ export class Validator {
    * @param ast The root of the AST to validate
    * @return All errors that occured during evaluation
    */
-  validateFromRoot(ast: AST.Node | AST.Tree, additionalContext: any = {}) {
+  validateFromRoot(
+    ast: AST.SyntaxNode | AST.SyntaxTree,
+    additionalContext: any = {}
+  ) {
     // Grab the actual root
-    let astRoot: AST.Node = undefined;
-    if (ast instanceof AST.Tree && !ast.isEmpty) {
+    let astRoot: AST.SyntaxNode = undefined;
+    if (ast instanceof AST.SyntaxTree && !ast.isEmpty) {
       astRoot = ast.rootNode;
-    } else if (ast instanceof AST.Node) {
+    } else if (ast instanceof AST.SyntaxNode) {
       astRoot = ast;
     }
 
@@ -178,7 +185,7 @@ export class Validator {
     }
 
     if (!this.isKnownType(languageName, typename)) {
-      throw new Error(
+      throw new BlattWerkzeugError(
         `Validator does not know type "${languageName}.${typename}"`
       );
     } else {

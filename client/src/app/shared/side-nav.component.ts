@@ -1,11 +1,4 @@
-import {
-  Component,
-  Inject,
-  LOCALE_ID,
-  Input,
-  ViewChild,
-  OnDestroy,
-} from "@angular/core";
+import { Component, Input, ViewChild, OnDestroy } from "@angular/core";
 import { BrowserService } from "./browser.service";
 import { MatSidenav } from "@angular/material/sidenav";
 
@@ -29,7 +22,6 @@ export class SideNavComponent implements OnDestroy {
    * Used for dependency injection
    */
   constructor(
-    @Inject(LOCALE_ID) private readonly _localeId: string,
     private readonly _browser: BrowserService,
     private readonly _sideNav: SideNavService,
     private readonly _userService: UserService
@@ -45,9 +37,6 @@ export class SideNavComponent implements OnDestroy {
 
   // Pass through: Rendering mode for sidebar
   readonly sidebarMode$ = this._browser.sidebarMode$;
-
-  // The actual locale that is currently in use
-  readonly locale = this._localeId;
 
   readonly sideNavToggleSub = this._sideNav
     .sideNavToggle$()

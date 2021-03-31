@@ -18,7 +18,7 @@ import { defaultEditorComponents } from "./generator-default";
 import {
   getQualifiedTypes,
   ensureGrammarAttributeNames,
-  allPresentTypes,
+  allVisualizableTypes,
 } from "../../syntaxtree/grammar-type-util";
 
 /**
@@ -52,7 +52,7 @@ export function convertGrammarManualInstructions(
   d: ManualBlockLanguageGeneratorDescription,
   g: GrammarDocument
 ): BlockLanguageDocument {
-  const allTypes = allPresentTypes(g);
+  const allTypes = allVisualizableTypes(g);
 
   // If the grammar designer has decided to not name some things: This step still
   // relies on unique names so they have to be generated

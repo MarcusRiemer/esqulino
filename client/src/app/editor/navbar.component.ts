@@ -1,12 +1,22 @@
 import { Component, Input } from "@angular/core";
+import { of } from "rxjs";
+import { map } from "rxjs/operators";
 
-import { Project } from "./project.service";
+import { Project, ProjectService } from "./project.service";
 
 @Component({
   templateUrl: "templates/navbar.html",
   selector: "editor-navbar",
 })
 export class NavbarComponent {
+  constructor(private _projectService: ProjectService) {}
+
+  readonly hasDatabase$ = this._projectService.activeProject.pipe(
+    map((p) => !!p.currentDatabaseName)
+  );
+
+  readonly imagesEnabled$ = of(false);
+
   /**
    * The currently edited project
    */

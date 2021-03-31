@@ -1,5 +1,5 @@
 import { NodeDescription, NodeLocation } from "./syntaxtree.description";
-import { Tree } from "./syntaxtree";
+import { SyntaxTree } from "./syntaxtree";
 import { Validator } from "./validator";
 import { GRAMMAR_BOOLEAN_DESCRIPTION } from "./grammar.spec.boolean";
 import { GRAMMAR_SQL_DESCRIPTION } from "./grammar.spec.sql";
@@ -39,7 +39,7 @@ describe("Drop Parent", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inTree = new Tree(inTreeDesc);
+      const inTree = new SyntaxTree(inTreeDesc);
 
       // Attempt to insert at the "wrong" side, expecting to get the free side
       expect(
@@ -167,7 +167,7 @@ describe("Drop Parent", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inTree = new Tree(inTreeDesc);
+      const inTree = new SyntaxTree(inTreeDesc);
 
       // Attempt to insert at the "wrong" side, expecting to get the free side
       expect(
@@ -356,7 +356,7 @@ describe("Drop Parent", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inTree = new Tree(inTreeDesc);
+      const inTree = new SyntaxTree(inTreeDesc);
 
       // Attempt to insert at the "wrong" side, expecting to get the free side
       let insertLocation: NodeLocation = [
@@ -492,7 +492,7 @@ describe("Drop Parent", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inTree = new Tree(inTreeDesc);
+      const inTree = new SyntaxTree(inTreeDesc);
 
       // Dropping on "AND"
       expect(
@@ -567,7 +567,7 @@ describe("Drop Parent", () => {
       ];
 
       const validator = new Validator([GRAMMAR_SQL_DESCRIPTION]);
-      const inTree = new Tree(inTreeDesc);
+      const inTree = new SyntaxTree(inTreeDesc);
 
       let loc: NodeLocation = [
         ["select", 0],
@@ -659,7 +659,7 @@ describe("Drop Parent", () => {
       ];
 
       const validator = new Validator([GRAMMAR_SQL_DESCRIPTION]);
-      const inTree = new Tree(inTreeDesc);
+      const inTree = new SyntaxTree(inTreeDesc);
 
       let loc: NodeLocation = [
         ["select", 0],

@@ -1,11 +1,21 @@
-<select
-  id="grammar-root"
-  class="custom-select"
-  name="meta-code-resource"
-  [(ngModel)]="selectedCodeResourceId"
->
-  <option value="">-- Freie JSON Definition --</option>
-  <option *ngFor="let res of metaCodeResources$ | async;" [value]="res.id">
-    {{ res.name }}
-  </option>
-</select>
+<div class="input-group">
+  <select
+    id="grammar-root"
+    class="custom-select"
+    name="meta-code-resource"
+    [(ngModel)]="selectedCodeResourceId"
+  >
+    <option value="">-- Freie JSON Definition --</option>
+    <option *ngFor="let res of metaCodeResources$ | async;" [value]="res.id">
+      {{ res.project.name | currentLanguage }} - {{ res.name }}
+    </option>
+  </select>
+  <div *ngIf="selectedCodeResource$ | async as res" class="input-group-append">
+    <a
+      class="input-group-text"
+      [routerLink]="['/editor', res.project.id, 'ast', res.id]"
+    >
+      Editor
+    </a>
+  </div>
+</div>

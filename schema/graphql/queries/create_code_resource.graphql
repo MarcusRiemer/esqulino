@@ -1,0 +1,21 @@
+mutation CreateCodeResource(
+  $name: String!,
+  $projectId: ID!,
+  $blockLanguageId: ID!,
+  $programmingLanguageId: ID!
+) {
+  createCodeResource(input: {
+    name: $name,
+    projectId: $projectId,
+    blockLanguageId: $blockLanguageId,
+    programmingLanguageId: $programmingLanguageId,
+  }) {
+    codeResource {
+      id
+      name
+      blockLanguageId
+      ast
+      programmingLanguageId
+    }
+  }
+}

@@ -8,7 +8,7 @@ import { EditorSharedComponentsModule } from "../shared-components/editor-shared
 import { ResourceChangedGuard } from "./resource-changed.guard";
 import { CodeGeneratorComponent } from "./code-generator.component";
 import { CreateCodeResourceComponent } from "./create-code-resource.component";
-import { EditorComponentsService } from "./editor-components.service";
+import { CreateLanguageComponent } from "./create-language.component";
 import { LanguageModelSelectorComponent } from "./language-model-selector.component";
 import { LanguageEmittedSelectorComponent } from "./language-emitted-selector.component";
 import { CodeSidebarComponent } from "./code.sidebar";
@@ -47,6 +47,10 @@ import { TrafficLightVisualisator } from "./truck/world-editor/traffic-light-vis
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 
 import { RegexTestComponent } from "./regex/regex-test.component";
+import { QueryStepwiseComponent } from "./query/query-stepwise.component";
+import { QueryStepwiseResultComponent } from "./query/query-stepwise-result.component";
+import { QueryStepwiseDescriptionComponent } from "./query/query-stepwise-description.component";
+import { CreateOverviewComponent } from "./create-overview.component";
 
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],
@@ -57,6 +61,7 @@ import { RegexTestComponent } from "./regex/regex-test.component";
     CodeGeneratorComponent,
     CodeResourceSettingsComponent,
     CreateCodeResourceComponent,
+    CreateLanguageComponent,
     DropDebugComponent,
     DatabaseSchemaSidebarComponent,
     DraggableBlockListComponent,
@@ -78,6 +83,10 @@ import { RegexTestComponent } from "./regex/regex-test.component";
     DefinedTypesSidebarComponent,
     JsonAstComponent,
     RegexTestComponent,
+    QueryStepwiseComponent,
+    QueryStepwiseResultComponent,
+    QueryStepwiseDescriptionComponent,
+    CreateOverviewComponent,
   ],
   providers: [ResourceChangedGuard],
   exports: [BlockHostComponent],
@@ -87,7 +96,6 @@ export class CodeEditorModule {
     return {
       ngModule: CodeEditorModule,
       providers: [
-        EditorComponentsService,
         BlockDebugOptionsService,
         QueryService,
         TruckWorldService,

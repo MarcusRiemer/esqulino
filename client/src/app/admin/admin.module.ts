@@ -49,7 +49,6 @@ import { CodeResourceGalleryComponent } from "./code-resource-gallery.component"
 
 import { AdminNewsListComponent } from "./news/news.component";
 import { AdminNewsEditComponent } from "./edit-news.component";
-import { ChangeRoles } from "./change-roles.component";
 
 const materialModules = [
   MatAutocompleteModule,
@@ -94,7 +93,6 @@ const materialModules = [
     OverviewProjectComponent,
     AdminNewsListComponent,
     AdminNewsEditComponent,
-    ChangeRoles,
     GalleryGrammarComponent,
     MetaCodeResourceSelectComponent,
     ProgrammingLanguageSelectComponent,

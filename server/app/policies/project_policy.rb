@@ -22,6 +22,17 @@ class ProjectPolicy < ApplicationPolicy
     user.owner_of?(project) || user.has_role?(:admin)
   end
 
+  # May the user add a code resource in this project?
+  def create_code_resource?
+    user.owner_of?(project) || user.has_role?(:admin)
+  end
+
+  # May the user persist the current state of the project to the seed data?
+  # If this is permitted, the stored data may end up in git.
+  def store_seed?
+    user.has_role?(:admin)
+  end
+
   class Scope < Scope
     def resolve
       if user.has_role?(:admin)

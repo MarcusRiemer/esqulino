@@ -1,4 +1,3 @@
-import { ApolloQueryResult } from "@apollo/client/core";
 import { Component, Input } from "@angular/core";
 
 import { map, filter, switchMap, distinctUntilChanged } from "rxjs/operators";

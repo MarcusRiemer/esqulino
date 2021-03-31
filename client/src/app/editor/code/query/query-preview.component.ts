@@ -4,7 +4,7 @@ import { Subscription } from "rxjs";
 import { first, filter, finalize, flatMap, map } from "rxjs/operators";
 
 import { DatabaseQueryErrorDescription } from "../../../shared";
-import { Tree } from "../../../shared/syntaxtree";
+import { SyntaxTree } from "../../../shared/syntaxtree";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { EditorToolbarService, ToolbarItem } from "../../toolbar.service";
@@ -18,7 +18,7 @@ import {
 /**
  * Extracts the names of required query parameters out of a syntaxtree.
  */
-function extractQueryParameterNames(tree: Tree) {
+function extractQueryParameterNames(tree: SyntaxTree) {
   const names = tree
     .getNodesOfType({ languageName: "sql", typeName: "parameter" })
     .map((n) => n.properties["name"]);
@@ -54,12 +54,12 @@ export class QueryPreviewComponent implements OnInit, OnDestroy {
 
   // A code resource that is guaranteed to be a SQL query
   private _currentQuery = this._currentCodeResource.currentResource.pipe(
-    filter((c) => c.emittedLanguageIdPeek == "sql")
+    filter((c) => c.runtimeLanguageId == "sql")
   );
 
   // All parameters that are part of the current tree
   readonly queryParameterNames = this._currentQuery.pipe(
-    flatMap((c) => c.syntaxTree),
+    flatMap((c) => c.syntaxTree$),
     map(extractQueryParameterNames)
   );
 

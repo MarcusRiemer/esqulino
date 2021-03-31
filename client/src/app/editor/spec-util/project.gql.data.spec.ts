@@ -16,6 +16,9 @@ const ADMIN_LIST_PROJECT: AdminListProjectNode = {
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: { en: "Project" },
   codeResourceCount: 0,
+  user: {
+    displayName: "System",
+  },
 };
 
 const FRONTEND_LIST_PROJECT: FrontendListProjectNode = {

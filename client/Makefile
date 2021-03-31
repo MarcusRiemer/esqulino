@@ -7,9 +7,9 @@ include ../schema/graphql/Makefile
 # Various tools may be installed in different locations
 # * npm dependencies should not be installed globally
 # * Some platforms call the "node" binary "nodejs"
-NG_BIN = node_modules/.bin/ng
-TSC_BIN = node_modules/.bin/tsc
-XLIFFMERGE_BIN = node_modules/.bin/xliffmerge
+NG_BIN = npx ng
+TSC_BIN = npx tsc
+XLIFFMERGE_BIN = npx xliffmerge
 NODE_BIN = node
 
 BUNDLE_FILES = $(shell find dist/browser -iregex ".*\.\(js\|css\|svg\|eot\|ttf\)" 2> /dev/null)
@@ -52,7 +52,7 @@ client-compile : msg-pre-build src/environments/version.ts
 	$(NG_BIN) build --aot --localize --outputPath="dist/browser" $(NG_PROD) $(DIST_FLAGS)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --outputPath="dist/browser" $(DEV_FLAGS)
+	$(NG_BIN) build --aot --localize --outputPath="dist/browser" $(DEV_FLAGS)
 
 ##################################
 # Commandline Client
@@ -115,13 +115,13 @@ gzipped-clean :
 # Translation
 ##################################
 
-src/locale/messages.xlf : $(CLIENT_NON_XLF_SOURCES)
-	$(NG_BIN) xi18n --output-path locale
+locale/messages.xlf : $(CLIENT_NON_XLF_SOURCES)
+	$(NG_BIN) extract-i18n --output-path locale
 
-src/locale/messages.en.xlf : src/locale/messages.xlf
-	$(NG_BIN) run "blattwerkzeug-client:xliffmerge"
+locale/messages.en.xlf : locale/messages.xlf
+	npx xliffmerge --profile xliffmergeoptions.json en
 
-update-xlf : src/locale/messages.en.xlf
+update-xlf : locale/messages.en.xlf
 
 ##################################
 # GraphQL Client Generation
@@ -141,7 +141,7 @@ verify-cached-schemas:
 
 # Ensures that the GraphQL-Client can be compiled
 verify-compile-graphql-client: src/generated/graphql.ts
-	npx tsc --noEmit --experimentalDecorators --esModuleInterop  --target "es5" $^
+	npx tsc --noEmit --experimentalDecorators --esModuleInterop  --target "es5" --lib "ESNext,DOM" $^
 
 ##################################
 # Dependencies

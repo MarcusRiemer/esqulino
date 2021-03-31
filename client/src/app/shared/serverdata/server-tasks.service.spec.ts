@@ -5,6 +5,18 @@ import { Observable } from "rxjs";
 import { ServerTaskManual } from "./server-task-manual";
 
 describe(`ServerTaskService`, () => {
+  function instantiate() {
+    TestBed.configureTestingModule({
+      imports: [],
+      providers: [ServerTasksService],
+      declarations: [],
+    });
+
+    return {
+      service: TestBed.inject(ServerTasksService),
+    };
+  }
+
   function mkTaskSuccess(description: string): ServerTaskManual {
     const task = new ServerTaskManual(description);
     task.succeeded();
@@ -24,46 +36,34 @@ describe(`ServerTaskService`, () => {
     return task;
   }
 
-  async function hasFinishedTask(t, toBe: boolean) {
-    const hasAnyFinishedTask = await t.service.hasAnyFinishedTask$
+  async function hasFinishedTask(s: ServerTasksService, toBe: boolean) {
+    const hasAnyFinishedTask = await s.hasAnyFinishedTask$
       .pipe(first())
       .toPromise();
     expect(hasAnyFinishedTask).toEqual(toBe);
   }
 
-  async function hasErrorTask(t, toBe: boolean) {
-    const hasAnyFinishedTask = await t.service.hasAnyErrorTask$
+  async function hasErrorTask(s: ServerTasksService, toBe: boolean) {
+    const hasAnyFinishedTask = await s.hasAnyErrorTask$
       .pipe(first())
       .toPromise();
     expect(hasAnyFinishedTask).toEqual(toBe);
   }
 
-  async function hasSucceededTask(t, toBe: boolean) {
-    const hasAnyFinishedTask = await t.service.hasAnySucceededTask$
+  async function hasSucceededTask(s: ServerTasksService, toBe: boolean) {
+    const hasAnyFinishedTask = await s.hasAnySucceededTask$
       .pipe(first())
       .toPromise();
     expect(hasAnyFinishedTask).toEqual(toBe);
   }
 
   async function waitMil(mil: number) {
-    const prom = new Promise((resolve) => {
+    const prom = new Promise<void>((resolve) => {
       setTimeout((_) => {
         resolve();
       }, mil);
     });
     return prom;
-  }
-
-  function instantiate() {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [ServerTasksService],
-      declarations: [],
-    });
-
-    return {
-      service: TestBed.inject(ServerTasksService),
-    };
   }
 
   function firstPromise<T>(obs: Observable<T>) {
@@ -173,11 +173,9 @@ describe(`ServerTaskService`, () => {
     it("No task enqueued", async () => {
       const t = instantiate();
 
-      await hasFinishedTask(t, false);
-
-      await hasErrorTask(t, false);
-
-      await hasSucceededTask(t, false);
+      await hasFinishedTask(t.service, false);
+      await hasErrorTask(t.service, false);
+      await hasSucceededTask(t.service, false);
     });
 
     it("Single pending task enqueued (subscribe late)", async () => {
@@ -185,11 +183,9 @@ describe(`ServerTaskService`, () => {
 
       t.service.addTask(mkTaskPending("t1"));
 
-      await hasFinishedTask(t, false);
-
-      await hasErrorTask(t, false);
-
-      await hasSucceededTask(t, false);
+      await hasFinishedTask(t.service, false);
+      await hasErrorTask(t.service, false);
+      await hasSucceededTask(t.service, false);
     });
     it("Single failed task enqueued (subscribe late)", async () => {
       const t = instantiate();
@@ -198,11 +194,9 @@ describe(`ServerTaskService`, () => {
       t.service.addTask(task);
       task.failed("test");
 
-      await hasFinishedTask(t, true);
-
-      await hasErrorTask(t, true);
-
-      await hasSucceededTask(t, false);
+      await hasFinishedTask(t.service, true);
+      await hasErrorTask(t.service, true);
+      await hasSucceededTask(t.service, false);
     });
     it("Single succeeded task enqueued (subscribe late)", async () => {
       const t = instantiate();
@@ -211,11 +205,9 @@ describe(`ServerTaskService`, () => {
       t.service.addTask(task);
       task.succeeded();
 
-      await hasFinishedTask(t, true);
-
-      await hasErrorTask(t, false);
-
-      await hasSucceededTask(t, true);
+      await hasFinishedTask(t.service, true);
+      await hasErrorTask(t.service, false);
+      await hasSucceededTask(t.service, true);
     });
   });
 
@@ -226,11 +218,9 @@ describe(`ServerTaskService`, () => {
       t.service.addTask(mkTaskPending("t1"));
       t.service.addTask(mkTaskPending("t2"));
 
-      await hasFinishedTask(t, false);
-
-      await hasErrorTask(t, false);
-
-      await hasSucceededTask(t, false);
+      await hasFinishedTask(t.service, false);
+      await hasErrorTask(t.service, false);
+      await hasSucceededTask(t.service, false);
     });
     it("Two failed task enqueued (subscribe late)", async () => {
       const t = instantiate();
@@ -240,11 +230,9 @@ describe(`ServerTaskService`, () => {
       t.service.addTask(task);
       task.failed("test");
 
-      await hasFinishedTask(t, true);
-
-      await hasErrorTask(t, true);
-
-      await hasSucceededTask(t, false);
+      await hasFinishedTask(t.service, true);
+      await hasErrorTask(t.service, true);
+      await hasSucceededTask(t.service, false);
     });
     it("Two succeeded task enqueued (subscribe late)", async () => {
       const t = instantiate();
@@ -254,11 +242,9 @@ describe(`ServerTaskService`, () => {
       t.service.addTask(task);
       task.succeeded();
 
-      await hasFinishedTask(t, true);
-
-      await hasErrorTask(t, false);
-
-      await hasSucceededTask(t, true);
+      await hasFinishedTask(t.service, true);
+      await hasErrorTask(t.service, false);
+      await hasSucceededTask(t.service, true);
     });
   });
 

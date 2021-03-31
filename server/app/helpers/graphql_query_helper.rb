@@ -23,6 +23,7 @@ module GraphqlQueryHelper
     end
   end
 
+  # Retrieves the query from the storage
   def get_query(name)
     query_insert_typename @@query_storage.get_query(name.underscore)
   end
@@ -44,24 +45,11 @@ module GraphqlQueryHelper
   def query_insert_typename(query_string)
     query = GraphQL.parse query_string
 
-    visitor = InsertTypenameVisitor.new(query)
+    visitor = Resolvers::InsertTypenameVisitor.new(query)
     visitor.visit
 
     # Add a trailing newline, this eases the specs because
     # we can work with heredocs to compare the result
     return visitor.result.to_query_string + "\n"
-  end
-
-  private
-
-  class InsertTypenameVisitor < GraphQL::Language::Visitor
-    def on_field(node, parent)
-      names = node.selections.map { |s| s.name }
-      if not names.empty? and not names.include? "__typename"
-        typename_node = GraphQL::Language::Nodes::Field.new(name: "__typename");
-        node = node.merge(selections: node.selections + [typename_node])
-      end
-      super
-    end
   end
 end
