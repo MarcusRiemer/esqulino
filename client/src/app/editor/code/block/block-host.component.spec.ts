@@ -1,10 +1,6 @@
 import { FormsModule } from "@angular/forms";
 import { TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from "@angular/common/http/testing";
 import { ApolloTestingModule } from "apollo-angular/testing";
 
 import { first } from "rxjs/operators";
@@ -29,8 +25,8 @@ import { DragService } from "../../drag.service";
 import {
   specCacheBlockLanguage,
   specBuildBlockLanguage,
-  specEnsureLocalGrammarRequest,
   specBuildGrammarDescription,
+  specProvideGrammarResponse,
 } from "../../spec-util";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
@@ -43,12 +39,7 @@ describe("BlockHostComponent", () => {
     editorBlocks: EditorBlockDescription[]
   ) {
     await TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        MatSnackBarModule,
-        HttpClientTestingModule,
-        ApolloTestingModule,
-      ],
+      imports: [FormsModule, MatSnackBarModule, ApolloTestingModule],
       providers: [
         DragService,
         FullGrammarGQL,
@@ -61,9 +52,7 @@ describe("BlockHostComponent", () => {
       declarations: [FocusDirective, ...BLOCK_RENDER_COMPONENTS],
     }).compileComponents();
 
-    const grammarDesc = await specEnsureLocalGrammarRequest(
-      specBuildGrammarDescription({})
-    );
+    const grammarDesc = specBuildGrammarDescription({});
 
     const blockLangDesc = specCacheBlockLanguage(
       specBuildBlockLanguage({
@@ -103,26 +92,26 @@ describe("BlockHostComponent", () => {
     component.blockLanguage = blockLanguage;
     component.codeResource = codeResource;
 
-    await renderData._updateRenderData(codeResource, blockLanguage, false, {});
+    const gotRenderData$ = renderData._updateRenderData(
+      codeResource,
+      blockLanguage,
+      false,
+      {}
+    );
+
+    specProvideGrammarResponse(grammarDesc);
+
+    await gotRenderData$;
 
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const httpTestingController = TestBed.inject(HttpTestingController);
-    httpTestingController.verify();
-
-    const serviceRenderDataAvailable = await renderData.dataAvailable$
-      .pipe(first())
-      .toPromise();
     const componentRenderDataAvailable = await component.renderDataAvailable$
       .pipe(first())
       .toPromise();
 
     expect(componentRenderDataAvailable)
       .withContext("Component render data must be available")
-      .toBe(true);
-    expect(serviceRenderDataAvailable)
-      .withContext("Service render data must be available")
       .toBe(true);
 
     expect(component.node)

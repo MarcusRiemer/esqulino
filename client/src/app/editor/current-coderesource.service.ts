@@ -1,7 +1,14 @@
 import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
-import { map, filter, tap, mergeMap } from "rxjs/operators";
+import {
+  map,
+  filter,
+  tap,
+  mergeMap,
+  shareReplay,
+  switchMap,
+} from "rxjs/operators";
 
 import { ResourceReferencesService } from "../shared/resource-references.service";
 import {
@@ -53,7 +60,7 @@ export class CurrentCodeResourceService {
    */
   readonly currentTree: Observable<SyntaxTree> = this._codeResource.pipe(
     filter((c) => !!c),
-    mergeMap((c) => c.syntaxTree$)
+    switchMap((c) => c.syntaxTree$)
   );
 
   /**
@@ -61,19 +68,21 @@ export class CurrentCodeResourceService {
    */
   readonly resourceBlockLanguageId: Observable<string> = this.currentResource.pipe(
     filter((c) => !!c),
-    mergeMap((c) => c.blockLanguageId$)
+    switchMap((c) => c.blockLanguageId$)
   );
 
   readonly blockLanguage$ = this.resourceBlockLanguageId.pipe(
-    mergeMap((id) => this._resourceReferences.getBlockLanguage(id))
+    switchMap((id) => this._resourceReferences.getBlockLanguage(id)),
+    shareReplay(1)
   );
 
   readonly blockLanguageGrammar$ = this.blockLanguage$.pipe(
-    mergeMap((b) =>
+    switchMap((b) =>
       this._resourceReferences.getGrammarDescription(b.grammarId, {
         onMissing: "throw",
       })
-    )
+    ),
+    shareReplay(1)
   );
 
   readonly validator$ = combineLatest([
@@ -82,9 +91,10 @@ export class CurrentCodeResourceService {
   ]).pipe(
     // Both arguments must be available to have a validator
     filter(([c, b]) => !!c && !!b),
-    mergeMap(([c, b]) =>
+    switchMap(([c, b]) =>
       this._resourceReferences.getValidator(c.runtimeLanguageId, b.grammarId)
-    )
+    ),
+    shareReplay(1)
   );
 
   /**

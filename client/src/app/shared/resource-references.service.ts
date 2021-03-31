@@ -10,7 +10,10 @@ import { first, map, tap } from "rxjs/operators";
 import { Observable, of, concat } from "rxjs";
 
 import {
+  FullBlockLanguageDocument,
   FullBlockLanguageGQL,
+  FullBlockLanguageQuery,
+  FullBlockLanguageQueryVariables,
   FullGrammarDocument,
   FullGrammarGQL,
   FullGrammarQuery,
@@ -25,6 +28,7 @@ import { Language } from "./syntaxtree/language";
 import { StringUnion } from "./string-union";
 import { GrammarDescription } from "./syntaxtree";
 import { Apollo, Query } from "apollo-angular";
+import { BlockLanguageDescription } from "./block/block-language.description";
 
 /**
  * Valid values for resources that may be required
@@ -95,8 +99,6 @@ function fetchPolicyIncludesNetwork(f: RetrievalOptions["fetchPolicy"]) {
  */
 @Injectable()
 export class ResourceReferencesService {
-  private _blockLanguages: { [blockLanguageId: string]: BlockLanguage } = {};
-
   constructor(
     private readonly _apollo: Apollo,
     private readonly _languageService: LanguageService,
@@ -114,7 +116,7 @@ export class ResourceReferencesService {
     { onMissing = "throw", fetchPolicy = "cache-first" }: RetrievalOptions = {}
   ): Promise<BlockLanguage> {
     const msg = [
-      `Retrieving block language "${id}"`,
+      `Retrieving block language description "${id}"`,
       {
         onMissing,
         fetchPolicy,
@@ -122,95 +124,43 @@ export class ResourceReferencesService {
     ];
     console.log(...msg);
 
-    if (!this._blockLanguages[id]) {
-      await this._blockLanguage
-        .fetch({ id }, { fetchPolicy })
-        .pipe(
-          first(),
-          map((res) => {
-            const blockLangDesc = res.data?.blockLanguage;
-            if (blockLangDesc) {
-              const bl = new BlockLanguage(blockLangDesc);
-              // Nasty: A side effect to store the value for later
-              //        This might be a very dumb idea
-              this._blockLanguages[bl.id] = bl;
-              return bl;
-            } else {
-              switch (onMissing) {
-                case "throw":
-                  // The internet says its okay to throw here:
-                  // https://stackoverflow.com/questions/43199642/how-to-throw-error-from-rxjs-map-operator-angular
-                  throw new ResourceRetrievalError(
-                    "BlockLanguageDescription",
-                    id,
-                    {
-                      onMissing,
-                      fetchPolicy,
-                    }
-                  );
-                case "undefined":
-                  return undefined;
-              }
-            }
-          })
+    const cachedResult = this.explicitApolloCache<
+      FullBlockLanguageQuery,
+      BlockLanguageDescription
+    >(
+      fetchPolicy,
+      id,
+      FullBlockLanguageDocument,
+      (cacheResult) => cacheResult.blockLanguage
+    );
+
+    const requestResult = this.explicitApolloRequest<
+      FullBlockLanguageQuery,
+      FullBlockLanguageQueryVariables,
+      BlockLanguageDescription
+    >(
+      { onMissing, fetchPolicy },
+      { id },
+      this._blockLanguage,
+      "BlockLanguageDescription",
+      (netResult) => netResult.data.blockLanguage
+    );
+
+    const combined = concat(cachedResult, requestResult);
+
+    const result = await combined
+      .pipe(
+        first(),
+        this.pipeEnsureOnMissing(
+          { id },
+          { onMissing, fetchPolicy },
+          "BlockLanguageDescription"
         )
-        .toPromise();
-    }
-    console.log(`DONE:`, ...msg);
+      )
+      .toPromise();
 
-    return this._blockLanguages[id];
-  }
-
-  private explicitApolloCache<TResponse, TResult>(
-    fetchPolicy: RetrievalOptions["fetchPolicy"],
-    id: String,
-    document: DocumentNode,
-    mapFunc: (res: ApolloQueryResult<TResponse>) => TResult
-  ): Observable<TResult> {
-    if (fetchPolicyIncludesCache(fetchPolicy)) {
-      const cached = this._apollo.client.cache.readQuery<
-        ApolloQueryResult<TResponse>
-      >({
-        query: document,
-        variables: {
-          id,
-        },
-      });
-
-      // Observable sequence which contains the desired value
-      return of(cached ? mapFunc(cached) : undefined);
-    } else {
-      // Empty observable sequence which does not contain any value
-      return of();
-    }
-  }
-
-  private explicitApolloRequest<TResponse, TVars, TResult>(
-    retrieval: RetrievalOptions,
-    vars: TVars,
-    query: Query<TResponse, TVars>,
-    resourceType: ResourceType,
-    mapFunc: (res: ApolloQueryResult<TResponse>) => TResult
-  ): Observable<TResult> {
-    if (fetchPolicyIncludesNetwork(retrieval.fetchPolicy)) {
-      return (
-        query
-          // This method explicitly wants to make a request, caching is taken care of
-          // elsewhere
-          .fetch(vars, { fetchPolicy: "network-only" })
-          .pipe(
-            tap((res) => {
-              console.log(
-                `PROGRESS ${resourceType} "${JSON.stringify(vars)}" =>`,
-                res
-              );
-            }),
-            map(mapFunc)
-          )
-      );
-    } else {
-      return of();
-    }
+    console.log(`DONE:`, ...msg, "=>", result);
+    return result ? new BlockLanguage(result) : undefined;
   }
 
   /**
@@ -234,7 +184,7 @@ export class ResourceReferencesService {
     const cachedResult = this.explicitApolloCache<
       FullGrammarQuery,
       GrammarDescription
-    >(fetchPolicy, id, FullGrammarDocument, (res) => res.data.grammar);
+    >(fetchPolicy, id, FullGrammarDocument, (res) => res.grammar);
 
     const requestResult = this.explicitApolloRequest<
       FullGrammarQuery,
@@ -253,23 +203,11 @@ export class ResourceReferencesService {
     const result = await combined
       .pipe(
         first(),
-        map((desc) => {
-          if (desc) {
-            return desc;
-          } else {
-            switch (onMissing) {
-              case "throw":
-                // The internet says its okay to throw here:
-                // https://stackoverflow.com/questions/43199642/how-to-throw-error-from-rxjs-map-operator-angular
-                throw new ResourceRetrievalError("GrammarDescription", id, {
-                  onMissing,
-                  fetchPolicy,
-                });
-              case "undefined":
-                return undefined;
-            }
-          }
-        })
+        this.pipeEnsureOnMissing(
+          { id },
+          { onMissing, fetchPolicy },
+          "GrammarDescription"
+        )
       )
       .toPromise();
 
@@ -364,7 +302,7 @@ export class ResourceReferencesService {
 
     const toReturn = await Promise.all(requests);
     if (toReturn.some((v) => v === undefined)) {
-      console.error("Ensural result was falsy", req, "=>", requests);
+      console.error("Ensural result was falsy", req, "=>", toReturn);
       throw new Error("Ensural result was falsy");
     }
 
@@ -434,5 +372,94 @@ export class ResourceReferencesService {
     });
 
     return this.ensureResources({ type: "grammar", id: blockLang.grammarId });
+  }
+
+  private explicitApolloCache<TResponse, TResult>(
+    fetchPolicy: RetrievalOptions["fetchPolicy"],
+    id: String,
+    document: DocumentNode,
+    mapFunc: (res: TResponse) => TResult
+  ): Observable<TResult> {
+    if (fetchPolicyIncludesCache(fetchPolicy)) {
+      const cached = this._apollo.client.cache.readQuery<TResponse>({
+        query: document,
+        variables: {
+          id,
+        },
+      });
+
+      // Everything is fine if we have found a value: The
+      // mapper must then extract it.
+      if (cached) {
+        return of(mapFunc(cached));
+      } else {
+        // If we don't have a value and are the only stop:
+        // Indicate that there is no value
+        if (fetchPolicy === "cache-only") {
+          return of(undefined);
+        }
+        // If we don't have a value but there is a chance for
+        // a hit: Don't produce any value.
+        else {
+          return of();
+        }
+      }
+    } else {
+      // Empty observable sequence which does not contain any value
+      return of();
+    }
+  }
+
+  private explicitApolloRequest<TResponse, TVars, TResult>(
+    retrieval: RetrievalOptions,
+    vars: TVars,
+    query: Query<TResponse, TVars>,
+    resourceType: ResourceType,
+    mapFunc: (res: ApolloQueryResult<TResponse>) => TResult
+  ): Observable<TResult> {
+    if (fetchPolicyIncludesNetwork(retrieval.fetchPolicy)) {
+      return (
+        query
+          // This method explicitly wants to make a request, caching is taken care of
+          // elsewhere
+          .fetch(vars, { fetchPolicy: "network-only" })
+          .pipe(
+            tap((res) => {
+              console.log(
+                `PROGRESS ${resourceType} "${JSON.stringify(vars)}" =>`,
+                res
+              );
+            }),
+            map(mapFunc)
+          )
+      );
+    } else {
+      return of();
+    }
+  }
+
+  private pipeEnsureOnMissing<T>(
+    id: Object,
+    options: RetrievalOptions,
+    resourceType: ResourceType
+  ) {
+    return map<T, T>((desc) => {
+      if (desc) {
+        return desc;
+      } else {
+        switch (options.onMissing) {
+          case "throw":
+            // The internet says its okay to throw here:
+            // https://stackoverflow.com/questions/43199642/how-to-throw-error-from-rxjs-map-operator-angular
+            throw new ResourceRetrievalError(
+              resourceType,
+              JSON.stringify(id),
+              options
+            );
+          case "undefined":
+            return undefined;
+        }
+      }
+    });
   }
 }

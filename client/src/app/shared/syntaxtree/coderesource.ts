@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
-import { map, mergeMap, tap } from "rxjs/operators";
+import { map, shareReplay, switchMap, tap } from "rxjs/operators";
 
 import { ProjectResource } from "../resource";
 import { ResourceReferencesService } from "../resource-references.service";
@@ -61,14 +61,15 @@ export class CodeResource extends ProjectResource {
    * @return The language that is currently in use
    */
   readonly blockLanguage$: Observable<BlockLanguage> = this._blockLanguageId$.pipe(
-    mergeMap((l) => this.resourceReferences.getBlockLanguage(l))
+    switchMap((l) => this.resourceReferences.getBlockLanguage(l)),
+    shareReplay(1)
   );
 
   readonly validator$: Observable<Validator> = combineLatest([
     this._runtimeLanguageId$,
     this.blockLanguage$,
   ]).pipe(
-    mergeMap(([runtimeLangId, b]) =>
+    switchMap(([runtimeLangId, b]) =>
       this.resourceReferences.getValidator(runtimeLangId, b.grammarId)
     )
   );
@@ -81,7 +82,7 @@ export class CodeResource extends ProjectResource {
     this.blockLanguage$,
   ]).pipe(
     tap(console.log),
-    mergeMap(([l, b]) =>
+    switchMap(([l, b]) =>
       this.resourceReferences.getGrammarProgrammingLanguage(b.grammarId, l)
     )
   );
