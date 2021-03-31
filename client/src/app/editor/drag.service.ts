@@ -84,10 +84,10 @@ interface DragOverEvent {
 export class DragService {
   // The thing we are currently dragging, including the complete hovering
   // state and everything that may be of concern.
-  private _currentDrag = new BehaviorSubject<CurrentDrag>(undefined);
+  private _currentDrag$ = new BehaviorSubject<CurrentDrag>(undefined);
 
   // Shortcut to get the gist of the current drag process
-  private _currentDragInProgress = this._currentDrag.pipe(map((d) => !!d));
+  private _currentDragInProgress = this._currentDrag$.pipe(map((d) => !!d));
 
   private _currentDragOverlay: OverlayRef = undefined;
 
@@ -142,7 +142,13 @@ export class DragService {
       this._informDraggedOverEvent$,
       this._currentCodeResource.validator$,
     ]).subscribe(([evt, v]) => {
-      this.informDraggedOverImpl(evt, v);
+      // This should be only sensitive to the event, not to the validator.
+      // But as it stands a change in the validator also fires this which
+      // leads to errors when changing the resource (and therefore the
+      // validator) in the editor.
+      if (this._currentDrag$.value) {
+        this.informDraggedOverImpl(evt, v);
+      }
     });
   }
 
@@ -220,7 +226,7 @@ export class DragService {
     sourceSidebar?: DragSidebar,
     sourceTree?: DragTree
   ) {
-    if (this._currentDrag.value) {
+    if (this._currentDrag$.value) {
       throw new Error("Attempted to start a second drag");
     }
 
@@ -248,7 +254,7 @@ export class DragService {
     }
 
     // And fire the drag out
-    this._currentDrag.next(hoverData);
+    this._currentDrag$.next(hoverData);
 
     // If we have a proper source: Wire it up to react to
     // being put in the trash.
@@ -306,7 +312,7 @@ export class DragService {
    * The actual implementation of drag notifications.
    */
   private informDraggedOverImpl(evt: DragOverEvent, validator: Validator) {
-    const dragData = this._currentDrag.value;
+    const dragData = this._currentDrag$.value;
     if (!dragData) {
       throw new Error("Can't drag over anything: No drag in progress");
     }
@@ -342,14 +348,14 @@ export class DragService {
       smartDropLocations[0].operation === "embrace";
 
     // console.log(`Dragging over ${JSON.stringify(dropLocation)}`, smartDropLocations);
-    this._currentDrag.next(dragData);
+    this._currentDrag$.next(dragData);
   }
 
   /**
    * Needs to be called when the drag operation currently drags over the editor.
    */
   public informDraggedOverEditor() {
-    const dragData = this._currentDrag.value;
+    const dragData = this._currentDrag$.value;
     if (!dragData) {
       throw new Error("Can't drag over editor: No drag in progress");
     }
@@ -363,14 +369,14 @@ export class DragService {
 
     this._bufferedDragOver = undefined;
 
-    this._currentDrag.next(dragData);
+    this._currentDrag$.next(dragData);
   }
 
   /**
    * Needs to be called when the drag operation currently drags over the editor.
    */
   public informDraggedOverTrash() {
-    const dragData = this._currentDrag.value;
+    const dragData = this._currentDrag$.value;
 
     // Get rid of everything that could be set ...
     delete dragData.hoverNode;
@@ -383,14 +389,14 @@ export class DragService {
 
     this._bufferedDragOver = undefined;
 
-    this._currentDrag.next(dragData);
+    this._currentDrag$.next(dragData);
   }
 
   /**
    * @return Observable that always knows all details about the ongoing drag operation.
    */
   get currentDrag(): Observable<CurrentDrag> {
-    return this._currentDrag;
+    return this._currentDrag$;
   }
 
   /**
@@ -404,14 +410,14 @@ export class DragService {
    * @return Takes a peek whether a drag is occuring *right now*.
    */
   get peekIsDragInProgress(): boolean {
-    return !!this._currentDrag.value;
+    return !!this._currentDrag$.value;
   }
 
   /**
    * @return Takes a peek at the data of the drag that is occuring *right now*.
    */
   get peekDragData() {
-    return this._currentDrag.value;
+    return this._currentDrag$.value;
   }
 
   /**
@@ -422,12 +428,12 @@ export class DragService {
     // Reset everything once the operation has ended
     const dragEndHandler = (cancelled: boolean) => {
       // Keep a reference to the now finished drag
-      const dragData = this._currentDrag.value;
+      const dragData = this._currentDrag$.value;
 
       // Do the strictly required internal bookkeeping
       removeDragHandlers();
       this.hideDraggedBlock();
-      this._currentDrag.next(undefined);
+      this._currentDrag$.next(undefined);
 
       // Tell the analytics API about the ended event
       this._analytics.trackEvent({
