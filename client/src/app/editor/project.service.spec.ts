@@ -16,7 +16,6 @@ import {
 } from "../../generated/graphql";
 
 import { ResourceReferencesService } from "../shared/resource-references.service";
-import { ResourceReferencesOnlineService } from "../shared/resource-references-online.service";
 import { LanguageService, ServerApiService } from "../shared";
 import { generateUUIDv4 } from "../shared/util-browser";
 
@@ -36,10 +35,7 @@ describe(`ProjectService`, () => {
         FullGrammarGQL,
         MatSnackBar,
         Overlay,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
       ],
       declarations: [],
     });

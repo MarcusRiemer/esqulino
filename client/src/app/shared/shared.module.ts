@@ -68,7 +68,6 @@ import { MessageDialogComponent } from "./message-dialog.component";
 import { UnexpectedLogoutInterceptor } from "./unexpected-logout.interceptor";
 import { UserService } from "./auth/user.service";
 import { ResourceReferencesService } from "./resource-references.service";
-import { ResourceReferencesOnlineService } from "./resource-references-online.service";
 import { PaginatorTableGraphqlComponent } from "./table/paginator-table-graphql.component";
 
 import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
@@ -219,10 +218,7 @@ export class SharedAppModule {
         PerformDataService,
         IsAdminGuard,
         MayPerformService,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
         {
           provide: HTTP_INTERCEPTORS,
           useClass: UnexpectedLogoutInterceptor,

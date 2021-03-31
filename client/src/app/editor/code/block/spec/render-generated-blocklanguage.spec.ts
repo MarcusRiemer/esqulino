@@ -26,7 +26,6 @@ import {
   GrammarDocument,
 } from "../../../../shared";
 import { ServerApiService } from "../../../../shared/serverdata";
-import { ResourceReferencesOnlineService } from "../../../../shared/resource-references-online.service";
 import { ResourceReferencesService } from "../../../../shared/resource-references.service";
 import { generateBlockLanguage } from "../../../../shared/block/generator/generator";
 import { BlockLanguageListDescription } from "../../../../shared/block/block-language.description";
@@ -40,8 +39,8 @@ import { TrashService } from "../../../trash.service";
 import {
   specCacheBlockLanguage,
   specBuildBlockLanguage,
-  ensureLocalGrammarRequest,
-  mkGrammarDescription,
+  specEnsureLocalGrammarRequest,
+  specBuildGrammarDescription,
 } from "../../../spec-util";
 import { CurrentCodeResourceService } from "../../../current-coderesource.service";
 
@@ -72,10 +71,7 @@ describe(`Render Generated BlockLanguages`, () => {
         TrashService,
         ServerApiService,
         FullProjectGQL,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
         {
           provide: AnalyticsService,
           useClass: SpecAnalyticsService,
@@ -84,8 +80,8 @@ describe(`Render Generated BlockLanguages`, () => {
       declarations: [...BLOCK_RENDER_COMPONENTS, FocusDirective],
     }).compileComponents();
 
-    const grammarDesc = await ensureLocalGrammarRequest(
-      mkGrammarDescription(grammarDoc)
+    const grammarDesc = await specEnsureLocalGrammarRequest(
+      specBuildGrammarDescription(grammarDoc)
     );
     const listBlockLanguage: BlockLanguageListDescription = specBuildBlockLanguage(
       {

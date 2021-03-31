@@ -13,7 +13,6 @@ import {
 import { ServerApiService } from "../../../shared/serverdata";
 
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
-import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
 import {
   LanguageService,
   NodeDescription,
@@ -23,10 +22,10 @@ import {
 import { VisualBlockDescriptions, BlockLanguage } from "../../../shared/block";
 
 import {
-  ensureLocalGrammarRequest,
-  mkGrammarDescription,
+  specBuildGrammarDescription,
   specBuildBlockLanguage,
   specCacheBlockLanguage,
+  specEnsureLocalGrammarRequest,
 } from "../../spec-util";
 import { DragService } from "../../drag.service";
 
@@ -52,10 +51,7 @@ describe(`BlockRenderErrorComponent`, () => {
         RenderedCodeResourceService,
         FullGrammarGQL,
         FullBlockLanguageGQL,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
       ],
       declarations: [BlockRenderErrorComponent],
     }).compileComponents();
@@ -64,10 +60,7 @@ describe(`BlockRenderErrorComponent`, () => {
     const component = fixture.componentInstance;
     const renderData = TestBed.inject(RenderedCodeResourceService);
 
-    // WRONG: Must use GraphQL service
-    const grammarDesc = await ensureLocalGrammarRequest(
-      mkGrammarDescription({ types: { spec: types } })
-    );
+    const grammarDesc = specBuildGrammarDescription({ types: { spec: types } });
 
     const blockLangDesc = specCacheBlockLanguage(
       specBuildBlockLanguage({
@@ -97,10 +90,25 @@ describe(`BlockRenderErrorComponent`, () => {
     component.node = codeResource.syntaxTreePeek.rootNode;
     component.visual = visual;
 
-    await renderData._updateRenderData(codeResource, blockLanguage, false, {});
+    console.log("### Pre _updateRenderData ###");
+
+    const updated = renderData._updateRenderData(
+      codeResource,
+      blockLanguage,
+      false,
+      {}
+    );
+
+    console.log("### Pre ensureLocalGrammarRequest ###");
+
+    specEnsureLocalGrammarRequest(grammarDesc);
+
+    await updated;
 
     fixture.detectChanges();
     await fixture.whenRenderingDone();
+
+    console.log("### Pre Data available ###");
 
     const dataAvailable = await renderData.dataAvailable$
       .pipe(first())
@@ -109,12 +117,12 @@ describe(`BlockRenderErrorComponent`, () => {
       .withContext("Must have all data to render")
       .toEqual(true);
 
-    console.log("###  Reached ###");
+    console.log("### Reached Data available ###");
 
     const validator = await renderData.validator$.pipe(first()).toPromise();
     expect(validator).toBeDefined();
 
-    console.log("### Not Reached ###");
+    console.log("### Reached Validator ###");
 
     const promisedTree = await renderData.syntaxTree$.pipe(first()).toPromise();
     expect(promisedTree).toBeDefined();

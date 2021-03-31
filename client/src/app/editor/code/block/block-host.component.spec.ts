@@ -23,15 +23,14 @@ import {
   CodeResource,
 } from "../../../shared";
 import { ServerApiService } from "../../../shared/serverdata";
-import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 
 import { DragService } from "../../drag.service";
 import {
   specCacheBlockLanguage,
   specBuildBlockLanguage,
-  ensureLocalGrammarRequest,
-  mkGrammarDescription,
+  specEnsureLocalGrammarRequest,
+  specBuildGrammarDescription,
 } from "../../spec-util";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
@@ -56,17 +55,14 @@ describe("BlockHostComponent", () => {
         LanguageService,
         RenderedCodeResourceService,
         ServerApiService,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
         FullBlockLanguageGQL,
       ],
       declarations: [FocusDirective, ...BLOCK_RENDER_COMPONENTS],
     }).compileComponents();
 
-    const grammarDesc = await ensureLocalGrammarRequest(
-      mkGrammarDescription({})
+    const grammarDesc = await specEnsureLocalGrammarRequest(
+      specBuildGrammarDescription({})
     );
 
     const blockLangDesc = specCacheBlockLanguage(

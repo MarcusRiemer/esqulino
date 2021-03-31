@@ -28,7 +28,6 @@ import {
 } from "../../editor/spec-util";
 
 import { ResourceReferencesService } from "../../shared/resource-references.service";
-import { ResourceReferencesOnlineService } from "../../shared/resource-references-online.service";
 
 import { ServerApiService, LanguageService } from "../../shared";
 import { MayPerformService } from "../../shared/authorisation/may-perform.service";
@@ -73,10 +72,7 @@ describe(`CreateCodeResourceComponent`, () => {
         FullGrammarGQL,
         MatSnackBar,
         Overlay,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
         FullProjectGQL,
         FullBlockLanguageGQL,
         NameBlockLanguageGQL,

@@ -1,4 +1,4 @@
-import { mkGrammarDescription } from "../../editor/spec-util";
+import { specBuildGrammarDescription } from "../../editor/spec-util";
 import { BlattWerkzeugError } from "../blattwerkzeug-error";
 import { NodeTerminalSymbolDescription } from "./grammar.description";
 import { Language } from "./language";
@@ -17,7 +17,7 @@ const TERMINAL_R: NodeTerminalSymbolDescription = {
   symbol: "r",
 };
 
-const SINGLE_ROOT_GRAMMAR = mkGrammarDescription({
+const SINGLE_ROOT_GRAMMAR = specBuildGrammarDescription({
   types: {
     l: {
       r: {
@@ -28,7 +28,7 @@ const SINGLE_ROOT_GRAMMAR = mkGrammarDescription({
   },
 });
 
-const VIS_SINGLE_ROOT_GRAMMAR = mkGrammarDescription({
+const VIS_SINGLE_ROOT_GRAMMAR = specBuildGrammarDescription({
   visualisations: {
     l: {
       r: {

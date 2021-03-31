@@ -1,11 +1,30 @@
 import { Injectable } from "@angular/core";
+import {
+  ApolloQueryResult,
+  DocumentNode,
+  FetchPolicy,
+  WatchQueryFetchPolicy,
+} from "@apollo/client/core";
 
-import { BlockLanguage } from "./block/block-language";
+import { first, map, tap } from "rxjs/operators";
+import { Observable, of, concat } from "rxjs";
+
+import {
+  FullBlockLanguageGQL,
+  FullGrammarDocument,
+  FullGrammarGQL,
+  FullGrammarQuery,
+  FullGrammarQueryVariables,
+} from "../../generated/graphql";
+
+import { LanguageService } from "./language.service";
+import { BlockLanguage } from "./block";
+import { BlattWerkzeugError } from "./blattwerkzeug-error";
 import { Validator } from "./syntaxtree/validator";
 import { Language } from "./syntaxtree/language";
 import { StringUnion } from "./string-union";
 import { GrammarDescription } from "./syntaxtree";
-import { FetchPolicy } from "@apollo/client/core";
+import { Apollo, Query } from "apollo-angular";
 
 /**
  * Valid values for resources that may be required
@@ -34,7 +53,39 @@ export function isRequiredResource(obj: any): obj is RequiredResource {
 
 export interface RetrievalOptions {
   onMissing?: "undefined" | "throw";
-  fetchPolicy?: FetchPolicy;
+  fetchPolicy?: "cache-first" | "cache-only" | "network-only";
+}
+
+export type ResourceType = "BlockLanguageDescription" | "GrammarDescription";
+
+export class ResourceRetrievalError extends BlattWerkzeugError {
+  constructor(
+    readonly resourceType: ResourceType,
+    readonly id: string,
+    readonly retrievalOptions: RetrievalOptions
+  ) {
+    super(`Error retrieving ${resourceType} "${id}"`);
+  }
+}
+
+function fetchPolicyIncludesCache(f: RetrievalOptions["fetchPolicy"]) {
+  switch (f) {
+    case "cache-first":
+    case "cache-only":
+      return true;
+    default:
+      return false;
+  }
+}
+
+function fetchPolicyIncludesNetwork(f: RetrievalOptions["fetchPolicy"]) {
+  switch (f) {
+    case "cache-first":
+    case "network-only":
+      return true;
+    default:
+      return false;
+  }
 }
 
 /**
@@ -43,26 +94,188 @@ export interface RetrievalOptions {
  * breaks down for resources that don't belong to a project. So this interface was born :)
  */
 @Injectable()
-export abstract class ResourceReferencesService {
+export class ResourceReferencesService {
+  private _blockLanguages: { [blockLanguageId: string]: BlockLanguage } = {};
+
+  constructor(
+    private readonly _apollo: Apollo,
+    private readonly _languageService: LanguageService,
+    private readonly _blockLanguage: FullBlockLanguageGQL,
+    private readonly _grammar: FullGrammarGQL
+  ) {}
+
   /**
    * @param id The ID of the requested block language
    * @param onMissing What should be done in the case of a missing resource?
    * @return The block language with the requested ID
    */
-  abstract getBlockLanguage(
+  async getBlockLanguage(
     id: string,
-    options?: RetrievalOptions
-  ): Promise<BlockLanguage>;
+    { onMissing = "throw", fetchPolicy = "cache-first" }: RetrievalOptions = {}
+  ): Promise<BlockLanguage> {
+    const msg = [
+      `Retrieving block language "${id}"`,
+      {
+        onMissing,
+        fetchPolicy,
+      },
+    ];
+    console.log(...msg);
+
+    if (!this._blockLanguages[id]) {
+      await this._blockLanguage
+        .fetch({ id }, { fetchPolicy })
+        .pipe(
+          first(),
+          map((res) => {
+            const blockLangDesc = res.data?.blockLanguage;
+            if (blockLangDesc) {
+              const bl = new BlockLanguage(blockLangDesc);
+              // Nasty: A side effect to store the value for later
+              //        This might be a very dumb idea
+              this._blockLanguages[bl.id] = bl;
+              return bl;
+            } else {
+              switch (onMissing) {
+                case "throw":
+                  // The internet says its okay to throw here:
+                  // https://stackoverflow.com/questions/43199642/how-to-throw-error-from-rxjs-map-operator-angular
+                  throw new ResourceRetrievalError(
+                    "BlockLanguageDescription",
+                    id,
+                    {
+                      onMissing,
+                      fetchPolicy,
+                    }
+                  );
+                case "undefined":
+                  return undefined;
+              }
+            }
+          })
+        )
+        .toPromise();
+    }
+    console.log(`DONE:`, ...msg);
+
+    return this._blockLanguages[id];
+  }
+
+  private explicitApolloCache<TResponse, TResult>(
+    fetchPolicy: RetrievalOptions["fetchPolicy"],
+    id: String,
+    document: DocumentNode,
+    mapFunc: (res: ApolloQueryResult<TResponse>) => TResult
+  ): Observable<TResult> {
+    if (fetchPolicyIncludesCache(fetchPolicy)) {
+      const cached = this._apollo.client.cache.readQuery<
+        ApolloQueryResult<TResponse>
+      >({
+        query: document,
+        variables: {
+          id,
+        },
+      });
+
+      // Observable sequence which contains the desired value
+      return of(cached ? mapFunc(cached) : undefined);
+    } else {
+      // Empty observable sequence which does not contain any value
+      return of();
+    }
+  }
+
+  private explicitApolloRequest<TResponse, TVars, TResult>(
+    retrieval: RetrievalOptions,
+    vars: TVars,
+    query: Query<TResponse, TVars>,
+    resourceType: ResourceType,
+    mapFunc: (res: ApolloQueryResult<TResponse>) => TResult
+  ): Observable<TResult> {
+    if (fetchPolicyIncludesNetwork(retrieval.fetchPolicy)) {
+      return (
+        query
+          // This method explicitly wants to make a request, caching is taken care of
+          // elsewhere
+          .fetch(vars, { fetchPolicy: "network-only" })
+          .pipe(
+            tap((res) => {
+              console.log(
+                `PROGRESS ${resourceType} "${JSON.stringify(vars)}" =>`,
+                res
+              );
+            }),
+            map(mapFunc)
+          )
+      );
+    } else {
+      return of();
+    }
+  }
 
   /**
    * @param id The ID of the requested grammar
    * @param onMissing What should be done in the case of a missing resource?
    * @return The grammar with the requested ID
    */
-  abstract getGrammarDescription(
+  async getGrammarDescription(
     id: string,
-    onMissing: "undefined" | "throw"
-  ): Promise<GrammarDescription>;
+    { onMissing = "throw", fetchPolicy = "cache-first" }: RetrievalOptions = {}
+  ): Promise<GrammarDescription> {
+    const msg = [
+      `Retrieving grammar description "${id}"`,
+      {
+        onMissing,
+        fetchPolicy,
+      },
+    ];
+    console.log(...msg);
+
+    const cachedResult = this.explicitApolloCache<
+      FullGrammarQuery,
+      GrammarDescription
+    >(fetchPolicy, id, FullGrammarDocument, (res) => res.data.grammar);
+
+    const requestResult = this.explicitApolloRequest<
+      FullGrammarQuery,
+      FullGrammarQueryVariables,
+      GrammarDescription
+    >(
+      { onMissing, fetchPolicy },
+      { id },
+      this._grammar,
+      "GrammarDescription",
+      (res) => res.data.grammar
+    );
+
+    const combined = concat(cachedResult, requestResult);
+
+    const result = await combined
+      .pipe(
+        first(),
+        map((desc) => {
+          if (desc) {
+            return desc;
+          } else {
+            switch (onMissing) {
+              case "throw":
+                // The internet says its okay to throw here:
+                // https://stackoverflow.com/questions/43199642/how-to-throw-error-from-rxjs-map-operator-angular
+                throw new ResourceRetrievalError("GrammarDescription", id, {
+                  onMissing,
+                  fetchPolicy,
+                });
+              case "undefined":
+                return undefined;
+            }
+          }
+        })
+      )
+      .toPromise();
+
+    console.log(`DONE:`, ...msg, "=>", result);
+    return result;
+  }
 
   /**
    * @param programmingLanguageId The core language to use, may define static code validators
@@ -75,10 +288,9 @@ export abstract class ResourceReferencesService {
     );
     const specializedValidators =
       programmingLanguage.validator.specializedValidators;
-    const grammarDescription = await this.getGrammarDescription(
-      grammarId,
-      "undefined"
-    );
+    const grammarDescription = await this.getGrammarDescription(grammarId, {
+      onMissing: "undefined",
+    });
     if (!grammarDescription) {
       throw new Error(
         `Could not construct validator for "${programmingLanguageId}" with grammar ${grammarId} on the fly: Grammar missing`
@@ -105,10 +317,9 @@ export abstract class ResourceReferencesService {
       programmingLanguageId
     );
 
-    const grammarDescription = await this.getGrammarDescription(
-      grammarId,
-      "undefined"
-    );
+    const grammarDescription = await this.getGrammarDescription(grammarId, {
+      onMissing: "undefined",
+    });
 
     if (!grammarDescription) {
       throw new Error(
@@ -123,37 +334,79 @@ export abstract class ResourceReferencesService {
    * @param programmingLanguageId The id of the core language
    * @return The language as defined in the core, does not validate any grammar!
    */
-  abstract getCoreProgrammingLanguage(programmingLanguageId: string): Language;
+  getCoreProgrammingLanguage(programmingLanguageId: string): Language {
+    return this._languageService.getLanguage(programmingLanguageId);
+  }
 
   /**
    * May be used to block until a certain set of resources is available.
    *
    * @param req All resources that must be available after the promise is fulfilled.
    */
-  abstract ensureResources(...req: RequiredResource[]): Promise<boolean>;
+  async ensureResources(...req: RequiredResource[]): Promise<boolean> {
+    const requests: Promise<any>[] = req.map((r) => {
+      switch (r.type) {
+        case "blockLanguage":
+          return this.getBlockLanguage(r.id, { onMissing: "undefined" });
+        case "grammar":
+          return this.getGrammarDescription(r.id, { onMissing: "undefined" });
+        case "blockLanguageGrammar":
+          return this.ensureBlockLanguageGrammar(r.id);
+        default:
+          throw new Error(`Unknown resource required: ${r.type}`);
+      }
+    });
+
+    if (requests.some((v) => !v)) {
+      console.error("Ensural promise was falsy", req, "=>", requests);
+      throw new Error("Ensural promise was falsy");
+    }
+
+    const toReturn = await Promise.all(requests);
+    if (toReturn.some((v) => v === undefined)) {
+      console.error("Ensural result was falsy", req, "=>", requests);
+      throw new Error("Ensural result was falsy");
+    }
+
+    return toReturn.every((v) => !!v);
+  }
 
   /**
    * May be used to check whether a certain set of resources is available.
    *
    * @param req All resources that must be available on the spot.
    */
-  hasResources(...req: RequiredResource[]) {
-    return req.every((r) => {
-      switch (r.type) {
-        case "blockLanguage":
-          return !!this.getBlockLanguage(r.id, { onMissing: "undefined" });
-        case "grammar":
-          return !!this.getGrammarDescription(r.id, "undefined");
-        case "blockLanguageGrammar":
-          return this.hasBlockLanguageGrammar(r.id);
-      }
-    });
+  async hasResources(...req: RequiredResource[]): Promise<boolean> {
+    const results = await Promise.all(
+      req.map(
+        async (r): Promise<boolean> => {
+          switch (r.type) {
+            case "blockLanguage":
+              return !!(await this.getBlockLanguage(r.id, {
+                fetchPolicy: "cache-only",
+                onMissing: "undefined",
+              }));
+            case "grammar":
+              return !!(await this.getGrammarDescription(r.id, {
+                fetchPolicy: "cache-only",
+                onMissing: "undefined",
+              }));
+            case "blockLanguageGrammar":
+              return this.hasBlockLanguageGrammar(r.id);
+          }
+        }
+      )
+    );
+
+    return results.every((v) => v);
   }
 
   /**
    * Helper method to check whether the block language and the referenced grammar are available
    */
-  protected async hasBlockLanguageGrammar(blockLanguageId: string) {
+  protected async hasBlockLanguageGrammar(
+    blockLanguageId: string
+  ): Promise<boolean> {
     const blockLang = await this.getBlockLanguage(blockLanguageId, {
       onMissing: "undefined",
     });

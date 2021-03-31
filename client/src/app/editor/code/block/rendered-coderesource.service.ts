@@ -97,12 +97,16 @@ export class RenderedCodeResourceService implements OnDestroy {
   );
 
   private readonly _blockLanguageGrammar$ = this.blockLanguage$.pipe(
+    tap((b) => {
+      console.log("asking for grammar description to render", b.grammarId);
+    }),
     switchMap((b) =>
-      this._resourceReferences.getGrammarDescription(b.grammarId, "throw")
+      this._resourceReferences.getGrammarDescription(b.grammarId)
     ),
     tap((grammarDesc) => {
       console.log("Got grammar description to render", grammarDesc);
-    })
+    }),
+    shareReplay(1)
   );
 
   /**
@@ -112,6 +116,7 @@ export class RenderedCodeResourceService implements OnDestroy {
     this._blockLanguageGrammar$,
     this.codeResource$,
   ]).pipe(
+    tap((args) => console.log("Tap validator$", args)),
     switchMap(([g, c]) =>
       this._resourceReferences.getValidator(c.runtimeLanguageId, g.id)
     ),
@@ -169,9 +174,9 @@ export class RenderedCodeResourceService implements OnDestroy {
       { type: "grammar", id: newBlockLang.grammarId },
     ];
 
-    const fetchRequired = !this._resourceReferences.hasResources(
+    const fetchRequired = !(await this._resourceReferences.hasResources(
       ...requiredResources
-    );
+    ));
 
     console.log(
       `Preparing to render syntaxtree of code resource:`,

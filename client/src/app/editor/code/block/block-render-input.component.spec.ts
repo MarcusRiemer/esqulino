@@ -6,7 +6,6 @@ import { ApolloTestingModule } from "apollo-angular/testing";
 import { FullGrammarGQL } from "../../../../generated/graphql";
 
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
-import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
 import { VisualBlockDescriptions, BlockLanguage } from "../../../shared/block";
 import { FocusDirective } from "../../../shared/focus-element.directive";
 import {
@@ -35,10 +34,7 @@ describe("BlockRenderInputComponent", () => {
         RenderedCodeResourceService,
         ServerApiService,
         ProjectService,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
       ],
       declarations: [
         BlockRenderInputComponent,

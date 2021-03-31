@@ -9,7 +9,6 @@ import {
 } from "../../../generated/graphql";
 import { LanguageService, ServerApiService } from "../../shared";
 import { EmptyComponent } from "../../shared/empty.component";
-import { ResourceReferencesOnlineService } from "../../shared/resource-references-online.service";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
 import { ProjectService } from "../project.service";
 import { CreateLanguageComponent } from "./create-language.component";
@@ -33,10 +32,7 @@ describe("CreateLanguageComponent", () => {
         LanguageService,
         ServerApiService,
         CreateProgrammingLanguageGQL,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
         FullGrammarGQL,
       ],
       declarations: [CreateLanguageComponent],

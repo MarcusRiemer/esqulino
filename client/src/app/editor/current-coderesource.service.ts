@@ -70,7 +70,9 @@ export class CurrentCodeResourceService {
 
   readonly blockLanguageGrammar$ = this.blockLanguage$.pipe(
     mergeMap((b) =>
-      this._resourceReferences.getGrammarDescription(b.grammarId, "throw")
+      this._resourceReferences.getGrammarDescription(b.grammarId, {
+        onMissing: "throw",
+      })
     )
   );
 
