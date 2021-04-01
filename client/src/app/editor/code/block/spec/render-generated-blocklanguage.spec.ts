@@ -49,7 +49,7 @@ import { BlockHostComponent } from "../block-host.component";
 import { BLOCK_RENDER_COMPONENTS } from "../index";
 import { mkGrammarDoc } from "src/app/shared/syntaxtree/grammar.spec-util";
 
-describe(`Render Generated BlockLanguages`, () => {
+xdescribe(`Render Generated BlockLanguages`, () => {
   async function createComponent(
     nodeDesc: NodeDescription,
     grammarDoc: GrammarDocument

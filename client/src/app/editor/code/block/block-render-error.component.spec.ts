@@ -32,7 +32,7 @@ import { DragService } from "../../drag.service";
 import { BlockRenderErrorComponent } from "./block-render-error.component";
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 
-describe(`BlockRenderErrorComponent`, () => {
+xdescribe(`BlockRenderErrorComponent`, () => {
   async function createComponent(
     nodeDesc: NodeDescription,
     types: NamedTypes,

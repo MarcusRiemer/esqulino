@@ -33,7 +33,7 @@ import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 import { BlockHostComponent } from "./block-host.component";
 import { BLOCK_RENDER_COMPONENTS } from "./index";
 
-describe("BlockHostComponent", () => {
+xdescribe("BlockHostComponent", () => {
   async function createComponent(
     nodeDesc: NodeDescription,
     editorBlocks: EditorBlockDescription[]

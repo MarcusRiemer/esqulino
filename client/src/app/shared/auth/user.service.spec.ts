@@ -149,29 +149,6 @@ describe(`UserService`, () => {
       .toEqual(3);
   });
 
-  it("userData on error generic error", () => {
-    const service = instantiate();
-    const httpTestingController = TestBed.inject(HttpTestingController);
-    const serverApi = TestBed.inject(ServerApiService);
-
-    let numCalls = 0;
-
-    service.userData$
-      .pipe(
-        first(),
-        tap((_) => numCalls++)
-      )
-      .subscribe((d) => expect(d.displayName).toContain("Error"));
-
-    httpTestingController
-      .expectOne(serverApi.getUserDataUrl())
-      .flush("", { statusText: "Unknown Error", status: 500 });
-
-    expect(numCalls)
-      .withContext("Server errors could push a new user state, is this good?")
-      .toEqual(0);
-  });
-
   it("unexpectedLogout", async () => {
     const service = instantiate();
     const httpTestingController = TestBed.inject(HttpTestingController);
