@@ -31,6 +31,7 @@ const DEFAULT_EMPTY_PROJECT: FullProjectNode = {
   createdAt: Date(),
   updatedAt: Date(),
   defaultDatabase: {
+    __typename: "ProjectDatabase",
     id: "4861f7ad-53c6-481f-b4a7-2b19aeffb021",
     name: "specDb",
     schema: [],

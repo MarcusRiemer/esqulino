@@ -16,6 +16,7 @@ export function cacheFullBlockLanguage(
 ) {
   // Make the block language available to the rendered trees
   const queryData: FullBlockLanguageQuery = {
+    __typename: "Query",
     blockLanguage: Object.assign(
       { __typename: "BlockLanguage" },
       blockLangDesc
@@ -38,6 +39,7 @@ export function cacheFullGrammar(
 ) {
   // Make the block language available to the rendered trees
   const queryData: FullGrammarQuery = {
+    __typename: "Query",
     grammar: Object.assign({ __typename: "Grammar" }, grammarDesc),
   };
   // Don't need to provide explicitly linked ID as it is contained

@@ -66,14 +66,17 @@ describe("MetaCodeResourceSelect", () => {
     expect(selectElement.value).toBeFalsy();
     expect(selectElement.children.length).toEqual(1);
   });
+
   it(`Shows a list with a single unselected item`, async () => {
     const fixture = await createComponent();
 
     const response: MetaCodeResourceListDescription[] = [
       {
+        __typename: "CodeResource",
         id: "0",
         name: "zero",
         project: {
+          __typename: "Project",
           id: "76b1c8b3-7feb-4d77-96a7-a79523c2d58d",
           name: { de: "de", en: "en" },
         },
@@ -95,9 +98,11 @@ describe("MetaCodeResourceSelect", () => {
   it(`Pre-selects in a list with a single item`, async () => {
     const response: MetaCodeResourceListDescription[] = [
       {
+        __typename: "CodeResource",
         id: "0000",
         name: "zero",
         project: {
+          __typename: "Project",
           id: "76b1c8b3-7feb-4d77-96a7-a79523c2d58d",
           name: { de: "de", en: "en" },
         },

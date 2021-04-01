@@ -93,6 +93,7 @@ describe(`CreateCodeResourceComponent`, () => {
     const project = await specLoadProject(projectService, {
       id: projectId,
       projectUsesBlockLanguages: blockLanguages.map((b) => ({
+        __typename: "ProjectUsesBlockLanguage",
         blockLanguageId: b.id,
         id: projectId,
       })),

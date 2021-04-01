@@ -35,9 +35,12 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
  */
 export const specBuildGrammarDescription = (
   override?: Partial<GrammarDescription>
-): GrammarDescription => {
+): FullGrammar => {
   const id = override?.id ?? generateUUIDv4();
-  return Object.assign({}, DEFAULT_EMPTY_GRAMMAR, override || {}, { id });
+  const toReturn: Pick<FullGrammar, "__typename"> = {
+    __typename: "Grammar",
+  };
+  return Object.assign(toReturn, DEFAULT_EMPTY_GRAMMAR, override || {}, { id });
 };
 
 export const specCacheGrammar = (response: FullGrammar) => {

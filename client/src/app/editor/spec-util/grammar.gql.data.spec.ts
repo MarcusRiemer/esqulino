@@ -20,6 +20,7 @@ type GrammarItemGQLResponse = {
 export const defaultSpecGrammarId = "28066939-7d53-40de-a89b-95bf37c982be";
 
 const ADMIN_LIST_GRAMMAR: AdminListGrammarNode = {
+  __typename: "Grammar",
   programmingLanguageId: "28066123-7d53-40de-a89b-95bf37c982be",
   id: defaultSpecGrammarId,
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
@@ -27,6 +28,7 @@ const ADMIN_LIST_GRAMMAR: AdminListGrammarNode = {
 };
 
 const GRAMMAR_DESCRIPTION_ITEM: GrammarDescriptionItemNode = {
+  __typename: "Grammar",
   id: defaultSpecGrammarId,
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: "Grammar",
@@ -44,7 +46,9 @@ const wrapGrammarItem = (
   return {
     errors: [],
     data: {
+      __typename: "Query",
       grammars: {
+        __typename: "GrammarConnection",
         nodes: [data],
       },
     },
@@ -58,9 +62,11 @@ const wrapGrammarData = (
     errors: [],
     data: {
       grammars: {
+        __typename: "GrammarConnection",
         nodes: data,
         totalCount: data.length,
         pageInfo: {
+          __typename: "PageInfo",
           hasPreviousPage: false,
           hasNextPage: false,
           startCursor: "NQ",

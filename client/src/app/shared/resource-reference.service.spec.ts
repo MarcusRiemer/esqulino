@@ -1,5 +1,8 @@
 import { TestBed } from "@angular/core/testing";
-import { ApolloTestingModule } from "apollo-angular/testing";
+import {
+  ApolloTestingModule,
+  APOLLO_TESTING_CACHE,
+} from "apollo-angular/testing";
 
 import { FullBlockLanguageGQL, FullGrammarGQL } from "../../generated/graphql";
 
@@ -13,12 +16,18 @@ import {
   specCacheGrammar,
   specProvideGrammarResponse,
 } from "../editor/spec-util";
+import { InMemoryCache } from "@apollo/client/core";
+import { Apollo } from "apollo-angular";
 
 describe(`ResourceReferencesService`, () => {
   function instantiate(): ResourceReferencesService {
     TestBed.configureTestingModule({
       imports: [ApolloTestingModule],
       providers: [
+        {
+          provide: APOLLO_TESTING_CACHE,
+          useValue: new InMemoryCache({ addTypename: false }),
+        },
         LanguageService,
         FullBlockLanguageGQL,
         FullGrammarGQL,
@@ -63,6 +72,9 @@ describe(`ResourceReferencesService`, () => {
           id: "00000000-0000-0000-0000-000000000002",
         })
       );
+
+      const apollo = TestBed.inject(Apollo);
+      const cacheState = (apollo.client.cache as any).data.data;
 
       pending("GraphQL Caching seems to be broken in specs");
 

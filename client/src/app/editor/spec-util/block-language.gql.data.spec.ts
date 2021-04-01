@@ -54,6 +54,7 @@ type BlockLanguageAdminResponse = {
 type AdminListBlockLanguageNode = AdminListBlockLanguagesQuery["blockLanguages"]["nodes"][0];
 
 const ADMIN_LIST_BLOCKLANGUAGE: AdminListBlockLanguageNode = {
+  __typename: "BlockLanguage",
   id: "96659508-e006-4290-926e-0734e7dd061a",
   name: "Empty Spec Block Language",
   slug: "BlockLanguage Slug",
@@ -68,9 +69,11 @@ const wrapBlockLanguageData = (
     errors: [],
     data: {
       blockLanguages: {
+        __typename: "BlockLanguageConnection",
         nodes: data,
         totalCount: data.length,
         pageInfo: {
+          __typename: "PageInfo",
           hasPreviousPage: false,
           hasNextPage: false,
           startCursor: "NQ",

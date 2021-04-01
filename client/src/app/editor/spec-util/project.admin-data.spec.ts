@@ -11,16 +11,19 @@ export type FrontendProjectGQLResponse = { data: FrontpageListProjectsQuery };
 type FrontendListProjectNode = FrontpageListProjectsQuery["projects"]["nodes"][0];
 
 const ADMIN_LIST_PROJECT: AdminListProjectNode = {
+  __typename: "Project",
   id: "28066939-7d53-40de-a89b-95bf37c982be",
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: { en: "Project" },
   codeResourceCount: 0,
   user: {
+    __typename: "User",
     displayName: "System",
   },
 };
 
 const FRONTEND_LIST_PROJECT: FrontendListProjectNode = {
+  __typename: "Project",
   id: "28066939-7d53-40de-a89b-95bf37c982be",
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: { en: "Project" },
@@ -33,7 +36,9 @@ const FRONTEND_LIST_PROJECT: FrontendListProjectNode = {
   userId: "00000000-0000-0000-0000-000000000000",
   blockLanguages: [
     {
+      __typename: "BlockLanguage",
       defaultProgrammingLanguage: {
+        __typename: "ProgrammingLanguage",
         id: "truck-lang",
         name: "Trucklino Lang",
       },
@@ -47,9 +52,11 @@ const wrapAdminProjectData = (
   return {
     data: {
       projects: {
+        __typename: "ProjectConnection",
         nodes: data,
         totalCount: data.length,
         pageInfo: {
+          __typename: "PageInfo",
           hasPreviousPage: false,
           hasNextPage: false,
           startCursor: "NQ",
@@ -65,7 +72,9 @@ const wrapFrontendProjectData = (
 ): FrontendProjectGQLResponse => {
   return {
     data: {
+      __typename: "Query",
       projects: {
+        __typename: "ProjectConnection",
         nodes: data,
       },
     },
