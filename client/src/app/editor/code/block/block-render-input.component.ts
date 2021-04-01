@@ -99,10 +99,6 @@ export class BlockRenderInputComponent {
     }
   }
 
-  onEvent(evt: any) {
-    debugger;
-  }
-
   /**
    * @return True, if there is a non missing or blank value to display.
    */

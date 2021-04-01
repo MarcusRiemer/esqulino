@@ -173,6 +173,10 @@ format-code:
 verify-format-code:
 	npx prettier --check "src/**/*.{html,ts}"
 
+# Verify that advanced rules are beeing followed
+verify-eslint:
+	npx eslint "src/**/*.ts"
+
 ##################################
 # Revision tracking file
 ##################################

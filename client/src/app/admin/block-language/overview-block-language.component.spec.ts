@@ -144,6 +144,7 @@ describe("OverviewBlockLanguageComponent", () => {
         expect(response.data).toEqual(responses.pop().data);
       }
     });
+
     const op = t.controller.expectOne(AdminListBlockLanguagesDocument);
     op.flush(singleBlockLanguage);
 
