@@ -20,7 +20,7 @@ export function isResourceReference(
   return typeof value === "object" && "id" in value && "type" in value;
 }
 
-const FETCH_POLICY: FetchPolicy = "cache-only";
+const FETCH_POLICY: FetchPolicy = "cache-first";
 
 /**
  * Attempts to find an automatic way of presenting a user centric

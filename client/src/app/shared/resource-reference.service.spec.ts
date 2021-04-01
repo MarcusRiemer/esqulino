@@ -52,7 +52,7 @@ describe(`ResourceReferencesService`, () => {
         fetchPolicy: "network-only",
       });
 
-      specProvideBlockLanguageResponse(b);
+      await specProvideBlockLanguageResponse(b);
 
       const result = await request;
 

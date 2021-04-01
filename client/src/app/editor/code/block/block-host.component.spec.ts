@@ -26,14 +26,14 @@ import {
   specCacheBlockLanguage,
   specBuildBlockLanguageDescription,
   specBuildGrammarDescription,
-  specProvideGrammarResponse,
+  specCacheGrammar,
 } from "../../spec-util";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 import { BlockHostComponent } from "./block-host.component";
 import { BLOCK_RENDER_COMPONENTS } from "./index";
 
-xdescribe("BlockHostComponent", () => {
+describe("BlockHostComponent", () => {
   async function createComponent(
     nodeDesc: NodeDescription,
     editorBlocks: EditorBlockDescription[]
@@ -52,7 +52,7 @@ xdescribe("BlockHostComponent", () => {
       declarations: [FocusDirective, ...BLOCK_RENDER_COMPONENTS],
     }).compileComponents();
 
-    const grammarDesc = specBuildGrammarDescription({});
+    const grammarDesc = specCacheGrammar(specBuildGrammarDescription({}));
 
     const blockLangDesc = specCacheBlockLanguage(
       specBuildBlockLanguageDescription({
@@ -98,8 +98,6 @@ xdescribe("BlockHostComponent", () => {
       false,
       {}
     );
-
-    specProvideGrammarResponse(grammarDesc);
 
     await gotRenderData$;
 

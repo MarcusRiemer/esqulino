@@ -67,6 +67,7 @@ export class CodeResourceService {
         first()
       );
 
+    console.log("Creating code resource");
     return toReturn.toPromise();
   }
 

@@ -25,14 +25,14 @@ import {
   specBuildGrammarDescription,
   specBuildBlockLanguageDescription,
   specCacheBlockLanguage,
-  specEnsureLocalGrammarRequest,
+  specCacheGrammar,
 } from "../../spec-util";
 import { DragService } from "../../drag.service";
 
 import { BlockRenderErrorComponent } from "./block-render-error.component";
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 
-xdescribe(`BlockRenderErrorComponent`, () => {
+describe(`BlockRenderErrorComponent`, () => {
   async function createComponent(
     nodeDesc: NodeDescription,
     types: NamedTypes,
@@ -60,7 +60,9 @@ xdescribe(`BlockRenderErrorComponent`, () => {
     const component = fixture.componentInstance;
     const renderData = TestBed.inject(RenderedCodeResourceService);
 
-    const grammarDesc = specBuildGrammarDescription({ types: { spec: types } });
+    const grammarDesc = specCacheGrammar(
+      specBuildGrammarDescription({ types: { spec: types } })
+    );
 
     const blockLangDesc = specCacheBlockLanguage(
       specBuildBlockLanguageDescription({
@@ -90,8 +92,6 @@ xdescribe(`BlockRenderErrorComponent`, () => {
     component.node = codeResource.syntaxTreePeek.rootNode;
     component.visual = visual;
 
-    console.log("### Pre _updateRenderData ###");
-
     const updated = renderData._updateRenderData(
       codeResource,
       blockLanguage,
@@ -99,16 +99,10 @@ xdescribe(`BlockRenderErrorComponent`, () => {
       {}
     );
 
-    console.log("### Pre ensureLocalGrammarRequest ###");
-
-    specEnsureLocalGrammarRequest(grammarDesc);
-
     await updated;
 
     fixture.detectChanges();
     await fixture.whenRenderingDone();
-
-    console.log("### Pre Data available ###");
 
     const dataAvailable = await renderData.dataAvailable$
       .pipe(first())
@@ -117,12 +111,8 @@ xdescribe(`BlockRenderErrorComponent`, () => {
       .withContext("Must have all data to render")
       .toEqual(true);
 
-    console.log("### Reached Data available ###");
-
     const validator = await renderData.validator$.pipe(first()).toPromise();
     expect(validator).toBeDefined();
-
-    console.log("### Reached Validator ###");
 
     const promisedTree = await renderData.syntaxTree$.pipe(first()).toPromise();
     expect(promisedTree).toBeDefined();

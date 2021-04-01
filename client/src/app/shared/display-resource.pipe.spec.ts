@@ -1,16 +1,18 @@
 import { TestBed } from "@angular/core/testing";
+import { getOperationName } from "@apollo/client/utilities";
 import { Apollo } from "apollo-angular";
 import { ApolloTestingModule } from "apollo-angular/testing";
 import { take, toArray } from "rxjs/operators";
 
 import {
-  FullBlockLanguageDocument,
+  NameBlockLanguageDocument,
   NameBlockLanguageGQL,
 } from "../../generated/graphql";
 import {
   specBuildBlockLanguageDescription,
   specCacheBlockLanguage,
 } from "../editor/spec-util";
+import { specGqlWaitQuery } from "../editor/spec-util/gql-respond-query.spec";
 
 import { DisplayResourcePipe } from "./display-resource.pipe";
 
@@ -34,7 +36,7 @@ describe("DisplayResourcePipe", () => {
     expect(t.pipe).toBeTruthy();
   });
 
-  xit(`Immediatly resolves "ProjectUsesBlockLanguage" `, async () => {
+  it(`Immediatly resolves "ProjectUsesBlockLanguage" `, async () => {
     const t = await createModule();
 
     const b = specCacheBlockLanguage(
@@ -44,28 +46,16 @@ describe("DisplayResourcePipe", () => {
       })
     );
 
-    const cache = t.apollo.client.cache;
-    const res = cache.readQuery({
-      query: FullBlockLanguageDocument,
-      variables: {
-        id: b.id,
-      },
-    });
-
-    console.log("Cache state", (cache as any).data.data);
-
-    expect(res["name"]).toEqual(b.name);
-
     const names$ = t.pipe.transform({
       id: "f45155e4-c78d-44c2-9c44-901058327f4b",
       blockLanguageId: b.id,
     });
 
-    const names = await names$.pipe(take(2), toArray()).toPromise();
+    const names = await names$.pipe(toArray()).toPromise();
     expect(names).toEqual([b.id, b.name]);
   });
 
-  xit(`Delivers "ProjectUsesBlockLanguage" if resolved later`, async () => {
+  it(`Delivers "ProjectUsesBlockLanguage" if resolved later`, async () => {
     const t = await createModule();
 
     // Exists, but not yet cached
@@ -82,8 +72,17 @@ describe("DisplayResourcePipe", () => {
       .pipe(take(2), toArray())
       .toPromise();
 
-    // Cache now
-    specCacheBlockLanguage(b);
+    const op = await specGqlWaitQuery(
+      (m) =>
+        m.operationName === getOperationName(NameBlockLanguageDocument) &&
+        m.variables.id === b.id,
+      `NameBlockLanguage "${b.id}"`
+    );
+    op.flush({
+      data: {
+        blockLanguage: { id: b.id, name: b.name, __typename: b.__typename },
+      },
+    });
 
     const names = await names$;
     expect(names).toEqual([b.id, b.name]);

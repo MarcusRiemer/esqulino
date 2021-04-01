@@ -21,7 +21,7 @@ import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 import { BlockRenderInputComponent } from "./block-render-input.component";
 import { BlockBaseDirective } from "./block-base.directive";
 
-xdescribe("BlockRenderInputComponent", () => {
+describe("BlockRenderInputComponent", () => {
   async function createComponent(
     nodeDesc: NodeDescription,
     visual: VisualBlockDescriptions.EditorInput

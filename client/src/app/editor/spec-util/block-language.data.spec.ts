@@ -1,7 +1,7 @@
 import { TestBed } from "@angular/core/testing";
 import { Apollo } from "apollo-angular";
 import { getOperationName } from "@apollo/client/utilities";
-import { ApolloTestingController } from "apollo-angular/testing";
+import { ApolloTestingController, TestOperation } from "apollo-angular/testing";
 
 import { FullBlockLanguageDocument } from "../../../generated/graphql";
 
@@ -13,6 +13,8 @@ import {
 
 import { DEFAULT_SPEC_GRAMMAR_ID } from "./grammar.data.spec";
 import { GraphQLError } from "graphql";
+import { Operation } from "@apollo/client/core";
+import { specGqlWaitQuery } from "./gql-respond-query.spec";
 
 const DEFAULT_EMPTY_BLOCKLANGUAGE: FullBlockLanguage = Object.freeze<FullBlockLanguage>(
   {
@@ -51,20 +53,18 @@ export const specCacheBlockLanguage = (response: FullBlockLanguage) => {
   return response;
 };
 
-export const specProvideBlockLanguageResponse = (
+export const specProvideBlockLanguageResponse = async (
   response: FullBlockLanguage
 ) => {
-  const testingController = TestBed.inject(ApolloTestingController);
-
-  testingController
-    .expectOne(
-      (op) =>
-        op.operationName === getOperationName(FullBlockLanguageDocument) &&
-        op.variables.id === response.id
-    )
-    .flush({
-      data: { blockLanguage: response },
-    });
+  const op = await specGqlWaitQuery(
+    (m: Operation) =>
+      m.operationName === getOperationName(FullBlockLanguageDocument) &&
+      m.variables.id === response.id,
+    `FullBlockLanguage "${response.id}"`
+  );
+  op.flush({
+    data: { blockLanguage: response },
+  });
 };
 
 export const specProvideMissingBlockLanguageResponse = (id: string) => {

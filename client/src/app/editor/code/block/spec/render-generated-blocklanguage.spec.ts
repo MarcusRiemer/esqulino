@@ -39,8 +39,8 @@ import { TrashService } from "../../../trash.service";
 import {
   specCacheBlockLanguage,
   specBuildBlockLanguageDescription,
-  specEnsureLocalGrammarRequest,
   specBuildGrammarDescription,
+  specCacheGrammar,
 } from "../../../spec-util";
 import { CurrentCodeResourceService } from "../../../current-coderesource.service";
 
@@ -49,7 +49,7 @@ import { BlockHostComponent } from "../block-host.component";
 import { BLOCK_RENDER_COMPONENTS } from "../index";
 import { mkGrammarDoc } from "src/app/shared/syntaxtree/grammar.spec-util";
 
-xdescribe(`Render Generated BlockLanguages`, () => {
+describe(`Render Generated BlockLanguages`, () => {
   async function createComponent(
     nodeDesc: NodeDescription,
     grammarDoc: GrammarDocument
@@ -80,7 +80,7 @@ xdescribe(`Render Generated BlockLanguages`, () => {
       declarations: [...BLOCK_RENDER_COMPONENTS, FocusDirective],
     }).compileComponents();
 
-    const grammarDesc = await specEnsureLocalGrammarRequest(
+    const grammarDesc = specCacheGrammar(
       specBuildGrammarDescription(grammarDoc)
     );
     const listBlockLanguage: BlockLanguageListDescription = specBuildBlockLanguageDescription(
@@ -243,7 +243,7 @@ xdescribe(`Render Generated BlockLanguages`, () => {
     });
   });
 
-  describe(`Grammar 0: Root with single required child in container`, () => {
+  describe(`Grammar 1: Root with single required child in container`, () => {
     const grammarDesc: GrammarDocument = mkGrammarDoc(
       { languageName: "l", typeName: "r" },
       {

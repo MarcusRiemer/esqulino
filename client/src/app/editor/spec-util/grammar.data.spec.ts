@@ -12,6 +12,7 @@ import {
 } from "../../shared/serverdata/gql-cache";
 import { Apollo } from "apollo-angular";
 import { getOperationName } from "@apollo/client/utilities";
+import { specGqlWaitQuery } from "./gql-respond-query.spec";
 
 export const DEFAULT_SPEC_GRAMMAR_ID = "28066939-7d53-40de-a89b-95bf37c982be";
 
@@ -74,16 +75,15 @@ export const specEnsureLocalGrammarRequest = (
   return toReturn;
 };
 
-export const specProvideGrammarResponse = (response: GrammarDescription) => {
-  const testingController = TestBed.inject(ApolloTestingController);
-
-  testingController
-    .expectOne(
-      (op) =>
-        op.operationName === getOperationName(FullGrammarDocument) &&
-        op.variables.id === response.id
-    )
-    .flush({
-      data: { grammar: response },
-    });
+export const specProvideGrammarResponse = async (
+  response: GrammarDescription
+) => {
+  const op = await specGqlWaitQuery(
+    (op) =>
+      op.operationName === getOperationName(FullGrammarDocument) &&
+      op.variables.id === response.id
+  );
+  op.flush({
+    data: { grammar: response },
+  });
 };

@@ -17,7 +17,6 @@ import {
 
 import {
   CreateCodeResourceDocument,
-  FullBlockLanguageDocument,
   FullBlockLanguageGQL,
   FullGrammarGQL,
   FullProjectGQL,
@@ -50,6 +49,7 @@ import { RegistrationService } from "../registration.service";
 
 import { CreateCodeResourceComponent } from "./create-code-resource.component";
 import { getOperationName } from "@apollo/client/utilities";
+import { specGqlWaitQuery } from "../spec-util/gql-respond-query.spec";
 
 describe(`CreateCodeResourceComponent`, () => {
   async function createComponent(
@@ -90,6 +90,8 @@ describe(`CreateCodeResourceComponent`, () => {
         DisplayResourcePipe,
       ],
     }).compileComponents();
+
+    blockLanguages.forEach(specCacheBlockLanguage);
 
     const projectService = TestBed.inject(ProjectService);
 
@@ -141,7 +143,7 @@ describe(`CreateCodeResourceComponent`, () => {
     expect(t.component.resourceName).toBeUndefined();
   });
 
-  xit(`Shows the default block language`, async () => {
+  it(`Shows the default block language`, async () => {
     const id = "cbc49d11-40e5-4ab6-9549-64959488c1eb";
 
     let t = await createComponent(
@@ -174,10 +176,8 @@ describe(`CreateCodeResourceComponent`, () => {
     expect(t.component.blockLanguageId).toEqual(b.id);
   });
 
-  xit(`Creating a new resource results in a HTTP request and a redirect`, async () => {
+  it(`Creating a new resource results in a HTTP request and a redirect`, async () => {
     const b = specBuildBlockLanguageDescription();
-    specCacheBlockLanguage(b);
-
     const t = await createComponent([b]);
 
     const r: CodeResourceDescription = {
@@ -195,15 +195,17 @@ describe(`CreateCodeResourceComponent`, () => {
     const created = t.component.createCodeResource();
 
     // Mimic a successful response
-    t.apolloTesting
-      .expectOne(getOperationName(CreateCodeResourceDocument))
-      .flush({
-        data: {
-          createCodeResource: {
-            codeResource: r,
-          },
+    const op = await specGqlWaitQuery(
+      (m) => m.operationName === getOperationName(CreateCodeResourceDocument)
+    );
+
+    op.flush({
+      data: {
+        createCodeResource: {
+          codeResource: r,
         },
-      });
+      },
+    });
 
     // Ensure the creation has actually happened
     await created;
