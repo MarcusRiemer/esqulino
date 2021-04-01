@@ -23,7 +23,7 @@ import { VisualBlockDescriptions, BlockLanguage } from "../../../shared/block";
 
 import {
   specBuildGrammarDescription,
-  specBuildBlockLanguage,
+  specBuildBlockLanguageDescription,
   specCacheBlockLanguage,
   specEnsureLocalGrammarRequest,
 } from "../../spec-util";
@@ -63,7 +63,7 @@ xdescribe(`BlockRenderErrorComponent`, () => {
     const grammarDesc = specBuildGrammarDescription({ types: { spec: types } });
 
     const blockLangDesc = specCacheBlockLanguage(
-      specBuildBlockLanguage({
+      specBuildBlockLanguageDescription({
         editorBlocks: [
           {
             describedType: { languageName: "spec", typeName: "root" },

@@ -38,7 +38,7 @@ import { DragService } from "../../../drag.service";
 import { TrashService } from "../../../trash.service";
 import {
   specCacheBlockLanguage,
-  specBuildBlockLanguage,
+  specBuildBlockLanguageDescription,
   specEnsureLocalGrammarRequest,
   specBuildGrammarDescription,
 } from "../../../spec-util";
@@ -83,12 +83,12 @@ xdescribe(`Render Generated BlockLanguages`, () => {
     const grammarDesc = await specEnsureLocalGrammarRequest(
       specBuildGrammarDescription(grammarDoc)
     );
-    const listBlockLanguage: BlockLanguageListDescription = specBuildBlockLanguage(
+    const listBlockLanguage: BlockLanguageListDescription = specBuildBlockLanguageDescription(
       {
         grammarId: grammarDesc.id,
       }
     );
-    const genBlockLanguage = specBuildBlockLanguage(
+    const genBlockLanguage = specBuildBlockLanguageDescription(
       generateBlockLanguage(
         listBlockLanguage,
         {

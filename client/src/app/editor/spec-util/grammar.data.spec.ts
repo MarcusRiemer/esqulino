@@ -11,6 +11,9 @@ import {
   FullGrammar,
 } from "../../shared/serverdata/gql-cache";
 import { Apollo } from "apollo-angular";
+import { getOperationName } from "@apollo/client/utilities";
+
+export const DEFAULT_SPEC_GRAMMAR_ID = "28066939-7d53-40de-a89b-95bf37c982be";
 
 const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
@@ -20,6 +23,10 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   foreignTypes: {},
   foreignVisualisations: {},
   visualisations: {},
+  generatedFromId: null,
+  includes: null,
+  slug: null,
+  visualizes: null,
   types: {
     spec: {
       root: {
@@ -73,7 +80,8 @@ export const specProvideGrammarResponse = (response: GrammarDescription) => {
   testingController
     .expectOne(
       (op) =>
-        op.query === FullGrammarDocument && op.variables.id === response.id
+        op.operationName === getOperationName(FullGrammarDocument) &&
+        op.variables.id === response.id
     )
     .flush({
       data: { grammar: response },

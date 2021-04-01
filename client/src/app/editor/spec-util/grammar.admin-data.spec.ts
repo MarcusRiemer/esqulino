@@ -4,6 +4,7 @@ import {
   GrammarDescriptionItemQuery,
 } from "../../../generated/graphql";
 import { GraphQLError } from "graphql/error/GraphQLError";
+import { DEFAULT_SPEC_GRAMMAR_ID } from "./grammar.data.spec";
 
 type GrammarGQLResponse = {
   data: AdminListGrammarsQuery;
@@ -17,19 +18,17 @@ type GrammarItemGQLResponse = {
   errors: ReadonlyArray<GraphQLError>;
 };
 
-export const defaultSpecGrammarId = "28066939-7d53-40de-a89b-95bf37c982be";
-
 const ADMIN_LIST_GRAMMAR: AdminListGrammarNode = {
   __typename: "Grammar",
   programmingLanguageId: "28066123-7d53-40de-a89b-95bf37c982be",
-  id: defaultSpecGrammarId,
+  id: DEFAULT_SPEC_GRAMMAR_ID,
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: "Grammar",
 };
 
 const GRAMMAR_DESCRIPTION_ITEM: GrammarDescriptionItemNode = {
   __typename: "Grammar",
-  id: defaultSpecGrammarId,
+  id: DEFAULT_SPEC_GRAMMAR_ID,
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: "Grammar",
   programmingLanguageId: "28066123-7d53-40de-a89b-95bf37c982be",

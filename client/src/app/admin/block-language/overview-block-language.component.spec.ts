@@ -25,9 +25,9 @@ import {
   DestroyBlockLanguageDocument,
 } from "../../../generated/graphql";
 import {
-  buildEmptyBlockLanguageResponse,
-  buildSingleBlockLanguageResponse,
-} from "../../editor/spec-util/block-language.gql.data.spec";
+  specAdminbuildEmptyBlockLanguageResponse,
+  specAdminBuildSingleBlockLanguageResponse,
+} from "../../editor/spec-util/block-language.admin-data.spec";
 import { ConditionalDisplayDirective } from "../../shared/table/directives/conditional-display.directive";
 import { CreateBlockLanguageComponent } from "./create-block-language.component";
 import { LinkGrammarComponent } from "../link-grammar.component";
@@ -88,7 +88,7 @@ describe("OverviewBlockLanguageComponent", () => {
     const t = await createComponent();
     // only works like that when fetch-policy is network-only
     const states: boolean[] = [false, true, false];
-    const response = buildSingleBlockLanguageResponse();
+    const response = specAdminBuildSingleBlockLanguageResponse();
 
     t.component.query.valueChanges.subscribe((response) => {
       expect(response.loading).toBe(states.pop());
@@ -107,7 +107,7 @@ describe("OverviewBlockLanguageComponent", () => {
 
   it(`Displays an empty list`, async () => {
     const t = await createComponent();
-    const response = buildEmptyBlockLanguageResponse();
+    const response = specAdminbuildEmptyBlockLanguageResponse();
 
     // Trigger a request
     t.component.query.valueChanges.subscribe(
@@ -129,7 +129,7 @@ describe("OverviewBlockLanguageComponent", () => {
 
   it(`Displays a list with a single element`, async () => {
     const t = await createComponent();
-    const response = buildSingleBlockLanguageResponse();
+    const response = specAdminBuildSingleBlockLanguageResponse();
 
     t.controller
       .expectOne(getOperationName(AdminListBlockLanguagesDocument))
@@ -149,8 +149,8 @@ describe("OverviewBlockLanguageComponent", () => {
 
   it(`reloads data on refresh`, async () => {
     const t = await createComponent();
-    const singleBlockLanguage = buildSingleBlockLanguageResponse();
-    const emptyBlockLanguage = buildEmptyBlockLanguageResponse();
+    const singleBlockLanguage = specAdminBuildSingleBlockLanguageResponse();
+    const emptyBlockLanguage = specAdminbuildEmptyBlockLanguageResponse();
     const responses = [emptyBlockLanguage, singleBlockLanguage];
 
     t.component.query.valueChanges.subscribe((response) => {
@@ -174,8 +174,8 @@ describe("OverviewBlockLanguageComponent", () => {
 
   it(`Triggers deletion`, async () => {
     const t = await createComponent();
-    const singleBlockLanguage = buildSingleBlockLanguageResponse();
-    const emptyBlockLanguage = buildEmptyBlockLanguageResponse();
+    const singleBlockLanguage = specAdminBuildSingleBlockLanguageResponse();
+    const emptyBlockLanguage = specAdminbuildEmptyBlockLanguageResponse();
     const responses = [emptyBlockLanguage, singleBlockLanguage];
 
     t.component.query.valueChanges.subscribe((response) => {

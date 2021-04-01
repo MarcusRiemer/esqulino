@@ -382,8 +382,8 @@ export type DestroyProjectPayload = {
 
 export type Grammar = {
   __typename?: "Grammar";
-  blockLanguages?: Maybe<BlockLanguageConnection>;
-  codeResources?: Maybe<CodeResourceConnection>;
+  blockLanguages?: Maybe<BlockLanguage>;
+  codeResources?: Maybe<CodeResource>;
   createdAt: Scalars["ISO8601DateTime"];
   foreignTypes: Scalars["JSON"];
   foreignVisualisations: Scalars["JSON"];
@@ -400,20 +400,6 @@ export type Grammar = {
   updatedAt: Scalars["ISO8601DateTime"];
   visualisations: Scalars["JSON"];
   visualizes?: Maybe<Array<Scalars["ID"]>>;
-};
-
-export type GrammarBlockLanguagesArgs = {
-  after?: Maybe<Scalars["String"]>;
-  before?: Maybe<Scalars["String"]>;
-  first?: Maybe<Scalars["Int"]>;
-  last?: Maybe<Scalars["Int"]>;
-};
-
-export type GrammarCodeResourcesArgs = {
-  after?: Maybe<Scalars["String"]>;
-  before?: Maybe<Scalars["String"]>;
-  first?: Maybe<Scalars["Int"]>;
-  last?: Maybe<Scalars["Int"]>;
 };
 
 /** The connection type for Grammar. */
@@ -1034,7 +1020,6 @@ export type UpdateGrammarInput = {
   root?: Maybe<Scalars["QualifiedTypeName"]>;
   programmingLanguageId?: Maybe<Scalars["ID"]>;
   generatedFromId?: Maybe<Scalars["ID"]>;
-  blockLanguageIds?: Maybe<Array<Scalars["ID"]>>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars["String"]>;
 };
@@ -1374,22 +1359,7 @@ export type CreateGrammarMutation = { __typename?: "Mutation" } & {
             | "types"
             | "visualizes"
             | "includes"
-          > & {
-              blockLanguages?: Maybe<
-                { __typename?: "BlockLanguageConnection" } & {
-                  nodes?: Maybe<
-                    Array<
-                      Maybe<
-                        { __typename?: "BlockLanguage" } & Pick<
-                          BlockLanguage,
-                          "id" | "name"
-                        >
-                      >
-                    >
-                  >;
-                }
-              >;
-            }
+          >
         >;
       }
   >;
@@ -1640,22 +1610,7 @@ export type FullGrammarQuery = { __typename?: "Query" } & {
     | "root"
     | "includes"
     | "visualizes"
-  > & {
-      blockLanguages?: Maybe<
-        { __typename?: "BlockLanguageConnection" } & {
-          nodes?: Maybe<
-            Array<
-              Maybe<
-                { __typename?: "BlockLanguage" } & Pick<
-                  BlockLanguage,
-                  "id" | "name"
-                >
-              >
-            >
-          >;
-        }
-      >;
-    };
+  >;
 };
 
 export type FullProjectQueryVariables = Exact<{
@@ -2037,7 +1992,6 @@ export type UpdateGrammarMutationVariables = Exact<{
   root?: Maybe<Scalars["QualifiedTypeName"]>;
   programmingLanguageId?: Maybe<Scalars["ID"]>;
   generatedFromId?: Maybe<Scalars["ID"]>;
-  blockLanguageIds?: Maybe<Array<Scalars["ID"]> | Scalars["ID"]>;
 }>;
 
 export type UpdateGrammarMutation = { __typename?: "Mutation" } & {
@@ -2059,22 +2013,7 @@ export type UpdateGrammarMutation = { __typename?: "Mutation" } & {
             | "types"
             | "includes"
             | "visualizes"
-          > & {
-              blockLanguages?: Maybe<
-                { __typename?: "BlockLanguageConnection" } & {
-                  nodes?: Maybe<
-                    Array<
-                      Maybe<
-                        { __typename?: "BlockLanguage" } & Pick<
-                          BlockLanguage,
-                          "id" | "name"
-                        >
-                      >
-                    >
-                  >;
-                }
-              >;
-            }
+          >
         >;
       }
   >;
@@ -2532,12 +2471,6 @@ export const CreateGrammarDocument = gql`
         types
         visualizes
         includes
-        blockLanguages {
-          nodes {
-            id
-            name
-          }
-        }
       }
       errors
     }
@@ -2913,12 +2846,6 @@ export const FullGrammarDocument = gql`
       root
       includes
       visualizes
-      blockLanguages {
-        nodes {
-          id
-          name
-        }
-      }
     }
   }
 `;
@@ -3469,7 +3396,6 @@ export const UpdateGrammarDocument = gql`
     $root: QualifiedTypeName
     $programmingLanguageId: ID
     $generatedFromId: ID
-    $blockLanguageIds: [ID!]
   ) {
     updateGrammar(
       input: {
@@ -3481,7 +3407,6 @@ export const UpdateGrammarDocument = gql`
         root: $root
         programmingLanguageId: $programmingLanguageId
         generatedFromId: $generatedFromId
-        blockLanguageIds: $blockLanguageIds
       }
     ) {
       grammar {
@@ -3495,12 +3420,6 @@ export const UpdateGrammarDocument = gql`
         types
         includes
         visualizes
-        blockLanguages {
-          nodes {
-            id
-            name
-          }
-        }
       }
       errors
     }

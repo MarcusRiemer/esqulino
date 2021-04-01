@@ -27,12 +27,6 @@ mutation CreateGrammar(
       types
       visualizes
       includes
-      blockLanguages {
-        nodes {
-          id
-          name
-        }
-      }
     }
     errors
   }

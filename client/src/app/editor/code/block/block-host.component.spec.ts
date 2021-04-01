@@ -24,7 +24,7 @@ import { ResourceReferencesService } from "../../../shared/resource-references.s
 import { DragService } from "../../drag.service";
 import {
   specCacheBlockLanguage,
-  specBuildBlockLanguage,
+  specBuildBlockLanguageDescription,
   specBuildGrammarDescription,
   specProvideGrammarResponse,
 } from "../../spec-util";
@@ -55,7 +55,7 @@ xdescribe("BlockHostComponent", () => {
     const grammarDesc = specBuildGrammarDescription({});
 
     const blockLangDesc = specCacheBlockLanguage(
-      specBuildBlockLanguage({
+      specBuildBlockLanguageDescription({
         editorBlocks,
         grammarId: grammarDesc.id,
       })

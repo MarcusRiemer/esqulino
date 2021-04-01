@@ -1,10 +1,6 @@
 import { TestBed } from "@angular/core/testing";
-import { InMemoryCache } from "@apollo/client/core";
 import { Apollo } from "apollo-angular";
-import {
-  ApolloTestingModule,
-  APOLLO_TESTING_CACHE,
-} from "apollo-angular/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
 import { take, toArray } from "rxjs/operators";
 
 import {
@@ -12,7 +8,7 @@ import {
   NameBlockLanguageGQL,
 } from "../../generated/graphql";
 import {
-  specBuildBlockLanguage,
+  specBuildBlockLanguageDescription,
   specCacheBlockLanguage,
 } from "../editor/spec-util";
 
@@ -22,31 +18,7 @@ describe("DisplayResourcePipe", () => {
   async function createModule() {
     await TestBed.configureTestingModule({
       imports: [ApolloTestingModule],
-      providers: [
-        /*
-        {
-          provide: APOLLO_TESTING_CACHE,
-          useValue: new InMemoryCache({
-            typePolicies: {
-              Query: {
-                fields: {
-                  blockLanguage: (_, { toReference, variables }) => {
-                    if (variables?.id) {
-                      console.log("blockLanguage: toReference", variables);
-                      return toReference({
-                        __typename: "BlockLanguage",
-                        id: variables.id,
-                      });
-                    }
-                  },
-                },
-              },
-            },
-          }),
-        },*/
-
-        NameBlockLanguageGQL,
-      ],
+      providers: [NameBlockLanguageGQL],
       declarations: [DisplayResourcePipe],
     }).compileComponents();
 
@@ -66,7 +38,7 @@ describe("DisplayResourcePipe", () => {
     const t = await createModule();
 
     const b = specCacheBlockLanguage(
-      specBuildBlockLanguage({
+      specBuildBlockLanguageDescription({
         id: "c5f3f0e6-ad24-497a-9e14-99fc54cd0cde",
         name: "B1",
       })
@@ -97,7 +69,7 @@ describe("DisplayResourcePipe", () => {
     const t = await createModule();
 
     // Exists, but not yet cached
-    const b = specBuildBlockLanguage({
+    const b = specBuildBlockLanguageDescription({
       id: "c5f3f0e6-ad24-497a-9e14-99fc54cd0cde",
       name: "B1",
     });

@@ -25,7 +25,7 @@ import {
 } from "../../../generated/graphql";
 
 import {
-  specBuildBlockLanguage,
+  specBuildBlockLanguageDescription,
   specCacheBlockLanguage,
   specLoadProject,
 } from "../../editor/spec-util";
@@ -146,7 +146,7 @@ describe(`CreateCodeResourceComponent`, () => {
 
     let t = await createComponent(
       [
-        specBuildBlockLanguage({
+        specBuildBlockLanguageDescription({
           id,
           name: "B1",
           defaultProgrammingLanguageId: "spec",
@@ -161,12 +161,12 @@ describe(`CreateCodeResourceComponent`, () => {
   });
 
   it(`Shows the first availabe block language as default`, async () => {
-    const b = specBuildBlockLanguage();
+    const b = specBuildBlockLanguageDescription();
 
     let t = await createComponent(
       [
         b,
-        specBuildBlockLanguage(), // Two languages available
+        specBuildBlockLanguageDescription(), // Two languages available
       ],
       true
     );
@@ -175,7 +175,7 @@ describe(`CreateCodeResourceComponent`, () => {
   });
 
   xit(`Creating a new resource results in a HTTP request and a redirect`, async () => {
-    const b = specBuildBlockLanguage();
+    const b = specBuildBlockLanguageDescription();
     specCacheBlockLanguage(b);
 
     const t = await createComponent([b]);

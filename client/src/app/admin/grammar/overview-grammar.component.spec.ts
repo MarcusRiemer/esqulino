@@ -24,7 +24,7 @@ import { CreateGrammarComponent } from "./create-grammar.component";
 import {
   buildEmptyGrammarResponse,
   buildSingleGrammarResponse,
-} from "../../editor/spec-util/grammar.gql.data.spec";
+} from "../../editor/spec-util/grammar.admin-data.spec";
 import {
   AdminListGrammarsDocument,
   DestroyGrammarDocument,

@@ -1,51 +1,8 @@
-import { TestBed } from "@angular/core/testing";
-import { Apollo } from "apollo-angular";
 import { GraphQLError } from "graphql/error/GraphQLError";
 
 import { AdminListBlockLanguagesQuery } from "../../../generated/graphql";
 
 import { generateUUIDv4 } from "../../shared/util-browser";
-import {
-  cacheFullBlockLanguage,
-  FullBlockLanguage,
-} from "../../shared/serverdata/gql-cache";
-
-import { defaultSpecGrammarId } from "./grammar.gql.data.spec";
-
-const DEFAULT_EMPTY_BLOCKLANGUAGE: FullBlockLanguage = Object.freeze<FullBlockLanguage>(
-  {
-    __typename: "BlockLanguage",
-    id: "96659508-e006-4290-926e-0734e7dd061a",
-    name: "Empty Spec Block Language",
-    sidebars: [],
-    editorBlocks: [],
-    editorComponents: [],
-    rootCssClasses: [],
-    defaultProgrammingLanguageId: "generic",
-    grammarId: defaultSpecGrammarId,
-    localGeneratorInstructions: { type: "manual" },
-    createdAt: Date(),
-    updatedAt: Date(),
-  }
-);
-
-/**
- * Generates a valid block language description with a unique ID, that uses
- * the given data (if provided) and uses default data
- */
-export const specBuildBlockLanguage = (
-  override?: Partial<FullBlockLanguage>
-): FullBlockLanguage => {
-  return Object.assign({}, DEFAULT_EMPTY_BLOCKLANGUAGE, override || {}, {
-    id: override?.id ?? generateUUIDv4(),
-  });
-};
-
-export const specCacheBlockLanguage = (response: FullBlockLanguage) => {
-  const apollo = TestBed.inject(Apollo);
-  cacheFullBlockLanguage(apollo, response);
-  return response;
-};
 
 type BlockLanguageAdminResponse = {
   data: AdminListBlockLanguagesQuery;
@@ -62,7 +19,7 @@ const ADMIN_LIST_BLOCKLANGUAGE: AdminListBlockLanguageNode = {
   grammarId: "96659508-e006-4290-926e-0734e7dd072b",
 };
 
-const wrapBlockLanguageData = (
+const specAdminwrapBlockLanguageData = (
   data: AdminListBlockLanguageNode[]
 ): BlockLanguageAdminResponse => {
   return {
@@ -88,7 +45,7 @@ const wrapBlockLanguageData = (
  * Generates a valid block language description with a unique ID, that uses
  * the given data (if provided) and uses default data
  */
-export const buildSingleBlockLanguageResponse = (
+export const specAdminBuildSingleBlockLanguageResponse = (
   override?: AdminListBlockLanguageNode
 ): BlockLanguageAdminResponse => {
   const blockLanguages: AdminListBlockLanguageNode[] = [];
@@ -97,12 +54,12 @@ export const buildSingleBlockLanguageResponse = (
       id: generateUUIDv4(),
     })
   );
-  return wrapBlockLanguageData(blockLanguages);
+  return specAdminwrapBlockLanguageData(blockLanguages);
 };
 
 /**
  * Generates an empty project response
  */
-export const buildEmptyBlockLanguageResponse = (): BlockLanguageAdminResponse => {
-  return wrapBlockLanguageData([]);
+export const specAdminbuildEmptyBlockLanguageResponse = (): BlockLanguageAdminResponse => {
+  return specAdminwrapBlockLanguageData([]);
 };

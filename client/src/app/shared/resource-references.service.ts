@@ -6,7 +6,7 @@ import {
   WatchQueryFetchPolicy,
 } from "@apollo/client/core";
 
-import { first, map, tap } from "rxjs/operators";
+import { catchError, first, map, tap } from "rxjs/operators";
 import { Observable, of, concat } from "rxjs";
 
 import {
@@ -391,16 +391,19 @@ export class ResourceReferencesService {
       // Everything is fine if we have found a value: The
       // mapper must then extract it.
       if (cached) {
+        console.debug("Cache hit: ", cached);
         return of(mapFunc(cached));
       } else {
         // If we don't have a value and are the only stop:
         // Indicate that there is no value
         if (fetchPolicy === "cache-only") {
+          console.debug("Cache miss, but only stop for", id);
           return of(undefined);
         }
         // If we don't have a value but there is a chance for
         // a hit: Don't produce any value.
         else {
+          console.debug("Cache miss, but network available for", id);
           return of();
         }
       }
@@ -430,7 +433,16 @@ export class ResourceReferencesService {
                 res
               );
             }),
-            map(mapFunc)
+            // Swallow errors
+            catchError((err) => {
+              console.error(
+                `ERROR ${resourceType} "${JSON.stringify(vars)}" =>`,
+                err
+              );
+              return of(undefined);
+            }),
+            // Only use the mapFunc if there is a result
+            map((res) => (res ? mapFunc(res) : undefined))
           )
       );
     } else {

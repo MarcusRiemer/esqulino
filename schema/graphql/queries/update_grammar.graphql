@@ -7,7 +7,6 @@ mutation UpdateGrammar(
   $root: QualifiedTypeName,
   $programmingLanguageId: ID,
   $generatedFromId: ID,
-  $blockLanguageIds: [ID!]
 ) {
   updateGrammar(
     input:{
@@ -18,8 +17,7 @@ mutation UpdateGrammar(
       foreignTypes: $foreignTypes,
       root: $root,
       programmingLanguageId: $programmingLanguageId,
-      generatedFromId: $generatedFromId,
-      blockLanguageIds: $blockLanguageIds
+      generatedFromId: $generatedFromId
     }
   ) {
     grammar {
@@ -33,12 +31,6 @@ mutation UpdateGrammar(
       types
       includes
       visualizes
-      blockLanguages {
-        nodes {
-          id
-          name
-        }
-      }
     }
     errors
   }
