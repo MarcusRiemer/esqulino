@@ -16,7 +16,7 @@ import { specGqlWaitQuery } from "./gql-respond-query.spec";
 
 export const DEFAULT_SPEC_GRAMMAR_ID = "28066939-7d53-40de-a89b-95bf37c982be";
 
-const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
+const DEFAULT_EMPTY_GRAMMAR = Object.freeze<FullGrammar>({
   id: "96659508-e006-4290-926e-0734e7dd061a",
   name: "Empty Spec Grammar",
   programmingLanguageId: "generic",
@@ -28,6 +28,7 @@ const DEFAULT_EMPTY_GRAMMAR = Object.freeze<GrammarDescription>({
   includes: null,
   slug: null,
   visualizes: null,
+  blockLanguages: [],
   types: {
     spec: {
       root: {

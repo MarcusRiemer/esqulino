@@ -12,5 +12,9 @@ query FullGrammar($id: ID!) {
     root
     includes
     visualizes
+    blockLanguages {
+      id
+      name
+    }
   }
 }

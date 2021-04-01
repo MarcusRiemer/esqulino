@@ -382,8 +382,8 @@ export type DestroyProjectPayload = {
 
 export type Grammar = {
   __typename?: "Grammar";
-  blockLanguages?: Maybe<BlockLanguage>;
-  codeResources?: Maybe<CodeResource>;
+  blockLanguages?: Maybe<Array<BlockLanguage>>;
+  codeResources?: Maybe<Array<CodeResource>>;
   createdAt: Scalars["ISO8601DateTime"];
   foreignTypes: Scalars["JSON"];
   foreignVisualisations: Scalars["JSON"];
@@ -1610,7 +1610,13 @@ export type FullGrammarQuery = { __typename?: "Query" } & {
     | "root"
     | "includes"
     | "visualizes"
-  >;
+  > & {
+      blockLanguages?: Maybe<
+        Array<
+          { __typename?: "BlockLanguage" } & Pick<BlockLanguage, "id" | "name">
+        >
+      >;
+    };
 };
 
 export type FullProjectQueryVariables = Exact<{
@@ -2846,6 +2852,10 @@ export const FullGrammarDocument = gql`
       root
       includes
       visualizes
+      blockLanguages {
+        id
+        name
+      }
     }
   }
 `;

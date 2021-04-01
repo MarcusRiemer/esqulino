@@ -16,7 +16,7 @@ import { GraphQLError } from "graphql";
 import { Operation } from "@apollo/client/core";
 import { specGqlWaitQuery } from "./gql-respond-query.spec";
 
-const DEFAULT_EMPTY_BLOCKLANGUAGE: FullBlockLanguage = Object.freeze<FullBlockLanguage>(
+export const DEFAULT_EMPTY_BLOCKLANGUAGE: FullBlockLanguage = Object.freeze<FullBlockLanguage>(
   {
     __typename: "BlockLanguage",
     id: "96659508-e006-4290-926e-0734e7dd061a",
