@@ -899,7 +899,8 @@ export type Resource =
   | "CodeResourceSeed"
   | "BlockLanguageSeed"
   | "GrammarSeed"
-  | "ProgrammingLanguageSeed";
+  | "ProgrammingLanguageSeed"
+  | "ProjectDatabaseSeed";
 
 export type Response = {
   __typename?: "Response";
