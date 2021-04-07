@@ -75,9 +75,12 @@ export class CreateCodeResourceComponent {
    * Actually creates the CodeResource
    */
   async createCodeResource() {
+    // The project this code resource will be a part of
     const p = this._projectService.cachedProject;
+    // The block language this resource will use
     const b = await p.resourceReferences.getBlockLanguage(this.blockLanguageId);
 
+    // Actual creation of code resource
     const res = await this._codeResourceService.createCodeResource(
       p,
       this.resourceName,
@@ -85,6 +88,7 @@ export class CreateCodeResourceComponent {
       b.defaultProgrammingLanguageId
     );
 
+    // Locally cache new code resource and navigate to it
     p.addCodeResource(res);
     this._router.navigate([res.id], { relativeTo: this._route.parent });
 
