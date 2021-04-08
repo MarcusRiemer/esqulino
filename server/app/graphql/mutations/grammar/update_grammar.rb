@@ -7,7 +7,6 @@ class Mutations::Grammar::UpdateGrammar < Mutations::Grammar::Grammar
   argument :root, Types::Scalar::QualifiedTypeName, required: false
   argument :programming_language_id, ID, required: false
   argument :generated_from_id, ID, required: false
-  argument :block_language_ids, [ID], required: false
 
   def resolve(**args)
     begin

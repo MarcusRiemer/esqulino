@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 
-import { BehaviorSubject, ReplaySubject, Observable, of } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import {
   switchMap,
   tap,
@@ -11,18 +11,12 @@ import {
   catchError,
 } from "rxjs/operators";
 
-import { ServerTaskState } from "./server-tasks.service";
-
 /**
  * Caches the initial result of the given Observable (which is meant to be an Angular
  * HTTP request) and provides an option to explicitly refresh the value by re-subscribing
  * to the inital Observable.
  */
 export class CachedRequest<T> {
-  // Required for tracking the state of a request. For each CachedRequest instance a ServerTask will be created and
-  // the state$ will be added to it.
-  readonly state$ = new ReplaySubject<ServerTaskState>(1);
-
   // Every new value triggers another request. The exact value
   // is not of interest, so a single valued type seems appropriate.
   private _trigger = new BehaviorSubject<"trigger">("trigger");
@@ -70,9 +64,7 @@ export class CachedRequest<T> {
   // this this cache unless explicitly cleared.
   private _error = new BehaviorSubject<any>(undefined);
 
-  constructor(private _sourceObservable: Observable<T>) {
-    this.state$.next({ type: "pending" });
-  }
+  constructor(private _sourceObservable: Observable<T>) {}
 
   /**
    * Retrieve the current value. This triggers a request if no current value
@@ -89,14 +81,9 @@ export class CachedRequest<T> {
     catchError((e) => {
       console.error(`Error in cached request`, e);
       this._error.next(e);
-      this.state$.next({ type: "failure", message: e.toString() });
-      this.state$.complete();
       return of(undefined);
     }),
-    tap((_) => {
-      this.state$.next({ type: "success" });
-      this.state$.complete();
-    }),
+
     // Ensure that the request is properly cached
     shareReplay(1)
   );

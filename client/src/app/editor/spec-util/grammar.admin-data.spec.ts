@@ -4,6 +4,7 @@ import {
   GrammarDescriptionItemQuery,
 } from "../../../generated/graphql";
 import { GraphQLError } from "graphql/error/GraphQLError";
+import { DEFAULT_SPEC_GRAMMAR_ID } from "./grammar.data.spec";
 
 type GrammarGQLResponse = {
   data: AdminListGrammarsQuery;
@@ -17,17 +18,17 @@ type GrammarItemGQLResponse = {
   errors: ReadonlyArray<GraphQLError>;
 };
 
-export const defaultSpecGrammarId = "28066939-7d53-40de-a89b-95bf37c982be";
-
 const ADMIN_LIST_GRAMMAR: AdminListGrammarNode = {
+  __typename: "Grammar",
   programmingLanguageId: "28066123-7d53-40de-a89b-95bf37c982be",
-  id: defaultSpecGrammarId,
+  id: DEFAULT_SPEC_GRAMMAR_ID,
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: "Grammar",
 };
 
 const GRAMMAR_DESCRIPTION_ITEM: GrammarDescriptionItemNode = {
-  id: defaultSpecGrammarId,
+  __typename: "Grammar",
+  id: DEFAULT_SPEC_GRAMMAR_ID,
   slug: "28066939-7d53-40de-a89b-95bf37c982be",
   name: "Grammar",
   programmingLanguageId: "28066123-7d53-40de-a89b-95bf37c982be",
@@ -44,7 +45,9 @@ const wrapGrammarItem = (
   return {
     errors: [],
     data: {
+      __typename: "Query",
       grammars: {
+        __typename: "GrammarConnection",
         nodes: [data],
       },
     },
@@ -58,9 +61,11 @@ const wrapGrammarData = (
     errors: [],
     data: {
       grammars: {
+        __typename: "GrammarConnection",
         nodes: data,
         totalCount: data.length,
         pageInfo: {
+          __typename: "PageInfo",
           hasPreviousPage: false,
           hasNextPage: false,
           startCursor: "NQ",

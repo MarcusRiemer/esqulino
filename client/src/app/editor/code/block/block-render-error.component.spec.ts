@@ -1,17 +1,18 @@
 import { TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
 
 import { first } from "rxjs/operators";
 
 import {
-  IndividualBlockLanguageDataService,
-  IndividualGrammarDataService,
-  ServerApiService,
-} from "../../../shared/serverdata";
+  FullBlockLanguageGQL,
+  FullGrammarGQL,
+} from "../../../../generated/graphql";
+
+import { ServerApiService } from "../../../shared/serverdata";
 
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
-import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
 import {
   LanguageService,
   NodeDescription,
@@ -21,10 +22,10 @@ import {
 import { VisualBlockDescriptions, BlockLanguage } from "../../../shared/block";
 
 import {
-  ensureLocalGrammarRequest,
-  mkGrammarDescription,
-  ensureLocalBlockLanguageRequest,
-  buildBlockLanguage,
+  specBuildGrammarDescription,
+  specBuildBlockLanguageDescription,
+  specCacheBlockLanguage,
+  specCacheGrammar,
 } from "../../spec-util";
 import { DragService } from "../../drag.service";
 
@@ -38,18 +39,19 @@ describe(`BlockRenderErrorComponent`, () => {
     visual: VisualBlockDescriptions.EditorErrorIndicator
   ) {
     await TestBed.configureTestingModule({
-      imports: [MatSnackBarModule, HttpClientTestingModule],
+      imports: [
+        MatSnackBarModule,
+        HttpClientTestingModule,
+        ApolloTestingModule,
+      ],
       providers: [
-        IndividualBlockLanguageDataService,
         DragService,
-        IndividualGrammarDataService,
         LanguageService,
         ServerApiService,
         RenderedCodeResourceService,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        FullGrammarGQL,
+        FullBlockLanguageGQL,
+        ResourceReferencesService,
       ],
       declarations: [BlockRenderErrorComponent],
     }).compileComponents();
@@ -58,12 +60,12 @@ describe(`BlockRenderErrorComponent`, () => {
     const component = fixture.componentInstance;
     const renderData = TestBed.inject(RenderedCodeResourceService);
 
-    const grammarDesc = await ensureLocalGrammarRequest(
-      mkGrammarDescription({ types: { spec: types } })
+    const grammarDesc = specCacheGrammar(
+      specBuildGrammarDescription({ types: { spec: types } })
     );
 
-    const blockLangDesc = await ensureLocalBlockLanguageRequest(
-      buildBlockLanguage({
+    const blockLangDesc = specCacheBlockLanguage(
+      specBuildBlockLanguageDescription({
         editorBlocks: [
           {
             describedType: { languageName: "spec", typeName: "root" },
@@ -90,7 +92,14 @@ describe(`BlockRenderErrorComponent`, () => {
     component.node = codeResource.syntaxTreePeek.rootNode;
     component.visual = visual;
 
-    renderData._updateRenderData(codeResource, blockLanguage, false, {});
+    const updated = renderData._updateRenderData(
+      codeResource,
+      blockLanguage,
+      false,
+      {}
+    );
+
+    await updated;
 
     fixture.detectChanges();
     await fixture.whenRenderingDone();
@@ -138,9 +147,7 @@ describe(`BlockRenderErrorComponent`, () => {
     );
 
     expect(c.element.childElementCount).toEqual(0);
-
     expect(c.validationResult.errors).withContext("All errors").toEqual([]);
-
     expect(c.componentErrors).withContext("Component errors").toEqual([]);
   });
 });

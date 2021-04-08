@@ -23,7 +23,7 @@ export class UserService {
     private _matDialog: MatDialog
   ) {
     // Trigger retrieval of initial user data
-    this._serverData.getUserData.value
+    this._serverData.getUserData
       .pipe(
         filter((u) => !!u) // Don't set empty users, logout is handled via the interceptor
       )
@@ -32,7 +32,7 @@ export class UserService {
 
         // If this is not the guest user: Grab its identities
         if (newUser.userId !== UserService.GUEST_ID) {
-          this._serverData.getIdentities.value
+          this._serverData.getIdentities
             .pipe(first())
             .subscribe((i) => this.fireIdentities(i));
         }

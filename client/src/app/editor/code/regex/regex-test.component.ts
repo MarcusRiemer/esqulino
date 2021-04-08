@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable, combineLatest } from "rxjs";
-import { switchMap, map, filter } from "rxjs/operators";
+import { switchMap, map, filter, mergeMap } from "rxjs/operators";
 
 import {
   RegexTestBenchDescription,
@@ -52,9 +52,10 @@ export class RegexTestComponent {
   readonly test$: Observable<
     RegexTestBenchDescription[]
   > = this.regexResource$.pipe(
-    map((res) => {
+    mergeMap(async (res) => {
       const p = this._projectService.cachedProject;
-      const g = res.validatorPeek.getGrammarValidator("regex").description;
+      const g = (await res.validatorPeek()).getGrammarValidator("regex")
+        .description;
       const testRes = referencedResourceIds(
         res.syntaxTreePeek.rootNode,
         g,
@@ -71,10 +72,10 @@ export class RegexTestComponent {
     })
   );
 
-  readonly executedTestCases$: Observable<ExecutedTestCase[]> = combineLatest(
+  readonly executedTestCases$: Observable<ExecutedTestCase[]> = combineLatest([
     this.regexCompiled$,
-    this.test$
-  ).pipe(
+    this.test$,
+  ]).pipe(
     map(([regexString, testCases]) => {
       const regex = new RegExp(regexString);
       // TODO: Compile and use regex for each testcase

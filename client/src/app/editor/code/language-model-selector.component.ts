@@ -21,8 +21,8 @@ export class LanguageModelSelectorComponent {
   /**
    * @return All available language models
    */
-  readonly availableBlockLanguages = this._projectService.activeProject.pipe(
-    map((p) => p.projectBlockLanguages)
+  readonly availableBlockLanguages$ = this._projectService.activeProject.pipe(
+    map((p) => p.usesBlockLanguages)
   );
 
   /**

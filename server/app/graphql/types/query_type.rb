@@ -6,20 +6,52 @@ module Types
       ProgrammingLanguage.all
     end
 
-    # Endpoint for block languages
+    # Endpoint for paginated projects
+    field :projects, Types::ProjectType.connection_type, null: false do
+      argument :input, Types::ProjectType::InputType, required: false
+    end
+    def projects(input: {})
+      Resolvers::ProjectsResolver.connection(input, @context)
+    end
+
+    # Endpoint for single project
+    field :project, Types::ProjectType, null: false do
+      argument :id, ID, required: true
+    end
+    def project(id:)
+      Resolvers::ProjectsResolver.single(id, @context)
+    end
+
+    # Endpoint for paginated block languages
     field :block_languages, Types::BlockLanguageType.connection_type, null: false do
       argument :input, Types::BlockLanguageType::InputType, required: false
     end
     def block_languages(input: {})
-      Resolvers::BlockLanguageResolver::new(context: @context, **input).scope
+      Resolvers::BlockLanguageResolver.connection(input, @context)
     end
 
-    # Endpoint for grammars
+    # Endpoint for single block language
+    field :block_language, Types::BlockLanguageType, null: false do
+      argument :id, ID, required: true
+    end
+    def block_language(id:)
+      Resolvers::BlockLanguageResolver.single(id, @context)
+    end
+
+    # Endpoint for paginated grammars
     field :grammars, Types::GrammarType.connection_type, null: false do
       argument :input, Types::GrammarType::InputType, required: false
     end
     def grammars(input: {})
-      Resolvers::GrammarsResolver::new(context: @context, **input).scope
+      Resolvers::GrammarsResolver.connection(input, @context)
+    end
+
+    # Endpoint for single grammar
+    field :grammar, Types::GrammarType, null: false do
+      argument :id, ID, required: true
+    end
+    def grammar(id:)
+      Resolvers::GrammarsResolver.single(id, @context)
     end
 
     # Endpoint for code resources
@@ -36,14 +68,6 @@ module Types
     end
     def news(input: {})
       Resolvers::NewsResolver::new(context: @context, **input).scope
-    end
-
-    # Endpoint for projects
-    field :projects, Types::ProjectType.connection_type, null: false do
-      argument :input, Types::ProjectType::InputType, required: false
-    end
-    def projects(input: {})
-      Resolvers::ProjectsResolver::new(context: @context, **input).scope
     end
 
     # Endpoint for authorisation requests

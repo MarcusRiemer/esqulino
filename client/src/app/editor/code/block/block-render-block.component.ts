@@ -226,18 +226,16 @@ export class BlockRenderBlockComponent {
    * This is the case if the location that would be dropped in to is at
    * least not empty and if it would take the type.
    */
-  readonly showRelativeDropLocations: Observable<Boolean> = combineLatest(
+  readonly showRelativeDropLocations: Observable<Boolean> = combineLatest([
     this._dragService.isDragInProgress,
-    this._dragService.currentDrag
-  ).pipe(
-    map(([inProgress, currentDrag]) => {
+    this._dragService.currentDrag,
+    this._renderData.validator$,
+  ]).pipe(
+    map(([inProgress, currentDrag, validator]) => {
       if (inProgress && !this._renderData.readOnly && currentDrag) {
         return (
           currentDrag.hoverNode === this.node &&
-          !nodeIsInSingularHole(
-            this._renderData.codeResource.validatorPeek,
-            this.node
-          )
+          !nodeIsInSingularHole(validator, this.node)
         );
       } else {
         return false;
@@ -248,10 +246,10 @@ export class BlockRenderBlockComponent {
   /**
    * All different background states.
    */
-  readonly backgroundState: Observable<BackgroundState> = combineLatest(
+  readonly backgroundState: Observable<BackgroundState> = combineLatest([
     this.isBeingReplaced,
-    this.isCurrentlyExecuted$
-  ).pipe(
+    this.isCurrentlyExecuted$,
+  ]).pipe(
     map(
       ([isBeingReplaced, isCurrentlyExecuted]): BackgroundState => {
         if (isBeingReplaced && !this._renderData.readOnly) {

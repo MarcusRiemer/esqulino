@@ -98,7 +98,6 @@ export interface ProjectListDescription {
  */
 export interface ProjectDescription extends ProjectListDescription {
   projectUsesBlockLanguages: ProjectUsesBlockLanguageDescription[];
-  blockLanguages: BlockLanguageDescription[];
   grammars: GrammarDescription[];
   projectSources: ProjectSourceDescription[];
 }
@@ -123,6 +122,14 @@ export interface ProjectFullDescription extends ProjectDescription {
 export interface ProjectUsesBlockLanguageDescription {
   id: string;
   blockLanguageId: string;
+}
+
+export function isProjectUsesBlockLanguageDescription(
+  value: unknown
+): value is ProjectUsesBlockLanguageDescription {
+  return (
+    typeof value === "object" && "id" in value && "blockLanguageId" in value
+  );
 }
 
 export type ProjectUpdateUsedBlockLanguage =

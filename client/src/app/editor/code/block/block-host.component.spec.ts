@@ -1,12 +1,14 @@
 import { FormsModule } from "@angular/forms";
 import { TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from "@angular/common/http/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
 
 import { first } from "rxjs/operators";
+
+import {
+  FullBlockLanguageGQL,
+  FullGrammarGQL,
+} from "../../../../generated/graphql";
 
 import { BlockLanguage, EditorBlockDescription } from "../../../shared/block";
 import { FocusDirective } from "../../../shared/focus-element.directive";
@@ -16,20 +18,15 @@ import {
   SyntaxTree,
   CodeResource,
 } from "../../../shared";
-import {
-  IndividualBlockLanguageDataService,
-  IndividualGrammarDataService,
-  ServerApiService,
-} from "../../../shared/serverdata";
-import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
+import { ServerApiService } from "../../../shared/serverdata";
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 
 import { DragService } from "../../drag.service";
 import {
-  ensureLocalBlockLanguageRequest,
-  buildBlockLanguage,
-  ensureLocalGrammarRequest,
-  mkGrammarDescription,
+  specCacheBlockLanguage,
+  specBuildBlockLanguageDescription,
+  specBuildGrammarDescription,
+  specCacheGrammar,
 } from "../../spec-util";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
@@ -42,28 +39,23 @@ describe("BlockHostComponent", () => {
     editorBlocks: EditorBlockDescription[]
   ) {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, MatSnackBarModule, HttpClientTestingModule],
+      imports: [FormsModule, MatSnackBarModule, ApolloTestingModule],
       providers: [
-        IndividualBlockLanguageDataService,
         DragService,
-        IndividualGrammarDataService,
+        FullGrammarGQL,
         LanguageService,
         RenderedCodeResourceService,
         ServerApiService,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
+        FullBlockLanguageGQL,
       ],
       declarations: [FocusDirective, ...BLOCK_RENDER_COMPONENTS],
     }).compileComponents();
 
-    const grammarDesc = await ensureLocalGrammarRequest(
-      mkGrammarDescription({})
-    );
+    const grammarDesc = specCacheGrammar(specBuildGrammarDescription({}));
 
-    const blockLangDesc = await ensureLocalBlockLanguageRequest(
-      buildBlockLanguage({
+    const blockLangDesc = specCacheBlockLanguage(
+      specBuildBlockLanguageDescription({
         editorBlocks,
         grammarId: grammarDesc.id,
       })
@@ -100,26 +92,24 @@ describe("BlockHostComponent", () => {
     component.blockLanguage = blockLanguage;
     component.codeResource = codeResource;
 
-    renderData._updateRenderData(codeResource, blockLanguage, false, {});
+    const gotRenderData$ = renderData._updateRenderData(
+      codeResource,
+      blockLanguage,
+      false,
+      {}
+    );
+
+    await gotRenderData$;
 
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const httpTestingController = TestBed.inject(HttpTestingController);
-    httpTestingController.verify();
-
-    const serviceRenderDataAvailable = await renderData.dataAvailable$
-      .pipe(first())
-      .toPromise();
     const componentRenderDataAvailable = await component.renderDataAvailable$
       .pipe(first())
       .toPromise();
 
     expect(componentRenderDataAvailable)
       .withContext("Component render data must be available")
-      .toBe(true);
-    expect(serviceRenderDataAvailable)
-      .withContext("Service render data must be available")
       .toBe(true);
 
     expect(component.node)

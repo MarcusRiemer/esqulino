@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, NgZone } from "@angular/core";
 import { Subscription } from "rxjs";
-import { flatMap, first, filter } from "rxjs/operators";
+import { mergeMap, first, filter } from "rxjs/operators";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { World, Command } from "../../../shared/syntaxtree/truck/world";
@@ -30,10 +30,10 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
   readonly currentProgram = this._currentCodeResource.currentResource;
 
   readonly blocked = this._truckWorld.currentWorld.pipe(
-    flatMap((world) => world.commandInProgress)
+    mergeMap((world) => world.commandInProgress)
   );
   readonly paused = this._truckWorld.currentWorld.pipe(
-    flatMap((world) => world.codeShouldPause)
+    mergeMap((world) => world.codeShouldPause)
   );
 
   constructor(
@@ -58,9 +58,10 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
     // TODO?: Maybe honor a pre-selected world?
     this.currentProgram
       .pipe(filter(rxFilterRootLanguage("trucklino_program")))
-      .subscribe((prog) => {
-        const g = prog.validatorPeek.getGrammarValidator("trucklino_program")
-          .description;
+      .subscribe(async (prog) => {
+        const g = (await prog.validatorPeek()).getGrammarValidator(
+          "trucklino_program"
+        ).description;
         const refs = referencedResourceIds(
           prog.syntaxTreePeek,
           g,

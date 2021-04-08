@@ -391,6 +391,17 @@ RSpec.describe Grammar, type: :model do
       expect(grammar.regenerate_from_code_resource!(ide_service)).to eq []
     end
 
+    it "regenerates a dependant block language" do
+      resource = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: resource)
+      block_lang = FactoryBot.create(:block_language, :auto_generated_blocks, grammar: grammar)
+
+      ide_service = IdeService.instantiate(allow_mock: false)
+
+      expect(grammar.regenerate_from_code_resource!(ide_service)).to eq [grammar, block_lang]
+      expect(grammar.regenerate_from_code_resource!(ide_service)).to eq []
+    end
+
     context "references" do
       def grammar_document_references(category_name, *grammar_ids)
         ({

@@ -255,20 +255,25 @@ jobs:
       CLI_PROGRAM: '../client/dist/cli/bundle.cli.js'
 
 - job: code_formatting
-  displayName: Check Code Formatting
+  displayName: Client Code Formatting & Rules
   steps:
   - task: Npm@1
-    displayName: 'Install prettier'
+    displayName: 'Install prettier & eslint'
     inputs:
       command: custom
       workingDir: client
       verbose: false
-      customCommand: 'install prettier'
+      customCommand: 'install prettier @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-plugin-jasmine'
 
   - bash: 'make verify-format-code || echo "Client: Some files are not correctly formatted" >&2'
     workingDirectory: client
     failOnStderr: true
-    displayName: 'Verify Client Code Formatting'
+    displayName: 'Verify client code formatting'
+
+  - bash: 'make verify-eslint || echo "Client: Some files used forbidden JS/TS features" >&2'
+    workingDirectory: client
+    failOnStderr: true
+    displayName: 'Verify eslint'
 
 - job: json_schemas_synced
   displayName: Check JSON Schemas are Synced

@@ -77,7 +77,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
               { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
             ).valueChanges
         ),
-        pluck("data", "grammars", "nodes", 0)
+        pluck("data", "grammar")
       )
       .subscribe((g) => {
         // The response object contains additional properties that
@@ -90,7 +90,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
         this._title.setTitle(
           `Grammar "${this.grammar.name}" - Admin - BlattWerkzeug`
         );
-        this.relatedBlockLanguages = g.blockLanguages.nodes;
+        this.relatedBlockLanguages = g.blockLanguages;
         if (this.grammar.generatedFromId === null) {
           this.grammar.generatedFromId = undefined;
         }

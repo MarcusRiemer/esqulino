@@ -1,6 +1,6 @@
 <div class="card mb-3">
   <div class="card-body">
-    <may-perform [payload]="createCodeResourcePermission">
+    <may-perform [payload]="createCodeResourcePermission$ | async">
       <h4 class="card-title">Neue Code-Ressource anlegen</h4>
       <form (submit)="createCodeResource()">
         <div class="form-group row">
@@ -33,7 +33,7 @@
                 *ngFor="let lang of availableBlockLanguages$ | async"
                 [value]="lang.id"
               >
-                {{ lang.name }} ({{ lang.id }})
+                {{ lang | displayResource | async }} ({{ lang.id }})
               </option>
             </select>
             <small class="text-muted">

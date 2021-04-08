@@ -56,11 +56,6 @@ import { LoggedInGuard } from "./guards/logged-in.guard";
 import { ProviderShowComponent } from "./provider-show.component";
 import { EmptyComponent } from "./empty.component";
 
-import {
-  IndividualGrammarDataService,
-  IndividualBlockLanguageDataService,
-} from "./serverdata";
-
 import { ProviderButtonComponent } from "./auth/provider-button.component";
 import { ValidateInputComponent } from "./validate-input.component";
 import { SideNavService } from "./side-nav.service";
@@ -73,23 +68,15 @@ import { MessageDialogComponent } from "./message-dialog.component";
 import { UnexpectedLogoutInterceptor } from "./unexpected-logout.interceptor";
 import { UserService } from "./auth/user.service";
 import { ResourceReferencesService } from "./resource-references.service";
-import { ResourceReferencesOnlineService } from "./resource-references-online.service";
-import { PaginatorTableComponent } from "./table/paginator-table.component";
 import { PaginatorTableGraphqlComponent } from "./table/paginator-table-graphql.component";
 
 import { ConditionalDisplayDirective } from "./table/directives/conditional-display.directive";
-import { ServerTasksComponent } from "./server-tasks.component";
-import { ServerTasksService } from "./serverdata/server-tasks.service";
 import { MayPerformService } from "./authorisation/may-perform.service";
 import { LifecycleLogDirective } from "./lifecycle-log.directive";
 import { ChangeDetectionLogDirective } from "./change-detection-log.directive";
 import { UrlFriendlyIdPipe } from "./url-friendly-id.pipe";
-
-const dataServices = [
-  IndividualGrammarDataService,
-  IndividualBlockLanguageDataService,
-  ServerTasksService,
-];
+import { AffectedResourcesDialogComponent } from "./affected-resources-dialog.component";
+import { DisplayResourcePipe } from "./display-resource.pipe";
 
 const materialModules = [
   MatToolbarModule,
@@ -161,13 +148,13 @@ const materialModules = [
     MayPerformComponent,
     ProvidersAllButtonsComponent,
     MessageDialogComponent,
-    PaginatorTableComponent,
     PaginatorTableGraphqlComponent,
     ConditionalDisplayDirective,
-    ServerTasksComponent,
     LifecycleLogDirective,
     ChangeDetectionLogDirective,
     UrlFriendlyIdPipe,
+    AffectedResourcesDialogComponent,
+    DisplayResourcePipe,
   ],
   exports: [
     CommonModule,
@@ -200,13 +187,13 @@ const materialModules = [
     ProviderShowComponent,
     MessageDialogComponent,
     ProvidersAllButtonsComponent,
-    PaginatorTableComponent,
     PaginatorTableGraphqlComponent,
-    ServerTasksComponent,
     ConditionalDisplayDirective,
     LifecycleLogDirective,
     ChangeDetectionLogDirective,
     UrlFriendlyIdPipe,
+    AffectedResourcesDialogComponent,
+    DisplayResourcePipe,
   ],
 })
 export class SharedAppModule {
@@ -226,16 +213,12 @@ export class SharedAppModule {
         LanguageService,
         ToolbarService,
         SideNavService,
-        ...dataServices,
         LoggedInGuard,
         IsUserGuard,
         PerformDataService,
         IsAdminGuard,
         MayPerformService,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
         {
           provide: HTTP_INTERCEPTORS,
           useClass: UnexpectedLogoutInterceptor,

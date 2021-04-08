@@ -1,19 +1,17 @@
 query FullBlockLanguage($id: ID!) {
-  blockLanguages(input: {filter: {id: $id}}) {
-    nodes {
-      id
-      name
-      slug
-      generated
-      grammarId
-      sidebars
-      editorBlocks
-      editorComponents
-      rootCssClasses
-      localGeneratorInstructions
-      createdAt
-      updatedAt
-      defaultProgrammingLanguageId
-    }
+  blockLanguage(id: $id) {
+    id
+    name
+    slug
+    generated
+    grammarId
+    sidebars
+    editorBlocks
+    editorComponents
+    rootCssClasses
+    localGeneratorInstructions
+    createdAt
+    updatedAt
+    defaultProgrammingLanguageId
   }
 }

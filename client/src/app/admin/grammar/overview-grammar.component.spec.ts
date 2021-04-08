@@ -9,6 +9,13 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { PortalModule } from "@angular/cdk/portal";
 
+import {
+  ApolloTestingController,
+  ApolloTestingModule,
+  APOLLO_TESTING_CACHE,
+} from "apollo-angular/testing";
+import { InMemoryCache } from "@apollo/client/core";
+
 import { ToolbarService, LanguageService } from "../../shared";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
 
@@ -17,17 +24,14 @@ import { CreateGrammarComponent } from "./create-grammar.component";
 import {
   buildEmptyGrammarResponse,
   buildSingleGrammarResponse,
-} from "../../editor/spec-util/grammar.gql.data.spec";
+} from "../../editor/spec-util/grammar.admin-data.spec";
 import {
   AdminListGrammarsDocument,
   DestroyGrammarDocument,
 } from "../../../generated/graphql";
 import { PaginatorTableGraphqlComponent } from "../../shared/table/paginator-table-graphql.component";
-import {
-  ApolloTestingController,
-  ApolloTestingModule,
-} from "apollo-angular/testing";
 import { ConditionalDisplayDirective } from "../../shared/table/directives/conditional-display.directive";
+import { getOperationName } from "@apollo/client/utilities";
 
 describe("OverviewGrammarComponent", () => {
   async function createComponent() {
@@ -43,7 +47,14 @@ describe("OverviewGrammarComponent", () => {
         PortalModule,
         RouterTestingModule.withRoutes([]),
       ],
-      providers: [ToolbarService, LanguageService],
+      providers: [
+        ToolbarService,
+        LanguageService,
+        {
+          provide: APOLLO_TESTING_CACHE,
+          useValue: new InMemoryCache({ addTypename: true }),
+        },
+      ],
       declarations: [
         CreateGrammarComponent,
         OverviewGrammarComponent,
@@ -83,21 +94,24 @@ describe("OverviewGrammarComponent", () => {
       expect(response.loading).toBe(states.pop());
     });
 
-    const op = t.controller.expectOne(AdminListGrammarsDocument);
-    op.flush(response);
+    t.controller
+      .expectOne(getOperationName(AdminListGrammarsDocument))
+      .flush(response);
 
     t.component.query.refetch();
 
-    const op2 = t.controller.expectOne(AdminListGrammarsDocument);
-    op2.flush(response);
+    t.controller
+      .expectOne(getOperationName(AdminListGrammarsDocument))
+      .flush(response);
   });
 
   it(`Displays an empty list`, async () => {
     const t = await createComponent();
     const response = buildEmptyGrammarResponse();
 
-    const op = t.controller.expectOne(AdminListGrammarsDocument);
-    op.flush(response);
+    t.controller
+      .expectOne(getOperationName(AdminListGrammarsDocument))
+      .flush(response);
 
     await t.fixture.whenStable();
     t.fixture.detectChanges();
@@ -112,8 +126,9 @@ describe("OverviewGrammarComponent", () => {
     const t = await createComponent();
     const response = buildSingleGrammarResponse();
 
-    const op = t.controller.expectOne(AdminListGrammarsDocument);
-    op.flush(response);
+    t.controller
+      .expectOne(getOperationName(AdminListGrammarsDocument))
+      .flush(response);
 
     await t.fixture.whenStable();
     t.fixture.detectChanges();
@@ -136,11 +151,15 @@ describe("OverviewGrammarComponent", () => {
         expect(response.data).toEqual(responses.pop().data);
       }
     });
-    const op = t.controller.expectOne(AdminListGrammarsDocument);
+    const op = t.controller.expectOne(
+      getOperationName(AdminListGrammarsDocument)
+    );
     op.flush(singleGrammar);
 
     t.component.query.refetch();
-    const op2 = t.controller.expectOne(AdminListGrammarsDocument);
+    const op2 = t.controller.expectOne(
+      getOperationName(AdminListGrammarsDocument)
+    );
     op2.flush(emptyGrammar);
   });
 
@@ -156,8 +175,9 @@ describe("OverviewGrammarComponent", () => {
       }
     });
 
-    const op = t.controller.expectOne(AdminListGrammarsDocument);
-    op.flush(singleGrammar);
+    t.controller
+      .expectOne(getOperationName(AdminListGrammarsDocument))
+      .flush(singleGrammar);
 
     await t.fixture.whenStable();
     t.fixture.detectChanges();
@@ -170,7 +190,8 @@ describe("OverviewGrammarComponent", () => {
 
     i1Delete.click();
 
-    const op2 = t.controller.expectOne(DestroyGrammarDocument);
-    op2.flush({ data: { destroyGrammar: { id: "test", errors: [] } } });
+    t.controller
+      .expectOne(getOperationName(DestroyGrammarDocument))
+      .flush({ data: { destroyGrammar: { id: "test", errors: [] } } });
   });
 });

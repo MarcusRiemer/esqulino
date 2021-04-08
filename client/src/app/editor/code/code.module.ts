@@ -11,7 +11,7 @@ import { CreateCodeResourceComponent } from "./create-code-resource.component";
 import { CreateLanguageComponent } from "./create-language.component";
 import { LanguageModelSelectorComponent } from "./language-model-selector.component";
 import { LanguageEmittedSelectorComponent } from "./language-emitted-selector.component";
-import { CodeSidebarComponent } from "./code.sidebar";
+import { CodeSidebarComponent } from "./code-sidebar.component";
 import { CodeSidebarFixedBlocksComponent } from "./code-sidebar-fixed-blocks.component";
 import { ValidationComponent } from "./validation.component";
 import { UnknownCodeResourceComponent } from "./unknown-code-resource.component";

@@ -5,13 +5,18 @@ import {
   AfterViewInit,
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
 
 import { ToolbarService } from "../../shared/toolbar.service";
+import { MessageDialogComponent } from "../../shared/message-dialog.component";
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { AffectedResourcesDialogComponent } from "../../shared/affected-resources-dialog.component";
 
 import { EditBlockLanguageService } from "./edit-block-language.service";
 import {
   DestroyBlockLanguageGQL,
   SelectionListGrammarsGQL,
+  StoreBlockLanguageSeedGQL,
 } from "../../../generated/graphql";
 import { map } from "rxjs/operators";
 
@@ -26,10 +31,13 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    private _deleteBlockLanguageGQL: DestroyBlockLanguageGQL,
+    private _deleteGQL: DestroyBlockLanguageGQL,
+    private _storeSeedGQL: StoreBlockLanguageSeedGQL,
+    private _matDialog: MatDialog,
     private _current: EditBlockLanguageService,
     private _grammarSelection: SelectionListGrammarsGQL,
-    private _toolbarService: ToolbarService
+    private _toolbarService: ToolbarService,
+    private _performData: PerformDataService
   ) {}
 
   /**
@@ -45,7 +53,11 @@ export class EditBlockLanguageComponent implements AfterViewInit {
   /**
    * A readable version of the grammar that is beeing edited.
    */
-  readonly prettyPrintedGrammar = this._current.baseGrammarPrettyPrinted;
+  readonly prettyPrintedGrammar = this._current.baseGrammarPrettyPrinted$;
+
+  readonly mayStoreSeed$ = this._current.editedSubjectId$.pipe(
+    map((id) => this._performData.blockLanguage.storeSeed(id))
+  );
 
   ngAfterViewInit() {
     this._toolbarService.addItem(this.toolbarButtons);
@@ -123,10 +135,29 @@ export class EditBlockLanguageComponent implements AfterViewInit {
    * User has decided to delete.
    */
   async onDelete() {
-    await this._deleteBlockLanguageGQL
-      .mutate({ id: this.editedSubject.id })
+    const confirmed = await MessageDialogComponent.confirm(this._matDialog, {
+      description: $localize`:@@message.ask-delete-resource:Soll diese Resource wirklich gelöscht werden?`,
+    });
+
+    if (confirmed) {
+      await this._deleteGQL.mutate({ id: this.editedSubject.id }).toPromise();
+      this._router.navigate([".."], { relativeTo: this._activatedRoute });
+    }
+  }
+
+  async onStoreSeed() {
+    const result = await this._storeSeedGQL
+      .mutate({
+        blockLanguageIds: [this.editedSubject.id],
+      })
       .toPromise();
-    this._router.navigate([".."], { relativeTo: this._activatedRoute });
+
+    AffectedResourcesDialogComponent.show(
+      this._matDialog,
+      result.data.storeBlockLanguageSeed.affectedIds[0],
+      $localize`:@@message.block-stored-seeds:Die folgenden Daten wurden im Seed abgelegt:`
+    );
+    console.log(result);
   }
 
   /**

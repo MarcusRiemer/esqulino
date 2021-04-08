@@ -177,11 +177,4 @@ export class SettingsComponent {
       this.project.removeUsedBlockLanguage(usageId);
     }
   }
-
-  /**
-   * Retrieves the name of the given block language
-   */
-  resolveBlockLanguageName(blockLanguageId: string) {
-    return this._projectService.cachedProject.getBlockLanguage(blockLanguageId);
-  }
 }

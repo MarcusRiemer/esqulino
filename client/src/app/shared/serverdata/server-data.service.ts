@@ -13,7 +13,6 @@ import {
   MayPerformRequestDescription,
   MayPerformResponseDescription,
 } from "../authorisation/may-perform.description";
-import { ServerTasksService } from "./server-tasks.service";
 
 /**
  * Convenient and cached access to server side descriptions.
@@ -22,29 +21,19 @@ import { ServerTasksService } from "./server-tasks.service";
 export class ServerDataService {
   public constructor(
     private _serverApi: ServerApiService,
-    private _http: HttpClient,
-    private _serverTasks: ServerTasksService
+    private _http: HttpClient
   ) {}
 
-  readonly getUserData = this._serverTasks.createRequest<UserDescription>(
-    this._http.get<UserDescription>(this._serverApi.getUserDataUrl()),
-    "GET " + this._serverApi.getUserDataUrl()
+  readonly getUserData = this._http.get<UserDescription>(
+    this._serverApi.getUserDataUrl()
   );
 
-  readonly getIdentities = this._serverTasks.createRequest<ServerProviderDescription>(
-    this._http.get<ServerProviderDescription>(
-      this._serverApi.getUserIdentitiesUrl()
-    ),
-    "GET " + this._serverApi.getUserIdentitiesUrl()
+  readonly getIdentities = this._http.get<ServerProviderDescription>(
+    this._serverApi.getUserIdentitiesUrl()
   );
 
-  readonly availableProviders = this._serverTasks.createRequest<
-    LoginProviderDescription[]
-  >(
-    this._http.get<LoginProviderDescription[]>(
-      this._serverApi.getProvidersUrl()
-    ),
-    "GET " + this._serverApi.getProvidersUrl()
+  readonly availableProviders = this._http.get<LoginProviderDescription[]>(
+    this._serverApi.getProvidersUrl()
   );
 
   /**

@@ -11,31 +11,6 @@ class CodeResourcesController < ApplicationController
       .list_by_programming_language(params[:programming_language_id])
   end
 
-  # Updates a specific resource. As other models in the database may
-  # depend on this specific resource, they may be updated as well.
-  def update
-    # See what the new data looks like
-    request_data = ensure_request("CodeResourceRequestUpdateDescription", request.body.read)
-    update_params = request_data
-                    .dig("resource")
-                    .transform_keys { |k| k.underscore }
-
-    resource = CodeResource.find(params[:code_resource_id])
-
-    ApplicationRecord.transaction do
-      # Do the actual update of the code resource
-      if resource.update(update_params)
-        # Do updates on dependant resources
-        affected = resource.regenerate_immediate_dependants!
-        affected.each { |a| a.save! }
-
-        render :json => resource, :status => 200
-      else
-        render :json => { 'errors' => resource.errors }, :status => 400
-      end
-    end
-  end
-
   # Clones a specific resource
   def clone
     original = CodeResource.find(params[:code_resource_id])

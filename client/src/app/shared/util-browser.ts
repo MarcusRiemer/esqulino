@@ -12,3 +12,36 @@ export function generateUUIDv4() {
       ).toString(16)
   );
 }
+
+export function urlParamsFromObject(
+  params: Object | Array<unknown>,
+  skipobjects = false,
+  prefix = ""
+) {
+  var isObj = function (a: unknown): boolean {
+    return !!a && a.constructor === Object;
+  };
+  var _st = function (z: string, g: string) {
+    return "" + (g != "" ? "[" : "") + z + (g != "" ? "]" : "");
+  };
+  var result = "";
+  if (typeof params != "object") {
+    return prefix + "=" + encodeURIComponent(params) + "&";
+  }
+  for (var param in params) {
+    var c = "" + prefix + _st(param, prefix);
+    if (isObj(params[param]) && !skipobjects) {
+      result += urlParamsFromObject(params[param], false, "" + c);
+    } else if (Array.isArray(params[param]) && !skipobjects) {
+      params[param].forEach((item, ind) => {
+        result += urlParamsFromObject(item, false, c + "[" + ind + "]");
+      });
+    } else {
+      result += c + "=" + encodeURIComponent(params[param]) + "&";
+    }
+  }
+  if (prefix === "" && result.endsWith("&")) {
+    result = result.substring(0, result.length - 1);
+  }
+  return result;
+}

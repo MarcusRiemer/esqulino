@@ -4,9 +4,10 @@ import { BehaviorSubject, combineLatest, Observable, Subscription } from "rxjs";
 import {
   filter,
   distinctUntilChanged,
-  flatMap,
   map,
   shareReplay,
+  switchMap,
+  tap,
 } from "rxjs/operators";
 
 import {
@@ -21,7 +22,6 @@ import {
   ResourceReferencesService,
   RequiredResource,
 } from "../../../shared/resource-references.service";
-import { IndividualGrammarDataService } from "../../../shared/serverdata";
 
 /**
  * This service is provided at the root component that is used to render a coderesource.
@@ -57,10 +57,7 @@ export class RenderedCodeResourceService implements OnDestroy {
   // All manual subscriptions that are part of this service
   private _subscriptions: Subscription[] = [];
 
-  constructor(
-    private _resourceReferences: ResourceReferencesService,
-    private _grammarData: IndividualGrammarDataService
-  ) {
+  constructor(private _resourceReferences: ResourceReferencesService) {
     const subValidator = this.validator$.subscribe(this._validator);
     const subTree = this.syntaxTree$.subscribe(this._syntaxTree);
 
@@ -80,7 +77,7 @@ export class RenderedCodeResourceService implements OnDestroy {
   );
 
   readonly syntaxTree$: Observable<SyntaxTree> = this._codeResource.pipe(
-    flatMap((c) => c.syntaxTree$)
+    switchMap((c) => c.syntaxTree$)
   );
 
   readonly blockLanguage$ = this._blockLanguage.pipe(
@@ -100,19 +97,30 @@ export class RenderedCodeResourceService implements OnDestroy {
   );
 
   private readonly _blockLanguageGrammar$ = this.blockLanguage$.pipe(
-    flatMap((b) => this._grammarData.getLocal(b.grammarId, "request"))
+    tap((b) => {
+      console.log("asking for grammar description to render", b.grammarId);
+    }),
+    switchMap((b) =>
+      this._resourceReferences.getGrammarDescription(b.grammarId)
+    ),
+    tap((grammarDesc) => {
+      console.log("Got grammar description to render", grammarDesc);
+    }),
+    shareReplay(1)
   );
 
   /**
    * @return The validator that should be used based on the current block language.
    */
-  readonly validator$: Observable<Validator> = combineLatest(
+  readonly validator$: Observable<Validator> = combineLatest([
     this._blockLanguageGrammar$,
-    this.codeResource$
-  ).pipe(
-    map(([g, c]) =>
+    this.codeResource$,
+  ]).pipe(
+    tap((args) => console.log("Tap validator$", args)),
+    switchMap(([g, c]) =>
       this._resourceReferences.getValidator(c.runtimeLanguageId, g.id)
-    )
+    ),
+    shareReplay(1)
   );
 
   /**
@@ -154,20 +162,21 @@ export class RenderedCodeResourceService implements OnDestroy {
     return this._syntaxTree.value;
   }
 
-  _updateRenderData(
+  async _updateRenderData(
     codeResource: CodeResource,
     blockLanguage: BlockLanguage,
     readOnly: boolean,
     validationContext: any
   ) {
-    const newBlockLang = blockLanguage || codeResource.blockLanguagePeek;
+    const newBlockLang =
+      blockLanguage || (await codeResource.blockLanguagePeek);
     const requiredResources: RequiredResource[] = [
       { type: "grammar", id: newBlockLang.grammarId },
     ];
 
-    const fetchRequired = !this._resourceReferences.hasResources(
+    const fetchRequired = !(await this._resourceReferences.hasResources(
       ...requiredResources
-    );
+    ));
 
     console.log(
       `Preparing to render syntaxtree of code resource:`,

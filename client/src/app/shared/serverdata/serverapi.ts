@@ -7,8 +7,7 @@
  * This file is manually kept in sync with the rails route definitions
  * at `server/config/routes.rb`.
  *
- * TODO: Cleanup code so that these methods rely on each other instead
- *       of constructing the same base-url over and over again.
+ * TODO: Once the GraphQL migration is complete, this file is irrelevant.
  */
 export class ServerApi {
   protected static BASE_HOST = "http://www.blattwerkzeug.de";
@@ -65,32 +64,10 @@ export class ServerApi {
   }
 
   /**
-   * Retrieves the URL that is used to list all public block languages.
-   */
-  getBlockLanguageListUrl(): string {
-    return `${this._apiBaseUrl}/block_languages`;
-  }
-
-  /**
    * Retrieves the full description of a specific block language.
    */
   individualBlockLanguageUrl(id: string): string {
     return `${this._apiBaseUrl}/block_languages/${id}`;
-  }
-
-  /**
-   * Allows creation of new block languages
-   */
-  createBlockLanguageUrl(): string {
-    return `${this._apiBaseUrl}/block_languages`;
-  }
-
-  /**
-   * Retrieves the URL that is used to list meta code resources (that may be used
-   * as the basis for a grammar).
-   */
-  getMetaCodeResourceListUrl(): string {
-    return `${this._apiBaseUrl}/code_resources/by_programming_language/meta-grammar`;
   }
 
   /**
@@ -128,13 +105,6 @@ export class ServerApi {
    */
   individualGrammarCodeResourceGallery(id: string) {
     return `${this.individualGrammarUrl(id)}/code_resources_gallery`;
-  }
-
-  /**
-   * Retrieves the URL that is used to list all public block language generators.
-   */
-  getBlockLanguageGeneratorListUrl(): string {
-    return `${this._apiBaseUrl}/block_language_generators`;
   }
 
   /**

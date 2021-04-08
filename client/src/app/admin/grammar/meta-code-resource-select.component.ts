@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, Input } from "@angular/core";
 import { AdminMetaCodeResourcesGQL } from "../../../generated/graphql";
-import { filter, map } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { BehaviorSubject, combineLatest } from "rxjs";
 
 /**

@@ -1,77 +1,82 @@
 import { TestBed } from "@angular/core/testing";
-import { HttpTestingController } from "@angular/common/http/testing";
+import { Apollo } from "apollo-angular";
+import { getOperationName } from "@apollo/client/utilities";
+import { ApolloTestingController, TestOperation } from "apollo-angular/testing";
 
-import {
-  BlockLanguageDescription,
-  BlockLanguageListDescription,
-} from "../../shared/block/block-language.description";
+import { FullBlockLanguageDocument } from "../../../generated/graphql";
+
 import { generateUUIDv4 } from "../../shared/util-browser";
 import {
-  ServerApiService,
-  IndividualBlockLanguageDataService,
-} from "../../shared/serverdata";
-import { provideListResponse, ListOrder } from "./list.data.spec";
+  cacheFullBlockLanguage,
+  FullBlockLanguage,
+} from "../../shared/serverdata/gql-cache";
 
-import { defaultSpecGrammarId } from "./grammar.gql.data.spec";
+import { DEFAULT_SPEC_GRAMMAR_ID } from "./grammar.data.spec";
+import { GraphQLError } from "graphql";
+import { Operation } from "@apollo/client/core";
+import { specGqlWaitQuery } from "./gql-respond-query.spec";
 
-const DEFAULT_EMPTY_BLOCKLANGUAGE = Object.freeze<BlockLanguageDescription>({
-  id: "96659508-e006-4290-926e-0734e7dd061a",
-  name: "Empty Spec Block Language",
-  sidebars: [],
-  editorBlocks: [],
-  editorComponents: [],
-  rootCssClasses: [],
-  defaultProgrammingLanguageId: "generic",
-  grammarId: defaultSpecGrammarId,
-  localGeneratorInstructions: { type: "manual" },
-});
+export const DEFAULT_EMPTY_BLOCKLANGUAGE: FullBlockLanguage = Object.freeze<FullBlockLanguage>(
+  {
+    __typename: "BlockLanguage",
+    id: "96659508-e006-4290-926e-0734e7dd061a",
+    name: "Empty Spec Block Language",
+    sidebars: [],
+    slug: null,
+    generated: null,
+    editorBlocks: [],
+    editorComponents: [],
+    rootCssClasses: [],
+    defaultProgrammingLanguageId: "generic",
+    grammarId: DEFAULT_SPEC_GRAMMAR_ID,
+    localGeneratorInstructions: { type: "manual" },
+    createdAt: Date(),
+    updatedAt: Date(),
+  }
+);
 
 /**
  * Generates a valid block language description with a unique ID, that uses
  * the given data (if provided) and uses default data
  */
-export const buildBlockLanguage = (
-  override?: Partial<BlockLanguageDescription>
-): BlockLanguageDescription => {
+export const specBuildBlockLanguageDescription = (
+  override?: Partial<FullBlockLanguage>
+): FullBlockLanguage => {
   return Object.assign({}, DEFAULT_EMPTY_BLOCKLANGUAGE, override || {}, {
-    id: generateUUIDv4(),
+    id: override?.id ?? generateUUIDv4(),
   });
 };
 
-export const ensureLocalBlockLanguageRequest = (
-  response: BlockLanguageDescription
-) => {
-  const httpTestingController = TestBed.inject(HttpTestingController);
-  const serverApi = TestBed.inject(ServerApiService);
-  const blockData = TestBed.inject(IndividualBlockLanguageDataService);
-
-  const toReturn = blockData.getLocal(response.id, "request");
-
-  httpTestingController
-    .expectOne(serverApi.individualBlockLanguageUrl(response.id))
-    .flush(response);
-
-  return toReturn;
+export const specCacheBlockLanguage = (response: FullBlockLanguage) => {
+  const apollo = TestBed.inject(Apollo);
+  cacheFullBlockLanguage(apollo, response);
+  return response;
 };
 
-export type BlockLanguageOrder = ListOrder<BlockLanguageListDescription>;
-
-/**
- * Expects a request for the given list of grammars. If a ordered dataset
- * is requested, the `items` param must be already ordered accordingly.
- */
-export const provideBlockLanguageList = (
-  items: BlockLanguageDescription[],
-  options?: {
-    order?: BlockLanguageOrder;
-    pagination?: {
-      limit: number;
-      page: number;
-    };
-  }
+export const specProvideBlockLanguageResponse = async (
+  response: FullBlockLanguage
 ) => {
-  const serverApi = TestBed.inject(ServerApiService);
-  let reqUrl = serverApi.getBlockLanguageListUrl();
+  const op = await specGqlWaitQuery(
+    (m: Operation) =>
+      m.operationName === getOperationName(FullBlockLanguageDocument) &&
+      m.variables.id === response.id,
+    `FullBlockLanguage "${response.id}"`
+  );
+  op.flush({
+    data: { blockLanguage: response },
+  });
+};
 
-  return provideListResponse(items, reqUrl, options);
+export const specProvideMissingBlockLanguageResponse = (id: string) => {
+  const testingController = TestBed.inject(ApolloTestingController);
+
+  testingController
+    .expectOne(
+      (op) =>
+        op.operationName === getOperationName(FullBlockLanguageDocument) &&
+        op.variables.id === id
+    )
+    .flush({
+      errors: [new GraphQLError(`Block language "${id}" not found`)],
+    });
 };

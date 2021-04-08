@@ -4,7 +4,7 @@ import { Title } from "@angular/platform-browser";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { BehaviorSubject } from "rxjs";
-import { switchMap, map, filter, flatMap, pluck } from "rxjs/operators";
+import { switchMap, map, filter, pluck, mergeMap } from "rxjs/operators";
 
 import { objectOmit } from "../../shared/util";
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
@@ -50,7 +50,7 @@ export class EditBlockLanguageService {
         switchMap((id: string) =>
           this._singleBlockLanguageGQL
             .fetch({ id: id }, { fetchPolicy: "network-only" })
-            .pipe(pluck("data", "blockLanguages", "nodes", 0))
+            .pipe(pluck("data", "blockLanguage"))
         )
       )
       .subscribe((blockLanguage) => {
@@ -70,21 +70,23 @@ export class EditBlockLanguageService {
       });
   }
 
+  readonly editedSubjectId$ = this._editedSubject.pipe(pluck("id"));
+
   /**
    * The grammar that is the basis for this block language.
    */
-  readonly baseGrammar = this._editedSubject.pipe(
-    flatMap((blockLang) =>
+  readonly baseGrammar$ = this._editedSubject.pipe(
+    mergeMap((blockLang) =>
       this._individualGrammarData
         .watch({ id: blockLang.grammarId })
-        .valueChanges.pipe(pluck("data", "grammars", "nodes", 0))
+        .valueChanges.pipe(pluck("data", "grammar"))
     )
   );
 
   /**
    * A human readable version of that grammar.
    */
-  readonly baseGrammarPrettyPrinted = this.baseGrammar.pipe(
+  readonly baseGrammarPrettyPrinted$ = this.baseGrammar$.pipe(
     map((grammar) => prettyPrintGrammar(grammar.name, grammar))
   );
 
@@ -133,7 +135,7 @@ export class EditBlockLanguageService {
       // Fetch the actual grammar that should be used
       this._individualGrammarData
         .fetch({ id: this.editedSubject.grammarId })
-        .pipe(pluck("data", "grammars", "nodes", 0))
+        .pipe(pluck("data", "grammar"))
         .subscribe((g) => {
           try {
             this.generatorErrors.push(...validateGenerator(instructions));

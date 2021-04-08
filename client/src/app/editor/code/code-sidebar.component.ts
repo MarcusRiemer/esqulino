@@ -2,7 +2,9 @@ import { ComponentPortal } from "@angular/cdk/portal";
 import { Component } from "@angular/core";
 
 import { Observable, combineLatest } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
+import { map, mergeMap, pluck } from "rxjs/operators";
+
+import { FullGrammarGQL } from "../../../generated/graphql";
 
 import {
   FixedBlocksSidebar,
@@ -11,7 +13,6 @@ import {
 } from "../../shared/block";
 import { generateSidebar } from "../../shared/block/generator/sidebar";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
-import { IndividualGrammarDataService } from "../../shared/serverdata";
 import { allConcreteTypes } from "../../shared/syntaxtree/grammar-type-util";
 
 import { CurrentCodeResourceService } from "../current-coderesource.service";
@@ -61,18 +62,18 @@ export class CodeSidebarComponent {
   constructor(
     private _currentCodeResource: CurrentCodeResourceService,
     private _resourceReferences: ResourceReferencesService,
-    private _grammarData: IndividualGrammarDataService,
+    private _grammarData: FullGrammarGQL,
     private _sidebarDataService: SidebarDataService
   ) {}
 
   readonly currentCodeResource$ = this._currentCodeResource.currentResource;
 
   readonly currentBlockLanguageId$ = this.currentCodeResource$.pipe(
-    flatMap((res) => res.blockLanguageId$)
+    mergeMap((res) => res.blockLanguageId$)
   );
 
   readonly hasBlockLanguage$ = this.currentBlockLanguageId$.pipe(
-    flatMap((id) =>
+    mergeMap((id) =>
       this._resourceReferences.ensureResources({ type: "blockLanguage", id })
     )
   );
@@ -81,11 +82,12 @@ export class CodeSidebarComponent {
    * The block language that is currently in use.
    */
   readonly currentBlockLanguage$ = this.currentBlockLanguageId$.pipe(
-    map((id) => this._resourceReferences.getBlockLanguage(id, "throw"))
+    mergeMap((id) => this._resourceReferences.getBlockLanguage(id))
   );
 
   private readonly _fallbackSidebarDescription$: Observable<FixedBlocksSidebarDescription> = this.currentBlockLanguage$.pipe(
-    flatMap((b) => this._grammarData.getLocal(b.grammarId, "request")),
+    mergeMap((b) => this._grammarData.fetch({ id: b.grammarId })),
+    pluck("data", "grammar"),
     map((g) => {
       // Extract the types that can be generated meaningfully
       const toGenerate: { [grammarName: string]: string[] } = {};
@@ -107,10 +109,10 @@ export class CodeSidebarComponent {
     })
   );
 
-  readonly fallbackSidebar$: Observable<FixedBlocksSidebar> = combineLatest(
+  readonly fallbackSidebar$: Observable<FixedBlocksSidebar> = combineLatest([
     this.currentBlockLanguage$,
-    this._fallbackSidebarDescription$
-  ).pipe(map(([_b, desc]) => new FixedBlocksSidebar(desc)));
+    this._fallbackSidebarDescription$,
+  ]).pipe(map(([_b, desc]) => new FixedBlocksSidebar(desc)));
 
   /**
    * The actual sidebars that need to be spawned for the current language.

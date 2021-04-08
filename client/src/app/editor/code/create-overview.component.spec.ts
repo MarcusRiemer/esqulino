@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
+import { LanguageService, ServerApiService } from "../../shared";
+import { ResourceReferencesService } from "../../shared/resource-references.service";
+import { ProjectService } from "../project.service";
+
 import { CreateOverviewComponent } from "./create-overview.component";
 
 describe("CreateOverviewComponent", () => {
@@ -8,6 +12,12 @@ describe("CreateOverviewComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [
+        ProjectService,
+        ResourceReferencesService,
+        ServerApiService,
+        LanguageService,
+      ],
       declarations: [CreateOverviewComponent],
     }).compileComponents();
   });

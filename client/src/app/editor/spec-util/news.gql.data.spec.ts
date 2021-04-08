@@ -5,6 +5,7 @@ export type NewsGQLResponse = { data: FrontpageListNewsQuery };
 type FrontpageListNewsNode = FrontpageListNewsQuery["news"]["nodes"][0];
 
 const FRONTPAGE_LIST_NEWS: FrontpageListNewsNode = {
+  __typename: "News",
   id: generateUUIDv4(),
   publishedFrom: "December 17, 1995 03:24:00",
   renderedTextShort: {
@@ -18,7 +19,9 @@ const FRONTPAGE_LIST_NEWS: FrontpageListNewsNode = {
 const wrapNewsData = (data: FrontpageListNewsNode[]): NewsGQLResponse => {
   return {
     data: {
+      __typename: "Query",
       news: {
+        __typename: "NewsConnection",
         nodes: data,
       },
     },

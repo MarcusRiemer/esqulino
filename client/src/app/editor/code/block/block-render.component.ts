@@ -58,9 +58,6 @@ export class BlockRenderComponent {
 
   ngOnInit() {
     this._hostClassNodeType = this.node.languageName + " " + this.node.typeName;
-    if (!this.node) {
-      debugger;
-    }
   }
 
   /**

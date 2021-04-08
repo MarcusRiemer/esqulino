@@ -19,11 +19,11 @@ module Types
     field :generated_from_id, ID, null: true
     field :generated_from, Types::CodeResourceType, null: true
 
-    field :block_languages, Types::BlockLanguageType.connection_type, null: true
-    field :code_resources, Types::CodeResourceType.connection_type, null: true
+    field :block_languages, [Types::BlockLanguageType], null: true
+    field :code_resources, [Types::CodeResourceType], null: true
 
-    field :createdAt, GraphQL::Types::ISO8601DateTime, null: false
-    field :updatedAt, GraphQL::Types::ISO8601DateTime, null: false
+    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 
     class OrderFieldEnum < Types::Base::BaseEnum
       graphql_name 'GrammarOrderFieldEnum'

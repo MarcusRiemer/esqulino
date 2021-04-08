@@ -7,6 +7,8 @@ class Types::Scalar::NodeDescription < Types::Base::BaseScalar
       rescue
         raise GraphQL::ExecutionError.new("#{self.class.name} value is not a parsable JSON Object", extensions: { code: 'INVALID_PARAM' })
       end
+    when Hash
+      value
     when ActionController::Parameters
       value = value.to_unsafe_hash
     when nil

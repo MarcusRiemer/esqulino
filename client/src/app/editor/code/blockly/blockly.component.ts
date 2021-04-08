@@ -124,7 +124,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
         // Ensure that old subscriptions are not fired anymore
         this._blockly?.xmlToolboxSubscription?.unsubscribe();
 
-        const validators = currRes.validatorPeek.grammarValidators;
+        const validators = (await currRes.validatorPeek()).grammarValidators;
 
         if (!validators || validators.length != 1) {
           throw new Error(
@@ -136,7 +136,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
 
         const blocklyLoadable = this._blocklyBlocks.loadGrammar(
           g,
-          currRes.blockLanguagePeek
+          await currRes.blockLanguagePeek
         );
 
         console.log("Generated blockly settings", blocklyLoadable);
@@ -175,7 +175,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
           currRes.syntaxTreePeek.toModel(),
           g.types
         );
-        const loadedIds = Blockly.Xml.domToWorkspace(
+        const _loadedIds = Blockly.Xml.domToWorkspace(
           astXmlWorkspace,
           this._blockly.workspace
         );

@@ -1,5 +1,5 @@
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
-import { map, mergeMap, tap } from "rxjs/operators";
+import { map, shareReplay, switchMap, tap } from "rxjs/operators";
 
 import { ProjectResource } from "../resource";
 import { ResourceReferencesService } from "../resource-references.service";
@@ -8,6 +8,7 @@ import { CodeResourceDescription } from "./coderesource.description";
 import { SyntaxTree, NodeDescription, NodeLocation } from "./syntaxtree";
 import { embraceNode } from "./drop-embrace";
 import { BlockLanguage } from "../block/block-language";
+import { Validator } from "./validator";
 
 export * from "./coderesource.description";
 
@@ -48,17 +49,29 @@ export class CodeResource extends ProjectResource {
     return this._runtimeLanguageId$.value;
   }
 
-  get validatorPeek() {
+  async validatorPeek() {
+    const bl = await this.blockLanguagePeek;
     return this.resourceReferences.getValidator(
       this.runtimeLanguageId,
-      this.blockLanguagePeek.grammarId
+      bl.grammarId
     );
   }
+
   /**
    * @return The language that is currently in use
    */
   readonly blockLanguage$: Observable<BlockLanguage> = this._blockLanguageId$.pipe(
-    map((l) => this.resourceReferences.getBlockLanguage(l, "throw"))
+    switchMap((l) => this.resourceReferences.getBlockLanguage(l)),
+    shareReplay(1)
+  );
+
+  readonly validator$: Observable<Validator> = combineLatest([
+    this._runtimeLanguageId$,
+    this.blockLanguage$,
+  ]).pipe(
+    switchMap(([runtimeLangId, b]) =>
+      this.resourceReferences.getValidator(runtimeLangId, b.grammarId)
+    )
   );
 
   /**
@@ -69,7 +82,7 @@ export class CodeResource extends ProjectResource {
     this.blockLanguage$,
   ]).pipe(
     tap(console.log),
-    map(([l, b]) =>
+    switchMap(([l, b]) =>
       this.resourceReferences.getGrammarProgrammingLanguage(b.grammarId, l)
     )
   );
@@ -95,10 +108,7 @@ export class CodeResource extends ProjectResource {
   }
 
   get blockLanguagePeek() {
-    return this.resourceReferences.getBlockLanguage(
-      this.blockLanguageIdPeek,
-      "undefined"
-    );
+    return this.resourceReferences.getBlockLanguage(this.blockLanguageIdPeek);
   }
 
   /**
@@ -155,14 +165,18 @@ export class CodeResource extends ProjectResource {
    *       insert at the only possible location which must be provided
    *       entirely.
    */
-  embraceNode(loc: NodeLocation, desc: NodeDescription[]) {
+  embraceNode(
+    validator: Validator,
+    loc: NodeLocation,
+    desc: NodeDescription[]
+  ) {
     console.log(
       `Embracing node at ${JSON.stringify(loc)} with ${desc.length} candidates`,
       desc
     );
 
     this.replaceSyntaxTree(
-      embraceNode(this.validatorPeek, this.syntaxTreePeek, loc, desc)
+      embraceNode(validator, this.syntaxTreePeek, loc, desc)
     );
   }
 

@@ -19,7 +19,7 @@ import {
 import {
   buildGrammarDescItemResponse,
   buildSingleGrammarResponse,
-} from "../../editor/spec-util/grammar.gql.data.spec";
+} from "../../editor/spec-util/grammar.admin-data.spec";
 import {
   CreateBlockLanguageDocument,
   GrammarDescriptionItemDocument,

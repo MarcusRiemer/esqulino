@@ -22,6 +22,7 @@ module Types
     field :create_programming_language, mutation: Mutations::CreateProgrammingLanguage
     field :store_project_seed, mutation: Mutations::SeedData::StoreProject
 
-    field :create_code_resource, mutation: Mutations::CreateCodeResource
+    field :create_code_resource, mutation: Mutations::CodeResource::Create
+    field :update_code_resource, mutation: Mutations::CodeResource::Update
   end
 end

@@ -7,8 +7,11 @@ import { generateUUIDv4 } from "../../shared/util-browser";
 export const buildMetaCodeResourceListItem = (
   override?: Partial<MetaCodeResourceListDescription>
 ): MetaCodeResourceListDescription => {
+  const toReturn: Pick<MetaCodeResourceListDescription, "__typename"> = {
+    __typename: "CodeResource",
+  };
   return Object.assign(
-    {},
+    toReturn,
     {
       name: "Empty Meta Code Resource",
       project: {
