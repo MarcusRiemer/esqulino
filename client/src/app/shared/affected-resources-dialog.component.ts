@@ -10,6 +10,8 @@ export interface AffectedResourcesDialogData {
   header: string;
 }
 
+export const MSG_STORED_SEEDS = $localize`:@@message.stored-seeds:Die folgenden Daten wurden im Seed abgelegt:`;
+
 @Component({
   selector: "app-affected-resources-dialog",
   templateUrl: "./affected-resources-dialog.component.html",

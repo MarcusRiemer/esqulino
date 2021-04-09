@@ -1,7 +1,12 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
 
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import {
+  AffectedResourcesDialogComponent,
+  MSG_STORED_SEEDS,
+} from "../../shared/affected-resources-dialog.component";
 
 import { ProjectService, Project } from "../project.service";
 import { SidebarService } from "../sidebar.service";
@@ -52,7 +57,8 @@ export class SettingsComponent {
     private _addUsedBlockLanguage: ProjectAddUsedBlockLanguageGQL,
     private _removeUsedBlockLanguage: ProjectRemoveUsedBlockLanguageGQL,
     private _performData: PerformDataService,
-    private _storeSeed: StoreProjectSeedGQL
+    private _storeSeed: StoreProjectSeedGQL,
+    private _matDialog: MatDialog
   ) {}
 
   /**
@@ -123,7 +129,12 @@ export class SettingsComponent {
           .toPromise();
 
         btnStoreSeed.isInProgress = false;
-        alert(JSON.stringify(result));
+
+        AffectedResourcesDialogComponent.show(
+          this._matDialog,
+          result.data.storeProjectSeed.affectedIds[0],
+          MSG_STORED_SEEDS
+        );
       }
     });
     this._subscriptionRefs.push(subRef);
