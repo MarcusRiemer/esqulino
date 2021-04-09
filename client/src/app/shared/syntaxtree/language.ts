@@ -4,7 +4,7 @@ import { Validator, SubValidator } from "./validator";
 import { ValidationResult } from "./validation-result";
 import { CodeGenerator } from "./codegenerator";
 import { GrammarDescription } from "./grammar.description";
-import { allVisualizableTypes } from "./grammar-type-util";
+import { allVisualisableTypes } from "./grammar-type-util";
 
 /**
  * Ties together non-moving parts of everything the editor needs to work
@@ -54,7 +54,7 @@ export class Language {
 
     this.codeGenerator = new CodeGenerator(
       desc.emitters,
-      g ? allVisualizableTypes(g) : {},
+      g ? allVisualisableTypes(g) : {},
       desc.codeGeneratorState
     );
     this.validator = new Validator([...desc.validators, ...(g ? [g] : [])]);

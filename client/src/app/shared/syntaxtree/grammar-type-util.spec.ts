@@ -17,7 +17,7 @@ import {
   getConcreteTypes,
   getQualifiedTypes,
   resolveToConcreteTypes,
-  allVisualizableTypes,
+  allVisualisableTypes,
 } from "./grammar-type-util";
 import {
   mkGrammarDoc,
@@ -1200,7 +1200,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({});
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({});
+        expect(allVisualisableTypes(g)).toEqual({});
       });
     });
 
@@ -1211,7 +1211,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({});
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({});
+        expect(allVisualisableTypes(g)).toEqual({});
       });
     });
 
@@ -1225,7 +1225,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({ l: {} });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({ l: {} });
+        expect(allVisualisableTypes(g)).toEqual({ l: {} });
       });
     });
 
@@ -1239,7 +1239,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({ l: {} });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({ l: {} });
+        expect(allVisualisableTypes(g)).toEqual({ l: {} });
       });
     });
 
@@ -1253,7 +1253,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({ l: {} });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({ l: {} });
+        expect(allVisualisableTypes(g)).toEqual({ l: {} });
       });
     });
 
@@ -1267,7 +1267,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({ l1: {}, l2: {} });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({ l1: {}, l2: {} });
+        expect(allVisualisableTypes(g)).toEqual({ l1: {}, l2: {} });
       });
     });
 
@@ -1280,7 +1280,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({ l: { t: typeEmpty } });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeEmpty } });
+        expect(allVisualisableTypes(g)).toEqual({ l: { t: typeEmpty } });
       });
     });
 
@@ -1293,7 +1293,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({});
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeVisualizeA } });
+        expect(allVisualisableTypes(g)).toEqual({ l: { t: typeVisualizeA } });
       });
     });
 
@@ -1306,7 +1306,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({ l: { t: typeEmpty } });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeEmpty } });
+        expect(allVisualisableTypes(g)).toEqual({ l: { t: typeEmpty } });
       });
     });
 
@@ -1320,7 +1320,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({ l: { t: typeEmpty } });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeEmpty } });
+        expect(allVisualisableTypes(g)).toEqual({ l: { t: typeEmpty } });
       });
     });
 
@@ -1334,7 +1334,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({ l: { t: typeTerminalA } });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeTerminalA } });
+        expect(allVisualisableTypes(g)).toEqual({ l: { t: typeTerminalA } });
       });
     });
 
@@ -1348,7 +1348,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({ l: { t: typeEmpty } });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({ l: { t: typeEmpty } });
+        expect(allVisualisableTypes(g)).toEqual({ l: { t: typeEmpty } });
       });
     });
 
@@ -1375,7 +1375,7 @@ describe(`Grammar Type Utilities`, () => {
         });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({
+        expect(allVisualisableTypes(g)).toEqual({
           l: { t1: typeTerminalA, t2: typeTerminalA },
         });
       });
@@ -1393,7 +1393,7 @@ describe(`Grammar Type Utilities`, () => {
         });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({
+        expect(allVisualisableTypes(g)).toEqual({
           l: { t1: typeVisualizeA },
         });
       });
@@ -1411,7 +1411,7 @@ describe(`Grammar Type Utilities`, () => {
         });
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({
+        expect(allVisualisableTypes(g)).toEqual({
           l: { t1: typeVisualizeA },
         });
       });
@@ -1427,7 +1427,7 @@ describe(`Grammar Type Utilities`, () => {
         expect(allConcreteTypes(g)).toEqual({});
       });
       it(`allVisualizableTypes`, () => {
-        expect(allVisualizableTypes(g)).toEqual({
+        expect(allVisualisableTypes(g)).toEqual({
           l: { t1: typeVisualizeA },
         });
       });
@@ -1447,7 +1447,7 @@ describe(`Grammar Type Utilities`, () => {
           expect(allConcreteTypes(g, f)).toEqual({ l: {} });
         });
         it(`allVisualizableTypes`, () => {
-          expect(allVisualizableTypes(g, f)).toEqual({
+          expect(allVisualisableTypes(g, f)).toEqual({
             l: { t1: { ...typeVisualizeA, tags: ["a"] } },
           });
         });

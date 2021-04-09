@@ -525,13 +525,42 @@ export function allConcreteTypes(
 }
 
 /**
+ * Extracts all visualisations from the given document, with locally defined
+ * types taking precedence over foreign types.
+ *
+ * @param g The whole grammar that has the types in question.
+ * @param filter An optional filter to exclude some types
+ */
+export function allVisualisationTypes(
+  g: Desc.GrammarDocument,
+  filter: FilterType = undefined
+): Desc.VisualisedLanguages {
+  const allLangKeys = new Set([
+    ...Object.keys(g.visualisations ?? []),
+    ...Object.keys(g.foreignVisualisations ?? []),
+  ]);
+
+  const toReturn: Desc.VisualisedLanguages = {};
+
+  allLangKeys.forEach((lang) => {
+    toReturn[lang] = Object.assign(
+      {},
+      objectFilter(g.foreignVisualisations[lang] ?? {}, filter),
+      objectFilter(g.visualizes[lang] ?? {}, filter)
+    );
+  });
+
+  return toReturn;
+}
+
+/**
  * Extracts all types from the given document, with visual types taking precedence over
  * structural types and locally defined types taking precedence over foreign types.
  *
  * @param g The whole grammar that has the types in question.
  * @param filter An optional filter to exclude some types
  */
-export function allVisualizableTypes(
+export function allVisualisableTypes(
   g: Desc.GrammarDocument,
   filter: FilterType = undefined
 ): Desc.NamedLanguages | Desc.VisualisedLanguages {
