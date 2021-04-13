@@ -236,7 +236,10 @@ export function resolveSingularReference(
 /**
  * Convert an AST to a "proper" JSON-object.
  */
-export function readFromNode(node: NodeDescription): GrammarDocument {
+export function readFromNode(
+  node: NodeDescription,
+  throwOnError: boolean
+): GrammarDocument {
   const toReturn: ReturnType<typeof readFromNode> = {
     types: {},
     foreignTypes: {},
@@ -275,20 +278,30 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
       const nameNode = isVisual ? n.getChildInCategory("references") : n;
 
       if (nameNode === undefined) {
-        throw new BlattWerkzeugError(
-          `Attempted to visualize unknown node: ${JSON.stringify(n.toModel())}`
-        );
+        if (throwOnError) {
+          throw new BlattWerkzeugError(
+            `Attempted to visualize unknown node: ${JSON.stringify(
+              n.toModel()
+            )}`
+          );
+        } else {
+          return;
+        }
       }
 
       const languageName = nameNode.properties["languageName"];
       const typeName = nameNode.properties["typeName"];
 
       if (!typeName || !languageName) {
-        throw new BlattWerkzeugError(
-          `Attempted to read node without qualified Type: ${JSON.stringify(
-            n.toModel()
-          )}`
-        );
+        if (throwOnError) {
+          throw new BlattWerkzeugError(
+            `Attempted to read node without qualified Type: ${JSON.stringify(
+              n.toModel()
+            )}`
+          );
+        } else {
+          return;
+        }
       }
 
       const container: VisualisedLanguages | NamedLanguages = isVisual
@@ -303,9 +316,13 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
       // Ensure the type is not already taken
       const langTypes = container[languageName];
       if (langTypes[typeName]) {
-        throw new BlattWerkzeugError(
-          `Duplicate node "${languageName}.${typeName}" of type "${n.typeName}"`
-        );
+        if (throwOnError) {
+          throw new BlattWerkzeugError(
+            `Duplicate node "${languageName}.${typeName}" of type "${n.typeName}"`
+          );
+        } else {
+          return;
+        }
       }
 
       // Add the correct type of type

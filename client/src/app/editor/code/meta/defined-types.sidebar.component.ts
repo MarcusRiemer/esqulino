@@ -45,7 +45,7 @@ export class DefinedTypesSidebarComponent {
 
   readonly editedGrammarDocument$ = this._current.currentTree.pipe(
     filter((t) => !t.isEmpty),
-    map((t) => readFromNode(t.toModel()))
+    map((t) => readFromNode(t.toModel(), false))
   );
 
   readonly referencedGrammars$ = this.editedGrammarDocument$.pipe(
@@ -63,7 +63,7 @@ export class DefinedTypesSidebarComponent {
     this.referencedGrammars$,
   ]).pipe(
     map(([edited, included]) => {
-      if (included.length === 1) {
+      if (included?.length === 1) {
         return produce(edited, (merged) => {
           merged.foreignTypes = allConcreteTypes(included[0]);
           merged.foreignVisualisations = allVisualisationTypes(included[0]);
