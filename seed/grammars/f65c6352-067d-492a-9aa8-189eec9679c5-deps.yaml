@@ -2,3 +2,9 @@
 - - "../seed/programming_language"
   - generic
   - !ruby/class 'Seed::ProgrammingLanguageSeed'
+- - "../seed/grammars"
+  - 3b919483-8a97-41a8-8798-a8bb386609ba
+  - !ruby/class 'Seed::GrammarSeed'
+- - "../seed/grammar_references"
+  - 7e0b4a37-126f-460c-94d5-2b99ce4e546f
+  - !ruby/class 'Seed::GrammarReferenceSeed'
