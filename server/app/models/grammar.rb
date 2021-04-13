@@ -128,6 +128,11 @@ class Grammar < ApplicationRecord
         self.grammar_reference_origins = regenerated_relationships
       end
 
+      # Workaround: We need to "sometimes" fetch the referenced types
+      # For the moment we will just do it every time we regenerate
+      # from a code resource
+      self.refresh_from_references!
+
       affected << self
 
       # Possibly update block languages
