@@ -899,6 +899,7 @@ export type Resource =
   | "CodeResourceSeed"
   | "BlockLanguageSeed"
   | "GrammarSeed"
+  | "GrammarReferenceSeed"
   | "ProgrammingLanguageSeed"
   | "ProjectDatabaseSeed";
 
