@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { of } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, shareReplay } from "rxjs/operators";
 
 import { Project, ProjectService } from "./project.service";
 
@@ -15,19 +15,15 @@ export class NavbarComponent {
     map((p) => !!p.currentDatabaseName)
   );
 
+  readonly currentDatabaseName$ = this._projectService.activeProject.pipe(
+    map((p) => p.currentDatabaseName),
+    shareReplay(1)
+  );
+
   readonly imagesEnabled$ = of(false);
 
   /**
    * The currently edited project
    */
-  @Input() project: Project;
-
-  /**
-   * @return The name of the database that is currently in use
-   */
-  get currentDatabaseName() {
-    if (this.project) {
-      return this.project.currentDatabaseName;
-    }
-  }
+  readonly project$ = this._projectService.activeProject;
 }
