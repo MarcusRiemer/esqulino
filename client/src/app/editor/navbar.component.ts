@@ -2,6 +2,9 @@ import { Component } from "@angular/core";
 
 import { of } from "rxjs";
 import { map, shareReplay } from "rxjs/operators";
+
+import { GrammarGeneratedByGQL } from "../../generated/graphql";
+
 import { CodeResource } from "../shared";
 import { tailorResourceReferences } from "../shared/syntaxtree/tailor-resource-references";
 
@@ -15,7 +18,8 @@ import { ProjectService } from "./project.service";
 export class NavbarComponent {
   constructor(
     private _projectService: ProjectService,
-    private _dragService: DragService
+    private _dragService: DragService,
+    private readonly _grammarGeneratedBy: GrammarGeneratedByGQL
   ) {}
 
   readonly hasDatabase$ = this._projectService.activeProject.pipe(
@@ -34,10 +38,16 @@ export class NavbarComponent {
   /**
    * The user has decided to start dragging something from the sidebar.
    */
-  startResourceDrag(evt: DragEvent, c: CodeResource) {
-    const tailoredNode = tailorResourceReferences(c.toModel());
+  async startResourceDrag(evt: DragEvent, c: CodeResource) {
+    const tailoredNode = await tailorResourceReferences(
+      c.toModel(),
+      this._grammarGeneratedBy
+    );
     if (tailoredNode.length > 0) {
       this._dragService.dragStart(evt, tailoredNode);
     }
+
+    // Explicitly cancel the builtin drag operation
+    return false;
   }
 }
