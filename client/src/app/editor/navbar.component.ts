@@ -1,15 +1,22 @@
-import { Component, Input } from "@angular/core";
+import { Component } from "@angular/core";
+
 import { of } from "rxjs";
 import { map, shareReplay } from "rxjs/operators";
+import { CodeResource } from "../shared";
+import { tailorResourceReferences } from "../shared/syntaxtree/tailor-resource-references";
 
-import { Project, ProjectService } from "./project.service";
+import { DragService } from "./drag.service";
+import { ProjectService } from "./project.service";
 
 @Component({
   templateUrl: "templates/navbar.html",
   selector: "editor-navbar",
 })
 export class NavbarComponent {
-  constructor(private _projectService: ProjectService) {}
+  constructor(
+    private _projectService: ProjectService,
+    private _dragService: DragService
+  ) {}
 
   readonly hasDatabase$ = this._projectService.activeProject.pipe(
     map((p) => !!p.currentDatabaseName)
@@ -22,8 +29,15 @@ export class NavbarComponent {
 
   readonly imagesEnabled$ = of(false);
 
-  /**
-   * The currently edited project
-   */
   readonly project$ = this._projectService.activeProject;
+
+  /**
+   * The user has decided to start dragging something from the sidebar.
+   */
+  startResourceDrag(evt: DragEvent, c: CodeResource) {
+    const tailoredNode = tailorResourceReferences(c.toModel());
+    if (tailoredNode.length > 0) {
+      this._dragService.dragStart(evt, tailoredNode);
+    }
+  }
 }

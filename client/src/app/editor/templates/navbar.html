@@ -26,6 +26,7 @@
     class="indent"
     [routerLink]="['ast', codeResource.id]"
     routerLinkActive="router-link-active"
+    (dragstart)="startResourceDrag($event, codeResource)"
   >
     <span class="fa fa-file-code-o fa-fw"></span>
     <span class="nav-target">{{ codeResource.name }}</span>
