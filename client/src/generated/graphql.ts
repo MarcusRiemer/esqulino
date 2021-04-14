@@ -427,6 +427,7 @@ export type GrammarFilterFieldType = {
   id?: Maybe<Scalars["ID"]>;
   name?: Maybe<Scalars["String"]>;
   slug?: Maybe<Scalars["String"]>;
+  generatedFromId?: Maybe<Scalars["ID"]>;
 };
 
 export type GrammarInputType = {
@@ -1754,6 +1755,18 @@ export type GrammarDescriptionItemQuery = { __typename?: "Query" } & {
   };
 };
 
+export type GrammarGeneratedByQueryVariables = Exact<{
+  codeResourceId?: Maybe<Scalars["ID"]>;
+}>;
+
+export type GrammarGeneratedByQuery = { __typename?: "Query" } & {
+  grammars: { __typename?: "GrammarConnection" } & {
+    nodes?: Maybe<
+      Array<Maybe<{ __typename?: "Grammar" } & Pick<Grammar, "id" | "name">>>
+    >;
+  };
+};
+
 export type LoginProvidersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type LoginProvidersQuery = { __typename?: "Query" } & {
@@ -3019,6 +3032,30 @@ export class GrammarDescriptionItemGQL extends Apollo.Query<
   GrammarDescriptionItemQueryVariables
 > {
   document = GrammarDescriptionItemDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GrammarGeneratedByDocument = gql`
+  query GrammarGeneratedBy($codeResourceId: ID) {
+    grammars(input: { filter: { generatedFromId: $codeResourceId } }) {
+      nodes {
+        id
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class GrammarGeneratedByGQL extends Apollo.Query<
+  GrammarGeneratedByQuery,
+  GrammarGeneratedByQueryVariables
+> {
+  document = GrammarGeneratedByDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
