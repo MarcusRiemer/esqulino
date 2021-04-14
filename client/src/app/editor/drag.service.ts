@@ -87,7 +87,7 @@ export class DragService {
   private _currentDrag$ = new BehaviorSubject<CurrentDrag>(undefined);
 
   // Shortcut to get the gist of the current drag process
-  private _currentDragInProgress = this._currentDrag$.pipe(map((d) => !!d));
+  private _currentDragInProgress$ = this._currentDrag$.pipe(map((d) => !!d));
 
   private _currentDragOverlay: OverlayRef = undefined;
 
@@ -403,7 +403,7 @@ export class DragService {
    * @return Observable to always know the current (very general) state of drag affairs.
    */
   get isDragInProgress() {
-    return this._currentDragInProgress.pipe(distinctUntilChanged());
+    return this._currentDragInProgress$.pipe(distinctUntilChanged());
   }
 
   /**
@@ -498,7 +498,8 @@ export class DragService {
 
     // ... or the user presses "Escape"
     const escHandler = (evt: KeyboardEvent) => {
-      if (evt.key === "Escape") {
+      // Cancel on escape when a drag is in progress
+      if (evt.key === "Escape" && !!this._currentDrag$.value) {
         dragEndHandler(true);
       }
     };
