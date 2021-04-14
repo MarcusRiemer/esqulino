@@ -12,11 +12,11 @@ export const environment: EnvironmentDescription = {
   apiEndpoint: "http://lvh.me:9292/api",
   loginEnabled: true,
   piwik: {
-    host: "https://piwik.blattwerkzeug.de",
+    host: "//piwik.blattwerkzeug.de",
     id: 2,
   },
   sentry: {
-    dsn: "https://e64499f04f2c44bb8167cfb43a1928b3@sentry.blattwerkzeug.de/2",
+    dsn: "//e64499f04f2c44bb8167cfb43a1928b3@sentry.blattwerkzeug.de/2",
     active: false,
   },
   version: {
