@@ -61,6 +61,23 @@ class BaseIdeService
     end
   end
 
+  # Converts the given AST into a "proper" settings for a block language
+  # (the settings are every aspect of the language without the blocks).
+  def emit_block_lang_settings(block_lang_desc_ast)
+    ensure_valid_document(
+      "NodeDescription",
+      block_lang_desc_ast
+    )
+
+    # All documents seem fine, lets execute the request
+    json_result = execute_request({
+                                    "type" => "emitBlockLanguageSettings",
+                                    "meta_block_language" => block_lang_desc_ast
+                                  })
+
+    return json_result.transform_keys { |k| k.underscore }
+  end
+
   # Finds out which other resources are referenced by the given
   # code resource
   # @param code_resource [CodeResource]

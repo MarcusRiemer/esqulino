@@ -9,7 +9,8 @@ module Types
     field :programming_language, Types::ProgrammingLanguageType, null: false
     field :programming_language_id, ID, null: false
     field :compiled, String, null: true
-    field :grammars, Types::GrammarType, null: true
+
+    field :generated_grammars, [Types::GrammarType], null: true
 
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false

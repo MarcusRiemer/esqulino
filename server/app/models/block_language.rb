@@ -88,6 +88,23 @@ class BlockLanguage < ApplicationRecord
     not emit_generated_blocks!(ide_service).nil?
   end
 
+  # Takes the current state of the code resource that contains backing
+  # instructions and regenerates the static properties accordingly.
+  #
+  # @param ide_service [IdeService] A connection to the ide service
+  #        that may be used to generate the source code.
+  #
+  # @raise [IdeServiceError] If anything goes wrong during generation.
+  #
+  # @return [BlockLanguage[]] Every model that has been changed by regenenaration
+  def regenerate_from_code_resource!(ide_service = IdeService.instance)
+    generated_settings = ide_service.emit_block_lang_settings(generated_from.ast)
+
+    self.assign_attributes generated_settings
+
+    return [self]
+  end
+
   # Computes a hash that may be sent back to the client if it requires
   # full access to the block language. This usually happens when the
   # client is working with the editor.

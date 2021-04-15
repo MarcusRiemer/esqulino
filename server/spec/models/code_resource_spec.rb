@@ -167,6 +167,13 @@ RSpec.describe CodeResource, type: :model do
 
       expect(res.immediate_dependants.to_a).to eq [grammar]
     end
+
+    it "with a single generated block language" do
+      res = FactoryBot.create(:code_resource)
+      block_lang = FactoryBot.create(:block_language, generated_from: res)
+
+      expect(res.immediate_dependants.to_a).to eq [block_lang]
+    end
   end
 
   context "update_this_and_dependants" do
