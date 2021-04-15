@@ -1,0 +1,85 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: b1149fa7-dc3d-414f-93b9-56c7f77c27d0
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Grammar: Meta: Block Language'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 29d579a4-e8f7-470b-8390-4c73b06b5a7b
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Document", "languageName":
+    "MetaBlockLang"}}], "nodes": [{"name": "concreteNode", "children": {"attributes":
+    [{"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "CssClass", "languageName": "MetaBlockLang"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "RootCssClasses"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "Document", "languageName": "MetaBlockLang"}}, {"name":
+    "concreteNode", "children": {"attributes": [{"name": "property", "language": "MetaGrammar",
+    "properties": {"base": "string", "name": "Name"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "CssClass", "languageName": "MetaBlockLang"}}]}, "language":
+    "MetaGrammar", "properties": {"name": "MetaBlockLang"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-04-15 13:41:15.419967000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-04-15 14:01:06.444681000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "MetaBlockLang": {
+          "Document": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "RootCssClasses",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "MetaBlockLang",
+                      "typeName": "CssClass"
+                    },
+                    "occurs": "*"
+                  }
+                ]
+              }
+            ]
+          },
+          "CssClass": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "Name"
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "visualisations": {},
+      "foreignVisualisations": {},
+      "root": {
+        "languageName": "MetaBlockLang",
+        "typeName": "Document"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

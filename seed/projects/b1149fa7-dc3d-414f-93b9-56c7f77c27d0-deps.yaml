@@ -1,0 +1,13 @@
+---
+- - "../seed/used_block_languages"
+  - 6358c24e-2a2d-4e7e-abfb-659e4bb4f19e
+  - &1 !ruby/class 'Seed::ProjectUsesBlockLanguageSeed'
+- - "../seed/used_block_languages"
+  - b8bc9454-30c6-4b5b-8900-e5fce70a6c2e
+  - *1
+- - "../seed/code_resources"
+  - 6072bad2-f939-47dd-a5f0-c4d7ed4b14ef
+  - &2 !ruby/class 'Seed::CodeResourceSeed'
+- - "../seed/code_resources"
+  - 29d579a4-e8f7-470b-8390-4c73b06b5a7b
+  - *2
