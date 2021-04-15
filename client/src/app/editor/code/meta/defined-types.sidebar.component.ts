@@ -6,7 +6,6 @@ import { QualifiedTypeName, NodeDescription } from "../../../shared/syntaxtree";
 import { readFromNode } from "../../../shared/syntaxtree/meta-grammar/meta-grammar";
 import {
   allConcreteTypes,
-  allVisualisableTypes,
   allVisualisationTypes,
   getTypeList,
 } from "../../../shared/syntaxtree/grammar-type-util";

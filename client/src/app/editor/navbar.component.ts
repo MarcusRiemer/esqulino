@@ -8,6 +8,7 @@ import { GrammarGeneratedByGQL } from "../../generated/graphql";
 import { CodeResource } from "../shared";
 import { tailorResourceReferences } from "../shared/syntaxtree/tailor-resource-references";
 
+import { CurrentCodeResourceService } from "./current-coderesource.service";
 import { DragService } from "./drag.service";
 import { ProjectService } from "./project.service";
 
@@ -17,9 +18,10 @@ import { ProjectService } from "./project.service";
 })
 export class NavbarComponent {
   constructor(
-    private _projectService: ProjectService,
-    private _dragService: DragService,
-    private readonly _grammarGeneratedBy: GrammarGeneratedByGQL
+    private readonly _projectService: ProjectService,
+    private readonly _dragService: DragService,
+    private readonly _grammarGeneratedBy: GrammarGeneratedByGQL,
+    private readonly _currentCodeResource: CurrentCodeResourceService
   ) {}
 
   readonly hasDatabase$ = this._projectService.activeProject.pipe(
@@ -39,12 +41,17 @@ export class NavbarComponent {
    * The user has decided to start dragging something from the sidebar.
    */
   async startResourceDrag(evt: DragEvent, c: CodeResource) {
-    const tailoredNode = await tailorResourceReferences(
-      c.toModel(),
-      this._grammarGeneratedBy
-    );
-    if (tailoredNode.length > 0) {
-      this._dragService.dragStart(evt, tailoredNode);
+    // Only start drags if there is a current code resource, otherwise
+    // the <block-host> is irritated because there is no resource
+    // to validate against.
+    if (this._currentCodeResource.peekResource) {
+      const tailoredNode = await tailorResourceReferences(
+        c.toModel(),
+        this._grammarGeneratedBy
+      );
+      if (tailoredNode.length > 0) {
+        this._dragService.dragStart(evt, tailoredNode);
+      }
     }
 
     // Explicitly cancel the builtin drag operation
