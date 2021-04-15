@@ -28,6 +28,9 @@ class BlockLanguage < ApplicationRecord
   # creating code resources.
   belongs_to :default_programming_language, :class_name => "ProgrammingLanguage"
 
+  # The types of grammar may be based on a meta block language code resource
+  belongs_to :generated_from, class_name: 'CodeResource', optional: true
+
   # The grammar that this block language may describe
   belongs_to :grammar
 
