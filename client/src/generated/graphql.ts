@@ -119,7 +119,7 @@ export type CodeResource = {
   blockLanguageId: Scalars["ID"];
   compiled?: Maybe<Scalars["String"]>;
   createdAt: Scalars["ISO8601DateTime"];
-  grammars?: Maybe<Grammar>;
+  generatedGrammars?: Maybe<Array<Grammar>>;
   id: Scalars["ID"];
   name: Scalars["String"];
   programmingLanguage: ProgrammingLanguage;
@@ -277,7 +277,10 @@ export type CreateProgrammingLanguageInput = {
   projectId: Scalars["ID"];
   languageName: Scalars["String"];
   runtimeLanguageId: Scalars["String"];
+  /** Create an empty code resource with the new language? */
   createInitialCodeResource?: Maybe<Scalars["Boolean"]>;
+  /** Split the grammar into two files? */
+  createStructureAndSyntaxGrammar?: Maybe<Scalars["Boolean"]>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars["String"]>;
 };
