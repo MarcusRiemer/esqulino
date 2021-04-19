@@ -39,7 +39,7 @@ module Server
       tld_length: cookie_tld_length
     }
 
-    config.session_store :cookie_store, cookie_config
+    config.session_store :cookie_store, **cookie_config
 
     # Session storage and the following middleware is required for OmniAuth
     config.middleware.use ActionDispatch::Cookies # Required for all session management
