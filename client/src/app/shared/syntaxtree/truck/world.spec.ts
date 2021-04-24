@@ -137,9 +137,9 @@ describe("Shared: World", () => {
 
     function checkFor(index: number): void {
       const state = world.getState(index);
-      expect(state).not.toBeNull();
+      expect(state).not.toBeUndefined();
       expect(state).toEqual(world.state); // Must be the latest state
-      expect(world.getState(index + 1)).toBeNull();
+      expect(world.getState(index + 1)).toBeUndefined();
       expect(duplicationCheck.has(state)).toBeFalse(); // If 'immer' is not used correctly this will fail
       duplicationCheck.add(state);
     }
