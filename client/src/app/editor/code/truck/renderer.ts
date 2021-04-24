@@ -323,7 +323,8 @@ class WorldRenderer implements ObjectRenderer {
         this.lastRenderedStateStartTime == undefined
       ) {
         // Render zero-timed states instantly
-        this.lastRenderedStateStartTime = currState.time !== 0 ? currentTime : 0;
+        this.lastRenderedStateStartTime =
+          currState.time !== 0 ? currentTime : 0;
       } else if (this.world.step < this.currStep) {
         // We detected an UNDO operation, by setting the time to 0 all animations are done instantly
         this.lastRenderedStateStartTime = 0;
@@ -474,9 +475,7 @@ class TileRenderer implements ProgressableObjectRenderer<Tile> {
         const isGreen = tl.isGreen(
           Math.max(
             0,
-            ctx.stepProgress < 0.5
-              ? ctx.totalTimeSteps - 1
-              : ctx.totalTimeSteps
+            ctx.stepProgress < 0.5 ? ctx.totalTimeSteps - 1 : ctx.totalTimeSteps
           )
         );
 
