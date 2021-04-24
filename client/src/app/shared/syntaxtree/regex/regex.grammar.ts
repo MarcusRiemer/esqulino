@@ -5,6 +5,8 @@ export const GRAMMAR_DESCRIPTION: Schema.GrammarDescription = {
   name: "regex",
   programmingLanguageId: "regex",
   root: { languageName: "regex", typeName: "expression" },
+  visualisations: {},
+  foreignVisualisations: {},
   foreignTypes: {},
   types: {
     regex: {

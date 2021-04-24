@@ -1,4 +1,7 @@
-<ng-container *ngIf="renderDataAvailable$ | async">
+<ng-container
+  *ngIf="renderDataAvailable$ | async"
+  [changeDetectionLog]="rootNodeTypeName"
+>
   <editor-block-render
     *ngFor="let visualBlock of editorBlock.visual"
     [node]="node"

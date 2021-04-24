@@ -3,9 +3,9 @@
   [(ngModel)]="selectedBlockLanguageId"
 >
   <option
-    *ngFor="let lang of (availableBlockLanguages | async)"
-    [value]="lang.id"
+    *ngFor="let usedLang of (availableBlockLanguages$ | async)"
+    [value]="usedLang.blockLanguageId"
   >
-    {{ lang.name }} ({{ lang.id }})
+    {{ usedLang | displayResource }} ({{ usedLang.blockLanguageId }})
   </option>
 </select>

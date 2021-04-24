@@ -3,7 +3,7 @@ import { SqlValidator, DatabaseSchemaAdditionalContext } from "./sql.validator";
 import { SPEC_TABLES } from "../../schema/schema.spec";
 import { Schema } from "../../schema/schema";
 import { NodeDescription } from "../syntaxtree.description";
-import { Node } from "../syntaxtree";
+import { SyntaxNode } from "../syntaxtree";
 import { ValidationContext } from "../validation-result";
 
 function specContext(
@@ -104,7 +104,7 @@ describe(`Specialized SQL Validator`, () => {
       },
     };
 
-    const ast = new Node(astDesc, undefined);
+    const ast = new SyntaxNode(astDesc, undefined);
 
     it(`With schema`, () => {
       const context = new ValidationContext(specContext());
@@ -153,7 +153,7 @@ describe(`Specialized SQL Validator`, () => {
       },
     };
 
-    const ast = new Node(astDesc, undefined);
+    const ast = new SyntaxNode(astDesc, undefined);
     const sqlValidator = new SqlValidator();
 
     it(`With schema`, () => {
@@ -216,7 +216,7 @@ describe(`Specialized SQL Validator`, () => {
       },
     };
 
-    const ast = new Node(astDesc, undefined);
+    const ast = new SyntaxNode(astDesc, undefined);
     const sqlValidator = new SqlValidator();
 
     it(`With schema`, () => {
@@ -275,7 +275,7 @@ describe(`Specialized SQL Validator`, () => {
       },
     };
 
-    const ast = new Node(astDesc, undefined);
+    const ast = new SyntaxNode(astDesc, undefined);
     const sqlValidator = new SqlValidator();
 
     it(`With schema`, () => {
@@ -325,7 +325,7 @@ describe(`Specialized SQL Validator`, () => {
       },
     };
 
-    const ast = new Node(astDesc, undefined);
+    const ast = new SyntaxNode(astDesc, undefined);
 
     it(`Error: DUPLICATE_TABLE_NAME, UNKNOWN_TABLE`, () => {
       const context = new ValidationContext(specContext());
@@ -394,7 +394,7 @@ describe(`Specialized SQL Validator`, () => {
       },
     };
 
-    const ast = new Node(astDesc, undefined);
+    const ast = new SyntaxNode(astDesc, undefined);
     sqlValidator.validateFromRoot(ast, context);
 
     expect(context.errors.map((e) => e.code)).toEqual([
@@ -419,7 +419,7 @@ describe(`Specialized SQL Validator`, () => {
           argColumns
         );
 
-        const ast = new Node(astDesc, undefined);
+        const ast = new SyntaxNode(astDesc, undefined);
         sqlValidator.validateFromRoot(ast, context);
 
         expect(context.errors.map((e) => e.code)).toEqual(expectedCodes);

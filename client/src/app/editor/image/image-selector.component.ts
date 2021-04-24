@@ -53,4 +53,8 @@ export class ImageSelectorComponent {
   get images() {
     return this._imageService.images || [];
   }
+
+  get hasImages() {
+    return this._imageService.images?.length > 0;
+  }
 }

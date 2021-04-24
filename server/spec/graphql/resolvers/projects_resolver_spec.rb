@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Resolvers::ProjectsResolver do
+RSpec.fdescribe Resolvers::ProjectsResolver do
   it "can be instantiated" do
     res = Resolvers::ProjectsResolver.new
     expect(res).not_to be_nil
@@ -11,7 +11,7 @@ RSpec.describe Resolvers::ProjectsResolver do
     p2 = FactoryBot.create(:project, slug: "number-2")
 
     res = Resolvers::ProjectsResolver.new(languages: ["de", "en"])
-    expect(res.scope).to eq([p1, p2])
+    expect(res.scope).to match_array([p1, p2])
   end
 
   it "Loads all projects ordered COALESCE by multilingual NAME ASC" do
@@ -21,7 +21,7 @@ RSpec.describe Resolvers::ProjectsResolver do
 
     res = Resolvers::ProjectsResolver.new(
       languages: ["de", "en"],
-      order: { orderField: "name", orderDirection: "asc" }
+      order: { order_field: "name", orderDirection: "asc" }
     )
     expect(res.scope).to eq([p1, p2, p3])
   end
@@ -32,7 +32,7 @@ RSpec.describe Resolvers::ProjectsResolver do
     p2 = FactoryBot.create(:project, name: { de: "hallo-2" })
     res = Resolvers::ProjectsResolver.new(
       languages: ["de", "en"],
-      order: { orderField: "name", orderDirection: "desc" }
+      order: { order_field: "name", order_direction: :desc }
     )
     expect(res.scope).to eq([p3, p2, p1])
   end
@@ -43,7 +43,7 @@ RSpec.describe Resolvers::ProjectsResolver do
     p3 = FactoryBot.create(:project, slug: "number-3")
     res = Resolvers::ProjectsResolver.new(
       languages: ["de", "en"],
-      order: { orderField: "slug", orderDirection: "desc" }
+      order: { order_field: "slug", order_direction: "desc" }
     )
     expect(res.scope).to eq([p3, p2, p1])
   end
@@ -55,7 +55,7 @@ RSpec.describe Resolvers::ProjectsResolver do
 
     res = Resolvers::ProjectsResolver.new(
       languages: ["de", "en"],
-      order: { orderField: "slug", orderDirection: "asc" }
+      order: { order_field: "slug", order_direction: "asc" }
     )
     expect(res.scope).to eq([p1, p2, p3])
   end
@@ -67,7 +67,7 @@ RSpec.describe Resolvers::ProjectsResolver do
 
     res = Resolvers::ProjectsResolver.new(
       languages: ["de", "en"],
-      order: { orderField: "slug" }
+      order: { order_field: "slug" }
     )
     expect(res.scope).to eq([p1, p2, p3])
   end
@@ -79,7 +79,7 @@ RSpec.describe Resolvers::ProjectsResolver do
 
     res = Resolvers::ProjectsResolver.new(
       languages: ["de", "en"],
-      order: { orderDirection: "asc" }
+      order: { order_direction: "asc" }
     )
     expect(res.scope).to eq([p1, p2, p3])
   end
@@ -188,8 +188,18 @@ RSpec.describe Resolvers::ProjectsResolver do
     res2 = Resolvers::ProjectsResolver.new(
       languages: ["de"]
     )
-    expect(res.scope.map { |p| p.description}).to eq([{ "en" => "hello" }, {}, { "en" => "hello3" }, { "en" => "hello4" }])
-    expect(res2.scope.map { |p| p.description}).to eq([{ "de" => "hallo" }, { "de" => "hallo2" }, {}, {}])
+    expect(res.scope.map { |p| p.description}).to match_array([
+                                                                { "en" => "hello" },
+                                                                {},
+                                                                { "en" => "hello3" },
+                                                                { "en" => "hello4" }
+                                                              ])
+    expect(res2.scope.map { |p| p.description}).to match_array([
+                                                                 { "de" => "hallo" },
+                                                                 { "de" => "hallo2" },
+                                                                 {},
+                                                                 {}
+                                                               ])
   end
 
   it "Throws exception when creating project with not provided language keys" do
@@ -211,12 +221,12 @@ RSpec.describe Resolvers::ProjectsResolver do
     p3 = FactoryBot.create(:project, name: { de: "Test: Web" })
 
     res1 = Resolvers::ProjectsResolver.new(
-      order: { orderField: "name", orderDirection: "asc" },
+      order: { order_field: "name", order_direction: "asc" },
       languages: ["de", "en"]
     )
 
     res2 = Resolvers::ProjectsResolver.new(
-      order: { orderField: "name", orderDirection: "asc" },
+      order: { order_field: "name", order_direction: "asc" },
       languages: ["en", "de"]
     )
     expect(res1.scope).to eq([p2, p3, p1])

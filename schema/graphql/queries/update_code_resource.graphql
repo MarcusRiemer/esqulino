@@ -1,0 +1,50 @@
+mutation UpdateCodeResource(
+  $id: ID!,
+  $name: String!,
+  $ast: NodeDescription,
+  $blockLanguageId: ID!,
+  $programmingLanguageId: ID!,
+) {
+  updateCodeResource(input: {
+    id: $id,
+    name: $name,
+    ast: $ast,
+    blockLanguageId: $blockLanguageId,
+    programmingLanguageId: $programmingLanguageId,
+  }) {
+    codeResource {
+      name,
+      ast,
+      blockLanguageId,
+      programmingLanguageId,
+    }
+    affected {
+      ... on BlockLanguage {
+        id
+        name
+        sidebars
+        editorBlocks
+        editorComponents
+        localGeneratorInstructions
+        rootCssClasses
+        grammarId
+        defaultProgrammingLanguageId
+        __typename
+      }
+
+      ... on Grammar {
+        id
+        name
+        root
+        types
+        foreignTypes
+        visualisations
+        foreignVisualisations
+        includes
+        visualizes
+        programmingLanguageId
+        __typename
+      }
+    }
+  }
+}

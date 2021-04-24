@@ -1,4 +1,5 @@
-import { Pipe, PipeTransform, Inject, LOCALE_ID } from "@angular/core";
+import { Pipe, PipeTransform } from "@angular/core";
+import { CurrentLocaleService } from "../current-locale.service";
 
 import {
   NaturalLanguagesService,
@@ -15,14 +16,13 @@ import { MultiLangString } from "./multilingual-string.description";
 export class CurrentLanguagePipe implements PipeTransform {
   constructor(
     private readonly _naturalLanguages: NaturalLanguagesService,
-    @Inject(LOCALE_ID)
-    private readonly _localeId: string
+    private readonly _lang: CurrentLocaleService
   ) {}
 
   transform(value: MultiLangString) {
     const bestLocale = this._naturalLanguages.resolveLocaleId(value);
     let toReturn = this._naturalLanguages.resolveString(value);
-    if (bestLocale == this._localeId) {
+    if (bestLocale == this._lang.localeId) {
       return toReturn;
     } else {
       return localeToFlag(bestLocale) + " " + toReturn;

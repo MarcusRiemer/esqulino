@@ -1,5 +1,8 @@
 <select class="form-control custom-select" [(ngModel)]="selectedLanguageId">
-  <option *ngFor="let lang of availableLanguages" [value]="lang.id">
-    {{ lang.name }} ({{ lang.id }})
+  <option
+    *ngFor="let lang of availableLanguages"
+    [value]="lang.programmingLanguageId"
+  >
+    {{ lang.name }} ({{ lang.programmingLanguageId }})
   </option>
 </select>

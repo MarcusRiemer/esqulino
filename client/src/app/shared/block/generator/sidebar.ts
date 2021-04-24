@@ -4,6 +4,7 @@ import {
   NodePropertyTypeDescription,
   NodeChildrenGroupDescription,
   NamedLanguages,
+  VisualisedLanguages,
 } from "../../syntaxtree/";
 import { FullNodeConcreteTypeDescription } from "../../syntaxtree/grammar-type-util.description";
 import { fullNodeDescription } from "../../syntaxtree/grammar-type-util";
@@ -96,7 +97,7 @@ export function generateDefaultNode(
  * Generates a concrete block that is draggable and shal be shown on its own.
  */
 export function generateSidebarBlock(
-  languages: NamedLanguages,
+  languages: NamedLanguages | VisualisedLanguages,
   block: AnySidebarBlockDescription
 ): SidebarBlockDescription {
   if (block.type === "constant") {
@@ -122,7 +123,7 @@ export function generateSidebarBlock(
  * Generates all blocks in this sidebar category.
  */
 export function generateSidebarCategory(
-  languages: NamedLanguages,
+  languages: NamedLanguages | VisualisedLanguages,
   category: AnySidebarCategoryDescription
 ): FixedBlocksSidebarCategoryDescription {
   switch (category.type) {
@@ -176,15 +177,15 @@ export function generateSidebarCategory(
  * information.
  */
 export function generateSidebar(
-  languages: NamedLanguages,
+  languages: NamedLanguages | VisualisedLanguages,
   desc: GeneratedBlocksSidebarDescription
 ): FixedBlocksSidebarDescription;
 export function generateSidebar(
-  languages: NamedLanguages,
+  languages: NamedLanguages | VisualisedLanguages,
   desc: AnySidebarDescription
 ): SidebarDescription;
 export function generateSidebar(
-  languages: NamedLanguages,
+  languages: NamedLanguages | VisualisedLanguages,
   desc: AnySidebarDescription
 ): SidebarDescription {
   // Is there anything to generate?

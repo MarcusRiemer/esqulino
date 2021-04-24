@@ -1,13 +1,13 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 120027a8-2ef9-4a24-98ea-64f9fbac3cc5
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: Trucklino World
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 120027a8-2ef9-4a24-98ea-64f9fbac3cc5
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2018-12-19 11:24:22.059637000 Z
@@ -70,6 +70,10 @@ concise_attributes:
   name: root
   value_before_type_cast: '{"typeName": "world", "languageName": "truck_world"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: extends_id
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
 new_record: false
 active_record_yaml_version: 2

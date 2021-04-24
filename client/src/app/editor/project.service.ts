@@ -16,11 +16,10 @@ import {
 
 export { Project, ProjectFullDescription };
 
-export function fromGraphQL(descInQuery: FullProjectQuery) {
-  const descIn = descInQuery.projects.nodes[0];
-  const toReturn: ProjectFullDescription = descIn;
-
-  return toReturn;
+export function fromGraphQL(
+  descInQuery: FullProjectQuery
+): ProjectFullDescription {
+  return descInQuery.project;
 }
 
 /**
@@ -83,7 +82,6 @@ export class ProjectService {
     }
 
     // Build the HTTP-request
-    const url = this._server.getProjectUrl(slugOrId);
     this._httpRequest = this._fullProject
       .fetch({ id: slugOrId }, { fetchPolicy: "network-only" })
       .pipe(
@@ -97,7 +95,7 @@ export class ProjectService {
       (res) => {
         // There is a new project, Inform subscribers
         console.log(
-          `Project Service: HTTP request for specific project ("${url}") finished`
+          `Project Service: HTTP request for specific project ("${slugOrId}") finished`
         );
         this._subject.next(res);
 
@@ -107,7 +105,7 @@ export class ProjectService {
         // Something has gone wrong, pass the error on to the subscribers
         // of the project and hope they know what to do about it.
         console.log(
-          `Project Service: HTTP error with request for specific project ("${url}") => "${error.status}: ${error.statusText}"`
+          `Project Service: HTTP error with request for specific project ("${slugOrId}") => "${error.status}: ${error.statusText}"`
         );
         this._subject.error(error);
 
@@ -145,13 +143,18 @@ export class ProjectService {
    * @param proj The project with the relevant description.
    */
   storeProjectDescription(proj: Project) {
-    const desc = proj.toUpdateRequest();
-
-    const toReturn = this._updateProject.mutate(desc).pipe(
-      catchError(this.passThroughError),
-      delay(250),
-      tap((_) => proj.markSaved())
-    );
+    const toReturn = this._updateProject
+      .mutate({
+        id: proj.id,
+        description: proj.description,
+        name: proj.name,
+        preview: proj.projectImageId,
+      })
+      .pipe(
+        catchError(this.passThroughError),
+        delay(250),
+        tap((_) => proj.markSaved())
+      );
 
     return toReturn;
   }

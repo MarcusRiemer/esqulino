@@ -1,0 +1,109 @@
+{
+  "types": {},
+  "foreignTypes": {},
+  "visualisations": {
+    "dxml": {
+      "element": {
+        "type": "visualise",
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "vertical",
+            "children": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "<"
+                  },
+                  {
+                    "type": "interpolate",
+                    "name": "name"
+                  },
+                  {
+                    "type": "each",
+                    "name": "attributes"
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": ">"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "orientation": "vertical",
+                "children": [
+                  {
+                    "type": "each",
+                    "name": "elements"
+                  }
+                ],
+                "tags": [
+                  "indent"
+                ]
+              },
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "</"
+                  },
+                  {
+                    "type": "interpolate",
+                    "name": "name"
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": ">"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "attribute": {
+        "type": "visualise",
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "horizontal",
+            "children": [
+              {
+                "type": "interpolate",
+                "name": "name",
+                "tags": [
+                  "space-before"
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "="
+              },
+              {
+                "type": "interpolate",
+                "name": "value",
+                "tags": [
+                  "double-quote"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "foreignVisualisations": {},
+  "root": {
+    "languageName": "dxml",
+    "typeName": "element"
+  },
+  "visualizes": [
+    "3b919483-8a97-41a8-8798-a8bb386609ba"
+  ]
+}

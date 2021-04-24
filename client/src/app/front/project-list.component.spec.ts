@@ -12,13 +12,14 @@ import {
   buildEmptyProjectResponse,
   buildFrontendProjectResponse,
   FrontendProjectGQLResponse,
-} from "../editor/spec-util/project.gql.data.spec";
+} from "../editor/spec-util/";
 import { ProjectListItemComponent } from "./project-list-item.component";
 import { LanguageService } from "../shared";
 import { NaturalLanguagesService } from "../natural-languages.service";
 import { CurrentLanguagePipe } from "../shared/current-language.pipe";
 import { DefaultValuePipe } from "../shared/default-value.pipe";
 import { LinkService } from "../link.service";
+import { UrlFriendlyIdPipe } from "../shared/url-friendly-id.pipe";
 
 describe(`Component: ProjectList`, () => {
   async function createComponent(localeId: string) {
@@ -35,6 +36,7 @@ describe(`Component: ProjectList`, () => {
         CurrentLanguagePipe,
         DefaultValuePipe,
         ProjectListItemComponent,
+        UrlFriendlyIdPipe,
       ],
     }).compileComponents();
 

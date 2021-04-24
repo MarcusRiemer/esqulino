@@ -343,9 +343,9 @@ describe("Multi Block Types", () => {
       expect(b).toEqual(expBlock);
       expect(b.children.length).toEqual(2, "Error and a single child");
       expect(b.children[0]).toEqual(
-        jasmine.objectContaining({ blockType: "error" } as Partial<
-          VisualBlockDescriptions.EditorErrorIndicator
-        >)
+        jasmine.objectContaining({
+          blockType: "error",
+        } as Partial<VisualBlockDescriptions.EditorErrorIndicator>)
       );
       expect(b.children[1]).toEqual(expConstant);
     });

@@ -8,10 +8,6 @@ import { map, first, catchError, filter } from "rxjs/operators";
 import { ServerDataService } from "../serverdata/server-data.service";
 import { UserDescription } from "./user.description";
 import { ServerProviderDescription } from "./provider.description";
-import {
-  MayPerformResponseDescription,
-  MayPerformRequestDescription,
-} from "./../may-perform.description";
 import { AuthDialogComponent } from "./auth-dialog.component";
 
 @Injectable()
@@ -27,7 +23,7 @@ export class UserService {
     private _matDialog: MatDialog
   ) {
     // Trigger retrieval of initial user data
-    this._serverData.getUserData.value
+    this._serverData.getUserData
       .pipe(
         filter((u) => !!u) // Don't set empty users, logout is handled via the interceptor
       )
@@ -36,7 +32,7 @@ export class UserService {
 
         // If this is not the guest user: Grab its identities
         if (newUser.userId !== UserService.GUEST_ID) {
-          this._serverData.getIdentities.value
+          this._serverData.getIdentities
             .pipe(first())
             .subscribe((i) => this.fireIdentities(i));
         }
@@ -62,7 +58,6 @@ export class UserService {
     .asObservable()
     .pipe(filter((u) => !!u));
 
-  readonly providerList = this._serverData.getProviders;
   readonly identities = this._cachedIdentities.asObservable();
   readonly unexpectedLogout$ = this._unexpectedLogout$.asObservable();
 
@@ -112,19 +107,6 @@ export class UserService {
     filter((u) => !!u),
     map((u) => u.providers)
   );
-
-  /**
-   * Sends a http-request to check for the authorization of ui element.
-   * Server will respond with a list of authorizations
-   */
-  public mayPerform$(
-    data: MayPerformRequestDescription
-  ): Observable<MayPerformResponseDescription> {
-    return this._serverData.mayPerform$(data).pipe(
-      first(),
-      map((r) => r[0])
-    );
-  }
 
   /**
    * Log out a logged in user

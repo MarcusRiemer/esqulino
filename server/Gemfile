@@ -33,15 +33,6 @@ gem 'jwt'
 # oAuth2 authentication
 gem 'omniauth', '~> 1.9.0'
 
-# Github as provider
-gem 'omniauth-github'
-
-# Google as provider
-gem 'omniauth-google-oauth2'
-
-# Provider with login/password
-gem 'omniauth-identity', '~> 1.1.1'
-
 # Integrate with the keycloak-server
 gem 'omniauth-keycloak'
 
@@ -101,6 +92,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rspec_junit_formatter'
   gem 'guard-rspec', require: false
+
   gem 'pry', '~> 0.13'
   gem 'pry-byebug'
   gem 'webmock'

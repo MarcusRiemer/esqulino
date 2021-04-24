@@ -38,46 +38,103 @@ RSpec.describe Seed::GrammarSeed do
 
     context "store, destroys and loads" do
       it "an empty grammar by ID (CREATE)" do
-        gOrig = FactoryBot.create(:grammar, name: "Test Grammar")
+        g_orig = FactoryBot.create(:grammar, name: "Test Grammar")
 
-        Seed::GrammarSeed.new(gOrig).start_store
+        Seed::GrammarSeed.new(g_orig).start_store
 
-        gOrig.destroy!
+        g_orig.destroy!
 
-        gLoad = Seed::GrammarSeed.new(gOrig.id).start_load
-        gLoadData = Grammar.find_by(id: gOrig.id)
+        g_load = Seed::GrammarSeed.new(g_orig.id).start_load
+        g_load_data = Grammar.find_by(id: g_orig.id)
 
-        expect(identifying_attributes(gOrig)).to eq identifying_attributes(gLoadData)
+        expect(identifying_attributes(g_orig)).to eq identifying_attributes(g_load_data)
       end
 
       it "an empty grammar by slug (CREATE)" do
-        gOrig = FactoryBot.create(:grammar, name: "Test Grammar")
+        g_orig = FactoryBot.create(:grammar, name: "Test Grammar")
 
-        Seed::GrammarSeed.new(gOrig).start_store
+        Seed::GrammarSeed.new(g_orig).start_store
 
-        gOrig.destroy!
+        g_orig.destroy!
 
-        gLoad = Seed::GrammarSeed.new(gOrig.slug).start_load
-        gLoadData = Grammar.find_by(id: gOrig.id)
+        g_load = Seed::GrammarSeed.new(g_orig.slug).start_load
+        g_load_data = Grammar.find_by(id: g_orig.id)
 
-        expect(identifying_attributes(gOrig)).to eq identifying_attributes(gLoadData)
+        expect(identifying_attributes(g_orig)).to eq identifying_attributes(g_load_data)
       end
     end
 
     context "stores and reloads " do
       it "an empty grammar (CREATE)" do
-        gOrig = FactoryBot.create(:grammar, name: "Test Grammar")
+        g_orig = FactoryBot.create(:grammar, name: "Test Grammar")
 
-        Seed::GrammarSeed.new(gOrig).start_store
+        Seed::GrammarSeed.new(g_orig).start_store
 
         # Making a change after storing
-        gOrig.update_column("name", "changed")
+        g_orig.update_column("name", "changed")
 
-        gLoad = Seed::GrammarSeed.new(gOrig.id).start_load
-        gLoadData = Grammar.find_by(id: gOrig.id)
-        gOrig.reload
+        g_load = Seed::GrammarSeed.new(g_orig.id).start_load
+        g_load_data = Grammar.find_by(id: g_orig.id)
+        g_orig.reload
 
-        expect(identifying_attributes(gOrig)).to eq identifying_attributes(gLoadData)
+        expect(identifying_attributes(g_orig)).to eq identifying_attributes(g_load_data)
+      end
+    end
+
+    context "references other grammar" do
+      it "include_types" do
+        g_origin = FactoryBot.create(:grammar, name: "Origin")
+        g_target = FactoryBot.create(:grammar, name: "Target")
+
+        reference = create(:grammar_reference,
+                           origin: g_origin,
+                           target: g_target,
+                           reference_type: "include_types")
+
+        expect(g_origin.targeted_grammars).to eq([g_target])
+
+        Seed::GrammarSeed.new(g_origin).start_store
+
+        g_origin.destroy!
+        g_target.destroy!
+
+        Seed::GrammarSeed.new(g_origin.id).start_load
+
+        g_origin_load = Grammar.find_by(id: g_origin.id)
+        g_target_load = g_origin_load.targeted_grammars.first
+        reference_load = GrammarReference.first
+
+        expect(identifying_attributes g_origin_load).to eq(identifying_attributes g_origin)
+        expect(identifying_attributes g_target_load).to eq(identifying_attributes g_target)
+        expect(identifying_attributes reference_load).to eq(identifying_attributes reference)
+      end
+
+      it "visualize" do
+        g_origin = FactoryBot.create(:grammar, name: "Origin")
+        g_target = FactoryBot.create(:grammar, name: "Target")
+
+        reference = create(:grammar_reference,
+                           origin: g_origin,
+                           target: g_target,
+                           reference_type: "visualize")
+
+        expect(g_origin.targeted_grammars).to eq([g_target])
+
+        Seed::GrammarSeed.new(g_origin).start_store
+
+        g_origin.destroy!
+        g_target.destroy!
+
+        Seed::GrammarSeed.new(g_origin.id).start_load
+
+        g_origin_load = Grammar.find_by(id: g_origin.id)
+        g_target_load = g_origin_load.targeted_grammars.first
+        reference_load = GrammarReference.first
+
+        expect(identifying_attributes g_origin_load).to eq(identifying_attributes g_origin)
+        expect(identifying_attributes g_target_load).to eq(identifying_attributes g_target)
+        expect(identifying_attributes reference_load).to eq(identifying_attributes reference)
+
       end
     end
   end

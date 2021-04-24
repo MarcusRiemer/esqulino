@@ -107,7 +107,7 @@ module GraphqlSpecHelper
 
     json_data = JSON.parse(response.body)
 
-    # Ensure that there are no errors
+    # Possibly ensure that there are no errors
     if expect_no_errors
       aggregate_failures "GraphQL Query Errors" do
         recurse_no_error(json_data, [])
@@ -117,16 +117,37 @@ module GraphqlSpecHelper
     return json_data
   end
 
-  def execute_query(query: nil, variables: {}, operation_name: nil, language: ["de"])
+  # Shorthand to execute free form graphql queries
+  def execute_query(
+        query: nil,
+        variables: {},
+        operation_name: nil,
+        language: ["de"],
+        user: User.guest,
+        expect_no_errors: true
+      )
+
+    # Possibly retrieve the query by name
     query = get_query(operation_name) if query.nil?
+
+    # Language and user are expected to be present for all queries
     context = {
-      user: create(:user, :guest),
+      user: user,
       language: language
     }
+
+    # Directly execute the query against the schema
     result = ServerSchema.execute(query, variables: variables, context: context, operation_name: operation_name)
-    return result.as_json
-  rescue => e
-    return { "errors": [e] }
+    json_data = result.as_json
+
+    # Possibly ensure that there are no errors
+    if expect_no_errors
+      aggregate_failures "GraphQL Query Errors" do
+        recurse_no_error(json_data, [])
+      end
+    end
+
+    return json_data
   end
 
   private

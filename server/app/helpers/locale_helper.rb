@@ -1,11 +1,24 @@
 # Utility methods to pick the correct locale
 module LocaleHelper
+  # The languages that BlattWerkzeug supports
   def self.allowed_languages
-    return [:de, :en]
+    Types::Base::BaseEnum::LanguageEnum.values.keys
   end
 
-  def self.allowed_languages_s
-    return self.allowed_languages.map { |l| l.to_s }
+  # Returns the first text in the given string that ...
+  # 1) Matches any of the preferred locales
+  # 2) Matches any of the "typical" BlattWerkzeug languages
+  # 3) Is one of the languages in the given string
+  #
+  # If none of these apply, this returns nil
+  def self.first_matching_text(strings, locales)
+    available_locales = locales + allowed_languages + strings.keys
+    available_locales.each do |l|
+      t = strings[l]
+      return t if not t.nil?
+    end
+
+    return nil
   end
 
   # Determines the locale of a request. If no locale can be determined,

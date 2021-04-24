@@ -8,7 +8,7 @@ import { TableDescription } from "../../shared/schema";
 import { ProjectService } from "../project.service";
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
-import { SchemaService } from "../schema.service";
+import { EditDatabaseSchemaService } from "../edit-database-schema.service";
 
 /**
  * Allows to replace the serverside database as a single blob.
@@ -21,7 +21,7 @@ export class SchemaUploadComponent {
     private _projectService: ProjectService,
     private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService,
-    private _schemaService: SchemaService,
+    private _schemaService: EditDatabaseSchemaService,
     private _server: ServerApiService,
     private _http: HttpClient,
     private _route: ActivatedRoute,

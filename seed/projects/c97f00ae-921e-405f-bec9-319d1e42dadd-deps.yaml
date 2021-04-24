@@ -6,13 +6,13 @@
   - 12bf221a-b430-4900-8aba-6b11e054a949
   - *1
 - - "../seed/code_resources"
-  - 6b114674-ff31-447d-8722-e5437656958f
+  - d377c8ff-ef4b-4206-8cf2-32a90729cf1e
   - &2 !ruby/class 'Seed::CodeResourceSeed'
 - - "../seed/code_resources"
-  - 5eaab1f0-ced1-45d2-967d-6f1eb5d86415
+  - 6b114674-ff31-447d-8722-e5437656958f
   - *2
 - - "../seed/code_resources"
-  - d377c8ff-ef4b-4206-8cf2-32a90729cf1e
+  - 5eaab1f0-ced1-45d2-967d-6f1eb5d86415
   - *2
 - - "../seed/code_resources"
   - 1f70d186-1966-49f2-99b8-872794be258e

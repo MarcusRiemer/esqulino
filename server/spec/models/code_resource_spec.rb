@@ -169,6 +169,42 @@ RSpec.describe CodeResource, type: :model do
     end
   end
 
+  context "update_this_and_dependants" do
+    it "doesn't update if there is no change" do
+      code = FactoryBot.create(:code_resource, :grammar_single_type)
+      result = code.update_this_and_dependants!({
+                                                 name: code.name
+                                               })
+
+      expect(result).to eq []
+      expect(code.changed?).to eq false
+    end
+
+    it "does update itself if there is a change" do
+      code = FactoryBot.create(:code_resource, :grammar_single_type)
+      result = code.update_this_and_dependants!({
+                                                 name: "New"
+                                               })
+
+      expect(result).to eq []
+      expect(code.name).to eq "New"
+      expect(code.changed?).to eq false
+    end
+
+    it "does update others if there is a change" do
+      related = FactoryBot.create(:code_resource, :grammar_single_type)
+      grammar = FactoryBot.create(:grammar, generated_from: related)
+
+      result = related.update_this_and_dependants!({
+                                                     name: "New"
+                                                   })
+
+      expect(result).to eq [grammar]
+      expect(related.name).to eq "New"
+      expect(related.changed?).to eq false
+    end
+  end
+
   context "regenerate_immediate_dependants!" do
     it "is empty if nothing depends on this" do
       unrelated = FactoryBot.create(:grammar)

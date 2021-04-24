@@ -1,21 +1,14 @@
 --- !ruby/object:CodeResource
 concise_attributes:
-- !ruby/object:ActiveModel::Attribute::FromUser
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: project_id
   value_before_type_cast: cf28c9fc-f891-42b6-a1b3-e72dba2850fd
-  original_attribute: !ruby/object:ActiveModel::Attribute::FromDatabase
-    name: project_id
-    value_before_type_cast: cf28c9fc-f891-42b6-a1b3-e72dba2850fd
-    type: !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Uuid
-      precision:
-      scale:
-      limit:
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: 53f479ea-443c-4d60-8703-47fc8f65bc14
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: 02 <e a="b">
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 53f479ea-443c-4d60-8703-47fc8f65bc14
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "element", "children": {"elements": [], "attributes":
@@ -32,9 +25,9 @@ concise_attributes:
   value_before_type_cast: e4ad4071-ab82-4687-be04-4d19a7ecae36
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
-  value_before_type_cast: dxml-liquid
+  value_before_type_cast: generic
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: <e a="b"></e>
+  value_before_type_cast: Generic Language without code generator
 new_record: false
 active_record_yaml_version: 2

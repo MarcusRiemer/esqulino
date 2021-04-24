@@ -1,10 +1,11 @@
 import { FormsModule } from "@angular/forms";
 import { TestBed } from "@angular/core/testing";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
+
+import { FullGrammarGQL } from "../../../../generated/graphql";
 
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
-import { ResourceReferencesOnlineService } from "../../../shared/resource-references-online.service";
 import { VisualBlockDescriptions, BlockLanguage } from "../../../shared/block";
 import { FocusDirective } from "../../../shared/focus-element.directive";
 import {
@@ -12,11 +13,7 @@ import {
   NodeDescription,
   CodeResource,
 } from "../../../shared";
-import {
-  IndividualBlockLanguageDataService,
-  IndividualGrammarDataService,
-  ServerApiService,
-} from "../../../shared/serverdata";
+import { ServerApiService } from "../../../shared/serverdata";
 
 import { ProjectService } from "../../project.service";
 
@@ -30,18 +27,14 @@ describe("BlockRenderInputComponent", () => {
     visual: VisualBlockDescriptions.EditorInput
   ) {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, MatSnackBarModule, HttpClientTestingModule],
+      imports: [FormsModule, MatSnackBarModule, ApolloTestingModule],
       providers: [
-        IndividualBlockLanguageDataService,
-        IndividualGrammarDataService,
+        FullGrammarGQL,
         LanguageService,
         RenderedCodeResourceService,
         ServerApiService,
         ProjectService,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
       ],
       declarations: [
         BlockRenderInputComponent,
@@ -83,7 +76,7 @@ describe("BlockRenderInputComponent", () => {
     component.node = codeResource.syntaxTreePeek.rootNode;
     component.visual = visual;
 
-    renderData._updateRenderData(codeResource, blockLanguage, false, {});
+    await renderData._updateRenderData(codeResource, blockLanguage, false, {});
 
     fixture.detectChanges();
 

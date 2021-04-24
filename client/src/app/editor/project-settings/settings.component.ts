@@ -1,7 +1,12 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
 
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import {
+  AffectedResourcesDialogComponent,
+  MSG_STORED_SEEDS,
+} from "../../shared/affected-resources-dialog.component";
 
 import { ProjectService, Project } from "../project.service";
 import { SidebarService } from "../sidebar.service";
@@ -10,8 +15,9 @@ import {
   SelectionListBlockLanguagesGQL,
   ProjectAddUsedBlockLanguageGQL,
   ProjectRemoveUsedBlockLanguageGQL,
+  StoreProjectSeedGQL,
 } from "../../../generated/graphql";
-import { map } from "rxjs/operators";
+import { first, map } from "rxjs/operators";
 
 @Component({
   templateUrl: "templates/settings.html",
@@ -35,6 +41,11 @@ export class SettingsComponent {
     .valueChanges.pipe(map((result) => result.data.blockLanguages.nodes));
 
   /**
+   * Block languages shouldn't be addable multiple times
+   */
+  addBlockLanguageInProgress = false;
+
+  /**
    * Used for dependency injection.
    */
   constructor(
@@ -45,7 +56,9 @@ export class SettingsComponent {
     private _selectBlockLanguagesGQL: SelectionListBlockLanguagesGQL,
     private _addUsedBlockLanguage: ProjectAddUsedBlockLanguageGQL,
     private _removeUsedBlockLanguage: ProjectRemoveUsedBlockLanguageGQL,
-    private _performData: PerformDataService
+    private _performData: PerformDataService,
+    private _storeSeed: StoreProjectSeedGQL,
+    private _matDialog: MatDialog
   ) {}
 
   /**
@@ -80,7 +93,7 @@ export class SettingsComponent {
     this._subscriptionRefs.push(subRef);
 
     // Wiring up the delete button
-    let btnDelete = this._toolbarService.addButton(
+    const btnDelete = this._toolbarService.addButton(
       "delete",
       "Löschen",
       "trash",
@@ -90,11 +103,38 @@ export class SettingsComponent {
     subRef = btnDelete.onClick.subscribe(async (_) => {
       // Don't delete without asking the user
       if (confirm("Dieses Projekt löschen?")) {
-        const res = await this._projectService.deleteProject(this.project.slug);
+        const res = await this._projectService.deleteProject(this.project.id);
         // Go back to title after deleting
         if (res) {
           this._router.navigateByUrl("/");
         }
+      }
+    });
+    this._subscriptionRefs.push(subRef);
+
+    // Wiring up the store seed button
+    const btnStoreSeed = this._toolbarService.addButton(
+      "store-seed",
+      "Store Seed",
+      "archive",
+      undefined,
+      this._performData.project.storeSeed(this.project.id)
+    );
+    subRef = btnStoreSeed.onClick.subscribe(async (_) => {
+      if (confirm("Dieses Projekt zu den Seed-Daten speichern?")) {
+        btnStoreSeed.isInProgress = true;
+        const result = await this._storeSeed
+          .mutate({ projectIds: [this.project.id] })
+          .pipe(first())
+          .toPromise();
+
+        btnStoreSeed.isInProgress = false;
+
+        AffectedResourcesDialogComponent.show(
+          this._matDialog,
+          result.data.storeProjectSeed.affectedIds[0],
+          MSG_STORED_SEEDS
+        );
       }
     });
     this._subscriptionRefs.push(subRef);
@@ -112,16 +152,24 @@ export class SettingsComponent {
    * Reference a block language from this project.
    */
   async addUsedBlockLanguage(blockLanguageId: string) {
-    const res = await this._addUsedBlockLanguage
-      .mutate({
-        blockLanguageId,
-        projectId: this.project.id,
-      })
-      .toPromise();
+    try {
+      this.addBlockLanguageInProgress = true;
+      const res = await this._addUsedBlockLanguage
+        .mutate({
+          blockLanguageId,
+          projectId: this.project.id,
+        })
+        .toPromise();
 
-    const used =
-      res.data.addUsedBlockLanguage.result.projectUsesBlockLanguage.id;
-    this.project.addUsedBlockLanguage(blockLanguageId, used);
+      const used =
+        res.data.addUsedBlockLanguage.result.projectUsesBlockLanguage.id;
+      this.project.addUsedBlockLanguage(blockLanguageId, used);
+    } catch (e: any) {
+      let msg = e?.networkError?.error?.error?.message ?? e.toString();
+      alert(msg);
+    } finally {
+      this.addBlockLanguageInProgress = false;
+    }
   }
 
   /**
@@ -139,12 +187,5 @@ export class SettingsComponent {
 
       this.project.removeUsedBlockLanguage(usageId);
     }
-  }
-
-  /**
-   * Retrieves the name of the given block language
-   */
-  resolveBlockLanguageName(blockLanguageId: string) {
-    return this._projectService.cachedProject.getBlockLanguage(blockLanguageId);
   }
 }

@@ -37,46 +37,50 @@
   <mat-divider></mat-divider>
 
   <!-- Images -->
-  <a
-    mat-list-item
-    [routerLink]="['image']"
-    [routerLinkActiveOptions]="{exact: true}"
-    routerLinkActive="router-link-active"
-  >
-    <span class="fa fa-image fa-fw" aria-hidden="true"></span>
-    Bilder
-  </a>
-  <a
-    mat-list-item
-    [routerLink]="['image', 'upload']"
-    routerLinkActive="router-link-active"
-  >
-    <span class="fa fa-plus fa-fw"></span>
-    Neues Bild
-  </a>
-  <mat-divider></mat-divider>
+  <ng-container *ngIf="imagesEnabled$ | async">
+    <a
+      mat-list-item
+      [routerLink]="['image']"
+      [routerLinkActiveOptions]="{exact: true}"
+      routerLinkActive="router-link-active"
+    >
+      <span class="fa fa-image fa-fw" aria-hidden="true"></span>
+      Bilder
+    </a>
+    <a
+      mat-list-item
+      [routerLink]="['image', 'upload']"
+      routerLinkActive="router-link-active"
+    >
+      <span class="fa fa-plus fa-fw"></span>
+      Neues Bild
+    </a>
+    <mat-divider></mat-divider>
+  </ng-container>
 
   <!-- Schema Editor -->
-  <a
-    mat-list-item
-    [routerLink]="['schema', currentDatabaseName]"
-    [routerLinkActiveOptions]="{exact: true}"
-    routerLinkActive="router-link-active"
-  >
-    <span class="fa fa-database fa-fw"></span>
-    Datenbank "{{ currentDatabaseName }}"
-  </a>
-  <a
-    mat-list-item
-    *ngFor="let table of project?.schema.tables"
-    [routerLink]="['schema', currentDatabaseName, 'details', table.name]"
-    routerLinkActive="router-link-active"
-    class="indent"
-  >
-    <span class="fa fa-table fa-fw"></span>
-    <span class="nav-target">{{ table.name }}</span>
-  </a>
-  <mat-divider></mat-divider>
+  <ng-container *ngIf="hasDatabase$ | async">
+    <a
+      mat-list-item
+      [routerLink]="['schema', currentDatabaseName]"
+      [routerLinkActiveOptions]="{exact: true}"
+      routerLinkActive="router-link-active"
+    >
+      <span class="fa fa-database fa-fw"></span>
+      Datenbank "{{ currentDatabaseName }}"
+    </a>
+    <a
+      mat-list-item
+      *ngFor="let table of project?.schema.tables"
+      [routerLink]="['schema', currentDatabaseName, 'details', table.name]"
+      routerLinkActive="router-link-active"
+      class="indent"
+    >
+      <span class="fa fa-table fa-fw"></span>
+      <span class="nav-target">{{ table.name }}</span>
+    </a>
+    <mat-divider></mat-divider>
+  </ng-container>
   <ng-container *ngIf="project.hasSources">
     <h3 mat-subheader>Quellen</h3>
     <a *ngFor="let source of project.sources" mat-list-item [href]="source.url">

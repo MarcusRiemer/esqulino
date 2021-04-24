@@ -1,4 +1,4 @@
-import { NodeDescription, Tree, Node } from "../syntaxtree";
+import { NodeDescription, SyntaxTree, SyntaxNode } from "../syntaxtree";
 
 export type JoinType =
   | "crossJoin"
@@ -61,8 +61,8 @@ export interface SqlStepDescription {
     | SqlStepOrderByDescription;
 }
 
-function createBaseTree(): Tree {
-  return new Tree({
+function createBaseTree(): SyntaxTree {
+  return new SyntaxTree({
     name: "querySelect",
     language: "sql",
     children: {
@@ -90,7 +90,7 @@ function createBaseTree(): Tree {
   });
 }
 
-export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
+export function stepwiseSqlQuery(q: SyntaxTree): SqlStepDescription[] {
   if (!q || q.isEmpty) {
     return [];
   }
@@ -338,7 +338,7 @@ export function stepwiseSqlQuery(q: Tree): SqlStepDescription[] {
  * Collects all expressions of nodes and returns them as an string array
  * @param nodes
  */
-function collectExpressions(nodes: Node[]): string[] {
+function collectExpressions(nodes: SyntaxNode[]): string[] {
   // typedef "sql"."expression" ::= columnName | binaryExpression | constant | parameter | functionCall | parentheses
   let exp: string[] = [];
 
@@ -425,7 +425,7 @@ function collectExpressions(nodes: Node[]): string[] {
  */
 function collectColumnNames(nodeDesc: NodeDescription): string[] {
   // if join type is 'using' - return [usingValue, table.usingValue]
-  let t = new Tree(nodeDesc);
+  let t = new SyntaxTree(nodeDesc);
   if (nodeDesc.name.includes("Using")) {
     let name = t.locate([["using", 0]]).getChildInCategory("expression")
       .properties.value;
@@ -433,7 +433,7 @@ function collectColumnNames(nodeDesc: NodeDescription): string[] {
     return [name, t.locate([["table", 0]]).properties.name + "." + name];
   }
 
-  let all: Node[] = t.getNodesOfType({
+  let all: SyntaxNode[] = t.getNodesOfType({
     typeName: "columnName",
     languageName: "sql",
   });

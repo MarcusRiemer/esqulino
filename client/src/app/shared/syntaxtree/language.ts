@@ -1,12 +1,13 @@
 import { NodeConverterRegistration } from "./codegenerator";
-import { Tree, NodeDescription, QualifiedTypeName } from "./syntaxtree";
+import { SyntaxTree, NodeDescription, QualifiedTypeName } from "./syntaxtree";
 import { Validator, SubValidator } from "./validator";
 import { ValidationResult } from "./validation-result";
 import { CodeGenerator } from "./codegenerator";
 import { GrammarDescription } from "./grammar.description";
+import { allVisualisableTypes } from "./grammar-type-util";
 
 /**
- * Ties together descriptions of everything the editor needs to work
+ * Ties together non-moving parts of everything the editor needs to work
  * with a language.
  */
 export interface LanguageDefinition {
@@ -21,67 +22,66 @@ export interface LanguageDefinition {
  * A facade that ties together everything the editor needs to work with a language.
  */
 export class Language {
-  private _id: string;
-  private _name: string;
-
-  private _validator: Validator;
-  private _codeGenerator: CodeGenerator;
-
-  constructor(desc: LanguageDefinition) {
-    this._id = desc.id;
-    this._name = desc.name;
-    this._codeGenerator = new CodeGenerator(
-      desc.emitters,
-      desc.codeGeneratorState
-    );
-    this._validator = new Validator(desc.validators);
-  }
+  /**
+   * The ID of the core programming language that is represented.
+   */
+  readonly programmingLanguageId: string;
 
   /**
-   * @return The unique ID of this language
+   * Possibly the grammar that this language is based on.
    */
-  get id() {
-    return this._id;
-  }
+  readonly grammarId?: string;
 
   /**
    * @return The name of this language.
    */
-  get name() {
-    return this._name;
-  }
+  readonly name: string;
 
   /**
    * @return The validator that is assoicated with this language
    */
-  get validator() {
-    return this._validator;
+  readonly validator: Validator;
+
+  private readonly codeGenerator: CodeGenerator;
+
+  readonly codeEmitters: NodeConverterRegistration[];
+
+  constructor(desc: LanguageDefinition, g?: GrammarDescription) {
+    this.programmingLanguageId = desc.id;
+    this.name = desc.name;
+    this.codeEmitters = desc.emitters;
+    this.grammarId = g?.id;
+
+    this.codeGenerator = new CodeGenerator(
+      desc.emitters,
+      g ? allVisualisableTypes(g) : {},
+      desc.codeGeneratorState
+    );
+    this.validator = new Validator([...desc.validators, ...(g ? [g] : [])]);
   }
 
   /**
    * A new language that uses the exact same custom code assets (code
    * generator, additional validators) but a different grammar.
    */
-  cloneWithAlternateGrammar(g: GrammarDescription) {
-    // Construct a new language (without the emitters, they need to be patched in later)
-    const clone = new Language({
-      id: g.id,
-      name: this.name,
-      emitters: [],
-      validators: [...this._validator.specializedValidators, g],
-    });
-
-    // Patch in the emitters
-    clone._codeGenerator = this._codeGenerator;
-
-    return clone;
+  cloneWithGrammar(g: GrammarDescription) {
+    // Construct a new language that uses a grammar
+    return new Language(
+      {
+        id: this.programmingLanguageId,
+        name: this.name,
+        emitters: this.codeEmitters,
+        validators: [...this.validator.specializedValidators],
+      },
+      g
+    );
   }
 
   /**
    * @return The type with the given name.
    */
   getType(typeName: QualifiedTypeName) {
-    return this._validator.getType(typeName.languageName, typeName.typeName);
+    return this.validator.getType(typeName.languageName, typeName.typeName);
   }
 
   /**
@@ -90,8 +90,8 @@ export class Language {
    * @param desc The description of the tree
    * @return The described tree
    */
-  createTree(desc: NodeDescription): Tree {
-    return new Tree(desc);
+  createTree(desc: NodeDescription): SyntaxTree {
+    return new SyntaxTree(desc);
   }
 
   /**
@@ -103,8 +103,8 @@ export class Language {
    *   is the SQL validator which requires knowledge about the schema.
    * @return A result object containing all errors
    */
-  validateTree(ast: Tree, additionalContext: any = {}): ValidationResult {
-    return this._validator.validateFromRoot(ast, additionalContext);
+  validateTree(ast: SyntaxTree, additionalContext: any = {}): ValidationResult {
+    return this.validator.validateFromRoot(ast, additionalContext);
   }
 
   /**
@@ -113,21 +113,21 @@ export class Language {
    * @param ast The root of the tree to generate
    * @return A string representation of the tree.
    */
-  emitTree(ast: Tree): string {
-    return this._codeGenerator.emit(ast);
+  emitTree(ast: SyntaxTree): string {
+    return this.codeGenerator.emit(ast);
   }
 
   /**
    * @return The validators that are available for this language.
    */
   get availableValidators() {
-    return this._validator.availableSchemas;
+    return this.validator.availableSchemas;
   }
 
   /**
    * @return All types that are available in this language.
    */
   get availableTypes() {
-    return this._validator.availableTypes;
+    return this.validator.availableTypes;
   }
 }

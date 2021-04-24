@@ -117,7 +117,7 @@ RSpec.describe GrammarsController, type: :request do
       send_query(query_name: "FullGrammar", variables: { id: g.id })
 
       expect(response).to have_http_status(200)
-      response_data = JSON.parse(response.body)['data']['grammars']['nodes'][0]
+      response_data = JSON.parse(response.body)['data']['grammar']
 
       expect(response_data["id"]).to eq g.id
     end
@@ -129,14 +129,14 @@ RSpec.describe GrammarsController, type: :request do
       expect(response).to have_http_status(200)
 
       expect(JSON.parse(response.body).fetch('errors', [])).to eq []
-      grammar_data = JSON.parse(response.body)['data']['grammars']['nodes'][0]
+      grammar_data = JSON.parse(response.body)['data']['grammar']
 
       expect(grammar_data["slug"]).to eq g.slug
       expect(grammar_data["id"]).to eq g.id
     end
 
     it 'responds with 200 but not empty errors for non existing grammars' do
-      send_query(query_name: "FullGrammar", variables: { id: "0" })
+      send_query(query_name: "FullGrammar", variables: { id: "0" }, expect_no_errors: false)
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)['errors']).not_to eq []
@@ -148,7 +148,7 @@ RSpec.describe GrammarsController, type: :request do
       send_query(query_name: "FullGrammar", variables: { id: original.id })
 
       expect(response).to have_http_status(200)
-      grammar_data = JSON.parse(response.body)['data']['grammars']['nodes'][0]
+      grammar_data = JSON.parse(response.body)['data']['grammar']
       expect(grammar_data["id"]).to eq original.id
       expect(grammar_data["generatedFromId"]).to eq meta_code_resource.id
     end
@@ -306,7 +306,7 @@ RSpec.describe GrammarsController, type: :request do
       send_query(query_name: "DestroyGrammar", variables: { "id" => g.id })
       expect(response.status).to eq(200)
 
-      send_query(query_name: "FullGrammar", variables: { "id" => g.id })
+      send_query(query_name: "FullGrammar", variables: { "id" => g.id }, expect_no_errors: false)
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['errors']).not_to eq []
     end

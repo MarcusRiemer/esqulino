@@ -24,7 +24,7 @@ import { prettyPrintGrammar } from "../../shared/syntaxtree/prettyprint";
 import { QualifiedTypeName, GrammarDescription } from "../../shared/syntaxtree";
 import {
   getTypeList,
-  allPresentTypes,
+  allConcreteTypes,
 } from "../../shared/syntaxtree/grammar-type-util";
 import { BlockLanguageDescription } from "../../shared/block/block-language.description";
 
@@ -77,7 +77,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
               { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
             ).valueChanges
         ),
-        pluck("data", "grammars", "nodes", 0)
+        pluck("data", "grammar")
       )
       .subscribe((g) => {
         // The response object contains additional properties that
@@ -85,12 +85,12 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
         this.grammar = Object.assign({}, g);
         delete this.grammar["blockLanguages"];
 
-        this.availableTypes = getTypeList(allPresentTypes(this.grammar));
+        this.availableTypes = getTypeList(allConcreteTypes(this.grammar));
         this.grammarRoot = this.grammar.root;
         this._title.setTitle(
           `Grammar "${this.grammar.name}" - Admin - BlattWerkzeug`
         );
-        this.relatedBlockLanguages = g.blockLanguages.nodes;
+        this.relatedBlockLanguages = g.blockLanguages;
         if (this.grammar.generatedFromId === null) {
           this.grammar.generatedFromId = undefined;
         }
@@ -159,7 +159,7 @@ export class EditGrammarComponent implements OnInit, OnDestroy {
    */
   set grammarTypes(types) {
     this.grammar.types = types;
-    this.availableTypes = getTypeList(allPresentTypes(this.grammar));
+    this.availableTypes = getTypeList(allConcreteTypes(this.grammar));
     this.grammarRoot = this.grammar.root;
   }
 

@@ -1,9 +1,6 @@
-import {
-  CodeGenerator,
-  CodeGeneratorProcess,
-  NodeConverterRegistration,
-} from "./codegenerator";
-import { Tree, Node } from "./syntaxtree";
+import { CodeGenerator, NodeConverterRegistration } from "./codegenerator";
+import { CodeGeneratorProcess, OutputSeparator } from "./codegenerator-process";
+import { SyntaxTree, SyntaxNode } from "./syntaxtree";
 
 describe("Codegeneration", () => {
   it("Converters are registered correctly", () => {
@@ -17,7 +14,8 @@ describe("Codegeneration", () => {
     ]);
 
     // Check whether this converter exist (and no others)
-    expect(codeGen.hasConverter(fooBar)).toBeTruthy();
+    expect(codeGen.hasExplicitConverter(fooBar)).toBe(true);
+    expect(codeGen.hasImplicitConverter(fooBar)).toBe(false);
     expect(() =>
       codeGen.getConverter({ languageName: "phantasy", typeName: "bar" })
     ).toThrowError();
@@ -62,7 +60,7 @@ describe("Codegeneration", () => {
       {
         type: { languageName: "foo", typeName: "bar" },
         converter: {
-          init: function (_: Node, process: CodeGeneratorProcess<State>) {
+          init: function (_: SyntaxNode, process: CodeGeneratorProcess<State>) {
             // Read and write the state
             process.state.bar += 1;
             process.state.foo += "bar";
@@ -75,8 +73,11 @@ describe("Codegeneration", () => {
     ];
 
     // Run the codegenerator
-    const codeGen = new CodeGenerator(desc, [state]);
-    const syntaxTree = new Node({ language: "foo", name: "bar" }, undefined);
+    const codeGen = new CodeGenerator(desc, {}, [state]);
+    const syntaxTree = new SyntaxNode(
+      { language: "foo", name: "bar" },
+      undefined
+    );
     codeGen.emit(syntaxTree);
 
     // This is how the state must look if the mutations were applied correctly
@@ -107,7 +108,7 @@ describe("Codegeneration", () => {
         type: { languageName: "foo", typeName: "bar" },
         converter: {
           init: function (
-            _: Node,
+            _: SyntaxNode,
             process: CodeGeneratorProcess<StateA & StateB>
           ) {
             // Read and write the state
@@ -123,8 +124,11 @@ describe("Codegeneration", () => {
     ];
 
     // Run the codegenerator
-    const codeGen = new CodeGenerator(desc, [stateA, stateB]);
-    const syntaxTree = new Node({ language: "foo", name: "bar" }, undefined);
+    const codeGen = new CodeGenerator(desc, {}, [stateA, stateB]);
+    const syntaxTree = new SyntaxNode(
+      { language: "foo", name: "bar" },
+      undefined
+    );
     codeGen.emit(syntaxTree);
 
     // This is how the state must look if the mutations were applied correctly
@@ -143,8 +147,254 @@ describe("Codegeneration", () => {
 
   it("Empty Tree", () => {
     const codeGen = new CodeGenerator([]);
-    const tree = new Tree(undefined);
+    const tree = new SyntaxTree(undefined);
 
     expect(() => codeGen.emit(tree)).toThrowError();
+  });
+
+  it("tracks changes", () => {
+    const codeGen = new CodeGenerator([]);
+    const process = new CodeGeneratorProcess(codeGen);
+    const tree = new SyntaxTree({
+      language: "l",
+      name: "r",
+    });
+
+    const changes = process.trackChanges(() => {
+      process.addConvertedFragment("1", tree.rootNode);
+      process.addConvertedFragment("2", tree.rootNode);
+    });
+
+    expect(changes.map((c) => c.compilation)).toEqual(["1", "2"]);
+  });
+
+  it("tracks nested changes", () => {
+    const codeGen = new CodeGenerator([]);
+    const process = new CodeGeneratorProcess(codeGen);
+    const tree = new SyntaxTree({
+      language: "l",
+      name: "r",
+    });
+
+    const outer = process.trackChanges(() => {
+      process.addConvertedFragment("1", tree.rootNode);
+      const inner = process.trackChanges(() => {
+        process.addConvertedFragment("2", tree.rootNode);
+      });
+
+      expect(inner.map((c) => c.compilation)).toEqual(["2"]);
+    });
+
+    expect(outer.map((c) => c.compilation)).toEqual(["1", "2"]);
+  });
+
+  describe(`leading and ending seperators`, () => {
+    const codeGen = new CodeGenerator([]);
+    const tree = new SyntaxTree({
+      language: "l",
+      name: "r",
+    });
+
+    it(`␣a`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.SPACE_BEFORE
+      );
+      expect(process.emit()).toEqual("a");
+    });
+
+    it(`a␣`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.SPACE_AFTER
+      );
+      expect(process.emit()).toEqual("a");
+    });
+
+    it(`⏎a`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_BEFORE
+      );
+      expect(process.emit()).toEqual("a");
+    });
+
+    it(`a⏎`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_BEFORE
+      );
+      expect(process.emit()).toEqual("a");
+    });
+  });
+
+  describe(`multiple separators`, () => {
+    const codeGen = new CodeGenerator([]);
+    const tree = new SyntaxTree({
+      language: "l",
+      name: "r",
+    });
+
+    it(`␣a␣ (single root items shouldn't have spaces)`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.SPACE_AFTER | OutputSeparator.SPACE_BEFORE
+      );
+
+      expect(process.emit()).toEqual("a");
+    });
+
+    it(`a␣b␣c`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment("a", tree.rootNode);
+      process.addConvertedFragment(
+        "b",
+        tree.rootNode,
+        OutputSeparator.SPACE_AFTER | OutputSeparator.SPACE_BEFORE
+      );
+      process.addConvertedFragment("c", tree.rootNode);
+
+      expect(process.emit()).toEqual("a b c");
+    });
+
+    it(`⏎a⏎ (single root items shouldn't have spaces)`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_AFTER | OutputSeparator.NEW_LINE_BEFORE
+      );
+
+      expect(process.emit()).toEqual("a");
+    });
+
+    it(`a⏎b⏎c`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment("a", tree.rootNode);
+      process.addConvertedFragment(
+        "b",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_AFTER | OutputSeparator.NEW_LINE_BEFORE
+      );
+      process.addConvertedFragment("c", tree.rootNode);
+
+      expect(process.emit()).toEqual("a\nb\nc");
+    });
+
+    it(`Mixing spaces and newlines is forbidden`, () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      expect(() => {
+        process.addConvertedFragment(
+          "b",
+          tree.rootNode,
+          OutputSeparator.NEW_LINE_AFTER |
+            OutputSeparator.NEW_LINE_BEFORE |
+            OutputSeparator.SPACE_BEFORE |
+            OutputSeparator.SPACE_AFTER
+        );
+      }).toThrowError();
+    });
+  });
+
+  describe(`indent`, () => {
+    const codeGen = new CodeGenerator([]);
+    const tree = new SyntaxTree({
+      language: "l",
+      name: "r",
+    });
+
+    it("of first, single item", () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.indent(() => {
+        process.addConvertedFragment(
+          "a",
+          tree.rootNode,
+          OutputSeparator.NEW_LINE_AFTER
+        );
+      });
+
+      expect(process.emit()).toEqual("  a");
+    });
+
+    it("of first item with follow up", () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.indent(() => {
+        process.addConvertedFragment(
+          "a",
+          tree.rootNode,
+          OutputSeparator.NEW_LINE_AFTER
+        );
+        process.addConvertedFragment(
+          "b",
+          tree.rootNode,
+          OutputSeparator.NEW_LINE_AFTER
+        );
+      });
+
+      expect(process.emit()).toEqual("  a\n  b");
+    });
+
+    it("from the second line on", () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_AFTER
+      );
+
+      process.indent(() => {
+        process.addConvertedFragment("b", tree.rootNode);
+      });
+
+      expect(process.emit()).toEqual("a\n  b");
+    });
+
+    it("back to depth original on later new line", () => {
+      const process = new CodeGeneratorProcess(codeGen);
+
+      process.addConvertedFragment(
+        "a",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_AFTER
+      );
+
+      process.indent(() => {
+        process.addConvertedFragment(
+          "b",
+          tree.rootNode,
+          OutputSeparator.NEW_LINE_AFTER
+        );
+      });
+
+      process.addConvertedFragment(
+        "c",
+        tree.rootNode,
+        OutputSeparator.NEW_LINE_AFTER
+      );
+
+      expect(process.emit()).toEqual("a\n  b\nc");
+    });
   });
 });

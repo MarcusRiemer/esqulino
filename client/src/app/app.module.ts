@@ -1,6 +1,6 @@
 import { APOLLO_OPTIONS } from "apollo-angular";
 import { HttpLink } from "apollo-angular/http";
-import { InMemoryCache } from "@apollo/client/core";
+import { ApolloClientOptions, InMemoryCache } from "@apollo/client/core";
 import { NgModule, ErrorHandler, PLATFORM_ID, Inject } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import { BrowserModule, Title } from "@angular/platform-browser";
@@ -17,8 +17,9 @@ import * as Integrations from "@sentry/integrations";
 import { environment } from "../environments/environment";
 
 import { SharedAppModule } from "./shared/shared.module";
+import { urlParamsFromObject } from "./shared/util-browser";
+
 import { FrontModule } from "./front/front.module";
-import { EditorModule } from "./editor/editor.module";
 
 import { SqlScratchComponent } from "./app.component";
 import { routing } from "./app.routes";
@@ -78,7 +79,6 @@ if (environment.sentry && environment.sentry.active) {
     // Actual Application
     SharedAppModule.forRoot(),
     FrontModule,
-    EditorModule,
     UserModule,
     routing,
   ],
@@ -91,19 +91,47 @@ if (environment.sentry && environment.sentry.active) {
     NaturalLanguagesService,
     {
       provide: APOLLO_OPTIONS,
-      useFactory: (httpLink: HttpLink) => {
-        return {
-          cache: new InMemoryCache(),
-          link: httpLink.create({
-            uri: "/api/graphql",
-          }),
-          defaultOptions: {
-            watchQuery: {
-              errorPolicy: "all",
+      useFactory: (httpLink: HttpLink): ApolloClientOptions<any> => ({
+        connectToDevTools: true,
+        cache: new InMemoryCache({
+          typePolicies: {
+            Query: {
+              fields: {
+                blockLanguage: (_, { toReference, variables }) => {
+                  if (variables?.id) {
+                    console.debug("blockLanguage: toReference", variables);
+                    return toReference({
+                      __typename: "BlockLanguage",
+                      id: variables.id,
+                    });
+                  }
+                },
+              },
             },
           },
-        };
-      },
+        }),
+
+        link: httpLink.create({
+          // Don't send the query string over the wire
+          includeQuery: false,
+          // Put name of operation in URL to ease debugging
+          uri: ({ operationName, variables }) =>
+            `/api/graphql/${operationName}?${urlParamsFromObject(
+              variables["input"] ?? variables
+            )}`,
+        }),
+        defaultOptions: {
+          mutate: {
+            errorPolicy: "all",
+          },
+          query: {
+            errorPolicy: "all",
+          },
+          watchQuery: {
+            errorPolicy: "all",
+          },
+        },
+      }),
       deps: [HttpLink],
     },
   ],

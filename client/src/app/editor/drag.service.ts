@@ -6,15 +6,16 @@ import {
   GlobalPositionStrategy,
 } from "@angular/cdk/overlay";
 
-import { Observable, BehaviorSubject } from "rxjs";
+import { Observable, BehaviorSubject, Subject, combineLatest } from "rxjs";
 import { map, distinctUntilChanged } from "rxjs/operators";
 
 import { AnalyticsService, TrackCategory } from "../shared/analytics.service";
 import {
-  Node,
+  SyntaxNode,
   NodeDescription,
   NodeLocation,
   CodeResource,
+  Validator,
 } from "../shared/syntaxtree";
 import {
   SmartDropOptions,
@@ -26,6 +27,7 @@ import { FixedSidebarBlock } from "../shared/block";
 import { TrashService } from "./trash.service";
 import { DraggedBlockComponent } from "./dragged-block.component";
 import { CurrentCodeResourceService } from "./current-coderesource.service";
+import { BlattWerkzeugError } from "../shared/blattwerkzeug-error";
 
 /**
  * All information about the origin of this drag if it came from
@@ -41,7 +43,7 @@ export interface DragSidebar {
  * nodes in the tree.
  */
 export interface DragTree {
-  node: Node;
+  node: SyntaxNode;
   codeResource: CodeResource;
 }
 
@@ -51,7 +53,7 @@ export interface DragTree {
  */
 export interface CurrentDrag {
   // The node that is currently hovered over.
-  hoverNode?: Node;
+  hoverNode?: SyntaxNode;
   // Is the node currently hovering over something for deletion?
   hoverTrash: boolean;
   // The location that would be dropped at
@@ -68,18 +70,24 @@ export interface CurrentDrag {
   smartDrops: SmartDropLocation[];
 }
 
+interface DragOverEvent {
+  dropLocation: NodeLocation;
+  node: SyntaxNode | undefined;
+  smartDropOptions: SmartDropOptions;
+}
+
 /**
  * Manages state for everything involved dragging. This involves at least sidebars
  * and actual editors, but may very well extend to other pieces of UI.
  */
-@Injectable({ providedIn: "root" })
+@Injectable()
 export class DragService {
   // The thing we are currently dragging, including the complete hovering
   // state and everything that may be of concern.
-  private _currentDrag = new BehaviorSubject<CurrentDrag>(undefined);
+  private _currentDrag$ = new BehaviorSubject<CurrentDrag>(undefined);
 
   // Shortcut to get the gist of the current drag process
-  private _currentDragInProgress = this._currentDrag.pipe(map((d) => !!d));
+  private _currentDragInProgress = this._currentDrag$.pipe(map((d) => !!d));
 
   private _currentDragOverlay: OverlayRef = undefined;
 
@@ -101,11 +109,9 @@ export class DragService {
   // mouse move might need to re-trigger that event. Otherwise the subsequent move
   // might visually occur over an element that would change the drop location, but
   // no visual feedback is provided because the `mouseenter`-event did not fire.
-  private _bufferedDragOver?: {
-    dropLocation: NodeLocation;
-    node: Node | undefined;
-    smartDropOptions: SmartDropOptions;
-  } = undefined;
+  private _bufferedDragOver?: DragOverEvent = undefined;
+
+  private readonly _informDraggedOverEvent$ = new Subject<DragOverEvent>();
 
   /**
    * This service is involved  with *every* part of the UI and must therefore
@@ -114,7 +120,7 @@ export class DragService {
    * this service. They need to be passed as "normal" arguments of the existing
    * methods to ensure the correct instances get passed around.
    */
-  private constructor(
+  constructor(
     private _trashService: TrashService,
     private _analytics: AnalyticsService,
     private _overlay: Overlay,
@@ -131,6 +137,19 @@ export class DragService {
         this.updateMousePosition(evt)
       );
     }
+
+    combineLatest([
+      this._informDraggedOverEvent$,
+      this._currentCodeResource.validator$,
+    ]).subscribe(([evt, v]) => {
+      // This should be only sensitive to the event, not to the validator.
+      // But as it stands a change in the validator also fires this which
+      // leads to errors when changing the resource (and therefore the
+      // validator) in the editor.
+      if (this._currentDrag$.value) {
+        this.informDraggedOverImpl(evt, v);
+      }
+    });
   }
 
   /**
@@ -152,11 +171,7 @@ export class DragService {
 
     // The mouse was moved, this may cause a new drop location
     if (this._bufferedDragOver && this.peekIsDragInProgress) {
-      this.informDraggedOverImpl(
-        this._bufferedDragOver.dropLocation,
-        this._bufferedDragOver.node,
-        this._bufferedDragOver.smartDropOptions
-      );
+      this._informDraggedOverEvent$.next(this._bufferedDragOver);
     } else {
       // Not yet, but the next movement may
       this._mouseMoveCausedDragOver = true;
@@ -211,7 +226,7 @@ export class DragService {
     sourceSidebar?: DragSidebar,
     sourceTree?: DragTree
   ) {
-    if (this._currentDrag.value) {
+    if (this._currentDrag$.value) {
       throw new Error("Attempted to start a second drag");
     }
 
@@ -239,7 +254,7 @@ export class DragService {
     }
 
     // And fire the drag out
-    this._currentDrag.next(hoverData);
+    this._currentDrag$.next(hoverData);
 
     // If we have a proper source: Wire it up to react to
     // being put in the trash.
@@ -270,7 +285,7 @@ export class DragService {
   public informDraggedOver(
     evt: MouseEvent,
     dropLocation: NodeLocation,
-    node: Node | undefined,
+    node: SyntaxNode | undefined,
     smartDropOptions: SmartDropOptions
   ) {
     // Ensure that no other block tells the same story
@@ -278,7 +293,11 @@ export class DragService {
 
     // Was this caused by a direct user interaction?
     if (this._mouseMoveCausedDragOver) {
-      this.informDraggedOverImpl(dropLocation, node, smartDropOptions);
+      this._informDraggedOverEvent$.next({
+        dropLocation,
+        node,
+        smartDropOptions,
+      });
     } else {
       // Keep the event in mind for later
       this._bufferedDragOver = {
@@ -292,12 +311,8 @@ export class DragService {
   /**
    * The actual implementation of drag notifications.
    */
-  private informDraggedOverImpl(
-    dropLocation: NodeLocation,
-    node: Node | undefined,
-    smartDropOptions: SmartDropOptions
-  ) {
-    const dragData = this._currentDrag.value;
+  private informDraggedOverImpl(evt: DragOverEvent, validator: Validator) {
+    const dragData = this._currentDrag$.value;
     if (!dragData) {
       throw new Error("Can't drag over anything: No drag in progress");
     }
@@ -311,15 +326,15 @@ export class DragService {
 
     // Find out which locations are currently candidates for drags
     const smartDropLocations = smartDropLocation(
-      smartDropOptions,
-      currentCodeResource.validatorPeek,
+      evt.smartDropOptions,
+      validator,
       currentCodeResource.syntaxTreePeek,
-      dropLocation,
+      evt.dropLocation,
       dragData.draggedDescription
     );
 
     // Just in case: Reset all the data
-    dragData.hoverNode = node;
+    dragData.hoverNode = evt.node;
     dragData.hoverTrash = false;
     dragData.smartDrops = smartDropLocations;
 
@@ -333,14 +348,14 @@ export class DragService {
       smartDropLocations[0].operation === "embrace";
 
     // console.log(`Dragging over ${JSON.stringify(dropLocation)}`, smartDropLocations);
-    this._currentDrag.next(dragData);
+    this._currentDrag$.next(dragData);
   }
 
   /**
    * Needs to be called when the drag operation currently drags over the editor.
    */
   public informDraggedOverEditor() {
-    const dragData = this._currentDrag.value;
+    const dragData = this._currentDrag$.value;
     if (!dragData) {
       throw new Error("Can't drag over editor: No drag in progress");
     }
@@ -354,14 +369,14 @@ export class DragService {
 
     this._bufferedDragOver = undefined;
 
-    this._currentDrag.next(dragData);
+    this._currentDrag$.next(dragData);
   }
 
   /**
    * Needs to be called when the drag operation currently drags over the editor.
    */
   public informDraggedOverTrash() {
-    const dragData = this._currentDrag.value;
+    const dragData = this._currentDrag$.value;
 
     // Get rid of everything that could be set ...
     delete dragData.hoverNode;
@@ -374,14 +389,14 @@ export class DragService {
 
     this._bufferedDragOver = undefined;
 
-    this._currentDrag.next(dragData);
+    this._currentDrag$.next(dragData);
   }
 
   /**
    * @return Observable that always knows all details about the ongoing drag operation.
    */
   get currentDrag(): Observable<CurrentDrag> {
-    return this._currentDrag;
+    return this._currentDrag$;
   }
 
   /**
@@ -395,14 +410,14 @@ export class DragService {
    * @return Takes a peek whether a drag is occuring *right now*.
    */
   get peekIsDragInProgress(): boolean {
-    return !!this._currentDrag.value;
+    return !!this._currentDrag$.value;
   }
 
   /**
    * @return Takes a peek at the data of the drag that is occuring *right now*.
    */
   get peekDragData() {
-    return this._currentDrag.value;
+    return this._currentDrag$.value;
   }
 
   /**
@@ -413,12 +428,12 @@ export class DragService {
     // Reset everything once the operation has ended
     const dragEndHandler = (cancelled: boolean) => {
       // Keep a reference to the now finished drag
-      const dragData = this._currentDrag.value;
+      const dragData = this._currentDrag$.value;
 
       // Do the strictly required internal bookkeeping
       removeDragHandlers();
       this.hideDraggedBlock();
-      this._currentDrag.next(undefined);
+      this._currentDrag$.next(undefined);
 
       // Tell the analytics API about the ended event
       this._analytics.trackEvent({
@@ -436,11 +451,17 @@ export class DragService {
           const drop = dragData.smartDrops[0];
           switch (drop.operation) {
             case "embrace":
+              throw new BlattWerkzeugError(
+                "Embracing is currently disabled, sorry"
+              );
+
+            /*
               this._currentCodeResource.peekResource.embraceNode(
                 drop.location,
                 [drop.nodeDescription]
               );
               break;
+            */
             case "insert":
               this._currentCodeResource.peekResource.insertNode(
                 drop.location,

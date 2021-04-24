@@ -8,7 +8,7 @@ import {
   ApolloTestingController,
   ApolloTestingModule,
 } from "apollo-angular/testing";
-import { buildSingleGrammarResponse } from "../editor/spec-util/grammar.gql.data.spec";
+import { buildSingleGrammarResponse } from "../editor/spec-util/grammar.admin-data.spec";
 import { AdminListGrammarsDocument } from "../../generated/graphql";
 
 describe("LinkGrammarComponent", () => {

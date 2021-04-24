@@ -1,0 +1,6 @@
+query NameBlockLanguage ($id: ID!) {
+  blockLanguage(id: $id) {
+    id
+    name
+  }
+}

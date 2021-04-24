@@ -4,7 +4,8 @@ import { FormsModule } from "@angular/forms";
 
 import { SharedAppModule } from "../shared/shared.module";
 
-import { SchemaEditorModule } from "./schema/schema.module";
+import { editorRouting } from "./editor.routes";
+
 import { ImageEditorModule } from "./image/image.module";
 import { CodeEditorModule } from "./code/code.module";
 
@@ -20,9 +21,13 @@ import { TrashComponent } from "./trash.component";
 import { TrashService } from "./trash.service";
 import { ContenteditableModel } from "./contenteditable-model.directive";
 import { SourceIconComponent } from "./source-icon.component";
-import { SchemaService } from "./schema.service";
+import { EditDatabaseSchemaService } from "./edit-database-schema.service";
 import { CurrentCodeResourceService } from "./current-coderesource.service";
 import { EditorToolbarService } from "./toolbar.service";
+import { SidebarService } from "./sidebar.service";
+import { DatabaseSchemaService } from "./database-schema.service";
+import { SidebarDataService } from "./sidebar-data.service";
+import { DragService } from "./drag.service";
 
 @NgModule({
   imports: [
@@ -32,7 +37,6 @@ import { EditorToolbarService } from "./toolbar.service";
     SharedAppModule,
 
     ImageEditorModule.forRoot(),
-    SchemaEditorModule.forRoot(),
     CodeEditorModule.forRoot(),
   ],
   declarations: [
@@ -49,14 +53,17 @@ import { EditorToolbarService } from "./toolbar.service";
   ],
   providers: [
     TrashService,
-    SchemaService,
+    EditDatabaseSchemaService,
+    DatabaseSchemaService,
     CurrentCodeResourceService,
     EditorToolbarService,
+    SidebarService,
+    SidebarDataService,
+    DragService,
   ],
   exports: [
     EditorComponent,
     SettingsComponent,
-    SchemaEditorModule,
 
     QueryIconComponent,
     TrashComponent,
@@ -65,3 +72,9 @@ import { EditorToolbarService } from "./toolbar.service";
   ],
 })
 export class EditorModule {}
+
+@NgModule({
+  imports: [EditorModule, editorRouting],
+  exports: [EditorModule],
+})
+export class EditorModuleWithRoutes {}

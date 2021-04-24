@@ -1,8 +1,8 @@
 import {
-  Node,
+  SyntaxNode,
   NodeDescription,
   NodeLocation,
-  Tree,
+  SyntaxTree,
   locationEquals,
   locationIncLastIndex,
   locationMatchingLength,
@@ -437,7 +437,7 @@ describe("AST: Basic Operations", () => {
         ],
       },
     };
-    const root = new Node(desc, undefined);
+    const root = new SyntaxNode(desc, undefined);
     expect(root.tree).toBeUndefined();
 
     // <html>
@@ -549,7 +549,7 @@ describe("AST: Basic Operations", () => {
         ],
       },
     };
-    const t = new Tree(treeDesc);
+    const t = new SyntaxTree(treeDesc);
     expect(t.isEmpty).toEqual(false);
 
     expect(t.rootNode.tree).toEqual(t);
@@ -562,7 +562,7 @@ describe("AST: Basic Operations", () => {
   });
 
   it("Locating: Throws on empty trees", () => {
-    const t = new Tree(undefined);
+    const t = new SyntaxTree(undefined);
     expect(t.isEmpty).toEqual(true);
 
     expect(() => t.locate([])).toThrowError();
@@ -596,7 +596,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const t = new Tree(treeDesc);
+    const t = new SyntaxTree(treeDesc);
     expect(t.isEmpty).toEqual(false);
 
     expect(t.rootNode.location).toEqual([]);
@@ -649,7 +649,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const t = new Tree(treeDesc);
+    const t = new SyntaxTree(treeDesc);
     expect(t.rootNode).toBe(t.locate([]));
     expect(t.rootNode.children["a"][0]).toBe(t.locate([["a", 0]]));
     expect(t.rootNode.children["a"][1]).toBe(t.locate([["a", 1]]));
@@ -708,7 +708,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const t = new Tree(treeDesc);
+    const t = new SyntaxTree(treeDesc);
     expect(() => t.locate([["a", 2]])).toThrowError();
     expect(() => t.locate([["a", -1]])).toThrowError();
     expect(() => t.locate([["c", 0]])).toThrowError();
@@ -733,13 +733,13 @@ describe("AST: Basic Operations", () => {
     };
 
     // Remove the whole category from the tree
-    const t1 = new Tree(treeDesc);
+    const t1 = new SyntaxTree(treeDesc);
     const node1 = t1.rootNode.children["a"][0];
     delete t1.rootNode.children["a"];
     expect(() => node1.location).toThrowError();
 
     // Remove all children of the category from the tree
-    const t2 = new Tree(treeDesc);
+    const t2 = new SyntaxTree(treeDesc);
     const node2 = t2.rootNode.children["a"][0];
     t2.rootNode.children["a"] = [];
     expect(() => node2.location).toThrowError();
@@ -757,7 +757,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.replaceNode([], { language: "r2", name: "r_new" });
 
     expect(prev).not.toBe(curr);
@@ -777,7 +777,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.replaceNode([["a", 0]], {
       language: "r2",
       name: "r_a_0_new",
@@ -809,7 +809,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev
       .replaceNode(
         [
@@ -852,7 +852,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.setProperty([], "a", "2");
 
     expect(curr.isEmpty).toEqual(false);
@@ -866,7 +866,7 @@ describe("AST: Basic Operations", () => {
       name: "r",
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.setProperty([], "a", "1").setProperty([], "b", "2");
 
     expect(curr.isEmpty).toEqual(false);
@@ -881,13 +881,40 @@ describe("AST: Basic Operations", () => {
       name: "r",
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.addProperty([], "a").addProperty([], "b");
 
     expect(curr.isEmpty).toEqual(false);
     expect(prev).not.toBe(curr);
     expect(curr.rootNode.properties["a"]).toBeDefined();
     expect(curr.rootNode.properties["b"]).toBeDefined();
+  });
+
+  it("Adding new properties to a child", () => {
+    const treeDesc: NodeDescription = {
+      language: "lang",
+      name: "r",
+      children: {
+        c: [
+          {
+            language: "lang",
+            name: "c1",
+          },
+        ],
+      },
+    };
+
+    const prev = new SyntaxTree(treeDesc);
+    const curr = prev.addProperty([["c", 0]], "a");
+
+    expect(curr.isEmpty).toEqual(false);
+    expect(prev).not.toBe(curr);
+
+    const childNode = curr.rootNode.children["c"][0];
+    expect(childNode.properties["a"]).toBeDefined();
+
+    // Location fails badly if the tree is somehow damaged
+    expect(childNode.location).toEqual([["c", 0]]);
   });
 
   it("Error: Adding new duplicate properties", () => {
@@ -899,7 +926,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     expect(() => prev.addProperty([], "a")).toThrowError();
   });
 
@@ -913,7 +940,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.renameProperty([], "a", "c");
 
     expect(curr.isEmpty).toEqual(false);
@@ -933,7 +960,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     expect(() => prev.renameProperty([], "c", "d")).toThrowError();
   });
 
@@ -947,7 +974,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     expect(() => prev.renameProperty([], "b", "a")).toThrowError();
   });
 
@@ -960,7 +987,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.insertNode([["a", 0]], { language: "lang", name: "new" });
 
     expect(prev).not.toBe(curr);
@@ -978,7 +1005,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.insertNode([["a", 1]], { language: "lang", name: "new" });
 
     expect(prev).not.toBe(curr);
@@ -996,7 +1023,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.insertNode([["b", 0]], { language: "lang", name: "new" });
 
     expect(prev).not.toBe(curr);
@@ -1012,7 +1039,7 @@ describe("AST: Basic Operations", () => {
       name: "r",
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.insertNode([["a", 0]], { language: "lang", name: "new" });
 
     expect(prev).not.toBe(curr);
@@ -1021,7 +1048,7 @@ describe("AST: Basic Operations", () => {
   });
 
   it("Inserting something at the root of an empty tree is a replacement", () => {
-    const prev = new Tree(undefined);
+    const prev = new SyntaxTree(undefined);
     expect(prev.isEmpty).toBe(true);
 
     const curr = prev.insertNode([], { language: "lang", name: "new" });
@@ -1037,7 +1064,7 @@ describe("AST: Basic Operations", () => {
       name: "r",
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     expect(() =>
       prev.insertNode([], { language: "lang", name: "new" })
     ).toThrowError();
@@ -1049,7 +1076,7 @@ describe("AST: Basic Operations", () => {
       name: "r",
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     expect(prev.rootNode.childrenCategoryNames).toEqual([]);
 
     const curr = prev.addChildGroup([], "foo");
@@ -1068,7 +1095,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     expect(prev.rootNode.childrenCategoryNames).toEqual(["c1"]);
 
     const curr = prev.addChildGroup([], "c2");
@@ -1091,7 +1118,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.deleteNode([["a", 0]]);
 
     expect(prev).not.toBe(curr);
@@ -1113,7 +1140,7 @@ describe("AST: Basic Operations", () => {
       },
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.deleteNode([["a", 1]]);
 
     expect(prev).not.toBe(curr);
@@ -1128,7 +1155,7 @@ describe("AST: Basic Operations", () => {
       name: "r",
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.deleteNode([]);
 
     expect(prev).not.toBe(curr);
@@ -1141,7 +1168,7 @@ describe("AST: Basic Operations", () => {
       name: "r",
     };
 
-    const prev = new Tree(treeDesc);
+    const prev = new SyntaxTree(treeDesc);
     const curr = prev.deleteNode([]);
 
     expect(prev).not.toBe(curr);
@@ -1157,14 +1184,14 @@ describe("AST: Basic Operations", () => {
   });
 
   it("Enumerates types of empty trees", () => {
-    const t = new Tree(undefined);
+    const t = new SyntaxTree(undefined);
     const collected = t.typesPresent;
 
     expect(collected.size).toEqual(0);
   });
 
   it("Enumerates types of trees with a single node", () => {
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "l",
       name: "n1",
     });
@@ -1177,7 +1204,7 @@ describe("AST: Basic Operations", () => {
   });
 
   it("Enumerates types of trees with two nodes of identical type", () => {
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "l",
       name: "n1",
       children: {
@@ -1198,7 +1225,7 @@ describe("AST: Basic Operations", () => {
   });
 
   it("Enumerates types of trees with two nodes of different type", () => {
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "l1",
       name: "n1",
       children: {
@@ -1222,7 +1249,7 @@ describe("AST: Basic Operations", () => {
   });
 
   it("Enumerates types of trees with three nodes of overlapping type", () => {
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "l1",
       name: "n1",
       children: {
@@ -1257,14 +1284,14 @@ describe("AST: Basic Operations", () => {
   });
 
   it("Finds nodes of specific types in empty trees (hint: there are none)", () => {
-    const t = new Tree(undefined);
+    const t = new SyntaxTree(undefined);
     const found = t.getNodesOfType({ languageName: "foo", typeName: "bar" });
 
     expect(found).toEqual([]);
   });
 
   it("Finds node of specific types in a uniform tree", () => {
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "l1",
       name: "n1",
       children: {
@@ -1292,7 +1319,7 @@ describe("AST: Basic Operations", () => {
   });
 
   it("Finds node of specific types in a mixed tree", () => {
-    const t = new Tree({
+    const t = new SyntaxTree({
       language: "l1",
       name: "n1",
       children: {

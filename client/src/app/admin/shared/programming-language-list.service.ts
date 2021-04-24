@@ -12,7 +12,7 @@ export class ListProgrammingLanguagesService {
   > = of(
     Object.values(AvailableLanguages).map((l) => {
       return {
-        id: l.id,
+        id: l.programmingLanguageId,
         name: l.name,
       };
     })

@@ -27,6 +27,11 @@ setup-database-schema:
 test : msg-pre-run-test
 	./bin/rails spec
 
+# Helpful during development: Continously watches for changes in the project
+# and re-runs tests that are affected by code changes
+test-watch:
+	bundle exec guard --plugin=RSpec
+
 # Updates (or initially creates) the live data in the system in the system from
 # a dump that has been previously created.
 load-live-data:
@@ -53,11 +58,6 @@ delete-live-data: msg-pre-reset-live-data
 	bin/rails blattwerkzeug:file_storage:delete_all db:reset
 
 reset-live-data: delete-live-data load-live-data
-
-# Helpful during development: Continously watches for changes in the project
-# and re-runs tests that are affected by code changes
-test-watch:
-	bundle exec guard --plugin=RSpec
 
 generate-graphql-schema:
 	bin/rake graphql:schema:json --trace

@@ -1,0 +1,8 @@
+mutation StoreProjectSeed($projectIds: [String!]!) {
+  storeProjectSeed(input: {projects: $projectIds}) {
+    affectedIds {
+      id
+      type
+    }
+  }
+}

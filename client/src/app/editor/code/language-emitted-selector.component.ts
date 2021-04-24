@@ -26,13 +26,13 @@ export class LanguageEmittedSelectorComponent {
    * @return The ID of the currently selected language
    */
   get selectedLanguageId() {
-    return this.codeResource.emittedLanguageIdPeek;
+    return this.codeResource.runtimeLanguageId;
   }
 
   /**
    * Sets the ID of the new language and broadcasts the change.
    */
   set selectedLanguageId(id: string) {
-    this.codeResource.setEmittedLanguageId(id);
+    this.codeResource.setRuntimeLanguageId(id);
   }
 }

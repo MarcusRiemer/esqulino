@@ -7,6 +7,8 @@ import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { PortalModule } from "@angular/cdk/portal";
+import { InMemoryCache } from "@apollo/client/core";
+import { getOperationName } from "@apollo/client/utilities";
 
 import { ToolbarService } from "../../shared";
 import { DefaultValuePipe } from "../../shared/default-value.pipe";
@@ -15,6 +17,7 @@ import { OverviewBlockLanguageComponent } from "./overview-block-language.compon
 import {
   ApolloTestingController,
   ApolloTestingModule,
+  APOLLO_TESTING_CACHE,
 } from "apollo-angular/testing";
 import { PaginatorTableGraphqlComponent } from "../../shared/table/paginator-table-graphql.component";
 import {
@@ -22,9 +25,9 @@ import {
   DestroyBlockLanguageDocument,
 } from "../../../generated/graphql";
 import {
-  buildEmptyBlockLanguageResponse,
-  buildSingleBlockLanguageResponse,
-} from "../../editor/spec-util/block-language.gql.data.spec";
+  specAdminbuildEmptyBlockLanguageResponse,
+  specAdminBuildSingleBlockLanguageResponse,
+} from "../../editor/spec-util/block-language.admin-data.spec";
 import { ConditionalDisplayDirective } from "../../shared/table/directives/conditional-display.directive";
 import { CreateBlockLanguageComponent } from "./create-block-language.component";
 import { LinkGrammarComponent } from "../link-grammar.component";
@@ -43,7 +46,13 @@ describe("OverviewBlockLanguageComponent", () => {
         PortalModule,
         RouterTestingModule.withRoutes([]),
       ],
-      providers: [ToolbarService],
+      providers: [
+        ToolbarService,
+        {
+          provide: APOLLO_TESTING_CACHE,
+          useValue: new InMemoryCache({ addTypename: true }),
+        },
+      ],
       declarations: [
         OverviewBlockLanguageComponent,
         DefaultValuePipe,
@@ -79,32 +88,35 @@ describe("OverviewBlockLanguageComponent", () => {
     const t = await createComponent();
     // only works like that when fetch-policy is network-only
     const states: boolean[] = [false, true, false];
-    const response = buildSingleBlockLanguageResponse();
+    const response = specAdminBuildSingleBlockLanguageResponse();
 
     t.component.query.valueChanges.subscribe((response) => {
       expect(response.loading).toBe(states.pop());
     });
 
-    const op = t.controller.expectOne(AdminListBlockLanguagesDocument);
-    op.flush(response);
+    t.controller
+      .expectOne(getOperationName(AdminListBlockLanguagesDocument))
+      .flush(response);
 
     t.component.query.refetch();
 
-    const op2 = t.controller.expectOne(AdminListBlockLanguagesDocument);
-    op2.flush(response);
+    t.controller
+      .expectOne(getOperationName(AdminListBlockLanguagesDocument))
+      .flush(response);
   });
 
   it(`Displays an empty list`, async () => {
     const t = await createComponent();
-    const response = buildEmptyBlockLanguageResponse();
+    const response = specAdminbuildEmptyBlockLanguageResponse();
 
     // Trigger a request
     t.component.query.valueChanges.subscribe(
       (v) => v.data.blockLanguages.totalCount === 0
     );
 
-    const op = t.controller.expectOne(AdminListBlockLanguagesDocument);
-    op.flush(response);
+    t.controller
+      .expectOne(getOperationName(AdminListBlockLanguagesDocument))
+      .flush(response);
 
     t.fixture.detectChanges();
     await t.fixture.whenRenderingDone();
@@ -117,9 +129,11 @@ describe("OverviewBlockLanguageComponent", () => {
 
   it(`Displays a list with a single element`, async () => {
     const t = await createComponent();
-    const response = buildSingleBlockLanguageResponse();
+    const response = specAdminBuildSingleBlockLanguageResponse();
 
-    t.controller.expectOne(AdminListBlockLanguagesDocument).flush(response);
+    t.controller
+      .expectOne(getOperationName(AdminListBlockLanguagesDocument))
+      .flush(response);
 
     await t.fixture.whenStable();
     t.fixture.detectChanges();
@@ -135,27 +149,33 @@ describe("OverviewBlockLanguageComponent", () => {
 
   it(`reloads data on refresh`, async () => {
     const t = await createComponent();
-    const singleBlockLanguage = buildSingleBlockLanguageResponse();
-    const emptyBlockLanguage = buildEmptyBlockLanguageResponse();
+    const singleBlockLanguage = specAdminBuildSingleBlockLanguageResponse();
+    const emptyBlockLanguage = specAdminbuildEmptyBlockLanguageResponse();
     const responses = [emptyBlockLanguage, singleBlockLanguage];
 
     t.component.query.valueChanges.subscribe((response) => {
       if (!response.loading) {
-        expect(response.data).toEqual(responses.pop().data);
+        const expResponse = responses.pop().data;
+        expect(response.data).toEqual(expResponse);
       }
     });
-    const op = t.controller.expectOne(AdminListBlockLanguagesDocument);
+
+    const op = t.controller.expectOne(
+      getOperationName(AdminListBlockLanguagesDocument)
+    );
     op.flush(singleBlockLanguage);
 
     t.component.query.refetch();
-    const op2 = t.controller.expectOne(AdminListBlockLanguagesDocument);
+    const op2 = t.controller.expectOne(
+      getOperationName(AdminListBlockLanguagesDocument)
+    );
     op2.flush(emptyBlockLanguage);
   });
 
   it(`Triggers deletion`, async () => {
     const t = await createComponent();
-    const singleBlockLanguage = buildSingleBlockLanguageResponse();
-    const emptyBlockLanguage = buildEmptyBlockLanguageResponse();
+    const singleBlockLanguage = specAdminBuildSingleBlockLanguageResponse();
+    const emptyBlockLanguage = specAdminbuildEmptyBlockLanguageResponse();
     const responses = [emptyBlockLanguage, singleBlockLanguage];
 
     t.component.query.valueChanges.subscribe((response) => {
@@ -165,7 +185,7 @@ describe("OverviewBlockLanguageComponent", () => {
     });
 
     t.controller
-      .expectOne(AdminListBlockLanguagesDocument)
+      .expectOne(getOperationName(AdminListBlockLanguagesDocument))
       .flush(singleBlockLanguage);
 
     await t.fixture.whenStable();
@@ -179,7 +199,8 @@ describe("OverviewBlockLanguageComponent", () => {
 
     i1Delete.click();
 
-    const op2 = t.controller.expectOne(DestroyBlockLanguageDocument);
-    op2.flush({ data: { destroyBlockLanguage: { id: "test", errors: [] } } });
+    t.controller
+      .expectOne(getOperationName(DestroyBlockLanguageDocument))
+      .flush({ data: { destroyBlockLanguage: { id: "test", errors: [] } } });
   });
 });

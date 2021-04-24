@@ -47,7 +47,7 @@ export class TruckWorldEditorService implements OnDestroy {
     );
 
     this._currentCodeResource.currentResource.subscribe((currentProgram) => {
-      if (currentProgram.emittedLanguageIdPeek === "truck-world") {
+      if (currentProgram.runtimeLanguageId === "truck-world") {
         this.enableEditorMode();
       } else if (this._editorModeEnabled) {
         this.disableEditorMode();
@@ -194,9 +194,7 @@ export class TruckWorldEditorService implements OnDestroy {
   }
 
   private placeTrafficLight(): void {
-    const trafficLightFeature = this._feature.getValue() as TruckFeature<
-      TruckTileFeatureType.TrafficLight
-    >;
+    const trafficLightFeature = this._feature.getValue() as TruckFeature<TruckTileFeatureType.TrafficLight>;
     const option = trafficLightFeature.options;
     const { pos, direction } = this._mouse.peekCurrentPosition;
     this.mutateWorldAndCode(this._world, (s) =>

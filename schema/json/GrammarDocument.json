@@ -49,6 +49,9 @@
         "foreignTypes": {
           "$ref": "#/definitions/NamedLanguages"
         },
+        "foreignVisualisations": {
+          "$ref": "#/definitions/VisualisedLanguages"
+        },
         "includes": {
           "items": {
             "type": "string"
@@ -61,6 +64,9 @@
         "types": {
           "$ref": "#/definitions/NamedLanguages"
         },
+        "visualisations": {
+          "$ref": "#/definitions/VisualisedLanguages"
+        },
         "visualizes": {
           "items": {
             "type": "string"
@@ -70,7 +76,9 @@
       },
       "required": [
         "types",
-        "foreignTypes"
+        "foreignTypes",
+        "visualisations",
+        "foreignVisualisations"
       ],
       "type": "object"
     },
@@ -574,13 +582,10 @@
           "$ref": "#/definitions/NodeConcreteTypeDescription"
         },
         {
-          "$ref": "#/definitions/NodeVisualTypeDescription"
-        },
-        {
           "$ref": "#/definitions/NodeOneOfTypeDescription"
         }
       ],
-      "description": "Types may either be concrete new type, an alias grouping together multiple\nother types or a visualization of an existing type."
+      "description": "Types may either be concrete new type or an alias grouping together multiple\nother types."
     },
     "NodeTypesAllowedDescription": {
       "additionalProperties": false,
@@ -808,7 +813,7 @@
         },
         "type": {
           "enum": [
-            "visualize"
+            "visualise"
           ],
           "type": "string"
         }
@@ -930,6 +935,20 @@
         }
       ],
       "description": "These attributes are available when visualizing things"
+    },
+    "VisualisedLanguages": {
+      "additionalProperties": {
+        "$ref": "#/definitions/VisualisedTypes"
+      },
+      "description": "Multiple languages with visualizations",
+      "type": "object"
+    },
+    "VisualisedTypes": {
+      "additionalProperties": {
+        "$ref": "#/definitions/NodeVisualTypeDescription"
+      },
+      "description": "Visualizations for a single language",
+      "type": "object"
     }
   }
 }

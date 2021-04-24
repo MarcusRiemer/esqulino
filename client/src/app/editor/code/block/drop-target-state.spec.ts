@@ -1,4 +1,8 @@
-import { NodeDescription, Validator, Tree } from "../../../shared/syntaxtree";
+import {
+  NodeDescription,
+  Validator,
+  SyntaxTree,
+} from "../../../shared/syntaxtree";
 import { GRAMMAR_BOOLEAN_DESCRIPTION } from "../../../shared/syntaxtree/grammar.spec.boolean";
 import { _isChildRequiredSchema } from "./drop-target-state";
 
@@ -6,7 +10,7 @@ describe("Drop Target State", () => {
   describe("isChildRequired", () => {
     it("EmptyTree)", () => {
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inTree = new Tree(undefined);
+      const inTree = new SyntaxTree(undefined);
 
       expect(_isChildRequiredSchema(validator, inTree, []))
         .withContext("Empty trees always want insertion at the root")
@@ -50,7 +54,7 @@ describe("Drop Target State", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inTree = new Tree(inTreeDesc);
+      const inTree = new SyntaxTree(inTreeDesc);
 
       expect(_isChildRequiredSchema(validator, inTree, []))
         .withContext("Non empty trees don't want insertions")
@@ -91,7 +95,7 @@ describe("Drop Target State", () => {
       };
 
       const validator = new Validator([GRAMMAR_BOOLEAN_DESCRIPTION]);
-      const inTree = new Tree(inTreeDesc);
+      const inTree = new SyntaxTree(inTreeDesc);
 
       expect(_isChildRequiredSchema(validator, inTree, [["lhs", 0]]))
         .withContext("lhs is empty")

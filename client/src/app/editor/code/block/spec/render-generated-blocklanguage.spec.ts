@@ -11,23 +11,21 @@ import { first } from "rxjs/operators";
 
 import { ApolloTestingModule } from "apollo-angular/testing";
 
-import { FullProjectGQL } from "../../../../../generated/graphql";
+import {
+  FullGrammarGQL,
+  FullProjectGQL,
+} from "../../../../../generated/graphql";
 
 import { BlockLanguage } from "../../../../shared/block";
 import { FocusDirective } from "../../../../shared/focus-element.directive";
 import {
   LanguageService,
   NodeDescription,
-  Tree,
+  SyntaxTree,
   CodeResource,
   GrammarDocument,
 } from "../../../../shared";
-import {
-  IndividualBlockLanguageDataService,
-  IndividualGrammarDataService,
-  ServerApiService,
-} from "../../../../shared/serverdata";
-import { ResourceReferencesOnlineService } from "../../../../shared/resource-references-online.service";
+import { ServerApiService } from "../../../../shared/serverdata";
 import { ResourceReferencesService } from "../../../../shared/resource-references.service";
 import { generateBlockLanguage } from "../../../../shared/block/generator/generator";
 import { BlockLanguageListDescription } from "../../../../shared/block/block-language.description";
@@ -39,16 +37,17 @@ import {
 import { DragService } from "../../../drag.service";
 import { TrashService } from "../../../trash.service";
 import {
-  ensureLocalBlockLanguageRequest,
-  buildBlockLanguage,
-  ensureLocalGrammarRequest,
-  buildGrammar,
+  specCacheBlockLanguage,
+  specBuildBlockLanguageDescription,
+  specBuildGrammarDescription,
+  specCacheGrammar,
 } from "../../../spec-util";
 import { CurrentCodeResourceService } from "../../../current-coderesource.service";
 
 import { RenderedCodeResourceService } from "../rendered-coderesource.service";
 import { BlockHostComponent } from "../block-host.component";
 import { BLOCK_RENDER_COMPONENTS } from "../index";
+import { mkGrammarDoc } from "src/app/shared/syntaxtree/grammar.spec-util";
 
 describe(`Render Generated BlockLanguages`, () => {
   async function createComponent(
@@ -64,19 +63,15 @@ describe(`Render Generated BlockLanguages`, () => {
         NoopAnimationsModule,
       ],
       providers: [
-        IndividualBlockLanguageDataService,
         DragService,
-        IndividualGrammarDataService,
+        FullGrammarGQL,
         LanguageService,
         RenderedCodeResourceService,
         CurrentCodeResourceService,
         TrashService,
         ServerApiService,
         FullProjectGQL,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
         {
           provide: AnalyticsService,
           useClass: SpecAnalyticsService,
@@ -85,23 +80,25 @@ describe(`Render Generated BlockLanguages`, () => {
       declarations: [...BLOCK_RENDER_COMPONENTS, FocusDirective],
     }).compileComponents();
 
-    const grammarDesc = await ensureLocalGrammarRequest(
-      buildGrammar(grammarDoc)
+    const grammarDesc = specCacheGrammar(
+      specBuildGrammarDescription(grammarDoc)
     );
-    const listBlockLanguage: BlockLanguageListDescription = buildBlockLanguage({
-      grammarId: grammarDesc.id,
-    });
-    const genBlockLanguage = generateBlockLanguage(
-      listBlockLanguage,
+    const listBlockLanguage: BlockLanguageListDescription = specBuildBlockLanguageDescription(
       {
-        type: "tree",
-      },
-      grammarDoc
+        grammarId: grammarDesc.id,
+      }
+    );
+    const genBlockLanguage = specBuildBlockLanguageDescription(
+      generateBlockLanguage(
+        listBlockLanguage,
+        {
+          type: "tree",
+        },
+        grammarDoc
+      )
     );
 
-    const blockLangDesc = await ensureLocalBlockLanguageRequest(
-      genBlockLanguage
-    );
+    const blockLangDesc = specCacheBlockLanguage(genBlockLanguage);
 
     let fixture = TestBed.createComponent(BlockHostComponent);
     let component = fixture.componentInstance;
@@ -130,11 +127,11 @@ describe(`Render Generated BlockLanguages`, () => {
       undefined
     );
 
-    component.node = new Tree(nodeDesc).rootNode;
+    component.node = new SyntaxTree(nodeDesc).rootNode;
     component.blockLanguage = blockLanguage;
     component.codeResource = codeResource;
 
-    renderData._updateRenderData(codeResource, blockLanguage, false, {});
+    await renderData._updateRenderData(codeResource, blockLanguage, false, {});
 
     fixture.detectChanges();
     await fixture.whenStable();
@@ -179,28 +176,30 @@ describe(`Render Generated BlockLanguages`, () => {
   }
 
   describe(`Grammar 0: Root with single required child`, () => {
-    const grammarDesc: GrammarDocument = {
-      foreignTypes: {},
-      types: {
-        l: {
-          r: {
-            type: "concrete",
-            attributes: [
-              {
-                type: "allowed",
-                name: "c",
-                nodeTypes: [{ languageName: "l", typeName: "t1" }],
-              },
-            ],
-          },
-          t1: {
-            type: "concrete",
-            attributes: [{ type: "terminal", symbol: "t1" }],
+    const grammarDesc: GrammarDocument = mkGrammarDoc(
+      { languageName: "l", typeName: "r" },
+      {
+        foreignTypes: {},
+        types: {
+          l: {
+            r: {
+              type: "concrete",
+              attributes: [
+                {
+                  type: "allowed",
+                  name: "c",
+                  nodeTypes: [{ languageName: "l", typeName: "t1" }],
+                },
+              ],
+            },
+            t1: {
+              type: "concrete",
+              attributes: [{ type: "terminal", symbol: "t1" }],
+            },
           },
         },
-      },
-      root: { languageName: "l", typeName: "r" },
-    };
+      }
+    );
 
     it(`Child provided`, async () => {
       const treeDesc: NodeDescription = {
@@ -244,35 +243,37 @@ describe(`Render Generated BlockLanguages`, () => {
     });
   });
 
-  describe(`Grammar 0: Root with single required child in container`, () => {
-    const grammarDesc: GrammarDocument = {
-      foreignTypes: {},
-      types: {
-        l: {
-          r: {
-            type: "concrete",
-            attributes: [
-              {
-                type: "container",
-                orientation: "vertical",
-                children: [
-                  {
-                    type: "allowed",
-                    name: "c",
-                    nodeTypes: [{ languageName: "l", typeName: "t1" }],
-                  },
-                ],
-              },
-            ],
-          },
-          t1: {
-            type: "concrete",
-            attributes: [{ type: "terminal", symbol: "t1" }],
+  describe(`Grammar 1: Root with single required child in container`, () => {
+    const grammarDesc: GrammarDocument = mkGrammarDoc(
+      { languageName: "l", typeName: "r" },
+      {
+        foreignTypes: {},
+        types: {
+          l: {
+            r: {
+              type: "concrete",
+              attributes: [
+                {
+                  type: "container",
+                  orientation: "vertical",
+                  children: [
+                    {
+                      type: "allowed",
+                      name: "c",
+                      nodeTypes: [{ languageName: "l", typeName: "t1" }],
+                    },
+                  ],
+                },
+              ],
+            },
+            t1: {
+              type: "concrete",
+              attributes: [{ type: "terminal", symbol: "t1" }],
+            },
           },
         },
-      },
-      root: { languageName: "l", typeName: "r" },
-    };
+      }
+    );
 
     it(`Child provided`, async () => {
       const treeDesc: NodeDescription = {

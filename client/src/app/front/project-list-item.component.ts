@@ -29,14 +29,14 @@ export class ProjectListItemComponent {
    * @return The image URL of this project.
    */
   get imageUrl(): string {
-    return `/api/project/${this.project.slug}/image/${this.project.preview}`;
+    return `/api/project/${this.project.id}/image/${this.project.preview}`;
   }
 
   /**
    * @return True, if this item has an image
    */
   get hasImage(): boolean {
-    return this.project && !!this.project.preview;
+    return !!this.project?.preview;
   }
 
   /**

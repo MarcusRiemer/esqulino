@@ -1,5 +1,3 @@
-TEST_ENV = Rails.env == "test"
-
 module Seed
   class Base
     # Global indentation level for log output
@@ -7,7 +5,9 @@ module Seed
 
     # base seed class as a parent class designed as a service to store and load seed classes with all the supported methods
     # BASE_SEED_DIRECTORY is a autoloaded pathe defined in sqlino.yaml in the config
-    BASE_SEED_DIRECTORY = Rails.configuration.sqlino[:seed][:data_dir]
+    BASE_SEED_DIRECTORY = Rails.configuration.sqlino.fetch(:seed).fetch(:data_dir)
+
+    INFO_OUTPUT = Rails.configuration.sqlino.fetch(:seed).fetch(:output)
 
     attr_reader :seed_id, :dependencies
 
@@ -32,8 +32,7 @@ module Seed
     #
     # @param msg [string] The
     def info(msg = nil)
-      puts ("#{('  ' * @@indent)}[#{seed_class}] #{msg}") unless msg.nil? || TEST_ENV
-
+      puts ("#{('  ' * @@indent)}[#{seed_class}] #{msg}") unless msg.nil? || !INFO_OUTPUT
       if block_given?
         @@indent += 1
         yield
@@ -145,6 +144,8 @@ module Seed
           store_dependencies(processed)
         end
       end
+
+      return processed
     end
 
     # calls the dependent model on parent using send and serialize it

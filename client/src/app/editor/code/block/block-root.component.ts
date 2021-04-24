@@ -1,15 +1,19 @@
 import { Component } from "@angular/core";
 
 import { Observable, combineLatest } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import { first, map, pluck, switchMap } from "rxjs/operators";
+
+import * as Apollo from "apollo-angular";
+
+import {
+  FullBlockLanguageQuery,
+  FullGrammarGQL,
+} from "../../../../generated/graphql";
 
 import { BlockLanguage } from "../../../shared/block";
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 import { convertGrammarTreeInstructions } from "../../../shared/block/generator/generator-tree";
-import {
-  IndividualGrammarDataService,
-  IndividualBlockLanguageDataService,
-} from "../../../shared/serverdata";
+import { cacheFullBlockLanguage } from "../../../shared/serverdata/gql-cache";
 
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { DragService } from "../../drag.service";
@@ -30,8 +34,8 @@ export class BlockRootComponent {
     private _debugOptions: BlockDebugOptionsService,
     private _resourceReferences: ResourceReferencesService,
     private _projectService: ProjectService,
-    private _grammarData: IndividualGrammarDataService,
-    private _blockLangData: IndividualBlockLanguageDataService
+    private _grammarData: FullGrammarGQL,
+    private _apollo: Apollo.Apollo
   ) {}
 
   /**
@@ -58,14 +62,14 @@ export class BlockRootComponent {
   /**
    * The block language that should be used to display the code resource.
    */
-  readonly currentBlockLanguage$: Observable<BlockLanguage> = combineLatest(
+  readonly currentBlockLanguage$: Observable<BlockLanguage> = combineLatest([
     this._currentCodeResource.resourceBlockLanguageId,
-    this._debugOptions.showEditableAst.value$
-  ).pipe(
+    this._debugOptions.showEditableAst.value$,
+  ]).pipe(
     map(async ([blockLangId, showInternalAst]) => {
-      const blockLang = this._resourceReferences.getBlockLanguage(
+      const blockLang = await this._resourceReferences.getBlockLanguage(
         blockLangId,
-        "undefined"
+        { onMissing: "undefined" }
       );
       if (!blockLang) {
         throw new Error(
@@ -93,31 +97,46 @@ export class BlockRootComponent {
   ): Promise<BlockLanguage> {
     // If a block language exists for the given grammar ID: This language
     // was automatically generated for that grammar.
-    let blockLangDesc = this._blockLangData.getLocal(grammarId, "undefined");
+    let blockLang = await this._resourceReferences.getBlockLanguage(grammarId, {
+      fetchPolicy: "cache-only",
+      onMissing: "undefined",
+    });
     // Was the block language for that grammar created already?
-    if (!blockLangDesc) {
+    if (!blockLang) {
       // Nope, we build it on the fly
       console.log(
         `Generating AST block language for grammar with ID "${grammarId}"`
       );
 
       // There is a possibility that the grammar hasn't been loaded yet.
-      const grammar = await this._grammarData.getLocal(grammarId, "request");
+      const grammar = await this._grammarData
+        .fetch({ id: grammarId })
+        .pipe(pluck("data", "grammar"), first())
+        .toPromise();
       const blockLangModel = convertGrammarTreeInstructions(
         { type: "tree" },
         grammar
       );
-      blockLangDesc = Object.assign(blockLangModel, {
+
+      const blockLangDesc: FullBlockLanguageQuery["blockLanguage"] = {
+        __typename: "BlockLanguage",
         id: grammarId,
         grammarId: grammarId,
         name: `Automatically generated from "${grammar.name}"`,
         defaultProgrammingLanguageId: grammar.programmingLanguageId,
-      });
+        sidebars: blockLangModel.sidebars,
+        editorBlocks: blockLangModel.editorBlocks,
+        editorComponents: blockLangModel.editorComponents,
+        rootCssClasses: blockLangModel.rootCssClasses,
+        createdAt: Date(),
+        updatedAt: Date(),
+      };
 
-      // Make the block language available to the rendered trees
-      this._blockLangData.setLocal(blockLangDesc);
+      cacheFullBlockLanguage(this._apollo, blockLangDesc);
+
+      return new BlockLanguage(blockLangDesc);
+    } else {
+      return blockLang;
     }
-
-    return new BlockLanguage(blockLangDesc);
   }
 }

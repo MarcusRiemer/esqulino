@@ -67,7 +67,7 @@
     <ng-container matColumnDef="text">
       <th mat-header-cell *matHeaderCellDef>Verfügbar In</th>
       <td mat-cell *matCellDef="let news">
-        {{getLanguagesFlags(news.text)}}
+        {{ getLanguagesFlags(news.text)?.join(" ") }}
       </td>
     </ng-container>
     <ng-container matColumnDef="publishedFrom">

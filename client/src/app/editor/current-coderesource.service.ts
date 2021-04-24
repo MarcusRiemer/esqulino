@@ -1,19 +1,22 @@
 import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
-import { flatMap, map, filter, tap } from "rxjs/operators";
+import {
+  map,
+  filter,
+  tap,
+  mergeMap,
+  shareReplay,
+  switchMap,
+} from "rxjs/operators";
 
 import { ResourceReferencesService } from "../shared/resource-references.service";
 import {
   CodeResource,
   NodeLocation,
-  Tree,
+  SyntaxTree,
   ValidationResult,
 } from "../shared/syntaxtree";
-import {
-  IndividualBlockLanguageDataService,
-  IndividualGrammarDataService,
-} from "../shared/serverdata";
 
 import { ProjectService } from "./project.service";
 
@@ -34,9 +37,7 @@ export class CurrentCodeResourceService {
 
   constructor(
     private _projectService: ProjectService,
-    private _resourceReferences: ResourceReferencesService,
-    private _individualBlockLanguageData: IndividualBlockLanguageDataService,
-    private _individualGrammarData: IndividualGrammarDataService
+    private _resourceReferences: ResourceReferencesService
   ) {}
 
   /**
@@ -57,38 +58,55 @@ export class CurrentCodeResourceService {
   /**
    * Informs interested components about the tree behind the current resource
    */
-  readonly currentTree: Observable<Tree> = this._codeResource.pipe(
+  readonly currentTree: Observable<SyntaxTree> = this._codeResource.pipe(
     filter((c) => !!c),
-    flatMap((c) => c.syntaxTree)
+    switchMap((c) => c.syntaxTree$)
   );
 
   /**
    * The block language that is configured on the resource.
    */
-  readonly resourceBlockLanguageId: Observable<
-    string
-  > = this.currentResource.pipe(flatMap((c) => c.blockLanguageId));
+  readonly resourceBlockLanguageId: Observable<string> = this.currentResource.pipe(
+    filter((c) => !!c),
+    switchMap((c) => c.blockLanguageId$)
+  );
 
-  readonly blockLanguageGrammar = this.currentResource.pipe(
-    flatMap((r) => r.blockLanguageId),
-    flatMap((id) => this._individualBlockLanguageData.getLocal(id, "request")),
-    flatMap((b) => this._individualGrammarData.getLocal(b.grammarId, "request"))
+  readonly blockLanguage$ = this.resourceBlockLanguageId.pipe(
+    switchMap((id) => this._resourceReferences.getBlockLanguage(id)),
+    shareReplay(1)
+  );
+
+  readonly blockLanguageGrammar$ = this.blockLanguage$.pipe(
+    switchMap((b) =>
+      this._resourceReferences.getGrammarDescription(b.grammarId, {
+        onMissing: "throw",
+      })
+    ),
+    shareReplay(1)
+  );
+
+  readonly validator$ = combineLatest([
+    this.currentResource,
+    this.blockLanguage$,
+  ]).pipe(
+    // Both arguments must be available to have a validator
+    filter(([c, b]) => !!c && !!b),
+    switchMap(([c, b]) =>
+      this._resourceReferences.getValidator(c.runtimeLanguageId, b.grammarId)
+    ),
+    shareReplay(1)
   );
 
   /**
    * @return The latest validation result for this resource.
    */
-  readonly validationResult = combineLatest(
+  readonly validationResult = combineLatest([
     this.currentTree,
     this._projectService.activeProject,
-    this.blockLanguageGrammar
-  ).pipe(
-    map(([tree, project, grammar]) => {
+    this.validator$,
+  ]).pipe(
+    map(([tree, project, validator]) => {
       if (tree) {
-        const validator = this._resourceReferences.getValidator(
-          this.peekResource.emittedLanguageIdPeek,
-          grammar.id
-        );
         return validator.validateFromRoot(
           tree,
           project.additionalValidationContext
@@ -105,8 +123,7 @@ export class CurrentCodeResourceService {
   /**
    *
    */
-  readonly currentExecutionLocation: Observable<NodeLocation> = this
-    ._executionLocation;
+  readonly currentExecutionLocation$: Observable<NodeLocation> = this._executionLocation.asObservable();
 
   /**
    * The currently loaded resource

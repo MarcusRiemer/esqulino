@@ -6,7 +6,10 @@
 #
 class User < ApplicationRecord
   # The ID of the user that acts as a guest
-  GUEST_ID = Rails.configuration.sqlino[:seed_users][:guest]
+  GUEST_ID = Rails.configuration.sqlino[:seed][:users][:guest]
+
+  # The ID of the user that acts as a guest
+  SYSTEM_ID = Rails.configuration.sqlino[:seed][:users][:system]
 
   # Only return true for roles that have been manually added
   # https://github.com/RolifyCommunity/rolify#strict-mode
@@ -35,6 +38,11 @@ class User < ApplicationRecord
   # The guest user has a static ID
   def self.guest_id
     return GUEST_ID
+  end
+
+  # The system user has a static ID
+  def self.system_id
+    return SYSTEM_ID
   end
 
   # Creates a new user from a hash

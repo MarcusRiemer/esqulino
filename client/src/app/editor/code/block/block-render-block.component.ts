@@ -5,6 +5,7 @@ import {
   HostListener,
   HostBinding,
   Optional,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 
 import { combineLatest, Observable } from "rxjs";
@@ -17,7 +18,7 @@ import {
 } from "rxjs/operators";
 
 import {
-  Node,
+  SyntaxNode,
   locationEquals,
   locationMatchingLength,
 } from "../../../shared/syntaxtree";
@@ -44,13 +45,14 @@ export type BackgroundState = "executed" | "replaced" | "neutral";
 @Component({
   templateUrl: "templates/block-render-block.html",
   selector: `editor-block-render-block`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderBlockComponent {
   /**
    * The node to be rendered
    */
   @Input()
-  public node: Node;
+  public node: SyntaxNode;
 
   /**
    * The visualisation parameters for this block.
@@ -176,7 +178,7 @@ export class BlockRenderBlockComponent {
   /**
    * Determines whether a certain codeblock is currently beeing executed.
    */
-  readonly isOnExecutionPath = this._currentCodeResource.currentExecutionLocation.pipe(
+  readonly isOnExecutionPath = this._currentCodeResource.currentExecutionLocation$.pipe(
     map((loc) => {
       const matchingLength = locationMatchingLength(this.node.location, loc);
       return (
@@ -192,7 +194,7 @@ export class BlockRenderBlockComponent {
   /**
    * Determines whether a certain codeblock is currently beeing executed.
    */
-  readonly isCurrentlyExecuted$ = this._currentCodeResource.currentExecutionLocation.pipe(
+  readonly isCurrentlyExecuted$ = this._currentCodeResource.currentExecutionLocation$.pipe(
     // Even if the node is properly initialized, the input property may be missing
     // because it is initialized later
     filter((_) => !!this.node),
@@ -224,18 +226,16 @@ export class BlockRenderBlockComponent {
    * This is the case if the location that would be dropped in to is at
    * least not empty and if it would take the type.
    */
-  readonly showRelativeDropLocations: Observable<Boolean> = combineLatest(
+  readonly showRelativeDropLocations: Observable<Boolean> = combineLatest([
     this._dragService.isDragInProgress,
-    this._dragService.currentDrag
-  ).pipe(
-    map(([inProgress, currentDrag]) => {
+    this._dragService.currentDrag,
+    this._renderData.validator$,
+  ]).pipe(
+    map(([inProgress, currentDrag, validator]) => {
       if (inProgress && !this._renderData.readOnly && currentDrag) {
         return (
           currentDrag.hoverNode === this.node &&
-          !nodeIsInSingularHole(
-            this._renderData.codeResource.validatorPeek,
-            this.node
-          )
+          !nodeIsInSingularHole(validator, this.node)
         );
       } else {
         return false;
@@ -246,10 +246,10 @@ export class BlockRenderBlockComponent {
   /**
    * All different background states.
    */
-  readonly backgroundState: Observable<BackgroundState> = combineLatest(
+  readonly backgroundState: Observable<BackgroundState> = combineLatest([
     this.isBeingReplaced,
-    this.isCurrentlyExecuted$
-  ).pipe(
+    this.isCurrentlyExecuted$,
+  ]).pipe(
     map(
       ([isBeingReplaced, isCurrentlyExecuted]): BackgroundState => {
         if (isBeingReplaced && !this._renderData.readOnly) {

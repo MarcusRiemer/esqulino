@@ -46,30 +46,4 @@ RSpec.describe "user controller" do
 
     assert_redirected_to %r(.*/auth/realms/.*/account/)
   end
-
-  describe "user may-perform" do
-    let!(:identity) { create(:developer_provider, :existing) }
-
-    it "multiple objects" do
-      set_access_token(identity.user)
-
-      post '/api/user/may_perform',
-           :headers => json_headers,
-           :params => {
-             list: [
-               {
-                 resourceType: "News",
-                 policyAction: "create"
-               },
-               {
-                 resourceType: "Project",
-                 policyAction: "create"
-               }
-             ]
-           }.to_json
-
-      json_data = JSON.parse(response.body)
-      expect(json_data).to eq([{ "perform" => false }, { "perform" => true }])
-    end
-  end
 end

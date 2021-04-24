@@ -17,13 +17,13 @@ class Mutations::News::News < Mutations::BaseMutation
       {
         news: nil,
         errors: news.errors.full_messages.map do |err|
-                  ({
-                    type: "railsValidation",
-                    data: {
-                      msg: err,
-                    }
-                  })
-                end
+          ({
+             type: "railsValidation",
+             data: {
+               msg: err,
+             }
+           })
+        end
       }
     end
   end

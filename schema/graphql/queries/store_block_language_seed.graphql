@@ -1,0 +1,8 @@
+mutation StoreBlockLanguageSeed($blockLanguageIds: [String!]!) {
+  storeBlockLanguageSeed(input: {blockLanguages: $blockLanguageIds}) {
+    affectedIds {
+      id
+      type
+    }
+  }
+}

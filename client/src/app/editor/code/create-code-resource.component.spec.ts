@@ -10,22 +10,36 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Overlay } from "@angular/cdk/overlay";
 
-import { ApolloTestingModule } from "apollo-angular/testing";
+import {
+  ApolloTestingController,
+  ApolloTestingModule,
+} from "apollo-angular/testing";
 
-import { FullProjectGQL } from "../../../generated/graphql";
+import {
+  CreateCodeResourceDocument,
+  FullBlockLanguageGQL,
+  FullGrammarGQL,
+  FullProjectGQL,
+  NameBlockLanguageGQL,
+} from "../../../generated/graphql";
 
-import { specLoadProject, buildBlockLanguage } from "../../editor/spec-util";
+import {
+  specBuildBlockLanguageDescription,
+  specCacheBlockLanguage,
+  specLoadProject,
+} from "../../editor/spec-util";
 
 import { ResourceReferencesService } from "../../shared/resource-references.service";
-import { ResourceReferencesOnlineService } from "../../shared/resource-references-online.service";
 
 import { ServerApiService, LanguageService } from "../../shared";
-import {
-  IndividualBlockLanguageDataService,
-  IndividualGrammarDataService,
-} from "../../shared/serverdata";
+import { MayPerformService } from "../../shared/authorisation/may-perform.service";
 import { CodeResourceDescription } from "../../shared/syntaxtree";
 import { EmptyComponent } from "../../shared/empty.component";
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { specExpectMayPerform } from "../../shared/authorisation/may-perform.spec-util";
+import { MayPerformComponent } from "../../shared/authorisation/may-perform.component";
+import { DisplayResourcePipe } from "../../shared/display-resource.pipe";
+import { FullBlockLanguage } from "../../shared/serverdata/gql-cache";
 
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
@@ -34,9 +48,14 @@ import { CodeResourceService } from "../coderesource.service";
 import { RegistrationService } from "../registration.service";
 
 import { CreateCodeResourceComponent } from "./create-code-resource.component";
+import { getOperationName } from "@apollo/client/utilities";
+import { specGqlWaitQuery } from "../spec-util/gql-respond-query.spec";
 
 describe(`CreateCodeResourceComponent`, () => {
-  async function createComponent() {
+  async function createComponent(
+    blockLanguages: FullBlockLanguage[] = [],
+    permissionToCreate: boolean = true
+  ) {
     await TestBed.configureTestingModule({
       imports: [
         ApolloTestingModule,
@@ -54,86 +73,113 @@ describe(`CreateCodeResourceComponent`, () => {
         SidebarService,
         ProjectService,
         CodeResourceService,
-        IndividualBlockLanguageDataService,
-        IndividualGrammarDataService,
+        FullGrammarGQL,
         MatSnackBar,
         Overlay,
-        {
-          provide: ResourceReferencesService,
-          useClass: ResourceReferencesOnlineService,
-        },
+        ResourceReferencesService,
         FullProjectGQL,
+        FullBlockLanguageGQL,
+        NameBlockLanguageGQL,
+        PerformDataService,
+        MayPerformService,
       ],
-      declarations: [CreateCodeResourceComponent, EmptyComponent],
+      declarations: [
+        CreateCodeResourceComponent,
+        EmptyComponent,
+        MayPerformComponent,
+        DisplayResourcePipe,
+      ],
     }).compileComponents();
 
-    let fixture = TestBed.createComponent(CreateCodeResourceComponent);
-    let component = fixture.componentInstance;
+    blockLanguages.forEach(specCacheBlockLanguage);
+
+    const projectService = TestBed.inject(ProjectService);
+
+    const projectId = "19846df6-2839-4368-a888-7ce620c53346";
+    const project = await specLoadProject(projectService, {
+      id: projectId,
+      projectUsesBlockLanguages: blockLanguages.map((b) => ({
+        __typename: "ProjectUsesBlockLanguage",
+        blockLanguageId: b.id,
+        id: projectId,
+      })),
+      blockLanguages,
+    });
+
+    const fixture = TestBed.createComponent(CreateCodeResourceComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    // Allow or deny operation
+    specExpectMayPerform("first", permissionToCreate);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
     fixture.detectChanges();
 
     return {
       fixture,
       component,
       element: fixture.nativeElement as HTMLElement,
-      projectService: TestBed.inject(ProjectService),
+      projectService,
+      project,
       httpTesting: TestBed.inject(HttpTestingController),
       serverApi: TestBed.inject(ServerApiService),
+      apolloTesting: TestBed.inject(ApolloTestingController),
     };
   }
 
   it(`Has empty inputs without data`, async () => {
-    let t = await createComponent();
+    let t = await createComponent([], true);
+
+    expect(t.component.blockLanguageId).toBeUndefined();
+    expect(t.component.resourceName).toBeUndefined();
+  });
+
+  it(`Has empty inputs when not allowed to create`, async () => {
+    let t = await createComponent([], false);
 
     expect(t.component.blockLanguageId).toBeUndefined();
     expect(t.component.resourceName).toBeUndefined();
   });
 
   it(`Shows the default block language`, async () => {
-    let t = await createComponent();
+    const id = "cbc49d11-40e5-4ab6-9549-64959488c1eb";
 
-    await specLoadProject(t.projectService, {
-      blockLanguages: [
-        {
-          id: "1",
+    let t = await createComponent(
+      [
+        specBuildBlockLanguageDescription({
+          id,
           name: "B1",
-          sidebars: [],
-          editorBlocks: [],
-          editorComponents: [],
           defaultProgrammingLanguageId: "spec",
-          rootCssClasses: [],
           grammarId: "4330b41a-294b-43be-b1d0-679df35a7c87",
-          localGeneratorInstructions: { type: "manual" },
-        },
+        }),
       ],
-    });
+      true
+    );
 
-    t.fixture.detectChanges();
-
-    expect(t.component.blockLanguageId).toEqual("1");
+    expect(t.component.blockLanguageId).toEqual(id);
+    expect(t.element.innerText).toContain("B1");
   });
 
   it(`Shows the first availabe block language as default`, async () => {
-    let t = await createComponent();
-    const b = buildBlockLanguage();
+    const b = specBuildBlockLanguageDescription();
 
-    await specLoadProject(t.projectService, {
-      blockLanguages: [
+    let t = await createComponent(
+      [
         b,
-        buildBlockLanguage(), // Two languages available
+        specBuildBlockLanguageDescription(), // Two languages available
       ],
-    });
-
-    t.fixture.detectChanges();
+      true
+    );
 
     expect(t.component.blockLanguageId).toEqual(b.id);
   });
 
   it(`Creating a new resource results in a HTTP request and a redirect`, async () => {
-    const t = await createComponent();
-    const b = buildBlockLanguage();
-    const p = await specLoadProject(t.projectService, {
-      blockLanguages: [b],
-    });
+    const b = specBuildBlockLanguageDescription();
+    const t = await createComponent([b]);
+
     const r: CodeResourceDescription = {
       id: "a292fae1-aad7-4cfe-9646-6210a6814eab",
       name: "Test",
@@ -149,14 +195,24 @@ describe(`CreateCodeResourceComponent`, () => {
     const created = t.component.createCodeResource();
 
     // Mimic a successful response
-    t.httpTesting.expectOne(t.serverApi.getCodeResourceBaseUrl(p.id)).flush(r);
+    const op = await specGqlWaitQuery(
+      (m) => m.operationName === getOperationName(CreateCodeResourceDocument)
+    );
+
+    op.flush({
+      data: {
+        createCodeResource: {
+          codeResource: r,
+        },
+      },
+    });
 
     // Ensure the creation has actually happened
     await created;
 
     // There should be a new resource in the project now
-    expect(p.codeResources).not.toEqual([]);
-    expect(p.codeResources[0].name).toEqual(r.name);
+    expect(t.project.codeResources).not.toEqual([]);
+    expect(t.project.codeResources[0].name).toEqual(r.name);
 
     const router = TestBed.inject(Router);
     expect(router.url).toEqual("/" + r.id);

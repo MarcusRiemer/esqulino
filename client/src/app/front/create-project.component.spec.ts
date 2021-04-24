@@ -14,7 +14,12 @@ import {
   ApolloTestingModule,
   ApolloTestingController,
 } from "apollo-angular/testing";
-import { CreateProjectDocument } from "../../generated/graphql";
+import {
+  CreateProjectDocument,
+  CreateProjectMutation,
+  FullProjectQuery,
+} from "../../generated/graphql";
+import { ApolloQueryResult } from "@apollo/client/core";
 
 describe("CreateProjectComponent", () => {
   async function createComponent(localeId: string = "de") {
@@ -70,20 +75,22 @@ describe("CreateProjectComponent", () => {
 
     const request = c.component.createProject();
 
-    const serverResponse = {
-      data: {
-        createProject: {
-          id: "bdcb9a69-cadc-4ffb-9c95-077e81fc7aae",
-          errors: [],
-        },
+    const serverResponse: CreateProjectMutation = {
+      __typename: "Mutation",
+      createProject: {
+        __typename: "CreateProjectPayload",
+        id: "bdcb9a69-cadc-4ffb-9c95-077e81fc7aae",
+        errors: [],
       },
     };
 
-    c.controller.expectOne(CreateProjectDocument).flush(serverResponse);
+    c.controller
+      .expectOne(CreateProjectDocument)
+      .flush({ data: serverResponse });
 
     const result = await request;
 
-    expect(result).toEqual(serverResponse.data.createProject);
+    expect(result).toEqual(serverResponse.createProject);
 
     const router = TestBed.inject(Router);
     expect(router.url).toEqual("/editor/" + result.id);

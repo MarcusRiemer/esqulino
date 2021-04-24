@@ -1,11 +1,11 @@
 --- !ruby/object:Role
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: id
-  value_before_type_cast: bc59e8c1-e563-408f-869f-95392829c076
-- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
   value_before_type_cast: guest
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: bc59e8c1-e563-408f-869f-95392829c076
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: resource_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase

@@ -21,11 +21,10 @@ export function emptyProject(
     defaultDatabase: {
       id: "spec",
       name: "specDb",
+      schema: [],
     },
-    blockLanguages: [],
     grammars: [],
     codeResources: [],
-    schema: [],
     projectSources: [],
   };
 

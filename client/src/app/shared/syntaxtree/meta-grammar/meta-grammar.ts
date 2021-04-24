@@ -1,5 +1,5 @@
 import { NodeDescription, QualifiedTypeName } from "../syntaxtree.description";
-import { Tree, Node } from "../syntaxtree";
+import { SyntaxTree, SyntaxNode } from "../syntaxtree";
 import {
   NodePropertyTypeDescription,
   NodeTerminalSymbolDescription,
@@ -17,30 +17,45 @@ import {
   NodeInterpolatePropertyDescription,
   NodeVisualTypeDescription,
   NodeInterpolateChildrenDescription,
+  NamedLanguages,
+  VisualisedLanguages,
 } from "../grammar.description";
 import { OccursDescription, OccursString } from "../occurs.description";
+import { BlattWerkzeugError } from "../../blattwerkzeug-error";
 
-export function convertProperty(attrNode: Node): NodePropertyTypeDescription {
-  return {
+export function convertProperty(
+  attrNode: SyntaxNode
+): NodePropertyTypeDescription {
+  const toReturn: ReturnType<typeof convertProperty> = {
     type: "property",
     base: attrNode.properties["base"] as any,
     name: attrNode.properties["name"],
   };
+
+  possiblyAddTags(attrNode, toReturn);
+
+  return toReturn;
 }
 
 export function convertInterpolate(
-  attrNode: Node
+  attrNode: SyntaxNode
 ): NodeInterpolatePropertyDescription {
-  return {
+  const toReturn: ReturnType<typeof convertInterpolate> = {
     type: "interpolate",
     name: attrNode.properties["name"],
   };
+
+  possiblyAddTags(attrNode, toReturn);
+
+  return toReturn;
 }
 
 /**
  * Converts a node that represents a terminal symbol to a description.
  */
-export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
+export function convertTerminal(
+  attrNode: SyntaxNode
+): NodeTerminalSymbolDescription {
   const toReturn: ReturnType<typeof convertTerminal> = {
     type: "terminal",
     symbol: attrNode.properties["symbol"],
@@ -50,10 +65,12 @@ export function convertTerminal(attrNode: Node): NodeTerminalSymbolDescription {
     toReturn.name = attrNode.properties["name"];
   }
 
+  possiblyAddTags(attrNode, toReturn);
+
   return toReturn;
 }
 
-export function convertNodeRefOne(ref: Node): QualifiedTypeName {
+export function convertNodeRefOne(ref: SyntaxNode): QualifiedTypeName {
   if (!ref) {
     throw new Error(`convertNodeRefOne called with falsy value: ${ref}`);
   } else if (ref.typeName === "nodeRefOne") {
@@ -68,7 +85,7 @@ export function convertNodeRefOne(ref: Node): QualifiedTypeName {
   }
 }
 
-export function convertOccurs(ref: Node): OccursDescription {
+export function convertOccurs(ref: SyntaxNode): OccursDescription {
   if (!ref) {
     throw new Error(`convertOccurs called with falsy value: ${ref}`);
   }
@@ -81,14 +98,18 @@ export function convertOccurs(ref: Node): OccursDescription {
   }
 }
 
-function convertNodeRefCardinality(ref: Node): ChildCardinalityDescription {
+function convertNodeRefCardinality(
+  ref: SyntaxNode
+): ChildCardinalityDescription {
   return {
     nodeType: convertNodeRefOne(ref.getChildInCategory("references")),
     occurs: convertOccurs(ref.getChildInCategory("cardinality")),
   };
 }
 
-export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
+export function convertChildren(
+  attrNode: SyntaxNode
+): NodeChildrenGroupDescription {
   const toReturn: ReturnType<typeof convertChildren> = {
     type: attrNode.properties["base"] as any,
     name: attrNode.properties["name"],
@@ -119,18 +140,20 @@ export function convertChildren(attrNode: Node): NodeChildrenGroupDescription {
 }
 
 export function convertEach(
-  attrNode: Node
+  attrNode: SyntaxNode
 ): NodeInterpolateChildrenDescription {
   const toReturn: ReturnType<typeof convertEach> = {
     type: "each",
     name: attrNode.properties["name"],
   };
 
+  possiblyAddTags(attrNode, toReturn);
+
   return toReturn;
 }
 
 export function convertContainer(
-  attrNode: Node
+  attrNode: SyntaxNode
 ): NodeVisualContainerDescription {
   const orientationNode = attrNode.getChildInCategory("orientation");
 
@@ -144,7 +167,21 @@ export function convertContainer(
     readAttributes(subAttrNode, toReturn.children);
   });
 
+  possiblyAddTags(attrNode, toReturn);
+
   return toReturn;
+}
+
+export function possiblyAddTags(
+  toParse: SyntaxNode,
+  target: { tags?: string[] }
+) {
+  const tags = toParse
+    .getChildrenInCategory("tags")
+    .map((t) => t.properties["name"]);
+  if (tags.length > 0) {
+    target.tags = tags;
+  }
 }
 
 /**
@@ -152,7 +189,7 @@ export function convertContainer(
  * target list.
  */
 export function readAttributes(
-  attrNode: Node,
+  attrNode: SyntaxNode,
   target: NodeAttributeDescription[]
 ) {
   switch (attrNode.typeName) {
@@ -180,7 +217,9 @@ export function readAttributes(
 /**
  * Converts the given node to a type reference that has no cardinality.
  */
-export function resolveSingularReference(refNode: Node): QualifiedTypeName {
+export function resolveSingularReference(
+  refNode: SyntaxNode
+): QualifiedTypeName {
   switch (refNode.typeName) {
     case "nodeRefOne":
       return {
@@ -201,10 +240,12 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
   const toReturn: ReturnType<typeof readFromNode> = {
     types: {},
     foreignTypes: {},
+    visualisations: {},
+    foreignVisualisations: {},
     root: undefined,
   };
 
-  const tree = new Tree(node);
+  const tree = new SyntaxTree(node);
 
   // Extract the root this tree defines
   const nodeRoot = tree.rootNode.getChildInCategory("root");
@@ -230,75 +271,89 @@ export function readFromNode(node: NodeDescription): GrammarDocument {
   definedTypes
     .filter((n) => n.typeName.match(/typedef|(concrete|visualize)Node/))
     .forEach((n) => {
-      const nameNode =
-        n.typeName === "visualizeNode" ? n.getChildInCategory("references") : n;
+      const isVisual = n.typeName === "visualizeNode";
+      const nameNode = isVisual ? n.getChildInCategory("references") : n;
+
+      if (nameNode === undefined) {
+        throw new BlattWerkzeugError(
+          `Attempted to visualize unknown node: ${JSON.stringify(n.toModel())}`
+        );
+      }
 
       const languageName = nameNode.properties["languageName"];
       const typeName = nameNode.properties["typeName"];
 
       if (!typeName || !languageName) {
-        throw new Error(
+        throw new BlattWerkzeugError(
           `Attempted to read node without qualified Type: ${JSON.stringify(
             n.toModel()
           )}`
         );
       }
 
+      const container: VisualisedLanguages | NamedLanguages = isVisual
+        ? toReturn.visualisations
+        : toReturn.types;
+
       // Ensure the language is known
-      if (!toReturn.types[languageName]) {
-        toReturn.types[languageName] = {};
+      if (!container[languageName]) {
+        container[languageName] = {};
       }
 
       // Ensure the type is not already taken
-      const lang = toReturn.types[languageName];
-      if (lang[typeName]) {
-        throw new Error(`Duplicate type "${languageName}.${typeName}"`);
+      const langTypes = container[languageName];
+      if (langTypes[typeName]) {
+        throw new BlattWerkzeugError(
+          `Duplicate node "${languageName}.${typeName}" of type "${n.typeName}"`
+        );
       }
 
       // Add the correct type of type
-      switch (n.typeName) {
-        case "concreteNode": {
-          const concreteNode: NodeConcreteTypeDescription = {
-            type: "concrete",
-            attributes: [],
-          };
+      if (isVisual) {
+        const visualiseNode: NodeVisualTypeDescription = {
+          type: "visualise",
+          attributes: [],
+        };
 
-          n.getChildrenInCategory("attributes").forEach((a) =>
-            readAttributes(a, concreteNode.attributes)
-          );
+        n.getChildrenInCategory("attributes").forEach((a) =>
+          readAttributes(a, visualiseNode.attributes)
+        );
 
-          lang[typeName] = concreteNode;
-          break;
+        langTypes[typeName] = visualiseNode;
+      } else {
+        switch (n.typeName) {
+          case "concreteNode": {
+            const concreteNode: NodeConcreteTypeDescription = {
+              type: "concrete",
+              attributes: [],
+            };
+
+            possiblyAddTags(n, concreteNode);
+
+            n.getChildrenInCategory("attributes").forEach((a) =>
+              readAttributes(a, concreteNode.attributes)
+            );
+
+            langTypes[typeName] = concreteNode;
+            break;
+          }
+          case "typedef":
+            const references = n
+              .getChildrenInCategory("references")
+              .map(resolveSingularReference);
+
+            const oneOfNode: NodeOneOfTypeDescription = {
+              type: "oneOf",
+              oneOf: references,
+            };
+
+            langTypes[typeName] = oneOfNode;
+            break;
+          default:
+            throw Error(
+              `Unknown definition "${languageName}"."${typeName}" with type "${n.typeName}"`
+            );
         }
-        case "visualizeNode": {
-          const visualizeNode: NodeVisualTypeDescription = {
-            type: "visualize",
-            attributes: [],
-          };
-
-          n.getChildrenInCategory("attributes").forEach((a) =>
-            readAttributes(a, visualizeNode.attributes)
-          );
-
-          lang[typeName] = visualizeNode;
-          break;
-        }
-        case "typedef":
-          const references = n
-            .getChildrenInCategory("references")
-            .map(resolveSingularReference);
-
-          const oneOfNode: NodeOneOfTypeDescription = {
-            type: "oneOf",
-            oneOf: references,
-          };
-
-          lang[typeName] = oneOfNode;
-          break;
-        default:
-          throw Error(
-            `Unknown definition "${languageName}"."${typeName}" with type "${n.typeName}"`
-          );
       }
     });
 

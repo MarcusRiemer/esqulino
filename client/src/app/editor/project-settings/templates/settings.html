@@ -1,16 +1,12 @@
 <div class="card mb-3">
-  <h4 class="card-header">
-    Projekteinstellungen
-  </h4>
+  <h4 class="card-header">Projekteinstellungen</h4>
   <div class="card-body">
     In diesem Abschnitt kannst du Einstellungen vornehmen, die das gesamte
     Projekt betreffen.
   </div>
   <div *ngIf="project" class="card-body">
     <div class="form-group row">
-      <label for="project-id" class="col-sm-2 form-control-label">
-        ID
-      </label>
+      <label for="project-id" class="col-sm-2 form-control-label">ID</label>
       <div class="col-sm-10">
         <input
           [ngModel]="project.id"
@@ -26,9 +22,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="project-slug" class="col-sm-2 form-control-label">
-        Slug
-      </label>
+      <label for="project-slug" class="col-sm-2 form-control-label">Slug</label>
       <div class="col-sm-10">
         <input
           [ngModel]="project.slug"
@@ -45,9 +39,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="project-name" class="col-sm-2 form-control-label">
-        Name
-      </label>
+      <label for="project-name" class="col-sm-2 form-control-label">Name</label>
       <div class="col-sm-10">
         <multilingual-input
           [(editingString)]="project.name"
@@ -92,9 +84,7 @@
 </div>
 
 <div class="card mb-3" id="used-block-languages">
-  <h4 class="card-header">
-    Genutzte Programmiersprachen
-  </h4>
+  <h4 class="card-header">Genutzte Programmiersprachen</h4>
   <div class="card-body">
     <p>
       In einem Projekt können viele unterschiedliche Blocksprachen zum Einsatz
@@ -116,6 +106,7 @@
       </select>
       <button
         (click)="addUsedBlockLanguage(selectedBlockLanguage.value)"
+        [disabled]="addBlockLanguageInProgress"
         class="btn btn-primary"
       >
         <span class="fa fa-link fa-fw" aria-hidden="true"></span>
@@ -130,9 +121,7 @@
       *ngFor="let used of project.usesBlockLanguages;"
       class="list-group-item"
     >
-      <h5 class="card-title">
-        {{ resolveBlockLanguageName(used.blockLanguageId)?.name }}
-      </h5>
+      <h5 class="card-title">{{ used | displayResource | async }}</h5>
       <button
         *ngIf="used.id"
         (click)="removeUsedBlockLanguage(used.blockLanguageId, used.id)"
@@ -146,9 +135,7 @@
 </div>
 
 <div *ngIf="project.hasSources" class="card mb-3" id="sources">
-  <h4 class="card-header">
-    Quellen
-  </h4>
+  <h4 class="card-header">Quellen</h4>
   <div class="card-body">
     In diesem Abschnitt solltest du kenntlich machen, auf welchen Werken dein
     Projekt basiert und welche Personen daran mitgearbeitet haben.
@@ -164,9 +151,7 @@
         <div class="col-sm-2">
           <a [href]="source.url">{{ source.title }}</a>
         </div>
-        <div class="col-sm-8">
-          {{ source.display }}
-        </div>
+        <div class="col-sm-8">{{ source.display }}</div>
       </div>
     </li>
   </ul>

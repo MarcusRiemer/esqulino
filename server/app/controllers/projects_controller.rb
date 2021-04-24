@@ -3,7 +3,6 @@ class ProjectsController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
   include UserHelper
-  include PaginationHelper
 
   # Retrieves all information about a single project. This is the only
   # request the client will make to retrieve the *whole* project with

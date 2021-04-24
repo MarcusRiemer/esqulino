@@ -1,8 +1,10 @@
 import { Component } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { first, switchMap } from "rxjs/operators";
-import { of } from "rxjs";
+import { filter, first, map } from "rxjs/operators";
+
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { ResourceReference } from "../../shared/display-resource.pipe";
 
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
@@ -14,6 +16,7 @@ import { CodeResourceService } from "../coderesource.service";
  */
 @Component({
   templateUrl: "templates/create-code-resource.html",
+  selector: "create-code-resource",
 })
 export class CreateCodeResourceComponent {
   public resourceName: string;
@@ -25,7 +28,8 @@ export class CreateCodeResourceComponent {
     private _projectService: ProjectService,
     private _codeResourceService: CodeResourceService,
     private _router: Router,
-    private _route: ActivatedRoute
+    private _route: ActivatedRoute,
+    private _performData: PerformDataService
   ) {}
 
   /**
@@ -46,29 +50,45 @@ export class CreateCodeResourceComponent {
   }
 
   /**
+   * These permissions are required to add a code resource
+   */
+  readonly createCodeResourcePermission$ = this._projectService.activeProject.pipe(
+    map((p) => this._performData.project.update(p.id))
+  );
+
+  /**
    * @return The BlockLanguages that are available for creation.
    */
   readonly availableBlockLanguages$ = this._projectService.activeProject.pipe(
-    switchMap((p) => of(p.projectBlockLanguages))
+    filter((p) => !!p),
+    map((p) =>
+      p.usesBlockLanguages.map(
+        (u): ResourceReference => ({
+          id: u.blockLanguageId,
+          type: "BlockLanguage",
+        })
+      )
+    )
   );
 
   /**
    * Actually creates the CodeResource
    */
   async createCodeResource() {
+    // The project this code resource will be a part of
     const p = this._projectService.cachedProject;
-    const b = p.getBlockLanguage(this.blockLanguageId);
+    // The block language this resource will use
+    const b = await p.resourceReferences.getBlockLanguage(this.blockLanguageId);
 
-    const res = await this._codeResourceService
-      .createCodeResource(
-        p,
-        this.resourceName,
-        this.blockLanguageId,
-        b.defaultProgrammingLanguageId
-      )
-      .pipe(first())
-      .toPromise();
+    // Actual creation of code resource
+    const res = await this._codeResourceService.createCodeResource(
+      p,
+      this.resourceName,
+      this.blockLanguageId,
+      b.defaultProgrammingLanguageId
+    );
 
+    // Locally cache new code resource and navigate to it
     p.addCodeResource(res);
     this._router.navigate([res.id], { relativeTo: this._route.parent });
 

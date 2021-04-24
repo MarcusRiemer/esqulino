@@ -1,13 +1,9 @@
-import {
-  Injectable,
-  PLATFORM_ID,
-  Inject,
-  Optional,
-  LOCALE_ID,
-} from "@angular/core";
+import { Injectable, PLATFORM_ID, Inject, Optional } from "@angular/core";
 import { isPlatformServer } from "@angular/common";
 
 import { environment } from "../../../environments/environment";
+
+import { CurrentLocaleService } from "../../current-locale.service";
 
 import { ServerApi } from "./serverapi";
 
@@ -40,12 +36,11 @@ export class ServerApiService extends ServerApi {
     @Inject(PLATFORM_ID)
     @Optional()
     platformId: Object,
-    @Inject(LOCALE_ID)
-    readonly localeId: string
+    lang: CurrentLocaleService
   ) {
     super(
       isPlatformServer(platformId)
-        ? insertLanguageSubdomain(environment.apiEndpoint, localeId)
+        ? insertLanguageSubdomain(environment.apiEndpoint, lang.localeId)
         : "/api"
     );
   }

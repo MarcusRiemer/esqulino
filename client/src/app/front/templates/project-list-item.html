@@ -24,7 +24,7 @@
     </ul>
     <p class="card-text">{{ project.description | currentLanguage }}</p>
     <a
-      [routerLink]="['/editor/', project.id]"
+      [routerLink]="['/editor/', project | urlFriendlyId]"
       class="btn btn-info btn-block btn-edit-project"
     >
       <span class="fa fa-fw fa-pencil" aria-hidden="true"></span>

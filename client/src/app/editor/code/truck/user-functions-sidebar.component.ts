@@ -51,7 +51,7 @@ export class UserFunctionsSidebarComponent {
   }
 
   readonly availableProcedures = this._current.currentResource.pipe(
-    flatMap((res) => res.syntaxTree),
+    flatMap((res) => res.syntaxTree$),
     map((tree): AvailableProcedure[] => {
       const nodes = tree.getNodesOfType(GRAMMAR_PROCEDURE_DECLARATION);
       return nodes.map(

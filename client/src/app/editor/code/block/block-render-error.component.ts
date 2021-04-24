@@ -1,8 +1,8 @@
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 import { map, tap } from "rxjs/operators";
 
-import { Node } from "../../../shared/syntaxtree";
+import { SyntaxNode } from "../../../shared/syntaxtree";
 import { VisualBlockDescriptions } from "../../../shared/block";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
@@ -13,10 +13,11 @@ import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 @Component({
   templateUrl: "templates/block-render-error.html",
   selector: `editor-block-render-error`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderErrorComponent {
   @Input()
-  public node: Node;
+  public node: SyntaxNode;
 
   @Input()
   public visual: VisualBlockDescriptions.EditorErrorIndicator;

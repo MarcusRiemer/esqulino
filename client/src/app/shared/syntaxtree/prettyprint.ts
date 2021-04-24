@@ -2,7 +2,7 @@ import { recursiveJoin, NestedString } from "../nested-string";
 
 import { NodeDescription, QualifiedTypeName } from "./syntaxtree.description";
 import * as Desc from "./grammar.description";
-import { orderTypes, allPresentTypes } from "./grammar-type-util";
+import { orderTypes, allVisualisableTypes } from "./grammar-type-util";
 import { OccursDescription } from "./occurs";
 import { NodeTailoredDescription } from "../block";
 
@@ -17,14 +17,14 @@ export function prettyPrintGrammar(
   const head = `grammar "${name}" {`;
   const tail = `}`;
 
-  const allTypes = allPresentTypes(g);
+  const allTypes = allVisualisableTypes(g);
   const orderedTypes = orderTypes(g);
 
   const nodes = orderedTypes
-    .map((name): [QualifiedTypeName, Desc.NodeTypeDescription] => [
-      name,
-      allTypes[name.languageName][name.typeName],
-    ])
+    .map((name): [
+      QualifiedTypeName,
+      Desc.NodeTypeDescription | Desc.NodeVisualTypeDescription
+    ] => [name, allTypes[name.languageName][name.typeName]])
     .map(([name, t]) => prettyPrintType(name, t));
 
   const toReturn = [head, ...nodes, tail] as NestedString;
@@ -37,7 +37,7 @@ export function prettyPrintGrammar(
  */
 export function prettyPrintType(
   name: QualifiedTypeName,
-  t: Desc.NodeTypeDescription
+  t: Desc.NodeTypeDescription | Desc.NodeVisualTypeDescription
 ): NestedString {
   if (
     Desc.isNodeConcreteTypeDescription(t) ||
@@ -69,7 +69,7 @@ export function prettyPrintConcreteNodeType(
   name: QualifiedTypeName,
   t: Desc.NodeConcreteTypeDescription | Desc.NodeVisualTypeDescription
 ): NestedString {
-  const type = Desc.isNodeConcreteTypeDescription ? "node" : "visualize";
+  const type = Desc.isNodeConcreteTypeDescription(t) ? "node" : "visualize";
   const head = `${type} ${prettyPrintQualifiedTypeName(name)} {`;
   const attributes = (t.attributes ? t.attributes : []).map((a) =>
     prettyPrintConcreteNodeTypeAttribute(name, a)

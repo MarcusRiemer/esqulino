@@ -19,8 +19,8 @@ export function ensureAttributeName(
  * Constructs a new set of languages where attributes in the given languages are guarenteed to be named.
  */
 export function ensureGrammarAttributeNames(
-  languages: Desc.NamedLanguages
-): Desc.NamedLanguages {
+  languages: Desc.NamedLanguages | Desc.VisualisedLanguages
+): Desc.NamedLanguages | Desc.VisualisedLanguages {
   const copy: Desc.NamedLanguages = JSON.parse(JSON.stringify(languages));
 
   const impl = (
@@ -165,7 +165,7 @@ export function allChildTypes(
  */
 export function resolveToConcreteTypes(
   t: QualifiedTypeName,
-  g: Desc.NamedLanguages
+  g: Desc.NamedLanguages | Desc.VisualisedLanguages
 ): QualifiedTypeName[] {
   const toReturn: QualifiedTypeName[] = [];
 
@@ -246,10 +246,13 @@ export function getConcreteTypes(
 }
 
 /**
- * A NodeAttributeDescription that knows the name of its hosting grammar and
+ * A node of any type that knows the name of its hosting grammar and
  * the type it is placed on.
  */
-export type QualifiedNodeTypeDescription = Desc.NodeTypeDescription & {
+export type QualifiedNodeTypeDescription = (
+  | Desc.NodeTypeDescription
+  | Desc.NodeVisualTypeDescription
+) & {
   languageName: string;
   typeName: string;
 };
@@ -258,20 +261,25 @@ export type QualifiedNodeTypeDescription = Desc.NodeTypeDescription & {
  * @return All attributes of the given grammar in the form of a handy list.
  */
 export function getQualifiedTypes(
-  languages: Desc.NamedLanguages
+  languages: Desc.NamedLanguages | Desc.VisualisedLanguages
 ): QualifiedNodeTypeDescription[] {
   const toReturn: QualifiedNodeTypeDescription[] = [];
 
-  Object.entries(languages).forEach(([langName, types]) => {
-    Object.entries(types).forEach(([typeName, t]) => {
-      toReturn.push(
-        Object.assign({}, t, {
-          languageName: langName,
-          typeName: typeName,
-        })
-      );
-    });
-  });
+  Object.entries(languages).forEach(
+    ([langName, types]: [
+      string,
+      Desc.NodeTypeDescription | Desc.NodeVisualTypeDescription
+    ]) => {
+      Object.entries(types).forEach(([typeName, t]) => {
+        toReturn.push(
+          Object.assign({}, t, {
+            languageName: langName,
+            typeName: typeName,
+          })
+        );
+      });
+    }
+  );
 
   return toReturn;
 }
@@ -280,16 +288,16 @@ export function getQualifiedTypes(
  * Calculates the self contained, full description for a certain node type.
  */
 export function fullNodeDescription(
-  languages: Desc.NamedLanguages,
+  languages: Desc.NamedLanguages | Desc.VisualisedLanguages,
   typeName: QualifiedTypeName
 ): FullNodeConcreteTypeDescription;
 export function fullNodeDescription(
-  languages: Desc.NamedLanguages,
+  languages: Desc.NamedLanguages | Desc.VisualisedLanguages,
   typeName: string,
   languageName: string
 ): FullNodeConcreteTypeDescription;
 export function fullNodeDescription(
-  languages: Desc.NamedLanguages,
+  languages: Desc.NamedLanguages | Desc.VisualisedLanguages,
   typeName: string | QualifiedTypeName,
   languageName?: string
 ): FullNodeConcreteTypeDescription {
@@ -372,7 +380,7 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
 
   // Ordering should work over all types in the document, not
   // just the local types
-  const allTypes = allPresentTypes(g);
+  const allTypes = allConcreteTypes(g);
 
   if (!rootLang || !rootLang[g.root.typeName]) {
     // No root available? We just return the order that we got
@@ -487,7 +495,14 @@ const objectFilter = <O extends Object, T>(
   }
 };
 
-export function allPresentTypes(
+/**
+ * Extracts all types from the given document, with locally defined
+ * types taking precedence over foreign types.
+ *
+ * @param g The whole grammar that has the types in question.
+ * @param filter An optional filter to exclude some types
+ */
+export function allConcreteTypes(
   g: Desc.GrammarDocument,
   filter: FilterType = undefined
 ): Desc.NamedLanguages {
@@ -503,6 +518,70 @@ export function allPresentTypes(
       {},
       objectFilter(g.foreignTypes[lang] ?? {}, filter),
       objectFilter(g.types[lang] ?? {}, filter)
+    );
+  });
+
+  return toReturn;
+}
+
+/**
+ * Extracts all visualisations from the given document, with locally defined
+ * types taking precedence over foreign types.
+ *
+ * @param g The whole grammar that has the types in question.
+ * @param filter An optional filter to exclude some types
+ */
+export function allVisualisationTypes(
+  g: Desc.GrammarDocument,
+  filter: FilterType = undefined
+): Desc.VisualisedLanguages {
+  const allLangKeys = new Set([
+    ...Object.keys(g.visualisations ?? []),
+    ...Object.keys(g.foreignVisualisations ?? []),
+  ]);
+
+  const toReturn: Desc.VisualisedLanguages = {};
+
+  allLangKeys.forEach((lang) => {
+    toReturn[lang] = Object.assign(
+      {},
+      objectFilter(g.foreignVisualisations[lang] ?? {}, filter),
+      objectFilter(g.visualizes[lang] ?? {}, filter)
+    );
+  });
+
+  return toReturn;
+}
+
+/**
+ * Extracts all types from the given document, with visual types taking precedence over
+ * structural types and locally defined types taking precedence over foreign types.
+ *
+ * @param g The whole grammar that has the types in question.
+ * @param filter An optional filter to exclude some types
+ */
+export function allVisualisableTypes(
+  g: Desc.GrammarDocument,
+  filter: FilterType = undefined
+): Desc.NamedLanguages | Desc.VisualisedLanguages {
+  // Using a set because we don't want any duplicates
+  const allLangKeys = new Set([
+    ...Object.keys(g.types ?? []),
+    ...Object.keys(g.foreignTypes ?? []),
+    ...Object.keys(g.visualisations ?? []),
+    ...Object.keys(g.foreignVisualisations ?? []),
+  ]);
+
+  const toReturn: Desc.NamedLanguages = {};
+
+  allLangKeys.forEach((lang) => {
+    // Most important type last
+    toReturn[lang] = Object.assign(
+      {},
+      objectFilter(g.foreignTypes?.[lang] ?? {}, filter),
+      objectFilter(g.types?.[lang] ?? {}, filter),
+      objectFilter(g.foreignVisualisations?.[lang] ?? {}, filter),
+      objectFilter(g.visualisations?.[lang] ?? {}, filter)
     );
   });
 

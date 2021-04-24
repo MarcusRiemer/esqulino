@@ -1,17 +1,26 @@
-query AdminListProjects($first:Int,$after:String,$before:String,$last:Int,$input:ProjectInputType) {
-    projects(first:$first,after:$after,before:$before,last:$last,input:$input) {
-        nodes{
-            id
-            name
-            slug
-            codeResourceCount
-        }
-        totalCount
-        pageInfo {
-            hasPreviousPage
-            hasNextPage
-            startCursor
-            endCursor
-        }
+query AdminListProjects(
+  $first: Int,
+  $after: String,
+  $before: String,
+  $last: Int,
+  $input: ProjectInputType
+) {
+  projects(first:$first,after:$after,before:$before,last:$last,input:$input) {
+    nodes{
+      id
+      name
+      slug
+      codeResourceCount,
+      user {
+        displayName
+      }
     }
+    totalCount
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+  }
 }

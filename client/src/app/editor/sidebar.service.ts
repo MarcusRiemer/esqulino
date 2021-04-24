@@ -10,7 +10,7 @@ import { RegistrationService } from "./registration.service";
  * interact with the sidebar directly but always use this service
  * instead.
  */
-@Injectable({ providedIn: "root" })
+@Injectable()
 export class SidebarService {
   /**
    * Used to hand out IDs that are guaranteed to be unique.

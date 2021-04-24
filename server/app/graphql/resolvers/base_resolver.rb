@@ -1,23 +1,44 @@
 module Resolvers
+  # A base class to build scoped and optimized SQL queries based on a
+  # GraphQL query. Provides basic filtering and ordering operations alongside
+  # with sparse language field selection.
   class BaseResolver
-    def initialize(model_class, context: nil, scope:, filter: nil, order: nil, languages: nil, order_field:, order_dir:)
+    def initialize(
+          model_class,
+          context: nil,
+          scope:,
+          filter: nil,
+          order: nil,
+          languages: nil,
+          order_field:,
+          order_dir:
+        )
       @model_class = model_class
       @context = context
-      @languages = set_languages(languages)
+      @languages = relevant_languages(languages)
       @order_dir = order_dir
       @order_field = order_field
       scope = select_relevant_fields(scope)
       scope = apply_filter(scope, filter)
       @scope = apply_order(scope, order)
+
+      # TODO: This should happen when loading queries from disk, not for every query
+      if context and context.query
+        include_related(context.query.query_string)
+      end
     end
 
-    def set_languages(languages)
+    # Calculates the relevant languages based on the given languages
+    def relevant_languages(languages)
+      # No language given at all? Use default languages
       if languages.nil?
-        Types::Base::BaseEnum::LanguageEnum.enum_values
+        return Types::Base::BaseEnum::LanguageEnum.enum_values
+      # Explicitly asking for no language at all? Must be an error
       elsif languages.empty?
         raise GraphQL::ExecutionError, "An empty Array is not allowed as languages input field."
+      # This is fine
       else
-        languages
+        return languages
       end
     end
 
@@ -60,11 +81,15 @@ module Resolvers
     end
 
     def apply_order(scope, value)
-      order_key = value.to_h.stringify_keys.fetch("orderField", @order_field).underscore
-      order_dir = value.to_h.stringify_keys.fetch("orderDirection", @order_dir)
+      # `#to_h` turns nil into an empty hash so we can rely on `#fetch` to
+      # give us the request specific or the fallback ordering options
+      order_key = value.to_h.fetch(:order_field, @order_field).underscore
+      order_dir = value.to_h.fetch(:order_direction, @order_dir)
+
       if is_multilingual_column? order_key
-        # Use @languages arr and order key to make a string like "name->'de',name->'en',name->'it',name->'fr'"
-        # Using join to add comma as delimiter
+        # Use @languages arr and order key to make an SQL statement like
+        #   name->'de',name->'en',name->'it',name->'fr'
+        # which will (together with COALESCE) pick the first matching language
         coalesce = @languages.map { |l| "#{@model_class.table_name}.#{order_key}->'#{l}'"}.join(',')
         scope = scope.order Arel.sql("COALESCE(#{coalesce}) #{order_dir}")
       else
@@ -73,11 +98,13 @@ module Resolvers
       scope
     end
 
+    # Extends the scope with appropriate Rails `#includes` hints according to
+    # the GraphQL query.
     def include_related(graphql_query)
-      # .includes might be the wrong function because it only makes possible to use
-      # .size so the number will be determined by iterating the array not in sql
-      #  https://jacopretorius.net/2017/05/dealing-with-n1-queries-in-rails.html
-      # TODO: find out which related objects are queried for and should be included
+      proposed = RelatedModelsVisitor.calculate(graphql_query, @model_class)
+      if not proposed.empty?
+        @scope = @scope.includes(proposed)
+      end
     end
 
     def escape_search_term(term)
@@ -88,8 +115,8 @@ module Resolvers
       "[" + arr.map { |e| "'" + e + "'"}.join(", ") + "]"
     end
 
-    # List the requested columns except additional columns which doesn't exist in
-    # the Model like (projects codeResourceCount) also add primary key and foreign key
+    # Returns the requested columns except for transient columns which don't exist in
+    # the Model like (projects codeResourceCount). Also adds primary key and foreign key
     # columns (columns which ends with _id) to keep relations if no columns are
     # requested at all
     def relevant_columns

@@ -1,17 +1,8 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  Component,
-  OnInit,
-  LOCALE_ID,
-  Inject,
-  ViewChild,
-  TemplateRef,
-} from "@angular/core";
+import { Component, OnInit, ViewChild, TemplateRef } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { pluck } from "rxjs/operators";
-
-import * as _ from "lodash";
 
 import { ToolbarService } from "../shared";
 import { PerformDataService } from "../shared/authorisation/perform-data.service";
@@ -23,6 +14,7 @@ import {
   UpdateNewsMutationVariables,
 } from "../../generated/graphql";
 import { objectOmit } from "../shared/util";
+import { CurrentLocaleService } from "../current-locale.service";
 
 /**
  * Administrative UI to edit or create news.
@@ -44,7 +36,7 @@ export class AdminNewsEditComponent implements OnInit {
     private _createNewsGQL: CreateNewsGQL,
     private _updateNewsGQL: UpdateNewsGQL,
     private _destroyNewsGQL: DestroyNewsGQL,
-    @Inject(LOCALE_ID) private readonly localeID: string
+    private readonly _lang: CurrentLocaleService
   ) {}
 
   // ID of the news being edited
@@ -64,7 +56,7 @@ export class AdminNewsEditComponent implements OnInit {
 
   public newsData: UpdateNewsMutationVariables;
   public readonly queryParamsLanguage =
-    this._queryParams.language || this.localeID;
+    this._queryParams.language || this._lang.localeId;
   public queryParamsMode = this._queryParams.mode || "single";
 
   public ngOnInit(): void {

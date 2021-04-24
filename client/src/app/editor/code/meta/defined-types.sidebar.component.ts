@@ -1,10 +1,21 @@
 import { Component } from "@angular/core";
 
-import { map } from "rxjs/operators";
+import { filter, map, switchMap } from "rxjs/operators";
 
 import { QualifiedTypeName, NodeDescription } from "../../../shared/syntaxtree";
+import { readFromNode } from "../../../shared/syntaxtree/meta-grammar/meta-grammar";
+import {
+  allConcreteTypes,
+  allVisualisableTypes,
+  allVisualisationTypes,
+  getTypeList,
+} from "../../../shared/syntaxtree/grammar-type-util";
+import { ResourceReferencesService } from "../../../shared/resource-references.service";
+
 import { DragService } from "../../drag.service";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
+import { combineLatest } from "rxjs";
+import produce from "immer";
 
 /**
  * Create appropriate descriptions from the given typename
@@ -27,38 +38,44 @@ function makeReferenceBlock(name: QualifiedTypeName): NodeDescription[] {
 })
 export class DefinedTypesSidebarComponent {
   constructor(
-    private _dragService: DragService,
-    private _current: CurrentCodeResourceService
+    private readonly _dragService: DragService,
+    private readonly _current: CurrentCodeResourceService,
+    private readonly _resourceReferences: ResourceReferencesService
   ) {}
 
-  readonly availableNodes = this._current.currentTree.pipe(
-    map((t) => {
-      // Step 1: Types as they are currently defined
-      const concrete = t.getNodesOfType({
-        languageName: "MetaGrammar",
-        typeName: "concreteNode",
-      });
-      const typedefs = t.getNodesOfType({
-        languageName: "MetaGrammar",
-        typeName: "typedef",
-      });
-      const visualizes = t.getNodesOfType({
-        languageName: "MetaGrammar",
-        typeName: "visualizesNode",
-      });
+  readonly editedGrammarDocument$ = this._current.currentTree.pipe(
+    filter((t) => !t.isEmpty),
+    map((t) => readFromNode(t.toModel()))
+  );
 
-      // Step 2: Included types on possibly referenced grammar
-      // TODO
+  readonly referencedGrammars$ = this.editedGrammarDocument$.pipe(
+    switchMap((g) =>
+      Promise.all(
+        [...(g.includes ?? []), ...(g.visualizes ?? [])].map((grammarId) =>
+          this._resourceReferences.getGrammarDescription(grammarId)
+        )
+      )
+    )
+  );
 
-      return [...concrete, ...visualizes, ...typedefs].map(
-        (n): QualifiedTypeName => {
-          return {
-            languageName: n.properties["languageName"],
-            typeName: n.properties["typeName"],
-          };
-        }
-      );
+  readonly fullGrammarDocument$ = combineLatest([
+    this.editedGrammarDocument$,
+    this.referencedGrammars$,
+  ]).pipe(
+    map(([edited, included]) => {
+      if (included.length === 1) {
+        return produce(edited, (merged) => {
+          merged.foreignTypes = allConcreteTypes(included[0]);
+          merged.foreignVisualisations = allVisualisationTypes(included[0]);
+        });
+      } else {
+        return edited;
+      }
     })
+  );
+
+  readonly availableNodes$ = this.fullGrammarDocument$.pipe(
+    map((g) => getTypeList(allConcreteTypes(g)))
   );
 
   printableName(n: QualifiedTypeName) {

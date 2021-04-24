@@ -21,7 +21,7 @@ export interface ProviderDescription {
  * The information for the representation
  * of a provider-button.
  */
-export interface AvailableProviderDescription {
+export interface LoginProviderDescription {
   name: string;
   urlName: string;
   icon: string;

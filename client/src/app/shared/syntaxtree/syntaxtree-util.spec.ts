@@ -1,10 +1,10 @@
 import * as AST from "./syntaxtree";
-import { singleLanguageGrammar } from "./grammar.spec-util";
+import { mkSingleLanguageGrammar } from "./grammar.spec-util";
 import { referencedResourceIds } from "./syntaxtree-util";
 
 describe("syntaxtree-util.spec", () => {
   describe("referencedResourceIds", () => {
-    const gDesc = singleLanguageGrammar("l", "r", {
+    const gDesc = mkSingleLanguageGrammar("l", "r", {
       r: {
         type: "concrete",
         attributes: [
@@ -48,7 +48,7 @@ describe("syntaxtree-util.spec", () => {
     it("Single node with single reference", () => {
       const ref1 = "3d52ddf6-6d81-4158-9f66-365ad5adea90";
 
-      const n = new AST.Tree({
+      const n = new AST.SyntaxTree({
         language: "l",
         name: "r",
         properties: { ref1 },
@@ -62,7 +62,7 @@ describe("syntaxtree-util.spec", () => {
     it("Single node with single reference to grammar", () => {
       const grammarRef = "3d52ddf6-6d81-4158-9f66-365ad5adea90";
 
-      const n = new AST.Tree({
+      const n = new AST.SyntaxTree({
         language: "l",
         name: "r",
         properties: { grammarRef },
@@ -77,7 +77,7 @@ describe("syntaxtree-util.spec", () => {
       const ref1 = "3d52ddf6-6d81-4158-9f66-365ad5adea90";
       const ref2 = "6bbe0185-ca19-44a8-8003-30edc34b0c8b";
 
-      const n = new AST.Tree({
+      const n = new AST.SyntaxTree({
         language: "l",
         name: "r",
         properties: { ref1, ref2 },
@@ -93,7 +93,7 @@ describe("syntaxtree-util.spec", () => {
       const ref1 = "3d52ddf6-6d81-4158-9f66-365ad5adea90";
       const ref2 = "6bbe0185-ca19-44a8-8003-30edc34b0c8b";
 
-      const n = new AST.Tree({
+      const n = new AST.SyntaxTree({
         language: "l",
         name: "r",
         properties: { ref1 },
@@ -113,7 +113,7 @@ describe("syntaxtree-util.spec", () => {
       const ref2_1 = "6bbe0185-ca19-44a8-8003-30edc34b0c8b";
       const ref2_2 = "95fbb491-89d8-4d7e-9667-93302ba6763b";
 
-      const n = new AST.Tree({
+      const n = new AST.SyntaxTree({
         language: "l",
         name: "r",
         properties: { ref1 },

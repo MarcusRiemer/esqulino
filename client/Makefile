@@ -30,6 +30,7 @@ TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
 
 # Default to production build in complete build
 NG_PROD         ?= --prod
+NG_LOCALIZE     ?= true
 
 # Targets that may be used in the `dist` target have some special flags
 DIST_FLAGS      ?= --no-progress
@@ -49,10 +50,10 @@ dist: client-compile cli-compile universal-compile
 ##################################
 
 client-compile : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --localize --outputPath="dist/browser" $(NG_PROD) $(DIST_FLAGS)
+	$(NG_BIN) build --aot --localize $(NG_LOCALIZE) --outputPath="dist/browser" $(NG_PROD) $(DIST_FLAGS)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --localize --outputPath="dist/browser" $(DEV_FLAGS)
+	$(NG_BIN) build --aot --localize $(NG_LOCALIZE) --outputPath="dist/browser" $(DEV_FLAGS)
 
 ##################################
 # Commandline Client
@@ -141,7 +142,7 @@ verify-cached-schemas:
 
 # Ensures that the GraphQL-Client can be compiled
 verify-compile-graphql-client: src/generated/graphql.ts
-	npx tsc --noEmit --experimentalDecorators --esModuleInterop  --target "es5" $^
+	npx tsc --noEmit --experimentalDecorators --esModuleInterop  --target "es5" --lib "ESNext,DOM" $^
 
 ##################################
 # Dependencies
@@ -171,6 +172,10 @@ format-code:
 # Verify that the coding style is sound
 verify-format-code:
 	npx prettier --check "src/**/*.{html,ts}"
+
+# Verify that advanced rules are beeing followed
+verify-eslint:
+	npx eslint "src/**/*.ts"
 
 ##################################
 # Revision tracking file

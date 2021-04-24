@@ -1,0 +1,37 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 34e411af-0bac-4d62-b40f-b188bf53efba
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Initial: Exp'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: d04c577e-cc67-49bb-bbc2-38a49dc656cf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "BinOp", "children": {"lhs": [{"name": "BinOp",
+    "children": {"lhs": [{"name": "Const", "language": "Exp", "properties": {"Val":
+    "0"}}], "rhs": [{"name": "Const", "language": "Exp", "properties": {"Val": "0"}}]},
+    "language": "Exp", "properties": {"op": "-"}}], "rhs": [{"name": "BinOp", "children":
+    {"lhs": [{"name": "Const", "language": "Exp", "properties": {"Val": "1"}}], "rhs":
+    [{"name": "Const", "language": "Exp", "properties": {"Val": "2"}}]}, "language":
+    "Exp", "properties": {"op": "*"}}]}, "language": "Exp", "properties": {"op": "+"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-03-18 21:26:42.219955000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-03-18 21:34:25.236889000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: c1f8a9fc-ea72-4392-a1dc-36c8528d060a
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

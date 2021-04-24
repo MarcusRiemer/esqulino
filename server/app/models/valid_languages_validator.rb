@@ -8,7 +8,7 @@ class ValidLanguagesValidator < ActiveModel::EachValidator
   # @param attribute The name of the tested attribute
   # @param value The value of the tested attribute
   def validate_each(record, attribute, value)
-    unwanted_languages = value.keys - LocaleHelper.allowed_languages_s
+    unwanted_languages = value.keys - LocaleHelper.allowed_languages
 
     if not unwanted_languages.empty?
       record.errors.add(attribute, messag: "Unwanted Languages: #{unwanted_languages}")

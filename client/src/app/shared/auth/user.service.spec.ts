@@ -14,7 +14,6 @@ import { UserDescription } from "./user.description";
 
 import { ServerDataService } from "../serverdata/server-data.service";
 import { ServerApiService } from "../serverdata/serverapi.service";
-import { ServerTasksService } from "../serverdata/server-tasks.service";
 
 function mkUserResponse(displayName: string): UserDescription {
   return {
@@ -48,7 +47,6 @@ describe(`UserService`, () => {
         ServerApiService,
         MatSnackBar,
         UserService,
-        ServerTasksService,
       ],
       declarations: [],
     });
@@ -151,29 +149,6 @@ describe(`UserService`, () => {
       .toEqual(3);
   });
 
-  it("userData on error generic error", () => {
-    const service = instantiate();
-    const httpTestingController = TestBed.inject(HttpTestingController);
-    const serverApi = TestBed.inject(ServerApiService);
-
-    let numCalls = 0;
-
-    service.userData$
-      .pipe(
-        first(),
-        tap((_) => numCalls++)
-      )
-      .subscribe((d) => expect(d.displayName).toContain("Error"));
-
-    httpTestingController
-      .expectOne(serverApi.getUserDataUrl())
-      .flush("", { statusText: "Unknown Error", status: 500 });
-
-    expect(numCalls)
-      .withContext("Server errors could push a new user state, is this good?")
-      .toEqual(0);
-  });
-
   it("unexpectedLogout", async () => {
     const service = instantiate();
     const httpTestingController = TestBed.inject(HttpTestingController);
@@ -184,23 +159,17 @@ describe(`UserService`, () => {
     let unexpectedCalls = 0;
 
     service.userData$.pipe(tap((_) => userDataCalls++)).subscribe();
-
     httpTestingController.expectOne(serverApi.getUserDataUrl()).flush(user);
 
     expect(userDataCalls).withContext("First Subscription").toEqual(1);
 
     service.unexpectedLogout$.pipe(tap((_) => unexpectedCalls++)).subscribe();
-
     const loggedOut = service.userData$.pipe(first()).toPromise();
-
     const userData = await loggedOut;
-
     service.onUnexpectedLogout(userData);
 
     expect(unexpectedCalls).withContext("Event was triggerd").toEqual(1);
-
     expect(userDataCalls).withContext("Side Subscription").toEqual(2);
-
     expect(userData).toEqual(user);
   });
 });

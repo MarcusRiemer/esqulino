@@ -1,4 +1,4 @@
-import { NodeDescription, Tree } from "../syntaxtree";
+import { NodeDescription, SyntaxTree } from "../syntaxtree";
 
 import {
   FixedBlocksSidebarDescription,
@@ -7,7 +7,6 @@ import {
   NodeTailoredDescription,
   isNodeDerivedPropertyDescription,
 } from "./block.description";
-import { BlockLanguage } from "./block-language.forward";
 import { Sidebar } from "./sidebar";
 
 /**
@@ -15,7 +14,7 @@ import { Sidebar } from "./sidebar";
  * resulting node is a static and may be inserted to a tree.
  */
 export function tailorBlockDescription(
-  ast: Tree,
+  ast: SyntaxTree,
   proposal: NodeTailoredDescription
 ): NodeDescription {
   const properties: NodeDescription["properties"] = {};
@@ -91,7 +90,7 @@ export class FixedSidebarBlock {
     }
   }
 
-  tailoredBlockDescription(ast: Tree) {
+  tailoredBlockDescription(ast: SyntaxTree) {
     return this.defaultNode.map((b) => tailorBlockDescription(ast, b));
   }
 }
@@ -143,7 +142,7 @@ export class FixedBlocksSidebar implements Sidebar {
    */
   public readonly categories: ReadonlyArray<BlocksSidebarCategory>;
 
-  constructor(_parent: BlockLanguage, desc: FixedBlocksSidebarDescription) {
+  constructor(desc: FixedBlocksSidebarDescription) {
     this.displayName = desc.caption;
     this.categories = desc.categories.map((catDesc) => {
       return new FixedBlocksSidebarCategory(this, catDesc);

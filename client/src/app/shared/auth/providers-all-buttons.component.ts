@@ -1,6 +1,8 @@
 import { Component, Output, EventEmitter } from "@angular/core";
+import { pluck } from "rxjs/operators";
 
-import { UserService } from "./user.service";
+import { LoginProvidersGQL } from "../../../generated/graphql";
+
 @Component({
   selector: "providers-all-buttons",
   templateUrl: "./templates/providers-all-buttons.html",
@@ -8,12 +10,14 @@ import { UserService } from "./user.service";
 export class ProvidersAllButtonsComponent {
   @Output() trigger = new EventEmitter();
 
-  constructor(private _userService: UserService) {}
+  constructor(private _loginProviders: LoginProvidersGQL) {}
 
   /**
    * All available providers
    */
-  readonly providers = this._userService.providerList;
+  readonly providers$ = this._loginProviders
+    .watch()
+    .valueChanges.pipe(pluck("data", "loginProviders"));
 
   /**
    * Will be used for forwarding a click of the blattwerkzeug provider

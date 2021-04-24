@@ -3,21 +3,16 @@ import { BehaviorSubject, Observable } from "rxjs";
 import {
   ProjectFullDescription,
   ProjectDescription,
-  AvailableDatabaseDescription,
   ProjectSourceDescription,
-  ProjectUpdateDescription,
   ProjectUsesBlockLanguageDescription,
 } from "./project.description";
 import { Schema } from "./schema/schema";
 import { Saveable, SaveStateEvent } from "./interfaces";
 import { CodeResource, GrammarDescription } from "./syntaxtree";
-import { BlockLanguage } from "../shared/block";
 import { DatabaseSchemaAdditionalContext } from "./syntaxtree/sql/sql.validator";
 import { ResourceReferencesService } from "./resource-references.service";
 import { isValidId } from "./util";
 import { MultiLangString } from "./multilingual-string.description";
-
-import { UpdateProjectInput } from "../../generated/graphql";
 
 export { ProjectDescription, ProjectFullDescription };
 
@@ -62,8 +57,6 @@ export class Project implements Saveable {
 
   private _usesBlockLanguages: ProjectUsesBlockLanguageDescription[];
 
-  private _blockLanguages: BlockLanguage[];
-
   readonly grammarDescriptions: GrammarDescription[];
 
   /**
@@ -80,21 +73,16 @@ export class Project implements Saveable {
     this._description = json.description;
     this._indexPageId = json.indexPageId;
     this._projectImageId = json.preview;
-    this._sources = json.projectSources || []; // Sources may be undefined
-    this._usesBlockLanguages = json.projectUsesBlockLanguages;
+    this._sources = json.projectSources ?? []; // Sources may be undefined
+    this._usesBlockLanguages = [...json.projectUsesBlockLanguages];
     this._currentDatabase = json.defaultDatabase?.name;
     this.grammarDescriptions = json.grammars;
-    this.schema = new Schema(json.schema);
+    this.schema = new Schema(json.defaultDatabase?.schema ?? []);
 
     // Map all descriptions to their concrete objects
-    this._codeResources = (json.codeResources || [])
+    this._codeResources = (json.codeResources ?? [])
       .map((val) => new CodeResource(val, this.resourceReferences))
       .sort((lhs, rhs) => compareIgnoreCase(lhs, rhs));
-
-    // Construct relevant block languages
-    this._blockLanguages = (json.blockLanguages || []).map(
-      (val) => new BlockLanguage(val)
-    );
   }
 
   // Fired when the save-state has changed
@@ -112,6 +100,9 @@ export class Project implements Saveable {
     return this._id;
   }
 
+  /**
+   * Checks whether the given identifier identifies this project
+   */
   hasSlugOrId(slugOrId: string) {
     if (isValidId(slugOrId)) {
       return this.id == slugOrId;
@@ -231,13 +222,6 @@ export class Project implements Saveable {
   }
 
   /**
-   * @return All block languages that are available as part of this project.
-   */
-  get projectBlockLanguages() {
-    return this._blockLanguages;
-  }
-
-  /**
    * @return True, if the given block language is used by any resource.
    */
   isBlockLanguageReferenced(blockLanguageId: string) {
@@ -256,7 +240,12 @@ export class Project implements Saveable {
   /**
    *
    */
-  addUsedBlockLanguage(blockLanguageId: string, usageId: string) {
+  async addUsedBlockLanguage(blockLanguageId: string, usageId: string) {
+    await this.resourceReferences.ensureResources({
+      id: blockLanguageId,
+      type: "blockLanguage",
+    });
+
     this._usesBlockLanguages.push({
       id: usageId,
       blockLanguageId: blockLanguageId,
@@ -334,36 +323,5 @@ export class Project implements Saveable {
     if (index >= 0) {
       this._codeResources.splice(index, 1);
     }
-  }
-
-  /**
-   * @param id_or_slug The id or slug for a certain block language
-   */
-  getBlockLanguage(id_or_slug: string) {
-    return this._blockLanguages.find(
-      (l) => l.id === id_or_slug || l.slug === id_or_slug
-    );
-  }
-
-  /**
-   * @return An object that the server can use to update the stored data.
-   */
-  toUpdateRequest(): UpdateProjectInput {
-    const toReturn: UpdateProjectInput = {
-      id: this.id,
-      slug: this.slug,
-      name: this.name,
-    };
-
-    // Only send a description if there is a description
-    if (Object.keys(this._description).length > 0) {
-      toReturn.description = this._description;
-    }
-
-    if (this._projectImageId) {
-      toReturn.preview = this._projectImageId;
-    }
-
-    return toReturn;
   }
 }

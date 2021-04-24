@@ -1,9 +1,7 @@
-<div *ngIf="groupByRows" class="card card-body mb-3" style="overflow: scroll;">
-  <h4 class="card-title">
-    Vorschau der Gruppierung
-  </h4>
+<div *ngIf="groupByRows" class="card card-body mb-3" style="overflow: scroll">
+  <h4 class="card-title">Vorschau der Gruppierung</h4>
   <div class="table-responsive-sm">
-    <table class="table" style="border-collapse: collapse;">
+    <table class="table" style="border-collapse: collapse">
       <thead>
         <tr>
           <th *ngFor="let column of queryResult.columns">{{ column }}</th>
@@ -22,15 +20,15 @@
 
     <ng-template #defRow let-dataset="dataset">
       <tr>
-        <td *ngFor="let column of dataset" style="border-top: 0;">
+        <td *ngFor="let column of dataset" style="border-top: 0">
           {{ column }}
         </td>
       </tr>
     </ng-template>
 
     <ng-template #lastRow let-dataset="dataset">
-      <tr style="border-bottom: 1px solid #dee2e6;">
-        <td *ngFor="let column of dataset" style="border-top: 0;">
+      <tr style="border-bottom: 1px solid #dee2e6">
+        <td *ngFor="let column of dataset" style="border-top: 0">
           {{ column }}
         </td>
       </tr>
@@ -38,10 +36,8 @@
   </div>
 </div>
 
-<div *ngIf="filterRows" class="card card-body mb-3" style="overflow: scroll;">
-  <h4 class="card-title">
-    Vorschau der Filterung
-  </h4>
+<div *ngIf="filterRows" class="card card-body mb-3" style="overflow: scroll">
+  <h4 class="card-title">Vorschau der Filterung</h4>
 
   <div class="table-responsive-sm">
     <table class="table">
@@ -66,32 +62,24 @@
     </table>
 
     <ng-template #defaultd let-column="column">
-      <th>
-        {{ column }}
-      </th>
+      <th>{{ column }}</th>
     </ng-template>
 
     <ng-template #markd let-column="column">
-      <th style="background-color: yellow;">
-        {{ column }}
-      </th>
+      <th style="background-color: yellow">{{ column }}</th>
     </ng-template>
 
     <ng-template #default let-column="column">
-      <td>
-        {{ column }}
-      </td>
+      <td>{{ column }}</td>
     </ng-template>
 
     <ng-template #mark let-column="column">
-      <td style="background-color: yellow;">
-        {{ column }}
-      </td>
+      <td style="background-color: yellow">{{ column }}</td>
     </ng-template>
   </div>
 </div>
 
-<div class="card card-body mb-3" style="overflow: scroll;">
+<div class="card card-body mb-3" style="overflow: scroll">
   <h4 class="card-title">
     Ergebnisvorschau
     <ng-container *ngIf="queryResult">
@@ -120,9 +108,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let row of queryResult.rows">
-          <td *ngFor="let column of row">
-            {{ column }}
-          </td>
+          <td *ngFor="let column of row">{{ column }}</td>
         </tr>
       </tbody>
     </table>
