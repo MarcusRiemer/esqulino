@@ -1058,7 +1058,10 @@ export class Truck {
    * @return Position after forward movement.
    */
   get positionAfterMove(): Position {
-    return DirectionUtil.stepInDirection(this.position, this.facingDirectionAfterMove);
+    return DirectionUtil.stepInDirection(
+      this.position,
+      this.facingDirectionAfterMove
+    );
   }
 
   move(turnDirection: TurnDirection = null) {
@@ -1676,7 +1679,10 @@ export class DirectionUtil {
    * @param intoDirection where to move
    * @return new direction
    */
-  public static stepInDirection(position: Position, intoDirection: Direction): Position {
+  public static stepInDirection(
+    position: Position,
+    intoDirection: Direction
+  ): Position {
     const newPos = position.clone();
     switch (intoDirection) {
       case Direction.North:

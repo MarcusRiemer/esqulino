@@ -381,7 +381,7 @@ class PreviewWorldRenderingContext extends RenderingContext {
   }
 }
 
-class TemporaryRenderingContext extends RenderingContext  {
+class TemporaryRenderingContext extends RenderingContext {
   /* TODO: maybe extends from PreviewWorldRenderingContext ? */
 
   private readonly canvasElement: HTMLCanvasElement;
@@ -391,17 +391,23 @@ class TemporaryRenderingContext extends RenderingContext  {
     tmpCanvas.width = baseContext.canvasWidth;
     tmpCanvas.height = baseContext.canvasHeight;
     const tmpCtx = tmpCanvas.getContext("2d");
-    return new TemporaryRenderingContext(tmpCanvas, tmpCtx, {
-      width: tmpCanvas.width,
-      height: tmpCanvas.height
-    }, baseContext.currentTime);
+    return new TemporaryRenderingContext(
+      tmpCanvas,
+      tmpCtx,
+      {
+        width: tmpCanvas.width,
+        height: tmpCanvas.height,
+      },
+      baseContext.currentTime
+    );
   }
 
   constructor(
-              canvasElement: HTMLCanvasElement,
-              ctx: CanvasRenderingContext2D,
-              dimensions: RenderingDimensions,
-              timestamp: DOMHighResTimeStamp) {
+    canvasElement: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+    dimensions: RenderingDimensions,
+    timestamp: DOMHighResTimeStamp
+  ) {
     super(ctx, dimensions, timestamp);
     this.canvasElement = canvasElement;
   }
@@ -621,7 +627,6 @@ abstract class GenericTruckRenderer {
 class TruckPreviewStateRenderer
   extends GenericTruckRenderer
   implements PreviewObjectRenderer<Truck> {
-
   public constructor() {
     super();
   }
@@ -644,27 +649,32 @@ class TruckPreviewStateRenderer
     );
 
     ctx.useTempCanvasAsGhost((tmpCtx) => {
-      tmpCtx.translateAndRotate(truckPosition.x, truckPosition.y, truckAngle, () => {
-        // Turn signal
-        this.turnSignalSprite.draw(
-          tmpCtx,
-          turnSignalSpriteNumber,
-          -(truckWidth / 2),
-          -(truckHeight / 2),
-          truckWidth,
-          truckHeight
-        );
+      tmpCtx.translateAndRotate(
+        truckPosition.x,
+        truckPosition.y,
+        truckAngle,
+        () => {
+          // Turn signal
+          this.turnSignalSprite.draw(
+            tmpCtx,
+            turnSignalSpriteNumber,
+            -(truckWidth / 2),
+            -(truckHeight / 2),
+            truckWidth,
+            truckHeight
+          );
 
-        // truck
-        this.truckSprite.draw(
-          tmpCtx,
-          TruckRenderer.truckSpriteNumber(truck),
-          -(truckWidth / 2),
-          -(truckHeight / 2),
-          truckWidth,
-          truckHeight
-        )
-      });
+          // truck
+          this.truckSprite.draw(
+            tmpCtx,
+            TruckRenderer.truckSpriteNumber(truck),
+            -(truckWidth / 2),
+            -(truckHeight / 2),
+            truckWidth,
+            truckHeight
+          );
+        }
+      );
     });
 
     // Figuring out where the cross should be located
@@ -725,13 +735,22 @@ class PreviewWorldStateRenderer
         (patch) => patch.path[0] === tilesFieldName && patch.path[1] === i
       );
 
-      if (tilePatch) { // This tile was changed in the preview
+      if (tilePatch) {
+        // This tile was changed in the preview
         const tile = preview.state.tiles[i];
 
-        const renderOpenings = tilePatch.path[2] === nameof<typeof preview.state.tiles[0]>("openings");
-        const renderFreight = tilePatch.path[2] === nameof<typeof preview.state.tiles[0]>("freight");
-        const renderFreightTarget = tilePatch.path[2] === nameof<typeof preview.state.tiles[0]>("freightTarget");
-        const hasTrafficLightsChange = tilePatch.path[2] === nameof<typeof preview.state.tiles[0]>("trafficLights");
+        const renderOpenings =
+          tilePatch.path[2] ===
+          nameof<typeof preview.state.tiles[0]>("openings");
+        const renderFreight =
+          tilePatch.path[2] ===
+          nameof<typeof preview.state.tiles[0]>("freight");
+        const renderFreightTarget =
+          tilePatch.path[2] ===
+          nameof<typeof preview.state.tiles[0]>("freightTarget");
+        const hasTrafficLightsChange =
+          tilePatch.path[2] ===
+          nameof<typeof preview.state.tiles[0]>("trafficLights");
         const renderTrafficLights = [];
         if (hasTrafficLightsChange) {
           renderTrafficLights.push(tilePatch.path[3] as number);
@@ -743,7 +762,7 @@ class PreviewWorldStateRenderer
           renderFreight,
           renderFreightTarget,
           renderTrafficLights,
-        })
+        });
       }
     }
 
@@ -893,13 +912,17 @@ interface TileRenderInfo {
   renderTrafficLights: number[];
 }
 
-class TilePreviewRenderer extends GenericTileRenderer implements PreviewObjectRenderer<TileRenderInfo> {
-
+class TilePreviewRenderer
+  extends GenericTileRenderer
+  implements PreviewObjectRenderer<TileRenderInfo> {
   public constructor() {
     super();
   }
 
-  private drawPreviewFreights(ctx: PreviewWorldRenderingContext, tile: Tile): void {
+  private drawPreviewFreights(
+    ctx: PreviewWorldRenderingContext,
+    tile: Tile
+  ): void {
     ctx.useTempCanvasAsGhost((tmpCtx) => {
       this.freightSprite.draw(
         tmpCtx,
@@ -912,7 +935,10 @@ class TilePreviewRenderer extends GenericTileRenderer implements PreviewObjectRe
     });
   }
 
-  private drawPreviewFreightTarget(ctx: PreviewWorldRenderingContext, tile: Tile): void {
+  private drawPreviewFreightTarget(
+    ctx: PreviewWorldRenderingContext,
+    tile: Tile
+  ): void {
     ctx.useTempCanvasAsGhost((tmpCtx) => {
       this.freightSprite.draw(
         tmpCtx,
@@ -925,7 +951,11 @@ class TilePreviewRenderer extends GenericTileRenderer implements PreviewObjectRe
     });
   }
 
-  private drawPreviewTrafficLights(ctx: PreviewWorldRenderingContext, tile: Tile, whichOne: number[]): void {
+  private drawPreviewTrafficLights(
+    ctx: PreviewWorldRenderingContext,
+    tile: Tile,
+    whichOne: number[]
+  ): void {
     tile.trafficLights.forEach((tl, i) => {
       if (tl != null) {
         if (whichOne.includes(i)) {
@@ -943,14 +973,16 @@ class TilePreviewRenderer extends GenericTileRenderer implements PreviewObjectRe
             );
           });
         }
-      } else if (tile.hasOpeningInDirection(Tile.trafficLightIndexToDirection(i))) {
+      } else if (
+        tile.hasOpeningInDirection(Tile.trafficLightIndexToDirection(i))
+      ) {
         // If there is no traffic light
         // we want to show that is it possible to place one there
         const isGreen = 1;
         ctx.alpha(ctx.otherObjectsGhostAlpha, () => {
           this.trafficLightSprite.draw(
             ctx,
-            i * 2 + (isGreen),
+            i * 2 + isGreen,
             ctx.tileWidth * tile.position.x - this.pixelOverlap,
             ctx.tileWidth * tile.position.y - this.pixelOverlap,
             ctx.tileWidth + this.pixelOverlap * 2,
@@ -963,14 +995,17 @@ class TilePreviewRenderer extends GenericTileRenderer implements PreviewObjectRe
     ctx.drawSubTilePosCrossHelper(tile.position);
   }
 
-  public draw(ctx: PreviewWorldRenderingContext, renderInfo: TileRenderInfo): void {
+  public draw(
+    ctx: PreviewWorldRenderingContext,
+    renderInfo: TileRenderInfo
+  ): void {
     const tile = renderInfo.tile;
 
     // Draw road
     if (renderInfo.renderOpenings) {
       // To supports roads we need to split each road into its subparts
       // in order to not overlay them in the preview
-      console.warn('Drawing road in preview mode is unsupported.');
+      console.warn("Drawing road in preview mode is unsupported.");
     }
 
     if (renderInfo.renderFreight) {
@@ -985,15 +1020,14 @@ class TilePreviewRenderer extends GenericTileRenderer implements PreviewObjectRe
       this.drawPreviewTrafficLights(ctx, tile, renderInfo.renderTrafficLights);
     }
   }
-
-
 }
 
 /**
  * ObjectRenderer for a tile.
  */
-class TileRenderer extends GenericTileRenderer implements ProgressableObjectRenderer<Tile> {
-
+class TileRenderer
+  extends GenericTileRenderer
+  implements ProgressableObjectRenderer<Tile> {
   public constructor() {
     super();
   }
@@ -1097,7 +1131,6 @@ class TileRenderer extends GenericTileRenderer implements ProgressableObjectRend
       );
     }
   }
-
 }
 
 /**
