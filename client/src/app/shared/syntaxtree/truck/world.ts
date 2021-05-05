@@ -662,7 +662,7 @@ export class World {
    * Converts the current state to a WorldDescription
    * @return the world description
    */
-  currentStateToDescription(): WorldDescription {
+  public currentStateToDescription(): WorldDescription {
     function toFreightColorDesc(
       freight: Freight
     ): WorldFreightColorDescription {
@@ -1058,17 +1058,7 @@ export class Truck {
    * @return Position after forward movement.
    */
   get positionAfterMove(): Position {
-    const pos = this.position.clone();
-    if (this.facingDirectionAfterMove === Direction.North) {
-      pos.y--;
-    } else if (this.facingDirectionAfterMove === Direction.East) {
-      pos.x++;
-    } else if (this.facingDirectionAfterMove === Direction.South) {
-      pos.y++;
-    } else if (this.facingDirectionAfterMove === Direction.West) {
-      pos.x--;
-    }
-    return pos;
+    return DirectionUtil.stepInDirection(this.position, this.facingDirectionAfterMove);
   }
 
   move(turnDirection: TurnDirection = null) {
@@ -1348,6 +1338,15 @@ export class Tile {
       return true;
     }
     return false;
+  }
+
+  static trafficLightIndexToDirection(i: number): Direction {
+    return {
+      [0]: Direction.North,
+      [1]: Direction.East,
+      [2]: Direction.South,
+      [3]: Direction.West,
+    }[i];
   }
 }
 
@@ -1669,6 +1668,56 @@ export class DirectionUtil {
     }
 
     return dir;
+  }
+
+  /**
+   * Returns a new position in a step direction
+   * @param position base position
+   * @param intoDirection where to move
+   * @return new direction
+   */
+  public static stepInDirection(position: Position, intoDirection: Direction): Position {
+    const newPos = position.clone();
+    switch (intoDirection) {
+      case Direction.North:
+        newPos.y--;
+        break;
+      case Direction.East:
+        newPos.x++;
+        break;
+      case Direction.South:
+        newPos.y++;
+        break;
+      case Direction.West:
+        newPos.x--;
+        break;
+    }
+    return newPos;
+  }
+
+  /***
+   * Calls f 4 times with North, East, South and West as an argument
+   * @param f the function that should be called
+   */
+  public static forEachDirection(f: (direction) => void): void {
+    f(Direction.North);
+    f(Direction.East);
+    f(Direction.South);
+    f(Direction.West);
+  }
+
+  /**
+   * Converts a direction into a clockwise degree number. Noth is 0°
+   * @param d the direction
+   * @return Direction in degree
+   */
+  public static directionToDegree(d: Direction): number {
+    return {
+      [Direction.North]: 0,
+      [Direction.East]: 90,
+      [Direction.South]: 180,
+      [Direction.West]: 270,
+    }[d];
   }
 }
 

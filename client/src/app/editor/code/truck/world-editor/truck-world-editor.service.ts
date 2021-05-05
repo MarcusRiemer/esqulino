@@ -57,21 +57,25 @@ export class TruckWorldEditorService implements OnDestroy {
     this._subscriptions.push(
       this._mouse.leftMouseButtonDown.subscribe((isDown) => {
         if (isDown && this._editorModeEnabled) {
+          const applier = (recipe) => this.mutateWorldAndCode(this._world, recipe);
+
           switch (this._feature.getValue().feature) {
             case TruckTileFeatureType.Road:
+              // This is not a trivial "on click" function
+              // There need to be more work in order to allow the applier here
               this.startDrawRoad();
               break;
             case TruckTileFeatureType.FreightTarget:
-              this.placeFrightTarget();
+              this.placeFrightTarget(applier);
               break;
             case TruckTileFeatureType.Freight:
-              this.placeFright();
+              this.placeFright(applier);
               break;
             case TruckTileFeatureType.TrafficLight:
-              this.placeTrafficLight();
+              this.placeTrafficLight(applier);
               break;
             case TruckTileFeatureType.TruckSpawn:
-              this.setTruckSpawn();
+              this.setTruckSpawn(applier);
               break;
           }
         } else {
@@ -96,6 +100,30 @@ export class TruckWorldEditorService implements OnDestroy {
           }
         } else {
           this.stopDestroyRoad();
+        }
+      })
+    );
+
+    this._subscriptions.push(
+      this._mouse.currentPosition.subscribe((posAndDirection) => {
+        if (this._editorModeEnabled) {
+
+          const applier = (recipe) => this._world.mutateStateAsPreview((s) => recipe(s) ? s : null);
+
+          switch (this._feature.getValue().feature) {
+            case TruckTileFeatureType.TrafficLight:
+              this.placeTrafficLight(applier);
+              break;
+            case TruckTileFeatureType.Freight:
+              this.placeFright(applier);
+              break;
+            case TruckTileFeatureType.FreightTarget:
+              this.placeFrightTarget(applier);
+              break;
+            case TruckTileFeatureType.TruckSpawn:
+              this.setTruckSpawn(applier);
+              break;
+          }
         }
       })
     );
@@ -167,22 +195,32 @@ export class TruckWorldEditorService implements OnDestroy {
     this._rightMouseDownPosUpdaterSubscription = undefined;
   }
 
-  private placeFright(): void {
+  private placeFright(applier: (recipe: (s: WorldState) => boolean) => void): void {
+    const posAndDirection = this._mouse.peekCurrentPosition;
+    if (!posAndDirection) {
+      return;
+    }
+    const { pos } = posAndDirection;
     const worldFreight = TruckWorldEditorService.frightFeatureAsWorldFright(
       this._feature.getValue()
     );
-    this.mutateWorldAndCode(this._world, (s) =>
-      s.getTile(this._mouse.peekCurrentPosition.pos).tryAddFreight(worldFreight)
+    applier((s) =>
+      s.getTile(pos).tryAddFreight(worldFreight)
     );
   }
 
-  private placeFrightTarget(): void {
+  private placeFrightTarget(applier: (recipe: (s: WorldState) => boolean) => void): void {
+    const posAndDirection = this._mouse.peekCurrentPosition;
+    if (!posAndDirection) {
+      return;
+    }
+    const { pos } = posAndDirection;
     const worldFreight = TruckWorldEditorService.frightFeatureAsWorldFright(
       this._feature.getValue()
     );
-    this.mutateWorldAndCode(this._world, (s) =>
+    applier((s) =>
       s
-        .getTile(this._mouse.peekCurrentPosition.pos)
+        .getTile(pos)
         .setFrightTarget(worldFreight)
     );
   }
@@ -193,11 +231,16 @@ export class TruckWorldEditorService implements OnDestroy {
     );
   }
 
-  private placeTrafficLight(): void {
+  private placeTrafficLight(applier: (recipe: (s: WorldState) => boolean) => void): void {
+    const posAndDirection = this._mouse.peekCurrentPosition;
+    if (!posAndDirection) {
+      return;
+    }
+    const { pos, direction } = posAndDirection;
+
     const trafficLightFeature = this._feature.getValue() as TruckFeature<TruckTileFeatureType.TrafficLight>;
     const option = trafficLightFeature.options;
-    const { pos, direction } = this._mouse.peekCurrentPosition;
-    this.mutateWorldAndCode(this._world, (s) =>
+    applier((s) =>
       s
         .getTile(pos)
         .setTrafficLight(
@@ -218,9 +261,13 @@ export class TruckWorldEditorService implements OnDestroy {
     );
   }
 
-  private setTruckSpawn(): void {
-    const { pos, direction } = this._mouse.peekCurrentPosition;
-    this.mutateWorldAndCode(this._world, (s) => {
+  private setTruckSpawn(applier: (recipe: (s: WorldState) => boolean) => void): void {
+    const posAndDirection = this._mouse.peekCurrentPosition;
+    if (!posAndDirection) {
+      return;
+    }
+    const { pos, direction } = posAndDirection;
+    applier((s) => {
       if (!s.getTile(pos).hasOpeningInDirection(direction)) {
         return false; // We dont have a opening in this direction
       }

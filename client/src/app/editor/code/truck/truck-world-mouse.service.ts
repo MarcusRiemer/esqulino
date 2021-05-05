@@ -19,7 +19,7 @@ export class TruckWorldMouseService {
   public readonly rightMouseButtonDown = this._rightMouseDown.asObservable();
   public readonly currentPosition = this._currentPosition.pipe(
     distinctUntilChanged(
-      (a, b) => a && b && a.pos.isEqual(b.pos) && a.direction === b.direction
+      (a, b) => a?.pos.isEqual(b?.pos) && a.direction === b.direction
     )
   );
 

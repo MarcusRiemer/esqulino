@@ -1,14 +1,17 @@
 import {
-  World,
-  TileOpening,
-  WorldState,
+  Direction,
+  DirectionUtil,
+  Position,
+  Size,
   Tile,
+  TileOpening,
   Truck,
   TurnDirection,
-  Direction,
-  Size,
+  World,
   WorldPreviewInfo,
+  WorldState,
 } from "../../../shared/syntaxtree/truck/world";
+import { nameof } from "../../../shared/util";
 
 export type RenderingDimensions = { width: number; height: number };
 
@@ -72,7 +75,7 @@ export class Renderer {
    * Returns the current with of the parent that hosts the rendering canvas.
    */
   private get parentWidthPeek() {
-    return this.canvasElement.parentElement.offsetWidth;
+    return this.canvasElement.parentElement.clientWidth;
   }
 
   /**
@@ -178,7 +181,7 @@ class RenderingContext {
    * @param angle Degree to be rotated.
    * @param f Function.
    */
-  rotate(x: number, y: number, angle: number, f: () => void) {
+  translateAndRotate(x: number, y: number, angle: number, f: () => void) {
     // Cache context
     this.ctx.save();
 
@@ -270,7 +273,7 @@ class ProgressiveWorldRenderingContext extends RenderingContext {
 }
 
 /**
- * Generic type to render objects (See: ObjectRenderer<>)
+ * Generic type to render with a iterating states objects (See: ObjectRenderer<>)
  * Most implementations will interpolate the progress between .prev and .curr by the stepProgress of the ctx
  */
 type ProgressableObjectRenderer<StateType> = ObjectRenderer<
@@ -286,6 +289,149 @@ function drawProgressive<StateType>(
 ) {
   renderer.draw(ctx, { prev, curr });
 }
+
+class PreviewWorldRenderingContext extends RenderingContext {
+  public readonly previewPulseInterval = 900; // ms
+
+  /** The alpha amount that other preview objects that here to guide the user */
+  public readonly otherObjectsGhostAlpha = 0.09; // 9% opacity
+
+  public readonly subTileCrossAlpha = 0.5; // 50% opacity
+
+  public readonly colorFilterColor = "#357fa7"; // blueish
+  public readonly colorFilterAlpha = 0.6; // 60% opacity
+
+  public readonly worldSize: Size;
+
+  /** The currently rendered state */
+  public readonly previewState: WorldState;
+
+  public readonly tileWidth: number;
+  public readonly tileHeight: number;
+
+  constructor(
+    previewState: WorldState,
+    stateStartTime: DOMHighResTimeStamp,
+    worldSize: Size,
+    base: RenderingContext
+  ) {
+    super(base.ctx, base.dimensions, base.currentTime);
+    this.worldSize = worldSize;
+
+    this.previewState = previewState;
+
+    this.tileWidth = this.dimensions.width / this.worldSize.width;
+    this.tileHeight = this.dimensions.height / this.worldSize.height;
+  }
+
+  /**
+   * Same as this.alpha but the alpha value is automatically calculated based on time.
+   * Useful for preview rendering
+   * @param f the function that should be called
+   */
+  public pulsingAlpha(f: () => void): void {
+    const alpha = ((t: DOMHighResTimeStamp) => {
+      const tn = (t % this.previewPulseInterval) / this.previewPulseInterval;
+      // min(1, max(0, cos(x * 2 * pi)+0.5)) with x from 0 to 1
+      return Math.min(1, Math.max(0, Math.cos(tn * 2 * Math.PI) + 0.5)) * 0.8;
+    })(this.currentTime);
+
+    this.alpha(alpha, f);
+  }
+
+  /**
+   * Draws a cross at crossPos.
+   * This might help the user to understand the subTilePos (direction) nature
+   * @param crossPos The (tile)position where to draw the cross
+   */
+  public drawSubTilePosCrossHelper(crossPos: Position): void {
+    this.alpha(this.subTileCrossAlpha, () => {
+      this.translateAndRotate(
+        crossPos.x * this.tileWidth,
+        crossPos.y * this.tileHeight,
+        0,
+        () => {
+          // Directly drawing a cross onto the canvas layer
+          this.ctx.beginPath();
+          this.ctx.strokeStyle = "black";
+          this.ctx.moveTo(0, 0);
+          this.ctx.lineTo(this.tileWidth, this.tileHeight);
+          this.ctx.moveTo(0, this.tileHeight);
+          this.ctx.lineTo(this.tileWidth, 0);
+          this.ctx.stroke();
+        }
+      );
+    });
+  }
+
+  /**
+   * Provides a fresh temporary canvas for
+   * @param f the function that receives the temp canvas
+   */
+  public useTempCanvasAsGhost(f: (tmpCtx: TemporaryRenderingContext) => void) {
+    const tmpCtx = TemporaryRenderingContext.createTemporaryContext(this);
+
+    tmpCtx.colorFilter(this.colorFilterColor, this.colorFilterAlpha, () => {
+      f(tmpCtx);
+    });
+
+    this.pulsingAlpha(() => {
+      tmpCtx.drawWholeCanvasOntoOtherCanvas(this);
+    });
+  }
+}
+
+class TemporaryRenderingContext extends RenderingContext  {
+  /* TODO: maybe extends from PreviewWorldRenderingContext ? */
+
+  private readonly canvasElement: HTMLCanvasElement;
+
+  public static createTemporaryContext(baseContext: RenderingContext) {
+    const tmpCanvas = document.createElement("canvas") as HTMLCanvasElement;
+    tmpCanvas.width = baseContext.canvasWidth;
+    tmpCanvas.height = baseContext.canvasHeight;
+    const tmpCtx = tmpCanvas.getContext("2d");
+    return new TemporaryRenderingContext(tmpCanvas, tmpCtx, {
+      width: tmpCanvas.width,
+      height: tmpCanvas.height
+    }, baseContext.currentTime);
+  }
+
+  constructor(
+              canvasElement: HTMLCanvasElement,
+              ctx: CanvasRenderingContext2D,
+              dimensions: RenderingDimensions,
+              timestamp: DOMHighResTimeStamp) {
+    super(ctx, dimensions, timestamp);
+    this.canvasElement = canvasElement;
+  }
+
+  public drawWholeCanvasOntoOtherCanvas(ctx: RenderingContext): void {
+    ctx.ctx.drawImage(
+      this.canvasElement,
+      0,
+      0,
+      this.canvasElement.width,
+      this.canvasElement.height
+    );
+  }
+
+  public colorFilter(color: string, alpha: number, f: () => void): void {
+    f();
+
+    this.ctx.globalCompositeOperation = "source-atop";
+    this.ctx.fillStyle = color;
+    this.ctx.globalAlpha = alpha;
+    this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+  }
+}
+/**
+ * Generic type to render preview objects (See: ObjectRenderer<>)
+ */
+type PreviewObjectRenderer<StateType> = ObjectRenderer<
+  PreviewWorldRenderingContext,
+  StateType
+>;
 
 /**
  * Stateful renderer!
@@ -354,24 +500,260 @@ class WorldRenderer implements ObjectRenderer {
       ctx
     );
 
+    // Draw current world
     drawProgressive(
       this.stateRenderer,
       worldCtx,
       this.currState,
       this.prevState
     );
+
+    // Draw preview changes if available
     if (this.world.previewChanges) {
-      this.previewStateRenderer.draw(ctx, this.world.previewChanges);
+      const previewCtx = new PreviewWorldRenderingContext(
+        this.currState,
+        this.lastRenderedStateStartTime,
+        this.currState.size,
+        ctx
+      );
+      this.previewStateRenderer.draw(previewCtx, this.world.previewChanges);
     }
   }
 }
 
-class PreviewWorldStateRenderer
-  implements ObjectRenderer<RenderingContext, WorldPreviewInfo> {
-  constructor() {}
+abstract class GenericTruckRenderer {
+  /** Duration of a turning signal interval in milliseconds. */
+  readonly blinkerInterval = 700;
 
-  public draw(ctx: RenderingContext, preview: WorldPreviewInfo): void {
-    // TODO: Need to .draw(...) on PreviewTileRenderer and PreviewTruckRender
+  /** Sprite for the truck. */
+  truckSprite: Sprite;
+
+  /** Sprite for the blinker. */
+  turnSignalSprite: Sprite;
+
+  /**
+   * Initializes the TruckRenderer.
+   */
+  protected constructor() {
+    // Sprites vorladen
+    this.truckSprite = SpriteFactory.getSprite(
+      "/vendor/truck/truck.svg",
+      10,
+      10
+    );
+    this.turnSignalSprite = SpriteFactory.getSprite(
+      "/vendor/truck/turnSignal.svg",
+      10,
+      10
+    );
+  }
+
+  /**
+   * Calculates the center of the truck.
+   * @param tileWidth Width of a tile.
+   * @param tileHeight Height of a tile.
+   * @param truckPos Position of the truck.
+   * @param direction Facing direction of the truck.
+   */
+  protected static calculateTruckPosition(
+    tileWidth: number,
+    tileHeight: number,
+    truckPos: Position,
+    direction: Direction
+  ): { x: number; y: number } {
+    let truckPositionX = tileWidth * truckPos.x + tileWidth / 2;
+    let truckPositionY = tileHeight * truckPos.y + tileHeight / 2;
+
+    if (direction === Direction.North) {
+      truckPositionY += tileHeight / 2;
+    }
+    if (direction === Direction.East) {
+      truckPositionX -= tileWidth / 2;
+    }
+    if (direction === Direction.South) {
+      truckPositionY -= tileHeight / 2;
+    }
+    if (direction === Direction.West) {
+      truckPositionX += tileWidth / 2;
+    }
+
+    return { x: truckPositionX, y: truckPositionY };
+  }
+
+  /**
+   * Calculates the rotation angle in degree of a truck.
+   * @param truck Truck.
+   */
+  protected static calculateTruckAngle(truck: Truck): number {
+    return DirectionUtil.directionToDegree(truck.facingDirection);
+  }
+
+  /**
+   * Returns the number of the tile in the sprite, depending on the freight.
+   * @param truck Truck to get the sprite number for.
+   * @return Number of the tile in the sprite.
+   */
+  protected static truckSpriteNumber(truck: Truck): number {
+    if (truck.freightColor() == null) {
+      return 0;
+    }
+    return {
+      red: 1,
+      green: 2,
+      blue: 3,
+    }[truck.freightColor()];
+  }
+
+  /**
+   * Returns the number of the tile in the sprite, depending on the turn signal.
+   * @param truck Truck for which the turn signal is to be determined.
+   * @return Number of the tile in the sprite.
+   */
+  protected static turnSignalSpriteNumber(truck: Truck): number {
+    return {
+      [TurnDirection.Straight]: 0,
+      [TurnDirection.Left]: 1,
+      [TurnDirection.Right]: 2,
+    }[truck.turning];
+  }
+}
+
+class TruckPreviewStateRenderer
+  extends GenericTruckRenderer
+  implements PreviewObjectRenderer<Truck> {
+
+  public constructor() {
+    super();
+  }
+
+  draw(ctx: PreviewWorldRenderingContext, truck: Truck): void {
+    // Calculate the height and width of the truck
+    const truckWidth = ctx.tileWidth / 3;
+    const truckHeight = ctx.tileHeight / 3;
+
+    // Calculate the position of the truck
+    let truckPosition = GenericTruckRenderer.calculateTruckPosition(
+      ctx.tileWidth,
+      ctx.tileHeight,
+      truck.position,
+      truck.facingDirection
+    );
+    let truckAngle = GenericTruckRenderer.calculateTruckAngle(truck);
+    let turnSignalSpriteNumber = GenericTruckRenderer.turnSignalSpriteNumber(
+      truck
+    );
+
+    ctx.useTempCanvasAsGhost((tmpCtx) => {
+      tmpCtx.translateAndRotate(truckPosition.x, truckPosition.y, truckAngle, () => {
+        // Turn signal
+        this.turnSignalSprite.draw(
+          tmpCtx,
+          turnSignalSpriteNumber,
+          -(truckWidth / 2),
+          -(truckHeight / 2),
+          truckWidth,
+          truckHeight
+        );
+
+        // truck
+        this.truckSprite.draw(
+          tmpCtx,
+          TruckRenderer.truckSpriteNumber(truck),
+          -(truckWidth / 2),
+          -(truckHeight / 2),
+          truckWidth,
+          truckHeight
+        )
+      });
+    });
+
+    // Figuring out where the cross should be located
+    // (the tile that is behind the truck)
+    const crossPos = DirectionUtil.stepInDirection(
+      truck.position,
+      DirectionUtil.opposite(truck.facingDirection)
+    );
+    ctx.drawSubTilePosCrossHelper(crossPos);
+
+    // Drawing the possible truck positions in a lower alpha value
+    ctx.alpha(ctx.otherObjectsGhostAlpha, () => {
+      const tile = ctx.previewState.getTile(crossPos);
+
+      DirectionUtil.forEachDirection((direction) => {
+        if (tile.hasOpeningInDirection(direction)) {
+          const rot = DirectionUtil.directionToDegree(direction);
+          const tmpPos = GenericTruckRenderer.calculateTruckPosition(
+            ctx.tileWidth,
+            ctx.tileHeight,
+            crossPos,
+            DirectionUtil.opposite(direction)
+          );
+
+          ctx.translateAndRotate(tmpPos.x, tmpPos.y, rot, () => {
+            this.truckSprite.drawDirect(
+              ctx.ctx,
+              0,
+              -(truckWidth / 2),
+              -(truckHeight / 2),
+              truckWidth,
+              truckHeight
+            );
+          });
+        }
+      });
+    });
+  }
+}
+
+class PreviewWorldStateRenderer
+  implements PreviewObjectRenderer<WorldPreviewInfo> {
+  readonly previewTruckRenderer: TruckPreviewStateRenderer;
+  readonly previewTileRenderer: TilePreviewRenderer;
+
+  constructor() {
+    this.previewTruckRenderer = new TruckPreviewStateRenderer();
+    this.previewTileRenderer = new TilePreviewRenderer();
+  }
+
+  public draw(
+    ctx: PreviewWorldRenderingContext,
+    preview: WorldPreviewInfo
+  ): void {
+    const tilesFieldName = nameof<typeof preview.state>("tiles");
+    for (let i = 0; i < preview.state.tiles.length; i++) {
+      const tilePatch = preview.patches.find(
+        (patch) => patch.path[0] === tilesFieldName && patch.path[1] === i
+      );
+
+      if (tilePatch) { // This tile was changed in the preview
+        const tile = preview.state.tiles[i];
+
+        const renderOpenings = tilePatch.path[2] === nameof<typeof preview.state.tiles[0]>("openings");
+        const renderFreight = tilePatch.path[2] === nameof<typeof preview.state.tiles[0]>("freight");
+        const renderFreightTarget = tilePatch.path[2] === nameof<typeof preview.state.tiles[0]>("freightTarget");
+        const hasTrafficLightsChange = tilePatch.path[2] === nameof<typeof preview.state.tiles[0]>("trafficLights");
+        const renderTrafficLights = [];
+        if (hasTrafficLightsChange) {
+          renderTrafficLights.push(tilePatch.path[3] as number);
+        }
+
+        this.previewTileRenderer.draw(ctx, {
+          tile,
+          renderOpenings,
+          renderFreight,
+          renderFreightTarget,
+          renderTrafficLights,
+        })
+      }
+    }
+
+    const truckFieldName = nameof<typeof preview.state>("truck");
+    const hasTruckPatch = !!preview.patches.find(
+      (patch) => patch.path[0] === truckFieldName
+    );
+    if (hasTruckPatch && preview.state.truck) {
+      this.previewTruckRenderer.draw(ctx, preview.state.truck);
+    }
   }
 }
 
@@ -406,26 +788,20 @@ class WorldStateRenderer implements ProgressableObjectRenderer<WorldState> {
   }
 }
 
-/**
- * ObjectRenderer for a tile.
- */
-class TileRenderer implements ProgressableObjectRenderer<Tile> {
+class GenericTileRenderer {
   /** Sprite for the tile background. */
   tileSprite: Sprite;
 
   /** Sprite for the traffic lights. */
   trafficLightSprite: Sprite;
 
-  /** Sprite for freight. */
+  /** Sprite for freight and fright targets. */
   freightSprite: Sprite;
 
   /** Overlap of the tile to avoid ugly edges. */
-  overlap = -1;
+  pixelOverlap = -1;
 
-  /**
-   * Initializes the TileRenderer.
-   */
-  constructor() {
+  protected constructor() {
     // Preload Sprites
     this.tileSprite = SpriteFactory.getSprite(
       "/vendor/truck/tiles.svg",
@@ -445,110 +821,11 @@ class TileRenderer implements ProgressableObjectRenderer<Tile> {
   }
 
   /**
-   * Draws the tile in the given context.
-   * @param ctx RenderingContext.
-   * @param states The previous state and the world state (are used to the interpolate traffic light)
-   */
-  public draw(
-    ctx: ProgressiveWorldRenderingContext,
-    { prev: prevTile, curr: tile }: ProgressableState<Tile>
-  ) {
-    // Calculate the freight alpha value
-    const freightAlpha =
-      ctx.stepProgress < 1 && prevTile?.freightItems !== tile.freightItems
-        ? ctx.stepProgress
-        : 1;
-
-    this.tileSprite.draw(
-      ctx,
-      TileRenderer.tileSpriteNumber(tile),
-      ctx.tileWidth * tile.position.x - this.overlap,
-      ctx.tileHeight * tile.position.y - this.overlap,
-      ctx.tileWidth + this.overlap * 2,
-      ctx.tileHeight + this.overlap * 2
-    );
-
-    // Draw traffic lights
-    tile.trafficLights.forEach((tl, i) => {
-      if (tl != null) {
-        // Switch traffic light on half of the step
-        const isGreen = tl.isGreen(
-          Math.max(
-            0,
-            ctx.stepProgress < 0.5 ? ctx.totalTimeSteps - 1 : ctx.totalTimeSteps
-          )
-        );
-
-        this.trafficLightSprite.draw(
-          ctx,
-          i * 2 + (isGreen ? 1 : 0),
-          ctx.tileWidth * tile.position.x - this.overlap,
-          ctx.tileWidth * tile.position.y - this.overlap,
-          ctx.tileWidth + this.overlap * 2,
-          ctx.tileHeight + this.overlap * 2
-        );
-      }
-    });
-
-    // Draw old freight
-    if (prevTile && prevTile.freightItems > 0 && freightAlpha < 1) {
-      ctx.alpha(1 - freightAlpha, () => {
-        this.freightSprite.draw(
-          ctx,
-          TileRenderer.freightSpriteNumber(prevTile),
-          ctx.tileWidth * tile.position.x - this.overlap,
-          ctx.tileWidth * tile.position.y - this.overlap,
-          ctx.tileWidth + this.overlap * 2,
-          ctx.tileHeight + this.overlap * 2
-        );
-      });
-    }
-
-    // Draw new freight
-    if (tile.freightItems > 0) {
-      ctx.alpha(freightAlpha, () => {
-        this.freightSprite.draw(
-          ctx,
-          TileRenderer.freightSpriteNumber(tile),
-          ctx.tileWidth * tile.position.x - this.overlap,
-          ctx.tileWidth * tile.position.y - this.overlap,
-          ctx.tileWidth + this.overlap * 2,
-          ctx.tileHeight + this.overlap * 2
-        );
-      });
-    }
-
-    // Draw targets
-    if (tile.freightTarget != null) {
-      this.freightSprite.draw(
-        ctx,
-        TileRenderer.freightTargetSpriteNumber(tile),
-        ctx.tileWidth * tile.position.x - this.overlap,
-        ctx.tileWidth * tile.position.y - this.overlap,
-        ctx.tileWidth + this.overlap * 2,
-        ctx.tileHeight + this.overlap * 2
-      );
-    }
-
-    // Possibly draw a "truck is here"-marker (outline the tile blue)
-    if (tile.position.isEqual(ctx.currentState.truck.position)) {
-      // ctx.ctx.strokeStyle = `hsl(${this.parent.state.time}, 100, 50)`;
-      ctx.ctx.strokeStyle = "blue";
-      ctx.ctx.strokeRect(
-        ctx.tileWidth * tile.position.x - this.overlap,
-        ctx.tileWidth * tile.position.y - this.overlap,
-        ctx.tileWidth + this.overlap * 2,
-        ctx.tileHeight + this.overlap * 2
-      );
-    }
-  }
-
-  /**
    * Returns the number of the tile in the sprite, depending on the requested
    * openings.
    * @return Number of the tile in the sprite.
    */
-  private static tileSpriteNumber(tile: Tile): number {
+  protected static tileSpriteNumber(tile: Tile): number {
     return {
       [TileOpening.None]: 0,
       [TileOpening.North]: 1,
@@ -582,7 +859,7 @@ class TileRenderer implements ProgressableObjectRenderer<Tile> {
    * @param tile Tile to get the sprite number for.
    * @return Number of the tile in the sprite.
    */
-  private static freightSpriteNumber(tile: Tile): number {
+  protected static freightSpriteNumber(tile: Tile): number {
     return {
       red: 0,
       green: 2,
@@ -596,7 +873,7 @@ class TileRenderer implements ProgressableObjectRenderer<Tile> {
    * @param tile Tile to get the sprite number for.
    * @return Number of the tile in the sprite.
    */
-  private static freightTargetSpriteNumber(tile: Tile): number {
+  protected static freightTargetSpriteNumber(tile: Tile): number {
     return {
       red: 1,
       green: 3,
@@ -605,75 +882,232 @@ class TileRenderer implements ProgressableObjectRenderer<Tile> {
   }
 }
 
+interface TileRenderInfo {
+  tile: Tile;
+
+  renderOpenings: boolean;
+  renderFreight: boolean;
+  renderFreightTarget: boolean;
+
+  // The array indices of traffic light that need should be rendered
+  renderTrafficLights: number[];
+}
+
+class TilePreviewRenderer extends GenericTileRenderer implements PreviewObjectRenderer<TileRenderInfo> {
+
+  public constructor() {
+    super();
+  }
+
+  private drawPreviewFreights(ctx: PreviewWorldRenderingContext, tile: Tile): void {
+    ctx.useTempCanvasAsGhost((tmpCtx) => {
+      this.freightSprite.draw(
+        tmpCtx,
+        TileRenderer.freightSpriteNumber(tile),
+        ctx.tileWidth * tile.position.x - this.pixelOverlap,
+        ctx.tileWidth * tile.position.y - this.pixelOverlap,
+        ctx.tileWidth + this.pixelOverlap * 2,
+        ctx.tileHeight + this.pixelOverlap * 2
+      );
+    });
+  }
+
+  private drawPreviewFreightTarget(ctx: PreviewWorldRenderingContext, tile: Tile): void {
+    ctx.useTempCanvasAsGhost((tmpCtx) => {
+      this.freightSprite.draw(
+        tmpCtx,
+        TileRenderer.freightTargetSpriteNumber(tile),
+        ctx.tileWidth * tile.position.x - this.pixelOverlap,
+        ctx.tileWidth * tile.position.y - this.pixelOverlap,
+        ctx.tileWidth + this.pixelOverlap * 2,
+        ctx.tileHeight + this.pixelOverlap * 2
+      );
+    });
+  }
+
+  private drawPreviewTrafficLights(ctx: PreviewWorldRenderingContext, tile: Tile, whichOne: number[]): void {
+    tile.trafficLights.forEach((tl, i) => {
+      if (tl != null) {
+        if (whichOne.includes(i)) {
+          // Switch traffic light on half of the step
+          const isGreen = tl.isGreen(0);
+
+          ctx.useTempCanvasAsGhost((tmpCtx) => {
+            this.trafficLightSprite.draw(
+              tmpCtx,
+              i * 2 + (isGreen ? 1 : 0),
+              ctx.tileWidth * tile.position.x - this.pixelOverlap,
+              ctx.tileWidth * tile.position.y - this.pixelOverlap,
+              ctx.tileWidth + this.pixelOverlap * 2,
+              ctx.tileHeight + this.pixelOverlap * 2
+            );
+          });
+        }
+      } else if (tile.hasOpeningInDirection(Tile.trafficLightIndexToDirection(i))) {
+        // If there is no traffic light
+        // we want to show that is it possible to place one there
+        const isGreen = 1;
+        ctx.alpha(ctx.otherObjectsGhostAlpha, () => {
+          this.trafficLightSprite.draw(
+            ctx,
+            i * 2 + (isGreen),
+            ctx.tileWidth * tile.position.x - this.pixelOverlap,
+            ctx.tileWidth * tile.position.y - this.pixelOverlap,
+            ctx.tileWidth + this.pixelOverlap * 2,
+            ctx.tileHeight + this.pixelOverlap * 2
+          );
+        });
+      }
+    });
+
+    ctx.drawSubTilePosCrossHelper(tile.position);
+  }
+
+  public draw(ctx: PreviewWorldRenderingContext, renderInfo: TileRenderInfo): void {
+    const tile = renderInfo.tile;
+
+    // Draw road
+    if (renderInfo.renderOpenings) {
+      // To supports roads we need to split each road into its subparts
+      // in order to not overlay them in the preview
+      console.warn('Drawing road in preview mode is unsupported.');
+    }
+
+    if (renderInfo.renderFreight) {
+      this.drawPreviewFreights(ctx, tile);
+    }
+
+    if (renderInfo.renderFreightTarget) {
+      this.drawPreviewFreightTarget(ctx, tile);
+    }
+
+    if (renderInfo.renderTrafficLights.length) {
+      this.drawPreviewTrafficLights(ctx, tile, renderInfo.renderTrafficLights);
+    }
+  }
+
+
+}
+
+/**
+ * ObjectRenderer for a tile.
+ */
+class TileRenderer extends GenericTileRenderer implements ProgressableObjectRenderer<Tile> {
+
+  public constructor() {
+    super();
+  }
+
+  /**
+   * Draws the tile in the given context.
+   * @param ctx RenderingContext.
+   * @param states The previous state and the world state (are used to the interpolate traffic light)
+   */
+  public draw(
+    ctx: ProgressiveWorldRenderingContext,
+    { prev: prevTile, curr: tile }: ProgressableState<Tile>
+  ) {
+    // Calculate the freight alpha value
+    const freightAlpha =
+      ctx.stepProgress < 1 && prevTile?.freightItems !== tile.freightItems
+        ? ctx.stepProgress
+        : 1;
+
+    // Draw road
+    this.tileSprite.draw(
+      ctx,
+      TileRenderer.tileSpriteNumber(tile),
+      ctx.tileWidth * tile.position.x - this.pixelOverlap,
+      ctx.tileHeight * tile.position.y - this.pixelOverlap,
+      ctx.tileWidth + this.pixelOverlap * 2,
+      ctx.tileHeight + this.pixelOverlap * 2
+    );
+
+    // Draw traffic lights
+    tile.trafficLights.forEach((tl, i) => {
+      if (tl != null) {
+        // Switch traffic light on half of the step
+        const isGreen = tl.isGreen(
+          Math.max(
+            0,
+            ctx.stepProgress < 0.5 ? ctx.totalTimeSteps - 1 : ctx.totalTimeSteps
+          )
+        );
+
+        this.trafficLightSprite.draw(
+          ctx,
+          i * 2 + (isGreen ? 1 : 0),
+          ctx.tileWidth * tile.position.x - this.pixelOverlap,
+          ctx.tileWidth * tile.position.y - this.pixelOverlap,
+          ctx.tileWidth + this.pixelOverlap * 2,
+          ctx.tileHeight + this.pixelOverlap * 2
+        );
+      }
+    });
+
+    // Draw old freight
+    if (prevTile && prevTile.freightItems > 0 && freightAlpha < 1) {
+      ctx.alpha(1 - freightAlpha, () => {
+        this.freightSprite.draw(
+          ctx,
+          TileRenderer.freightSpriteNumber(prevTile),
+          ctx.tileWidth * tile.position.x - this.pixelOverlap,
+          ctx.tileWidth * tile.position.y - this.pixelOverlap,
+          ctx.tileWidth + this.pixelOverlap * 2,
+          ctx.tileHeight + this.pixelOverlap * 2
+        );
+      });
+    }
+
+    // Draw new freight
+    if (tile.freightItems > 0) {
+      ctx.alpha(freightAlpha, () => {
+        this.freightSprite.draw(
+          ctx,
+          TileRenderer.freightSpriteNumber(tile),
+          ctx.tileWidth * tile.position.x - this.pixelOverlap,
+          ctx.tileWidth * tile.position.y - this.pixelOverlap,
+          ctx.tileWidth + this.pixelOverlap * 2,
+          ctx.tileHeight + this.pixelOverlap * 2
+        );
+      });
+    }
+
+    // Draw targets
+    if (tile.freightTarget != null) {
+      this.freightSprite.draw(
+        ctx,
+        TileRenderer.freightTargetSpriteNumber(tile),
+        ctx.tileWidth * tile.position.x - this.pixelOverlap,
+        ctx.tileWidth * tile.position.y - this.pixelOverlap,
+        ctx.tileWidth + this.pixelOverlap * 2,
+        ctx.tileHeight + this.pixelOverlap * 2
+      );
+    }
+
+    // Possibly draw a "truck is here"-marker (outline the tile blue)
+    if (tile.position.isEqual(ctx.currentState.truck.position)) {
+      // ctx.ctx.strokeStyle = `hsl(${this.parent.state.time}, 100, 50)`;
+      ctx.ctx.strokeStyle = "blue";
+      ctx.ctx.strokeRect(
+        ctx.tileWidth * tile.position.x - this.pixelOverlap,
+        ctx.tileWidth * tile.position.y - this.pixelOverlap,
+        ctx.tileWidth + this.pixelOverlap * 2,
+        ctx.tileHeight + this.pixelOverlap * 2
+      );
+    }
+  }
+
+}
+
 /**
  * ObjectRenderer of a truck.
  */
-class TruckRenderer implements ProgressableObjectRenderer<Truck> {
-  /** Duration of a turning signal interval in milliseconds. */
-  readonly blinkerInterval = 700;
-
-  /** Sprite for the truck. */
-  truckSprite: Sprite;
-
-  /** Sprite for the blinker. */
-  turnSignalSprite: Sprite;
-
-  /**
-   * Initializes the TruckRenderer.
-   */
-  constructor() {
-    // Sprites vorladen
-    this.truckSprite = SpriteFactory.getSprite(
-      "/vendor/truck/truck.svg",
-      10,
-      10
-    );
-    this.turnSignalSprite = SpriteFactory.getSprite(
-      "/vendor/truck/turnSignal.svg",
-      10,
-      10
-    );
-  }
-
-  /**
-   * Calculates the center of the truck.
-   * @param tileWidth Width of a tile.
-   * @param tileHeight Height of a tile.
-   * @param truck Truck.
-   */
-  private static calculateTruckPosition(
-    tileWidth: number,
-    tileHeight: number,
-    truck: Truck
-  ) {
-    let truckPositionX = tileWidth * truck.position.x + tileWidth / 2;
-    let truckPositionY = tileHeight * truck.position.y + tileHeight / 2;
-
-    if (truck.facingDirection === Direction.North) {
-      truckPositionY += tileHeight / 2;
-    }
-    if (truck.facingDirection === Direction.East) {
-      truckPositionX -= tileWidth / 2;
-    }
-    if (truck.facingDirection === Direction.South) {
-      truckPositionY -= tileHeight / 2;
-    }
-    if (truck.facingDirection === Direction.West) {
-      truckPositionX += tileWidth / 2;
-    }
-
-    return {
-      x: truckPositionX,
-      y: truckPositionY,
-    };
-  }
-
-  /**
-   * Calculates the rotation angle of a truck.
-   * @param truck Truck.
-   */
-  private static calculateTruckAngle(truck: Truck) {
-    return truck.facing * 90;
+class TruckRenderer
+  extends GenericTruckRenderer
+  implements ProgressableObjectRenderer<Truck> {
+  public constructor() {
+    super();
   }
 
   /**
@@ -691,13 +1125,16 @@ class TruckRenderer implements ProgressableObjectRenderer<Truck> {
     const truckHeight = ctx.tileHeight / 3;
 
     // Calculate the position of the truck
-    let truckPosition = TruckRenderer.calculateTruckPosition(
+    let truckPosition = GenericTruckRenderer.calculateTruckPosition(
       ctx.tileWidth,
       ctx.tileHeight,
+      truck.position,
+      truck.facingDirection
+    );
+    let truckAngle = GenericTruckRenderer.calculateTruckAngle(truck);
+    let turnSignalSpriteNumber = GenericTruckRenderer.turnSignalSpriteNumber(
       truck
     );
-    let truckAngle = TruckRenderer.calculateTruckAngle(truck);
-    let turnSignalSpriteNumber = TruckRenderer.turnSignalSpriteNumber(truck);
 
     // Current Truck is fully visible by default
     let truckAlpha = 1;
@@ -712,12 +1149,15 @@ class TruckRenderer implements ProgressableObjectRenderer<Truck> {
           truck.facing !== prevTruck.facing)
       ) {
         // Calculate position of previous truck
-        const prevTruckPosition = TruckRenderer.calculateTruckPosition(
+        const prevTruckPosition = GenericTruckRenderer.calculateTruckPosition(
           ctx.tileWidth,
           ctx.tileHeight,
+          prevTruck.position,
+          prevTruck.facingDirection
+        );
+        const prevTruckAngle = GenericTruckRenderer.calculateTruckAngle(
           prevTruck
         );
-        const prevTruckAngle = TruckRenderer.calculateTruckAngle(prevTruck);
 
         if (truck.facing !== prevTruck.facing) {
           const p0 = prevTruckPosition;
@@ -762,7 +1202,7 @@ class TruckRenderer implements ProgressableObjectRenderer<Truck> {
       return Math.min(1, Math.max(0, Math.cos(tn * 2 * Math.PI) + 0.5));
     })(ctx.currentTime);
 
-    ctx.rotate(truckPosition.x, truckPosition.y, truckAngle, () => {
+    ctx.translateAndRotate(truckPosition.x, truckPosition.y, truckAngle, () => {
       // Turn signal
       ctx.alpha(turnSignalAlpha, () => {
         this.turnSignalSprite.draw(
@@ -802,35 +1242,6 @@ class TruckRenderer implements ProgressableObjectRenderer<Truck> {
       });
     });
   }
-
-  /**
-   * Returns the number of the tile in the sprite, depending on the freight.
-   * @param truck Truck to get the sprite number for.
-   * @return Number of the tile in the sprite.
-   */
-  private static truckSpriteNumber(truck: Truck): number {
-    if (truck.freightColor() == null) {
-      return 0;
-    }
-    return {
-      red: 1,
-      green: 2,
-      blue: 3,
-    }[truck.freightColor()];
-  }
-
-  /**
-   * Returns the number of the tile in the sprite, depending on the turn signal.
-   * @param truck Truck for which the turn signal is to be determined.
-   * @return Number of the tile in the sprite.
-   */
-  private static turnSignalSpriteNumber(truck: Truck): number {
-    return {
-      [TurnDirection.Straight]: 0,
-      [TurnDirection.Left]: 1,
-      [TurnDirection.Right]: 2,
-    }[truck.turning];
-  }
 }
 
 /**
@@ -862,16 +1273,16 @@ class SpriteFactory {
  */
 class Sprite {
   /** Path to the image file for identification by the SpriteFactory. */
-  path: string;
+  public readonly path: string;
 
   /** Image element for drawing on a canvas. */
-  private image: HTMLImageElement = new Image();
+  private readonly image: HTMLImageElement = new Image();
 
   /** Width of a single tile in the sprite. */
-  private readonly width: number;
+  public readonly width: number;
 
   /** Height of a single tile in the sprite. */
-  private readonly height: number;
+  public readonly height: number;
 
   /**
    * Initializes and preloads a sprite.
@@ -904,6 +1315,27 @@ class Sprite {
     height: number
   ) {
     ctx.ctx.drawImage(
+      this.image,
+      this.width * number,
+      0,
+      this.width,
+      this.height,
+      x,
+      y,
+      width,
+      height
+    );
+  }
+
+  drawDirect(
+    ctx: CanvasRenderingContext2D,
+    number: number,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) {
+    ctx.drawImage(
       this.image,
       this.width * number,
       0,
