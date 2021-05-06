@@ -14,6 +14,7 @@ import {
   TurnDirection,
   UnloadingError,
   World,
+  WorldState,
 } from "./world";
 import { WorldDescription } from "./world.description";
 
@@ -132,20 +133,33 @@ describe("Shared: World", () => {
   });
 
   it("should return the right state", () => {
-    expect(world.getState(0).step).toEqual(0);
-    expect(world.getState(1)).toBeNull();
+    const duplicationCheck = new Set<WorldState>();
+
+    function checkFor(index: number): void {
+      const state = world.getState(index);
+      expect(state).not.toBeUndefined();
+      expect(state).toEqual(world.state); // Must be the latest state
+      expect(world.getState(index + 1)).toBeUndefined();
+      expect(duplicationCheck.has(state)).toBeFalse(); // If 'immer' is not used correctly this will fail
+      duplicationCheck.add(state);
+    }
+
+    checkFor(0);
 
     world.command(Command.goForward);
+    checkFor(1);
+
     world.command(Command.load);
-    world.command(Command.goForward);
-    world.command(Command.goForward);
-    world.command(Command.unload);
+    checkFor(2);
 
-    expect(world.getState(0).step).toEqual(0);
-    expect(world.getState(1).step).toEqual(1);
-    expect(world.getState(2).step).toEqual(2);
-    expect(world.getState(3).step).toEqual(3);
-    expect(world.getState(4).step).toEqual(4);
+    world.command(Command.goForward);
+    checkFor(3);
+
+    world.command(Command.goForward);
+    checkFor(4);
+
+    world.command(Command.unload);
+    checkFor(5);
   });
 });
 

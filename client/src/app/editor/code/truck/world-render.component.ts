@@ -107,7 +107,7 @@ export class WorldRenderComponent implements OnInit, OnDestroy {
     });
     this.addRemovableEventListener(canvas, "mousemove", (ev) => {
       if (!this._currentWorld) {
-        return; // We need a world in order to
+        return; // We need a world size
       }
       // Bounding box of the canvas
       const bb = canvas.getBoundingClientRect();
@@ -120,6 +120,7 @@ export class WorldRenderComponent implements OnInit, OnDestroy {
       const fTileX = Math.max(relX * this._currentWorld.state.size.width);
       const fTileY = Math.max(relY * this._currentWorld.state.size.height);
 
+      // Cut the floating point part
       const tileX = Math.trunc(fTileX);
       const tileY = Math.trunc(fTileY);
 

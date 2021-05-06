@@ -140,3 +140,13 @@ export function rxFilterRootLanguage(langName: string) {
 
   return toReturn;
 }
+
+// https://stackoverflow.com/a/50470026
+/**
+ * Helper function that can provide the fieldName of an object and thus making
+ * it typesafe
+ * This has just very little runtime impact since it is basically returning
+ * the string that you are giving in
+ * @param name the name of the field in object <T>
+ */
+export const nameof = <T>(name: Extract<keyof T, string>): string => name;
