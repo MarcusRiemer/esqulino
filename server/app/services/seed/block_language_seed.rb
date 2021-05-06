@@ -9,9 +9,13 @@ module Seed
     SEED_DIRECTORY = "block_languages"
 
     def initialize(seed_id)
-      super(seed_id, dependencies = {
-        "grammar" => GrammarSeed
-      })
+      super(
+        seed_id,
+        {
+          "grammar" => GrammarSeed
+        },
+        true
+      )
     end
   end
 end

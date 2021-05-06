@@ -15,7 +15,10 @@ class CodeResource < ApplicationRecord
   has_one :grammar, through: :block_language
 
   # May be the basis for generated grammars
-  has_many :grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
+  has_many :generated_grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
+
+  # May be the basis for generated block languages
+  has_many :generated_block_languages, foreign_key: 'generated_from_id', class_name: 'BlockLanguage'
 
   # A code resource may reference other code resources (this `includes` other)
   has_many :code_resource_reference_origins,
@@ -175,7 +178,7 @@ class CodeResource < ApplicationRecord
   # is of interest when e.g. saving this resource, as it may require updates
   # to these objects.
   def immediate_dependants
-    self.grammars
+    self.generated_grammars + self.generated_block_languages
   end
 
   # Regenerates other resources that depend on this code resource.

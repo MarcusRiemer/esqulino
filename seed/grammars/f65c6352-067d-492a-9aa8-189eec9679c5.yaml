@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2020-08-14 08:18:16.049875000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-02-05 14:26:00.850640000 Z
+  value_before_type_cast: 2021-04-13 15:10:29.840189000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
@@ -42,15 +42,16 @@ concise_attributes:
   name: visualisations
   value_before_type_cast: '{"dxml": {"element": {"type": "visualise", "attributes":
     [{"type": "container", "children": [{"type": "container", "children": [{"type":
-    "terminal", "symbol": "<"}, {"name": "name", "type": "interpolate"}, {"name":
-    "attributes", "type": "each"}, {"type": "terminal", "symbol": ">"}], "orientation":
-    "horizontal"}, {"type": "container", "children": [{"name": "elements", "type":
-    "each"}], "orientation": "vertical"}, {"type": "container", "children": [{"type":
-    "terminal", "symbol": "</"}, {"name": "name", "type": "interpolate"}, {"type":
-    "terminal", "symbol": ">"}], "orientation": "horizontal"}], "orientation": "vertical"}]},
-    "attribute": {"type": "visualise", "attributes": [{"type": "container", "children":
-    [{"name": "name", "type": "interpolate"}, {"type": "terminal", "symbol": "="},
-    {"name": "value", "type": "interpolate"}], "orientation": "horizontal"}]}}}'
+    "terminal", "symbol": "<"}, {"name": "name", "tags": ["keyword"], "type": "interpolate"},
+    {"name": "attributes", "type": "each"}, {"type": "terminal", "symbol": ">"}],
+    "orientation": "horizontal"}, {"tags": ["indent"], "type": "container", "children":
+    [{"name": "elements", "type": "each"}], "orientation": "vertical"}, {"type": "container",
+    "children": [{"type": "terminal", "symbol": "</"}, {"name": "name", "tags": ["keyword"],
+    "type": "interpolate"}, {"type": "terminal", "symbol": ">"}], "orientation": "horizontal"}],
+    "orientation": "vertical"}]}, "attribute": {"type": "visualise", "attributes":
+    [{"type": "container", "children": [{"name": "name", "tags": ["space-before"],
+    "type": "interpolate"}, {"type": "terminal", "symbol": "="}, {"name": "value",
+    "tags": ["double-quote"], "type": "interpolate"}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_visualisations
   value_before_type_cast: "{}"

@@ -29,12 +29,12 @@ class Mutations::CodeResource::Update < Mutations::BaseMutation
 
   def resolve(id:, name:, ast:, block_language_id:, programming_language_id:)
     resource = CodeResource.find_by!(id: id)
-    affected = resource.update_this_and_dependants!({
-                                                      :name => name,
-                                                      :ast => ast,
-                                                      :block_language_id => block_language_id,
-                                                      :programming_language_id => programming_language_id
-                                                    })
+    affected = resource.update_this_and_dependants!(
+      name: name,
+      ast: ast,
+      block_language_id: block_language_id,
+      programming_language_id: programming_language_id
+    )
 
     return {
       code_resource: resource,

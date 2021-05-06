@@ -9,6 +9,16 @@ class Grammar < ApplicationRecord
       .fetch(:seed)
       .fetch(:meta)
       .fetch(:grammar)
+      .fetch(:grammar)
+  end
+
+  # ID of the meta block language grammar
+  def self.meta_block_language_id
+    Rails.application.config_for(:sqlino)
+      .fetch(:seed)
+      .fetch(:meta)
+      .fetch(:grammar)
+      .fetch(:block_language)
   end
 
   # A user defined name
@@ -127,6 +137,11 @@ class Grammar < ApplicationRecord
       if (document_references_changed)
         self.grammar_reference_origins = regenerated_relationships
       end
+
+      # Workaround: We need to "sometimes" fetch the referenced types
+      # For the moment we will just do it every time we regenerate
+      # from a code resource
+      self.refresh_from_references!
 
       affected << self
 

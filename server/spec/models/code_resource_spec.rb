@@ -167,14 +167,19 @@ RSpec.describe CodeResource, type: :model do
 
       expect(res.immediate_dependants.to_a).to eq [grammar]
     end
+
+    it "with a single generated block language" do
+      res = FactoryBot.create(:code_resource)
+      block_lang = FactoryBot.create(:block_language, generated_from: res)
+
+      expect(res.immediate_dependants.to_a).to eq [block_lang]
+    end
   end
 
   context "update_this_and_dependants" do
     it "doesn't update if there is no change" do
       code = FactoryBot.create(:code_resource, :grammar_single_type)
-      result = code.update_this_and_dependants!({
-                                                 name: code.name
-                                               })
+      result = code.update_this_and_dependants!(name: code.name)
 
       expect(result).to eq []
       expect(code.changed?).to eq false
@@ -182,9 +187,7 @@ RSpec.describe CodeResource, type: :model do
 
     it "does update itself if there is a change" do
       code = FactoryBot.create(:code_resource, :grammar_single_type)
-      result = code.update_this_and_dependants!({
-                                                 name: "New"
-                                               })
+      result = code.update_this_and_dependants!(name: "New")
 
       expect(result).to eq []
       expect(code.name).to eq "New"
@@ -195,9 +198,7 @@ RSpec.describe CodeResource, type: :model do
       related = FactoryBot.create(:code_resource, :grammar_single_type)
       grammar = FactoryBot.create(:grammar, generated_from: related)
 
-      result = related.update_this_and_dependants!({
-                                                     name: "New"
-                                                   })
+      result = related.update_this_and_dependants!(name: "New")
 
       expect(result).to eq [grammar]
       expect(related.name).to eq "New"

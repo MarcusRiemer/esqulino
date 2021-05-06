@@ -1,0 +1,12 @@
+query GrammarGeneratedBy($codeResourceId: ID) {
+  grammars(input: {
+    filter: {
+      generatedFromId: $codeResourceId
+    }
+  }) {
+    nodes {
+      id
+      name
+    }
+  }
+}

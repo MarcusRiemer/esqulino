@@ -3,6 +3,7 @@ import { URL } from "url";
 import { httpRequest } from "./request-promise";
 
 import { SyntaxTree } from "../app/shared/syntaxtree/syntaxtree";
+import * as MetaBlockLanguage from "../app/shared/syntaxtree/meta-blocklanguage/meta-blocklanguage";
 
 import { ServerApi } from "../app/shared/serverdata/serverapi";
 
@@ -65,13 +66,21 @@ interface EmitCodeCommand {
 }
 
 /**
- * Prints the compiled version of the given syntaxtree.
+ * Generates blocks from the given instructions
  */
 interface EmitGeneratedBlocksCommand {
   type: "emitGeneratedBlocks";
   blockLanguage: BlockLanguageListDescription;
   generator: BlockLanguageGeneratorDocument;
   grammar: GrammarDescription;
+}
+
+/**
+ * Generates the block language settings from the given instructions
+ */
+interface EmitBlockLanguageSettingsCommand {
+  type: "emitBlockLanguageSettings";
+  metaBlockLanguage: NodeDescription;
 }
 
 /**
@@ -98,7 +107,8 @@ type Command =
   | GraphvizSyntaxTreeCommand
   | EmitCodeCommand
   | EmitGeneratedBlocksCommand
-  | ReferencedCodeResourcesCommand;
+  | ReferencedCodeResourcesCommand
+  | EmitBlockLanguageSettingsCommand;
 
 // Knows all URLs that are available to the API
 const serverApi = new ServerApi("http://localhost:9292/api");
@@ -194,11 +204,10 @@ export async function executeCommand(
         }
       }
       case "emitGeneratedBlocks": {
-        return generateBlockLanguage(
-          command.blockLanguage,
-          command.generator,
-          command.grammar
-        );
+        return generateBlockLanguage(command.generator, command.grammar);
+      }
+      case "emitBlockLanguageSettings": {
+        return MetaBlockLanguage.readFromNode(command.metaBlockLanguage, true);
       }
       case "referencedCodeResources":
       case "referencedGrammars": {

@@ -62,10 +62,10 @@ export class CreateBlockLanguageComponent {
       .toPromise();
 
     // Generate some default blocks
-    const toCreate = generateBlockLanguage(
+    const toCreate = Object.assign(
+      {},
       this.blockLanguage,
-      DEFAULT_GENERATOR,
-      g
+      generateBlockLanguage(DEFAULT_GENERATOR, g)
     );
 
     // Default the default programming language to use the same value as

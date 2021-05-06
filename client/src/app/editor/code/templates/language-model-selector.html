@@ -6,6 +6,6 @@
     *ngFor="let usedLang of (availableBlockLanguages$ | async)"
     [value]="usedLang.blockLanguageId"
   >
-    {{ usedLang | displayResource }} ({{ usedLang.blockLanguageId }})
+    {{ usedLang | displayResource | async }} ({{ usedLang.blockLanguageId }})
   </option>
 </select>

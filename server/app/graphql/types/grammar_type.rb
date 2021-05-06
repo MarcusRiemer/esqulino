@@ -47,6 +47,7 @@ module Types
       argument :id, type: ID, required: false
       argument :name, type: String, required: false
       argument :slug, type: String, required: false
+      argument :generated_from_id, type: ID, required: false
     end
 
     class InputType < Types::Base::BaseInputObject
