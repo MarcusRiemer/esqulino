@@ -204,11 +204,7 @@ export async function executeCommand(
         }
       }
       case "emitGeneratedBlocks": {
-        return generateBlockLanguage(
-          command.blockLanguage,
-          command.generator,
-          command.grammar
-        );
+        return generateBlockLanguage(command.generator, command.grammar);
       }
       case "emitBlockLanguageSettings": {
         return MetaBlockLanguage.readFromNode(command.metaBlockLanguage, true);

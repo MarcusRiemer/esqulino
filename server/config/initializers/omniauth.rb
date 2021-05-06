@@ -16,13 +16,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     provider :developer, :fields => [:name, :email], :uid_field => :email
   end
 
-  if auth_providers.include? "Identity::Google"
-    provider :google_oauth2,
-             config[:auth_provider_keys][:google_id],
-             config[:auth_provider_keys][:google_secret],
-             prompt: "consent"
-  end
-
   if auth_providers.include? "Identity::Keycloak"
     provider :keycloak_openid,
              "blattwerkzeug-omniauth",

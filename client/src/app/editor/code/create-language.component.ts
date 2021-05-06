@@ -14,9 +14,18 @@ import { ProjectService } from "../project.service";
   templateUrl: "./templates/create-language.html",
 })
 export class CreateLanguageComponent {
+  readonly minLengthDisplayName = 2;
+  readonly minLengthTechnicalName = 1;
+
   creationInput = new FormGroup({
-    newLanguageName: new FormControl("", {
-      validators: [Validators.required, Validators.minLength(2)],
+    newLanguageDisplayName: new FormControl("", {
+      validators: [
+        Validators.required,
+        Validators.minLength(this.minLengthDisplayName),
+      ],
+    }),
+    newLanguageTechnicalName: new FormControl("", {
+      validators: [Validators.minLength(this.minLengthTechnicalName)],
     }),
     runtimeLanguage: new FormControl("generic", {
       validators: [Validators.required],
@@ -42,7 +51,8 @@ export class CreateLanguageComponent {
       const result = await this._serverEndpoint
         .mutate({
           projectId: this.currentProjectId,
-          languageName: this.newLanguageName.value,
+          languageDisplayName: this.newLanguageDisplayName.value,
+          languageTechnicalName: this.newLanguageTechnicalName.value,
           runtimeLanguageId: this.runtimeLanguage.value,
           createInitialCodeResource: true,
         })
@@ -53,11 +63,12 @@ export class CreateLanguageComponent {
       const resultData = result.data.createProgrammingLanguage;
       const p = this._projectService.cachedProject;
 
-      // Always present: A new programming language link
-
       // Always present: The new grammar code resource
       p.addCodeResource(
-        new CodeResource(resultData.grammarCodeResource, p.resourceReferences)
+        new CodeResource(
+          resultData.structureGrammarCodeResource,
+          p.resourceReferences
+        )
       );
 
       if (resultData.initialCodeResource) {
@@ -66,7 +77,7 @@ export class CreateLanguageComponent {
         );
       }
 
-      this._router.navigate([resultData.grammarCodeResource.id], {
+      this._router.navigate([resultData.structureGrammarCodeResource.id], {
         relativeTo: this._route.parent,
       });
     } finally {
@@ -78,8 +89,12 @@ export class CreateLanguageComponent {
     return this._projectService.cachedProject.id;
   }
 
-  get newLanguageName() {
-    return this.creationInput.get("newLanguageName");
+  get newLanguageDisplayName() {
+    return this.creationInput.get("newLanguageDisplayName");
+  }
+
+  get newLanguageTechnicalName() {
+    return this.creationInput.get("newLanguageTechnicalName");
   }
 
   get runtimeLanguage() {

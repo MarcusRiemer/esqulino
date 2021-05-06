@@ -4,12 +4,22 @@ class BlockLanguage < ApplicationRecord
   # In progress: Pulling out model type
   self.ignored_columns = ['model']
 
-  # ID of the meta block language
+  # ID of the meta grammar block language
   def self.meta_grammar_id
     Rails.application.config_for(:sqlino)
       .fetch(:seed)
       .fetch(:meta)
-      .fetch(:block)
+      .fetch(:block_language)
+      .fetch(:grammar)
+  end
+
+  # ID of the meta block language block language
+  def self.meta_block_language_id
+    Rails.application.config_for(:sqlino)
+      .fetch(:seed)
+      .fetch(:meta)
+      .fetch(:block_language)
+      .fetch(:block_language)
   end
 
   # Every language must have a name and a family assigned
@@ -98,11 +108,15 @@ class BlockLanguage < ApplicationRecord
   #
   # @return [BlockLanguage[]] Every model that has been changed by regenenaration
   def regenerate_from_code_resource!(ide_service = IdeService.instance)
-    generated_settings = ide_service.emit_block_lang_settings(generated_from.ast)
+    if generated_from
+      generated_settings = ide_service.emit_block_lang_settings(generated_from.ast)
 
-    self.assign_attributes generated_settings
+      self.assign_attributes generated_settings
 
-    return [self]
+      return [self]
+    else
+      return []
+    end
   end
 
   # Computes a hash that may be sent back to the client if it requires

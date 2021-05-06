@@ -1,16 +1,20 @@
 mutation CreateProgrammingLanguage(
   $projectId: ID!,
-  $languageName: String!,
+  $languageDisplayName: String!,
+  $languageTechnicalName: String,
   $runtimeLanguageId: String!,
   $createInitialCodeResource: Boolean,
+  $createStructureAndSyntaxGrammar: Boolean,
 ) {
   createProgrammingLanguage(input: {
-    projectId: $projectId,
-    languageName: $languageName,
-    runtimeLanguageId: $runtimeLanguageId,
-    createInitialCodeResource: $createInitialCodeResource
-  }) {
-    grammar {
+      projectId: $projectId,
+      languageDisplayName: $languageDisplayName,
+      languageTechnicalName: $languageTechnicalName,
+      runtimeLanguageId: $runtimeLanguageId,
+      createInitialCodeResource: $createInitialCodeResource,
+      createStructureAndSyntaxGrammar: $createStructureAndSyntaxGrammar,
+    }) {
+    structureGrammar {
       id
       name
       types
@@ -18,7 +22,22 @@ mutation CreateProgrammingLanguage(
       foreignTypes
       foreignVisualisations
     }
-    grammarCodeResource {
+    structureGrammarCodeResource {
+      id
+      name
+      ast
+      blockLanguageId
+      programmingLanguageId
+    }
+    syntaxGrammar {
+      id
+      name
+      types
+      visualisations
+      foreignTypes
+      foreignVisualisations
+    }
+    syntaxGrammarCodeResource {
       id
       name
       ast

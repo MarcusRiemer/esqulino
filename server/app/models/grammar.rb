@@ -9,6 +9,16 @@ class Grammar < ApplicationRecord
       .fetch(:seed)
       .fetch(:meta)
       .fetch(:grammar)
+      .fetch(:grammar)
+  end
+
+  # ID of the meta block language grammar
+  def self.meta_block_language_id
+    Rails.application.config_for(:sqlino)
+      .fetch(:seed)
+      .fetch(:meta)
+      .fetch(:grammar)
+      .fetch(:block_language)
   end
 
   # A user defined name

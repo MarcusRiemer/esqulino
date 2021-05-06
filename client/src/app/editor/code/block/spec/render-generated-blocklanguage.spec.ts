@@ -89,12 +89,15 @@ describe(`Render Generated BlockLanguages`, () => {
       }
     );
     const genBlockLanguage = specBuildBlockLanguageDescription(
-      generateBlockLanguage(
+      Object.assign(
+        {},
         listBlockLanguage,
-        {
-          type: "tree",
-        },
-        grammarDoc
+        generateBlockLanguage(
+          {
+            type: "tree",
+          },
+          grammarDoc
+        )
       )
     );
 

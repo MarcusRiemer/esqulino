@@ -81,9 +81,9 @@ export class GalleryGrammarComponent implements OnInit {
         type: "manual",
       };
 
-      const blockDesc = generateBlockLanguage(blockListDesc, genDesc, g);
+      const blockDesc = generateBlockLanguage(genDesc, g);
       console.log(`Generated block language for "${g.name}" grammar gallery`);
-      return new BlockLanguage(blockDesc);
+      return new BlockLanguage(Object.assign(blockListDesc, blockDesc));
     })
   );
 

@@ -152,10 +152,10 @@ export class EditBlockLanguageService {
               // Try to generate the block language itself. If this fails something is
               // seriously wrong and we should probably do something smart about it.
               try {
-                const updated = generateBlockLanguage(
+                const updated = Object.assign(
+                  {},
                   blockLanguage,
-                  instructions,
-                  g
+                  generateBlockLanguage(instructions, g)
                 );
                 // Keep previous root css classes
                 updated.rootCssClasses = blockLanguage.rootCssClasses;

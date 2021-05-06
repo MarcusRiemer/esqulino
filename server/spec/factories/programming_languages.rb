@@ -8,6 +8,11 @@ FactoryBot.define do
       name { 'Meta Grammar' }
     end
 
+    trait :meta_block_language do
+      id { 'meta-block-language' }
+      name { 'Meta Block Language' }
+    end
+
     trait :sql do
       id { 'sql' }
       name { 'SQL' }
