@@ -17,7 +17,7 @@ RSpec.describe GraphqlController, type: :request do
     it 'no query, only valid name' do
       expect {
         execute_query(operation_name: "RegenerateForeignTypes", expect_no_errors: false)
-      }.not_to raise_error(ArgumentError)
+      }.not_to raise_error()
     end
   end
 

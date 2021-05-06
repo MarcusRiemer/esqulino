@@ -42,15 +42,10 @@ class BaseIdeService
         "GrammarDocument",
         block_language.grammar.document.transform_keys { |k| k.camelize(:lower) }
       )
-      block_language_description = ensure_valid_document(
-        "BlockLanguageListDescription",
-        block_language.to_list_api_response
-      )
 
       # All documents seem fine, lets execute the request
       json_result = execute_request({
                                       "type" => "emitGeneratedBlocks",
-                                      "block_language" => block_language_description,
                                       "generator" => generator_description,
                                       "grammar" => grammar_description
                                     })
@@ -59,6 +54,23 @@ class BaseIdeService
     else
       nil
     end
+  end
+
+  # Converts the given AST into a "proper" settings for a block language
+  # (the settings are every aspect of the language without the blocks).
+  def emit_block_lang_settings(block_lang_desc_ast)
+    ensure_valid_document(
+      "NodeDescription",
+      block_lang_desc_ast
+    )
+
+    # All documents seem fine, lets execute the request
+    json_result = execute_request({
+                                    "type" => "emitBlockLanguageSettings",
+                                    "metaBlockLanguage" => block_lang_desc_ast
+                                  })
+
+    return json_result.transform_keys { |k| k.underscore }
   end
 
   # Finds out which other resources are referenced by the given

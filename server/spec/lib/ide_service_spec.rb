@@ -25,7 +25,7 @@ RSpec.describe "IDE Service" do
       expect(service.emit_code(tree_desc, "sql")).to eq "*"
     end
 
-    it "emits generated block languages" do
+    it "emits generated blocks for languages" do
       service = OneShotExecIdeService.new(config: exec_configuration)
 
       grammar = create(:grammar)

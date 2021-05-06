@@ -15,7 +15,7 @@ export const GRAMMAR_NODE_CONVERTER: NodeConverterRegistration[] = [
     },
     converter: {
       init: function (node: SyntaxNode, process: CodeGeneratorProcess<{}>) {
-        const grammarDocument = readFromNode(node.toModel());
+        const grammarDocument = readFromNode(node.toModel(), true);
         process.addConvertedFragment(
           JSON.stringify(grammarDocument, undefined, 2),
           node,

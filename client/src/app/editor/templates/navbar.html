@@ -1,4 +1,4 @@
-<mat-nav-list id="main-nav">
+<mat-nav-list *ngIf="project$ | async as project" id="main-nav">
   <a
     mat-list-item
     [routerLink]="['settings']"
@@ -20,12 +20,15 @@
     Code
   </a>
 
+  <!-- TODO: Wrap these in their own component to meaningfully
+             pre-fetch the state for the resource dragging. -->
   <a
     *ngFor="let codeResource of project?.codeResources"
     mat-list-item
     class="indent"
     [routerLink]="['ast', codeResource.id]"
     routerLinkActive="router-link-active"
+    (dragstart)="startResourceDrag($event, codeResource)"
   >
     <span class="fa fa-file-code-o fa-fw"></span>
     <span class="nav-target">{{ codeResource.name }}</span>
@@ -62,17 +65,17 @@
   <ng-container *ngIf="hasDatabase$ | async">
     <a
       mat-list-item
-      [routerLink]="['schema', currentDatabaseName]"
+      [routerLink]="['schema', currentDatabaseName$ | async]"
       [routerLinkActiveOptions]="{exact: true}"
       routerLinkActive="router-link-active"
     >
       <span class="fa fa-database fa-fw"></span>
-      Datenbank "{{ currentDatabaseName }}"
+      Datenbank "{{ currentDatabaseName$ | async }}"
     </a>
     <a
       mat-list-item
       *ngFor="let table of project?.schema.tables"
-      [routerLink]="['schema', currentDatabaseName, 'details', table.name]"
+      [routerLink]="['schema', currentDatabaseName$ | async, 'details', table.name]"
       routerLinkActive="router-link-active"
       class="indent"
     >

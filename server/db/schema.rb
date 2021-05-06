@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_04_145003) do
+ActiveRecord::Schema.define(version: 2021_04_15_080333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -30,7 +30,9 @@ ActiveRecord::Schema.define(version: 2021_02_04_145003) do
     t.jsonb "editor_components", default: []
     t.jsonb "local_generator_instructions"
     t.string "root_css_classes", default: [], array: true
+    t.uuid "generated_from_id"
     t.index ["default_programming_language_id"], name: "index_block_languages_on_default_programming_language_id"
+    t.index ["generated_from_id"], name: "index_block_languages_on_generated_from_id"
     t.index ["grammar_id"], name: "index_block_languages_on_grammar_id"
     t.index ["slug"], name: "index_block_languages_on_slug", unique: true
   end
@@ -193,6 +195,7 @@ ActiveRecord::Schema.define(version: 2021_02_04_145003) do
     t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
   end
 
+  add_foreign_key "block_languages", "code_resources", column: "generated_from_id"
   add_foreign_key "block_languages", "grammars"
   add_foreign_key "block_languages", "programming_languages", column: "default_programming_language_id"
   add_foreign_key "code_resource_references", "code_resources", column: "origin_id"

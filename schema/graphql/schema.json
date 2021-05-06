@@ -879,15 +879,23 @@
               "deprecationReason": null
             },
             {
-              "name": "grammars",
+              "name": "generatedGrammars",
               "description": null,
               "args": [
 
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "Grammar",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Grammar",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -2183,7 +2191,7 @@
               "deprecationReason": null
             },
             {
-              "name": "languageName",
+              "name": "languageDisplayName",
               "description": null,
               "type": {
                 "kind": "NON_NULL",
@@ -2193,6 +2201,18 @@
                   "name": "String",
                   "ofType": null
                 }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "languageTechnicalName",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": false,
@@ -2216,7 +2236,31 @@
             },
             {
               "name": "createInitialCodeResource",
-              "description": null,
+              "description": "Create an empty code resource with the new language?",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "createStructureAndSyntaxGrammar",
+              "description": "Split the grammar into two files?",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "createMetaBlockLanguage",
+              "description": "Create a block language resource for the block language",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -2263,7 +2307,21 @@
               "deprecationReason": null
             },
             {
-              "name": "grammar",
+              "name": "initialCodeResource",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "CodeResource",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "structureGrammar",
               "description": null,
               "args": [
 
@@ -2281,7 +2339,7 @@
               "deprecationReason": null
             },
             {
-              "name": "grammarCodeResource",
+              "name": "structureGrammarCodeResource",
               "description": null,
               "args": [
 
@@ -2299,15 +2357,37 @@
               "deprecationReason": null
             },
             {
-              "name": "initialCodeResource",
+              "name": "syntaxGrammar",
               "description": null,
               "args": [
 
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "CodeResource",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Grammar",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "syntaxGrammarCodeResource",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CodeResource",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3432,6 +3512,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "generatedFromId",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
@@ -7334,6 +7426,12 @@
               "deprecationReason": null
             },
             {
+              "name": "GrammarReferenceSeed",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ProgrammingLanguageSeed",
               "description": null,
               "isDeprecated": false,
@@ -9100,7 +9198,18 @@
               "name": "args",
               "description": null,
               "args": [
-
+                {
+                  "name": "includeDeprecated",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": "false",
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
               ],
               "type": {
                 "kind": "NON_NULL",

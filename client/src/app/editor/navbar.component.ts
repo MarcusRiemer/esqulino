@@ -1,33 +1,60 @@
-import { Component, Input } from "@angular/core";
-import { of } from "rxjs";
-import { map } from "rxjs/operators";
+import { Component } from "@angular/core";
 
-import { Project, ProjectService } from "./project.service";
+import { of } from "rxjs";
+import { map, shareReplay } from "rxjs/operators";
+
+import { GrammarGeneratedByGQL } from "../../generated/graphql";
+
+import { CodeResource } from "../shared";
+import { tailorResourceReferences } from "../shared/syntaxtree/tailor-resource-references";
+
+import { CurrentCodeResourceService } from "./current-coderesource.service";
+import { DragService } from "./drag.service";
+import { ProjectService } from "./project.service";
 
 @Component({
   templateUrl: "templates/navbar.html",
   selector: "editor-navbar",
 })
 export class NavbarComponent {
-  constructor(private _projectService: ProjectService) {}
+  constructor(
+    private readonly _projectService: ProjectService,
+    private readonly _dragService: DragService,
+    private readonly _grammarGeneratedBy: GrammarGeneratedByGQL,
+    private readonly _currentCodeResource: CurrentCodeResourceService
+  ) {}
 
   readonly hasDatabase$ = this._projectService.activeProject.pipe(
     map((p) => !!p.currentDatabaseName)
   );
 
+  readonly currentDatabaseName$ = this._projectService.activeProject.pipe(
+    map((p) => p.currentDatabaseName),
+    shareReplay(1)
+  );
+
   readonly imagesEnabled$ = of(false);
 
-  /**
-   * The currently edited project
-   */
-  @Input() project: Project;
+  readonly project$ = this._projectService.activeProject;
 
   /**
-   * @return The name of the database that is currently in use
+   * The user has decided to start dragging something from the sidebar.
    */
-  get currentDatabaseName() {
-    if (this.project) {
-      return this.project.currentDatabaseName;
+  async startResourceDrag(evt: DragEvent, c: CodeResource) {
+    // Only start drags if there is a current code resource, otherwise
+    // the <block-host> is irritated because there is no resource
+    // to validate against.
+    if (this._currentCodeResource.peekResource) {
+      const tailoredNode = await tailorResourceReferences(
+        c.toModel(),
+        this._grammarGeneratedBy
+      );
+      if (tailoredNode.length > 0) {
+        this._dragService.dragStart(evt, tailoredNode);
+      }
     }
+
+    // Explicitly cancel the builtin drag operation
+    return false;
   }
 }

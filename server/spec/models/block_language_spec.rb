@@ -92,6 +92,46 @@ RSpec.describe BlockLanguage do
     end
   end
 
+  context "regenerate_from_code_resource!" do
+    it "Doesn't regenerate without a code resource" do
+      block_language = create(:block_language)
+      expect(block_language.regenerate_from_code_resource!).to eq []
+    end
+
+    it "Properly regenerates the top level classes" do
+      css_classes_to_add = ["activate-keyword", "activate-block-outline"]
+
+      meta_code_resource = create(
+        :code_resource,
+        ast: {
+          "name" => "Document",
+          "language" => "MetaBlockLang",
+          "children" => {
+            "RootCssClasses" => css_classes_to_add.map do |c|
+              {
+                "name" => "CssClass",
+                "language" => "MetaBlockLang",
+                "properties" => {
+                  "Name" => c
+                }
+              }
+            end
+          }
+        }
+      )
+
+      block_language = create(
+        :block_language,
+        generated_from: meta_code_resource,
+        root_css_classes: [] # Will be added during regeneration
+      )
+
+      regenerated = block_language.regenerate_from_code_resource!(IdeService.guaranteed_instance)
+      expect(regenerated).to eq [block_language]
+      expect(block_language.root_css_classes).to eq css_classes_to_add
+    end
+  end
+
   it "can be valid" do
     res = FactoryBot.build(:block_language)
     expect(res.valid?).to be true

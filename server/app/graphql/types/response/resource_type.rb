@@ -4,6 +4,7 @@ class Types::Response::ResourceType < Types::Base::BaseEnum
   value "CodeResourceSeed"
   value "BlockLanguageSeed"
   value "GrammarSeed"
+  value "GrammarReferenceSeed"
   value "ProgrammingLanguageSeed"
   value "ProjectDatabaseSeed"
 end

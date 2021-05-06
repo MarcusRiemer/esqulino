@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
 
-import { filter, map, switchMap } from "rxjs/operators";
+import { filter, map, shareReplay, switchMap } from "rxjs/operators";
 
 import { QualifiedTypeName, NodeDescription } from "../../../shared/syntaxtree";
 import { readFromNode } from "../../../shared/syntaxtree/meta-grammar/meta-grammar";
 import {
   allConcreteTypes,
-  allVisualisableTypes,
   allVisualisationTypes,
   getTypeList,
 } from "../../../shared/syntaxtree/grammar-type-util";
@@ -45,7 +44,14 @@ export class DefinedTypesSidebarComponent {
 
   readonly editedGrammarDocument$ = this._current.currentTree.pipe(
     filter((t) => !t.isEmpty),
-    map((t) => readFromNode(t.toModel()))
+    map((t) => {
+      try {
+        return readFromNode(t.toModel(), true);
+      } catch {
+        return null;
+      }
+    }),
+    filter((g) => !!g)
   );
 
   readonly referencedGrammars$ = this.editedGrammarDocument$.pipe(
@@ -63,7 +69,7 @@ export class DefinedTypesSidebarComponent {
     this.referencedGrammars$,
   ]).pipe(
     map(([edited, included]) => {
-      if (included.length === 1) {
+      if (included?.length === 1) {
         return produce(edited, (merged) => {
           merged.foreignTypes = allConcreteTypes(included[0]);
           merged.foreignVisualisations = allVisualisationTypes(included[0]);
@@ -75,7 +81,9 @@ export class DefinedTypesSidebarComponent {
   );
 
   readonly availableNodes$ = this.fullGrammarDocument$.pipe(
-    map((g) => getTypeList(allConcreteTypes(g)))
+    map((g) => getTypeList(allConcreteTypes(g))),
+    // Keep providing the last configuration that was known to work
+    shareReplay(1)
   );
 
   printableName(n: QualifiedTypeName) {
