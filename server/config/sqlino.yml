@@ -26,9 +26,9 @@ common: &common-settings
     meta:
       grammar:
         grammar: "89f9ca62-845c-435b-9b9a-cf52fe7df2b1"
-        block_language: "df3ec59c-20c0-446d-8c84-7580e1c418bf"
+        block_language: "b292612e-c58f-442f-9139-00b35a22f266"
       block_language:
-        grammar: "b292612e-c58f-442f-9139-00b35a22f266"
+        grammar: "df3ec59c-20c0-446d-8c84-7580e1c418bf"
         block_language: "81430cc2-bcff-4304-8cfd-6f05cf249a53"
 
 
