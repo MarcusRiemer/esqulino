@@ -1672,6 +1672,7 @@ export type FullProjectQuery = { __typename?: "Query" } & {
     | "createdAt"
     | "updatedAt"
   > & {
+      user?: Maybe<{ __typename?: "User" } & Pick<User, "id" | "displayName">>;
       defaultDatabase?: Maybe<
         { __typename?: "ProjectDatabase" } & Pick<
           ProjectDatabase,
@@ -2961,6 +2962,10 @@ export const FullProjectDocument = gql`
       indexPageId
       createdAt
       updatedAt
+      user {
+        id
+        displayName
+      }
       defaultDatabase {
         id
         name

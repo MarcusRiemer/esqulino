@@ -1,0 +1,8 @@
+<div class="card mb-3" id="used-block-languages">
+  <h4 class="card-header">Projektmitglieder</h4>
+  <div class="card-body">
+    <span *ngIf="owner$ | async as owner">
+      Eigentümer ist {{ owner.displayName }}
+    </span>
+  </div>
+</div>
