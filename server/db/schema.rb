@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_15_080333) do
+ActiveRecord::Schema.define(version: 2021_05_14_094710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -135,6 +135,17 @@ ActiveRecord::Schema.define(version: 2021_04_15_080333) do
     t.index ["project_id"], name: "index_project_databases_on_project_id"
   end
 
+  create_table "project_members", force: :cascade do |t|
+    t.datetime "joined_at"
+    t.uuid "user_id", null: false
+    t.uuid "project_id", null: false
+    t.integer "type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["project_id"], name: "index_project_members_on_project_id"
+    t.index ["user_id"], name: "index_project_members_on_user_id"
+  end
+
   create_table "project_sources", force: :cascade do |t|
     t.uuid "project_id", null: false
     t.string "url"
@@ -212,6 +223,8 @@ ActiveRecord::Schema.define(version: 2021_04_15_080333) do
   add_foreign_key "log_entries", "users"
   add_foreign_key "news", "users"
   add_foreign_key "project_databases", "projects"
+  add_foreign_key "project_members", "projects"
+  add_foreign_key "project_members", "users"
   add_foreign_key "project_sources", "projects"
   add_foreign_key "project_uses_block_languages", "block_languages"
   add_foreign_key "project_uses_block_languages", "projects"
