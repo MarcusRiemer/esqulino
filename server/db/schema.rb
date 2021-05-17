@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_14_094710) do
+ActiveRecord::Schema.define(version: 2021_05_17_100330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -139,7 +139,7 @@ ActiveRecord::Schema.define(version: 2021_05_14_094710) do
     t.datetime "joined_at"
     t.uuid "user_id", null: false
     t.uuid "project_id", null: false
-    t.integer "type", null: false
+    t.integer "membership_type", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["project_id"], name: "index_project_members_on_project_id"

@@ -3,7 +3,7 @@ class ProjectMember < ApplicationRecord
   belongs_to :project
 
   #Represent the possible Member Type of a group
-  enum type: {
+  enum membership_type: {
     admin: 0,
     participant: 1
   }
