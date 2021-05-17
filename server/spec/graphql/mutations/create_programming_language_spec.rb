@@ -86,7 +86,7 @@ RSpec.describe Mutations::CreateProgrammingLanguage do
 
     # Meta grammar block language, meta block language and created block language
     expect(BlockLanguage.count).to eq 3
-    block_language = BlockLanguage.find_by(id: res[:used_block_language][:block_language_id])
+    block_language = BlockLanguage.find_by(id: res[:created_block_language_usage][:block_language_id])
     expect(block_language.grammar).to eq grammar
     expect(block_language.name).to eq "My Language"
     expect(block_language.default_programming_language.id).to eq "generic"
@@ -138,7 +138,7 @@ RSpec.describe Mutations::CreateProgrammingLanguage do
 
     # Meta grammar block language, meta block language and created block language
     expect(BlockLanguage.count).to eq 3
-    block_language = BlockLanguage.find_by!(id: res[:used_block_language][:block_language_id])
+    block_language = BlockLanguage.find_by(id: res[:created_block_language_usage][:block_language_id])
     expect(block_language.grammar).to eq grammar
     expect(block_language.name).to eq "My Language"
     expect(block_language.default_programming_language.id).to eq "generic"
@@ -177,7 +177,7 @@ RSpec.describe Mutations::CreateProgrammingLanguage do
     syntax_grammar = Grammar.find_by!(id: res[:syntax_grammar][:id])
     expect(syntax_grammar.generated_from).to eq syntax_code_resource
 
-    block_language = BlockLanguage.find_by(id: res[:used_block_language][:block_language_id])
+    block_language = BlockLanguage.find_by(id: res[:created_block_language_usage][:block_language_id])
     expect(block_language.grammar).to eq syntax_grammar
   end
 
@@ -208,7 +208,7 @@ RSpec.describe Mutations::CreateProgrammingLanguage do
     expect(syntax_grammar.generated_from).to eq syntax_code_resource
 
     # Block language must target syntax grammar
-    block_language = BlockLanguage.find_by(id: res[:used_block_language][:block_language_id])
+    block_language = BlockLanguage.find_by(id: res[:created_block_language_usage][:block_language_id])
     expect(block_language.grammar).to eq syntax_grammar
   end
 
@@ -238,7 +238,7 @@ RSpec.describe Mutations::CreateProgrammingLanguage do
     syntax_grammar = Grammar.find_by!(id: res[:syntax_grammar][:id])
     expect(syntax_grammar.generated_from).to eq syntax_code_resource
 
-    block_language = BlockLanguage.find_by(id: res[:used_block_language][:block_language_id])
+    block_language = BlockLanguage.find_by(id: res[:created_block_language_usage][:block_language_id])
     expect(block_language.grammar).to eq syntax_grammar
   end
 end
