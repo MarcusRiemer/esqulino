@@ -8,6 +8,10 @@ query FullProject($id: ID!) {
     indexPageId
     createdAt
     updatedAt
+    user {
+      id
+      displayName
+    }
     defaultDatabase {
       id
       name

@@ -4,12 +4,12 @@ class Mutations::Projects::CreateProject < Mutations::Projects::Projects
 
   field :id, ID, null: true
 
-  def resolve(**args)
+  def resolve(name:, slug: nil)
     authorize :project, :create?
 
     project = Project.new(
-      name: args[:name],
-      slug: args[:slug],
+      name: name,
+      slug: slug,
       user_id: current_user.id
     )
 

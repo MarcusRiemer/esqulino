@@ -14,6 +14,8 @@ module Types
     field :user, Types::UserType, null: true
     field :user_id, ID, null: true
 
+    field :members, [Types::UserType], null: true
+
     field :code_resources, [Types::CodeResourceType], null: false
     field :code_resource_count, Integer, null: true
     field :project_sources, [Types::ProjectSourceType], null: false

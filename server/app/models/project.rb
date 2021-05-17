@@ -5,9 +5,9 @@ class Project < ApplicationRecord
   # In progress: Multilingual migration
   self.ignored_columns = ['name_single', 'description_single']
 
-
-  # The Participants of this course
-  has_many :project_members 
+  # The Participants of this project / course with their roles
+  has_many :project_members
+  # The actual users that are participating in this course
   has_many :members, class_name: 'User', :foreign_key => 'project_id', through:  :project_members, :source => :user
 
   # The owner in this project
