@@ -5,6 +5,8 @@ module Types
     field :display_name, String, null: true
     field :email, String, null: true
     field :projects, [Types::ProjectType], null: true
+    field :member_at, [Types::ProjectType], null: false
+    field :project_members, [Types::ProjectMemberType], null: false
     field :identities, [Types::IdentityType], null: true
     field :news, [Types::NewsType], null: true
 
