@@ -484,6 +484,8 @@ export type MayPerformInputType = {
   policyAction: Scalars["String"];
 };
 
+export type MembershipTypeEnum = "admin" | "participant";
+
 export type Mutation = {
   __typename?: "Mutation";
   addUsedBlockLanguage?: Maybe<AddUsedBlockLanguagePayload>;
@@ -703,8 +705,10 @@ export type Project = {
   grammars: Array<Grammar>;
   id: Scalars["ID"];
   indexPageId?: Maybe<Scalars["String"]>;
+  members: Array<User>;
   name: Scalars["LangJson"];
   preview?: Maybe<Scalars["String"]>;
+  projectMembers: Array<ProjectMember>;
   projectSources: Array<ProjectSource>;
   projectUsesBlockLanguages: Array<ProjectUsesBlockLanguage>;
   public?: Maybe<Scalars["Boolean"]>;
@@ -757,6 +761,19 @@ export type ProjectInputType = {
   order?: Maybe<ProjectOrderType>;
   filter?: Maybe<ProjectFilterFieldType>;
   languages?: Maybe<Array<LanguageEnum>>;
+};
+
+export type ProjectMember = {
+  __typename?: "ProjectMember";
+  createdAt: Scalars["ISO8601DateTime"];
+  id: Scalars["ID"];
+  joinedAt?: Maybe<Scalars["ISO8601DateTime"]>;
+  membershipType: MembershipTypeEnum;
+  project: Project;
+  projectId: Scalars["ID"];
+  updatedAt: Scalars["ISO8601DateTime"];
+  user: User;
+  userId: Scalars["ID"];
 };
 
 export type ProjectOrderFieldEnum = "name" | "slug";
@@ -1092,7 +1109,9 @@ export type User = {
   email?: Maybe<Scalars["String"]>;
   id: Scalars["ID"];
   identities?: Maybe<Array<Identity>>;
+  memberAt: Array<Project>;
   news?: Maybe<Array<News>>;
+  projectMembers: Array<ProjectMember>;
   projects?: Maybe<Array<Project>>;
   roles: Role;
   updatedAt: Scalars["ISO8601DateTime"];
@@ -1661,6 +1680,13 @@ export type FullProjectQuery = { __typename?: "Query" } & {
     | "createdAt"
     | "updatedAt"
   > & {
+      projectMembers: Array<
+        { __typename?: "ProjectMember" } & Pick<
+          ProjectMember,
+          "id" | "membershipType" | "joinedAt"
+        > & { user: { __typename?: "User" } & Pick<User, "id" | "displayName"> }
+      >;
+      user?: Maybe<{ __typename?: "User" } & Pick<User, "id" | "displayName">>;
       defaultDatabase?: Maybe<
         { __typename?: "ProjectDatabase" } & Pick<
           ProjectDatabase,
@@ -2941,6 +2967,19 @@ export const FullProjectDocument = gql`
       indexPageId
       createdAt
       updatedAt
+      projectMembers {
+        id
+        membershipType
+        joinedAt
+        user {
+          id
+          displayName
+        }
+      }
+      user {
+        id
+        displayName
+      }
       defaultDatabase {
         id
         name
