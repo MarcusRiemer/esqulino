@@ -9,7 +9,7 @@ import * as VERSION from "./version";
 export const environment: EnvironmentDescription = {
   production: false,
   canonicalHost: "lvh.me:9292",
-  apiEndpoint: "http://lvh.me:9292/api",
+  apiEndpoint: "//lvh.me:9292/api",
   loginEnabled: true,
   piwik: {
     host: "//piwik.blattwerkzeug.de",

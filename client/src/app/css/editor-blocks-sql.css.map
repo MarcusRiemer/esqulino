@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,IAAI,GAAG,QAAQ,CAAC;EACZ,KAAK,EAAE,IAAI;CACd;;AAED,AAAA,IAAI,GAAG,SAAS,CAAC;EACb,KAAK,EAAE,KAAK;CACf;;AAED,AAAA,IAAI,GAAG,UAAU,CAAC;EACd,KAAK,EAAE,MAAM;CAChB;;AAED,AAAA,IAAI,AAAA,SAAS,CAAC;EACV,KAAK,EAAE,GAAG;CACb;;AAED,AAAA,IAAI,GAAG,UAAU,CAAC;EACd,SAAS,EAAE,IAAI;CAClB",
+    "sources": [
+        "editor-blocks-sql.scss"
+    ],
+    "names": [],
+    "file": "editor-blocks-sql.css"
+}

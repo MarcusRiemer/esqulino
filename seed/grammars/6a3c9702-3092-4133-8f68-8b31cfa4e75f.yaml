@@ -1,0 +1,70 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: JavaScript
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 6a3c9702-3092-4133-8f68-8b31cfa4e75f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-14 11:53:53.801934000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-14 12:38:40.351070000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: bcb341f2-fda6-47d3-9b72-552f1369a78c
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"js": {"For": {"type": "concrete", "attributes": [{"type":
+    "container", "children": [{"type": "container", "children": [{"tags": ["keyword"],
+    "type": "terminal", "symbol": "for"}, {"type": "terminal", "symbol": "("}, {"name":
+    "Declare", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName":
+    "DeclareVariable", "languageName": "js"}}]}, {"type": "terminal", "symbol": ";"},
+    {"name": "Check", "type": "sequence", "nodeTypes": [{"typeName": "Expression",
+    "languageName": "js"}]}, {"type": "terminal", "symbol": ";"}, {"name": "Step",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "Statement",
+    "languageName": "js"}}]}, {"tags": ["space-after"], "type": "terminal", "symbol":
+    ")"}, {"type": "terminal", "symbol": "{"}], "orientation": "horizontal"}, {"tags":
+    ["indent"], "type": "container", "children": [{"name": "$childGroup", "type":
+    "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "Statement",
+    "languageName": "js"}}]}], "orientation": "vertical"}, {"type": "terminal", "symbol":
+    "}"}], "orientation": "vertical"}]}, "Program": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "Body", "type": "sequence", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "Statement", "languageName": "js"}}]}],
+    "orientation": "vertical"}]}, "Statement": {"type": "oneOf", "oneOf": [{"typeName":
+    "DeclareVariable", "languageName": "js"}, {"typeName": "CallFunction", "languageName":
+    "js"}, {"typeName": "For", "languageName": "js"}]}, "ConstValue": {"type": "concrete",
+    "attributes": [{"base": "string", "name": "Value", "type": "property"}]}, "Expression":
+    {"type": "oneOf", "oneOf": [{"typeName": "ConstValue", "languageName": "js"}]},
+    "CallFunction": {"type": "concrete", "attributes": [{"base": "string", "name":
+    "Name", "type": "property"}, {"type": "terminal", "symbol": "("}, {"name": "Arguments",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "Expression",
+    "languageName": "js"}}]}, {"type": "terminal", "symbol": ")"}]}, "ExprVariable":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "Name", "type":
+    "property"}]}, "DeclareVariable": {"type": "concrete", "attributes": [{"type":
+    "container", "children": [{"base": "string", "name": "Type", "type": "property"},
+    {"base": "string", "name": "Name", "type": "property"}, {"type": "terminal", "symbol":
+    "="}, {"name": "Value", "type": "sequence", "nodeTypes": [{"typeName": "Expression",
+    "languageName": "js"}]}], "orientation": "horizontal"}]}, "BinaryExpression":
+    {"type": "concrete", "attributes": []}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "Program", "languageName": "js"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
+new_record: false
+active_record_yaml_version: 2

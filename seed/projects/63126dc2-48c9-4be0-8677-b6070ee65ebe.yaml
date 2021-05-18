@@ -2,13 +2,13 @@
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
-  value_before_type_cast: meta-block-lang
+  value_before_type_cast: lang-js
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: '"de"=>"Meta Block Language"'
+  value_before_type_cast: '"de"=>"Sprache: JavaScript"'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
-  value_before_type_cast: b1149fa7-dc3d-414f-93b9-56c7f77c27d0
+  value_before_type_cast: 63126dc2-48c9-4be0-8677-b6070ee65ebe
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: public
   value_before_type_cast: false
@@ -18,15 +18,15 @@ concise_attributes:
   name: index_page_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: 2021-04-15 13:40:48.291907000 Z
+  value_before_type_cast: 2021-05-14 11:53:35.336049000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-14 11:41:46.530274000 Z
+  value_before_type_cast: 2021-05-14 11:53:35.336049000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
-  value_before_type_cast: 00000000-0000-0000-0000-000000000002
+  value_before_type_cast: 00000000-0000-0000-0000-000000000001
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: ''

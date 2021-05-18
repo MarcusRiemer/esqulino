@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
 
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { catchError, delay, filter, tap, map, share } from "rxjs/operators";
 
-import { ServerApiService } from "../shared/serverdata/serverapi.service";
 import { Project, ProjectFullDescription } from "../shared/project";
 import { ResourceReferencesService } from "../shared/resource-references.service";
 
@@ -36,21 +35,18 @@ export class ProjectService {
   /**
    * The project instance that is delivered to all subscribers.
    */
-  private _subject: BehaviorSubject<Project>;
+  private readonly _currentProject = new BehaviorSubject<Project>(undefined);
+
+  private readonly _currentProjectId = new BehaviorSubject<Project["id"]>(
+    undefined
+  );
 
   constructor(
-    private _server: ServerApiService,
     private _resourceReferences: ResourceReferencesService,
     private _fullProject: FullProjectGQL,
     private _destroyProject: DestroyProjectGQL,
     private _updateProject: UpdateProjectGQL
-  ) {
-    // Create a single subject once and for all. This instance is not
-    // allowed to changed as it is passed on to every subscriber.
-    // TODO: Make this blocking until the first value was loaded
-    //       instead of filling it with `undefined`.
-    this._subject = new BehaviorSubject<Project>(undefined);
-  }
+  ) {}
 
   /**
    * Removes the reference to the current project, effectively
@@ -58,7 +54,8 @@ export class ProjectService {
    */
   forgetCurrentProject() {
     console.log("ProjectService got told to forget current project");
-    this._subject.next(undefined);
+    this._currentProject.next(undefined);
+    this._currentProjectId.next(undefined);
   }
 
   /**
@@ -73,7 +70,7 @@ export class ProjectService {
 
     // Clear out the reference to the current project if we are loading
     // a new project or must reload by sheer force.
-    const currentProject = this._subject.getValue();
+    const currentProject = this._currentProject.getValue();
     if (
       forceRefresh ||
       (currentProject && !currentProject.hasSlugOrId(slugOrId))
@@ -97,7 +94,8 @@ export class ProjectService {
         console.log(
           `Project Service: HTTP request for specific project ("${slugOrId}") finished`
         );
-        this._subject.next(res);
+        this._currentProject.next(res);
+        this._currentProjectId.next(slugOrId);
 
         this._httpRequest = undefined;
       },
@@ -107,10 +105,11 @@ export class ProjectService {
         console.log(
           `Project Service: HTTP error with request for specific project ("${slugOrId}") => "${error.status}: ${error.statusText}"`
         );
-        this._subject.error(error);
+        this._currentProject.error(error);
 
         // Reset the internal to be as blank as possible
-        this._subject.next(undefined);
+        this._currentProject.next(undefined);
+        this._currentProjectId.next(undefined);
         this._httpRequest = undefined;
       }
     );
@@ -123,9 +122,9 @@ export class ProjectService {
    * Retrieves an observable that always points to the active
    * project.
    */
-  get activeProject(): Observable<Project> {
-    return this._subject.pipe(filter((v) => !!v));
-  }
+  readonly activeProject = this._currentProject.pipe(filter((v) => !!v));
+
+  readonly activeProjectId$ = this._currentProjectId.asObservable();
 
   /**
    * Unwraps the project from the observable.
@@ -133,7 +132,7 @@ export class ProjectService {
    * @return The project that is currently shared to all subscribers.
    */
   get cachedProject(): Project {
-    return this._subject.getValue();
+    return this._currentProject.getValue();
   }
 
   /**
@@ -170,6 +169,6 @@ export class ProjectService {
     // in a real world app, we may send the error to some remote logging infrastructure
     // instead of just logging it to the console
     console.log(error);
-    return Observable.throw(error);
+    return throwError(error);
   }
 }

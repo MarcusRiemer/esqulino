@@ -1,0 +1,46 @@
+.editor-images .filter-input {
+  width: 25%;
+  min-width: 12rem;
+  display: inline-block;
+}
+
+.editor-images .image-card {
+  min-height: 15.35rem;
+  min-width: 16rem;
+}
+
+.editor-images .card:hover > .card-img-overlay {
+  display: block;
+}
+
+.editor-images .card > .card-img-overlay {
+  display: none;
+}
+
+.editor-images .table-icon-col {
+  width: 128px;
+}
+
+.editor-images .table-icon {
+  max-width: 128px;
+  max-height: 128px;
+}
+
+.editor-images .table-button {
+  width: 9rem;
+  display: block;
+}
+
+/* Not nested into any class because it is meant to be used anywhere */
+image-selector {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+image-selector img {
+  max-width: calc(2.25rem + 2px);
+  max-height: calc(2.25rem + 2px);
+  margin: 2px;
+}
+/*# sourceMappingURL=editor-images.css.map */

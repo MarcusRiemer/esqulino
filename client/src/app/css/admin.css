@@ -1,0 +1,120 @@
+.admin {
+  /* Typical height: Almost full screen */
+  /* Typical height: Almost full screen, but inside a tab group */
+  /* Typical height: Half a screen */
+  /* Make the ace-editor look a little like the surrounding components */
+  /* Bootstrap aligns texts in the center, this looks odd for the parameter names */
+  /* Some minor optical grouping of items in every trait scope */
+  /* Chip lists prefer to stack their items vertically, lets only do this if there
+       really is not enough space. */
+  /* Clickable root classes that have been added in the block language editor */
+  /* Tables are usually full width in the admin backend */
+  /* Hides (cached) tables until the table data is available,
+       hides progress-bar when table data arrived */
+}
+
+.admin textarea.full-height, .admin json-editor.full-height ace-editor {
+  height: 95vh;
+}
+
+.admin mat-tab-group textarea.full-height, .admin mat-tab-group json-editor.full-height ace-editor {
+  height: calc(95vh - 49px);
+  /* Subtract height of tab group */
+}
+
+.admin textarea.half-height, .admin json-editor.half-height ace-editor {
+  height: 50vh;
+}
+
+.admin ace-editor {
+  min-height: 200px;
+  width: 100%;
+  overflow: auto;
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+}
+
+.admin edit-input-parameter-value .input-group-text {
+  text-align: left;
+}
+
+.admin edit-single-trait-scope {
+  display: block;
+  padding: 5px;
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+  margin-bottom: 5px;
+}
+
+.admin .full-width-chip-list {
+  width: 100%;
+}
+
+.admin .block-lang-css-root-class {
+  cursor: pointer;
+}
+
+.admin table.full-width {
+  width: 100%;
+}
+
+.admin table.hide, .admin mat-progress-bar.hide {
+  display: none !important;
+}
+
+.admin .block-lang-css-root-class:hover {
+  background-color: red;
+}
+
+.admin #news tbody tr {
+  cursor: pointer;
+}
+
+.admin #news table {
+  word-wrap: break-word;
+  table-layout: fixed;
+}
+
+.admin #news .row {
+  margin: 1vh 0 1vh 0;
+}
+
+.admin #news label {
+  margin-top: 1vh;
+}
+
+.admin #news input {
+  margin-bottom: 1vh;
+}
+
+.admin #news button {
+  margin-top: 4vh;
+}
+
+.admin #edit-news textarea {
+  margin-top: 1vh;
+}
+
+.admin #edit-news select {
+  margin-bottom: 2vh;
+}
+
+.admin change-roles {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.admin change-roles label {
+  width: 20vw;
+  min-width: 230px;
+}
+
+.admin change-roles button {
+  width: 230px;
+}
+/*# sourceMappingURL=admin.css.map */

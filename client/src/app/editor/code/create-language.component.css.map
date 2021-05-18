@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,WAAW,CAAC,KAAK,CAAA,AAAA,IAAC,CAAK,UAAU,AAAf,GAAkB,WAAW,CAAC,KAAK,CAAA,AAAA,IAAC,CAAK,UAAU,AAAf,IAAmB,KAAK,CAAC;EAC3E,cAAc,EAAE,MAAM;CACzB",
+    "sources": [
+        "create-language.component.scss"
+    ],
+    "names": [],
+    "file": "create-language.component.css"
+}

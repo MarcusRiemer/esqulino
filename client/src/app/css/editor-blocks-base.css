@@ -1,0 +1,82 @@
+editor-block-host editor-block-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+editor-block-host editor-block-container.horizontal {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
+}
+
+editor-block-host editor-block-container.vertical {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+editor-block-host editor-block-container.allow-wrap {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+editor-block-host .indent {
+  margin-left: 2ch;
+}
+
+editor-block-host .space-around::after, editor-block-host .space-around::before {
+  content: "\00a0 ";
+}
+
+editor-block-host .space-after::after {
+  content: "\00a0 ";
+}
+
+editor-block-host .space-before::before {
+  content: "\00a0 ";
+}
+
+editor-block-host .double-quote::after, editor-block-host .double-quote::before {
+  content: "\"";
+}
+
+editor-block-host .double-quote.space-after::after {
+  content: "\"\00a0 ";
+}
+
+editor-block-host .double-quote.space-before::before {
+  content: "\00a0 \"";
+}
+
+editor-block-host.activate-block-outline editor-block-render-block {
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin-left: -1px;
+  margin-right: 1px;
+}
+
+editor-block-host.activate-nowrap span.no-wrap {
+  white-space: nowrap;
+}
+
+editor-block-host.activate-keyword span.keyword {
+  color: blue;
+}
+
+editor-block-host.activate-comment *.comment {
+  color: green;
+}
+/*# sourceMappingURL=editor-blocks-base.css.map */

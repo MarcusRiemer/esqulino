@@ -14,23 +14,27 @@ concise_attributes:
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "Document", "languageName":
     "MetaBlockLang"}}], "nodes": [{"name": "concreteNode", "children": {"attributes":
-    [{"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
-    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "CssClass", "languageName": "MetaBlockLang"}}], "cardinality":
-    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
-    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
-    {"base": "sequence", "name": "RootCssClasses"}}]}, "language": "MetaGrammar",
-    "properties": {"typeName": "Document", "languageName": "MetaBlockLang"}}, {"name":
-    "concreteNode", "children": {"attributes": [{"name": "property", "language": "MetaGrammar",
-    "properties": {"base": "string", "name": "Name"}}]}, "language": "MetaGrammar",
-    "properties": {"typeName": "CssClass", "languageName": "MetaBlockLang"}}]}, "language":
-    "MetaGrammar", "properties": {"name": "MetaBlockLang"}}'
+    [{"name": "container", "children": {"attributes": [{"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": "Root CSS Classes:"}}, {"name": "children",
+    "children": {"references": [{"name": "nodeRefCardinality", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "CssClass", "languageName": "MetaBlockLang"}}], "cardinality": [{"name": "knownCardinality",
+    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "RootCssClasses"}}], "orientation": [{"name": "orientation", "language":
+    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"typeName": "Document", "languageName":
+    "MetaBlockLang"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
+    "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
+    "Name"}}]}, "language": "MetaGrammar", "properties": {"typeName": "CssClass",
+    "languageName": "MetaBlockLang"}}]}, "language": "MetaGrammar", "properties":
+    {"name": "MetaBlockLang"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2021-04-15 13:41:15.419967000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-04-15 14:01:06.444681000 Z
+  value_before_type_cast: 2021-05-14 11:42:32.409284000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -47,15 +51,25 @@ concise_attributes:
             "type": "concrete",
             "attributes": [
               {
-                "type": "sequence",
-                "name": "RootCssClasses",
-                "nodeTypes": [
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
                   {
-                    "nodeType": {
-                      "languageName": "MetaBlockLang",
-                      "typeName": "CssClass"
-                    },
-                    "occurs": "*"
+                    "type": "terminal",
+                    "symbol": "Root CSS Classes:"
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "RootCssClasses",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "MetaBlockLang",
+                          "typeName": "CssClass"
+                        },
+                        "occurs": "*"
+                      }
+                    ]
                   }
                 ]
               }

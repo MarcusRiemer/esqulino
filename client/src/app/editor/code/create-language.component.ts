@@ -3,15 +3,19 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
-import { CreateProgrammingLanguageGQL } from "../../../generated/graphql";
+import {
+  CreateProgrammingLanguageGQL,
+  CreateProgrammingLanguageMutation,
+} from "../../../generated/graphql";
 
-import { CodeResource } from "../../shared";
+import { CodeResource, CodeResourceDescription } from "../../shared";
 
 import { ProjectService } from "../project.service";
 
 @Component({
   selector: "create-language",
   templateUrl: "./templates/create-language.html",
+  styleUrls: ["./create-language.component.scss"],
 })
 export class CreateLanguageComponent {
   readonly minLengthDisplayName = 2;
@@ -31,6 +35,8 @@ export class CreateLanguageComponent {
       validators: [Validators.required],
       updateOn: "blur",
     }),
+    createMetaBlockLanguage: new FormControl(true),
+    createStructureAndSyntaxGrammar: new FormControl(false),
   });
 
   inProgress = false;
@@ -55,27 +61,32 @@ export class CreateLanguageComponent {
           languageTechnicalName: this.newLanguageTechnicalName.value,
           runtimeLanguageId: this.runtimeLanguage.value,
           createInitialCodeResource: true,
+          createStructureAndSyntaxGrammar: this.createStructureAndSyntaxGrammar
+            .value,
+          createMetaBlockLanguage: this.createMetaBlockLanguage.value,
         })
         .pipe(first())
         .toPromise();
 
       // Add the new resources to this project
+      if (result.errors?.length > 0) {
+        console.error(result.errors);
+      }
+
       const resultData = result.data.createProgrammingLanguage;
       const p = this._projectService.cachedProject;
 
-      // Always present: The new grammar code resource
-      p.addCodeResource(
-        new CodeResource(
-          resultData.structureGrammarCodeResource,
-          p.resourceReferences
-        )
-      );
+      const funcAddCodeResource = (desc: CodeResourceDescription) => {
+        if (desc) {
+          p.addCodeResource(new CodeResource(desc, p.resourceReferences));
+        }
+      };
 
-      if (resultData.initialCodeResource) {
-        p.addCodeResource(
-          new CodeResource(resultData.initialCodeResource, p.resourceReferences)
-        );
-      }
+      // Add every code resource that might exist in the answer
+      funcAddCodeResource(resultData.structureGrammarCodeResource);
+      funcAddCodeResource(resultData.syntaxGrammarCodeResource);
+      funcAddCodeResource(resultData.initialCodeResource);
+      funcAddCodeResource(resultData.createdBlockLanguageCodeResource);
 
       this._router.navigate([resultData.structureGrammarCodeResource.id], {
         relativeTo: this._route.parent,
@@ -99,5 +110,13 @@ export class CreateLanguageComponent {
 
   get runtimeLanguage() {
     return this.creationInput.get("runtimeLanguage");
+  }
+
+  get createMetaBlockLanguage() {
+    return this.creationInput.get("createMetaBlockLanguage");
+  }
+
+  get createStructureAndSyntaxGrammar() {
+    return this.creationInput.get("createStructureAndSyntaxGrammar");
   }
 }

@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,iDAAiD;AACjD,AACI,kBADc,CACd,GAAG,CAAC;EACA,oCAAoC;EACpC,SAAS,EAAE,IAAI;EAaf,4JAA4J;CAC/J;;AAjBL,AAKQ,kBALU,CACd,GAAG,CAIC,OAAO,CAAC;EACJ,UAAU,EAAE,iBAAiB;CAChC;;AAPT,AASQ,kBATU,CACd,GAAG,CAQC,OAAO,AAAA,KAAK,CAAC;EACT,YAAY,EAAE,GAAG;CACpB;;AAXT,AAYQ,kBAZU,CACd,GAAG,CAWC,OAAO,AAAA,KAAK,CAAC;EACT,YAAY,EAAE,IAAI;CACrB",
+    "sources": [
+        "editor-db-schema.scss"
+    ],
+    "names": [],
+    "file": "editor-db-schema.css"
+}

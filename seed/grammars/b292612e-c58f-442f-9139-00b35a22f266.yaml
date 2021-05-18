@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2021-04-15 13:41:15.541112000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-04-15 14:01:06.726371000 Z
+  value_before_type_cast: 2021-05-14 11:42:32.700478000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
@@ -24,8 +24,10 @@ concise_attributes:
   name: types
   value_before_type_cast: '{"MetaBlockLang": {"CssClass": {"type": "concrete", "attributes":
     [{"base": "string", "name": "Name", "type": "property"}]}, "Document": {"type":
-    "concrete", "attributes": [{"name": "RootCssClasses", "type": "sequence", "nodeTypes":
-    [{"occurs": "*", "nodeType": {"typeName": "CssClass", "languageName": "MetaBlockLang"}}]}]}}}'
+    "concrete", "attributes": [{"type": "container", "children": [{"type": "terminal",
+    "symbol": "Root CSS Classes:"}, {"name": "RootCssClasses", "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "CssClass", "languageName":
+    "MetaBlockLang"}}]}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"

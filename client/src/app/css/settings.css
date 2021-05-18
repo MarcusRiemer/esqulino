@@ -1,0 +1,127 @@
+.add-email-dialog-title {
+  margin-bottom: 1em;
+}
+
+.add-email-dialog-actions button {
+  margin-top: 1vh;
+}
+
+.add-email-dialog-content .input-group {
+  margin-top: 0.5em;
+}
+
+.settings .general {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.settings .general h1 {
+  margin-top: 5%;
+  margin-bottom: 0%;
+}
+
+.settings .general .input-group,
+.settings .general select {
+  margin-bottom: 1vh;
+}
+
+.settings .general .input-group {
+  width: 20.5em;
+}
+
+.settings .general select {
+  width: 20.5em;
+}
+
+.settings .general hr {
+  width: 100%;
+  margin-bottom: 3vh;
+}
+
+.settings .mat-raised-button {
+  width: 10em;
+}
+
+.settings .account-settings mat-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 15em;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 0 0 10px 10px;
+}
+
+.settings .account-settings mat-card mat-card-actions {
+  width: 100%;
+}
+
+.settings .account-settings mat-card mat-card-actions button {
+  width: 100%;
+}
+
+.settings .account-settings table {
+  width: 50vw;
+  background-color: white;
+}
+
+.settings .account-settings table th,
+.settings .account-settings table td {
+  padding: 10px 10px 10px 10px;
+}
+
+.settings .account-settings table td:last-child {
+  width: 10px;
+}
+
+.settings .account-settings provider-button {
+  width: 10em;
+}
+
+.settings .account-settings provider-button div {
+  margin-bottom: 1vh;
+}
+
+.settings .account-settings provider-button button {
+  color: white !important;
+}
+
+.settings .account-settings provider-button div,
+.settings .account-settings provider-button button {
+  width: 100%;
+}
+
+.settings .email-settings button {
+  margin-bottom: 5vh;
+}
+
+.settings .email-settings label {
+  margin-bottom: 0;
+}
+
+.settings .email-settings p {
+  width: 30vw;
+  min-width: 20.5em;
+}
+
+.settings .email-settings mat-progress-spinner {
+  width: 30px !important;
+  height: 30px !important;
+  margin-left: 10px;
+}
+
+.settings .email-settings svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+/*# sourceMappingURL=settings.css.map */

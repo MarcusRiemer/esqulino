@@ -15,10 +15,11 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
 
   field :structure_grammar, Types::GrammarType, null: false
   field :structure_grammar_code_resource, Types::CodeResourceType, null: false
-  field :syntax_grammar, Types::GrammarType, null: false
-  field :syntax_grammar_code_resource, Types::CodeResourceType, null: false
+  field :syntax_grammar, Types::GrammarType, null: true
+  field :syntax_grammar_code_resource, Types::CodeResourceType, null: true
   field :initial_code_resource, Types::CodeResourceType, null: true
-  field :used_block_language, Types::ProjectUsesBlockLanguageType, null: false
+  field :created_block_language_usage, Types::ProjectUsesBlockLanguageType, null: false
+  field :created_block_language_code_resource, Types::CodeResourceType, null: true
 
   DEFAULT_ROOT_CSS_CLASSES = ["activate-block-outline", "activate-keyword"]
 
@@ -89,7 +90,7 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
       grammar_for_block_language = syntax_grammar || structure_grammar
 
       # Possibly create a meta code resource to define details of the block language
-      meta_block_language_code_resource = nil
+      block_language_code_resource = nil
       if create_meta_block_language
         # Ensure that the project uses the meta block language block language
         ProjectUsesBlockLanguage.where(
@@ -97,7 +98,7 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
           block_language_id: BlockLanguage.meta_block_language_id
         ).first_or_create!
 
-        meta_block_language_code_resource = CodeResource.create!(
+        block_language_code_resource = CodeResource.create!(
           name: "Blocks: " + language_display_name,
           project: p,
           programming_language_id: "generic",
@@ -106,7 +107,9 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
         )
       end
 
-      # Create a backing block language. This again touches the
+      # Create a backing block language. This happens unconditionally no matter
+      # whether there is a backing code resource because a block language without
+      # a block language wouldn't be very helpful. And this again touches the
       # database because we need an ID for the CLI.
       block_language = BlockLanguage.create!(
         name: language_display_name,
@@ -115,7 +118,7 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
         local_generator_instructions: {
           "type": "manual"
         },
-        generated_from: meta_block_language_code_resource,
+        generated_from: block_language_code_resource,
         root_css_classes: DEFAULT_ROOT_CSS_CLASSES
       )
 
@@ -124,8 +127,8 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
       block_language.save!
 
       # Ensure that the project may use the newly added block language
-      used_block_language = p.project_uses_block_languages
-                              .create!(block_language: block_language)
+      created_block_language_usage = p.project_uses_block_languages
+                                       .create!(block_language: block_language)
 
       # Possibly create an initial code resource to play around with
       initial_code_resource =
@@ -146,7 +149,8 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
               syntax_grammar: syntax_grammar,
               syntax_grammar_code_resource: syntax_grammar_code_resource,
               initial_code_resource: initial_code_resource,
-              used_block_language: used_block_language,
+              created_block_language_usage: created_block_language_usage,
+              created_block_language_code_resource: block_language_code_resource,
             })
     end
   end

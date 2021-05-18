@@ -15,7 +15,6 @@ import { DraggedBlockComponent } from "./dragged-block.component";
 import { EditorToolbarComponent } from "./editor-toolbar.component";
 import { NavbarComponent } from "./navbar.component";
 import { SidebarLoaderComponent } from "./sidebar-loader.component";
-import { SettingsComponent } from "./project-settings/settings.component";
 import { QueryIconComponent } from "./query-icon.component";
 import { TrashComponent } from "./trash.component";
 import { TrashService } from "./trash.service";
@@ -28,6 +27,9 @@ import { SidebarService } from "./sidebar.service";
 import { DatabaseSchemaService } from "./database-schema.service";
 import { SidebarDataService } from "./sidebar-data.service";
 import { DragService } from "./drag.service";
+
+import { SettingsComponent } from "./project-settings/settings.component";
+import { MembersComponent } from "./project-settings/members.component";
 
 @NgModule({
   imports: [
@@ -50,6 +52,7 @@ import { DragService } from "./drag.service";
     ContenteditableModel,
     TrashComponent,
     SourceIconComponent,
+    MembersComponent,
   ],
   providers: [
     TrashService,

@@ -2307,6 +2307,38 @@
               "deprecationReason": null
             },
             {
+              "name": "createdBlockLanguageCodeResource",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "CodeResource",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "createdBlockLanguageUsage",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "ProjectUsesBlockLanguage",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "initialCodeResource",
               "description": null,
               "args": [
@@ -2363,13 +2395,9 @@
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "Grammar",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "Grammar",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -2381,31 +2409,9 @@
 
               ],
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "CodeResource",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "usedBlockLanguage",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ProjectUsesBlockLanguage",
-                  "ofType": null
-                }
+                "kind": "OBJECT",
+                "name": "CodeResource",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null

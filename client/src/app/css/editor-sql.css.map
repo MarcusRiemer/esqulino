@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,cAAc,CAAC;EACX,OAAO,EAAE,GAAG;CACf;;AAED,AACI,cADU,CACV,EAAE,AAAA,IAAI,CAAC;EACH,YAAY,EAAE,IAAI;CACrB",
+    "sources": [
+        "editor-sql.scss"
+    ],
+    "names": [],
+    "file": "editor-sql.css"
+}
