@@ -14,7 +14,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-14 12:48:52.737019000 Z
+  value_before_type_cast: 2021-05-19 12:34:06.155746000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: meta-grammar
@@ -77,8 +77,9 @@ concise_attributes:
     {"name": "space-after"}}, "displayName": "space-after"}, {"defaultNode": {"name":
     "tag", "language": "MetaGrammar", "properties": {"name": "space-around"}}, "displayName":
     "space-around"}, {"defaultNode": {"name": "tag", "language": "MetaGrammar", "properties":
-    {"name": "double-quote"}}, "displayName": "double-quote"}], "categoryCaption":
-    "Tags"}]}, {"type": "metaDefinedTypes"}]'
+    {"name": "double-quote"}}, "displayName": "double-quote"}, {"defaultNode": {"name":
+    "tag", "language": "MetaGrammar", "properties": {"name": "soft-hole"}}, "displayName":
+    "soft-hole"}], "categoryCaption": "Tags"}]}, {"type": "metaDefinedTypes"}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: editor_blocks
   value_before_type_cast: '[{"visual": [{"children": [{"style": {"color": "white",
@@ -146,11 +147,12 @@ concise_attributes:
     "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after",
     "keyword"]}, {"style": {"display": "inline-flex"}, "property": "base", "blockType":
     "input", "cssClasses": ["space-after"]}, {"style": {"display": "inline-flex"},
-    "property": "name", "blockType": "input", "cssClasses": ["space-after"]}, {"text":
-    "::=", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
-    ["space-after"]}, {"blockType": "iterator", "childGroupName": "references", "emptyDropTarget":
-    true}], "blockType": "container", "orientation": "horizontal"}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "children", "languageName":
+    "property": "name", "blockType": "input", "cssClasses": ["space-after"]}, {"blockType":
+    "iterator", "childGroupName": "tags", "emptyDropTarget": false}, {"text": "::=",
+    "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after"]},
+    {"blockType": "iterator", "childGroupName": "references", "emptyDropTarget": true}],
+    "blockType": "container", "orientation": "horizontal"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "children", "languageName":
     "MetaGrammar"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
     "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
@@ -334,8 +336,9 @@ concise_attributes:
     {"name": "space-after"}}, "displayName": "space-after"}, {"defaultNode": {"name":
     "tag", "language": "MetaGrammar", "properties": {"name": "space-around"}}, "displayName":
     "space-around"}, {"defaultNode": {"name": "tag", "language": "MetaGrammar", "properties":
-    {"name": "double-quote"}}, "displayName": "double-quote"}], "categoryCaption":
-    "Tags"}]}, {"type": "metaDefinedTypes"}]}'
+    {"name": "double-quote"}}, "displayName": "double-quote"}, {"defaultNode": {"name":
+    "tag", "language": "MetaGrammar", "properties": {"name": "soft-hole"}}, "displayName":
+    "soft-hole"}], "categoryCaption": "Tags"}]}, {"type": "metaDefinedTypes"}]}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root_css_classes
   value_before_type_cast: "{activate-keyword,activate-comment,activate-block-outline}"
