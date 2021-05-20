@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
-import { map, switchMap } from "rxjs/operators";
+import { filter, switchMap } from "rxjs/operators";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
+import { executeJavaScriptProgram } from "./execute-java-script";
 
 @Component({
   selector: "app-execute-java-script",
@@ -13,12 +14,9 @@ export class ExecuteJavaScriptComponent {
   ) {}
 
   readonly currentProgram$ = this.currentCodeResource.currentResource.pipe(
+    filter((c) => !!c),
     switchMap((c) => c.generatedCode$),
-    map((c) => {
-      if (c) {
-      } else {
-        return "---";
-      }
-    })
+    filter((c) => !!c),
+    switchMap((c) => executeJavaScriptProgram(c))
   );
 }

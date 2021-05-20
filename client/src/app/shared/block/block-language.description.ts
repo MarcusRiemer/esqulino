@@ -116,6 +116,14 @@ export interface RegexTestComponentDescription
 }
 
 /**
+ * Executing JavaScript programs
+ */
+export interface ExecuteJavaScriptComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "execute-js";
+}
+
+/**
  * Displays debug information about an ongoing drag process
  */
 export interface DropDebugComponentDescription
@@ -195,7 +203,8 @@ export type EditorComponentDescription =
   | TruckWorldEditorMenuComponentDescription
   | DropDebugComponentDescription
   | JsonAstComponentDescription
-  | RegexTestComponentDescription;
+  | RegexTestComponentDescription
+  | ExecuteJavaScriptComponentDescription;
 
 export type BlockLanguageSidebarsDescription = SidebarDescription[];
 
