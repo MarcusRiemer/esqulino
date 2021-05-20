@@ -27,6 +27,7 @@ import { SidebarService } from "./sidebar.service";
 import { DatabaseSchemaService } from "./database-schema.service";
 import { SidebarDataService } from "./sidebar-data.service";
 import { DragService } from "./drag.service";
+import { EditorDebugMenuComponent } from "./debug-menu.component";
 
 import { SettingsComponent } from "./project-settings/settings.component";
 import { MembersComponent } from "./project-settings/members.component";
@@ -45,6 +46,7 @@ import { MembersComponent } from "./project-settings/members.component";
     DraggedBlockComponent,
     EditorComponent,
     EditorToolbarComponent,
+    EditorDebugMenuComponent,
     NavbarComponent,
     SidebarLoaderComponent,
     SettingsComponent,
