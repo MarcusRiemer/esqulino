@@ -5,7 +5,7 @@ concise_attributes:
   value_before_type_cast: 63126dc2-48c9-4be0-8677-b6070ee65ebe
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 'Initial: JavaScript'
+  value_before_type_cast: JS01 const loop
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 471e952d-4960-4295-804f-936b39363be4
@@ -34,7 +34,7 @@ concise_attributes:
   value_before_type_cast: 2021-05-14 11:53:54.221594000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-19 13:29:32.293556000 Z
+  value_before_type_cast: 2021-05-20 14:06:38.285271000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 44a4409a-a51f-40f7-840f-9bba99f0ec30

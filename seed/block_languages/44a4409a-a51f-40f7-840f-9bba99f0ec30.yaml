@@ -16,7 +16,7 @@ concise_attributes:
   value_before_type_cast: 2021-05-14 11:53:54.046271000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-19 13:44:17.923938000 Z
+  value_before_type_cast: 2021-05-20 13:41:25.525965000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic
@@ -40,67 +40,69 @@ concise_attributes:
     "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
     "INVALID_MIN_OCCURENCES"]}, {"children": [{"style": {"display": "inline-flex"},
     "property": "Type", "blockType": "input", "cssClasses": ["space-after", "keyword"]},
-    {"blockType": "iterator", "cssClasses": ["space-after"], "childGroupName": "Name",
-    "emptyDropTarget": false}, {"text": "=", "style": {"display": "inline-flex"},
-    "blockType": "constant", "cssClasses": ["space-after"]}, {"blockType": "iterator",
-    "childGroupName": "Value", "emptyDropTarget": false}], "blockType": "container",
-    "orientation": "horizontal"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "DeclareVariable", "languageName": "js"}}, {"visual": [{"children":
-    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
-    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
-    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"style": {"display": "inline-flex"}, "property": "Name", "blockType": "input"}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "ExprVariable",
+    {"blockType": "iterator", "childGroupName": "Name", "emptyDropTarget": false},
+    {"text": "=", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
+    ["space-around"]}, {"blockType": "iterator", "childGroupName": "Value", "emptyDropTarget":
+    false}], "blockType": "container", "orientation": "horizontal"}], "blockType":
+    "block", "dropTarget": {}}], "describedType": {"typeName": "DeclareVariable",
     "languageName": "js"}}, {"visual": [{"children": [{"style": {"color": "white",
     "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
     "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
     "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
-    "inline-flex"}, "property": "Name", "blockType": "input"}, {"text": "(", "style":
-    {"display": "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator",
-    "childGroupName": "Arguments", "emptyDropTarget": false}, {"text": ")", "style":
-    {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "CallFunction", "languageName": "js"}}, {"visual":
-    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
-    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
-    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"children": [{"children": [{"text": "for", "style":
-    {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["keyword"]},
-    {"text": "(", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
-    "iterator", "cssClasses": ["soft-hole"], "childGroupName": "Declare", "emptyDropTarget":
-    true}, {"text": ";", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"blockType": "iterator", "childGroupName": "Check", "emptyDropTarget": false},
-    {"text": ";", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
-    "iterator", "cssClasses": ["soft-hole"], "childGroupName": "Step", "emptyDropTarget":
-    true}, {"text": ")", "style": {"display": "inline-flex"}, "blockType": "constant",
-    "cssClasses": ["space-after"]}, {"text": "{", "style": {"display": "inline-flex"},
-    "blockType": "constant"}], "blockType": "container", "orientation": "horizontal"},
-    {"children": [{"blockType": "iterator", "cssClasses": ["soft-hole"], "childGroupName":
-    "$childGroup", "emptyDropTarget": true}], "blockType": "container", "cssClasses":
-    ["indent"], "orientation": "vertical"}, {"text": "}", "style": {"display": "inline-flex"},
-    "blockType": "constant"}], "blockType": "container", "orientation": "vertical"}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "For",
-    "languageName": "js"}}, {"visual": [{"children": [{"style": {"color": "white",
-    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
-    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
-    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
-    "inline-flex"}, "property": "Value", "blockType": "input"}], "blockType": "block",
-    "dropTarget": {}}], "describedType": {"typeName": "ConstValue", "languageName":
+    "inline-flex"}, "property": "Name", "blockType": "input"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "ExprVariable", "languageName":
     "js"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
     solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType": "iterator",
-    "childGroupName": "lhs", "emptyDropTarget": false}, {"style": {"display": "inline-flex"},
-    "property": "op", "blockType": "input", "cssClasses": ["space-around"]}, {"blockType":
-    "iterator", "childGroupName": "rhs", "emptyDropTarget": false}], "blockType":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"style": {"display":
+    "inline-flex"}, "property": "Name", "blockType": "input"}, {"text": "(", "style":
+    {"display": "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator",
+    "childGroupName": "Arguments", "emptyDropTarget": false}, {"text": ")", "style":
+    {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "container",
+    "orientation": "horizontal"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "CallFunction", "languageName": "js"}}, {"visual": [{"children":
+    [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
+    "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
+    "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"children": [{"children": [{"text": "for", "style": {"display": "inline-flex"},
+    "blockType": "constant", "cssClasses": ["keyword"]}, {"text": "(", "style": {"display":
+    "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator", "cssClasses":
+    ["soft-hole"], "childGroupName": "Declare", "emptyDropTarget": true}, {"text":
+    ";", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
+    ["space-after"]}, {"blockType": "iterator", "childGroupName": "Check", "emptyDropTarget":
+    false}, {"text": ";", "style": {"display": "inline-flex"}, "blockType": "constant",
+    "cssClasses": ["space-after"]}, {"blockType": "iterator", "cssClasses": ["soft-hole"],
+    "childGroupName": "Step", "emptyDropTarget": true}, {"text": ")", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after"]}, {"text":
+    "{", "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType":
+    "container", "orientation": "horizontal"}, {"children": [{"blockType": "iterator",
+    "cssClasses": ["soft-hole"], "childGroupName": "$childGroup", "emptyDropTarget":
+    true}], "blockType": "container", "cssClasses": ["indent"], "orientation": "vertical"},
+    {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "container", "orientation": "vertical"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "For", "languageName": "js"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"}, "property":
+    "Value", "blockType": "input"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "ConstValue", "languageName": "js"}}, {"visual": [{"children": [{"style":
+    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
+    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
+    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"children": [{"blockType": "iterator", "childGroupName": "lhs", "emptyDropTarget":
+    false}, {"style": {"display": "inline-flex"}, "property": "op", "blockType": "input",
+    "cssClasses": ["space-around"]}, {"blockType": "iterator", "childGroupName": "rhs",
+    "emptyDropTarget": false}], "blockType": "container", "orientation": "horizontal"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "BinaryExpression",
+    "languageName": "js"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType":
+    "iterator", "childGroupName": "Variable", "emptyDropTarget": false}, {"text":
+    "++", "style": {"display": "inline-flex"}, "blockType": "constant"}], "blockType":
     "container", "orientation": "horizontal"}], "blockType": "block", "dropTarget":
-    {}}], "describedType": {"typeName": "BinaryExpression", "languageName": "js"}},
-    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
-    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
-    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"blockType": "iterator", "childGroupName": "Variable",
-    "emptyDropTarget": false}, {"text": "++", "style": {"display": "inline-flex"},
-    "blockType": "constant"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "Increment", "languageName": "js"}}]'
+    {}}], "describedType": {"typeName": "Increment", "languageName": "js"}}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: editor_components
   value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "validator"},
