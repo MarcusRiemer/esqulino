@@ -1,38 +1,45 @@
 class Mutations::Projects::AddMembers < Mutations::BaseMutation
     argument :project_id, ID, required: true
-    argument :user_id, ID, required: true
+    argument :user_ids, [ID], required: true
     argument :is_admin, Boolean, required: true
 
-    class Response < Types::Base::BaseObject
-      field :project, Types::ProjectType, null: false
-    end
-  
-    field :result, Response, null: true
+    field :project, Types::ProjectType, null: true
 
-    def resolve(project_id, user_id, is_admin)
+    def resolve(project_id:, user_ids:, is_admin:)
       project = Project.find_by_slug_or_id! (project_id)
-      authorize project, :update?
+      authorize project, :add_member?
+      ActiveRecord::Base.transaction do
+        user_ids.each do |id|
+          project = helper_add_one_member(project, id, is_admin)
+        end
+      end
+      
+      return ({
+        project: project
+      })
+    rescue ActiveRecord::RecordNotFound => e
+      return (e)
+    end
+
+    def helper_add_one_member(project, user_id, is_admin)
       
       user = User.find(user_id)
 
-      if(project.members.find_by(user_id: user.id))
-        raise ArgumentError.new "User is allready member"
+      if(project.is_already_in_project?(user))
+        raise ArgumentError.new "User is already member"
       end
 
+      if(project.user_have_role(current_user, ["participant"]) && (is_admin || !project.public))
+        raise Pundit::NotAuthorizedError
+      end
 
       if is_admin
-        m = p.members.create(user_id: user.id, membership_type: Course.roles["admin"])
+        project.project_members.create(user_id: user.id, membership_type: "admin")
       else
-        m = p.members.create(user_id: user.id, membership_type: Course.roles["participant"])
+        project.project_members.create(user_id: user.id, membership_type: "participant")
       end
-  
-      return ({
-        result: {
-          project_member: m
-        }
-      })
-    rescue Pundit::NotAuthorizedError, ActiveRecord::RecordNotFound => e
-      return (e)
+
+      return project
     end
   end
   

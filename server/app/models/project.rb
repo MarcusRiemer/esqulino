@@ -157,4 +157,26 @@ class Project < ApplicationRecord
   def owner?(user)
     return user.eql? self.user
   end
+
+  # Return the role of the user. 
+  # If he is not a member return nil
+  def member_role(user)
+    if(owner?(user))
+      #TODO: put that into config
+      return "owner";
+    end
+
+    user = project_members.find_by(user_id: user.id)
+    return user.present? ? user.membership_type  : nil
+  end
+
+  # Return true if the user have on of the given roles
+  def user_have_role(user, role_names_as_array)
+    return member_role(user).in?(role_names_as_array)
+  end
+
+  # Check if the user is the owner or a member
+  def is_already_in_project?(user)
+    return user.eql?(self.user) || project_members.find_by(user_id: user.id).present?
+  end
 end
