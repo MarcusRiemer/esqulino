@@ -1,14 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
-import {
-  map,
-  filter,
-  tap,
-  mergeMap,
-  shareReplay,
-  switchMap,
-} from "rxjs/operators";
+import { map, filter, tap, shareReplay, switchMap } from "rxjs/operators";
 
 import { ResourceReferencesService } from "../shared/resource-references.service";
 import {
@@ -66,11 +59,10 @@ export class CurrentCodeResourceService {
   /**
    * The block language that is configured on the resource.
    */
-  readonly resourceBlockLanguageId: Observable<string> =
-    this.currentResource.pipe(
-      filter((c) => !!c),
-      switchMap((c) => c.blockLanguageId$)
-    );
+  readonly resourceBlockLanguageId: Observable<string> = this.currentResource.pipe(
+    filter((c) => !!c),
+    switchMap((c) => c.blockLanguageId$)
+  );
 
   readonly blockLanguage$ = this.resourceBlockLanguageId.pipe(
     switchMap((id) => this._resourceReferences.getBlockLanguage(id)),
@@ -124,8 +116,7 @@ export class CurrentCodeResourceService {
   /**
    *
    */
-  readonly currentExecutionLocation$: Observable<NodeLocation> =
-    this._executionLocation.asObservable();
+  readonly currentExecutionLocation$: Observable<NodeLocation> = this._executionLocation.asObservable();
 
   /**
    * The currently loaded resource
