@@ -276,7 +276,8 @@ export class CodeResource extends ProjectResource {
       } else {
         return "";
       }
-    })
+    }),
+    shareReplay(1)
   );
 
   /**
