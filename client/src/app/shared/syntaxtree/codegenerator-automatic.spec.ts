@@ -18,7 +18,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     expect(g.hasImplicitConverter({ languageName: "l", typeName: "r" })).toBe(
       true
@@ -52,7 +52,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     expect(g.hasImplicitConverter({ languageName: "l", typeName: "r" })).toBe(
       true
@@ -83,7 +83,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     it(`isDefined`, () => {
       expect(g.hasImplicitConverter({ languageName: "l", typeName: "r" })).toBe(
@@ -129,7 +129,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     it(`isDefined`, () => {
       expect(g.hasImplicitConverter({ languageName: "l", typeName: "r" })).toBe(
@@ -189,7 +189,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     it(`with present property at runtime`, () => {
       const t = new SyntaxTree({
@@ -232,7 +232,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     it(`with present property at runtime`, () => {
       const t = new SyntaxTree({
@@ -275,7 +275,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     it(`empty`, () => {
       const t = new SyntaxTree({
@@ -351,7 +351,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     it(`empty`, () => {
       const t = new SyntaxTree({
@@ -434,7 +434,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     it(`empty`, () => {
       const t = new SyntaxTree({
@@ -522,7 +522,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     it(`empty`, () => {
       const t = new SyntaxTree({
@@ -615,7 +615,7 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
+    const g = new CodeGenerator([], types, "legacy");
 
     it(`empty`, () => {
       const t = new SyntaxTree({

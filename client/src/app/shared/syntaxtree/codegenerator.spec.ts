@@ -73,7 +73,7 @@ describe("Codegeneration", () => {
     ];
 
     // Run the codegenerator
-    const codeGen = new CodeGenerator(desc, {}, [state]);
+    const codeGen = new CodeGenerator(desc, {}, "legacy", [state]);
     const syntaxTree = new SyntaxNode(
       { language: "foo", name: "bar" },
       undefined
@@ -124,7 +124,7 @@ describe("Codegeneration", () => {
     ];
 
     // Run the codegenerator
-    const codeGen = new CodeGenerator(desc, {}, [stateA, stateB]);
+    const codeGen = new CodeGenerator(desc, {}, "legacy", [stateA, stateB]);
     const syntaxTree = new SyntaxNode(
       { language: "foo", name: "bar" },
       undefined
