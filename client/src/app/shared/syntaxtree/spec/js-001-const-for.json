@@ -1,0 +1,154 @@
+{
+  "name": "Program",
+  "language": "js",
+  "children": {
+    "Body": [
+      {
+        "name": "DeclareVariable",
+        "language": "js",
+        "properties": {
+          "Type": "const"
+        },
+        "children": {
+          "Name": [
+            {
+              "name": "ExprVariable",
+              "language": "js",
+              "properties": {
+                "Name": "a"
+              }
+            }
+          ],
+          "Value": [
+            {
+              "name": "ConstValue",
+              "language": "js",
+              "properties": {
+                "Value": "5"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "For",
+        "language": "js",
+        "children": {
+          "Step": [
+            {
+              "name": "Increment",
+              "language": "js",
+              "children": {
+                "Variable": [
+                  {
+                    "name": "ExprVariable",
+                    "language": "js",
+                    "properties": {
+                      "Name": "i"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "Check": [
+            {
+              "name": "BinaryExpression",
+              "language": "js",
+              "properties": {
+                "op": "<"
+              },
+              "children": {
+                "lhs": [
+                  {
+                    "name": "ExprVariable",
+                    "language": "js",
+                    "properties": {
+                      "Name": "i"
+                    }
+                  }
+                ],
+                "rhs": [
+                  {
+                    "name": "ExprVariable",
+                    "language": "js",
+                    "properties": {
+                      "Name": "a"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "Declare": [
+            {
+              "name": "DeclareVariable",
+              "language": "js",
+              "properties": {
+                "Type": "let"
+              },
+              "children": {
+                "Name": [
+                  {
+                    "name": "ExprVariable",
+                    "language": "js",
+                    "properties": {
+                      "Name": "i"
+                    }
+                  }
+                ],
+                "Value": [
+                  {
+                    "name": "ConstValue",
+                    "language": "js",
+                    "properties": {
+                      "Value": "0"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "$childGroup": [
+            {
+              "name": "CallFunction",
+              "language": "js",
+              "properties": {
+                "Name": "console.log"
+              },
+              "children": {
+                "Arguments": [
+                  {
+                    "name": "ExprVariable",
+                    "language": "js",
+                    "properties": {
+                      "Name": "a"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "CallFunction",
+        "language": "js",
+        "properties": {
+          "Name": "console.log"
+        },
+        "children": {
+          "Arguments": [
+            {
+              "name": "ConstValue",
+              "language": "js",
+              "properties": {
+                "Value": "\"Hello World\""
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

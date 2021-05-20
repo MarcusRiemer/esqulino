@@ -1,8 +1,47 @@
-import { SyntaxTree } from "./syntaxtree";
-import { CodeGenerator } from "./codegenerator";
+import { doc } from "prettier";
+import { prettierCodeGeneratorFromGrammar } from "./codegenerator-prettier";
 import { NamedLanguages, VisualisedLanguages } from "./grammar.description";
+import { SyntaxTree } from "./syntaxtree";
 
-describe(`Automatic code generation`, () => {
+describe(`Prettier code generator`, () => {
+  describe(`Sanity Checks`, () => {
+    const pp = (tree: doc.builders.Doc): string => {
+      return doc.printer.printDocToString(tree, {
+        embeddedInHtml: false,
+        printWidth: 80,
+        tabWidth: 2,
+        useTabs: false,
+      }).formatted;
+    };
+
+    it(`Indent with terminal before`, () => {
+      const tree = doc.builders.concat([
+        "root:",
+        doc.builders.indent(
+          doc.builders.concat([
+            doc.builders.hardline,
+            doc.builders.join(doc.builders.hardline, ["a", "b"]),
+          ])
+        ),
+      ]);
+
+      expect(pp(tree)).toEqual("root:\n  a\n  b");
+    });
+
+    it(`Indent without terminal before`, () => {
+      const tree = doc.builders.concat([
+        doc.builders.indent(
+          doc.builders.concat([
+            doc.builders.hardline,
+            doc.builders.join(doc.builders.hardline, ["a", "b"]),
+          ])
+        ),
+      ]);
+
+      expect(pp(tree)).toEqual("\n  a\n  b");
+    });
+  });
+
   it(`Single terminal`, () => {
     const types: NamedLanguages = {
       l: {
@@ -18,18 +57,12 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
-    expect(g.hasImplicitConverter({ languageName: "l", typeName: "r" })).toBe(
-      true
-    );
-
     const t = new SyntaxTree({
       language: "l",
       name: "r",
     });
 
-    const res = g.emit(t);
+    const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
     expect(res).toEqual("root");
   });
 
@@ -52,18 +85,12 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
-    expect(g.hasImplicitConverter({ languageName: "l", typeName: "r" })).toBe(
-      true
-    );
-
     const t = new SyntaxTree({
       language: "l",
       name: "r",
     });
 
-    const res = g.emit(t);
+    const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
     expect(res).toEqual("12");
   });
 
@@ -83,14 +110,6 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
-    it(`isDefined`, () => {
-      expect(g.hasImplicitConverter({ languageName: "l", typeName: "r" })).toBe(
-        true
-      );
-    });
-
     it(`with present property at runtime`, () => {
       const t = new SyntaxTree({
         language: "l",
@@ -100,7 +119,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("v1");
     });
 
@@ -110,7 +129,9 @@ describe(`Automatic code generation`, () => {
         name: "r",
       });
 
-      expect(() => g.emit(t)).toThrowError();
+      expect(() =>
+        prettierCodeGeneratorFromGrammar(types, t.rootNode)
+      ).toThrowError();
     });
   });
 
@@ -129,14 +150,6 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
-    it(`isDefined`, () => {
-      expect(g.hasImplicitConverter({ languageName: "l", typeName: "r" })).toBe(
-        true
-      );
-    });
-
     it(`with present property at runtime`, () => {
       const t = new SyntaxTree({
         language: "l",
@@ -146,7 +159,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("v1");
     });
 
@@ -156,7 +169,9 @@ describe(`Automatic code generation`, () => {
         name: "r",
       });
 
-      expect(() => g.emit(t)).toThrowError();
+      expect(() =>
+        prettierCodeGeneratorFromGrammar(types, t.rootNode)
+      ).toThrowError();
     });
   });
 
@@ -189,8 +204,6 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
     it(`with present property at runtime`, () => {
       const t = new SyntaxTree({
         language: "l",
@@ -203,7 +216,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("v1 v2v3 v4");
     });
   });
@@ -232,8 +245,6 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
     it(`with present property at runtime`, () => {
       const t = new SyntaxTree({
         language: "l",
@@ -245,7 +256,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual(`v1 "v2" v3`);
     });
   });
@@ -275,15 +286,13 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
     it(`empty`, () => {
       const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("");
     });
 
@@ -296,7 +305,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("t1");
     });
 
@@ -312,7 +321,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("t1t1");
     });
   });
@@ -351,15 +360,13 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
     it(`empty`, () => {
       const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("");
     });
 
@@ -372,7 +379,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("t1");
     });
 
@@ -388,7 +395,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("t1,t1");
     });
   });
@@ -402,7 +409,6 @@ describe(`Automatic code generation`, () => {
             {
               type: "container",
               orientation: "vertical",
-              tags: ["indent"],
               children: [
                 {
                   type: "sequence",
@@ -434,15 +440,13 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
     it(`empty`, () => {
       const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("");
     });
 
@@ -455,8 +459,8 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
-      expect(res).toEqual("  t1");
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
+      expect(res).toEqual("t1");
     });
 
     it(`two children`, () => {
@@ -471,8 +475,8 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
-      expect(res).toEqual("  t1,\n  t1");
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
+      expect(res).toEqual("t1,\nt1");
     });
   });
 
@@ -485,7 +489,6 @@ describe(`Automatic code generation`, () => {
             {
               type: "terminal",
               symbol: "c:",
-              tags: ["newline-after"],
             },
             {
               type: "container",
@@ -522,15 +525,13 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
     it(`empty`, () => {
       const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("c:");
     });
 
@@ -543,7 +544,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("c:\n  t1");
     });
 
@@ -559,7 +560,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("c:\n  t1,\n  t1");
     });
   });
@@ -573,7 +574,6 @@ describe(`Automatic code generation`, () => {
             {
               type: "terminal",
               symbol: "=>",
-              tags: ["newline-after"],
             },
             {
               type: "container",
@@ -599,7 +599,6 @@ describe(`Automatic code generation`, () => {
             {
               type: "terminal",
               symbol: "<=",
-              tags: ["newline-after"],
             },
           ],
         },
@@ -615,16 +614,14 @@ describe(`Automatic code generation`, () => {
       },
     };
 
-    const g = new CodeGenerator([], types);
-
     it(`empty`, () => {
       const t = new SyntaxTree({
         language: "l",
         name: "r",
       });
 
-      const res = g.emit(t);
-      expect(res).toEqual("=>\n<=");
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
+      expect(res).toEqual("=><=");
     });
 
     it(`single child`, () => {
@@ -636,7 +633,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("=>\n  t1\n<=");
     });
 
@@ -652,7 +649,7 @@ describe(`Automatic code generation`, () => {
         },
       });
 
-      const res = g.emit(t);
+      const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("=>\n  t1,\n  t1\n<=");
     });
   });
