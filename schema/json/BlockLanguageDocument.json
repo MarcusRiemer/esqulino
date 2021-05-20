@@ -377,9 +377,34 @@
         },
         {
           "$ref": "#/definitions/RegexTestComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/ExecuteJavaScriptComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
+    },
+    "ExecuteJavaScriptComponentDescription": {
+      "additionalProperties": false,
+      "description": "Executing JavaScript programs",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "execute-js"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
     },
     "FixedBlocksSidebarCategoryDescription": {
       "additionalProperties": false,

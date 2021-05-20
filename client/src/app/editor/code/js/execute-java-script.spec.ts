@@ -1,6 +1,6 @@
 import { executeJavaScriptProgram } from "./execute-java-script";
 
-fdescribe(`Execute JavaScript`, () => {
+describe(`Execute JavaScript`, () => {
   let originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
 
   beforeAll(() => {
@@ -37,7 +37,7 @@ fdescribe(`Execute JavaScript`, () => {
           result: undefined,
           started: true,
           finished: true,
-          output: [{ channel: "log", message: "42" }],
+          output: [jasmine.objectContaining({ channel: "log", message: "42" })],
         })
       );
     });

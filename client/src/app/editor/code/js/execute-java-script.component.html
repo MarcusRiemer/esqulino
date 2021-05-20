@@ -1,1 +1,9 @@
-<p>execute-java-script works!</p>
+<table class="table table-sm" *ngIf="currentProgram$ | async as currentProgram">
+  <tr *ngFor="let output of currentProgram.output">
+    <td class="channel">
+      <code>{{ output.channel }}</code>
+    </td>
+    <td class="timestamp">{{ output.timestamp }}ms</td>
+    <td>{{ output.message }}</td>
+  </tr>
+</table>

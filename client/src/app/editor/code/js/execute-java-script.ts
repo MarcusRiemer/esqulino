@@ -1,9 +1,14 @@
-export interface ExecutionOutput {
+export interface ExecutionMessage {
   message: string;
   channel: "log" | "error" | "warn";
+  timestamp: number;
 }
 
-function isExecutionOutput(msg: unknown): msg is ExecutionOutput {
+export interface ExecutionOutput extends ExecutionMessage {
+  timestamp: number;
+}
+
+function isExecutionMessage(msg: unknown): msg is ExecutionMessage {
   return msg instanceof Object && "message" in msg && "channel" in msg;
 }
 
@@ -45,6 +50,9 @@ const workerApiEnd = `
 postMessage("end");
 `;
 
+// This seems to be laughably slow in Firefox when run in Jasmine
+// but blazingly fast in the Typescript playground, no idea
+// why this could be the case :-(
 export async function executeJavaScriptProgram(
   code: string,
   timeoutInMs = 5000
@@ -57,35 +65,52 @@ export async function executeJavaScriptProgram(
     runtime: 0,
   };
 
+  console.time("blobUrl");
   // const workerSrc = [workerApiSrc, "onmessage = function() {", code, "}"].join("\n");
   const workerSrc = [workerApiSrc, code, workerApiEnd].join("\n");
   const blobUrl = URL.createObjectURL(new Blob([workerSrc]));
+  console.timeEnd("blobUrl");
 
-  console.log("Running program:\n", workerSrc);
+  console.debug("Running program:\n", workerSrc);
 
   // Required in "finally"
   let worker: Worker = undefined;
 
   try {
+    console.time("whole");
     const startTime = Date.now();
+
+    console.time("workerCreated");
     worker = new Worker(blobUrl, {
       type: "classic",
     });
+
     worker.addEventListener("message", (msg) => {
       if (msg.data === "start") {
         result.started = true;
       } else if (msg.data === "end") {
         result.finished = true;
         result.runtime = Date.now() - startTime;
-      } else if (isExecutionOutput(msg.data)) {
-        result.output.push(msg.data);
+      } else if (isExecutionMessage(msg.data)) {
+        result.output.push(
+          Object.assign({}, msg.data, { timestamp: Date.now() - startTime })
+        );
       }
     });
 
+    console.timeEnd("workerCreated");
+
     // Busy waiting
+    console.time("busyWaiting");
+    let i = 0;
     while (!result.finished && startTime + timeoutInMs > Date.now()) {
+      console.timeLog("busyWaiting", i);
+      i++;
       await sleep(10);
     }
+    console.timeEnd("busyWaiting");
+
+    console.timeEnd("whole");
     return result;
   } finally {
     worker?.terminate();

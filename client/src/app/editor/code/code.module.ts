@@ -52,8 +52,7 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
 
 import { RegexTestComponent } from "./regex/regex-test.component";
 
-import {} from "./js/";
-import { ExecuteJavaScriptComponent } from './js/execute-java-script.component';
+import { ExecuteJavaScriptComponent } from "./js/execute-java-script.component";
 
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],
