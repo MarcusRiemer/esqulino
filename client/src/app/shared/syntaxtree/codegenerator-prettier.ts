@@ -1,4 +1,4 @@
-import { doc } from "prettier";
+import { builders, printer } from "prettier/doc";
 import { OutputSeparator } from "./codegenerator-process";
 import {
   ensureCodeGenType,
@@ -18,7 +18,7 @@ import { SyntaxNode } from "./syntaxtree";
 
 // Documentation at https://github.com/prettier/prettier/blob/main/commands.md
 // will be helpful when following this code.
-type Doc = doc.builders.Doc;
+type Doc = builders.Doc;
 
 /**
  * Converts a terminal, with respect to all tags that may affect a terminal.
@@ -37,7 +37,7 @@ function convertTerminal(
   const sep = tagToSeparator(node, t.tags);
 
   if ((sep & OutputSeparator.NEW_LINE_BEFORE) > 0) {
-    toReturn.push(doc.builders.hardline);
+    toReturn.push(builders.hardline);
   }
   if ((sep & OutputSeparator.SPACE_BEFORE) > 0) {
     toReturn.push(" ");
@@ -50,7 +50,7 @@ function convertTerminal(
   }
 
   if ((sep & OutputSeparator.NEW_LINE_AFTER) > 0) {
-    toReturn.push(doc.builders.hardline);
+    toReturn.push(builders.hardline);
   }
 
   return toReturn;
@@ -90,7 +90,7 @@ function processAttributes(
           "between" in a ? convertTerminal(a.between, node) : [""];
 
         if (parentOrientation === "vertical") {
-          between.push(doc.builders.hardline);
+          between.push(builders.hardline);
         }
 
         const childDocs = children.map((childNode) => {
@@ -107,8 +107,8 @@ function processAttributes(
         // it. Otherwise we possibly introduce a hardline without having any
         // content
         if (childDocs.length > 0) {
-          const joined = doc.builders.group(
-            doc.builders.join(doc.builders.concat(between), childDocs.flat(1))
+          const joined = builders.group(
+            builders.join(builders.concat(between), childDocs.flat(1))
           );
 
           toReturn.push(joined);
@@ -123,7 +123,7 @@ function processAttributes(
       // therefore handled in a separate case although it looks sort
       // of similar to syntax tree recursion.
       case "container": {
-        const childDocs = doc.builders.concat(
+        const childDocs = builders.concat(
           processAttributes(a.children, types, node, a.orientation)
         );
 
@@ -131,17 +131,17 @@ function processAttributes(
         if (childDocs.parts.length > 0) {
           // Vertical containers must start and end on their own line
           const indentSurround =
-            a.orientation === "vertical" ? [doc.builders.hardline] : [];
+            a.orientation === "vertical" ? [builders.hardline] : [];
 
           const finalChildDocs = a.tags?.includes("indent")
             ? // Leading break inside the indent, trailing break outside
-              doc.builders.concat([
-                doc.builders.indent(
-                  doc.builders.concat([...indentSurround, childDocs])
+              builders.concat([
+                builders.indent(
+                  builders.concat([...indentSurround, childDocs])
                 ),
                 ...indentSurround,
               ])
-            : doc.builders.group(childDocs);
+            : builders.group(childDocs);
 
           toReturn.push(finalChildDocs);
         }
@@ -171,11 +171,10 @@ export function prettierCodeGeneratorFromGrammar(
     node,
     "horizontal"
   );
-  const printed = doc.printer.printDocToString(
+  const printed = printer.printDocToString(
     // Don't leave last lines with nothing but whitespace
-    doc.builders.concat([...prettierTree, doc.builders.trim]),
+    builders.concat([...prettierTree, builders.trim]),
     {
-      embeddedInHtml: false,
       printWidth: 80,
       tabWidth: 2,
       useTabs: false,
