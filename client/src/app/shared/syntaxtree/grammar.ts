@@ -153,9 +153,8 @@ export class NodeConcreteType extends NodeType {
             if (a.name in this._allowedProperties) {
               throw new Error(`Duplicate property "${a.name}"`);
             }
-            this._allowedProperties[a.name] = this.instanciatePropertyValidator(
-              a
-            );
+            this._allowedProperties[a.name] =
+              this.instanciatePropertyValidator(a);
             break;
           case "allowed":
           case "sequence":
@@ -1024,15 +1023,16 @@ class NodeComplexTypeChildrenParentheses extends NodeComplexTypeChildrenValidato
    * @return The actual range of children that could occur.
    */
   validCardinality(): OccursSpecificDescription {
-    const childCardinality: OccursSpecificDescription = this._nodeTypes.reduce<OccursSpecificDescription>(
-      (akku, curr): OccursSpecificDescription => {
-        return {
-          maxOccurs: akku.maxOccurs + curr.maxOccurs,
-          minOccurs: akku.minOccurs + curr.minOccurs,
-        };
-      },
-      { minOccurs: 0, maxOccurs: 0 }
-    );
+    const childCardinality: OccursSpecificDescription =
+      this._nodeTypes.reduce<OccursSpecificDescription>(
+        (akku, curr): OccursSpecificDescription => {
+          return {
+            maxOccurs: akku.maxOccurs + curr.maxOccurs,
+            minOccurs: akku.minOccurs + curr.minOccurs,
+          };
+        },
+        { minOccurs: 0, maxOccurs: 0 }
+      );
 
     // A group that is not optional requires at least a single child,
     // Or to be more precise: There must be at least as many children as the cardinality

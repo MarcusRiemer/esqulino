@@ -72,19 +72,17 @@ export class TrashComponent {
     this._mouseOver,
     this._trashService.isTrashShown
   ).pipe(
-    map(
-      ([mouseIn, trashShown]): AnimationState => {
-        if (trashShown) {
-          if (mouseIn) {
-            return "over";
-          } else {
-            return "available";
-          }
+    map(([mouseIn, trashShown]): AnimationState => {
+      if (trashShown) {
+        if (mouseIn) {
+          return "over";
         } else {
-          return "hidden";
+          return "available";
         }
+      } else {
+        return "hidden";
       }
-    )
+    })
   );
 
   mouseEnter() {

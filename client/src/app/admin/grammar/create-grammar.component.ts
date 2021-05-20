@@ -31,8 +31,8 @@ export class CreateGrammarComponent {
     private _mutation: CreateGrammarGQL
   ) {}
 
-  readonly availableProgrammingLanguages = this._languageService
-    .availableLanguages;
+  readonly availableProgrammingLanguages =
+    this._languageService.availableLanguages;
 
   /**
    * Attempts to create the specified block language

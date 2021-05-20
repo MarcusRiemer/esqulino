@@ -3,7 +3,29 @@ import { AnySidebarDescription } from "./sidebar.description";
 import { SidebarDescription } from "../block.description";
 
 describe("Sidebar Default Node Generator", () => {
-  it("Creates empty nodes for empty tyes", () => {
+  it("Creates empty nodes for empty types", () => {
+    const node = generateDefaultNode({
+      type: "concrete",
+      languageName: "g1",
+      typeName: "t1",
+      attributes: [
+        {
+          type: "property",
+          base: "string",
+          name: "s",
+          restrictions: [{ type: "enum", value: ["first", "second"] }],
+        },
+      ],
+    });
+
+    expect(node).toEqual({
+      language: "g1",
+      name: "t1",
+      properties: { s: "first" },
+    });
+  });
+
+  it("Uses the first enum value for strings as default value", () => {
     const node = generateDefaultNode({
       type: "concrete",
       languageName: "g1",

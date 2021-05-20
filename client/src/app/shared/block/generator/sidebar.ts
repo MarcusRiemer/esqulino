@@ -5,6 +5,7 @@ import {
   NodeChildrenGroupDescription,
   NamedLanguages,
   VisualisedLanguages,
+  EnumRestrictionDescription,
 } from "../../syntaxtree/";
 import { FullNodeConcreteTypeDescription } from "../../syntaxtree/grammar-type-util.description";
 import { fullNodeDescription } from "../../syntaxtree/grammar-type-util";
@@ -45,7 +46,14 @@ export function generateDefaultValue(
     case "integer":
       return "0";
     case "string":
-      return "";
+      const enumRestriction = propertyType.restrictions?.find(
+        (restr) => restr.type === "enum"
+      ) as EnumRestrictionDescription;
+      if (enumRestriction) {
+        return enumRestriction.value[0] ?? "";
+      } else {
+        return "";
+      }
   }
 }
 

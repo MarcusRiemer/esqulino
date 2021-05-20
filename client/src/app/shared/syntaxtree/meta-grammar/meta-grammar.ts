@@ -136,6 +136,8 @@ export function convertChildren(
     toReturn.nodeTypes = typeReferences;
   }
 
+  possiblyAddTags(attrNode, toReturn);
+
   return toReturn;
 }
 

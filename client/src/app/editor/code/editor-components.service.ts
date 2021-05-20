@@ -84,7 +84,9 @@ export class EditorComponentsService {
 
         await this._moduleLoader.loadModule(
           async () =>
-            (await import("./blockly/blockly.module")).BlocklyEditorModule
+            (
+              await import("./blockly/blockly.module")
+            ).BlocklyEditorModule
         );
 
         console.log("Dynamically loaded blockly editor component");

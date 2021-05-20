@@ -588,7 +588,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4376_"
                   }
                 ]
               }
@@ -640,7 +640,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4376_"
                   }
                 ]
               }
@@ -1127,7 +1127,7 @@
       },
       "type": "array"
     },
-    "ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_": {
+    "ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4376_": {
       "additionalProperties": {
         "anyOf": [
           {
@@ -1326,7 +1326,7 @@
                     "type": "object"
                   },
                   {
-                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4368_"
+                    "$ref": "#/definitions/ParameterReferenceable_structure-1632909121-804-836-1632909121-757-837-1632909121-475-1197-1632909121-0-4376_"
                   }
                 ]
               }

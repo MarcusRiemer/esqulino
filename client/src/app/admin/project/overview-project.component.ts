@@ -33,7 +33,8 @@ export class OverviewProjectComponent
       AdminListProjectsQueryVariables,
       DataKey,
       ColumnName
-    > {
+    >
+{
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
   _paginator: MatPaginator;

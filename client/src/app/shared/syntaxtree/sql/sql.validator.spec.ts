@@ -37,18 +37,16 @@ function createTreeWithCall(
                   name: funcName,
                 },
                 children: {
-                  arguments: colNames.map(
-                    (col): NodeDescription => {
-                      return {
-                        language: "sql",
-                        name: "columnName",
-                        properties: {
-                          columnName: col,
-                          refTableName: "ereignis",
-                        },
-                      };
-                    }
-                  ),
+                  arguments: colNames.map((col): NodeDescription => {
+                    return {
+                      language: "sql",
+                      name: "columnName",
+                      properties: {
+                        columnName: col,
+                        refTableName: "ereignis",
+                      },
+                    };
+                  }),
                 },
               },
             ],

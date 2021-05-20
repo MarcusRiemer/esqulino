@@ -457,11 +457,9 @@ export function orderTypes(g: Desc.GrammarDocument): OrderedTypes {
     const unreferenced = getQualifiedTypes(allTypes)
       // OUCH! Order of keys is important here, if "typeName" is mentioned first
       // the resulting string also has that key and value mentioned first
-      .map(
-        (t): QualifiedTypeName => {
-          return { languageName: t.languageName, typeName: t.typeName };
-        }
-      )
+      .map((t): QualifiedTypeName => {
+        return { languageName: t.languageName, typeName: t.typeName };
+      })
       .filter((t) => !usedTypes.has(stableQualifiedTypename(t)));
     order.push(...unreferenced);
 

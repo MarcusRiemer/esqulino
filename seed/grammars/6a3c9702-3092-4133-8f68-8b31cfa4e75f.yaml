@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2021-05-14 11:53:53.801934000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-14 12:38:40.351070000 Z
+  value_before_type_cast: 2021-05-19 13:44:17.906769000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
@@ -25,35 +25,46 @@ concise_attributes:
   value_before_type_cast: '{"js": {"For": {"type": "concrete", "attributes": [{"type":
     "container", "children": [{"type": "container", "children": [{"tags": ["keyword"],
     "type": "terminal", "symbol": "for"}, {"type": "terminal", "symbol": "("}, {"name":
-    "Declare", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName":
-    "DeclareVariable", "languageName": "js"}}]}, {"type": "terminal", "symbol": ";"},
-    {"name": "Check", "type": "sequence", "nodeTypes": [{"typeName": "Expression",
-    "languageName": "js"}]}, {"type": "terminal", "symbol": ";"}, {"name": "Step",
-    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "Statement",
-    "languageName": "js"}}]}, {"tags": ["space-after"], "type": "terminal", "symbol":
-    ")"}, {"type": "terminal", "symbol": "{"}], "orientation": "horizontal"}, {"tags":
-    ["indent"], "type": "container", "children": [{"name": "$childGroup", "type":
-    "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "Statement",
-    "languageName": "js"}}]}], "orientation": "vertical"}, {"type": "terminal", "symbol":
-    "}"}], "orientation": "vertical"}]}, "Program": {"type": "concrete", "attributes":
-    [{"type": "container", "children": [{"name": "Body", "type": "sequence", "nodeTypes":
-    [{"occurs": "*", "nodeType": {"typeName": "Statement", "languageName": "js"}}]}],
-    "orientation": "vertical"}]}, "Statement": {"type": "oneOf", "oneOf": [{"typeName":
-    "DeclareVariable", "languageName": "js"}, {"typeName": "CallFunction", "languageName":
-    "js"}, {"typeName": "For", "languageName": "js"}]}, "ConstValue": {"type": "concrete",
+    "Declare", "tags": ["soft-hole"], "type": "sequence", "nodeTypes": [{"occurs":
+    "*", "nodeType": {"typeName": "DeclareVariable", "languageName": "js"}}]}, {"type":
+    "terminal", "symbol": ";"}, {"name": "Check", "type": "sequence", "nodeTypes":
+    [{"typeName": "Expression", "languageName": "js"}]}, {"type": "terminal", "symbol":
+    ";"}, {"name": "Step", "tags": ["soft-hole"], "type": "sequence", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "Statement", "languageName": "js"}}]},
+    {"tags": ["space-after"], "type": "terminal", "symbol": ")"}, {"type": "terminal",
+    "symbol": "{"}], "orientation": "horizontal"}, {"tags": ["indent"], "type": "container",
+    "children": [{"name": "$childGroup", "tags": ["soft-hole"], "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "Statement", "languageName":
+    "js"}}]}], "orientation": "vertical"}, {"type": "terminal", "symbol": "}"}], "orientation":
+    "vertical"}]}, "Program": {"type": "concrete", "attributes": [{"type": "container",
+    "children": [{"name": "Body", "type": "sequence", "nodeTypes": [{"occurs": "*",
+    "nodeType": {"typeName": "Statement", "languageName": "js"}}]}], "orientation":
+    "vertical"}]}, "Increment": {"type": "concrete", "attributes": [{"name": "Variable",
+    "type": "sequence", "nodeTypes": [{"typeName": "ExprVariable", "languageName":
+    "js"}]}, {"type": "terminal", "symbol": "++"}]}, "Statement": {"type": "oneOf",
+    "oneOf": [{"typeName": "DeclareVariable", "languageName": "js"}, {"typeName":
+    "CallFunction", "languageName": "js"}, {"typeName": "For", "languageName": "js"},
+    {"typeName": "Increment", "languageName": "js"}]}, "ConstValue": {"type": "concrete",
     "attributes": [{"base": "string", "name": "Value", "type": "property"}]}, "Expression":
-    {"type": "oneOf", "oneOf": [{"typeName": "ConstValue", "languageName": "js"}]},
-    "CallFunction": {"type": "concrete", "attributes": [{"base": "string", "name":
-    "Name", "type": "property"}, {"type": "terminal", "symbol": "("}, {"name": "Arguments",
-    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "Expression",
-    "languageName": "js"}}]}, {"type": "terminal", "symbol": ")"}]}, "ExprVariable":
-    {"type": "concrete", "attributes": [{"base": "string", "name": "Name", "type":
-    "property"}]}, "DeclareVariable": {"type": "concrete", "attributes": [{"type":
-    "container", "children": [{"base": "string", "name": "Type", "type": "property"},
-    {"base": "string", "name": "Name", "type": "property"}, {"type": "terminal", "symbol":
+    {"type": "oneOf", "oneOf": [{"typeName": "ConstValue", "languageName": "js"},
+    {"typeName": "BinaryExpression", "languageName": "js"}, {"typeName": "ExprVariable",
+    "languageName": "js"}]}, "CallFunction": {"type": "concrete", "attributes": [{"base":
+    "string", "name": "Name", "type": "property"}, {"type": "terminal", "symbol":
+    "("}, {"name": "Arguments", "type": "sequence", "nodeTypes": [{"occurs": "*",
+    "nodeType": {"typeName": "Expression", "languageName": "js"}}]}, {"type": "terminal",
+    "symbol": ")"}]}, "ExprVariable": {"type": "concrete", "attributes": [{"base":
+    "string", "name": "Name", "type": "property"}]}, "DeclareVariable": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"base": "string", "name": "Type",
+    "tags": ["space-after", "keyword"], "type": "property"}, {"name": "Name", "tags":
+    ["space-after"], "type": "sequence", "nodeTypes": [{"typeName": "ExprVariable",
+    "languageName": "js"}]}, {"tags": ["space-after"], "type": "terminal", "symbol":
     "="}, {"name": "Value", "type": "sequence", "nodeTypes": [{"typeName": "Expression",
     "languageName": "js"}]}], "orientation": "horizontal"}]}, "BinaryExpression":
-    {"type": "concrete", "attributes": []}}}'
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
+    "lhs", "type": "sequence", "nodeTypes": [{"typeName": "Expression", "languageName":
+    "js"}]}, {"base": "string", "name": "op", "tags": ["space-around"], "type": "property"},
+    {"name": "rhs", "type": "sequence", "nodeTypes": [{"typeName": "Expression", "languageName":
+    "js"}]}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"
