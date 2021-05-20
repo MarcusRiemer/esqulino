@@ -1,6 +1,6 @@
 import { SyntaxTree } from "./syntaxtree";
-import { CodeGenerator } from "./codegenerator";
 import { allVisualisableTypes } from "./grammar-type-util";
+import { prettierCodeGeneratorFromGrammar } from "./codegenerator-prettier";
 
 /**
  * Ensures that the given in and output files do match correctly.
@@ -21,14 +21,22 @@ export function verifyFiles(grammarName: string, astName: string) {
     }
 
     const types = allVisualisableTypes(grammar);
-    const generator = new CodeGenerator([], types);
-    expect(generator.emit(new SyntaxTree(ast))).toEqual(expected);
+
+    const res = prettierCodeGeneratorFromGrammar(
+      types,
+      new SyntaxTree(ast).rootNode
+    );
+    expect(res).toEqual(expected);
   });
 }
 
-xdescribe(`Automatic code generation with complex files`, () => {
+describe(`Automatic code generation with complex files`, () => {
   describe(`Visualized XML`, () => {
     verifyFiles("xmlvis", "001-node-attrib");
     verifyFiles("xmlvis", "002-node-single-child");
+  });
+
+  describe(`JavaScript`, () => {
+    verifyFiles("js", "001-const-for");
   });
 });
