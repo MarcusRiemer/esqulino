@@ -31,7 +31,8 @@ export class OverviewBlockLanguageComponent
       AdminListBlockLanguagesQueryVariables,
       DataKey,
       ColumnName
-    > {
+    >
+{
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
   _paginator: MatPaginator;

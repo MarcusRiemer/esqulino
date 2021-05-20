@@ -32,9 +32,8 @@ export class ResourceChangedGuard implements CanActivate {
     const resourceId = route.params["resourceId"];
     console.log(`ResourceChangedGuard: "${resourceId} => ???"`);
 
-    const activatedResource = this._projectService.cachedProject.getCodeResourceById(
-      resourceId
-    );
+    const activatedResource =
+      this._projectService.cachedProject.getCodeResourceById(resourceId);
 
     if (activatedResource) {
       // Ensure that the relevant block language is fully loaded

@@ -85,29 +85,30 @@ export class CodeSidebarComponent {
     mergeMap((id) => this._resourceReferences.getBlockLanguage(id))
   );
 
-  private readonly _fallbackSidebarDescription$: Observable<FixedBlocksSidebarDescription> = this.currentBlockLanguage$.pipe(
-    mergeMap((b) => this._grammarData.fetch({ id: b.grammarId })),
-    pluck("data", "grammar"),
-    map((g) => {
-      // Extract the types that can be generated meaningfully
-      const toGenerate: { [grammarName: string]: string[] } = {};
-      const allTypes = allConcreteTypes(g, (t) => t.type === "concrete");
-      Object.entries(allTypes).forEach(([name, types]) => {
-        toGenerate[name] = [...Object.keys(types)];
-      });
-      return generateSidebar(allTypes, {
-        type: "generatedBlocks",
-        caption: "Auto Generated",
-        categories: [
-          {
-            type: "generated",
-            categoryCaption: g.name,
-            grammar: toGenerate,
-          },
-        ],
-      });
-    })
-  );
+  private readonly _fallbackSidebarDescription$: Observable<FixedBlocksSidebarDescription> =
+    this.currentBlockLanguage$.pipe(
+      mergeMap((b) => this._grammarData.fetch({ id: b.grammarId })),
+      pluck("data", "grammar"),
+      map((g) => {
+        // Extract the types that can be generated meaningfully
+        const toGenerate: { [grammarName: string]: string[] } = {};
+        const allTypes = allConcreteTypes(g, (t) => t.type === "concrete");
+        Object.entries(allTypes).forEach(([name, types]) => {
+          toGenerate[name] = [...Object.keys(types)];
+        });
+        return generateSidebar(allTypes, {
+          type: "generatedBlocks",
+          caption: "Auto Generated",
+          categories: [
+            {
+              type: "generated",
+              categoryCaption: g.name,
+              grammar: toGenerate,
+            },
+          ],
+        });
+      })
+    );
 
   readonly fallbackSidebar$: Observable<FixedBlocksSidebar> = combineLatest([
     this.currentBlockLanguage$,

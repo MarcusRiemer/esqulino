@@ -12,7 +12,8 @@ type GrammarGQLResponse = {
 };
 type AdminListGrammarNode = AdminListGrammarsQuery["grammars"]["nodes"][0];
 
-type GrammarDescriptionItemNode = GrammarDescriptionItemQuery["grammars"]["nodes"][0];
+type GrammarDescriptionItemNode =
+  GrammarDescriptionItemQuery["grammars"]["nodes"][0];
 type GrammarItemGQLResponse = {
   data: GrammarDescriptionItemQuery;
   errors: ReadonlyArray<GraphQLError>;

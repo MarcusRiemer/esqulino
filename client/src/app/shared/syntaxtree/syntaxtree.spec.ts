@@ -486,9 +486,8 @@ describe("AST: Basic Operations", () => {
     expect(titleInterpolate.hasChildren).toBeTruthy();
 
     // page.title
-    const titleInterpolateVar = titleInterpolate.getChildrenInCategory(
-      "children"
-    )[0];
+    const titleInterpolateVar =
+      titleInterpolate.getChildrenInCategory("children")[0];
     expect(titleInterpolateVar.typeName).toEqual(
       "varname",
       "{{ page.title }} var-name"

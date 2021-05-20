@@ -124,10 +124,11 @@ export type TypeInstructionsDescription = InternalTypeInstructionsDescription<
 /**
  * Type instructions that may contain references.
  */
-export type ReferenceableTypeInstructionsDescription = InternalTypeInstructionsDescription<
-  ReferenceableInstructions,
-  ParameterReferenceable<BlockInstructions>
->;
+export type ReferenceableTypeInstructionsDescription =
+  InternalTypeInstructionsDescription<
+    ReferenceableInstructions,
+    ParameterReferenceable<BlockInstructions>
+  >;
 
 /**
  * Supplementary generation instructions for all types. In this variant
