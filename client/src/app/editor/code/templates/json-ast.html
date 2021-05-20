@@ -1,2 +1,7 @@
-<h4 class="card-title">Raw JSON AST</h4>
+<div>
+  <h4 class="card-title">Raw JSON AST</h4>
+  <button (click)="copyToClipboard()" class="btn btn-secondary">
+    Copy AST to Clipboard
+  </button>
+</div>
 <pre><code [innerText]="jsonTree$ | async | json"></code></pre>
