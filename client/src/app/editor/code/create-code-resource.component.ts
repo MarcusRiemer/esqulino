@@ -52,9 +52,10 @@ export class CreateCodeResourceComponent {
   /**
    * These permissions are required to add a code resource
    */
-  readonly createCodeResourcePermission$ = this._projectService.activeProject.pipe(
-    map((p) => this._performData.project.update(p.id))
-  );
+  readonly createCodeResourcePermission$ =
+    this._projectService.activeProject.pipe(
+      map((p) => this._performData.project.update(p.id))
+    );
 
   /**
    * @return The BlockLanguages that are available for creation.

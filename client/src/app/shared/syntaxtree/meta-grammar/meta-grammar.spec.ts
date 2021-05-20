@@ -1118,6 +1118,68 @@ describe(`Convert Meta Grammar AST => GrammarDescription`, () => {
       });
     });
 
+    it(`Type with single, empty sequence (with "soft-hole" tag)`, () => {
+      const g: GrammarDocument = readFromNode(
+        {
+          language: "MetaGrammar",
+          name: "grammar",
+          children: {
+            nodes: [
+              {
+                language: "MetaGrammar",
+                name: "concreteNode",
+                properties: {
+                  languageName: "l",
+                  typeName: "t",
+                },
+                children: {
+                  attributes: [
+                    {
+                      language: "MetaGrammar",
+                      name: "children",
+                      properties: {
+                        base: "sequence",
+                        name: "seq",
+                      },
+                      children: {
+                        tags: [
+                          {
+                            language: "MetaGrammar",
+                            name: "tag",
+                            properties: {
+                              name: "soft-hole",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+        true
+      );
+
+      const seqDesc: NodeTypesSequenceDescription = {
+        type: "sequence",
+        name: "seq",
+        nodeTypes: [],
+        tags: ["soft-hole"],
+      };
+
+      expect(g).toEqual({
+        root: undefined,
+        foreignTypes: {},
+        visualisations: {},
+        foreignVisualisations: {},
+        types: {
+          l: { t: { type: "concrete", attributes: [seqDesc] } },
+        },
+      });
+    });
+
     it(`Type with single, empty sequence in container`, () => {
       const g: GrammarDocument = readFromNode(
         {

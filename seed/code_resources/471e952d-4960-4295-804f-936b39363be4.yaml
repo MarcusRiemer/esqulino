@@ -12,18 +12,29 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "Program", "children": {"Body": [{"name": "DeclareVariable",
-    "children": {"Value": [{"name": "ConstValue", "language": "js", "properties":
-    {"Value": "\"Variable a\""}}]}, "language": "js", "properties": {"Name": "a",
-    "Type": "let"}}, {"name": "For", "language": "js"}, {"name": "CallFunction", "children":
-    {"Arguments": [{"name": "ConstValue", "language": "js", "properties": {"Value":
-    "\"Hello World\""}}]}, "language": "js", "properties": {"Name": "console.log"}}]},
-    "language": "js"}'
+    "children": {"Name": [{"name": "ExprVariable", "language": "js", "properties":
+    {"Name": "a"}}], "Value": [{"name": "ConstValue", "language": "js", "properties":
+    {"Value": "5"}}]}, "language": "js", "properties": {"Type": "const"}}, {"name":
+    "For", "children": {"Step": [{"name": "Increment", "children": {"Variable": [{"name":
+    "ExprVariable", "language": "js", "properties": {"Name": "i"}}]}, "language":
+    "js"}], "Check": [{"name": "BinaryExpression", "children": {"lhs": [{"name": "ExprVariable",
+    "language": "js", "properties": {"Name": "i"}}], "rhs": [{"name": "ExprVariable",
+    "language": "js", "properties": {"Name": "a"}}]}, "language": "js", "properties":
+    {"op": "<"}}], "Declare": [{"name": "DeclareVariable", "children": {"Name": [{"name":
+    "ExprVariable", "language": "js", "properties": {"Name": "i"}}], "Value": [{"name":
+    "ConstValue", "language": "js", "properties": {"Value": "0"}}]}, "language": "js",
+    "properties": {"Type": "let"}}], "$childGroup": [{"name": "CallFunction", "children":
+    {"Arguments": [{"name": "ExprVariable", "language": "js", "properties": {"Name":
+    "a"}}]}, "language": "js", "properties": {"Name": "console.log"}}]}, "language":
+    "js"}, {"name": "CallFunction", "children": {"Arguments": [{"name": "ConstValue",
+    "language": "js", "properties": {"Value": "\"Hello World\""}}]}, "language": "js",
+    "properties": {"Name": "console.log"}}]}, "language": "js"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2021-05-14 11:53:54.221594000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-14 12:34:53.946694000 Z
+  value_before_type_cast: 2021-05-19 13:29:32.293556000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 44a4409a-a51f-40f7-840f-9bba99f0ec30

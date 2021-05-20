@@ -17,94 +17,124 @@ concise_attributes:
     "language": "MetaGrammar", "properties": {"typeName": "DeclareVariable", "languageName":
     "js"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
     "CallFunction", "languageName": "js"}}, {"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "For", "languageName": "js"}}]}, "language": "MetaGrammar",
-    "properties": {"typeName": "Statement", "languageName": "js"}}, {"name": "typedef",
-    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "ConstValue", "languageName": "js"}}]}, "language":
-    "MetaGrammar", "properties": {"typeName": "Expression", "languageName": "js"}},
-    {"name": "concreteNode", "children": {"attributes": [{"name": "container", "children":
-    {"attributes": [{"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
-    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "Statement", "languageName": "js"}}], "cardinality":
-    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
-    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
-    {"base": "sequence", "name": "Body"}}], "orientation": [{"name": "orientation",
-    "language": "MetaGrammar", "properties": {"orientation": "vertical"}}]}, "language":
-    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName": "Program",
-    "languageName": "js"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
-    "container", "children": {"attributes": [{"name": "property", "language": "MetaGrammar",
-    "properties": {"base": "string", "name": "Type"}}, {"name": "property", "language":
-    "MetaGrammar", "properties": {"base": "string", "name": "Name"}}, {"name": "terminal",
-    "language": "MetaGrammar", "properties": {"symbol": "="}}, {"name": "children",
-    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "Expression", "languageName": "js"}}]}, "language":
-    "MetaGrammar", "properties": {"base": "sequence", "name": "Value"}}], "orientation":
-    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
-    "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "DeclareVariable", "languageName": "js"}}, {"name": "concreteNode",
-    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
-    {"base": "string", "name": "Name"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "ExprVariable", "languageName": "js"}}, {"name": "concreteNode",
-    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
-    {"base": "string", "name": "Name"}}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "("}}, {"name": "children", "children": {"references":
-    [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
+    "properties": {"typeName": "For", "languageName": "js"}}, {"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Increment", "languageName":
+    "js"}}]}, "language": "MetaGrammar", "properties": {"typeName": "Statement", "languageName":
+    "js"}}, {"name": "typedef", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "ConstValue", "languageName":
+    "js"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "BinaryExpression", "languageName": "js"}}, {"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "ExprVariable", "languageName": "js"}}]},
     "language": "MetaGrammar", "properties": {"typeName": "Expression", "languageName":
-    "js"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
-    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language":
-    "MetaGrammar", "properties": {"base": "sequence", "name": "Arguments"}}, {"name":
-    "terminal", "language": "MetaGrammar", "properties": {"symbol": ")"}}]}, "language":
-    "MetaGrammar", "properties": {"typeName": "CallFunction", "languageName": "js"}},
-    {"name": "concreteNode", "children": {"attributes": [{"name": "container", "children":
-    {"attributes": [{"name": "container", "children": {"attributes": [{"name": "terminal",
-    "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
-    {"name": "keyword"}}]}, "language": "MetaGrammar", "properties": {"symbol": "for"}},
-    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "("}},
-    {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
-    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "DeclareVariable", "languageName": "js"}}], "cardinality":
-    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
-    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
-    {"base": "sequence", "name": "Declare"}}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": ";"}}, {"name": "children", "children": {"references":
+    "js"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "container",
+    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
+    "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "Statement", "languageName": "js"}}],
+    "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
+    {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "Body"}}], "orientation": [{"name":
+    "orientation", "language": "MetaGrammar", "properties": {"orientation": "vertical"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "Program", "languageName": "js"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "container", "children": {"attributes": [{"name": "property", "children":
+    {"tags": [{"name": "tag", "language": "MetaGrammar", "properties": {"name": "space-after"}},
+    {"name": "tag", "language": "MetaGrammar", "properties": {"name": "keyword"}}]},
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "Type"}},
+    {"name": "children", "children": {"tags": [{"name": "tag", "language": "MetaGrammar",
+    "properties": {"name": "space-after"}}], "references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "ExprVariable", "languageName":
+    "js"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
+    "Name"}}, {"name": "terminal", "children": {"tags": [{"name": "tag", "language":
+    "MetaGrammar", "properties": {"name": "space-after"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": "="}}, {"name": "children", "children": {"references":
     [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
     "Expression", "languageName": "js"}}]}, "language": "MetaGrammar", "properties":
-    {"base": "sequence", "name": "Check"}}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": ";"}}, {"name": "children", "children": {"references":
+    {"base": "sequence", "name": "Value"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName": "DeclareVariable",
+    "languageName": "js"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
+    "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
+    "Name"}}]}, "language": "MetaGrammar", "properties": {"typeName": "ExprVariable",
+    "languageName": "js"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
+    "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
+    "Name"}}, {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol":
+    "("}}, {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "Expression", "languageName": "js"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "Arguments"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": ")"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "CallFunction", "languageName": "js"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "container", "children": {"attributes": [{"name": "container", "children":
+    {"attributes": [{"name": "terminal", "children": {"tags": [{"name": "tag", "language":
+    "MetaGrammar", "properties": {"name": "keyword"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": "for"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "("}}, {"name": "children", "children": {"tags": [{"name":
+    "tag", "language": "MetaGrammar", "properties": {"name": "soft-hole"}}], "references":
     [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "Statement", "languageName":
+    "language": "MetaGrammar", "properties": {"typeName": "DeclareVariable", "languageName":
     "js"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
     "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language":
-    "MetaGrammar", "properties": {"base": "sequence", "name": "Step"}}, {"name": "terminal",
+    "MetaGrammar", "properties": {"base": "sequence", "name": "Declare"}}, {"name":
+    "terminal", "language": "MetaGrammar", "properties": {"symbol": ";"}}, {"name":
+    "children", "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "Expression", "languageName": "js"}}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "Check"}}, {"name":
+    "terminal", "language": "MetaGrammar", "properties": {"symbol": ";"}}, {"name":
+    "children", "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "soft-hole"}}], "references": [{"name": "nodeRefCardinality", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "Statement", "languageName": "js"}}], "cardinality": [{"name": "knownCardinality",
+    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "Step"}}, {"name": "terminal", "children": {"tags": [{"name": "tag", "language":
+    "MetaGrammar", "properties": {"name": "space-after"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": ")"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "{"}}], "orientation": [{"name": "orientation", "language":
+    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"},
+    {"name": "container", "children": {"tags": [{"name": "tag", "language": "MetaGrammar",
+    "properties": {"name": "indent"}}], "attributes": [{"name": "children", "children":
+    {"tags": [{"name": "tag", "language": "MetaGrammar", "properties": {"name": "soft-hole"}}],
+    "references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "Statement",
+    "languageName": "js"}}], "cardinality": [{"name": "knownCardinality", "language":
+    "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "$childGroup"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "vertical"}}]}, "language": "MetaGrammar"}, {"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "}"}}], "orientation": [{"name":
+    "orientation", "language": "MetaGrammar", "properties": {"orientation": "vertical"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "For", "languageName": "js"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "property", "children": {"tags": []}, "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "Value"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "ConstValue", "languageName": "js"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "container", "children": {"attributes": [{"name": "children",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "Expression", "languageName": "js"}}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "lhs"}}, {"name": "property",
     "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
-    {"name": "space-after"}}]}, "language": "MetaGrammar", "properties": {"symbol":
-    ")"}}, {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol":
-    "{"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
-    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}, {"name": "container",
-    "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
-    {"name": "indent"}}], "attributes": [{"name": "children", "children": {"references":
-    [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "Statement", "languageName":
-    "js"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
-    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language":
-    "MetaGrammar", "properties": {"base": "sequence", "name": "$childGroup"}}], "orientation":
-    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
-    "vertical"}}]}, "language": "MetaGrammar"}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "}"}}], "orientation": [{"name": "orientation", "language":
-    "MetaGrammar", "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]},
-    "language": "MetaGrammar", "properties": {"typeName": "For", "languageName": "js"}},
-    {"name": "concreteNode", "children": {"attributes": [{"name": "property", "language":
-    "MetaGrammar", "properties": {"base": "string", "name": "Value"}}]}, "language":
-    "MetaGrammar", "properties": {"typeName": "ConstValue", "languageName": "js"}},
-    {"name": "concreteNode", "language": "MetaGrammar", "properties": {"typeName":
-    "BinaryExpression", "languageName": "js"}}]}, "language": "MetaGrammar", "properties":
-    {"name": "js"}}'
+    {"name": "space-around"}}]}, "language": "MetaGrammar", "properties": {"base":
+    "string", "name": "op"}}, {"name": "children", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "Expression",
+    "languageName": "js"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "rhs"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"typeName": "BinaryExpression", "languageName":
+    "js"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "children",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "ExprVariable", "languageName": "js"}}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "Variable"}}, {"name":
+    "terminal", "language": "MetaGrammar", "properties": {"symbol": "++"}}]}, "language":
+    "MetaGrammar", "properties": {"typeName": "Increment", "languageName": "js"}}]},
+    "language": "MetaGrammar", "properties": {"name": "js"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2021-05-14 11:53:53.705019000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-14 12:38:40.022186000 Z
+  value_before_type_cast: 2021-05-19 13:44:17.556986000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -131,6 +161,10 @@ concise_attributes:
               {
                 "languageName": "js",
                 "typeName": "For"
+              },
+              {
+                "languageName": "js",
+                "typeName": "Increment"
               }
             ]
           },
@@ -140,6 +174,14 @@ concise_attributes:
               {
                 "languageName": "js",
                 "typeName": "ConstValue"
+              },
+              {
+                "languageName": "js",
+                "typeName": "BinaryExpression"
+              },
+              {
+                "languageName": "js",
+                "typeName": "ExprVariable"
               }
             ]
           },
@@ -177,16 +219,31 @@ concise_attributes:
                   {
                     "type": "property",
                     "base": "string",
-                    "name": "Type"
+                    "name": "Type",
+                    "tags": [
+                      "space-after",
+                      "keyword"
+                    ]
                   },
                   {
-                    "type": "property",
-                    "base": "string",
-                    "name": "Name"
+                    "type": "sequence",
+                    "name": "Name",
+                    "nodeTypes": [
+                      {
+                        "languageName": "js",
+                        "typeName": "ExprVariable"
+                      }
+                    ],
+                    "tags": [
+                      "space-after"
+                    ]
                   },
                   {
                     "type": "terminal",
-                    "symbol": "="
+                    "symbol": "=",
+                    "tags": [
+                      "space-after"
+                    ]
                   },
                   {
                     "type": "sequence",
@@ -276,6 +333,9 @@ concise_attributes:
                             },
                             "occurs": "*"
                           }
+                        ],
+                        "tags": [
+                          "soft-hole"
                         ]
                       },
                       {
@@ -307,6 +367,9 @@ concise_attributes:
                             },
                             "occurs": "*"
                           }
+                        ],
+                        "tags": [
+                          "soft-hole"
                         ]
                       },
                       {
@@ -337,6 +400,9 @@ concise_attributes:
                             },
                             "occurs": "*"
                           }
+                        ],
+                        "tags": [
+                          "soft-hole"
                         ]
                       }
                     ],
@@ -364,7 +430,61 @@ concise_attributes:
           },
           "BinaryExpression": {
             "type": "concrete",
-            "attributes": []
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "sequence",
+                    "name": "lhs",
+                    "nodeTypes": [
+                      {
+                        "languageName": "js",
+                        "typeName": "Expression"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "property",
+                    "base": "string",
+                    "name": "op",
+                    "tags": [
+                      "space-around"
+                    ]
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "rhs",
+                    "nodeTypes": [
+                      {
+                        "languageName": "js",
+                        "typeName": "Expression"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "Increment": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "Variable",
+                "nodeTypes": [
+                  {
+                    "languageName": "js",
+                    "typeName": "ExprVariable"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "++"
+              }
+            ]
           }
         }
       },

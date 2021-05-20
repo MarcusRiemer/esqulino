@@ -178,30 +178,32 @@ export class BlockRenderBlockComponent {
   /**
    * Determines whether a certain codeblock is currently beeing executed.
    */
-  readonly isOnExecutionPath = this._currentCodeResource.currentExecutionLocation$.pipe(
-    map((loc) => {
-      const matchingLength = locationMatchingLength(this.node.location, loc);
-      return (
-        matchingLength !== false &&
-        matchingLength > 0 &&
-        matchingLength - 1 < loc.length
-      );
-    }),
-    distinctUntilChanged(),
-    tap((_) => this._changeDetector.markForCheck())
-  );
+  readonly isOnExecutionPath =
+    this._currentCodeResource.currentExecutionLocation$.pipe(
+      map((loc) => {
+        const matchingLength = locationMatchingLength(this.node.location, loc);
+        return (
+          matchingLength !== false &&
+          matchingLength > 0 &&
+          matchingLength - 1 < loc.length
+        );
+      }),
+      distinctUntilChanged(),
+      tap((_) => this._changeDetector.markForCheck())
+    );
 
   /**
    * Determines whether a certain codeblock is currently beeing executed.
    */
-  readonly isCurrentlyExecuted$ = this._currentCodeResource.currentExecutionLocation$.pipe(
-    // Even if the node is properly initialized, the input property may be missing
-    // because it is initialized later
-    filter((_) => !!this.node),
-    map((loc) => locationEquals(loc, this.node.location)),
-    distinctUntilChanged(),
-    tap((_) => this._changeDetector.markForCheck())
-  );
+  readonly isCurrentlyExecuted$ =
+    this._currentCodeResource.currentExecutionLocation$.pipe(
+      // Even if the node is properly initialized, the input property may be missing
+      // because it is initialized later
+      filter((_) => !!this.node),
+      map((loc) => locationEquals(loc, this.node.location)),
+      distinctUntilChanged(),
+      tap((_) => this._changeDetector.markForCheck())
+    );
 
   /**
    * True, if this block is currently being replaced.
@@ -250,16 +252,14 @@ export class BlockRenderBlockComponent {
     this.isBeingReplaced,
     this.isCurrentlyExecuted$,
   ]).pipe(
-    map(
-      ([isBeingReplaced, isCurrentlyExecuted]): BackgroundState => {
-        if (isBeingReplaced && !this._renderData.readOnly) {
-          return "replaced";
-        } else if (isCurrentlyExecuted) {
-          return "executed";
-        } else {
-          return "neutral";
-        }
+    map(([isBeingReplaced, isCurrentlyExecuted]): BackgroundState => {
+      if (isBeingReplaced && !this._renderData.readOnly) {
+        return "replaced";
+      } else if (isCurrentlyExecuted) {
+        return "executed";
+      } else {
+        return "neutral";
       }
-    )
+    })
   );
 }

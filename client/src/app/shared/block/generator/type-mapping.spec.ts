@@ -61,6 +61,33 @@ describe("BlockLanguage Generator Type Mapping", () => {
     expect(res).toEqual({ blockType: "interpolated", property: "prop" });
   });
 
+  it("Sequence with soft hole", () => {
+    const attrType: NodeAttributeDescription = {
+      type: "sequence",
+      name: "c1",
+      tags: ["soft-hole"],
+      nodeTypes: [],
+    };
+    const nodeType: NodeConcreteTypeDescription = {
+      type: "concrete",
+      attributes: [attrType],
+    };
+    const res = mapChildren(
+      nodeType,
+      attrType,
+      DefaultInstructions.iteratorInstructions
+    );
+
+    expect(res).toEqual([
+      {
+        blockType: "iterator",
+        childGroupName: "c1",
+        cssClasses: ["soft-hole"],
+        emptyDropTarget: true,
+      },
+    ]);
+  });
+
   it("Sequence => Iterator", () => {
     const attrType: NodeAttributeDescription = {
       type: "sequence",

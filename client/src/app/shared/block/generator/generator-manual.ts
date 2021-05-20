@@ -95,17 +95,15 @@ export function convertGrammarManualInstructions(
   const instructions = new GeneratorInstructions(resolvedTypeInstructions);
 
   // Look over every type that exists and see how it should be created
-  toReturn.editorBlocks = concreteTypes.map(
-    (t): EditorBlockDescription => {
-      return {
-        describedType: { languageName: t.languageName, typeName: t.typeName },
-        visual: mapType(
-          t as NodeConcreteTypeDescription | NodeVisualTypeDescription,
-          instructions.typeInstructions(t.languageName, t.typeName)
-        ),
-      };
-    }
-  );
+  toReturn.editorBlocks = concreteTypes.map((t): EditorBlockDescription => {
+    return {
+      describedType: { languageName: t.languageName, typeName: t.typeName },
+      visual: mapType(
+        t as NodeConcreteTypeDescription | NodeVisualTypeDescription,
+        instructions.typeInstructions(t.languageName, t.typeName)
+      ),
+    };
+  });
 
   return toReturn;
 }

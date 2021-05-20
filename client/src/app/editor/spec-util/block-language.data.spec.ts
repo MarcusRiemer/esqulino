@@ -16,8 +16,8 @@ import { GraphQLError } from "graphql";
 import { Operation } from "@apollo/client/core";
 import { specGqlWaitQuery } from "./gql-respond-query.spec";
 
-export const DEFAULT_EMPTY_BLOCKLANGUAGE: FullBlockLanguage = Object.freeze<FullBlockLanguage>(
-  {
+export const DEFAULT_EMPTY_BLOCKLANGUAGE: FullBlockLanguage =
+  Object.freeze<FullBlockLanguage>({
     __typename: "BlockLanguage",
     id: "96659508-e006-4290-926e-0734e7dd061a",
     name: "Empty Spec Block Language",
@@ -32,8 +32,7 @@ export const DEFAULT_EMPTY_BLOCKLANGUAGE: FullBlockLanguage = Object.freeze<Full
     localGeneratorInstructions: { type: "manual" },
     createdAt: Date(),
     updatedAt: Date(),
-  }
-);
+  });
 
 /**
  * Generates a valid block language description with a unique ID, that uses

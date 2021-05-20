@@ -65,8 +65,7 @@ const DevelopmentLinks: DevelopmentLink[] = [
     },
     titleBadgeImage:
       "https://dev.azure.com/marcusriemer/BlattWerkzeug/_apis/build/status/marcusriemer.esqulino?branchName=master",
-    href:
-      "https://dev.azure.com/marcusriemer/BlattWerkzeug/_build?definitionId=7",
+    href: "https://dev.azure.com/marcusriemer/BlattWerkzeug/_build?definitionId=7",
   },
   {
     icon: "slack",
@@ -82,8 +81,7 @@ const DevelopmentLinks: DevelopmentLink[] = [
       de: `Welche akuten Änderungen stehen gerade an? Wie kann ich eigentlich ..? Hinweise und Antworten gibt es im Chat.`,
       en: `Which acute changes are about to happen? How can I ..? Hints and answers are available in chat.`,
     },
-    href:
-      "https://join.slack.com/t/blattwerkzeug/shared_invite/zt-gbzwusqo-Mg0G3dhcoHThs6e5Nfx4ww",
+    href: "https://join.slack.com/t/blattwerkzeug/shared_invite/zt-gbzwusqo-Mg0G3dhcoHThs6e5Nfx4ww",
   },
 ];
 

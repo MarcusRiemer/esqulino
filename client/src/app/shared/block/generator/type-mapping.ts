@@ -168,7 +168,9 @@ export function mapChildren(
   const iteratorBlock: VisualBlockDescriptions.EditorIterator = {
     blockType: "iterator",
     childGroupName: attr.name,
-    emptyDropTarget: instructions.emptyDropTarget,
+    // Is this a soft hole according to the tags or the traits?
+    emptyDropTarget:
+      instructions.emptyDropTarget || (attr.tags ?? []).includes("soft-hole"),
   };
 
   // And only add between instructions if there are any
@@ -192,9 +194,8 @@ export function mapContainer(
   attr: NodeVisualContainerDescription,
   instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock {
-  const mappedChildren: VisualBlockDescriptions.ConcreteBlock[][] = attr.children.map(
-    (a) => mapAttribute(_typeDesc, a, instructions)
-  );
+  const mappedChildren: VisualBlockDescriptions.ConcreteBlock[][] =
+    attr.children.map((a) => mapAttribute(_typeDesc, a, instructions));
 
   const toReturn: VisualBlockDescriptions.EditorContainer = {
     blockType: "container",
