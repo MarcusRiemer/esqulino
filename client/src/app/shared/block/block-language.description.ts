@@ -124,6 +124,14 @@ export interface ExecuteJavaScriptComponentDescription
 }
 
 /**
+ * "Executing" JavaScript programs
+ */
+export interface ExecuteMathComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "execute-math";
+}
+
+/**
  * Displays debug information about an ongoing drag process
  */
 export interface DropDebugComponentDescription
@@ -204,7 +212,8 @@ export type EditorComponentDescription =
   | DropDebugComponentDescription
   | JsonAstComponentDescription
   | RegexTestComponentDescription
-  | ExecuteJavaScriptComponentDescription;
+  | ExecuteJavaScriptComponentDescription
+  | ExecuteMathComponentDescription;
 
 export type BlockLanguageSidebarsDescription = SidebarDescription[];
 

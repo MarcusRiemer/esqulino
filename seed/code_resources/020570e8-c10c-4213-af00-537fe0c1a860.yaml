@@ -1,0 +1,45 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: a90b5fdd-69ad-4915-b555-508206a2c6e1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Initial: Mathe-Gleichungen'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 020570e8-c10c-4213-af00-537fe0c1a860
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "Equation", "children": {"Left": [{"name": "BinaryOperation",
+    "children": {"Left": [{"name": "Variable", "language": "nerdamer", "properties":
+    {"Name": "X"}}], "Right": [{"name": "Constant", "language": "nerdamer", "properties":
+    {"Value": "3"}}]}, "language": "nerdamer", "properties": {"Operation": "+"}}],
+    "Right": [{"name": "Constant", "language": "nerdamer", "properties": {"Value":
+    "2"}}], "Transforms": [{"name": "Transform", "children": {"Expression": [{"name":
+    "Constant", "language": "nerdamer", "properties": {"Value": "3"}}]}, "language":
+    "nerdamer", "properties": {"Operation": "-"}}, {"name": "Transform", "children":
+    {"Expression": [{"name": "Constant", "language": "nerdamer", "properties": {"Value":
+    "3"}}]}, "language": "nerdamer", "properties": {"Operation": "+"}}, {"name": "Transform",
+    "children": {"Expression": [{"name": "Variable", "language": "nerdamer", "properties":
+    {"Name": "X"}}]}, "language": "nerdamer", "properties": {"Operation": "*"}}, {"name":
+    "Transform", "children": {"Expression": [{"name": "Constant", "language": "nerdamer",
+    "properties": {"Value": "0"}}]}, "language": "nerdamer", "properties": {"Operation":
+    "*"}}]}, "language": "nerdamer"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-21 11:55:11.689751000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-21 14:32:09.235542000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 0b70b0f3-87d9-4804-9467-48638c31f513
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

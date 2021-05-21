@@ -4,7 +4,6 @@ import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { executeJavaScriptProgram } from "./execute-java-script";
 
 @Component({
-  selector: "app-execute-java-script",
   templateUrl: "./execute-java-script.component.html",
   styleUrls: ["./execute-java-script.component.scss"],
 })

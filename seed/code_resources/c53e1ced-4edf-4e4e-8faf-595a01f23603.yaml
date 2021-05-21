@@ -1,0 +1,280 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: a90b5fdd-69ad-4915-b555-508206a2c6e1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Grammar: Mathe-Gleichungen'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: c53e1ced-4edf-4e4e-8faf-595a01f23603
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Equation", "languageName":
+    "nerdamer"}}], "nodes": [{"name": "typedef", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "Constant",
+    "languageName": "nerdamer"}}, {"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "BinaryOperation", "languageName": "nerdamer"}}, {"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "Variable",
+    "languageName": "nerdamer"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "Expression", "languageName": "nerdamer"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "container", "children": {"attributes": [{"name": "container",
+    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "Expression",
+    "languageName": "nerdamer"}}]}, "language": "MetaGrammar", "properties": {"base":
+    "sequence", "name": "Left"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "="}}, {"name": "children", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "Expression", "languageName": "nerdamer"}}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "Right"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
+    "MetaGrammar"}, {"name": "container", "children": {"attributes": [{"name": "container",
+    "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "indent"}}], "attributes": [{"name": "children", "children": {"references":
+    [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Transform", "languageName":
+    "nerdamer"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
+    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "Transforms"}}], "orientation":
+    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
+    "vertical"}}]}, "language": "MetaGrammar"}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
+    "MetaGrammar"}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]}, "language":
+    "MetaGrammar", "properties": {"typeName": "Equation", "languageName": "nerdamer"}},
+    {"name": "concreteNode", "children": {"attributes": [{"name": "property", "language":
+    "MetaGrammar", "properties": {"base": "integer", "name": "Value"}}]}, "language":
+    "MetaGrammar", "properties": {"typeName": "Constant", "languageName": "nerdamer"}},
+    {"name": "concreteNode", "children": {"attributes": [{"name": "property", "language":
+    "MetaGrammar", "properties": {"base": "string", "name": "Name"}}]}, "language":
+    "MetaGrammar", "properties": {"typeName": "Variable", "languageName": "nerdamer"}},
+    {"name": "concreteNode", "children": {"attributes": [{"name": "container", "children":
+    {"attributes": [{"name": "children", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Expression", "languageName":
+    "nerdamer"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "Left"}}, {"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "Operation"}}, {"name": "children", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "Expression", "languageName": "nerdamer"}}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "Right"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName": "BinaryOperation",
+    "languageName": "nerdamer"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "container", "children": {"attributes": [{"name": "terminal", "children":
+    {"tags": [{"name": "tag", "language": "MetaGrammar", "properties": {"name": "space-after"}}]},
+    "language": "MetaGrammar", "properties": {"symbol": "|"}}, {"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "Operation"}},
+    {"name": "children", "children": {"references": [{"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "Expression", "languageName": "nerdamer"}}]},
+    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "Expression"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "Transform", "languageName": "nerdamer"}}]}, "language":
+    "MetaGrammar", "properties": {"name": "nerdamer"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-21 11:55:11.130131000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-21 14:15:12.880354000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "nerdamer": {
+          "Expression": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "nerdamer",
+                "typeName": "Constant"
+              },
+              {
+                "languageName": "nerdamer",
+                "typeName": "BinaryOperation"
+              },
+              {
+                "languageName": "nerdamer",
+                "typeName": "Variable"
+              }
+            ]
+          },
+          "Equation": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "vertical",
+                "children": [
+                  {
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "sequence",
+                        "name": "Left",
+                        "nodeTypes": [
+                          {
+                            "languageName": "nerdamer",
+                            "typeName": "Expression"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "terminal",
+                        "symbol": "="
+                      },
+                      {
+                        "type": "sequence",
+                        "name": "Right",
+                        "nodeTypes": [
+                          {
+                            "languageName": "nerdamer",
+                            "typeName": "Expression"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "container",
+                        "orientation": "vertical",
+                        "children": [
+                          {
+                            "type": "sequence",
+                            "name": "Transforms",
+                            "nodeTypes": [
+                              {
+                                "nodeType": {
+                                  "languageName": "nerdamer",
+                                  "typeName": "Transform"
+                                },
+                                "occurs": "*"
+                              }
+                            ]
+                          }
+                        ],
+                        "tags": [
+                          "indent"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "Constant": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "integer",
+                "name": "Value"
+              }
+            ]
+          },
+          "Variable": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "Name"
+              }
+            ]
+          },
+          "BinaryOperation": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "sequence",
+                    "name": "Left",
+                    "nodeTypes": [
+                      {
+                        "languageName": "nerdamer",
+                        "typeName": "Expression"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "property",
+                    "base": "string",
+                    "name": "Operation"
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "Right",
+                    "nodeTypes": [
+                      {
+                        "languageName": "nerdamer",
+                        "typeName": "Expression"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "Transform": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "|",
+                    "tags": [
+                      "space-after"
+                    ]
+                  },
+                  {
+                    "type": "property",
+                    "base": "string",
+                    "name": "Operation"
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "Expression",
+                    "nodeTypes": [
+                      {
+                        "languageName": "nerdamer",
+                        "typeName": "Expression"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "visualisations": {},
+      "foreignVisualisations": {},
+      "root": {
+        "languageName": "nerdamer",
+        "typeName": "Equation"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2
