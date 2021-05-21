@@ -64,10 +64,12 @@ editor-block-host {
         //margin: 2px;
         //padding: 2px;
 
-        margin-top: 2px;
-        margin-bottom: 2px;
+        margin: 2px 5px;
         padding-top: 2px;
         padding-bottom: 2px;
+    }
+
+    &.activate-block-outline.activate-left-aligned-blocks editor-block-render-block {
         margin-left: -1px;
         margin-right: 1px;
     }
