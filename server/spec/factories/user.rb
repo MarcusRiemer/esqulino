@@ -10,6 +10,12 @@ FactoryBot.define do
       roles { [Role.find_or_create_by(name: 'guest')] }
     end
 
+    trait :system do
+      id { User.system_id }
+      display_name { "System" }
+      roles { [Role.find_or_create_by(name: 'admin')] }
+    end
+
     trait :admin do
       roles { [Role.find_or_create_by(name: 'admin')] }
     end
