@@ -37,7 +37,7 @@ class ProjectPolicy < ApplicationPolicy
     permitted_roles = ["admin", "owner"]
     user_role = project.member_role(user)
 
-    return project.user_have_role(user,permitted_roles) || project.public && user_role=="participant" 
+    return user.has_role?(:admin) || project.user_have_role(user,permitted_roles) || project.public && user_role=="participant"
   end
 
   def change_member_role?
