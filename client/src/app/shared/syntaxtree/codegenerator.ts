@@ -87,9 +87,6 @@ export class CodeGenerator {
         this.algorithm === "legacy" ||
         Object.keys(this._callbacks).length > 0
       ) {
-        console.warn(
-          "Using the legacy code generator that may break at any moment"
-        );
         // Make a deep copy of the given state
         const stateCopy = JSON.parse(JSON.stringify(this._state));
         const process = new CodeGeneratorProcess(this, stateCopy);
