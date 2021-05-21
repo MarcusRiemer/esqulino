@@ -53,6 +53,8 @@ import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.compo
 import { RegexTestComponent } from "./regex/regex-test.component";
 
 import { ExecuteJavaScriptComponent } from "./js/execute-java-script.component";
+import { ExecuteMathComponent } from "./math/execute-math.component";
+import { NerdamerPipe } from "./math/nerdamer.pipe";
 
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],
@@ -90,6 +92,8 @@ import { ExecuteJavaScriptComponent } from "./js/execute-java-script.component";
     QueryStepwiseDescriptionComponent,
     CreateOverviewComponent,
     ExecuteJavaScriptComponent,
+    ExecuteMathComponent,
+    NerdamerPipe,
   ],
   providers: [ResourceChangedGuard],
   exports: [BlockHostComponent],

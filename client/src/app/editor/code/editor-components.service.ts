@@ -24,6 +24,8 @@ import { RegexTestComponent } from "./regex/regex-test.component";
 
 import { ExecuteJavaScriptComponent } from "./js/execute-java-script.component";
 
+import { ExecuteMathComponent } from "./math/execute-math.component";
+
 type ComponentTypeId = EditorComponentDescription["componentType"];
 
 /**
@@ -50,6 +52,7 @@ export class EditorComponentsService {
     "truck-sensors": WorldSensorsComponent,
     "truck-world-editor": TruckWorldEditorComponent,
     "execute-js": ExecuteJavaScriptComponent,
+    "execute-math": ExecuteMathComponent,
   };
 
   constructor(

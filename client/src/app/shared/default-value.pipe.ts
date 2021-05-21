@@ -4,7 +4,10 @@ import { Pipe, PipeTransform } from "@angular/core";
  * Inserts a replacement string if the given string is
  * undefined, null or the empty string.
  */
-@Pipe({ name: "defaultValue" })
+@Pipe({
+  name: "defaultValue",
+  pure: true,
+})
 export class DefaultValuePipe implements PipeTransform {
   transform(value: string, defaultValue: string = "␀") {
     if (value === null || value === undefined || value === "") {
