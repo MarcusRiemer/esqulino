@@ -20,7 +20,7 @@ export interface ResultStep {
 }
 
 export interface TransformationInput {
-  operation: "+" | "-" | "*";
+  operation: "+" | "-" | "−" | "*" | "×" | "/" | "÷";
   expression: string;
 }
 
@@ -51,8 +51,9 @@ export function compileMath(
   const rightAst = ast.rootNode.getChildInCategory("Right");
   const right = prettierCodeGeneratorFromGrammar(nerdamerTypes, rightAst);
 
-  const astTransformExpressions =
-    ast.rootNode.getChildrenInCategory("Transforms");
+  const astTransformExpressions = ast.rootNode.getChildrenInCategory(
+    "Transforms"
+  );
   const transformationSteps = astTransformExpressions.map((expr) => ({
     operation: expr.properties["Operation"] as any,
     expression: prettierCodeGeneratorFromGrammar(
@@ -83,14 +84,22 @@ export function executeMath(input: ExecutionInput): ResultStep[] {
           right: (current.right as any).add(step.expression),
         };
       case "-":
+      case "−":
         return {
           left: (current.left as any).subtract(step.expression),
           right: (current.right as any).subtract(step.expression),
         };
       case "*":
+      case "×":
         return {
           left: (current.left as any).multiply(step.expression),
           right: (current.right as any).multiply(step.expression),
+        };
+      case "/":
+      case "÷":
+        return {
+          left: (current.left as any).divide(step.expression),
+          right: (current.right as any).divide(step.expression),
         };
       default:
         throw new Error(`Unknown nerdamer operation "${step.operation}"`);
