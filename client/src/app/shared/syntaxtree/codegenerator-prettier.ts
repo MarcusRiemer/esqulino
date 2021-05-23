@@ -20,6 +20,31 @@ import { SyntaxNode } from "./syntaxtree";
 // will be helpful when following this code.
 type Doc = builders.Doc;
 
+function isPrettierGroup(obj: unknown): obj is builders.Group {
+  return obj instanceof Object && obj["type"] === "group";
+}
+
+function isPrettierConcat(obj: unknown): obj is builders.Concat {
+  return obj instanceof Object && obj["type"] === "concat";
+}
+
+function unwrapPrettierGroups(children: Doc[]): Doc[] {
+  if (children.length === 1) {
+    if (isPrettierGroup(children[0])) {
+      return unwrapPrettierGroups([children[0].contents]);
+    } else if (isPrettierConcat(children[0])) {
+      return unwrapPrettierGroups(children[0].parts);
+    }
+  }
+  return children;
+}
+
+const DEFAULT_PRINTING_OPTIONS = {
+  printWidth: 80,
+  tabWidth: 2,
+  useTabs: false,
+};
+
 /**
  * Converts a terminal, with respect to all tags that may affect a terminal.
  *
@@ -89,10 +114,6 @@ function processAttributes(
         const between =
           "between" in a ? convertTerminal(a.between, node) : [""];
 
-        if (parentOrientation === "vertical") {
-          between.push(builders.hardline);
-        }
-
         const childDocs = children.map((childNode) => {
           const t = ensureCodeGenType(types, childNode);
           return processAttributes(
@@ -107,11 +128,12 @@ function processAttributes(
         // it. Otherwise we possibly introduce a hardline without having any
         // content
         if (childDocs.length > 0) {
-          const joined = builders.group(
-            builders.join(builders.concat(between), childDocs.flat(1))
+          const joined = builders.join(
+            builders.concat(between),
+            childDocs.flat(1)
           );
 
-          toReturn.push(joined);
+          toReturn.push(...joined.parts);
         }
 
         break;
@@ -123,26 +145,38 @@ function processAttributes(
       // therefore handled in a separate case although it looks sort
       // of similar to syntax tree recursion.
       case "container": {
-        const childDocs = builders.concat(
-          processAttributes(a.children, types, node, a.orientation)
+        const childDocs = processAttributes(
+          a.children,
+          types,
+          node,
+          a.orientation
         );
 
-        // Did we add more than that single hardline?
-        if (childDocs.parts.length > 0) {
+        console.log("childDocs", childDocs);
+
+        const unwrappedChildDocs = unwrapPrettierGroups(childDocs);
+
+        console.log("unwrappedChildDocs", unwrappedChildDocs);
+
+        if (childDocs.length > 0) {
           // Vertical containers must start and end on their own line
-          const indentSurround =
-            a.orientation === "vertical" ? [builders.hardline] : [];
+          const orientedChildDocs =
+            a.orientation === "vertical"
+              ? unwrappedChildDocs.flatMap((e) => [builders.hardline, e])
+              : unwrappedChildDocs;
 
           const finalChildDocs = a.tags?.includes("indent")
-            ? // Leading break inside the indent, trailing break outside
-              builders.concat([
-                builders.indent(
-                  builders.concat([...indentSurround, childDocs])
-                ),
-                ...indentSurround,
+            ? builders.concat([
+                builders.indent(builders.concat(orientedChildDocs)),
+                // Last hardline must be outside of indentation
+                builders.hardline,
               ])
-            : builders.group(childDocs);
+            : builders.group(builders.concat(orientedChildDocs));
 
+          console.log("finalChildDocs", finalChildDocs);
+          console.log(
+            printer.printDocToString(finalChildDocs, DEFAULT_PRINTING_OPTIONS)
+          );
           toReturn.push(finalChildDocs);
         }
       }
@@ -174,11 +208,7 @@ export function prettierCodeGeneratorFromGrammar(
   const printed = printer.printDocToString(
     // Don't leave last lines with nothing but whitespace
     builders.concat([...prettierTree, builders.trim]),
-    {
-      printWidth: 80,
-      tabWidth: 2,
-      useTabs: false,
-    }
+    DEFAULT_PRINTING_OPTIONS
   );
 
   return printed.formatted.trim();
