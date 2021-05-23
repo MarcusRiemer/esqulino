@@ -1,0 +1,90 @@
+{
+  "types": {
+    "MetaBlockLang": {
+      "Document": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "vertical",
+            "children": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "Root CSS Classes:"
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "RootCssClasses",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "MetaBlockLang",
+                          "typeName": "CssClass"
+                        },
+                        "occurs": "*"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "Editor Components:"
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "EditorComponents",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "MetaBlockLang",
+                          "typeName": "EditorComponent"
+                        },
+                        "occurs": "*"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "CssClass": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "property",
+            "base": "string",
+            "name": "Name"
+          }
+        ]
+      },
+      "EditorComponent": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "property",
+            "base": "string",
+            "name": "Name"
+          }
+        ]
+      }
+    }
+  },
+  "foreignTypes": {},
+  "visualisations": {},
+  "foreignVisualisations": {},
+  "root": {
+    "languageName": "MetaBlockLang",
+    "typeName": "Document"
+  }
+}

@@ -39,4 +39,8 @@ describe(`Prettier code generation with complex files`, () => {
   describe(`JavaScript`, () => {
     verifyFiles("js", "001-const-for");
   });
+
+  describe(`Meta Block Language`, () => {
+    verifyFiles("metablocklang", "001-css-and-components");
+  });
 });
