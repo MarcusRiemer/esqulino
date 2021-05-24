@@ -9,8 +9,6 @@ import {
 } from "../../../generated/graphql";
 import { GraphQLQueryComponent } from "../../shared/table/paginator-table-graphql.component";
 import { MatPaginator } from "@angular/material/paginator";
-// TODO: Should be beautified and used
-type Query = ReturnType<AdminListGrammarsGQL["watch"]>;
 
 type DataKey = Exclude<keyof AdminListGrammarsQuery, "__typename">;
 
@@ -18,7 +16,7 @@ type DataKey = Exclude<keyof AdminListGrammarsQuery, "__typename">;
 //       a type argument to Observable
 type ListItem = AdminListGrammarsQuery[DataKey]["nodes"][0];
 
-type ColumnName = keyof ListItem | "actions";
+type ColumnName = keyof ListItem | "actions" | "generatedFrom";
 
 /**
  *
@@ -33,8 +31,7 @@ export class OverviewGrammarComponent
       AdminListGrammarsQueryVariables,
       DataKey,
       ColumnName
-    >
-{
+    > {
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
   _paginator: MatPaginator;
@@ -57,14 +54,20 @@ export class OverviewGrammarComponent
   // mat-pagination info
   pageSize: number = 25;
 
-  //Query Object which can be used to refetch data
-  //fetchPolicy must be network-only, to get a clean pagination
+  // Query Object which can be used to refetch data
+  // fetchPolicy must be network-only, to get a clean pagination
   readonly query = this.grammarsGQL.watch(
     { first: this.pageSize },
     { notifyOnNetworkStatusChange: true, fetchPolicy: "network-only" }
   );
 
-  displayedColumns: ColumnName[] = ["name", "slug", "id", "actions"];
+  displayedColumns: ColumnName[] = [
+    "name",
+    "slug",
+    "generatedFrom",
+    "id",
+    "actions",
+  ];
 
   async onDeleteGrammar(id: string) {
     await this._destroyGrammarGQL.mutate({ id: id }).toPromise();

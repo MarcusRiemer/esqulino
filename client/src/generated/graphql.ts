@@ -1148,7 +1148,19 @@ export type AdminListGrammarsQuery = { __typename?: "Query" } & {
             { __typename?: "Grammar" } & Pick<
               Grammar,
               "id" | "name" | "slug" | "programmingLanguageId"
-            >
+            > & {
+                generatedFrom?: Maybe<
+                  { __typename?: "CodeResource" } & Pick<
+                    CodeResource,
+                    "id" | "name"
+                  > & {
+                      project: { __typename?: "Project" } & Pick<
+                        Project,
+                        "id" | "name"
+                      >;
+                    }
+                >;
+              }
           >
         >
       >;
@@ -2188,6 +2200,14 @@ export const AdminListGrammarsDocument = gql`
         name
         slug
         programmingLanguageId
+        generatedFrom {
+          id
+          name
+          project {
+            id
+            name
+          }
+        }
       }
       totalCount
       pageInfo {
