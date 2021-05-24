@@ -12,14 +12,16 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "Document", "children": {"RootCssClasses": [{"name":
-    "CssClass", "language": "MetaBlockLang", "properties": {"Name": "activate-block-outline"}}]},
-    "language": "MetaBlockLang"}'
+    "CssClass", "language": "MetaBlockLang", "properties": {"Name": "activate-block-outline"}}],
+    "EditorComponents": [{"name": "EditorComponents", "children": {"Values": [{"name":
+    "EditorComponent", "language": "MetaBlockLang", "properties": {"Name": "block-root"}}]},
+    "language": "MetaBlockLang"}]}, "language": "MetaBlockLang"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2021-04-15 13:41:15.719870000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-14 11:43:05.237096000 Z
+  value_before_type_cast: 2021-05-24 10:19:38.595615000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 81430cc2-bcff-4304-8cfd-6f05cf249a53

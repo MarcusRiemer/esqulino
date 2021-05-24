@@ -1,11 +1,10 @@
 import { BlockLanguageDescription } from "../../block/block-language.description";
 import { SyntaxTree } from "../syntaxtree";
 
-import { NodeDescription, QualifiedTypeName } from "../syntaxtree.description";
+import { NodeDescription } from "../syntaxtree.description";
 
-export type BlockLanguageSettings = Pick<
-  BlockLanguageDescription,
-  "rootCssClasses"
+export type BlockLanguageSettings = Partial<
+  Pick<BlockLanguageDescription, "rootCssClasses" | "editorComponents">
 >;
 
 export function readFromNode(
@@ -14,11 +13,26 @@ export function readFromNode(
 ): BlockLanguageSettings {
   const tree = node instanceof SyntaxTree ? node : new SyntaxTree(node);
 
-  const cssClasses = tree.rootNode
+  const rootCssClasses = tree.rootNode
     .getChildrenInCategory("RootCssClasses")
     .map((cssNode) => cssNode.properties["Name"]);
 
-  return {
-    rootCssClasses: cssClasses,
+  const toReturn: ReturnType<typeof readFromNode> = {
+    rootCssClasses,
   };
+
+  const editorComponents = tree.rootNode.getChildInCategory("EditorComponents");
+  if (editorComponents) {
+    const values = editorComponents
+      .getChildrenInCategory("Values")
+      .map((compNode) => ({
+        componentType: compNode.properties["Name"] as any,
+      }));
+
+    if (values.length > 0) {
+      toReturn.editorComponents = values;
+    }
+  }
+
+  return toReturn;
 }

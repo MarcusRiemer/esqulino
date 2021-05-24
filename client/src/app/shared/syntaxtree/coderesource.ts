@@ -60,11 +60,10 @@ export class CodeResource extends ProjectResource {
   /**
    * @return The language that is currently in use
    */
-  readonly blockLanguage$: Observable<BlockLanguage> =
-    this._blockLanguageId$.pipe(
-      switchMap((l) => this.resourceReferences.getBlockLanguage(l)),
-      shareReplay(1)
-    );
+  readonly blockLanguage$: Observable<BlockLanguage> = this._blockLanguageId$.pipe(
+    switchMap((l) => this.resourceReferences.getBlockLanguage(l)),
+    shareReplay(1)
+  );
 
   readonly validator$: Observable<Validator> = combineLatest([
     this._runtimeLanguageId$,
@@ -82,7 +81,6 @@ export class CodeResource extends ProjectResource {
     this._runtimeLanguageId$,
     this.blockLanguage$,
   ]).pipe(
-    tap(console.log),
     switchMap(([l, b]) =>
       this.resourceReferences.getGrammarProgrammingLanguage(b.grammarId, l)
     )
@@ -99,8 +97,7 @@ export class CodeResource extends ProjectResource {
   /**
    * @return An observable value of the language this id uses.
    */
-  readonly blockLanguageId$: Observable<string> =
-    this._blockLanguageId$.asObservable();
+  readonly blockLanguageId$: Observable<string> = this._blockLanguageId$.asObservable();
 
   /**
    * @return The ID of the language this resource uses.
