@@ -132,6 +132,14 @@ export interface ExecuteMathComponentDescription
 }
 
 /**
+ * "Executing" Finite State Machines
+ */
+export interface ExecuteFiniteStateMachineComponentDescription
+  extends EditorComponentBaseDescription {
+  componentType: "execute-fsm";
+}
+
+/**
  * Displays debug information about an ongoing drag process
  */
 export interface DropDebugComponentDescription
@@ -213,7 +221,8 @@ export type EditorComponentDescription =
   | JsonAstComponentDescription
   | RegexTestComponentDescription
   | ExecuteJavaScriptComponentDescription
-  | ExecuteMathComponentDescription;
+  | ExecuteMathComponentDescription
+  | ExecuteFiniteStateMachineComponentDescription;
 
 export type BlockLanguageSidebarsDescription = SidebarDescription[];
 

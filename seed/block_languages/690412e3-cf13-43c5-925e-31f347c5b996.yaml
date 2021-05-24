@@ -1,0 +1,80 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 712ac459-8f43-4c72-95b5-f32acb2ffb04
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Endliche Automaten
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 690412e3-cf13-43c5-925e-31f347c5b996
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-24 11:22:42.780181000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 13:23:06.901479000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: afabc28f-4e20-4042-bd4d-2e73fcc6aff8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: sidebars
+  value_before_type_cast: "[]"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_blocks
+  value_before_type_cast: '[{"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType":
+    "iterator", "childGroupName": "From", "emptyDropTarget": false}, {"text": "->",
+    "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["space-around"]},
+    {"blockType": "iterator", "childGroupName": "To", "emptyDropTarget": false}, {"text":
+    "[label=", "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses":
+    ["space-before"]}, {"style": {"display": "inline-flex"}, "property": "Input",
+    "blockType": "input", "cssClasses": ["double-quote"]}, {"text": "];", "style":
+    {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "container",
+    "orientation": "horizontal"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "Edge", "languageName": "dea"}}, {"visual": [{"children": [{"style":
+    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
+    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
+    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"children": [{"style": {"display": "inline-flex"}, "property": "Name", "blockType":
+    "input", "cssClasses": ["double-quote"]}, {"text": ";", "style": {"display": "inline-flex"},
+    "blockType": "constant"}], "blockType": "container", "orientation": "horizontal"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "Node",
+    "languageName": "dea"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
+    "inline-flex"}, "property": "Name", "blockType": "input", "cssClasses": ["double-quote"]}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "NodeRef",
+    "languageName": "dea"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text":
+    "digraph {", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"children":
+    [{"blockType": "iterator", "childGroupName": "Nodes", "emptyDropTarget": false}],
+    "blockType": "container", "cssClasses": ["indent"], "orientation": "vertical"},
+    {"children": [{"blockType": "iterator", "childGroupName": "Edges", "emptyDropTarget":
+    false}], "blockType": "container", "cssClasses": ["indent"], "orientation": "vertical"},
+    {"text": "}", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    "blockType": "container", "orientation": "vertical"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "Document", "languageName": "dea"}}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_components
+  value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "validator"},
+    {"componentType": "generated-code"}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: local_generator_instructions
+  value_before_type_cast: '{"type": "manual"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root_css_classes
+  value_before_type_cast: "{activate-block-outline,activate-keyword}"
+new_record: false
+active_record_yaml_version: 2

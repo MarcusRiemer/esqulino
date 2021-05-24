@@ -45,6 +45,11 @@
                 "glob": "**/*",
                 "input": "./node_modules/blockly/media",
                 "output": "./blockly-media/"
+              },
+              {
+                "glob": "graphvizlib.wasm",
+                "input": "./node_modules/@hpcc-js/wasm/dist",
+                "output": "./hpcc-js/",
               }
             ],
             "styles": [

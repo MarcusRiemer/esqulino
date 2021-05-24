@@ -418,9 +418,34 @@
         },
         {
           "$ref": "#/definitions/ExecuteMathComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/ExecuteFiniteStateMachineComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
+    },
+    "ExecuteFiniteStateMachineComponentDescription": {
+      "additionalProperties": false,
+      "description": "\"Executing\" Finite State Machines",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "execute-fsm"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
     },
     "ExecuteJavaScriptComponentDescription": {
       "additionalProperties": false,

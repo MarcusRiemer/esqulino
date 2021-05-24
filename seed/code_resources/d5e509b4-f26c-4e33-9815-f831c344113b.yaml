@@ -1,0 +1,223 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: af16d1b2-710b-4576-94c8-707d2f763eee
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 00 Syntax
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: d5e509b4-f26c-4e33-9815-f831c344113b
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Document", "languageName":
+    "dea"}}], "nodes": [{"name": "visualizeNode", "children": {"attributes": [{"name":
+    "container", "children": {"attributes": [{"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "digraph {"}}, {"name": "container", "children": {"tags":
+    [{"name": "tag", "language": "MetaGrammar", "properties": {"name": "indent"}}],
+    "attributes": [{"name": "each", "language": "MetaGrammar", "properties": {"name":
+    "Nodes"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}, {"name":
+    "container", "children": {"tags": [{"name": "tag", "language": "MetaGrammar",
+    "properties": {"name": "indent"}}], "attributes": [{"name": "each", "language":
+    "MetaGrammar", "properties": {"name": "Edges"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "vertical"}}]}, "language":
+    "MetaGrammar"}, {"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "}"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}], "references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "Document", "languageName": "dea"}}]}, "language": "MetaGrammar"}, {"name": "visualizeNode",
+    "children": {"attributes": [{"name": "container", "children": {"attributes": [{"name":
+    "property", "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "double-quote"}}]}, "language": "MetaGrammar", "properties": {"base":
+    "string", "name": "Name"}}, {"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": ";"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}], "references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "Node", "languageName": "dea"}}]}, "language": "MetaGrammar"}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "property", "children": {"tags": [{"name":
+    "tag", "language": "MetaGrammar", "properties": {"name": "double-quote"}}]}, "language":
+    "MetaGrammar", "properties": {"base": "string", "name": "Name"}}]}, "language":
+    "MetaGrammar", "properties": {"typeName": "NodeRef", "languageName": "dea"}},
+    {"name": "visualizeNode", "children": {"attributes": [{"name": "container", "children":
+    {"attributes": [{"name": "each", "language": "MetaGrammar", "properties": {"name":
+    "From"}}, {"name": "terminal", "children": {"tags": [{"name": "tag", "language":
+    "MetaGrammar", "properties": {"name": "space-around"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": "->"}}, {"name": "each", "language": "MetaGrammar", "properties":
+    {"name": "To"}}, {"name": "terminal", "children": {"tags": [{"name": "tag", "language":
+    "MetaGrammar", "properties": {"name": "space-before"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": "[label="}}, {"name": "property", "children": {"tags":
+    [{"name": "tag", "language": "MetaGrammar", "properties": {"name": "double-quote"}}]},
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "Input"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "];"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}], "references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "Edge", "languageName":
+    "dea"}}]}, "language": "MetaGrammar"}], "visualizes": [{"name": "grammarVisualizes",
+    "children": {"includes": [{"name": "grammarRef", "language": "MetaGrammar", "properties":
+    {"grammarId": "9f3511da-4561-4f86-9e4e-f8e1a5f04cae"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"name": "dea"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-24 11:22:42.414958000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 13:23:06.648176000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "dea": {
+          "NodeRef": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "Name",
+                "tags": [
+                  "double-quote"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "visualisations": {
+        "dea": {
+          "Document": {
+            "type": "visualise",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "vertical",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "digraph {"
+                  },
+                  {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "children": [
+                      {
+                        "type": "each",
+                        "name": "Nodes"
+                      }
+                    ],
+                    "tags": [
+                      "indent"
+                    ]
+                  },
+                  {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "children": [
+                      {
+                        "type": "each",
+                        "name": "Edges"
+                      }
+                    ],
+                    "tags": [
+                      "indent"
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": "}"
+                  }
+                ]
+              }
+            ]
+          },
+          "Node": {
+            "type": "visualise",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "property",
+                    "base": "string",
+                    "name": "Name",
+                    "tags": [
+                      "double-quote"
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": ";"
+                  }
+                ]
+              }
+            ]
+          },
+          "Edge": {
+            "type": "visualise",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "each",
+                    "name": "From"
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": "->",
+                    "tags": [
+                      "space-around"
+                    ]
+                  },
+                  {
+                    "type": "each",
+                    "name": "To"
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": "[label=",
+                    "tags": [
+                      "space-before"
+                    ]
+                  },
+                  {
+                    "type": "property",
+                    "base": "string",
+                    "name": "Input",
+                    "tags": [
+                      "double-quote"
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": "];"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "foreignVisualisations": {},
+      "root": {
+        "languageName": "dea",
+        "typeName": "Document"
+      },
+      "visualizes": [
+        "9f3511da-4561-4f86-9e4e-f8e1a5f04cae"
+      ]
+    }
+new_record: false
+active_record_yaml_version: 2

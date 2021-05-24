@@ -1,0 +1,61 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: af16d1b2-710b-4576-94c8-707d2f763eee
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 01 Some Graph
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: ba0e80dd-1ee1-408c-961c-832ec02b6dfe
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "Document", "children": {"Edges": [{"name": "Edge",
+    "children": {"To": [{"name": "NodeRef", "language": "dea", "properties": {"Name":
+    "B"}}], "From": [{"name": "NodeRef", "language": "dea", "properties": {"Name":
+    "A"}}]}, "language": "dea", "properties": {"Input": "1"}}, {"name": "Edge", "children":
+    {"To": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "C"}}],
+    "From": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "A"}}]},
+    "language": "dea", "properties": {"Input": "2"}}, {"name": "Edge", "children":
+    {"To": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "C"}}],
+    "From": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "B"}}]},
+    "language": "dea", "properties": {"Input": "1"}}, {"name": "Edge", "children":
+    {"To": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "D"}}],
+    "From": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "B"}}]},
+    "language": "dea", "properties": {"Input": "3"}}, {"name": "Edge", "children":
+    {"To": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "E"}}],
+    "From": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "A"}}]},
+    "language": "dea", "properties": {"Input": "5"}}, {"name": "Edge", "children":
+    {"To": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "F"}}],
+    "From": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "E"}}]},
+    "language": "dea", "properties": {"Input": "7"}}, {"name": "Edge", "children":
+    {"To": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "C"}}],
+    "From": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "E"}}]},
+    "language": "dea", "properties": {"Input": "2"}}, {"name": "Edge", "children":
+    {"To": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "A"}}],
+    "From": [{"name": "NodeRef", "language": "dea", "properties": {"Name": "C"}}]},
+    "language": "dea", "properties": {"Input": "2"}}], "Nodes": [{"name": "Node",
+    "language": "dea", "properties": {"Name": "A"}}, {"name": "Node", "language":
+    "dea", "properties": {"Name": "B"}}, {"name": "Node", "language": "dea", "properties":
+    {"Name": "C"}}, {"name": "Node", "language": "dea", "properties": {"Name": "D"}},
+    {"name": "Node", "language": "dea", "properties": {"Name": "E"}}, {"name": "Node",
+    "language": "dea", "properties": {"Name": "F"}}], "Start": [{"name": "NodeRef",
+    "language": "dea", "properties": {"Name": ""}}]}, "language": "dea"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-24 11:22:42.951461000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 13:22:35.261295000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 690412e3-cf13-43c5-925e-31f347c5b996
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

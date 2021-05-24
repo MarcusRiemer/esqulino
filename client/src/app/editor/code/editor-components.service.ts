@@ -26,6 +26,8 @@ import { ExecuteJavaScriptComponent } from "./js/execute-java-script.component";
 
 import { ExecuteMathComponent } from "./math/execute-math.component";
 
+import { ExecFiniteStateMachineComponent } from "./automaton/exec-finite-state-machine.component";
+
 type ComponentTypeId = EditorComponentDescription["componentType"];
 
 /**
@@ -53,6 +55,7 @@ export class EditorComponentsService {
     "truck-world-editor": TruckWorldEditorComponent,
     "execute-js": ExecuteJavaScriptComponent,
     "execute-math": ExecuteMathComponent,
+    "execute-fsm": ExecFiniteStateMachineComponent,
   };
 
   constructor(
