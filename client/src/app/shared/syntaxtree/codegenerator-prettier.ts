@@ -1,3 +1,5 @@
+// Documentation at https://github.com/prettier/prettier/blob/main/commands.md
+// will be helpful when following this code.
 import { builders, printer } from "prettier/doc";
 import { OutputSeparator } from "./codegenerator-process";
 import {
@@ -16,9 +18,48 @@ import {
 } from "./grammar.description";
 import { SyntaxNode } from "./syntaxtree";
 
-// Documentation at https://github.com/prettier/prettier/blob/main/commands.md
-// will be helpful when following this code.
 type Doc = builders.Doc;
+
+function joinPrettierDocuments(docs: Doc[], between: Doc[] | Doc): Doc[] {
+  between = Array.isArray(between) ? builders.concat(between) : between;
+
+  return builders.join(between, docs).parts;
+}
+
+function isPrettierGroup(obj: unknown): obj is builders.Group {
+  return obj instanceof Object && obj["type"] === "group";
+}
+
+function isPrettierConcat(obj: unknown): obj is builders.Concat {
+  return obj instanceof Object && obj["type"] === "concat";
+}
+
+export function isPrettierLine(obj: unknown): obj is builders.Concat {
+  // hardline is line + parentBreak
+  if (isPrettierConcat(obj)) {
+    return obj.parts.some(isPrettierLine);
+  }
+
+  return obj instanceof Object && obj["type"] === "line";
+}
+
+export function hasAnyNonWhitespace(obj: Doc[]): boolean {
+  return (
+    obj.length > 0 &&
+    obj.some((d) => {
+      if (typeof d === "string") {
+        // Must be something other than whitespace
+        return d.trim().length > 0;
+      } else if (isPrettierGroup(d)) {
+        return hasAnyNonWhitespace([d.contents]);
+      } else if (isPrettierConcat(d)) {
+        return hasAnyNonWhitespace(d.parts);
+      } else {
+        return false;
+      }
+    })
+  );
+}
 
 /**
  * Converts a terminal, with respect to all tags that may affect a terminal.
@@ -61,7 +102,7 @@ function convertTerminal(
  * This is part of a recursive process that is required for containers:
  * These may define a new attribute list on the same node.
  */
-function processAttributes(
+function processBlock(
   attributes: NodeAttributeDescription[],
   types: NamedLanguages | VisualisedLanguages,
   node: SyntaxNode,
@@ -69,13 +110,22 @@ function processAttributes(
 ): Doc[] {
   const toReturn: Doc[] = [];
 
-  attributes.forEach((a) => {
+  attributes.forEach((a, idx) => {
+    const lastAttributeOfBlock = idx === attributes.length - 1;
+
     switch (a.type) {
       // Are converted by directly printing out some strings
       case "terminal":
       case "property":
       case "interpolate": {
         toReturn.push(...convertTerminal(a, node));
+
+        // #### HANDLING VERTICALS ####
+        // Possibly break after terminals, but not if this is the last attribute
+        // because in that case the break is handled by the vertical container
+        if (parentOrientation === "vertical" && !lastAttributeOfBlock) {
+          toReturn.push(builders.hardline);
+        }
         break;
       }
 
@@ -89,29 +139,23 @@ function processAttributes(
         const between =
           "between" in a ? convertTerminal(a.between, node) : [""];
 
+        // #### HANDLING VERTICALS ####
+        // Add breaks between enumerated items if parent is vertical
         if (parentOrientation === "vertical") {
           between.push(builders.hardline);
         }
 
-        const childDocs = children.map((childNode) => {
+        const childDocs = children.flatMap((childNode) => {
           const t = ensureCodeGenType(types, childNode);
-          return processAttributes(
-            t.attributes,
-            types,
-            childNode,
-            parentOrientation
-          );
+          // A block is always considered to work horizontally
+          return processBlock(t.attributes, types, childNode, "horizontal");
         });
 
         // Only actually build the subtree if there are any children inside
         // it. Otherwise we possibly introduce a hardline without having any
         // content
-        if (childDocs.length > 0) {
-          const joined = builders.group(
-            builders.join(builders.concat(between), childDocs.flat(1))
-          );
-
-          toReturn.push(joined);
+        if (hasAnyNonWhitespace(childDocs)) {
+          toReturn.push(...joinPrettierDocuments(childDocs, between));
         }
 
         break;
@@ -123,28 +167,45 @@ function processAttributes(
       // therefore handled in a separate case although it looks sort
       // of similar to syntax tree recursion.
       case "container": {
-        const childDocs = builders.concat(
-          processAttributes(a.children, types, node, a.orientation)
-        );
+        const childDocs = processBlock(a.children, types, node, a.orientation);
 
-        // Did we add more than that single hardline?
-        if (childDocs.parts.length > 0) {
+        // Did we add more than possibly newlines?
+        if (hasAnyNonWhitespace(childDocs)) {
           // Vertical containers must start and end on their own line
           const indentSurround =
             a.orientation === "vertical" ? [builders.hardline] : [];
+          const doIndent = a.tags?.includes("indent");
 
-          const finalChildDocs = a.tags?.includes("indent")
-            ? // Leading break inside the indent, trailing break outside
-              builders.concat([
-                builders.indent(
-                  builders.concat([...indentSurround, childDocs])
-                ),
-                ...indentSurround,
-              ])
-            : builders.group(childDocs);
+          // If we are indenting, a possibly existing newline that was
+          // added by a previous step must go inside the indentation
+          const lastOverallAdded = toReturn[toReturn.length - 1];
+          if (isPrettierLine(lastOverallAdded) && doIndent) {
+            toReturn.pop();
+          }
 
-          toReturn.push(finalChildDocs);
+          const groupedChildDocs = doIndent
+            ? // Leading break inside the indent to have a proper level
+              // of indentation for the first line
+              builders.indent(
+                builders.concat([...indentSurround, ...childDocs])
+              )
+            : builders.group(builders.concat(childDocs));
+          toReturn.push(groupedChildDocs);
+
+          // Containers may be nested and must therefore play by the same
+          // rules as iterations and terminals: There is possibly a newline
+          // that follows this container.
+          const lastAdded = toReturn[toReturn.length - 1];
+          if (
+            parentOrientation === "vertical" &&
+            !isPrettierLine(lastAdded) &&
+            hasAnyNonWhitespace(toReturn) &&
+            !lastAttributeOfBlock
+          ) {
+            toReturn.push(builders.hardline);
+          }
         }
+        break;
       }
     }
   });
@@ -165,12 +226,7 @@ export function prettierCodeGeneratorFromGrammar(
   node: SyntaxNode
 ): string {
   const t = ensureCodeGenType(types, node);
-  const prettierTree = processAttributes(
-    t.attributes,
-    types,
-    node,
-    "horizontal"
-  );
+  const prettierTree = processBlock(t.attributes, types, node, "horizontal");
   const printed = printer.printDocToString(
     // Don't leave last lines with nothing but whitespace
     builders.concat([...prettierTree, builders.trim]),

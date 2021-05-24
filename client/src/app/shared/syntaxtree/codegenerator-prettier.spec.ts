@@ -1,10 +1,47 @@
 import { doc } from "prettier";
-import { prettierCodeGeneratorFromGrammar } from "./codegenerator-prettier";
+import {
+  hasAnyNonWhitespace,
+  isPrettierLine,
+  prettierCodeGeneratorFromGrammar,
+} from "./codegenerator-prettier";
 import { NamedLanguages, VisualisedLanguages } from "./grammar.description";
 import { SyntaxTree } from "./syntaxtree";
 
 describe(`Prettier code generator`, () => {
-  describe(`Sanity Checks`, () => {
+  describe(`Prettier utilities`, () => {
+    describe(`isPrettierLine`, () => {
+      it(`hardline`, () => {
+        expect(isPrettierLine(doc.builders.hardline)).toBeTrue();
+      });
+    });
+    describe(`hasAnyPrettierTerminal`, () => {
+      it(`hardline`, () => {
+        expect(hasAnyNonWhitespace([doc.builders.hardline])).toBeFalse();
+      });
+
+      it(`"a" + hardline`, () => {
+        expect(hasAnyNonWhitespace(["a", doc.builders.hardline])).toBeTrue();
+      });
+
+      it(`" " + hardline`, () => {
+        expect(hasAnyNonWhitespace([" ", doc.builders.hardline])).toBeFalse();
+      });
+
+      it(`group(hardline)`, () => {
+        expect(
+          hasAnyNonWhitespace([doc.builders.group(doc.builders.hardline)])
+        ).toBeFalse();
+      });
+
+      it(`concat(hardline)`, () => {
+        expect(
+          hasAnyNonWhitespace([doc.builders.concat([doc.builders.hardline])])
+        ).toBeFalse();
+      });
+    });
+  });
+
+  describe(`Sanity Check Prettier Codegen`, () => {
     const pp = (tree: doc.builders.Doc): string => {
       return doc.printer.printDocToString(tree, {
         embeddedInHtml: false,
@@ -572,33 +609,39 @@ describe(`Prettier code generator`, () => {
           type: "concrete",
           attributes: [
             {
-              type: "terminal",
-              symbol: "=>",
-            },
-            {
               type: "container",
               orientation: "vertical",
-              tags: ["indent"],
               children: [
                 {
-                  type: "sequence",
-                  name: "a1",
-                  nodeTypes: [
+                  type: "terminal",
+                  symbol: "=>",
+                },
+                {
+                  type: "container",
+                  orientation: "vertical",
+                  tags: ["indent"],
+                  children: [
                     {
-                      occurs: "*",
-                      nodeType: "t1",
+                      type: "sequence",
+                      name: "a1",
+                      nodeTypes: [
+                        {
+                          occurs: "*",
+                          nodeType: "t1",
+                        },
+                      ],
+                      between: {
+                        type: "terminal",
+                        symbol: ",",
+                      },
                     },
                   ],
-                  between: {
-                    type: "terminal",
-                    symbol: ",",
-                  },
+                },
+                {
+                  type: "terminal",
+                  symbol: "<=",
                 },
               ],
-            },
-            {
-              type: "terminal",
-              symbol: "<=",
             },
           ],
         },
@@ -621,7 +664,7 @@ describe(`Prettier code generator`, () => {
       });
 
       const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
-      expect(res).toEqual("=><=");
+      expect(res).toEqual("=>\n<=");
     });
 
     it(`single child`, () => {
@@ -652,5 +695,237 @@ describe(`Prettier code generator`, () => {
       const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
       expect(res).toEqual("=>\n  t1,\n  t1\n<=");
     });
+  });
+
+  it(`vertical container with nothing but terminals `, () => {
+    const types: NamedLanguages = {
+      l: {
+        r: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "vertical",
+              children: [
+                {
+                  type: "terminal",
+                  symbol: "1",
+                },
+                {
+                  type: "terminal",
+                  symbol: "2",
+                },
+                {
+                  type: "terminal",
+                  symbol: "3",
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+
+    const t = new SyntaxTree({
+      language: "l",
+      name: "r",
+    });
+
+    const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
+    expect(res).toEqual("1\n2\n3");
+  });
+
+  it(`Block with nothing but terminals `, () => {
+    const types: NamedLanguages = {
+      l: {
+        r: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "terminal",
+              symbol: "1",
+            },
+            {
+              type: "terminal",
+              symbol: "2",
+            },
+            {
+              type: "terminal",
+              symbol: "3",
+            },
+          ],
+        },
+      },
+    };
+
+    const t = new SyntaxTree({
+      language: "l",
+      name: "r",
+    });
+
+    const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
+    expect(res).toEqual("123");
+  });
+
+  it(`Vertical container with terminals and horizontal containers`, () => {
+    const types: NamedLanguages = {
+      l: {
+        r: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "vertical",
+              children: [
+                {
+                  type: "container",
+                  orientation: "horizontal",
+                  children: [
+                    {
+                      type: "terminal",
+                      symbol: "l1-1",
+                    },
+                    {
+                      type: "terminal",
+                      symbol: "l1-2",
+                      tags: ["space-around"],
+                    },
+                    {
+                      type: "terminal",
+                      symbol: "l1-3",
+                    },
+                  ],
+                },
+
+                {
+                  type: "terminal",
+                  symbol: "l2-1",
+                },
+                {
+                  type: "terminal",
+                  symbol: "l2-2",
+                },
+                {
+                  type: "terminal",
+                  symbol: "l2-3",
+                },
+                {
+                  type: "container",
+                  orientation: "horizontal",
+                  children: [
+                    {
+                      type: "terminal",
+                      symbol: "l3-1",
+                    },
+                    {
+                      type: "terminal",
+                      symbol: "l3-2",
+                      tags: ["space-around"],
+                    },
+                    {
+                      type: "terminal",
+                      symbol: "l3-3",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+
+    const t = new SyntaxTree({
+      language: "l",
+      name: "r",
+    });
+
+    const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
+    expect(res).toEqual("l1-1 l1-2 l1-3\nl2-1\nl2-2\nl2-3\nl3-1 l3-2 l3-3");
+  });
+
+  it(`Vertical container with indented terminals and horizontal containers`, () => {
+    const types: NamedLanguages = {
+      l: {
+        r: {
+          type: "concrete",
+          attributes: [
+            {
+              type: "container",
+              orientation: "vertical",
+              children: [
+                {
+                  type: "container",
+                  orientation: "horizontal",
+                  children: [
+                    {
+                      type: "terminal",
+                      symbol: "l1-1",
+                    },
+                    {
+                      type: "terminal",
+                      symbol: "l1-2",
+                      tags: ["space-around"],
+                    },
+                    {
+                      type: "terminal",
+                      symbol: "l1-3",
+                    },
+                  ],
+                },
+                {
+                  type: "container",
+                  orientation: "vertical",
+                  children: [
+                    {
+                      type: "terminal",
+                      symbol: "l2-1",
+                    },
+                    {
+                      type: "terminal",
+                      symbol: "l2-2",
+                    },
+                    {
+                      type: "terminal",
+                      symbol: "l2-3",
+                    },
+                  ],
+                  tags: ["indent"],
+                },
+                {
+                  type: "container",
+                  orientation: "horizontal",
+                  children: [
+                    {
+                      type: "terminal",
+                      symbol: "l3-1",
+                    },
+                    {
+                      type: "terminal",
+                      symbol: "l3-2",
+                      tags: ["space-around"],
+                    },
+                    {
+                      type: "terminal",
+                      symbol: "l3-3",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+
+    const t = new SyntaxTree({
+      language: "l",
+      name: "r",
+    });
+
+    const res = prettierCodeGeneratorFromGrammar(types, t.rootNode);
+    expect(res).toEqual(
+      "l1-1 l1-2 l1-3\n  l2-1\n  l2-2\n  l2-3\nl3-1 l3-2 l3-3"
+    );
   });
 });
