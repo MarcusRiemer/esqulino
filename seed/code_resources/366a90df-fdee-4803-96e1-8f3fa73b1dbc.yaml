@@ -1,0 +1,46 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 63126dc2-48c9-4be0-8677-b6070ee65ebe
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: JS03 endless
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 366a90df-fdee-4803-96e1-8f3fa73b1dbc
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "Program", "children": {"Body": [{"name": "DeclareVariable",
+    "children": {"Name": [{"name": "ExprVariable", "language": "js", "properties":
+    {"Name": "a"}}], "Value": [{"name": "ConstValue", "language": "js", "properties":
+    {"Value": "0"}}]}, "language": "js", "properties": {"Type": "const"}}, {"name":
+    "For", "children": {"Step": [{"name": "Increment", "children": {"Variable": [{"name":
+    "ExprVariable", "language": "js", "properties": {"Name": "i"}}]}, "language":
+    "js"}], "Check": [{"name": "BinaryExpression", "children": {"lhs": [{"name": "ExprVariable",
+    "language": "js", "properties": {"Name": "a"}}], "rhs": [{"name": "ConstValue",
+    "language": "js", "properties": {"Value": "10"}}]}, "language": "js", "properties":
+    {"op": "<"}}], "Declare": [{"name": "DeclareVariable", "children": {"Name": [{"name":
+    "ExprVariable", "language": "js", "properties": {"Name": "i"}}], "Value": [{"name":
+    "ConstValue", "language": "js", "properties": {"Value": "0"}}]}, "language": "js",
+    "properties": {"Type": "let"}}], "$childGroup": [{"name": "CallFunction", "children":
+    {"Arguments": [{"name": "ExprVariable", "language": "js", "properties": {"Name":
+    "i"}}]}, "language": "js", "properties": {"Name": "console.log"}}]}, "language":
+    "js"}]}, "language": "js"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-24 12:51:18.123774000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 12:54:45.984676000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 44a4409a-a51f-40f7-840f-9bba99f0ec30
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2
