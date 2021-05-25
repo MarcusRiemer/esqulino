@@ -1,6 +1,9 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 48ecf76c-3543-49bc-af52-d881e856fe77
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
@@ -17,9 +20,6 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: generic
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: generated_from_id
-  value_before_type_cast: 48ecf76c-3543-49bc-af52-d881e856fe77
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: types
   value_before_type_cast: "{}"

@@ -11,6 +11,17 @@
       <code>{{ typed(grammar).slug | defaultValue }}</code>
     </td>
   </ng-container>
+  <ng-container matColumnDef="generatedFrom">
+    <th mat-header-cell *matHeaderCellDef>Definiert durch</th>
+    <td mat-cell *matCellDef="let grammar">
+      <a
+        *ngIf="typed(grammar).generatedFrom as g"
+        [routerLink]="['/', 'editor', g.project | urlFriendlyId, 'ast', g.id]"
+      >
+        {{ g.name }} - {{ g.project.name | currentLanguage }}
+      </a>
+    </td>
+  </ng-container>
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
     <td mat-cell *matCellDef="let grammar">

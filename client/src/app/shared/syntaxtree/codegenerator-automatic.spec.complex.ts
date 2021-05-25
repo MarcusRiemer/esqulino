@@ -26,7 +26,7 @@ export function verifyFiles(grammarName: string, astName: string) {
   });
 }
 
-describe(`Automatic code generation with complex files`, () => {
+xdescribe(`Automatic code generation with complex files`, () => {
   describe(`Visualized XML`, () => {
     verifyFiles("xmlvis", "001-node-attrib");
     verifyFiles("xmlvis", "002-node-single-child");

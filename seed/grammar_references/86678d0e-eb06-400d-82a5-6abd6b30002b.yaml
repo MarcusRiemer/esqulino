@@ -1,0 +1,22 @@
+--- !ruby/object:GrammarReference
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: origin_id
+  value_before_type_cast: afabc28f-4e20-4042-bd4d-2e73fcc6aff8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 86678d0e-eb06-400d-82a5-6abd6b30002b
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: target_id
+  value_before_type_cast: 9f3511da-4561-4f86-9e4e-f8e1a5f04cae
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: reference_type
+  value_before_type_cast: 1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-24 11:22:42.599060000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 11:22:42.599060000 Z
+new_record: false
+active_record_yaml_version: 2

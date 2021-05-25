@@ -5,6 +5,14 @@ query AdminListGrammars($first:Int,$after:String,$before:String,$last:Int,$input
             name
             slug
             programmingLanguageId
+            generatedFrom {
+              id
+              name
+              project {
+                id
+                name
+              }
+            }
         }
         totalCount
         pageInfo {

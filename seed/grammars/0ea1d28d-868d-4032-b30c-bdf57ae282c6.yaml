@@ -1,6 +1,9 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 1ecaed49-b8d0-488f-ad45-07ad978f5b20
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
@@ -17,9 +20,6 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: regex-testbench
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: generated_from_id
-  value_before_type_cast: 1ecaed49-b8d0-488f-ad45-07ad978f5b20
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: types
   value_before_type_cast: '{"regex-testbench": {"case": {"type": "oneOf", "oneOf":

@@ -60,7 +60,7 @@ function emitTree(astDesc: NodeDescription, emitProgressCallback = false) {
   specCodegenState.emitProgressCallbacks = emitProgressCallback;
 
   const ast = new SyntaxTree(astDesc).rootNode;
-  const codeGen = new CodeGenerator(PROGRAM_NODE_CONVERTER, {}, [
+  const codeGen = new CodeGenerator(PROGRAM_NODE_CONVERTER, {}, "legacy", [
     specCodegenState,
   ]);
 

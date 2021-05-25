@@ -1,6 +1,9 @@
 --- !ruby/object:Grammar
 concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: ae11bf52-6290-47fb-8532-410749ace1fb
+- !ruby/object:ActiveModel::Attribute::FromDatabase
   name: slug
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
@@ -17,9 +20,6 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
-- !ruby/object:ActiveModel::Attribute::FromDatabase
-  name: generated_from_id
-  value_before_type_cast: ae11bf52-6290-47fb-8532-410749ace1fb
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: types
   value_before_type_cast: '{"included": {"C": {"type": "concrete", "attributes": []}}}'

@@ -1,0 +1,41 @@
+<button
+  mat-button
+  [matMenuTriggerFor]="debugMenu"
+  aria-label="Debug Optionen Menü"
+>
+  <span class="fa fa-bug" aria-hidden="true"></span>
+  Debug Options
+</button>
+<mat-menu #debugMenu="matMenu">
+  <mat-button mat-menu-item (click)="copyCompiledToClipboard()">
+    Copy Compiled
+  </mat-button>
+  <mat-checkbox
+    [(ngModel)]="debugOptions.showEditableAst.value"
+    class="mat-menu-item"
+    color="warn"
+  >
+    Show Editable AST
+  </mat-checkbox>
+  <mat-checkbox
+    [(ngModel)]="debugOptions.showJsonAst.value"
+    class="mat-menu-item"
+    color="warn"
+  >
+    Show JSON AST
+  </mat-checkbox>
+  <mat-checkbox
+    [(ngModel)]="debugOptions.showLanguageSelector.value"
+    class="mat-menu-item"
+    color="warn"
+  >
+    Show Language Selector
+  </mat-checkbox>
+  <mat-checkbox
+    [(ngModel)]="debugOptions.showDropDebug.value"
+    class="mat-menu-item"
+    color="warn"
+  >
+    Show Drop Debug
+  </mat-checkbox>
+</mat-menu>

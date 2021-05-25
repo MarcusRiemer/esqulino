@@ -14,27 +14,51 @@ concise_attributes:
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "Document", "languageName":
     "MetaBlockLang"}}], "nodes": [{"name": "concreteNode", "children": {"attributes":
-    [{"name": "container", "children": {"attributes": [{"name": "terminal", "language":
-    "MetaGrammar", "properties": {"symbol": "Root CSS Classes:"}}, {"name": "children",
-    "children": {"references": [{"name": "nodeRefCardinality", "children": {"references":
-    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
-    "CssClass", "languageName": "MetaBlockLang"}}], "cardinality": [{"name": "knownCardinality",
+    [{"name": "container", "children": {"attributes": [{"name": "container", "children":
+    {"attributes": [{"name": "terminal", "children": {"tags": [{"name": "tag", "language":
+    "MetaGrammar", "properties": {"name": "space-after"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": "Root CSS Classes:"}}, {"name": "children", "children":
+    {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "CssClass",
+    "languageName": "MetaBlockLang"}}], "cardinality": [{"name": "knownCardinality",
     "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
     "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
     "name": "RootCssClasses"}}], "orientation": [{"name": "orientation", "language":
-    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]},
-    "language": "MetaGrammar", "properties": {"typeName": "Document", "languageName":
-    "MetaBlockLang"}}, {"name": "concreteNode", "children": {"attributes": [{"name":
-    "property", "language": "MetaGrammar", "properties": {"base": "string", "name":
-    "Name"}}]}, "language": "MetaGrammar", "properties": {"typeName": "CssClass",
-    "languageName": "MetaBlockLang"}}]}, "language": "MetaGrammar", "properties":
-    {"name": "MetaBlockLang"}}'
+    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"},
+    {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "EditorComponents", "languageName": "MetaBlockLang"}}],
+    "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
+    {"cardinality": "?"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "EditorComponents"}}], "orientation":
+    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
+    "vertical"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "Document", "languageName": "MetaBlockLang"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "container", "children": {"attributes": [{"name":
+    "terminal", "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "space-after"}}]}, "language": "MetaGrammar", "properties": {"symbol":
+    "Editor Components:"}}, {"name": "children", "children": {"references": [{"name":
+    "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "EditorComponent", "languageName": "MetaBlockLang"}}],
+    "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
+    {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "Values"}}], "orientation": [{"name":
+    "orientation", "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "EditorComponents", "languageName": "MetaBlockLang"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "Name"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "CssClass", "languageName": "MetaBlockLang"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "Name"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "EditorComponent", "languageName": "MetaBlockLang"}}]}, "language":
+    "MetaGrammar", "properties": {"name": "MetaBlockLang"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2021-04-15 13:41:15.419967000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-14 11:42:32.409284000 Z
+  value_before_type_cast: 2021-05-24 10:10:39.653991000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -52,20 +76,73 @@ concise_attributes:
             "attributes": [
               {
                 "type": "container",
-                "orientation": "horizontal",
+                "orientation": "vertical",
                 "children": [
                   {
-                    "type": "terminal",
-                    "symbol": "Root CSS Classes:"
+                    "type": "container",
+                    "orientation": "horizontal",
+                    "children": [
+                      {
+                        "type": "terminal",
+                        "symbol": "Root CSS Classes:",
+                        "tags": [
+                          "space-after"
+                        ]
+                      },
+                      {
+                        "type": "sequence",
+                        "name": "RootCssClasses",
+                        "nodeTypes": [
+                          {
+                            "nodeType": {
+                              "languageName": "MetaBlockLang",
+                              "typeName": "CssClass"
+                            },
+                            "occurs": "*"
+                          }
+                        ]
+                      }
+                    ]
                   },
                   {
                     "type": "sequence",
-                    "name": "RootCssClasses",
+                    "name": "EditorComponents",
                     "nodeTypes": [
                       {
                         "nodeType": {
                           "languageName": "MetaBlockLang",
-                          "typeName": "CssClass"
+                          "typeName": "EditorComponents"
+                        },
+                        "occurs": "?"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "EditorComponents": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "Editor Components:",
+                    "tags": [
+                      "space-after"
+                    ]
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "Values",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "MetaBlockLang",
+                          "typeName": "EditorComponent"
                         },
                         "occurs": "*"
                       }
@@ -76,6 +153,16 @@ concise_attributes:
             ]
           },
           "CssClass": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "Name"
+              }
+            ]
+          },
+          "EditorComponent": {
             "type": "concrete",
             "attributes": [
               {

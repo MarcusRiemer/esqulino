@@ -1,0 +1,24 @@
+{
+  "name": "Document",
+  "language": "MetaBlockLang",
+  "children": {
+    "RootCssClasses": [
+      {
+        "name": "CssClass",
+        "language": "MetaBlockLang",
+        "properties": {
+          "Name": "activate-block-outline"
+        }
+      }
+    ],
+    "EditorComponents": [
+      {
+        "name": "EditorComponent",
+        "language": "MetaBlockLang",
+        "properties": {
+          "Name": "test"
+        }
+      }
+    ]
+  }
+}

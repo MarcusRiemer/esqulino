@@ -1,0 +1,10 @@
+---
+- - "../seed/programming_language"
+  - meta-grammar
+  - !ruby/class 'Seed::ProgrammingLanguageSeed'
+- - "../seed/grammars"
+  - 9f3511da-4561-4f86-9e4e-f8e1a5f04cae
+  - !ruby/class 'Seed::GrammarSeed'
+- - "../seed/grammar_references"
+  - 86678d0e-eb06-400d-82a5-6abd6b30002b
+  - !ruby/class 'Seed::GrammarReferenceSeed'

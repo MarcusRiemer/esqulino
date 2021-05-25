@@ -377,9 +377,84 @@
         },
         {
           "$ref": "#/definitions/RegexTestComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/ExecuteJavaScriptComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/ExecuteMathComponentDescription"
+        },
+        {
+          "$ref": "#/definitions/ExecuteFiniteStateMachineComponentDescription"
         }
       ],
       "description": "Any component that could be displayed in the actual editor view."
+    },
+    "ExecuteFiniteStateMachineComponentDescription": {
+      "additionalProperties": false,
+      "description": "\"Executing\" Finite State Machines",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "execute-fsm"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "ExecuteJavaScriptComponentDescription": {
+      "additionalProperties": false,
+      "description": "Executing JavaScript programs",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "execute-js"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
+    },
+    "ExecuteMathComponentDescription": {
+      "additionalProperties": false,
+      "description": "\"Executing\" JavaScript programs",
+      "properties": {
+        "columnClasses": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "componentType": {
+          "enum": [
+            "execute-math"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "componentType"
+      ],
+      "type": "object"
     },
     "FixedBlocksSidebarCategoryDescription": {
       "additionalProperties": false,

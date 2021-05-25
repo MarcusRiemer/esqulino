@@ -1,0 +1,37 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: a90b5fdd-69ad-4915-b555-508206a2c6e1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Blocks: Mathe-Gleichungen'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 985fb7cb-027c-4002-bcea-d74513309476
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "Document", "children": {"RootCssClasses": [{"name":
+    "CssClass", "language": "MetaBlockLang", "properties": {"Name": "activate-block-outline"}},
+    {"name": "CssClass", "language": "MetaBlockLang", "properties": {"Name": "activate-keyword"}}],
+    "EditorComponents": [{"name": "EditorComponents", "children": {"Values": [{"name":
+    "EditorComponent", "language": "MetaBlockLang", "properties": {"Name": "block-root"}},
+    {"name": "EditorComponent", "language": "MetaBlockLang", "properties": {"Name":
+    "execute-math"}}]}, "language": "MetaBlockLang"}]}, "language": "MetaBlockLang"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-21 11:55:11.411186000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 10:26:28.918262000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 81430cc2-bcff-4304-8cfd-6f05cf249a53
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

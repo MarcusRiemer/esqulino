@@ -5,7 +5,7 @@ concise_attributes:
   value_before_type_cast: 63126dc2-48c9-4be0-8677-b6070ee65ebe
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 'Initial: JavaScript'
+  value_before_type_cast: JS01 const loop
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: 471e952d-4960-4295-804f-936b39363be4
@@ -14,7 +14,7 @@ concise_attributes:
   value_before_type_cast: '{"name": "Program", "children": {"Body": [{"name": "DeclareVariable",
     "children": {"Name": [{"name": "ExprVariable", "language": "js", "properties":
     {"Name": "a"}}], "Value": [{"name": "ConstValue", "language": "js", "properties":
-    {"Value": "5"}}]}, "language": "js", "properties": {"Type": "const"}}, {"name":
+    {"Value": "8"}}]}, "language": "js", "properties": {"Type": "const"}}, {"name":
     "For", "children": {"Step": [{"name": "Increment", "children": {"Variable": [{"name":
     "ExprVariable", "language": "js", "properties": {"Name": "i"}}]}, "language":
     "js"}], "Check": [{"name": "BinaryExpression", "children": {"lhs": [{"name": "ExprVariable",
@@ -25,7 +25,7 @@ concise_attributes:
     "ConstValue", "language": "js", "properties": {"Value": "0"}}]}, "language": "js",
     "properties": {"Type": "let"}}], "$childGroup": [{"name": "CallFunction", "children":
     {"Arguments": [{"name": "ExprVariable", "language": "js", "properties": {"Name":
-    "a"}}]}, "language": "js", "properties": {"Name": "console.log"}}]}, "language":
+    "i"}}]}, "language": "js", "properties": {"Name": "console.log"}}]}, "language":
     "js"}, {"name": "CallFunction", "children": {"Arguments": [{"name": "ConstValue",
     "language": "js", "properties": {"Value": "\"Hello World\""}}]}, "language": "js",
     "properties": {"Name": "console.log"}}]}, "language": "js"}'
@@ -34,7 +34,7 @@ concise_attributes:
   value_before_type_cast: 2021-05-14 11:53:54.221594000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-19 13:29:32.293556000 Z
+  value_before_type_cast: 2021-05-20 21:27:21.740809000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 44a4409a-a51f-40f7-840f-9bba99f0ec30

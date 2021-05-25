@@ -1,0 +1,64 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Endliche Automaten
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: afabc28f-4e20-4042-bd4d-2e73fcc6aff8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-24 11:22:42.499009000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 11:51:02.930712000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: d5e509b4-f26c-4e33-9815-f831c344113b
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"dea": {"NodeRef": {"type": "concrete", "attributes":
+    [{"base": "string", "name": "Name", "tags": ["double-quote"], "type": "property"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: '{"dea": {"Edge": {"type": "concrete", "attributes": [{"name":
+    "From", "type": "sequence", "nodeTypes": [{"typeName": "NodeRef", "languageName":
+    "dea"}]}, {"name": "To", "type": "sequence", "nodeTypes": [{"typeName": "NodeRef",
+    "languageName": "dea"}]}, {"base": "string", "name": "Input", "type": "property"}]},
+    "Node": {"type": "concrete", "attributes": [{"base": "string", "name": "Name",
+    "type": "property"}]}, "NodeRef": {"type": "concrete", "attributes": [{"base":
+    "string", "name": "Name", "type": "property"}]}, "Document": {"type": "concrete",
+    "attributes": [{"name": "Nodes", "type": "sequence", "nodeTypes": [{"occurs":
+    "+", "nodeType": {"typeName": "Node", "languageName": "dea"}}]}, {"name": "Edges",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "Edge",
+    "languageName": "dea"}}]}, {"name": "Start", "type": "sequence", "nodeTypes":
+    [{"typeName": "NodeRef", "languageName": "dea"}]}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "Document", "languageName": "dea"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: '{"dea": {"Edge": {"type": "visualise", "attributes": [{"type":
+    "container", "children": [{"name": "From", "type": "each"}, {"tags": ["space-around"],
+    "type": "terminal", "symbol": "->"}, {"name": "To", "type": "each"}, {"tags":
+    ["space-before"], "type": "terminal", "symbol": "[label="}, {"base": "string",
+    "name": "Input", "tags": ["double-quote"], "type": "property"}, {"type": "terminal",
+    "symbol": "];"}], "orientation": "horizontal"}]}, "Node": {"type": "visualise",
+    "attributes": [{"type": "container", "children": [{"base": "string", "name": "Name",
+    "tags": ["double-quote"], "type": "property"}, {"type": "terminal", "symbol":
+    ";"}], "orientation": "horizontal"}]}, "Document": {"type": "visualise", "attributes":
+    [{"type": "container", "children": [{"type": "terminal", "symbol": "digraph {"},
+    {"tags": ["indent"], "type": "container", "children": [{"name": "Nodes", "type":
+    "each"}], "orientation": "vertical"}, {"tags": ["indent"], "type": "container",
+    "children": [{"name": "Edges", "type": "each"}], "orientation": "vertical"}, {"type":
+    "terminal", "symbol": "}"}], "orientation": "vertical"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
+new_record: false
+active_record_yaml_version: 2

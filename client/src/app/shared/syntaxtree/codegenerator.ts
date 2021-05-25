@@ -1,5 +1,6 @@
 import { BlattWerkzeugError } from "../blattwerkzeug-error";
 import { codeGeneratorFromGrammar } from "./codegenerator-automatic";
+import { prettierCodeGeneratorFromGrammar } from "./codegenerator-prettier";
 import { CodeGeneratorProcess, NodeConverter } from "./codegenerator-process";
 import { NamedLanguages, VisualisedLanguages } from "./grammar.description";
 import { SyntaxNode, SyntaxTree, QualifiedTypeName } from "./syntaxtree";
@@ -30,11 +31,15 @@ export class CodeGenerator {
     /**
      * Explicit converters defined by typescript code
      */
-    private readonly converters: NodeConverterRegistration[],
+    converters: NodeConverterRegistration[],
     /**
      * Implicitly written converters defined by grammar visualisations
      */
     private readonly types: NamedLanguages | VisualisedLanguages = {},
+    /**
+     * Add possibility to opt out of prettier code generation
+     */
+    private readonly algorithm: "legacy" | "prettier" = "prettier",
     state: any[] = []
   ) {
     // Merge all the given states into a single object
@@ -78,12 +83,19 @@ export class CodeGenerator {
     }
 
     if (rootNode) {
-      // Make a deep copy of the given state
-      const stateCopy = JSON.parse(JSON.stringify(this._state));
-      const process = new CodeGeneratorProcess(this, stateCopy);
-      process.generateNode(rootNode);
+      if (
+        this.algorithm === "legacy" ||
+        Object.keys(this._callbacks).length > 0
+      ) {
+        // Make a deep copy of the given state
+        const stateCopy = JSON.parse(JSON.stringify(this._state));
+        const process = new CodeGeneratorProcess(this, stateCopy);
+        process.generateNode(rootNode);
 
-      return process.emit();
+        return process.emit();
+      } else {
+        return prettierCodeGeneratorFromGrammar(this.types, rootNode);
+      }
     } else {
       throw new Error("Attempted to generate code for empty tree");
     }

@@ -1,14 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
-import {
-  map,
-  filter,
-  tap,
-  mergeMap,
-  shareReplay,
-  switchMap,
-} from "rxjs/operators";
+import { map, filter, tap, shareReplay, switchMap } from "rxjs/operators";
 
 import { ResourceReferencesService } from "../shared/resource-references.service";
 import {

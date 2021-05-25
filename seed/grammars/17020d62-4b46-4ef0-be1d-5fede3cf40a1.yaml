@@ -1,0 +1,62 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Mathe-Gleichungen
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 17020d62-4b46-4ef0-be1d-5fede3cf40a1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-21 11:55:11.237401000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 10:25:54.085537000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: c53e1ced-4edf-4e4e-8faf-595a01f23603
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"nerdamer": {"Constant": {"type": "concrete", "attributes":
+    [{"base": "integer", "name": "Value", "type": "property"}]}, "Equation": {"type":
+    "concrete", "attributes": [{"type": "container", "children": [{"type": "container",
+    "children": [{"name": "Left", "type": "sequence", "nodeTypes": [{"typeName": "Expression",
+    "languageName": "nerdamer"}]}, {"type": "terminal", "symbol": "="}, {"name": "Right",
+    "type": "sequence", "nodeTypes": [{"typeName": "Expression", "languageName": "nerdamer"}]}],
+    "orientation": "horizontal"}, {"type": "container", "children": [{"tags": ["indent"],
+    "type": "container", "children": [{"name": "Transforms", "type": "sequence", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "Transform", "languageName": "nerdamer"}}]}],
+    "orientation": "vertical"}], "orientation": "horizontal"}], "orientation": "vertical"}]},
+    "Variable": {"type": "concrete", "attributes": [{"base": "string", "name": "Name",
+    "tags": ["keyword"], "type": "property"}]}, "Transform": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"tags": ["space-after"], "type":
+    "terminal", "symbol": "|"}, {"base": "string", "name": "Operation", "type": "property"},
+    {"name": "Expression", "type": "sequence", "nodeTypes": [{"typeName": "Expression",
+    "languageName": "nerdamer"}]}], "orientation": "horizontal"}]}, "Expression":
+    {"type": "oneOf", "oneOf": [{"typeName": "Constant", "languageName": "nerdamer"},
+    {"typeName": "BinaryOperation", "languageName": "nerdamer"}, {"typeName": "Variable",
+    "languageName": "nerdamer"}]}, "BinaryOperation": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "Left", "type": "sequence", "nodeTypes":
+    [{"typeName": "Expression", "languageName": "nerdamer"}]}, {"base": "string",
+    "name": "Operation", "type": "property"}, {"name": "Right", "type": "sequence",
+    "nodeTypes": [{"typeName": "Expression", "languageName": "nerdamer"}]}], "orientation":
+    "horizontal"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "Equation", "languageName": "nerdamer"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
+new_record: false
+active_record_yaml_version: 2

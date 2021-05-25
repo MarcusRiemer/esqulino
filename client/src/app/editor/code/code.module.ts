@@ -17,6 +17,7 @@ import { ValidationComponent } from "./validation.component";
 import { UnknownCodeResourceComponent } from "./unknown-code-resource.component";
 import { DraggableBlockListComponent } from "./draggable-block-list.component";
 import { JsonAstComponent } from "./json-ast.component";
+import { CreateOverviewComponent } from "./create-overview.component";
 
 import { BLOCK_RENDER_COMPONENTS } from "./block/index";
 import { BlockRootComponent } from "./block/block-root.component";
@@ -31,6 +32,9 @@ import { DropDebugComponent } from "./block/drop-debug.component";
 import { DatabaseSchemaSidebarComponent } from "./query/database-schema-sidebar.component";
 import { QueryPreviewComponent } from "./query/query-preview.component";
 import { QueryService } from "./query/query.service";
+import { QueryStepwiseComponent } from "./query/query-stepwise.component";
+import { QueryStepwiseResultComponent } from "./query/query-stepwise-result.component";
+import { QueryStepwiseDescriptionComponent } from "./query/query-stepwise-description.component";
 
 import { WorldRenderComponent } from "./truck/world-render.component";
 import { WorldSelectorComponent } from "./truck/world-selector.component";
@@ -47,10 +51,10 @@ import { TrafficLightVisualisator } from "./truck/world-editor/traffic-light-vis
 import { DefinedTypesSidebarComponent } from "./meta/defined-types.sidebar.component";
 
 import { RegexTestComponent } from "./regex/regex-test.component";
-import { QueryStepwiseComponent } from "./query/query-stepwise.component";
-import { QueryStepwiseResultComponent } from "./query/query-stepwise-result.component";
-import { QueryStepwiseDescriptionComponent } from "./query/query-stepwise-description.component";
-import { CreateOverviewComponent } from "./create-overview.component";
+
+import { ExecuteJavaScriptComponent } from "./js/execute-java-script.component";
+import { ExecuteMathComponent } from "./math/execute-math.component";
+import { NerdamerPipe } from "./math/nerdamer.pipe";
 
 @NgModule({
   imports: [EditorSharedComponentsModule, SharedAppModule],
@@ -87,6 +91,9 @@ import { CreateOverviewComponent } from "./create-overview.component";
     QueryStepwiseResultComponent,
     QueryStepwiseDescriptionComponent,
     CreateOverviewComponent,
+    ExecuteJavaScriptComponent,
+    ExecuteMathComponent,
+    NerdamerPipe,
   ],
   providers: [ResourceChangedGuard],
   exports: [BlockHostComponent],

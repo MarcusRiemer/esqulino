@@ -1,0 +1,168 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: af16d1b2-710b-4576-94c8-707d2f763eee
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 00 Structure
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: c56c663f-a310-4633-92a8-f84bea58a773
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Document", "languageName":
+    "dea"}}], "nodes": [{"name": "concreteNode", "children": {"attributes": [{"name":
+    "children", "children": {"references": [{"name": "nodeRefCardinality", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "Node", "languageName": "dea"}}], "cardinality": [{"name": "knownCardinality",
+    "language": "MetaGrammar", "properties": {"cardinality": "+"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
+    "name": "Nodes"}}, {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "Edge", "languageName": "dea"}}], "cardinality": [{"name":
+    "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality": "*"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base":
+    "sequence", "name": "Edges"}}, {"name": "children", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "NodeRef", "languageName": "dea"}}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "Start"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "Document", "languageName": "dea"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "Name"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "Node", "languageName": "dea"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "Name"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "NodeRef", "languageName": "dea"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "children", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "NodeRef", "languageName":
+    "dea"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
+    "From"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "NodeRef", "languageName":
+    "dea"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
+    "To"}}, {"name": "property", "language": "MetaGrammar", "properties": {"base":
+    "string", "name": "Input"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "Edge", "languageName": "dea"}}]}, "language": "MetaGrammar", "properties": {"name":
+    "dea"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-24 11:22:42.116419000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 13:23:01.520851000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "dea": {
+          "Document": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "Nodes",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "dea",
+                      "typeName": "Node"
+                    },
+                    "occurs": "+"
+                  }
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "Edges",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "dea",
+                      "typeName": "Edge"
+                    },
+                    "occurs": "*"
+                  }
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "Start",
+                "nodeTypes": [
+                  {
+                    "languageName": "dea",
+                    "typeName": "NodeRef"
+                  }
+                ]
+              }
+            ]
+          },
+          "Node": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "Name"
+              }
+            ]
+          },
+          "NodeRef": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "Name"
+              }
+            ]
+          },
+          "Edge": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "sequence",
+                "name": "From",
+                "nodeTypes": [
+                  {
+                    "languageName": "dea",
+                    "typeName": "NodeRef"
+                  }
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "To",
+                "nodeTypes": [
+                  {
+                    "languageName": "dea",
+                    "typeName": "NodeRef"
+                  }
+                ]
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "Input"
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "visualisations": {},
+      "foreignVisualisations": {},
+      "root": {
+        "languageName": "dea",
+        "typeName": "Document"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

@@ -1,0 +1,84 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 985fb7cb-027c-4002-bcea-d74513309476
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Mathe-Gleichungen
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 0b70b0f3-87d9-4804-9467-48638c31f513
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-21 11:55:11.504802000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 10:26:29.119545000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: 17020d62-4b46-4ef0-be1d-5fede3cf40a1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: sidebars
+  value_before_type_cast: "[]"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_blocks
+  value_before_type_cast: '[{"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"children":
+    [{"blockType": "iterator", "childGroupName": "Left", "emptyDropTarget": false},
+    {"text": "=", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
+    "iterator", "childGroupName": "Right", "emptyDropTarget": false}], "blockType":
+    "container", "orientation": "horizontal"}, {"children": [{"children": [{"blockType":
+    "iterator", "childGroupName": "Transforms", "emptyDropTarget": false}], "blockType":
+    "container", "cssClasses": ["indent"], "orientation": "vertical"}], "blockType":
+    "container", "orientation": "horizontal"}], "blockType": "container", "orientation":
+    "vertical"}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
+    "Equation", "languageName": "nerdamer"}}, {"visual": [{"children": [{"style":
+    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
+    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
+    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
+    {"style": {"display": "inline-flex"}, "property": "Value", "blockType": "input"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "Constant",
+    "languageName": "nerdamer"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display":
+    "inline-flex"}, "property": "Name", "blockType": "input", "cssClasses": ["keyword"]}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "Variable",
+    "languageName": "nerdamer"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType":
+    "iterator", "childGroupName": "Left", "emptyDropTarget": false}, {"style": {"display":
+    "inline-flex"}, "property": "Operation", "blockType": "input"}, {"blockType":
+    "iterator", "childGroupName": "Right", "emptyDropTarget": false}], "blockType":
+    "container", "orientation": "horizontal"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "BinaryOperation", "languageName": "nerdamer"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "|", "style": {"display": "inline-flex"},
+    "blockType": "constant", "cssClasses": ["space-after"]}, {"style": {"display":
+    "inline-flex"}, "property": "Operation", "blockType": "input"}, {"blockType":
+    "iterator", "childGroupName": "Expression", "emptyDropTarget": false}], "blockType":
+    "container", "orientation": "horizontal"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "Transform", "languageName": "nerdamer"}}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_components
+  value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "execute-math"}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: local_generator_instructions
+  value_before_type_cast: '{"type": "manual", "editorComponents": [{"componentType":
+    "block-root"}, {"componentType": "execute-math"}]}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root_css_classes
+  value_before_type_cast: "{activate-block-outline,activate-keyword}"
+new_record: false
+active_record_yaml_version: 2

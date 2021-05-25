@@ -1,0 +1,367 @@
+{
+  "types": {
+    "js": {
+      "Statement": {
+        "type": "oneOf",
+        "oneOf": [
+          {
+            "languageName": "js",
+            "typeName": "DeclareVariable"
+          },
+          {
+            "languageName": "js",
+            "typeName": "CallFunction"
+          },
+          {
+            "languageName": "js",
+            "typeName": "For"
+          },
+          {
+            "languageName": "js",
+            "typeName": "Increment"
+          }
+        ]
+      },
+      "Expression": {
+        "type": "oneOf",
+        "oneOf": [
+          {
+            "languageName": "js",
+            "typeName": "ConstValue"
+          },
+          {
+            "languageName": "js",
+            "typeName": "BinaryExpression"
+          },
+          {
+            "languageName": "js",
+            "typeName": "ExprVariable"
+          }
+        ]
+      },
+      "Program": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "vertical",
+            "children": [
+              {
+                "type": "sequence",
+                "name": "Body",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "js",
+                      "typeName": "Statement"
+                    },
+                    "occurs": "*"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "DeclareVariable": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "horizontal",
+            "children": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "Type",
+                "tags": [
+                  "space-after",
+                  "keyword"
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "Name",
+                "nodeTypes": [
+                  {
+                    "languageName": "js",
+                    "typeName": "ExprVariable"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "=",
+                "tags": [
+                  "space-around"
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "Value",
+                "nodeTypes": [
+                  {
+                    "languageName": "js",
+                    "typeName": "Expression"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "ExprVariable": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "property",
+            "base": "string",
+            "name": "Name"
+          }
+        ]
+      },
+      "CallFunction": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "horizontal",
+            "children": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "Name"
+              },
+              {
+                "type": "terminal",
+                "symbol": "("
+              },
+              {
+                "type": "sequence",
+                "name": "Arguments",
+                "nodeTypes": [
+                  {
+                    "nodeType": {
+                      "languageName": "js",
+                      "typeName": "Expression"
+                    },
+                    "occurs": "*"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": ")"
+              }
+            ]
+          }
+        ]
+      },
+      "For": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "vertical",
+            "children": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "for",
+                    "tags": [
+                      "keyword"
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": "("
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "Declare",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "js",
+                          "typeName": "DeclareVariable"
+                        },
+                        "occurs": "*"
+                      }
+                    ],
+                    "tags": [
+                      "soft-hole"
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": ";",
+                    "tags": [
+                      "space-after"
+                    ]
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "Check",
+                    "nodeTypes": [
+                      {
+                        "languageName": "js",
+                        "typeName": "Expression"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": ";",
+                    "tags": [
+                      "space-after"
+                    ]
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "Step",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "js",
+                          "typeName": "Statement"
+                        },
+                        "occurs": "*"
+                      }
+                    ],
+                    "tags": [
+                      "soft-hole"
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": ")",
+                    "tags": [
+                      "space-after"
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": "{"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "orientation": "vertical",
+                "children": [
+                  {
+                    "type": "sequence",
+                    "name": "$childGroup",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "js",
+                          "typeName": "Statement"
+                        },
+                        "occurs": "*"
+                      }
+                    ],
+                    "tags": [
+                      "soft-hole"
+                    ]
+                  }
+                ],
+                "tags": [
+                  "indent"
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "}"
+              }
+            ]
+          }
+        ]
+      },
+      "ConstValue": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "property",
+            "base": "string",
+            "name": "Value"
+          }
+        ]
+      },
+      "BinaryExpression": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "horizontal",
+            "children": [
+              {
+                "type": "sequence",
+                "name": "lhs",
+                "nodeTypes": [
+                  {
+                    "languageName": "js",
+                    "typeName": "Expression"
+                  }
+                ]
+              },
+              {
+                "type": "property",
+                "base": "string",
+                "name": "op",
+                "tags": [
+                  "space-around"
+                ]
+              },
+              {
+                "type": "sequence",
+                "name": "rhs",
+                "nodeTypes": [
+                  {
+                    "languageName": "js",
+                    "typeName": "Expression"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "Increment": {
+        "type": "concrete",
+        "attributes": [
+          {
+            "type": "container",
+            "orientation": "horizontal",
+            "children": [
+              {
+                "type": "sequence",
+                "name": "Variable",
+                "nodeTypes": [
+                  {
+                    "languageName": "js",
+                    "typeName": "ExprVariable"
+                  }
+                ]
+              },
+              {
+                "type": "terminal",
+                "symbol": "++"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "foreignTypes": {},
+  "visualisations": {},
+  "foreignVisualisations": {},
+  "root": {
+    "languageName": "js",
+    "typeName": "Program"
+  }
+}

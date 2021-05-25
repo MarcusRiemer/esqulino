@@ -1,3 +1,4 @@
+import { Router } from "@angular/router";
 import { Injectable } from "@angular/core";
 import { ComponentPortal, ComponentType } from "@angular/cdk/portal";
 
@@ -18,8 +19,14 @@ import { WorldRenderComponent } from "./truck/world-render.component";
 import { WorldControllerComponent } from "./truck/world-controller.component";
 import { WorldSensorsComponent } from "./truck/world-sensors.component";
 import { TruckWorldEditorComponent } from "./truck/world-editor/truck-world-editor.component";
+
 import { RegexTestComponent } from "./regex/regex-test.component";
-import { Router } from "@angular/router";
+
+import { ExecuteJavaScriptComponent } from "./js/execute-java-script.component";
+
+import { ExecuteMathComponent } from "./math/execute-math.component";
+
+import { ExecFiniteStateMachineComponent } from "./automaton/exec-finite-state-machine.component";
 
 type ComponentTypeId = EditorComponentDescription["componentType"];
 
@@ -46,6 +53,9 @@ export class EditorComponentsService {
     "truck-controller": WorldControllerComponent,
     "truck-sensors": WorldSensorsComponent,
     "truck-world-editor": TruckWorldEditorComponent,
+    "execute-js": ExecuteJavaScriptComponent,
+    "execute-math": ExecuteMathComponent,
+    "execute-fsm": ExecFiniteStateMachineComponent,
   };
 
   constructor(

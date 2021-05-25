@@ -1,0 +1,36 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 63126dc2-48c9-4be0-8677-b6070ee65ebe
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: JS02 console.log
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 43ddf834-5949-473d-bb90-3b0ad3909926
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "Program", "children": {"Body": [{"name": "CallFunction",
+    "children": {"Arguments": [{"name": "ConstValue", "language": "js", "properties":
+    {"Value": "\"Test\""}}]}, "language": "js", "properties": {"Name": "console.log"}},
+    {"name": "CallFunction", "children": {"Arguments": [{"name": "ConstValue", "language":
+    "js", "properties": {"Value": "2"}}]}, "language": "js", "properties": {"Name":
+    "console.log"}}]}, "language": "js"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-20 14:07:11.476685000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-20 14:08:43.339975000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 44a4409a-a51f-40f7-840f-9bba99f0ec30
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

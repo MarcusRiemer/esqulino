@@ -82,7 +82,6 @@ export class CodeResource extends ProjectResource {
     this._runtimeLanguageId$,
     this.blockLanguage$,
   ]).pipe(
-    tap(console.log),
     switchMap(([l, b]) =>
       this.resourceReferences.getGrammarProgrammingLanguage(b.grammarId, l)
     )
@@ -276,7 +275,8 @@ export class CodeResource extends ProjectResource {
       } else {
         return "";
       }
-    })
+    }),
+    shareReplay(1)
   );
 
   /**

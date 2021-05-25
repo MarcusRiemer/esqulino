@@ -20,7 +20,10 @@
                   },
                   {
                     "type": "interpolate",
-                    "name": "name"
+                    "name": "name",
+                    "tags": [
+                      "keyword"
+                    ]
                   },
                   {
                     "type": "each",
@@ -55,7 +58,10 @@
                   },
                   {
                     "type": "interpolate",
-                    "name": "name"
+                    "name": "name",
+                    "tags": [
+                      "keyword"
+                    ]
                   },
                   {
                     "type": "terminal",

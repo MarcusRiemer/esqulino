@@ -55,6 +55,7 @@ export class Language {
     this.codeGenerator = new CodeGenerator(
       desc.emitters,
       g ? allVisualisableTypes(g) : {},
+      "prettier",
       desc.codeGeneratorState
     );
     this.validator = new Validator([...desc.validators, ...(g ? [g] : [])]);

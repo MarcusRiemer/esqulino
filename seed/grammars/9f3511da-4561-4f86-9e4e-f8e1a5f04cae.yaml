@@ -1,0 +1,50 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Endliche Automaten
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 9f3511da-4561-4f86-9e4e-f8e1a5f04cae
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-24 11:22:42.229217000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-24 11:31:00.021137000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: c56c663f-a310-4633-92a8-f84bea58a773
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"dea": {"Edge": {"type": "concrete", "attributes": [{"name":
+    "From", "type": "sequence", "nodeTypes": [{"typeName": "NodeRef", "languageName":
+    "dea"}]}, {"name": "To", "type": "sequence", "nodeTypes": [{"typeName": "NodeRef",
+    "languageName": "dea"}]}, {"base": "string", "name": "Input", "type": "property"}]},
+    "Node": {"type": "concrete", "attributes": [{"base": "string", "name": "Name",
+    "type": "property"}]}, "NodeRef": {"type": "concrete", "attributes": [{"base":
+    "string", "name": "Name", "type": "property"}]}, "Document": {"type": "concrete",
+    "attributes": [{"name": "Nodes", "type": "sequence", "nodeTypes": [{"occurs":
+    "+", "nodeType": {"typeName": "Node", "languageName": "dea"}}]}, {"name": "Edges",
+    "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "Edge",
+    "languageName": "dea"}}]}, {"name": "Start", "type": "sequence", "nodeTypes":
+    [{"typeName": "NodeRef", "languageName": "dea"}]}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "Document", "languageName": "dea"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
+new_record: false
+active_record_yaml_version: 2
