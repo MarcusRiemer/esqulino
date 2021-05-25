@@ -1070,7 +1070,7 @@ abstract class NodePropertyValidator {
     context: ValidationContext
   ): void;
 
-  get restrictions(): Desc.NodePropertyRestrictions[] {
+  get restrictions(): Desc.NodePropertyRestriction[] {
     return [];
   }
 }

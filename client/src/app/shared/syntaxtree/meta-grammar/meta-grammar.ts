@@ -19,6 +19,7 @@ import {
   NodeInterpolateChildrenDescription,
   NamedLanguages,
   VisualisedLanguages,
+  NodePropertyRestriction,
 } from "../grammar.description";
 import { OccursDescription, OccursString } from "../occurs.description";
 import { BlattWerkzeugError } from "../../blattwerkzeug-error";
@@ -31,6 +32,29 @@ export function convertProperty(
     base: attrNode.properties["base"] as any,
     name: attrNode.properties["name"],
   };
+
+  // TODO: Properly split up restrictions based on the actual type
+  const restrictionNodes = attrNode.getChildrenInCategory("restrictions");
+  const restrictions = restrictionNodes.map((r): NodePropertyRestriction => {
+    switch (r.typeName) {
+      case "restrictionEnum":
+        return {
+          type: "enum",
+          value: r
+            .getChildrenInCategory("values")
+            .map((v) => v.properties["value"]),
+        };
+      default:
+        throw new Error(`Unknown property restriction "${r.typeName}"`);
+    }
+  });
+
+  if (
+    restrictionNodes.length > 0 &&
+    (toReturn.base === "integer" || toReturn.base === "string")
+  ) {
+    toReturn.restrictions = restrictions as any;
+  }
 
   possiblyAddTags(attrNode, toReturn);
 

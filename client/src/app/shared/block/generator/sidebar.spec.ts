@@ -105,6 +105,35 @@ describe("Sidebar Default Node Generator", () => {
     });
   });
 
+  it("Node creation digs into containers", () => {
+    const node = generateDefaultNode({
+      type: "concrete",
+      languageName: "g1",
+      typeName: "t1",
+      attributes: [
+        {
+          type: "container",
+          orientation: "horizontal",
+          children: [
+            {
+              type: "sequence",
+              name: "seq",
+              nodeTypes: [],
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(node).toEqual({
+      language: "g1",
+      name: "t1",
+      children: {
+        seq: [],
+      },
+    });
+  });
+
   it(`Sidebar generation passes fixed sidebars through`, () => {
     const sidebar: AnySidebarDescription = {
       type: "fixedBlocks",

@@ -175,7 +175,7 @@ export type NodeStringTypeRestrictions =
   | EnumRestrictionDescription
   | RegularExpressionRestrictionDescription;
 
-export type NodePropertyRestrictions =
+export type NodePropertyRestriction =
   | NodeIntegerTypeRestrictions
   | NodeStringTypeRestrictions;
 

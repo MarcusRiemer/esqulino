@@ -81,7 +81,7 @@ editor-block-host {
     }
 
     // Mark something as a keyword of a language
-    &.activate-keyword span.keyword {
+    &.activate-keyword span.keyword, &.activate-keyword span.keyword select {
         color: blue;
     }
 
