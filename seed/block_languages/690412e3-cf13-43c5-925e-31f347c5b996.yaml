@@ -16,7 +16,7 @@ concise_attributes:
   value_before_type_cast: 2021-05-24 11:22:42.780181000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-24 13:23:06.901479000 Z
+  value_before_type_cast: 2021-05-25 06:56:30.468366000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic
@@ -68,13 +68,12 @@ concise_attributes:
     {}}], "describedType": {"typeName": "Document", "languageName": "dea"}}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: editor_components
-  value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "validator"},
-    {"componentType": "generated-code"}]'
+  value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "execute-fsm"}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: local_generator_instructions
   value_before_type_cast: '{"type": "manual"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root_css_classes
-  value_before_type_cast: "{activate-block-outline,activate-keyword}"
+  value_before_type_cast: "{activate-keyword,activate-block-outline}"
 new_record: false
 active_record_yaml_version: 2
