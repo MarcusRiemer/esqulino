@@ -1,0 +1,55 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 838018f7-8233-4503-9a57-4f7a9f5dd37d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 20210525 Frank
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 61d4d66e-d6c8-4fa9-afd5-5b2ba4abc719
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "Document", "children": {"Items": [{"name": "Item",
+    "language": "todo", "properties": {"Done": "false", "Text": "Neu: Sprachen direkt
+    aus der IDE heraus erzeugen"}}, {"name": "Item", "language": "todo", "properties":
+    {"Done": "false", "Text": "Neue Sprache: Mathematische Umformungen"}}, {"name":
+    "Item", "language": "todo", "properties": {"Done": "false", "Text": "Neue Sprache:
+    JavaScript"}}, {"name": "Item", "language": "todo", "properties": {"Done": "false",
+    "Text": "Neue Sprache: GraphViz / Automaten"}}, {"name": "Item", "language": "todo",
+    "properties": {"Done": "false", "Text": "Neue Sprache: Reguläre Ausdrücke (Seminar
+    & WIP)"}}, {"name": "Item", "language": "todo", "properties": {"Done": "false",
+    "Text": "Neu: SQL Schritte (Seminar)"}}, {"name": "Item", "language": "todo",
+    "properties": {"Done": "false", "Text": "Überarbeitet: Truck-Editor (Seminar)"}},
+    {"name": "Item", "language": "todo", "properties": {"Done": "false", "Text": "Aktuell:
+    Bachelor-Arbeit zur Rechteverwaltung & zum Aufgaben-Stellen"}}, {"name": "Item",
+    "language": "todo", "properties": {"Done": "false", "Text": "Neu: Verweise auf
+    andere Resourcen"}}, {"name": "Item", "language": "todo", "properties": {"Done":
+    "false", "Text": "Neu: Pretty Printing nun automatisch auf Basis der Grammatik"}},
+    {"name": "Item", "language": "todo", "properties": {"Done": "false", "Text": "Neu:
+    Unterscheidung in strukturelle und visuelle Grammatiken"}}, {"name": "Item", "language":
+    "todo", "properties": {"Done": "false", "Text": "Neu: Enum über <select> abgebildet"}},
+    {"name": "Item", "language": "todo", "properties": {"Done": "false", "Text": "Offen:
+    Bessere Hinweise für Drops"}}, {"name": "Item", "language": "todo", "properties":
+    {"Done": "false", "Text": "Offen: Visuelle Vorschau in den Seitenleisten"}}, {"name":
+    "Item", "language": "todo", "properties": {"Done": "false", "Text": "Offen: Kollegin
+    mit viel Spaß an Informatik-Didaktik würde gerne über Möglichkeiten einer Promotion
+    reden"}}]}, "language": "todo"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-25 07:31:55.753276000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-25 10:38:59.778858000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 3962ad91-72c8-4718-b3f4-5dbec5b84125
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2
