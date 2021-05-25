@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
-import { SyntaxNode } from "../../../shared/syntaxtree";
+import {
+  EnumRestrictionDescription,
+  SyntaxNode,
+} from "../../../shared/syntaxtree";
 import { VisualBlockDescriptions } from "../../../shared/block";
 
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
@@ -25,7 +28,17 @@ export class BlockRenderInputComponent {
    */
   public editedValue: string;
 
+  /**
+   * There are specialized visual representations based on the
+   * current datatype. `string` is a meaningful fallback.
+   */
   public editedType: VisualizedDatatype = "string";
+
+  /**
+   * Some datatypes may have a special set of available values,
+   * mainly "enum" and small ranges of numbers.
+   */
+  public permittedValues: string[] = [];
 
   /**
    * True, if this block is currently beeing edited.
@@ -42,12 +55,10 @@ export class BlockRenderInputComponent {
     this.editedType = this.determineDatatype();
   }
 
+  /**
+   * Figures out what type of data should be displayed.
+   */
   private determineDatatype(): VisualizedDatatype {
-    // TODO: Remove this hack for the regex testbench
-    if (this.visual.property === "wholeMatch") {
-      return "boolean";
-    }
-
     const langName = this.node.languageName;
     const g = this._renderData.validator?.getGrammarValidator(langName);
 
@@ -55,13 +66,24 @@ export class BlockRenderInputComponent {
     if (!g) {
       return "string";
     }
-    const nodeType = g.getType(this.node);
-    const baseType = nodeType.getPropertyBaseType(this.visual.property);
 
-    switch (baseType) {
+    const nodeType = g.getType(this.node);
+    const baseType = nodeType.getPropertyType(this.visual.property);
+
+    switch (baseType.baseName) {
       case "boolean":
-      case "enum":
-        return baseType;
+        return baseType.baseName;
+      case "string":
+        const hasEnum = baseType.restrictions.find(
+          (v): v is EnumRestrictionDescription => v.type === "enum"
+        );
+
+        if (hasEnum) {
+          this.permittedValues = hasEnum.value;
+          return "enum";
+        } else {
+          return "string";
+        }
       default:
         return "string";
     }

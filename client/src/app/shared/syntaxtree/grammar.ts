@@ -186,8 +186,11 @@ export class NodeConcreteType extends NodeType {
     }
   }
 
-  getPropertyBaseType(name: string) {
-    return this._allowedProperties[name].baseName;
+  /**
+   * @return The validator for the given property.
+   */
+  getPropertyType(name: string) {
+    return this._allowedProperties[name];
   }
 
   /**
@@ -1066,6 +1069,10 @@ abstract class NodePropertyValidator {
     value: string,
     context: ValidationContext
   ): void;
+
+  get restrictions(): Desc.NodePropertyRestrictions[] {
+    return [];
+  }
 }
 
 /**
@@ -1137,6 +1144,10 @@ export class NodePropertyIntegerValidator extends NodePropertyValidator {
       });
     }
   }
+
+  get restrictions(): Desc.NodeIntegerTypeRestrictions[] {
+    return this._restrictions;
+  }
 }
 
 /**
@@ -1195,6 +1206,10 @@ export class NodePropertyStringValidator extends NodePropertyValidator {
           throw new Error(`Unknown string restriction: "${restriction.type}"`);
       }
     });
+  }
+
+  get restrictions(): Desc.NodeStringTypeRestrictions[] {
+    return this._restrictions;
   }
 }
 

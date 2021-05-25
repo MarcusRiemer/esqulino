@@ -170,6 +170,19 @@ editor-block-host {
             border-bottom: 1px dashed black;
             background-color: transparent;
         }
+
+        // <select> also neds to blend in
+        select {
+            appearance: none;
+            border: none;
+            background-color: white;
+            border-bottom: 1px dashed black;
+            text-align: center;
+            // Try to make this as close to a "normal" div as possible,
+            // without these instructions the height will be slightly off.
+            padding: 0;
+            margin: 0;
+        }
     }
 
     .break-after {

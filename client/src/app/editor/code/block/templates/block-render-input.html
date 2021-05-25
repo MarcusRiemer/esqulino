@@ -7,25 +7,21 @@
   [blockBase]="visual"
   draggable="true"
 >
-  <ng-container [ngSwitch]="editedType">
-    <ng-container *ngSwitchDefault>
-      <input
-        [focus]="true"
-        [(ngModel)]="editedValue"
-        (keyup)="onInputKeyUp($event)"
-        [size]="inputSize"
-        type="text"
-        draggable="false"
-        #lineInput
-      />
-      <button #btnAccept (click)="acceptInput()" class="btn btn-sm btn-success">
-        ✓
-      </button>
-      <button #btnCancel (click)="cancelInput()" class="btn btn-sm btn-warning">
-        ✗
-      </button>
-    </ng-container>
-  </ng-container>
+  <input
+    [focus]="true"
+    [(ngModel)]="editedValue"
+    (keyup)="onInputKeyUp($event)"
+    [size]="inputSize"
+    type="text"
+    draggable="false"
+    #lineInput
+  />
+  <button #btnAccept (click)="acceptInput()" class="btn btn-sm btn-success">
+    ✓
+  </button>
+  <button #btnCancel (click)="cancelInput()" class="btn btn-sm btn-warning">
+    ✗
+  </button>
 </span>
 <ng-template #notEditing>
   <span class="not-editing" [ngClass]="visual.cssClasses" [blockBase]="visual">
@@ -37,6 +33,19 @@
         type="checkbox"
         draggable="false"
       />
+
+      <!-- By default a select is as wide as the longest option, so
+           the width must be set according to the current value -->
+      <select
+        *ngSwitchCase="'enum'"
+        draggable="false"
+        [(ngModel)]="editedValue"
+        [style.width.ch]="inputSize + 1"
+        (change)="setEditedProperty($event.target.value)"
+      >
+        <option *ngFor="let v of permittedValues" [value]="v">{{ v }}</option>
+      </select>
+
       <ng-container *ngSwitchDefault>
         <span (click)="onActivateEditing($event)">
           <span *ngIf="hasValue; else noValue" class="display-value">
