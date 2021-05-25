@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-23 09:06:53.415057000 Z
+  value_before_type_cast: 2021-05-25 10:36:41.748693000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
@@ -55,9 +55,9 @@ concise_attributes:
     "*", "nodeType": "nodeRef"}]}], "orientation": "horizontal"}], "orientation":
     "horizontal"}]}, "children": {"type": "concrete", "attributes": [{"type": "container",
     "children": [{"tags": ["space-after", "keyword"], "type": "terminal", "symbol":
-    "children"}, {"base": "string", "name": "base", "tags": ["space-after"], "type":
+    "children"}, {"base": "string", "name": "name", "tags": ["space-after"], "type":
+    "property"}, {"base": "string", "name": "base", "tags": ["space-after"], "type":
     "property", "restrictions": [{"type": "enum", "value": ["sequence", "allowed"]}]},
-    {"base": "string", "name": "name", "tags": ["space-after"], "type": "property"},
     {"name": "tags", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType":
     "tag"}]}, {"tags": ["space-after"], "type": "terminal", "symbol": "::="}, {"name":
     "references", "type": "sequence", "nodeTypes": [{"occurs": "*", "nodeType": "nodeRef"}]}],

@@ -14,7 +14,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-19 12:34:06.155746000 Z
+  value_before_type_cast: 2021-05-25 10:36:46.218597000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: meta-grammar
@@ -145,9 +145,9 @@ concise_attributes:
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
     ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "children",
     "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after",
-    "keyword"]}, {"style": {"display": "inline-flex"}, "property": "base", "blockType":
+    "keyword"]}, {"style": {"display": "inline-flex"}, "property": "name", "blockType":
     "input", "cssClasses": ["space-after"]}, {"style": {"display": "inline-flex"},
-    "property": "name", "blockType": "input", "cssClasses": ["space-after"]}, {"blockType":
+    "property": "base", "blockType": "input", "cssClasses": ["space-after"]}, {"blockType":
     "iterator", "childGroupName": "tags", "emptyDropTarget": false}, {"text": "::=",
     "style": {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after"]},
     {"blockType": "iterator", "childGroupName": "references", "emptyDropTarget": true}],
