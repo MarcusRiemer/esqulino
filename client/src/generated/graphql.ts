@@ -1943,6 +1943,34 @@ export type NameBlockLanguageQuery = { __typename?: "Query" } & {
   >;
 };
 
+export type ProjectAddMemberMutationVariables = Exact<{
+  projectId: Scalars["ID"];
+  userIds: Array<Scalars["ID"]> | Scalars["ID"];
+  isAdmin: Scalars["Boolean"];
+}>;
+
+export type ProjectAddMemberMutation = { __typename?: "Mutation" } & {
+  addMember?: Maybe<
+    { __typename?: "AddMembersPayload" } & {
+      project?: Maybe<
+        { __typename?: "Project" } & Pick<Project, "id"> & {
+            projectMembers: Array<
+              { __typename?: "ProjectMember" } & Pick<
+                ProjectMember,
+                "createdAt" | "id"
+              > & {
+                  user: { __typename?: "User" } & Pick<
+                    User,
+                    "id" | "displayName"
+                  >;
+                }
+            >;
+          }
+      >;
+    }
+  >;
+};
+
 export type ProjectAddUsedBlockLanguageMutationVariables = Exact<{
   projectId: Scalars["ID"];
   blockLanguageId: Scalars["ID"];
@@ -3310,6 +3338,43 @@ export class NameBlockLanguageGQL extends Apollo.Query<
   NameBlockLanguageQueryVariables
 > {
   document = NameBlockLanguageDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ProjectAddMemberDocument = gql`
+  mutation ProjectAddMember(
+    $projectId: ID!
+    $userIds: [ID!]!
+    $isAdmin: Boolean!
+  ) {
+    addMember(
+      input: { projectId: $projectId, userIds: $userIds, isAdmin: $isAdmin }
+    ) {
+      project {
+        id
+        projectMembers {
+          createdAt
+          id
+          user {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class ProjectAddMemberGQL extends Apollo.Mutation<
+  ProjectAddMemberMutation,
+  ProjectAddMemberMutationVariables
+> {
+  document = ProjectAddMemberDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

@@ -4,5 +4,11 @@
     <span *ngIf="owner$ | async as owner">
       Eigentümer ist {{ owner.displayName }}
     </span>
+
+    <ul *ngIf="members$ | async as members">
+      <li *ngFor="let member of members">{{ member.displayName }}</li>
+    </ul>
+
+    <button (click)="onAddMember()">Add Guest as Member</button>
   </div>
 </div>
