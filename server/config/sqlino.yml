@@ -31,7 +31,6 @@ common: &common-settings
         grammar: "b292612e-c58f-442f-9139-00b35a22f266"
         block_language: "81430cc2-bcff-4304-8cfd-6f05cf249a53"
 
-
   sentry:
     dsn: <%= ENV["SENTRY_DSN"] %>
 
@@ -51,7 +50,6 @@ development:
   <<: *common-settings
   name: "Blattwerkzeug (Dev)"
   data_dir: <%= ENV['DATA_DIR'] || '../data/dev' %>
-
 
   project_domains: ["projects.localdomain:9292"]
   editor_domain: "lvh.me:9292"
@@ -79,7 +77,6 @@ test:
       program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
       mode: one_shot
 
-
   seed:
     data_dir: ../seed-test
     output: <%= ENV['TEST_SEED_OUTPUT'] || false %>
@@ -98,9 +95,7 @@ test:
         grammar: "b292612e-c58f-442f-9139-00b35a22f266"
         block_language: "81430cc2-bcff-4304-8cfd-6f05cf249a53"
 
-
   auth_provider: ["Identity::Developer"]
-
 
 production:
   <<: *common-settings
