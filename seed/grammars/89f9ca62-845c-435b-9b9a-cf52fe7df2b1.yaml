@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 09:31:33.682761000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-25 10:44:47.136696000 Z
+  value_before_type_cast: 2021-05-27 19:55:36.884041000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
@@ -125,15 +125,16 @@ concise_attributes:
     ["terminal", "interpolate", "each", "container"]}, "knownCardinality": {"type":
     "concrete", "attributes": [{"base": "string", "name": "cardinality", "type": "property",
     "restrictions": [{"type": "enum", "value": ["*", "?", "+"]}]}]}, "grammarVisualizes":
-    {"type": "concrete", "attributes": [{"tags": ["space-after", "keyword"], "type":
-    "terminal", "symbol": "visualises"}, {"name": "includes", "type": "sequence",
-    "nodeTypes": [{"occurs": "1", "nodeType": "grammarRef"}]}]}, "nodeRefCardinality":
-    {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
-    "references", "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "nodeRef"}]},
-    {"name": "cardinality", "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType":
-    "cardinality"}]}], "orientation": "horizontal"}]}, "restrictionEnumValue": {"type":
-    "concrete", "attributes": [{"type": "container", "children": [{"base": "string",
-    "name": "value", "type": "property"}], "orientation": "horizontal"}]}}}'
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"tags":
+    ["space-after", "keyword"], "type": "terminal", "symbol": "visualises"}, {"name":
+    "includes", "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "grammarRef"}]}],
+    "orientation": "horizontal"}]}, "nodeRefCardinality": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "references", "type": "sequence",
+    "nodeTypes": [{"occurs": "1", "nodeType": "nodeRef"}]}, {"name": "cardinality",
+    "type": "sequence", "nodeTypes": [{"occurs": "1", "nodeType": "cardinality"}]}],
+    "orientation": "horizontal"}]}, "restrictionEnumValue": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"base": "string", "name": "value", "type":
+    "property"}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"

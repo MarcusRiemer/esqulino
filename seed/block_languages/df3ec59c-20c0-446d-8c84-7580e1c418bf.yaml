@@ -14,7 +14,7 @@ concise_attributes:
   value_before_type_cast: 2019-05-22 11:09:10.812796000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-25 10:49:45.049165000 Z
+  value_before_type_cast: 2021-05-27 19:55:40.074750000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: meta-grammar
@@ -170,21 +170,6 @@ concise_attributes:
     "MetaGrammar"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
     "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
     "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "enum", "style":
-    {"display": "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after",
-    "keyword"]}, {"blockType": "iterator", "childGroupName": "values", "emptyDropTarget":
-    false}], "blockType": "container", "orientation": "horizontal"}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "restrictionEnum",
-    "languageName": "MetaGrammar"}}, {"visual": [{"children": [{"style": {"color":
-    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
-    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
-    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children":
-    [{"style": {"display": "inline-flex"}, "property": "value", "blockType": "input"}],
-    "blockType": "container", "orientation": "horizontal"}], "blockType": "block",
-    "dropTarget": {}}], "describedType": {"typeName": "restrictionEnumValue", "languageName":
-    "MetaGrammar"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
-    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
-    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
     ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"style": {"display":
     "inline-flex"}, "property": "symbol", "blockType": "input", "cssClasses": ["double-quote"]},
     {"blockType": "iterator", "childGroupName": "tags", "emptyDropTarget": false}],
@@ -275,25 +260,40 @@ concise_attributes:
     {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
     "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
     "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"}, "property":
-    "cardinality", "blockType": "input"}], "blockType": "block", "dropTarget": {}}],
-    "describedType": {"typeName": "knownCardinality", "languageName": "MetaGrammar"}},
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "enum", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after", "keyword"]},
+    {"blockType": "iterator", "childGroupName": "values", "emptyDropTarget": false}],
+    "blockType": "container", "orientation": "horizontal"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "restrictionEnum", "languageName":
+    "MetaGrammar"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"},
+    "property": "cardinality", "blockType": "input"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "knownCardinality", "languageName": "MetaGrammar"}},
     {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
     "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
     "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
-    "INVALID_MIN_OCCURENCES"]}, {"text": "visualises", "style": {"display": "inline-flex"},
-    "blockType": "constant", "cssClasses": ["space-after", "keyword"]}, {"blockType":
-    "iterator", "childGroupName": "includes", "emptyDropTarget": false}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "grammarVisualizes",
-    "languageName": "MetaGrammar"}}, {"visual": [{"children": [{"style": {"color":
-    "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
-    "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
-    "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children":
-    [{"blockType": "iterator", "childGroupName": "references", "emptyDropTarget":
-    false}, {"blockType": "iterator", "childGroupName": "cardinality", "emptyDropTarget":
-    false}], "blockType": "container", "orientation": "horizontal"}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "nodeRefCardinality",
-    "languageName": "MetaGrammar"}}]'
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "visualises", "style": {"display":
+    "inline-flex"}, "blockType": "constant", "cssClasses": ["space-after", "keyword"]},
+    {"blockType": "iterator", "childGroupName": "includes", "emptyDropTarget": false}],
+    "blockType": "container", "orientation": "horizontal"}], "blockType": "block",
+    "dropTarget": {}}], "describedType": {"typeName": "grammarVisualizes", "languageName":
+    "MetaGrammar"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType": "iterator",
+    "childGroupName": "references", "emptyDropTarget": false}, {"blockType": "iterator",
+    "childGroupName": "cardinality", "emptyDropTarget": false}], "blockType": "container",
+    "orientation": "horizontal"}], "blockType": "block", "dropTarget": {}}], "describedType":
+    {"typeName": "nodeRefCardinality", "languageName": "MetaGrammar"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"style": {"display": "inline-flex"},
+    "property": "value", "blockType": "input"}], "blockType": "container", "orientation":
+    "horizontal"}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
+    "restrictionEnumValue", "languageName": "MetaGrammar"}}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: editor_components
   value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "validator"},
