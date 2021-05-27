@@ -196,6 +196,8 @@ export class BlockRenderBlockComponent {
       tap((_) => this._changeDetector.markForCheck())
     );
 
+  readonly isDragInProgress$ = this._dragService.isDragInProgress;
+
   /**
    * Determines whether a certain codeblock is currently beeing executed.
    */

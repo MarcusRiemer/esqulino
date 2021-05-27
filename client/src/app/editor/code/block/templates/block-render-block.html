@@ -12,9 +12,10 @@
 
 <ng-container *ngIf="showRelativeDropLocations$ | async as loc">
   <div *ngIf="loc === 'begin'" class="begin-drop"></div>
-
   <div *ngIf="loc === 'end'" class="end-drop"></div>
 </ng-container>
 
-<div (mouseover)="onMouseOver($event, 'begin')" class="begin-drop-zone"></div>
-<div (mouseover)="onMouseOver($event, 'end')" class="end-drop-zone"></div>
+<ng-container *ngIf="isDragInProgress$ | async">
+  <div (mouseover)="onMouseOver($event, 'begin')" class="begin-drop-zone"></div>
+  <div (mouseover)="onMouseOver($event, 'end')" class="end-drop-zone"></div>
+</ng-container>

@@ -404,16 +404,14 @@ export class DragService {
   /**
    * @return Observable that always knows all details about the ongoing drag operation.
    */
-  get currentDrag(): Observable<CurrentDrag> {
-    return this._currentDrag$;
-  }
+  readonly currentDrag: Observable<CurrentDrag> = this._currentDrag$;
 
   /**
    * @return Observable to always know the current (very general) state of drag affairs.
    */
-  get isDragInProgress() {
-    return this._currentDragInProgress$.pipe(distinctUntilChanged());
-  }
+  readonly isDragInProgress = this._currentDragInProgress$.pipe(
+    distinctUntilChanged()
+  );
 
   /**
    * @return Takes a peek whether a drag is occuring *right now*.
