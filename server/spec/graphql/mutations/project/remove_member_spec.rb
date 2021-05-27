@@ -47,7 +47,6 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
     expect(ProjectMember.count).to eq 1
     expect(ProjectMember.find_by(user_id: user_admin.id,)).to eq nil
-    expect(res[:successful]).to eq true
 
     mut = described_class.new(**init_args(user: current_user_owner))
     res = mut.resolve(
@@ -56,7 +55,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
     expect(ProjectMember.count).to eq 0
     expect(ProjectMember.find_by(user_id: user_participant.id,)).to eq nil
-    expect(res[:successful]).to eq true
+
 
     mut = described_class.new(**init_args(user: current_user_owner))
     expect{ mut.resolve(
@@ -97,7 +96,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
     expect(ProjectMember.count).to eq 1
     expect(ProjectMember.find_by(user_id: user_admin.id,)).to eq nil
-    expect(res[:successful]).to eq true
+
 
     mut = described_class.new(**init_args(user: current_user_owner))
     res = mut.resolve(
@@ -106,7 +105,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
     expect(ProjectMember.count).to eq 0
     expect(ProjectMember.find_by(user_id: user_participant.id,)).to eq nil
-    expect(res[:successful]).to eq true
+
 
     mut = described_class.new(**init_args(user: current_user_owner))
     expect{mut.resolve(
@@ -150,7 +149,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
     expect(ProjectMember.count).to eq 2
     expect(ProjectMember.find_by(user_id: user_admin.id,)).to eq nil
-    expect(res[:successful]).to eq true
+
 
     mut = described_class.new(**init_args(user: current_user_user_admin))
     res = mut.resolve(
@@ -159,7 +158,6 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
     expect(ProjectMember.count).to eq 1
     expect(ProjectMember.find_by(user_id: user_participant.id,)).to eq nil
-    expect(res[:successful]).to eq true
 
     mut = described_class.new(**init_args(user: current_user_user_admin))
     expect{ mut.resolve(
@@ -204,7 +202,6 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
     expect(ProjectMember.count).to eq 2
     expect(ProjectMember.find_by(user_id: user_admin.id,)).to eq nil
-    expect(res[:successful]).to eq true
 
     mut = described_class.new(**init_args(user: current_user_user_admin))
     res = mut.resolve(
@@ -213,7 +210,6 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
     expect(ProjectMember.count).to eq 1
     expect(ProjectMember.find_by(user_id: user_participant.id,)).to eq nil
-    expect(res[:successful]).to eq true
 
     mut = described_class.new(**init_args(user: current_user_user_admin))
     expect{ mut.resolve(
@@ -458,7 +454,6 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
     expect(ProjectMember.count).to eq 1
     expect(ProjectMember.find_by(user_id: user_admin.id,)).to eq nil
-    expect(res[:successful]).to eq true
 
 
     mut = described_class.new(**init_args(user: user_participant))
@@ -468,7 +463,6 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
 
     expect(ProjectMember.find_by(user_id: user_participant.id,)).to eq nil
-    expect(res[:successful]).to eq true
     expect(ProjectMember.count).to eq 0
   end
 
@@ -506,7 +500,6 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
     expect(ProjectMember.count).to eq 1
     expect(ProjectMember.find_by(user_id: user_admin.id,)).to eq nil
-    expect(res[:successful]).to eq true
 
 
     mut = described_class.new(**init_args(user: user_participant))
@@ -516,7 +509,6 @@ RSpec.describe Mutations::Projects::RemoveMember do
     ) 
 
     expect(ProjectMember.find_by(user_id: user_participant.id,)).to eq nil
-    expect(res[:successful]).to eq true
     expect(ProjectMember.count).to eq 0
   end
 end
