@@ -37,8 +37,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: true
     ) 
     expect(ProjectMember.count).to eq 2
-    expect(res[:project_member][:membership_type]).to eq "admin"
-    expect(res[:project_member][:user_id]).to eq user_admin.id
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "admin"
     
     #Other role as admin
@@ -49,8 +47,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: false
     ) 
     expect(ProjectMember.count).to eq 2
-    expect(res[:project_member][:membership_type]).to eq "participant"
-    expect(res[:project_member][:user_id]).to eq user_admin.id
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "participant"
 
     #Same role as participant
@@ -61,8 +57,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: false
     ) 
     expect(ProjectMember.count).to eq 2
-    expect(res[:project_member][:membership_type]).to eq "participant"
-    expect(res[:project_member][:user_id]).to eq user_participant.id
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "participant"
 
     #Other role as participant
@@ -73,8 +67,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: true
     ) 
     expect(ProjectMember.count).to eq 2
-    expect(res[:project_member][:membership_type]).to eq "admin"
-    expect(res[:project_member][:user_id]).to eq user_participant.id
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "admin"
 
 
@@ -117,8 +109,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: true
     ) 
     expect(ProjectMember.count).to eq 2
-    expect(res[:project_member][:membership_type]).to eq "admin"
-    expect(res[:project_member][:user_id]).to eq user_admin.id
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "admin"
     
     #Other role as admin
@@ -129,8 +119,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: false
     ) 
     expect(ProjectMember.count).to eq 2
-    expect(res[:project_member][:membership_type]).to eq "participant"
-    expect(res[:project_member][:user_id]).to eq user_admin.id
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "participant"
 
     #Same role as participant
@@ -141,8 +129,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: false
     ) 
     expect(ProjectMember.count).to eq 2
-    expect(res[:project_member][:membership_type]).to eq "participant"
-    expect(res[:project_member][:user_id]).to eq user_participant.id
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "participant"
 
     #Other role as participant
@@ -153,8 +139,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: true
     ) 
     expect(ProjectMember.count).to eq 2
-    expect(res[:project_member][:membership_type]).to eq "admin"
-    expect(res[:project_member][:user_id]).to eq user_participant.id
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "admin"
 
 
@@ -201,8 +185,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: true
     ) 
     expect(ProjectMember.count).to eq 3
-    expect(res[:project_member][:membership_type]).to eq "admin"
-    expect(res[:project_member][:user_id]).to eq user_admin.id
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "admin"
     
     #Other role as admin
@@ -213,8 +195,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: false
     ) 
     expect(ProjectMember.count).to eq 3
-    expect(res[:project_member][:membership_type]).to eq "participant"
-    expect(res[:project_member][:user_id]).to eq user_admin.id
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "participant"
 
     #Same role as participant
@@ -225,8 +205,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: false
     ) 
     expect(ProjectMember.count).to eq 3
-    expect(res[:project_member][:membership_type]).to eq "participant"
-    expect(res[:project_member][:user_id]).to eq user_participant.id
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "participant"
 
     #Other role as participant
@@ -237,8 +215,6 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
       is_admin: true
     ) 
     expect(ProjectMember.count).to eq 3
-    expect(res[:project_member][:membership_type]).to eq "admin"
-    expect(res[:project_member][:user_id]).to eq user_participant.id
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "admin"
 
 
@@ -284,8 +260,6 @@ it "change User role as admin in private group" do
       is_admin: true
     ) 
     expect(ProjectMember.count).to eq 3
-    expect(res[:project_member][:membership_type]).to eq "admin"
-    expect(res[:project_member][:user_id]).to eq user_admin.id
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "admin"
     
     #Other role as admin
@@ -296,8 +270,6 @@ it "change User role as admin in private group" do
       is_admin: false
     ) 
     expect(ProjectMember.count).to eq 3
-    expect(res[:project_member][:membership_type]).to eq "participant"
-    expect(res[:project_member][:user_id]).to eq user_admin.id
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "participant"
 
     #Same role as participant
@@ -308,8 +280,6 @@ it "change User role as admin in private group" do
       is_admin: false
     ) 
     expect(ProjectMember.count).to eq 3
-    expect(res[:project_member][:membership_type]).to eq "participant"
-    expect(res[:project_member][:user_id]).to eq user_participant.id
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "participant"
 
     #Other role as participant
@@ -320,8 +290,6 @@ it "change User role as admin in private group" do
       is_admin: true
     ) 
     expect(ProjectMember.count).to eq 3
-    expect(res[:project_member][:membership_type]).to eq "admin"
-    expect(res[:project_member][:user_id]).to eq user_participant.id
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "admin"
 
 
@@ -589,8 +557,6 @@ it "change own user role" do
       is_admin: true
     )
     expect(ProjectMember.count).to eq 2
-    expect(res[:project_member][:membership_type]).to eq "admin"
-    expect(res[:project_member][:user_id]).to eq user_admin.id
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "admin"
     
     mut = described_class.new(**init_args(user: user_admin))
@@ -600,8 +566,6 @@ it "change own user role" do
       is_admin: false
     ) 
     expect(ProjectMember.count).to eq 2
-    expect(res[:project_member][:membership_type]).to eq "participant"
-    expect(res[:project_member][:user_id]).to eq user_admin.id
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "participant"
 
     
