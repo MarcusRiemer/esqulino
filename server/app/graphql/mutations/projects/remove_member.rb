@@ -2,7 +2,7 @@ class Mutations::Projects::RemoveMember < Mutations::BaseMutation
     argument :project_id, ID, required: true
     argument :user_id, ID, required: true
 
-    field :successful, Boolean, null: true
+    field :project, Types::ProjectType, null: true
 
     def resolve(project_id:, user_id:)
       project = Project.find_by_slug_or_id! (project_id)
@@ -24,9 +24,10 @@ class Mutations::Projects::RemoveMember < Mutations::BaseMutation
         project.project_members.find_by(user_id: user.id).destroy!
       end
 
-      return ({
-        successful: true
-      })
+    return  ({
+      project: project
+    })
+
     rescue ActiveRecord::RecordNotFound => e
       return (e)
     end

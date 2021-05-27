@@ -3,7 +3,7 @@ class Mutations::Projects::ChangeMemberRole < Mutations::BaseMutation
     argument :user_id, ID, required: true
     argument :is_admin, Boolean, required: true
 
-    field :project_member, Types::ProjectMemberType, null: true
+    field :project, Types::ProjectType, null: true
 
     def resolve(project_id:, user_id:, is_admin:)
       project = Project.find_by_slug_or_id! (project_id)
@@ -30,7 +30,7 @@ class Mutations::Projects::ChangeMemberRole < Mutations::BaseMutation
       membership_relation.save!
   
       return ({
-          project_member: membership_relation
+          project: project
       })
     rescue ActiveRecord::RecordNotFound => e
       return (e)
