@@ -76,19 +76,19 @@ editor-block-host {
            is for a vertical layout where the indicators are displayed at top or bottom */
         &.vertical > {
 
-            .begin-drop, .end-drop {
+            .begin-drop, .end-drop, .begin-drop-zone, .end-drop-zone {
                 position: absolute;
                 left: 0px;
                 right: 0px;
             }
 
             /* Drop before this block */
-            .begin-drop {
+            .begin-drop, .begin-drop-zone {
                 top: 0px;
                 height: $relative-drop-hint-size;
             }
 
-            .begin-drop:hover {
+            .begin-drop {
                 background: linear-gradient(
                     to top,
                     rgba(255,255,255,0) 10%,
@@ -98,12 +98,12 @@ editor-block-host {
             }
 
             /* Drop after this block */
-            .end-drop {
+            .end-drop, .end-drop-zone {
                 bottom: 0px;
                 height: $relative-drop-hint-size;
             }
 
-            .end-drop:hover {
+            .end-drop {
                 background: linear-gradient(
                     to bottom,
                     rgba(255,255,255,0) 10%,
@@ -116,14 +116,14 @@ editor-block-host {
         /* Horizontal (left to right) indicators */
         &.horizontal > {
 
-            .begin-drop, .end-drop {
+            .begin-drop, .end-drop, .begin-drop-zone, .end-drop-zone {
                 position: absolute;
                 top: 0px;
                 bottom: 0px;
             }
 
             /* Drop before this block */
-            .begin-drop {
+            .begin-drop, .begin-drop-zone {
                 left: 0px;
                 width: $relative-drop-hint-size;
             }
@@ -138,7 +138,7 @@ editor-block-host {
             }
 
             /* Drop after this block */
-            .end-drop {
+            .end-drop, .end-drop-zone {
                 right: 0px;
                 width: $relative-drop-hint-size;
             }

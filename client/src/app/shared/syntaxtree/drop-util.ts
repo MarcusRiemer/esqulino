@@ -6,6 +6,7 @@ import {
 import { Validator } from "./validator";
 import { SyntaxNode } from "./syntaxtree";
 import { ErrorCodes } from "./validation-result";
+import { RelativeDropLocation } from "./drop.description";
 
 // These errors signal cardinality errors that would be triggered
 // by inserting a new node.
@@ -77,11 +78,6 @@ export function nodeIsInSingularHole(validator: Validator, node: SyntaxNode) {
     return true;
   }
 }
-
-/**
- * Possibilities the user may specify to further indicate where the drop should take place.
- */
-export type RelativeDropLocation = "block" | "begin" | "end";
 
 /**
  * Calculates a possibly shifted drop location relative to the given location.

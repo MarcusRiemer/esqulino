@@ -1025,7 +1025,14 @@ describe("Complex Spec Grammar: SQL", () => {
     const ast = new AST.SyntaxTree(astDesc);
 
     expect(
-      smartDropLocation({ allowAnyParent: true }, v, ast, [], dropCandidates)
+      smartDropLocation(
+        { allowAnyParent: true },
+        v,
+        ast,
+        [],
+        "block",
+        dropCandidates
+      )
     )
       .withContext(`Inserting at root`)
       .toEqual([
@@ -1042,6 +1049,7 @@ describe("Complex Spec Grammar: SQL", () => {
         v,
         ast,
         [["select", 0]],
+        "block",
         dropCandidates
       )
     )
@@ -1063,6 +1071,7 @@ describe("Complex Spec Grammar: SQL", () => {
           ["select", 0],
           ["columns", 0],
         ],
+        "block",
         dropCandidates
       )
     )

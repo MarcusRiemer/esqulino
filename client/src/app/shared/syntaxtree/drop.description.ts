@@ -59,3 +59,8 @@ export interface EmbraceDropLocation {
    */
   candidateHole: NodeLocation;
 }
+
+/**
+ * Possibilities the user may specify to further indicate where the drop should take place.
+ */
+export type RelativeDropLocation = "block" | "begin" | "end";

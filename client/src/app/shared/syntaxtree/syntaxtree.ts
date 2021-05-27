@@ -120,13 +120,27 @@ export function isChildLocation(
  */
 export function locationSibling(
   loc: NodeLocation,
-  change: 1 | -1 = +1
+  change: 1 | -1 | -2 = +1
 ): NodeLocation {
   if (loc.length > 0) {
     const [c, i] = loc[loc.length - 1];
     return [...loc.slice(0, -1), [c, i + change]];
   } else {
     return [];
+  }
+}
+
+export function locationSiblingOrder(
+  lhs: NodeLocation,
+  rhs: NodeLocation
+): "begin" | "end" {
+  const lhsIndex = lhs[lhs.length - 1][1];
+  const rhsIndex = rhs[rhs.length - 1][1];
+
+  if (lhsIndex < rhsIndex) {
+    return "end";
+  } else {
+    return "begin";
   }
 }
 

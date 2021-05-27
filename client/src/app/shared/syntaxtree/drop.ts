@@ -8,6 +8,7 @@ import {
   InsertDropLocation,
   ReplaceDropLocation,
   SmartDropAlgorithmNames,
+  RelativeDropLocation,
 } from "./drop.description";
 import { insertAtAnyParent, appendAtParent } from "./drop-parent";
 import { _cardinalityAllowsInsertion } from "./drop-util";
@@ -218,6 +219,7 @@ export function smartDropLocation(
   validator: Validator,
   tree: SyntaxTree,
   loc: NodeLocation,
+  hoverPortion: RelativeDropLocation,
   candidates: NodeDescription[]
 ): SmartDropLocation[] {
   const toReturn: SmartDropLocation[] = [];
@@ -232,6 +234,13 @@ export function smartDropLocation(
       matches.add(name);
     }
   };
+
+  /*if (hoverPortion !== "block") {
+    options = {
+      allowAppend: true,
+      allowExact: true,
+    };
+  }*/
 
   // All advanced heuristics only make sense if there is a tree
   if (tree) {

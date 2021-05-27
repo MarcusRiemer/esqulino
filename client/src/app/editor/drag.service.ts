@@ -20,6 +20,7 @@ import {
 import {
   SmartDropOptions,
   SmartDropLocation,
+  RelativeDropLocation,
 } from "../shared/syntaxtree/drop.description";
 import { smartDropLocation } from "../shared/syntaxtree/drop";
 import { FixedSidebarBlock } from "../shared/block";
@@ -54,6 +55,8 @@ export interface DragTree {
 export interface CurrentDrag {
   // The node that is currently hovered over.
   hoverNode?: SyntaxNode;
+  // The part of the block that is beeing dragged over
+  hoverPortion?: RelativeDropLocation;
   // Is the node currently hovering over something for deletion?
   hoverTrash: boolean;
   // The location that would be dropped at
@@ -74,6 +77,7 @@ interface DragOverEvent {
   dropLocation: NodeLocation;
   node: SyntaxNode | undefined;
   smartDropOptions: SmartDropOptions;
+  hoverPortion: RelativeDropLocation;
 }
 
 /**
@@ -286,7 +290,8 @@ export class DragService {
     evt: MouseEvent,
     dropLocation: NodeLocation,
     node: SyntaxNode | undefined,
-    smartDropOptions: SmartDropOptions
+    smartDropOptions: SmartDropOptions,
+    hoverPortion?: RelativeDropLocation
   ) {
     // Ensure that no other block tells the same story
     evt.stopImmediatePropagation();
@@ -297,6 +302,7 @@ export class DragService {
         dropLocation,
         node,
         smartDropOptions,
+        hoverPortion,
       });
     } else {
       // Keep the event in mind for later
@@ -304,6 +310,7 @@ export class DragService {
         dropLocation: dropLocation,
         node: node,
         smartDropOptions: smartDropOptions,
+        hoverPortion,
       };
     }
   }
@@ -330,6 +337,7 @@ export class DragService {
       validator,
       currentCodeResource.syntaxTreePeek,
       evt.dropLocation,
+      evt.hoverPortion,
       dragData.draggedDescription
     );
 
@@ -337,6 +345,7 @@ export class DragService {
     dragData.hoverNode = evt.node;
     dragData.hoverTrash = false;
     dragData.smartDrops = smartDropLocations;
+    dragData.hoverPortion = evt.hoverPortion;
 
     // Temporarily: Smash down all the smart drop locations to a single option
     dragData.dropLocation =

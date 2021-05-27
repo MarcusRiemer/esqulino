@@ -1,11 +1,4 @@
 import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from "@angular/animations";
-import {
   Component,
   Input,
   ChangeDetectorRef,
@@ -22,8 +15,6 @@ import {
   distinctUntilChanged,
   tap,
   filter,
-  startWith,
-  shareReplay,
 } from "rxjs/operators";
 
 import {
@@ -33,6 +24,7 @@ import {
   isChildLocation,
   locationSibling,
   _exactMatches,
+  locationSiblingOrder,
 } from "../../../shared/syntaxtree";
 import { VisualBlockDescriptions } from "../../../shared/block";
 import { arrayEqual } from "../../../shared/util";
@@ -40,8 +32,8 @@ import { canEmbraceNode } from "../../../shared/syntaxtree/drop-embrace";
 import {
   nodeIsInSingularHole,
   relativeDropLocation,
-  RelativeDropLocation,
 } from "../../../shared/syntaxtree/drop-util";
+import { RelativeDropLocation } from "../../../shared/syntaxtree/drop.description";
 
 import { DragService } from "../../drag.service";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
@@ -250,17 +242,43 @@ export class BlockRenderBlockComponent {
     this._renderData.validator$,
   ]).pipe(
     map(([inProgress, currentDrag, validator]) => {
-      if (
-        inProgress &&
-        !this._renderData.readOnly &&
-        currentDrag &&
-        currentDrag.hoverNode === this.node
-      ) {
+      if (inProgress && !this._renderData.readOnly && currentDrag) {
         const ownLocation = this.node.location;
-        const prevSiblingLoc = locationSibling(ownLocation, -1);
-        const succSiblingLoc = locationSibling(ownLocation, +1);
+        const firstSmartDropLocation = currentDrag.smartDrops[0]?.location;
+        /*const prevSiblingLoc = locationSibling(ownLocation, -1);
+        //const succSiblingLoc = locationSibling(ownLocation, -1);
+        const succSiblingLoc = ownLocation;
+        //const succSiblingLoc = locationSibling(ownLocation, 1);*/
+
+        const prevSiblingLoc = ownLocation;
+        const succSiblingLoc = locationSibling(ownLocation, 1);
+
+        // First check: The current drop location might have nothing to do
+        // with this node, but it still possibly needs to highlight a drop
+        // that is made somewhere else.
+
+        const prevExactMatch = locationEquals(
+          prevSiblingLoc,
+          firstSmartDropLocation
+        );
+        const succExactMatch = locationEquals(
+          succSiblingLoc,
+          firstSmartDropLocation
+        );
+
+        if (prevExactMatch) {
+          return locationSiblingOrder(ownLocation, prevSiblingLoc);
+        } else if (succExactMatch) {
+          return locationSiblingOrder(ownLocation, succSiblingLoc);
+        }
+
+        // If we are still here: There is no current dragging going on
+        // that targets any sibling, but this new drag could be it.
+        const hoveringHere = currentDrag.hoverNode === this.node;
 
         const prevAllowed =
+          hoveringHere &&
+          currentDrag.hoverPortion === "begin" &&
           _exactMatches(
             validator,
             this.node.tree,
@@ -269,6 +287,8 @@ export class BlockRenderBlockComponent {
           ).length > 0;
 
         const succAllowed =
+          hoveringHere &&
+          currentDrag.hoverPortion === "end" &&
           _exactMatches(
             validator,
             this.node.tree,
