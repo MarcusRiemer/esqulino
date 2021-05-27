@@ -20,7 +20,7 @@ export interface ResultStep {
 }
 
 export interface TransformationInput {
-  operation: "+" | "-" | "−" | "*" | "×" | "/" | "÷";
+  operation: "+" | "-" | "−" | "*" | "×" | "⋅" | "/" | "÷";
   expression: string;
 }
 
@@ -90,6 +90,7 @@ export function executeMath(input: ExecutionInput): ResultStep[] {
         };
       case "*":
       case "×":
+      case "⋅":
         return {
           left: (current.left as any).multiply(step.expression),
           right: (current.right as any).multiply(step.expression),

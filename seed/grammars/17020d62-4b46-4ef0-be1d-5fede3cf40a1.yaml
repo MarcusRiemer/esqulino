@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2021-05-21 11:55:11.237401000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-25 11:58:52.682458000 Z
+  value_before_type_cast: 2021-05-27 19:40:10.204288000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
@@ -36,16 +36,17 @@ concise_attributes:
     "tags": ["keyword"], "type": "property", "restrictions": [{"type": "enum", "value":
     ["X", "Y"]}]}]}, "Transform": {"type": "concrete", "attributes": [{"type": "container",
     "children": [{"tags": ["space-after"], "type": "terminal", "symbol": "|"}, {"base":
-    "string", "name": "Operation", "type": "property"}, {"name": "Expression", "type":
-    "sequence", "nodeTypes": [{"typeName": "Expression", "languageName": "nerdamer"}]}],
-    "orientation": "horizontal"}]}, "Expression": {"type": "oneOf", "oneOf": [{"typeName":
-    "Constant", "languageName": "nerdamer"}, {"typeName": "BinaryOperation", "languageName":
-    "nerdamer"}, {"typeName": "Variable", "languageName": "nerdamer"}]}, "BinaryOperation":
-    {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
-    "Left", "type": "sequence", "nodeTypes": [{"typeName": "Expression", "languageName":
-    "nerdamer"}]}, {"base": "string", "name": "Operation", "type": "property"}, {"name":
-    "Right", "type": "sequence", "nodeTypes": [{"typeName": "Expression", "languageName":
-    "nerdamer"}]}], "orientation": "horizontal"}]}}}'
+    "string", "name": "Operation", "type": "property", "restrictions": [{"type": "enum",
+    "value": ["+", "-", "⋅", "÷"]}]}, {"name": "Expression", "type": "sequence", "nodeTypes":
+    [{"typeName": "Expression", "languageName": "nerdamer"}]}], "orientation": "horizontal"}]},
+    "Expression": {"type": "oneOf", "oneOf": [{"typeName": "Constant", "languageName":
+    "nerdamer"}, {"typeName": "BinaryOperation", "languageName": "nerdamer"}, {"typeName":
+    "Variable", "languageName": "nerdamer"}]}, "BinaryOperation": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"name": "Left", "type": "sequence",
+    "nodeTypes": [{"typeName": "Expression", "languageName": "nerdamer"}]}, {"base":
+    "string", "name": "Operation", "type": "property", "restrictions": [{"type": "enum",
+    "value": ["+", "-", "⋅", "÷"]}]}, {"name": "Right", "type": "sequence", "nodeTypes":
+    [{"typeName": "Expression", "languageName": "nerdamer"}]}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"

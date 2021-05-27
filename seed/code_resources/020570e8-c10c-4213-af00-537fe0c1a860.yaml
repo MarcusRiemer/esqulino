@@ -22,16 +22,18 @@ concise_attributes:
     {"Expression": [{"name": "Constant", "language": "nerdamer", "properties": {"Value":
     "3"}}]}, "language": "nerdamer", "properties": {"Operation": "+"}}, {"name": "Transform",
     "children": {"Expression": [{"name": "Variable", "language": "nerdamer", "properties":
-    {"Name": "X"}}]}, "language": "nerdamer", "properties": {"Operation": "*"}}, {"name":
-    "Transform", "children": {"Expression": [{"name": "Constant", "language": "nerdamer",
-    "properties": {"Value": "0"}}]}, "language": "nerdamer", "properties": {"Operation":
-    "*"}}]}, "language": "nerdamer"}'
+    {"Name": "X"}}]}, "language": "nerdamer", "properties": {"Operation": "⋅"}}, {"name":
+    "Transform", "children": {"Expression": [{"name": "Variable", "language": "nerdamer",
+    "properties": {"Name": "X"}}]}, "language": "nerdamer", "properties": {"Operation":
+    "+"}}, {"name": "Transform", "children": {"Expression": [{"name": "Variable",
+    "language": "nerdamer", "properties": {"Name": "X"}}]}, "language": "nerdamer",
+    "properties": {"Operation": "+"}}]}, "language": "nerdamer"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2021-05-21 11:55:11.689751000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-21 14:32:09.235542000 Z
+  value_before_type_cast: 2021-05-27 19:43:20.149566000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 0b70b0f3-87d9-4804-9467-48638c31f513
