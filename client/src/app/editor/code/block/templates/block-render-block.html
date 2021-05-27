@@ -10,8 +10,16 @@
   [node]="node"
 ></editor-block-render>
 
-<ng-container *ngIf="showRelativeDropLocations | async">
-  <div (mouseover)="onMouseOver($event, 'begin')" class="begin-drop"></div>
+<ng-container *ngIf="showRelativeDropLocations$ | async as loc">
+  <div
+    *ngIf="loc === 'begin' || loc === 'both'"
+    (mouseover)="onMouseOver($event, 'begin')"
+    class="begin-drop"
+  ></div>
 
-  <div (mouseover)="onMouseOver($event, 'end')" class="end-drop"></div>
+  <div
+    *ngIf="loc === 'begin'  || loc === 'both'"
+    (mouseover)="onMouseOver($event, 'end')"
+    class="end-drop"
+  ></div>
 </ng-container>

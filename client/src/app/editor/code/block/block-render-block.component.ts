@@ -31,6 +31,8 @@ import {
   locationEquals,
   locationMatchingLength,
   isChildLocation,
+  locationSibling,
+  _exactMatches,
 } from "../../../shared/syntaxtree";
 import { VisualBlockDescriptions } from "../../../shared/block";
 import { arrayEqual } from "../../../shared/util";
@@ -236,21 +238,55 @@ export class BlockRenderBlockComponent {
   );
 
   /**
-   * True if it is sensible to show more detailed drop location hints.
+   * A non empty string if it is sensible to show more detailed drop location hints.
    * This is the case if the location that would be dropped in to is at
    * least not empty and if it would take the type.
    */
-  readonly showRelativeDropLocations: Observable<boolean> = combineLatest([
+  readonly showRelativeDropLocations$: Observable<
+    false | "begin" | "end" | "both"
+  > = combineLatest([
     this._dragService.isDragInProgress,
     this._dragService.currentDrag,
     this._renderData.validator$,
   ]).pipe(
     map(([inProgress, currentDrag, validator]) => {
-      if (inProgress && !this._renderData.readOnly && currentDrag) {
-        return (
-          currentDrag.hoverNode === this.node &&
-          !nodeIsInSingularHole(validator, this.node)
-        );
+      if (
+        inProgress &&
+        !this._renderData.readOnly &&
+        currentDrag &&
+        currentDrag.hoverNode === this.node
+      ) {
+        const ownLocation = this.node.location;
+        const prevSiblingLoc = locationSibling(ownLocation, -1);
+        const succSiblingLoc = locationSibling(ownLocation, +1);
+
+        const prevAllowed =
+          _exactMatches(
+            validator,
+            this.node.tree,
+            prevSiblingLoc,
+            currentDrag.draggedDescription
+          ).length > 0;
+
+        const succAllowed =
+          _exactMatches(
+            validator,
+            this.node.tree,
+            succSiblingLoc,
+            currentDrag.draggedDescription
+          ).length > 0;
+
+        if (nodeIsInSingularHole(validator, this.node)) {
+          return false;
+        } else if (prevAllowed && succAllowed) {
+          return "both";
+        } else if (!prevAllowed && succAllowed) {
+          return "end";
+        } else if (prevAllowed && !succAllowed) {
+          return "begin";
+        } else {
+          return false;
+        }
       } else {
         return false;
       }

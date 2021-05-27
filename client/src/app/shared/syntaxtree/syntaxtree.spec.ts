@@ -5,20 +5,20 @@ import {
   NodeLocation,
   SyntaxTree,
   locationEquals,
-  locationIncLastIndex,
+  locationSibling,
   locationMatchingLength,
 } from "./syntaxtree";
 
-describe("locationIncLastIndex(loc)", () => {
+describe("locationSibling(loc)", () => {
   it("Does nothing for empty arrays", () => {
-    expect(locationIncLastIndex([])).toEqual([]);
+    expect(locationSibling([])).toEqual([]);
   });
 
   it("Increments all other arrays", () => {
-    expect(locationIncLastIndex([["a", 0]])).toEqual([["a", 1]]);
-    expect(locationIncLastIndex([["a", 1]])).toEqual([["a", 2]]);
+    expect(locationSibling([["a", 0]])).toEqual([["a", 1]]);
+    expect(locationSibling([["a", 1]])).toEqual([["a", 2]]);
     expect(
-      locationIncLastIndex([
+      locationSibling([
         ["a", 1],
         ["b", 2],
       ])
@@ -27,7 +27,7 @@ describe("locationIncLastIndex(loc)", () => {
       ["b", 3],
     ]);
     expect(
-      locationIncLastIndex([
+      locationSibling([
         ["a", 2],
         ["b", 1],
       ])

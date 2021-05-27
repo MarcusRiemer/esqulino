@@ -15,7 +15,7 @@ import {
 import {
   SyntaxNode,
   NodeLocation,
-  locationIncLastIndex,
+  locationSibling,
 } from "../../../shared/syntaxtree";
 import { VisualBlockDescriptions } from "../../../shared/block";
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
@@ -146,7 +146,7 @@ export class BlockRenderComponent {
   }
 
   locationAppend(loc: NodeLocation): NodeLocation {
-    return locationIncLastIndex(loc);
+    return locationSibling(loc);
   }
 
   get lastNode() {
