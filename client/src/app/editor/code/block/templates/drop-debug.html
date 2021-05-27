@@ -1,5 +1,7 @@
 <h4 class="card-title">Drop Debug</h4>
 <table *ngIf="currentDrag$ | async as currentDrag" class="table">
+  {{ currentDrag.dropLocation | json }}
+
   <tr *ngFor="let alternative of currentDrag.smartDrops">
     <td>{{ alternative.operation }}</td>
     <td>{{ alternative.algorithm }}</td>

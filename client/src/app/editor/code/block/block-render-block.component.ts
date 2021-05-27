@@ -1,4 +1,11 @@
 import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from "@angular/animations";
+import {
   Component,
   Input,
   ChangeDetectorRef,
@@ -8,19 +15,22 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 
-import { combineLatest, Observable } from "rxjs";
+import { combineLatest, concat, Observable, of } from "rxjs";
 import {
   map,
   withLatestFrom,
   distinctUntilChanged,
   tap,
   filter,
+  startWith,
+  shareReplay,
 } from "rxjs/operators";
 
 import {
   SyntaxNode,
   locationEquals,
   locationMatchingLength,
+  isChildLocation,
 } from "../../../shared/syntaxtree";
 import { VisualBlockDescriptions } from "../../../shared/block";
 import { arrayEqual } from "../../../shared/util";
@@ -37,7 +47,7 @@ import { CurrentCodeResourceService } from "../../current-coderesource.service";
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 import { BlockRenderContainerComponent } from "./block-render-container.component";
 
-export type BackgroundState = "executed" | "replaced" | "neutral";
+export type BackgroundState = "executed" | "replaced" | "neutral" | "consumed";
 
 /**
  * Renders a single and well known visual element of a node.
@@ -195,7 +205,8 @@ export class BlockRenderBlockComponent {
   /**
    * Determines whether a certain codeblock is currently beeing executed.
    */
-  readonly isCurrentlyExecuted$ =
+  readonly isCurrentlyExecuted$ = concat(
+    of(false),
     this._currentCodeResource.currentExecutionLocation$.pipe(
       // Even if the node is properly initialized, the input property may be missing
       // because it is initialized later
@@ -203,7 +214,8 @@ export class BlockRenderBlockComponent {
       map((loc) => locationEquals(loc, this.node.location)),
       distinctUntilChanged(),
       tap((_) => this._changeDetector.markForCheck())
-    );
+    )
+  );
 
   /**
    * True, if this block is currently being replaced.
@@ -228,7 +240,7 @@ export class BlockRenderBlockComponent {
    * This is the case if the location that would be dropped in to is at
    * least not empty and if it would take the type.
    */
-  readonly showRelativeDropLocations: Observable<Boolean> = combineLatest([
+  readonly showRelativeDropLocations: Observable<boolean> = combineLatest([
     this._dragService.isDragInProgress,
     this._dragService.currentDrag,
     this._renderData.validator$,
@@ -246,20 +258,56 @@ export class BlockRenderBlockComponent {
   );
 
   /**
-   * All different background states.
+   * Reacts to the current drag event being something that would be "consumed"
+   * by this node.
    */
-  readonly backgroundState: Observable<BackgroundState> = combineLatest([
-    this.isBeingReplaced,
-    this.isCurrentlyExecuted$,
-  ]).pipe(
-    map(([isBeingReplaced, isCurrentlyExecuted]): BackgroundState => {
-      if (isBeingReplaced && !this._renderData.readOnly) {
-        return "replaced";
-      } else if (isCurrentlyExecuted) {
-        return "executed";
+  readonly isConsumingDrag$: Observable<boolean> = this._latestDragData.pipe(
+    map(([currentDrag, inProgress]) => {
+      if (inProgress && currentDrag.smartDrops.length > 0) {
+        const smartDrop = currentDrag.smartDrops[0];
+        const ownLocation = this.node.location;
+        currentDrag.dropLocation;
+
+        return (
+          smartDrop.operation === "insert" &&
+          // If we only checked for the child location, the consuming drag would walk
+          // up the whole tree instead of highlighting exactly this node
+          isChildLocation(currentDrag.dropLocation, ownLocation, 1) &&
+          isChildLocation(smartDrop.location, ownLocation, 1)
+        );
       } else {
-        return "neutral";
+        return false;
       }
     })
   );
+
+  /**
+   * All different background states.
+   */
+  readonly backgroundState$: Observable<BackgroundState> = concat(
+    of("neutral" as const),
+    combineLatest([
+      this.isBeingReplaced,
+      this.isCurrentlyExecuted$,
+      this.isConsumingDrag$,
+    ]).pipe(
+      map(
+        ([
+          isBeingReplaced,
+          isCurrentlyExecuted,
+          isConsuming,
+        ]): BackgroundState => {
+          if (isBeingReplaced && !this._renderData.readOnly) {
+            return "replaced" as const;
+          } else if (isCurrentlyExecuted) {
+            return "executed" as const;
+          } else if (isConsuming && !this._renderData.readOnly) {
+            return "consumed" as const;
+          } else {
+            return "neutral" as const;
+          }
+        }
+      )
+    )
+  ).pipe();
 }

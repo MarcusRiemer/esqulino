@@ -28,10 +28,23 @@ import { RenderedCodeResourceService } from "./rendered-coderesource.service";
   selector: `editor-block-render`,
   // TODO: Move animations to host component
   //       https://stackoverflow.com/questions/38975808/adding-an-angular-animation-to-a-host-element
+  // TODO: Wait for async host bindings
+  //       https://github.com/angular/angular/issues/19483
   animations: [
     trigger("background", [
-      state("neutral", style({ background: "white" })),
+      state(
+        "neutral",
+        style({
+          background: "white",
+        })
+      ),
       state("executed", style({ background: "lime" })),
+      state(
+        "consumed",
+        style({
+          boxShadow: "inset 0px 0px 1ch 0px green",
+        })
+      ),
       state("replaced", style({ background: "red" })),
       // Easings function examples at https://easings.net/
       transition(
@@ -45,6 +58,7 @@ import { RenderedCodeResourceService } from "./rendered-coderesource.service";
       transition("false <=> true", animate(200)),
     ]),
   ],
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockRenderComponent {

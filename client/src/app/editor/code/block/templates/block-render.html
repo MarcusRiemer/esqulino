@@ -78,21 +78,28 @@
   </ng-container>
   <!-- Display a draggable block -->
   <ng-container *ngSwitchCase="'block'">
-    <!-- Okay, these properties are a convoluted mess that should probably be cleared
-         up sometime in the future. Lets see what we have:
+    <div>
+      <!-- Okay, these properties are a convoluted mess that should probably be cleared
+           up sometime in the future. Lets see what we have:
 
-         * node and visual are basicly passed through
-         * TODO: The animations should be defined on the child  -->
-    <editor-block-render-block
-      #currentBlock
-      [@background]="currentBlock.backgroundState | async"
-      [blockBase]="visual"
-      [node]="node"
-      [visual]="visual"
-      [ngClass]="visual.cssClasses"
-      [class.being-replaced]="(currentBlock.isBeingReplaced | async)"
-      draggable="true"
-    ></editor-block-render-block>
+           * node and visual are basicly passed through
+           * TODO: The animations should be defined on the child
+
+           [@background]="currentBlock.backgroundState$ | async"
+           [@background]="'neutral'"
+      -->
+      <div>
+        <editor-block-render-block
+          #currentBlock
+          [@background]="currentBlock.backgroundState$ | async"
+          [blockBase]="visual"
+          [node]="node"
+          [visual]="visual"
+          [ngClass]="visual.cssClasses"
+          draggable="true"
+        ></editor-block-render-block>
+      </div>
+    </div>
   </ng-container>
   <!-- Render multiple visuals for the same node -->
   <editor-block-container
