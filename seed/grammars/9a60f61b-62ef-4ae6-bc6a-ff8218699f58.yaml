@@ -16,7 +16,7 @@ concise_attributes:
   value_before_type_cast: 2020-03-26 16:03:09.682287000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-05-27 18:14:34.460251000 Z
+  value_before_type_cast: 2021-05-27 19:23:54.674909000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: json
@@ -33,16 +33,18 @@ concise_attributes:
     "array", "languageName": "json"}, {"typeName": "object", "languageName": "json"}]},
     "number": {"type": "concrete", "attributes": [{"base": "integer", "name": "value",
     "type": "property"}]}, "object": {"type": "concrete", "attributes": [{"type":
-    "terminal", "symbol": "{"}, {"name": "values", "type": "sequence", "nodeTypes":
-    [{"occurs": "*", "nodeType": {"typeName": "key-value", "languageName": "json"}}]},
-    {"type": "terminal", "symbol": "}"}]}, "string": {"type": "concrete", "attributes":
-    [{"type": "terminal", "symbol": "\""}, {"base": "string", "name": "value", "type":
-    "property"}, {"type": "terminal", "symbol": "\""}]}, "boolean": {"type": "concrete",
-    "attributes": [{"base": "boolean", "name": "value", "type": "property"}]}, "key-value":
-    {"type": "concrete", "attributes": [{"name": "key", "type": "sequence", "nodeTypes":
-    [{"typeName": "string", "languageName": "json"}]}, {"type": "terminal", "symbol":
-    ":"}, {"name": "value", "type": "sequence", "nodeTypes": [{"typeName": "value",
-    "languageName": "json"}]}]}}}'
+    "container", "children": [{"type": "terminal", "symbol": "{"}, {"tags": ["indent"],
+    "type": "container", "children": [{"name": "values", "type": "sequence", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "key-value", "languageName": "json"}}]}],
+    "orientation": "vertical"}, {"type": "terminal", "symbol": "}"}], "orientation":
+    "vertical"}]}, "string": {"type": "concrete", "attributes": [{"type": "terminal",
+    "symbol": "\""}, {"base": "string", "name": "value", "type": "property"}, {"type":
+    "terminal", "symbol": "\""}]}, "boolean": {"type": "concrete", "attributes": [{"base":
+    "boolean", "name": "value", "type": "property"}]}, "key-value": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"name": "key", "type": "sequence",
+    "nodeTypes": [{"typeName": "string", "languageName": "json"}]}, {"type": "terminal",
+    "symbol": ":"}, {"name": "value", "type": "sequence", "nodeTypes": [{"typeName":
+    "value", "languageName": "json"}]}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"

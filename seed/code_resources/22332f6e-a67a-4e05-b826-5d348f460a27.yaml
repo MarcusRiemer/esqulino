@@ -60,31 +60,38 @@ concise_attributes:
     "MetaGrammar", "properties": {"typeName": "array", "languageName": "json"}}, {"name":
     "comment", "language": "MetaGrammar", "properties": {"text": "Keys are always
     strings, values are arbitrary"}}, {"name": "concreteNode", "children": {"attributes":
-    [{"name": "children", "children": {"references": [{"name": "nodeRefOne", "language":
-    "MetaGrammar", "properties": {"typeName": "string", "languageName": "json"}}]},
-    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "key"}},
-    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": ":"}},
-    {"name": "children", "children": {"references": [{"name": "nodeRefOne", "language":
-    "MetaGrammar", "properties": {"typeName": "value", "languageName": "json"}}]},
-    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "value"}}]},
-    "language": "MetaGrammar", "properties": {"typeName": "key-value", "languageName":
-    "json"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "terminal",
-    "language": "MetaGrammar", "properties": {"symbol": "{"}}, {"name": "children",
-    "children": {"references": [{"name": "nodeRefCardinality", "children": {"references":
-    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
-    "key-value", "languageName": "json"}}], "cardinality": [{"name": "knownCardinality",
-    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
-    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "sequence",
-    "name": "values"}}, {"name": "terminal", "language": "MetaGrammar", "properties":
-    {"symbol": "}"}}]}, "language": "MetaGrammar", "properties": {"typeName": "object",
-    "languageName": "json"}}]}, "language": "MetaGrammar", "properties": {"name":
-    "json"}}'
+    [{"name": "container", "children": {"attributes": [{"name": "children", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "string", "languageName": "json"}}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "key"}}, {"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": ":"}}, {"name": "children", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "value", "languageName": "json"}}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "value"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName": "key-value",
+    "languageName": "json"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "container", "children": {"attributes": [{"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": "{"}}, {"name": "container", "children":
+    {"tags": [{"name": "tag", "language": "MetaGrammar", "properties": {"name": "indent"}}],
+    "attributes": [{"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "key-value", "languageName": "json"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "values"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "vertical"}}]}, "language":
+    "MetaGrammar"}, {"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "}"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "properties": {"orientation": "vertical"}}]}, "language": "MetaGrammar"}]}, "language":
+    "MetaGrammar", "properties": {"typeName": "object", "languageName": "json"}}]},
+    "language": "MetaGrammar", "properties": {"name": "json"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2020-03-26 16:02:12.779984000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-05-14 13:58:40.092033000 Z
+  value_before_type_cast: 2021-05-27 19:23:54.346550000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -209,26 +216,32 @@ concise_attributes:
             "type": "concrete",
             "attributes": [
               {
-                "type": "sequence",
-                "name": "key",
-                "nodeTypes": [
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
                   {
-                    "languageName": "json",
-                    "typeName": "string"
-                  }
-                ]
-              },
-              {
-                "type": "terminal",
-                "symbol": ":"
-              },
-              {
-                "type": "sequence",
-                "name": "value",
-                "nodeTypes": [
+                    "type": "sequence",
+                    "name": "key",
+                    "nodeTypes": [
+                      {
+                        "languageName": "json",
+                        "typeName": "string"
+                      }
+                    ]
+                  },
                   {
-                    "languageName": "json",
-                    "typeName": "value"
+                    "type": "terminal",
+                    "symbol": ":"
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "value",
+                    "nodeTypes": [
+                      {
+                        "languageName": "json",
+                        "typeName": "value"
+                      }
+                    ]
                   }
                 ]
               }
@@ -238,25 +251,40 @@ concise_attributes:
             "type": "concrete",
             "attributes": [
               {
-                "type": "terminal",
-                "symbol": "{"
-              },
-              {
-                "type": "sequence",
-                "name": "values",
-                "nodeTypes": [
+                "type": "container",
+                "orientation": "vertical",
+                "children": [
                   {
-                    "nodeType": {
-                      "languageName": "json",
-                      "typeName": "key-value"
-                    },
-                    "occurs": "*"
+                    "type": "terminal",
+                    "symbol": "{"
+                  },
+                  {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "children": [
+                      {
+                        "type": "sequence",
+                        "name": "values",
+                        "nodeTypes": [
+                          {
+                            "nodeType": {
+                              "languageName": "json",
+                              "typeName": "key-value"
+                            },
+                            "occurs": "*"
+                          }
+                        ]
+                      }
+                    ],
+                    "tags": [
+                      "indent"
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": "}"
                   }
                 ]
-              },
-              {
-                "type": "terminal",
-                "symbol": "}"
               }
             ]
           }

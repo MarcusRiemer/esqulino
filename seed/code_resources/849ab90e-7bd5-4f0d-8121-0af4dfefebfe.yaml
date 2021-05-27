@@ -5,20 +5,25 @@ concise_attributes:
   value_before_type_cast: f1e20ed9-da40-46ba-819b-bb8cd6b8b03e
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 03 Boolean
+  value_before_type_cast: 07 Filled Object
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
-  value_before_type_cast: 56948186-0b02-4e40-bc2c-cb002ce5f93c
+  value_before_type_cast: 849ab90e-7bd5-4f0d-8121-0af4dfefebfe
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
-  value_before_type_cast: '{"name": "boolean", "language": "json", "properties": {"value":
-    "true"}}'
+  value_before_type_cast: '{"name": "object", "children": {"values": [{"name": "key-value",
+    "children": {"key": [{"name": "string", "language": "json", "properties": {"value":
+    "a"}}], "value": [{"name": "number", "language": "json", "properties": {"value":
+    "0"}}]}, "language": "json"}, {"name": "key-value", "children": {"key": [{"name":
+    "string", "language": "json", "properties": {"value": "b"}}], "value": [{"name":
+    "number", "language": "json", "properties": {"value": "1"}}]}, "language": "json"}]},
+    "language": "json"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
-  value_before_type_cast: 2020-09-28 19:56:27.127759000 Z
+  value_before_type_cast: 2021-05-27 19:20:39.903529000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-27 19:17:46.626796000 Z
+  value_before_type_cast: 2021-05-27 19:24:57.908785000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 593b29a3-d6b1-4f99-a519-cc6d615b0fb9
@@ -27,6 +32,10 @@ concise_attributes:
   value_before_type_cast: json
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: compiled
-  value_before_type_cast: 'true'
+  value_before_type_cast: |-
+    {
+      "a": 0,
+      "b": 1
+    }
 new_record: false
 active_record_yaml_version: 2

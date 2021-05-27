@@ -5,7 +5,7 @@ concise_attributes:
   value_before_type_cast: f1e20ed9-da40-46ba-819b-bb8cd6b8b03e
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: name
-  value_before_type_cast: 05 Empty Object
+  value_before_type_cast: 06 Empty Object
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: id
   value_before_type_cast: cdf11a82-5786-4feb-9f16-29301f039753
@@ -17,7 +17,7 @@ concise_attributes:
   value_before_type_cast: 2020-08-31 10:55:49.192890000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2020-09-28 19:59:10.822348000 Z
+  value_before_type_cast: 2021-05-27 19:20:28.084098000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 593b29a3-d6b1-4f99-a519-cc6d615b0fb9
