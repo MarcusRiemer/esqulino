@@ -1,3 +1,4 @@
+import { isChildLocation } from ".";
 import {
   SyntaxNode,
   NodeDescription,
@@ -190,7 +191,7 @@ describe("locationEquals(lhs, rhs)", () => {
   });
 });
 
-describe("locationStartsWith(loc, fullPath)", () => {
+describe("locationMatchingLength(loc, fullPath)", () => {
   it("undefined & null", () => {
     expect(locationMatchingLength(undefined, undefined)).toEqual(false);
     expect(locationMatchingLength(undefined, null)).toEqual(false);
@@ -364,6 +365,69 @@ describe("locationStartsWith(loc, fullPath)", () => {
       )
     ).toEqual(1);
   });
+});
+
+describe("isChildLocation(loc, fullPath)", () => {
+  const runIt = (
+    loc: NodeLocation,
+    fullPath: NodeLocation,
+    exp: boolean,
+    { maxTimesRemoved = Infinity, desc = "" } = {}
+  ) => {
+    const strLoc = JSON.stringify(loc);
+    const strFullPath = JSON.stringify(fullPath);
+    it(`${strLoc}, ${strFullPath} ${desc}`, () => {
+      expect(isChildLocation(loc, fullPath, maxTimesRemoved)).toEqual(exp);
+    });
+  };
+
+  runIt([["a", 1]], [], true);
+  runIt([["a", 1]], [["a", 1]], false);
+  runIt(
+    [["a", 1]],
+    [
+      ["a", 1],
+      ["a", 1],
+    ],
+    false
+  );
+  runIt(
+    [
+      ["a", 1],
+      ["a", 1],
+    ],
+    [["a", 1]],
+    true
+  );
+  runIt(
+    [
+      ["a", 1],
+      ["b", 1],
+    ],
+    [["a", 1]],
+    true,
+    { desc: "Only child portion not on path" }
+  );
+  runIt(
+    [
+      ["b", 1],
+      ["b", 1],
+    ],
+    [["a", 1]],
+    false,
+    { desc: "Not on path at all" }
+  );
+
+  runIt(
+    [
+      ["a", 1],
+      ["a", 1],
+      ["a", 1],
+    ],
+    [["a", 1]],
+    false,
+    { maxTimesRemoved: 1, desc: "Too deep" }
+  );
 });
 
 describe("AST: Basic Operations", () => {

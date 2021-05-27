@@ -96,6 +96,25 @@ export function locationMatchingLength(
   return count;
 }
 
+export function isChildLocation(
+  childPath: NodeLocation,
+  parentPath: NodeLocation,
+  maxTimesRemoved = Infinity
+): boolean {
+  const pathDifference = childPath.length - parentPath.length;
+  if (pathDifference <= 0 || pathDifference > maxTimesRemoved) {
+    return false;
+  } else {
+    // Important: We swap the order of fullPath and childPath here
+    // because the childPath ist expected to be longer.
+    const matchLength = locationMatchingLength(parentPath, childPath);
+    return (
+      (matchLength === false && parentPath.length === 0) ||
+      matchLength === parentPath.length
+    );
+  }
+}
+
 /**
  *
  */
