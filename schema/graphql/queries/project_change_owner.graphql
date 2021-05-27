@@ -1,0 +1,15 @@
+mutation ProjectChangeOwner($projectId: ID!, $userId: ID!) {
+  changeOwner(input: { projectId: $projectId, userId: $userId }) {
+    project {
+      id
+      projectMembers {
+        createdAt
+        id
+        user {
+          id
+          displayName
+        }
+      }
+    }
+  }
+}

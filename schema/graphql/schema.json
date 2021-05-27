@@ -1002,14 +1002,14 @@
               "deprecationReason": null
             },
             {
-              "name": "projectMember",
+              "name": "project",
               "description": null,
               "args": [
 
               ],
               "type": {
                 "kind": "OBJECT",
-                "name": "ProjectMember",
+                "name": "Project",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -8066,14 +8066,14 @@
               "deprecationReason": null
             },
             {
-              "name": "successful",
+              "name": "project",
               "description": null,
               "args": [
 
               ],
               "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
+                "kind": "OBJECT",
+                "name": "Project",
                 "ofType": null
               },
               "isDeprecated": false,
