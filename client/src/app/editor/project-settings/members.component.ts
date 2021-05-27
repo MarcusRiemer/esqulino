@@ -1,20 +1,27 @@
-import { Component } from "@angular/core";
+import { UniqueSelectionDispatcher } from "@angular/cdk/collections";
+import { Component, ViewChild } from "@angular/core";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
 import { filter, first, map, pluck, switchMap } from "rxjs/operators";
+import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
 
 import {
   FullProjectGQL,
-  FullProjectQuery,
   ProjectAddMemberGQL,
-  ProjectAddMemberMutation,
+  ProjectChangeMemberRoleGQL,
+  ProjectChangeOwnerGQL,
+  ProjectRemoveMemberGQL,
 } from "../../../generated/graphql";
 
 import { ProjectService } from "../project.service";
 
 interface ProjectMember {
+  id: string;
   displayName: string;
   roleName: string;
   joinedAt: Date;
+  changedRole: boolean;
 }
 
 @Component({
@@ -25,7 +32,10 @@ export class MembersComponent {
   constructor(
     private readonly _projectService: ProjectService,
     private readonly _fullProjectQuery: FullProjectGQL,
-    private readonly _mutAddMember: ProjectAddMemberGQL
+    private readonly _mutAddMember: ProjectAddMemberGQL,
+    private readonly _mutRemoveMember: ProjectRemoveMemberGQL,
+    private readonly _mutChangeOwner: ProjectChangeOwnerGQL,
+    private readonly _mutChangeMemberRole: ProjectChangeMemberRoleGQL
   ) {}
 
   private readonly _fullProject$ = this._projectService.activeProjectId$.pipe(
@@ -34,36 +44,86 @@ export class MembersComponent {
     pluck("data", "project")
   );
 
+
+
   readonly owner$ = this._fullProject$.pipe(pluck("user"));
 
   readonly members$: Observable<ProjectMember[]> = this._fullProject$.pipe(
     pluck("projectMembers"),
     map((members) => {
       return members.map((singleMember) => ({
+        id: singleMember.user.id,
         displayName: singleMember.user.displayName,
         roleName: singleMember.membershipType,
-        joinedAt: new Date(singleMember.joinedAt),
+        joinedAt: singleMember.joinedAt ? new Date(singleMember.joinedAt) : null,
+        changedRole: singleMember.membershipType === "admin"
       }));
     })
   );
+
+  readonly displayedColumns: string[] = ['displayName', 'roleName', 'joinedAt', 'actions'];
+
+  addMemberId = "";
+  addMemberRole = "false";
+  changeOwnerId = "";
 
   async onAddMember() {
     const projectId = await this._projectService.activeProjectId$
       .pipe(first())
       .toPromise();
 
-    const userIds = ["00000000-0000-0000-0000-000000000001"];
-
     await this._mutAddMember
       .mutate({
         projectId,
-        isAdmin: true,
-        userIds,
+        isAdmin: this.addMemberRole == "true",
+        userIds:[this.addMemberId],
       })
       .pipe(first())
       .toPromise();
+  }
 
-    console.log("Added members: ", userIds);
+  async onRemoveMember(user) {
+    const projectId = await this._projectService.activeProjectId$
+      .pipe(first())
+      .toPromise();
+
+   await this._mutRemoveMember.mutate({
+    projectId,
+    userId: user.id
+   }).pipe(first())
+      .toPromise();
+  }
+
+  tranformDate(date) {
+    return date.toLocaleDateString('de-DE')
+  }
+
+  async onChangeMemberRole(user, role) {
+    const projectId = await this._projectService.activeProjectId$
+    .pipe(first())
+      .toPromise();
+
+      await this._mutChangeMemberRole
+      .mutate({
+        projectId,
+        isAdmin: role === "true",
+        userId: user.id,
+      })
+      .pipe(first())
+      .toPromise();
+      
+  }
+
+  async onChangeOwner() {
+    const projectId = await this._projectService.activeProjectId$
+      .pipe(first())
+      .toPromise();
+
+   await this._mutChangeOwner.mutate({
+    projectId,
+    userId: this.changeOwnerId
+   }).pipe(first())
+      .toPromise();
   }
 }
 

@@ -2,13 +2,117 @@
   <h4 class="card-header">Projektmitglieder</h4>
   <div class="card-body">
     <span *ngIf="owner$ | async as owner">
-      Eigentümer ist {{ owner.displayName }}
+      Eigentümer ist
+      <b>{{ owner.displayName }}</b>
     </span>
 
-    <ul *ngIf="members$ | async as members">
-      <li *ngFor="let member of members">{{ member.displayName }}</li>
-    </ul>
+    <div>
+      <table mat-table [dataSource]="members$" matSort class="container-fluid">
+        <!-- Position Column -->
+        <ng-container matColumnDef="displayName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let element">{{element.displayName}}</td>
+        </ng-container>
 
-    <button (click)="onAddMember()">Add Guest as Member</button>
+        <!-- Name Column -->
+        <ng-container matColumnDef="roleName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Rolle</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.roleName}}
+
+            <select
+              class="custom-select w-50"
+              [(ngModel)]="element.changedRole"
+              (change)="this.onChangeMemberRole(element, $event.target.value)"
+            >
+              <option value="true">Admin</option>
+              <option value="false">Mitglied</option>
+            </select>
+          </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="joinedAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Eintrittsdatum
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.joinedAt; else notAccepted">
+              {{tranformDate(element.joinedAt)}}
+            </div>
+            <ng-template #notAccepted>Noch nicht Akzeptiert</ng-template>
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Aktion</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              type="button"
+              class="btn btn-danger"
+              (click)="onRemoveMember(element)"
+            >
+              Löschen
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <form class="form-group row">
+      <h4 class="col-sm-12">Wechsel Eigentümer</h4>
+      <div class="col-sm-6">
+        <input
+          name="new-owner-id"
+          type="text"
+          [(ngModel)]="changeOwnerId"
+          class="form-control"
+          placeholder="User-ID des neuen Eigentümers"
+        />
+      </div>
+      <button
+        name="change-owner"
+        type="submit"
+        (click)="onChangeOwner()"
+        class="btn btn-primary col-sm-2"
+      >
+        Wechsel Eigentümer
+      </button>
+    </form>
+
+    <form class="form-group row">
+      <h4 class="col-sm-12">Hinzufügen neuer Mitglieder</h4>
+      <div class="col-sm-4">
+        <input
+          [(ngModel)]="addMemberId"
+          type="text"
+          class="form-control"
+          name="add-member-id"
+          placeholder="User-ID des neuen Mitgliedes"
+        />
+      </div>
+      <div class="col-sm-2">
+        <select
+          [(ngModel)]="addMemberRole"
+          name="add-member-role"
+          class="custom-select"
+        >
+          <-- Möchte anhand von Rechten entscheiden, was gewählt werden darf-->
+          <option value="true">Admin</option>
+          <option value="false">Mitglied</option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary col-sm-2"
+        (click)="onAddMember()"
+      >
+        Benutzer Hinzufügen
+      </button>
+    </form>
   </div>
 </div>
