@@ -13,13 +13,13 @@ concise_attributes:
 
     <div class=\"row\">
     <div class=\"col-lg-6\">
-    <a href=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-sql.png\">
-    <img alt=\"Blockly Prototyp für SQL\" class=\"img-fluid\" src=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-sql.png\">
+    <a href=\"https://files.blattwerkzeug.de/screenshots/20210128-blockly-sql.png\">
+    <img alt=\"Blockly Prototyp für SQL\" class=\"img-fluid\" src=\"https://files.blattwerkzeug.de/screenshots/20210128-blockly-sql.png\">
     </a>
     </div>
     <div class=\"col-lg-6\">
-    <a href=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-trucklino.png\">
-    <img alt=\"Blockly Prototyp für Trucklino\" class=\"img-fluid\" src=\"http://files.blattwerkzeug.de/screenshots/20210128-blockly-trucklino.png\">
+    <a href=\"https://files.blattwerkzeug.de/screenshots/20210128-blockly-trucklino.png\">
+    <img alt=\"Blockly Prototyp für Trucklino\" class=\"img-fluid\" src=\"https://files.blattwerkzeug.de/screenshots/20210128-blockly-trucklino.png\">
     </a>
     </div>
     </div>
@@ -49,7 +49,7 @@ concise_attributes:
   value_before_type_cast: 2021-01-28 09:25:31.707674000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-01-28 09:33:10.162178000 Z
+  value_before_type_cast: 2021-05-27 08:16:48.705332000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
   value_before_type_cast: 00000000-0000-0000-0000-000000000001
