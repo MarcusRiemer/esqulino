@@ -12,6 +12,10 @@ query AdminListUsers(
       id
       displayName
       email
+      roles {
+        id
+        name
+      }
     }
   }
 }

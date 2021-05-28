@@ -5,10 +5,31 @@
       {{ typed(user).displayName }}
     </td>
   </ng-container>
+  <ng-container matColumnDef="roles">
+    <th mat-header-cell *matHeaderCellDef>Roles</th>
+    <td mat-cell *matCellDef="let user">
+      <ul class="list-inline">
+        <li *ngFor="let role of user.roles" class="list-inline-item">
+          <span class="badge badge-secondary">{{ role.name }}</span>
+        </li>
+      </ul>
+    </td>
+  </ng-container>
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
     <td mat-cell *matCellDef="let user">
-      {{ typed(user).id }}
+      <code>{{ typed(user).id }}</code>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Aktionen</th>
+    <td mat-cell *matCellDef="let user">
+      <button
+        (click)="onPromoteToAdmin(typed(user).id)"
+        class="btn btn-warning btn-sm"
+      >
+        Zu Admin
+      </button>
     </td>
   </ng-container>
 </app-table-paginator-graphql>

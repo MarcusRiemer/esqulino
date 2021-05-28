@@ -1,6 +1,6 @@
 class Types::UserType < Types::Base::BaseObject
   field :id, ID, null: false
-  field :roles, Types::RoleType, null: false
+  field :roles, [Types::RoleType], null: false
   field :display_name, String, null: true
   field :email, String, null: true
   field :projects, [Types::ProjectType], null: true

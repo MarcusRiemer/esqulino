@@ -24,5 +24,7 @@ module Types
 
     field :create_code_resource, mutation: Mutations::CodeResource::Create
     field :update_code_resource, mutation: Mutations::CodeResource::Update
+
+    field :promote_user_admin, mutation: Mutations::User::PromoteAdmin
   end
 end

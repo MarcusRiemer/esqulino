@@ -1,16 +1,18 @@
 import { Component, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
+import { first } from "rxjs/operators";
 import {
   AdminListUsersGQL,
   AdminListUsersQuery,
   AdminListUsersQueryVariables,
+  PromoteUserAdminGQL,
 } from "../../../generated/graphql";
 import { GraphQLQueryComponent } from "../../shared/table/paginator-table-graphql.component";
 
 type DataKey = Exclude<keyof AdminListUsersQuery, "__typename">;
 type ListItem = AdminListUsersQuery[DataKey]["nodes"][0];
-type ColumnName = keyof ListItem;
+type ColumnName = keyof ListItem | "actions";
 
 @Component({
   selector: "app-overview-user",
@@ -34,7 +36,10 @@ export class OverviewUserComponent
   @ViewChild(MatSort, { static: true })
   sort: MatSort;
 
-  constructor(readonly usersGQL: AdminListUsersGQL) {}
+  constructor(
+    readonly usersGQL: AdminListUsersGQL,
+    private readonly makeAdmin: PromoteUserAdminGQL
+  ) {}
 
   readonly dataKey: DataKey = "users";
 
@@ -49,7 +54,7 @@ export class OverviewUserComponent
     return doc as ListItem;
   }
 
-  displayedColumns: ColumnName[] = ["displayName", "id"];
+  displayedColumns: ColumnName[] = ["displayName", "id", "roles", "actions"];
 
   get queryData() {
     return {
@@ -59,5 +64,13 @@ export class OverviewUserComponent
       pageSize: this.pageSize,
       sort: this.sort,
     };
+  }
+
+  async onPromoteToAdmin(userId: string) {
+    const result = await this.makeAdmin
+      .mutate({ userId })
+      .pipe(first())
+      .toPromise();
+    console.log(result);
   }
 }

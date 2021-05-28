@@ -1,0 +1,17 @@
+mutation PromoteUserAdmin($userId: ID!) {
+  promoteUserAdmin(input: {
+    userId: $userId
+  }) {
+    user {
+      id
+      roles {
+        id
+        name
+        resourceId
+        resourceType
+        updatedAt
+        createdAt
+      }
+    }
+  }
+}
