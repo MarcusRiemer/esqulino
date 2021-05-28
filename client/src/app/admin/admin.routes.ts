@@ -11,6 +11,7 @@ import { AdminNewsListComponent } from "./news/news.component";
 import { AdminNewsEditComponent } from "./edit-news.component";
 import { OverviewProjectComponent } from "./project/overview-project.component";
 import { GalleryGrammarComponent } from "./grammar/gallery-grammar.component";
+import { OverviewUserComponent } from "./user/overview-user.component";
 
 export const adminRoutes: Routes = [
   {
@@ -62,6 +63,10 @@ export const adminRoutes: Routes = [
       {
         path: "news/create",
         component: AdminNewsEditComponent,
+      },
+      {
+        path: "user",
+        component: OverviewUserComponent,
       },
     ],
   },

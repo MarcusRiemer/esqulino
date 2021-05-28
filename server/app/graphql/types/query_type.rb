@@ -70,6 +70,14 @@ module Types
       Resolvers::NewsResolver::new(context: @context, **input).scope
     end
 
+    # Endpoint for Users
+    field :users, Types::UserType.connection_type, null: false do
+      argument :input, Types::UserType::InputType, required: false
+    end
+    def users(input: {})
+      Resolvers::UsersResolver::new(context: @context, **input).scope
+    end
+
     # Endpoint for authorisation requests
     field :may_perform, Types::MayPerformType, null: false do
       argument :input, Types::MayPerformType::InputType, required: true

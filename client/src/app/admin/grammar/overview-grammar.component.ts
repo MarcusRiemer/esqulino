@@ -11,11 +11,7 @@ import { GraphQLQueryComponent } from "../../shared/table/paginator-table-graphq
 import { MatPaginator } from "@angular/material/paginator";
 
 type DataKey = Exclude<keyof AdminListGrammarsQuery, "__typename">;
-
-// TODO: Resolve this from the Query type above, requires unpacking
-//       a type argument to Observable
 type ListItem = AdminListGrammarsQuery[DataKey]["nodes"][0];
-
 type ColumnName = keyof ListItem | "actions" | "generatedFrom";
 
 /**

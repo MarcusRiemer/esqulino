@@ -49,6 +49,7 @@ import { CodeResourceGalleryComponent } from "./code-resource-gallery.component"
 
 import { AdminNewsListComponent } from "./news/news.component";
 import { AdminNewsEditComponent } from "./edit-news.component";
+import { OverviewUserComponent } from "./user/overview-user.component";
 
 const materialModules = [
   MatAutocompleteModule,
@@ -96,6 +97,7 @@ const materialModules = [
     GalleryGrammarComponent,
     MetaCodeResourceSelectComponent,
     ProgrammingLanguageSelectComponent,
+    OverviewUserComponent,
   ],
   providers: [JsonSchemaValidationService],
   exports: [],

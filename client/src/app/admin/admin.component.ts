@@ -7,6 +7,15 @@ export const adminItems: NavItem[] = [
   {
     type: "link",
     text: {
+      de: "Benutzer",
+      en: "Users",
+    },
+    route: ["/admin/user"],
+    icon: "users",
+  },
+  {
+    type: "link",
+    text: {
       de: "Projekte",
       en: "Projects",
     },
