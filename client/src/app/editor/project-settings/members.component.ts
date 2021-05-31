@@ -1,6 +1,5 @@
 import { UniqueSelectionDispatcher } from "@angular/cdk/collections";
 import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
-import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
@@ -16,6 +15,7 @@ import {
 } from "../../../generated/graphql";
 
 import { ProjectService } from "../project.service";
+import { User } from "@sentry/types";
 
 interface ProjectMember {
   id: string;
@@ -29,7 +29,7 @@ interface ProjectMember {
   templateUrl: "templates/members.html",
   selector: "project-members",
 })
-export class MembersComponent implements AfterViewInit {
+export class MembersComponent {
   /**
    * Used for dependency injection.
    */
@@ -65,7 +65,6 @@ export class MembersComponent implements AfterViewInit {
    * Field which be used to change the Owner
    */
   changeOwnerId = "";
-
 
   /**
    * These permissions are required to add a member
@@ -138,12 +137,15 @@ export class MembersComponent implements AfterViewInit {
       })
       .pipe(first())
       .toPromise();
+
+    //Clean the Field
+    this.addMemberId = "";
   }
 
   /**
    * Remove a Member from this project.
    */
-  async onRemoveMember(user) {
+  async onRemoveMember(user: User) {
     const projectId = await this._projectService.activeProjectId$
       .pipe(first())
       .toPromise();
@@ -164,7 +166,7 @@ export class MembersComponent implements AfterViewInit {
   /**
    * Change the Role of a existing Member from this project
    */
-  async onChangeMemberRole(user, role) {
+  async onChangeMemberRole(user: User, role: string) {
     const projectId = await this._projectService.activeProjectId$
       .pipe(first())
       .toPromise();
@@ -195,6 +197,9 @@ export class MembersComponent implements AfterViewInit {
       })
       .pipe(first())
       .toPromise();
+
+    //Clean the Field
+    this.changeOwnerId = "";
   }
 }
 
