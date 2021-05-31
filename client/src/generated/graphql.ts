@@ -2045,13 +2045,16 @@ export type ProjectChangeOwnerMutation = { __typename?: "Mutation" } & {
             projectMembers: Array<
               { __typename?: "ProjectMember" } & Pick<
                 ProjectMember,
-                "createdAt" | "id"
+                "createdAt" | "membershipType" | "joinedAt" | "id"
               > & {
                   user: { __typename?: "User" } & Pick<
                     User,
                     "id" | "displayName"
                   >;
                 }
+            >;
+            user?: Maybe<
+              { __typename?: "User" } & Pick<User, "id" | "displayName">
             >;
           }
       >;
@@ -3556,11 +3559,17 @@ export const ProjectChangeOwnerDocument = gql`
         id
         projectMembers {
           createdAt
+          membershipType
+          joinedAt
           id
           user {
             id
             displayName
           }
+        }
+        user {
+          id
+          displayName
         }
       }
     }
