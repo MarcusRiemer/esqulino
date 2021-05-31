@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2021-05-14 11:53:53.801934000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-20 13:41:25.504579000 Z
+  value_before_type_cast: 2021-05-25 11:15:41.619635000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
@@ -57,16 +57,17 @@ concise_attributes:
     "orientation": "horizontal"}]}, "ExprVariable": {"type": "concrete", "attributes":
     [{"base": "string", "name": "Name", "type": "property"}]}, "DeclareVariable":
     {"type": "concrete", "attributes": [{"type": "container", "children": [{"base":
-    "string", "name": "Type", "tags": ["space-after", "keyword"], "type": "property"},
-    {"name": "Name", "type": "sequence", "nodeTypes": [{"typeName": "ExprVariable",
-    "languageName": "js"}]}, {"tags": ["space-around"], "type": "terminal", "symbol":
-    "="}, {"name": "Value", "type": "sequence", "nodeTypes": [{"typeName": "Expression",
-    "languageName": "js"}]}], "orientation": "horizontal"}]}, "BinaryExpression":
-    {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
-    "lhs", "type": "sequence", "nodeTypes": [{"typeName": "Expression", "languageName":
-    "js"}]}, {"base": "string", "name": "op", "tags": ["space-around"], "type": "property"},
-    {"name": "rhs", "type": "sequence", "nodeTypes": [{"typeName": "Expression", "languageName":
-    "js"}]}], "orientation": "horizontal"}]}}}'
+    "string", "name": "Type", "tags": ["space-after", "keyword"], "type": "property",
+    "restrictions": [{"type": "enum", "value": ["const", "let"]}]}, {"name": "Name",
+    "type": "sequence", "nodeTypes": [{"typeName": "ExprVariable", "languageName":
+    "js"}]}, {"tags": ["space-around"], "type": "terminal", "symbol": "="}, {"name":
+    "Value", "type": "sequence", "nodeTypes": [{"typeName": "Expression", "languageName":
+    "js"}]}], "orientation": "horizontal"}]}, "BinaryExpression": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"name": "lhs", "type": "sequence",
+    "nodeTypes": [{"typeName": "Expression", "languageName": "js"}]}, {"base": "string",
+    "name": "op", "tags": ["space-around"], "type": "property"}, {"name": "rhs", "type":
+    "sequence", "nodeTypes": [{"typeName": "Expression", "languageName": "js"}]}],
+    "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"

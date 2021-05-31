@@ -48,39 +48,42 @@ concise_attributes:
     "MetaGrammar", "properties": {"base": "integer", "name": "Value"}}]}, "language":
     "MetaGrammar", "properties": {"typeName": "Constant", "languageName": "nerdamer"}},
     {"name": "concreteNode", "children": {"attributes": [{"name": "property", "children":
-    {"tags": [{"name": "tag", "language": "MetaGrammar", "properties": {"name": "keyword"}}]},
-    "language": "MetaGrammar", "properties": {"base": "string", "name": "Name"}}]},
-    "language": "MetaGrammar", "properties": {"typeName": "Variable", "languageName":
-    "nerdamer"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "container",
-    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
-    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "Expression",
-    "languageName": "nerdamer"}}]}, "language": "MetaGrammar", "properties": {"base":
-    "sequence", "name": "Left"}}, {"name": "property", "language": "MetaGrammar",
+    {"tags": [{"name": "tag", "language": "MetaGrammar", "properties": {"name": "keyword"}}],
+    "restrictions": [{"name": "restrictionEnum", "children": {"values": [{"name":
+    "restrictionEnumValue", "language": "MetaGrammar", "properties": {"value": "X"}},
+    {"name": "restrictionEnumValue", "language": "MetaGrammar", "properties": {"value":
+    "Y"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "Name"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "Variable", "languageName": "nerdamer"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "container", "children": {"attributes": [{"name":
+    "children", "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "Expression", "languageName": "nerdamer"}}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "Left"}}, {"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "Operation"}},
+    {"name": "children", "children": {"references": [{"name": "nodeRefOne", "language":
+    "MetaGrammar", "properties": {"typeName": "Expression", "languageName": "nerdamer"}}]},
+    "language": "MetaGrammar", "properties": {"base": "sequence", "name": "Right"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "BinaryOperation", "languageName": "nerdamer"}}, {"name":
+    "concreteNode", "children": {"attributes": [{"name": "container", "children":
+    {"attributes": [{"name": "terminal", "children": {"tags": [{"name": "tag", "language":
+    "MetaGrammar", "properties": {"name": "space-after"}}]}, "language": "MetaGrammar",
+    "properties": {"symbol": "|"}}, {"name": "property", "language": "MetaGrammar",
     "properties": {"base": "string", "name": "Operation"}}, {"name": "children", "children":
     {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
     {"typeName": "Expression", "languageName": "nerdamer"}}]}, "language": "MetaGrammar",
-    "properties": {"base": "sequence", "name": "Right"}}], "orientation": [{"name":
+    "properties": {"base": "sequence", "name": "Expression"}}], "orientation": [{"name":
     "orientation", "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]},
     "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName":
-    "BinaryOperation", "languageName": "nerdamer"}}, {"name": "concreteNode", "children":
-    {"attributes": [{"name": "container", "children": {"attributes": [{"name": "terminal",
-    "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
-    {"name": "space-after"}}]}, "language": "MetaGrammar", "properties": {"symbol":
-    "|"}}, {"name": "property", "language": "MetaGrammar", "properties": {"base":
-    "string", "name": "Operation"}}, {"name": "children", "children": {"references":
-    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
-    "Expression", "languageName": "nerdamer"}}]}, "language": "MetaGrammar", "properties":
-    {"base": "sequence", "name": "Expression"}}], "orientation": [{"name": "orientation",
-    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
-    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName": "Transform",
-    "languageName": "nerdamer"}}]}, "language": "MetaGrammar", "properties": {"name":
-    "nerdamer"}}'
+    "Transform", "languageName": "nerdamer"}}]}, "language": "MetaGrammar", "properties":
+    {"name": "nerdamer"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2021-05-21 11:55:11.130131000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-24 10:25:53.748713000 Z
+  value_before_type_cast: 2021-05-25 11:58:52.391159000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -196,6 +199,15 @@ concise_attributes:
                 "type": "property",
                 "base": "string",
                 "name": "Name",
+                "restrictions": [
+                  {
+                    "type": "enum",
+                    "value": [
+                      "X",
+                      "Y"
+                    ]
+                  }
+                ],
                 "tags": [
                   "keyword"
                 ]

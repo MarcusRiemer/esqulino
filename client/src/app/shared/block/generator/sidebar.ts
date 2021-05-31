@@ -6,6 +6,7 @@ import {
   NamedLanguages,
   VisualisedLanguages,
   EnumRestrictionDescription,
+  NodeVisualContainerDescription,
 } from "../../syntaxtree/";
 import { FullNodeConcreteTypeDescription } from "../../syntaxtree/grammar-type-util.description";
 import { fullNodeDescription } from "../../syntaxtree/grammar-type-util";
@@ -47,8 +48,8 @@ export function generateDefaultValue(
       return "0";
     case "string":
       const enumRestriction = propertyType.restrictions?.find(
-        (restr) => restr.type === "enum"
-      ) as EnumRestrictionDescription;
+        (restr): restr is EnumRestrictionDescription => restr.type === "enum"
+      );
       if (enumRestriction) {
         return enumRestriction.value[0] ?? "";
       } else {
@@ -70,13 +71,18 @@ export function generateDefaultNode(
     language: nodeType.languageName,
   };
 
-  // Are there any attributes that require mapping?
-  if (nodeType.attributes) {
+  const impl = (attributes: NodeAttributeDescription[]) => {
+    // Are there any containers? These must be walked recursively
+    const containers = attributes.filter(
+      (a): a is NodeVisualContainerDescription => a.type === "container"
+    );
+    containers.forEach((c) => impl(c.children));
+
     // Are there any child categories that are required? For the moment
     // we simply assume that a mentioned group is also required
-    const requiredChildrenCategories = nodeType.attributes.filter((a) =>
-      CHILD_GROUP_TYPES.has(a.type)
-    ) as NodeChildrenGroupDescription[];
+    const requiredChildrenCategories = attributes.filter(
+      (a): a is NodeChildrenGroupDescription => CHILD_GROUP_TYPES.has(a.type)
+    );
 
     if (requiredChildrenCategories.length > 0) {
       toReturn.children = {};
@@ -86,9 +92,9 @@ export function generateDefaultNode(
     }
 
     // Assign default values for properties
-    const properties = nodeType.attributes.filter(
-      (a) => a.type === "property"
-    ) as NodePropertyTypeDescription[];
+    const properties = attributes.filter(
+      (a): a is NodePropertyTypeDescription => a.type === "property"
+    );
 
     if (properties.length > 0) {
       toReturn.properties = {};
@@ -96,7 +102,8 @@ export function generateDefaultNode(
         toReturn.properties[p.name] = generateDefaultValue(p);
       });
     }
-  }
+  };
+  impl(nodeType?.attributes ?? []);
 
   return toReturn;
 }

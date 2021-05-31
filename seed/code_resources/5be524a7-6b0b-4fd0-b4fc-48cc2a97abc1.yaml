@@ -1,0 +1,112 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 838018f7-8233-4503-9a57-4f7a9f5dd37d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Grammar: TODO'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 5be524a7-6b0b-4fd0-b4fc-48cc2a97abc1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Document", "languageName":
+    "todo"}}], "nodes": [{"name": "concreteNode", "children": {"attributes": [{"name":
+    "container", "children": {"attributes": [{"name": "children", "children": {"references":
+    [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "Item", "languageName":
+    "todo"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
+    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "Items"}}], "orientation":
+    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
+    "vertical"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "Document", "languageName": "todo"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "container", "children": {"tags": [], "attributes": [{"name":
+    "property", "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "space-around"}}]}, "language": "MetaGrammar", "properties": {"base":
+    "boolean", "name": "Done"}}, {"name": "property", "children": {"tags": [], "restrictions":
+    []}, "language": "MetaGrammar", "properties": {"base": "string", "name": "Text"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "Item", "languageName": "todo"}}]}, "language": "MetaGrammar",
+    "properties": {"name": "todo"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-25 07:31:55.220959000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-25 11:07:48.940114000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "todo": {
+          "Document": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "vertical",
+                "children": [
+                  {
+                    "type": "sequence",
+                    "name": "Items",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "todo",
+                          "typeName": "Item"
+                        },
+                        "occurs": "*"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "Item": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "property",
+                    "base": "boolean",
+                    "name": "Done",
+                    "tags": [
+                      "space-around"
+                    ]
+                  },
+                  {
+                    "type": "property",
+                    "base": "string",
+                    "name": "Text"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "visualisations": {},
+      "foreignVisualisations": {},
+      "root": {
+        "languageName": "todo",
+        "typeName": "Document"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

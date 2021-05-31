@@ -1,0 +1,45 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: TODO
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 04cf0409-4b24-426c-a411-a5be9c54ec91
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-25 07:31:55.316908000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-25 11:07:49.214231000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 5be524a7-6b0b-4fd0-b4fc-48cc2a97abc1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"todo": {"Item": {"type": "concrete", "attributes": [{"type":
+    "container", "children": [{"base": "boolean", "name": "Done", "tags": ["space-around"],
+    "type": "property"}, {"base": "string", "name": "Text", "type": "property"}],
+    "orientation": "horizontal"}]}, "Document": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "Items", "type": "sequence", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "Item", "languageName": "todo"}}]}],
+    "orientation": "vertical"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "Document", "languageName": "todo"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
+new_record: false
+active_record_yaml_version: 2

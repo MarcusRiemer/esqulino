@@ -8,9 +8,9 @@ import {
 } from "@angular/core";
 import { graphviz } from "d3-graphviz";
 import { wasmFolder } from "@hpcc-js/wasm";
+import { Subscription } from "rxjs";
 import { filter, switchMap } from "rxjs/operators";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
-import { Subscription } from "rxjs";
 
 @Component({
   templateUrl: "./exec-finite-state-machine.component.html",
@@ -39,6 +39,7 @@ export class ExecFiniteStateMachineComponent
   ngOnInit(): void {
     if (!ExecFiniteStateMachineComponent._wasmFolderSet) {
       wasmFolder("/hpcc-js/");
+      ExecFiniteStateMachineComponent._wasmFolderSet = true;
     }
   }
 

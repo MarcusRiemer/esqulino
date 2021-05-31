@@ -1,0 +1,57 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: cfd9cc95-39bb-48b6-a2db-c00486e3743a
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: TODO
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 3962ad91-72c8-4718-b3f4-5dbec5b84125
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-05-25 07:31:55.585865000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-05-25 10:40:19.294194000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: 04cf0409-4b24-426c-a411-a5be9c54ec91
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: sidebars
+  value_before_type_cast: "[]"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_blocks
+  value_before_type_cast: '[{"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType":
+    "iterator", "childGroupName": "Items", "emptyDropTarget": false}], "blockType":
+    "container", "orientation": "vertical"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "Document", "languageName": "todo"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"style": {"display": "inline-flex"},
+    "property": "Done", "blockType": "input", "cssClasses": ["space-around"]}, {"style":
+    {"display": "inline-flex"}, "property": "Text", "blockType": "input"}], "blockType":
+    "container", "orientation": "horizontal"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "Item", "languageName": "todo"}}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_components
+  value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "validator"},
+    {"componentType": "generated-code"}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: local_generator_instructions
+  value_before_type_cast: '{"type": "manual"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root_css_classes
+  value_before_type_cast: "{activate-block-outline,activate-keyword}"
+new_record: false
+active_record_yaml_version: 2

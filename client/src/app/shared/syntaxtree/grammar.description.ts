@@ -175,6 +175,10 @@ export type NodeStringTypeRestrictions =
   | EnumRestrictionDescription
   | RegularExpressionRestrictionDescription;
 
+export type NodePropertyRestriction =
+  | NodeIntegerTypeRestrictions
+  | NodeStringTypeRestrictions;
+
 /**
  * Restricts the minimum length of things.
  */
