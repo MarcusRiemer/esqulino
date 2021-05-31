@@ -4,11 +4,17 @@ mutation ProjectChangeOwner($projectId: ID!, $userId: ID!) {
       id
       projectMembers {
         createdAt
+        membershipType
+        joinedAt
         id
         user {
           id
           displayName
         }
+      }
+      user {
+        id
+        displayName
       }
     }
   }

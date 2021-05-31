@@ -1969,7 +1969,7 @@ export type ProjectAddMemberMutation = { __typename?: "Mutation" } & {
             projectMembers: Array<
               { __typename?: "ProjectMember" } & Pick<
                 ProjectMember,
-                "createdAt" | "id"
+                "createdAt" | "membershipType" | "joinedAt" | "id"
               > & {
                   user: { __typename?: "User" } & Pick<
                     User,
@@ -3458,6 +3458,8 @@ export const ProjectAddMemberDocument = gql`
         id
         projectMembers {
           createdAt
+          membershipType
+          joinedAt
           id
           user {
             id
