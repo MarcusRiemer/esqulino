@@ -92,9 +92,10 @@ export class MembersComponent {
   /**
    * These permissions are required to change a member role
    */
-  readonly changeMemberRolePermission$ = this._projectService.activeProject.pipe(
-    map((p) => this._performData.project.changeMemberRole(p.id))
-  );
+  readonly changeMemberRolePermission$ =
+    this._projectService.activeProject.pipe(
+      map((p) => this._performData.project.changeMemberRole(p.id))
+    );
 
   /**
    * These permissions are required to remove a member

@@ -17,10 +17,6 @@
           <td mat-cell *matCellDef="let element">
             <!-- ToDo: else ? -->
             <may-perform [payload]="changeMemberRolePermission$ | async">
-              {{element.roleName}}
-            </may-perform>
-
-            <may-perform [payload]="changeMemberRolePermission$ | async">
               <select
                 class="custom-select w-50"
                 [(ngModel)]="element.changedRole"
@@ -29,6 +25,7 @@
                 <option value="true">Admin</option>
                 <option value="false">Mitglied</option>
               </select>
+              <span denied>{{element.roleName}}</span>
             </may-perform>
           </td>
         </ng-container>
