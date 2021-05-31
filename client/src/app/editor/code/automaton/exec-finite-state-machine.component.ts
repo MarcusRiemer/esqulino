@@ -17,7 +17,8 @@ import { Subscription } from "rxjs";
   styleUrls: ["./exec-finite-state-machine.component.scss"],
 })
 export class ExecFiniteStateMachineComponent
-  implements AfterViewInit, OnDestroy, OnInit {
+  implements AfterViewInit, OnDestroy, OnInit
+{
   @ViewChild("graphvizHost")
   private _graphvizHost: ElementRef;
 

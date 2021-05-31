@@ -8,7 +8,8 @@ export type AdminProjectGQLResponse = { data: AdminListProjectsQuery };
 type AdminListProjectNode = AdminListProjectsQuery["projects"]["nodes"][0];
 
 export type FrontendProjectGQLResponse = { data: FrontpageListProjectsQuery };
-type FrontendListProjectNode = FrontpageListProjectsQuery["projects"]["nodes"][0];
+type FrontendListProjectNode =
+  FrontpageListProjectsQuery["projects"]["nodes"][0];
 
 const ADMIN_LIST_PROJECT: AdminListProjectNode = {
   __typename: "Project",

@@ -140,9 +140,8 @@ export class ParameterMap {
       const currentGrammar = {};
       toReturn[grammarName] = currentGrammar;
       Object.entries(types).forEach(([typeName, typeInstructions]) => {
-        currentGrammar[typeName] = this.resolveTypeInstructions(
-          typeInstructions
-        );
+        currentGrammar[typeName] =
+          this.resolveTypeInstructions(typeInstructions);
       });
     });
 

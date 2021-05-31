@@ -60,14 +60,12 @@ export class JsonSchemaValidationService {
     } else {
       console.log(validator.errors);
       console.log(this._ajv.errorsText(validator.errors));
-      return validator.errors.map(
-        (e): GeneratorError => {
-          return {
-            type: "InvalidInstructions",
-            error: e,
-          };
-        }
-      );
+      return validator.errors.map((e): GeneratorError => {
+        return {
+          type: "InvalidInstructions",
+          error: e,
+        };
+      });
     }
   }
 }

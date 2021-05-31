@@ -31,7 +31,8 @@ export class OverviewGrammarComponent
       AdminListGrammarsQueryVariables,
       DataKey,
       ColumnName
-    > {
+    >
+{
   // Angular Material UI to paginate
   @ViewChild(MatPaginator)
   _paginator: MatPaginator;

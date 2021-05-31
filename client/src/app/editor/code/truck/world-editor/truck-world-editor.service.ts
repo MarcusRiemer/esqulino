@@ -158,8 +158,8 @@ export class TruckWorldEditorService implements OnDestroy {
     this.stopDrawRoad();
 
     let prevPos: Position | undefined;
-    this._leftMouseDownPosUpdaterSubscription = this._mouse.currentPosition.subscribe(
-      (posAndDirection) => {
+    this._leftMouseDownPosUpdaterSubscription =
+      this._mouse.currentPosition.subscribe((posAndDirection) => {
         if (!posAndDirection) return;
 
         if (prevPos) {
@@ -168,8 +168,7 @@ export class TruckWorldEditorService implements OnDestroy {
           );
         }
         prevPos = posAndDirection.pos;
-      }
-    );
+      });
   }
 
   private stopDrawRoad() {
@@ -180,15 +179,14 @@ export class TruckWorldEditorService implements OnDestroy {
   private startDestroyRoad(): void {
     this.stopDestroyRoad();
 
-    this._rightMouseDownPosUpdaterSubscription = this._mouse.currentPosition.subscribe(
-      (posAndDirection) => {
+    this._rightMouseDownPosUpdaterSubscription =
+      this._mouse.currentPosition.subscribe((posAndDirection) => {
         if (!posAndDirection) return;
 
         this.mutateWorldAndCode(this._world, (s) =>
           s.resetTile(posAndDirection.pos)
         );
-      }
-    );
+      });
   }
 
   private stopDestroyRoad(): void {
@@ -239,7 +237,8 @@ export class TruckWorldEditorService implements OnDestroy {
     }
     const { pos, direction } = posAndDirection;
 
-    const trafficLightFeature = this._feature.getValue() as TruckFeature<TruckTileFeatureType.TrafficLight>;
+    const trafficLightFeature =
+      this._feature.getValue() as TruckFeature<TruckTileFeatureType.TrafficLight>;
     const option = trafficLightFeature.options;
     applier((s) =>
       s

@@ -205,8 +205,8 @@ export class SqlValidator extends SpecializedValidator {
       .getNodesOfType({ languageName: "sql", typeName: "functionCall" })
       .forEach((callNode) => {
         const funcName = callNode.properties["name"].toLocaleLowerCase();
-        const numParameters = callNode.getChildrenInCategory("arguments")
-          .length;
+        const numParameters =
+          callNode.getChildrenInCategory("arguments").length;
 
         const validNumParameters = FUNCTION_ARGUMENT_COUNT[funcName];
         if (

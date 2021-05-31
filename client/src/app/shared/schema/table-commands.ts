@@ -326,16 +326,14 @@ export class ChangeColumnNotNull extends TableCommand {
   }
 
   do(table: Table): void {
-    table.getColumnByIndex(
-      this._columnIndex
-    ).not_null = !table.getColumnByIndex(this._columnIndex).not_null;
+    table.getColumnByIndex(this._columnIndex).not_null =
+      !table.getColumnByIndex(this._columnIndex).not_null;
     this.markColumnChanged(table);
   }
 
   undo(table: Table): void {
-    table.getColumnByIndex(
-      this._columnIndex
-    ).not_null = !table.getColumnByIndex(this._columnIndex).not_null;
+    table.getColumnByIndex(this._columnIndex).not_null =
+      !table.getColumnByIndex(this._columnIndex).not_null;
     this.restoreLastStatus(table);
   }
 

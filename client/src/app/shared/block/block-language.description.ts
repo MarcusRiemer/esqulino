@@ -226,7 +226,8 @@ export type EditorComponentDescription =
 
 export type BlockLanguageSidebarsDescription = SidebarDescription[];
 
-export type BlockLanguageEditorComponentsDescription = EditorComponentDescription[];
+export type BlockLanguageEditorComponentsDescription =
+  EditorComponentDescription[];
 
 export type BlockLanguageEditorBlocksDescription = EditorBlockDescription[];
 
@@ -269,7 +270,8 @@ export interface BlockLanguageListItemDescription
   generated: boolean;
 }
 
-export type BlockLanguageListResponseDescription = JsonApiListResponse<BlockLanguageListItemDescription>;
+export type BlockLanguageListResponseDescription =
+  JsonApiListResponse<BlockLanguageListItemDescription>;
 
 export function isBlockLanguageDescription(
   obj: any
