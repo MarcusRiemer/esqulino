@@ -29,7 +29,7 @@ interface ProjectMember {
   templateUrl: "templates/members.html",
   selector: "project-members",
 })
-export class MembersComponent implements AfterViewInit {
+export class MembersComponent {
   /**
    * Used for dependency injection.
    */
@@ -66,7 +66,6 @@ export class MembersComponent implements AfterViewInit {
    */
   changeOwnerId = "";
 
-
   /**
    * These permissions are required to add a member
    */
@@ -93,9 +92,10 @@ export class MembersComponent implements AfterViewInit {
   /**
    * These permissions are required to change a member role
    */
-  readonly changeMemberRolePermission$ = this._projectService.activeProject.pipe(
-    map((p) => this._performData.project.changeMemberRole(p.id))
-  );
+  readonly changeMemberRolePermission$ =
+    this._projectService.activeProject.pipe(
+      map((p) => this._performData.project.changeMemberRole(p.id))
+    );
 
   /**
    * These permissions are required to remove a member
