@@ -1,10 +1,11 @@
 import { UniqueSelectionDispatcher } from "@angular/cdk/collections";
-import { Component, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
+import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
 import { filter, first, map, pluck, switchMap } from "rxjs/operators";
-import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
+import { PerformDataService } from "./../../../../src/app/shared/authorisation/perform-data.service";
 
 import {
   FullProjectGQL,
@@ -28,16 +29,56 @@ interface ProjectMember {
   templateUrl: "templates/members.html",
   selector: "project-members",
 })
-export class MembersComponent {
+export class MembersComponent implements AfterViewInit {
+  
+  /**
+   * Used for dependency injection.
+   */
   constructor(
     private readonly _projectService: ProjectService,
     private readonly _fullProjectQuery: FullProjectGQL,
     private readonly _mutAddMember: ProjectAddMemberGQL,
     private readonly _mutRemoveMember: ProjectRemoveMemberGQL,
     private readonly _mutChangeOwner: ProjectChangeOwnerGQL,
-    private readonly _mutChangeMemberRole: ProjectChangeMemberRoleGQL
+    private readonly _mutChangeMemberRole: ProjectChangeMemberRoleGQL,
+    private readonly _performData: PerformDataService,
   ) {}
 
+  /**
+   * Necessary for the material table 
+   */
+  readonly displayedColumns: string[] = ['displayName', 'roleName', 'joinedAt', 'actions'];
+
+  /**
+   * Field which be used to add a new user
+   */
+  addMemberId = "";
+  /**
+   * Field which be used to choose the role of the new user
+   */
+  addMemberRole = "false";
+  /**
+   * Field which be used to change the Owner
+   */
+  changeOwnerId = "";
+
+
+
+@Input() dataSource: MatTableDataSource<>;
+
+@ViewChild(MatSort, {static: true}) sort: MatSort;
+
+ngAfterViewInit() {
+  this.dataSource.subscribe(data => {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.sort = this.sort;
+  });
+}
+
+
+  /**
+   * These permissions are required to add a member
+   */
   private readonly _fullProject$ = this._projectService.activeProjectId$.pipe(
     switchMap((id) => this._fullProjectQuery.watch({ id }).valueChanges),
     filter((response) => !response.loading),
@@ -45,7 +86,40 @@ export class MembersComponent {
   );
 
 
+/**
+   * These permissions are required to add a member
+   */
+ readonly addMemberPermission$ =
+ this._projectService.activeProject.pipe(
+   map((p) => this._performData.project.addMember(p.id))
+ );
 
+ /**
+   * These permissions are required to change the Owner
+   */
+  readonly changeOwnerPermission$ =
+  this._projectService.activeProject.pipe(
+    map((p) => this._performData.project.changeOwner(p.id))
+  );
+
+  
+  /**
+   * These permissions are required to change a member role
+   */
+ readonly changeMemberRolePermission$ =
+ this._projectService.activeProject.pipe(
+   map((p) => this._performData.project.changeMemberRole(p.id))
+ );
+
+ /**
+   * These permissions are required to remove a member
+   */
+  readonly removeMemberPermission$ =
+  this._projectService.activeProject.pipe(
+    map((p) => this._performData.project.removeMember(p.id))
+  );
+ 
+ 
   readonly owner$ = this._fullProject$.pipe(pluck("user"));
 
   readonly members$: Observable<ProjectMember[]> = this._fullProject$.pipe(
@@ -61,12 +135,12 @@ export class MembersComponent {
     })
   );
 
-  readonly displayedColumns: string[] = ['displayName', 'roleName', 'joinedAt', 'actions'];
+  
 
-  addMemberId = "";
-  addMemberRole = "false";
-  changeOwnerId = "";
-
+    /**
+   * Add a new User to this Project. 
+   * Don´t work if the user is the owner. 
+   */
   async onAddMember() {
     const projectId = await this._projectService.activeProjectId$
       .pipe(first())
@@ -82,6 +156,9 @@ export class MembersComponent {
       .toPromise();
   }
 
+    /**
+   * Remove a Member from this project.
+   */
   async onRemoveMember(user) {
     const projectId = await this._projectService.activeProjectId$
       .pipe(first())
@@ -98,6 +175,9 @@ export class MembersComponent {
     return date.toLocaleDateString('de-DE')
   }
 
+  /**
+   * Change the Role of a existing Member from this project
+   */
   async onChangeMemberRole(user, role) {
     const projectId = await this._projectService.activeProjectId$
     .pipe(first())
@@ -114,6 +194,10 @@ export class MembersComponent {
       
   }
 
+    /**
+   * Change the Owner from this Project. 
+   * The old Owner will get the role admin. 
+   */
   async onChangeOwner() {
     const projectId = await this._projectService.activeProjectId$
       .pipe(first())
