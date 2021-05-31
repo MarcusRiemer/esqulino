@@ -30,7 +30,6 @@ interface ProjectMember {
   selector: "project-members",
 })
 export class MembersComponent implements AfterViewInit {
-  
   /**
    * Used for dependency injection.
    */
@@ -41,13 +40,18 @@ export class MembersComponent implements AfterViewInit {
     private readonly _mutRemoveMember: ProjectRemoveMemberGQL,
     private readonly _mutChangeOwner: ProjectChangeOwnerGQL,
     private readonly _mutChangeMemberRole: ProjectChangeMemberRoleGQL,
-    private readonly _performData: PerformDataService,
+    private readonly _performData: PerformDataService
   ) {}
 
   /**
-   * Necessary for the material table 
+   * Necessary for the material table
    */
-  readonly displayedColumns: string[] = ['displayName', 'roleName', 'joinedAt', 'actions'];
+  readonly displayedColumns: string[] = [
+    "displayName",
+    "roleName",
+    "joinedAt",
+    "actions",
+  ];
 
   /**
    * Field which be used to add a new user
@@ -63,19 +67,6 @@ export class MembersComponent implements AfterViewInit {
   changeOwnerId = "";
 
 
-
-@Input() dataSource: MatTableDataSource<>;
-
-@ViewChild(MatSort, {static: true}) sort: MatSort;
-
-ngAfterViewInit() {
-  this.dataSource.subscribe(data => {
-    this.dataSource = new MatTableDataSource(data);
-    this.dataSource.sort = this.sort;
-  });
-}
-
-
   /**
    * These permissions are required to add a member
    */
@@ -85,41 +76,34 @@ ngAfterViewInit() {
     pluck("data", "project")
   );
 
-
-/**
+  /**
    * These permissions are required to add a member
    */
- readonly addMemberPermission$ =
- this._projectService.activeProject.pipe(
-   map((p) => this._performData.project.addMember(p.id))
- );
+  readonly addMemberPermission$ = this._projectService.activeProject.pipe(
+    map((p) => this._performData.project.addMember(p.id))
+  );
 
- /**
+  /**
    * These permissions are required to change the Owner
    */
-  readonly changeOwnerPermission$ =
-  this._projectService.activeProject.pipe(
+  readonly changeOwnerPermission$ = this._projectService.activeProject.pipe(
     map((p) => this._performData.project.changeOwner(p.id))
   );
 
-  
   /**
    * These permissions are required to change a member role
    */
- readonly changeMemberRolePermission$ =
- this._projectService.activeProject.pipe(
-   map((p) => this._performData.project.changeMemberRole(p.id))
- );
+  readonly changeMemberRolePermission$ = this._projectService.activeProject.pipe(
+    map((p) => this._performData.project.changeMemberRole(p.id))
+  );
 
- /**
+  /**
    * These permissions are required to remove a member
    */
-  readonly removeMemberPermission$ =
-  this._projectService.activeProject.pipe(
+  readonly removeMemberPermission$ = this._projectService.activeProject.pipe(
     map((p) => this._performData.project.removeMember(p.id))
   );
- 
- 
+
   readonly owner$ = this._fullProject$.pipe(pluck("user"));
 
   readonly members$: Observable<ProjectMember[]> = this._fullProject$.pipe(
@@ -129,17 +113,17 @@ ngAfterViewInit() {
         id: singleMember.user.id,
         displayName: singleMember.user.displayName,
         roleName: singleMember.membershipType,
-        joinedAt: singleMember.joinedAt ? new Date(singleMember.joinedAt) : null,
-        changedRole: singleMember.membershipType === "admin"
+        joinedAt: singleMember.joinedAt
+          ? new Date(singleMember.joinedAt)
+          : null,
+        changedRole: singleMember.membershipType === "admin",
       }));
     })
   );
 
-  
-
-    /**
-   * Add a new User to this Project. 
-   * Don´t work if the user is the owner. 
+  /**
+   * Add a new User to this Project.
+   * Don´t work if the user is the owner.
    */
   async onAddMember() {
     const projectId = await this._projectService.activeProjectId$
@@ -150,13 +134,13 @@ ngAfterViewInit() {
       .mutate({
         projectId,
         isAdmin: this.addMemberRole == "true",
-        userIds:[this.addMemberId],
+        userIds: [this.addMemberId],
       })
       .pipe(first())
       .toPromise();
   }
 
-    /**
+  /**
    * Remove a Member from this project.
    */
   async onRemoveMember(user) {
@@ -164,15 +148,17 @@ ngAfterViewInit() {
       .pipe(first())
       .toPromise();
 
-   await this._mutRemoveMember.mutate({
-    projectId,
-    userId: user.id
-   }).pipe(first())
+    await this._mutRemoveMember
+      .mutate({
+        projectId,
+        userId: user.id,
+      })
+      .pipe(first())
       .toPromise();
   }
 
   tranformDate(date) {
-    return date.toLocaleDateString('de-DE')
+    return date.toLocaleDateString("de-DE");
   }
 
   /**
@@ -180,10 +166,10 @@ ngAfterViewInit() {
    */
   async onChangeMemberRole(user, role) {
     const projectId = await this._projectService.activeProjectId$
-    .pipe(first())
+      .pipe(first())
       .toPromise();
 
-      await this._mutChangeMemberRole
+    await this._mutChangeMemberRole
       .mutate({
         projectId,
         isAdmin: role === "true",
@@ -191,22 +177,23 @@ ngAfterViewInit() {
       })
       .pipe(first())
       .toPromise();
-      
   }
 
-    /**
-   * Change the Owner from this Project. 
-   * The old Owner will get the role admin. 
+  /**
+   * Change the Owner from this Project.
+   * The old Owner will get the role admin.
    */
   async onChangeOwner() {
     const projectId = await this._projectService.activeProjectId$
       .pipe(first())
       .toPromise();
 
-   await this._mutChangeOwner.mutate({
-    projectId,
-    userId: this.changeOwnerId
-   }).pipe(first())
+    await this._mutChangeOwner
+      .mutate({
+        projectId,
+        userId: this.changeOwnerId,
+      })
+      .pipe(first())
       .toPromise();
   }
 }

@@ -626,8 +626,7 @@ abstract class GenericTruckRenderer {
 
 class TruckPreviewStateRenderer
   extends GenericTruckRenderer
-  implements PreviewObjectRenderer<Truck>
-{
+  implements PreviewObjectRenderer<Truck> {
   public constructor() {
     super();
   }
@@ -645,8 +644,9 @@ class TruckPreviewStateRenderer
       truck.facingDirection
     );
     let truckAngle = GenericTruckRenderer.calculateTruckAngle(truck);
-    let turnSignalSpriteNumber =
-      GenericTruckRenderer.turnSignalSpriteNumber(truck);
+    let turnSignalSpriteNumber = GenericTruckRenderer.turnSignalSpriteNumber(
+      truck
+    );
 
     ctx.useTempCanvasAsGhost((tmpCtx) => {
       tmpCtx.translateAndRotate(
@@ -716,8 +716,7 @@ class TruckPreviewStateRenderer
 }
 
 class PreviewWorldStateRenderer
-  implements PreviewObjectRenderer<WorldPreviewInfo>
-{
+  implements PreviewObjectRenderer<WorldPreviewInfo> {
   readonly previewTruckRenderer: TruckPreviewStateRenderer;
   readonly previewTileRenderer: TilePreviewRenderer;
 
@@ -915,8 +914,7 @@ interface TileRenderInfo {
 
 class TilePreviewRenderer
   extends GenericTileRenderer
-  implements PreviewObjectRenderer<TileRenderInfo>
-{
+  implements PreviewObjectRenderer<TileRenderInfo> {
   public constructor() {
     super();
   }
@@ -1029,8 +1027,7 @@ class TilePreviewRenderer
  */
 class TileRenderer
   extends GenericTileRenderer
-  implements ProgressableObjectRenderer<Tile>
-{
+  implements ProgressableObjectRenderer<Tile> {
   public constructor() {
     super();
   }
@@ -1141,8 +1138,7 @@ class TileRenderer
  */
 class TruckRenderer
   extends GenericTruckRenderer
-  implements ProgressableObjectRenderer<Truck>
-{
+  implements ProgressableObjectRenderer<Truck> {
   public constructor() {
     super();
   }
@@ -1169,8 +1165,9 @@ class TruckRenderer
       truck.facingDirection
     );
     let truckAngle = GenericTruckRenderer.calculateTruckAngle(truck);
-    let turnSignalSpriteNumber =
-      GenericTruckRenderer.turnSignalSpriteNumber(truck);
+    let turnSignalSpriteNumber = GenericTruckRenderer.turnSignalSpriteNumber(
+      truck
+    );
 
     // Current Truck is fully visible by default
     let truckAlpha = 1;
@@ -1191,8 +1188,9 @@ class TruckRenderer
           prevTruck.position,
           prevTruck.facingDirection
         );
-        const prevTruckAngle =
-          GenericTruckRenderer.calculateTruckAngle(prevTruck);
+        const prevTruckAngle = GenericTruckRenderer.calculateTruckAngle(
+          prevTruck
+        );
 
         if (truck.facing !== prevTruck.facing) {
           const p0 = prevTruckPosition;
@@ -1219,8 +1217,9 @@ class TruckRenderer
 
         // If necessary, leave the turn signal on as long as truck is turning
         if (prevTruck.turning !== TurnDirection.Straight) {
-          turnSignalSpriteNumber =
-            TruckRenderer.turnSignalSpriteNumber(prevTruck);
+          turnSignalSpriteNumber = TruckRenderer.turnSignalSpriteNumber(
+            prevTruck
+          );
         }
       }
 

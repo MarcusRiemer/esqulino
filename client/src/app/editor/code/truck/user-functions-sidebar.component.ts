@@ -54,9 +54,11 @@ export class UserFunctionsSidebarComponent {
     flatMap((res) => res.syntaxTree$),
     map((tree): AvailableProcedure[] => {
       const nodes = tree.getNodesOfType(GRAMMAR_PROCEDURE_DECLARATION);
-      return nodes.map((n): AvailableProcedure => {
-        return { name: n.properties["name"] };
-      });
+      return nodes.map(
+        (n): AvailableProcedure => {
+          return { name: n.properties["name"] };
+        }
+      );
     })
   );
 

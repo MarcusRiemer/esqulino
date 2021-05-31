@@ -48,12 +48,11 @@ export class WorldControllerComponent implements OnInit, OnDestroy {
         this.world = world;
       }
     );
-    this._worldSelectorSubscription =
-      this.worldSelector.selectedWorldIdChange.subscribe(
-        (selectedWorldId: string) => {
-          this._truckWorld.setNewWorld(selectedWorldId);
-        }
-      );
+    this._worldSelectorSubscription = this.worldSelector.selectedWorldIdChange.subscribe(
+      (selectedWorldId: string) => {
+        this._truckWorld.setNewWorld(selectedWorldId);
+      }
+    );
 
     // If the program provides a world to use: Use it
     // TODO?: Maybe honor a pre-selected world?

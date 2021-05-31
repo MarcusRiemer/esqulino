@@ -150,8 +150,8 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
    * All possible trait values for autocompletion
    */
   get autocompleteTrait() {
-    const instructions =
-      this._editedBlockLanguageService.editedSubject.localGeneratorInstructions;
+    const instructions = this._editedBlockLanguageService.editedSubject
+      .localGeneratorInstructions;
     if (instructions && instructions.type === "manual") {
       return Object.keys(instructions.traits || {}).filter(
         (traitName) => this.scope.traits.indexOf(traitName) < 0
@@ -180,17 +180,16 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
     });
   }
 
-  readonly filteredAvailableAttributes =
-    this.formControlAttribute.valueChanges.pipe(
-      map((value) =>
-        this.allPossibleAttributes.filter(
-          (option) =>
-            option.languageName.includes(value) ||
-            option.typeName.includes(value) ||
-            (option.name && option.name.includes(value))
-        )
+  readonly filteredAvailableAttributes = this.formControlAttribute.valueChanges.pipe(
+    map((value) =>
+      this.allPossibleAttributes.filter(
+        (option) =>
+          option.languageName.includes(value) ||
+          option.typeName.includes(value) ||
+          (option.name && option.name.includes(value))
       )
-    );
+    )
+  );
 
   /**
    * The user has decided to add a new attribute that this scope will be applied to.

@@ -61,8 +61,8 @@ export class CreateLanguageComponent {
           languageTechnicalName: this.newLanguageTechnicalName.value,
           runtimeLanguageId: this.runtimeLanguage.value,
           createInitialCodeResource: true,
-          createStructureAndSyntaxGrammar:
-            this.createStructureAndSyntaxGrammar.value,
+          createStructureAndSyntaxGrammar: this.createStructureAndSyntaxGrammar
+            .value,
           createMetaBlockLanguage: this.createMetaBlockLanguage.value,
         })
         .pipe(first())

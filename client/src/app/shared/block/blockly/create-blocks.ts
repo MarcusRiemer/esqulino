@@ -81,137 +81,145 @@ export function createBlocksFromGrammar(g: GrammarDocument): BlocklyBlock[] {
 
   const toReturn: BlocklyBlock[] = [];
 
-  ac.qualifiedTypes.forEach((t): BlocklyBlock => {
-    if (!isVisualizableType(t)) {
-      return;
-    }
-
-    const args: BlockArgs[] = [];
-    let messageString = "";
-    let messagePlaceholderIndex = 1;
-
-    // Bad stateful function that adds something to the message buffer
-    const addPlaceholder = (before?: string) => {
-      if (before !== undefined) {
-        messageString += before;
+  ac.qualifiedTypes.forEach(
+    (t): BlocklyBlock => {
+      if (!isVisualizableType(t)) {
+        return;
       }
-      messageString += "%" + messagePlaceholderIndex;
-      messagePlaceholderIndex++;
-    };
 
-    const walkAttributes = (
-      attributes: NodeAttributeDescription[],
-      orientation: Orientation
-    ) => {
-      const multipleChildgroups =
-        attributes.filter((a) => Object.keys(a).includes("children")).length >
-        1;
+      const args: BlockArgs[] = [];
+      let messageString = "";
+      let messagePlaceholderIndex = 1;
 
-      attributes.forEach((attr) => {
-        switch (attr.type) {
-          case "container":
-            walkAttributes(attr.children, attr.orientation);
-            break;
-          case "allowed":
-          case "sequence":
-          case "parentheses":
-          case "choice":
-            args.push({
-              type:
-                orientation === "vertical" ? "input_statement" : "input_value",
-              name: attr.name,
-            });
-            // Possibly prepend the name of the childgroup
-            addPlaceholder(multipleChildgroups ? attr.name : undefined);
-            break;
-          case "property":
-            switch (attr.base) {
-              case "string":
-                const enumRestriction = getEnumRestriction(attr.restrictions);
-                if (enumRestriction) {
-                  args.push({
-                    type: "field_dropdown",
-                    name: attr.name,
-                    options: enumRestriction.value.map((v) => [v, v]),
-                  });
-                } else {
-                  args.push({
-                    name: attr.name,
-                    type: "field_input",
-                  });
-                }
-                addPlaceholder();
-                break;
-              case "integer":
-                args.push({
-                  name: attr.name,
-                  type: "field_number",
-                });
-                addPlaceholder();
-                break;
-              case "boolean":
-                args.push({
-                  name: attr.name,
-                  type: "field_checkbox",
-                });
-                addPlaceholder();
-                break;
-              case "codeResourceReference":
-              case "grammarReference":
-                args.push({
-                  name: attr.name,
-                  type: "field_label_serializable",
-                });
-                addPlaceholder();
-                break;
-              default:
-                messageString +=
-                  "<<" + (attr as any).name + ":" + (attr as any).base + ">> ";
-            }
-            break;
-          case "terminal":
-            if (anyTag(attr, "space-before", "space-around")) {
-              messageString += " ";
-            }
-            messageString += attr.symbol;
-            if (anyTag(attr, "space-after", "space-around")) {
-              messageString += " ";
-            }
+      // Bad stateful function that adds something to the message buffer
+      const addPlaceholder = (before?: string) => {
+        if (before !== undefined) {
+          messageString += before;
         }
-      });
-    };
-    walkAttributes(t.attributes, "horizontal");
+        messageString += "%" + messagePlaceholderIndex;
+        messagePlaceholderIndex++;
+      };
 
-    // Possibly add a possibility to append something at the right of this block
-    const continuation = blockContinuation(t, ac);
-    if (continuation) {
-      args.push(continuation);
-      addPlaceholder();
+      const walkAttributes = (
+        attributes: NodeAttributeDescription[],
+        orientation: Orientation
+      ) => {
+        const multipleChildgroups =
+          attributes.filter((a) => Object.keys(a).includes("children")).length >
+          1;
+
+        attributes.forEach((attr) => {
+          switch (attr.type) {
+            case "container":
+              walkAttributes(attr.children, attr.orientation);
+              break;
+            case "allowed":
+            case "sequence":
+            case "parentheses":
+            case "choice":
+              args.push({
+                type:
+                  orientation === "vertical"
+                    ? "input_statement"
+                    : "input_value",
+                name: attr.name,
+              });
+              // Possibly prepend the name of the childgroup
+              addPlaceholder(multipleChildgroups ? attr.name : undefined);
+              break;
+            case "property":
+              switch (attr.base) {
+                case "string":
+                  const enumRestriction = getEnumRestriction(attr.restrictions);
+                  if (enumRestriction) {
+                    args.push({
+                      type: "field_dropdown",
+                      name: attr.name,
+                      options: enumRestriction.value.map((v) => [v, v]),
+                    });
+                  } else {
+                    args.push({
+                      name: attr.name,
+                      type: "field_input",
+                    });
+                  }
+                  addPlaceholder();
+                  break;
+                case "integer":
+                  args.push({
+                    name: attr.name,
+                    type: "field_number",
+                  });
+                  addPlaceholder();
+                  break;
+                case "boolean":
+                  args.push({
+                    name: attr.name,
+                    type: "field_checkbox",
+                  });
+                  addPlaceholder();
+                  break;
+                case "codeResourceReference":
+                case "grammarReference":
+                  args.push({
+                    name: attr.name,
+                    type: "field_label_serializable",
+                  });
+                  addPlaceholder();
+                  break;
+                default:
+                  messageString +=
+                    "<<" +
+                    (attr as any).name +
+                    ":" +
+                    (attr as any).base +
+                    ">> ";
+              }
+              break;
+            case "terminal":
+              if (anyTag(attr, "space-before", "space-around")) {
+                messageString += " ";
+              }
+              messageString += attr.symbol;
+              if (anyTag(attr, "space-after", "space-around")) {
+                messageString += " ";
+              }
+          }
+        });
+      };
+      walkAttributes(t.attributes, "horizontal");
+
+      // Possibly add a possibility to append something at the right of this block
+      const continuation = blockContinuation(t, ac);
+      if (continuation) {
+        args.push(continuation);
+        addPlaceholder();
+      }
+
+      const block: BlocklyBlock = Object.assign(
+        {},
+        {
+          type: t.languageName + "." + t.typeName,
+          colour: getRandomInt(360),
+          message0: messageString || t.languageName + "." + t.typeName,
+          args0: args,
+          tooltip: t.languageName + "." + t.typeName,
+          coreType: t,
+        },
+        blockConnectors(t, ac)
+      );
+
+      const inlineInfo = t.tags?.find(
+        (t): t is "blockly-inline" | "blockly-external" =>
+          t === "blockly-inline" || t === "blockly-external"
+      );
+      if (inlineInfo) {
+        block.inputsInline = inlineInfo === "blockly-inline";
+      }
+
+      toReturn.push(block);
     }
-
-    const block: BlocklyBlock = Object.assign(
-      {},
-      {
-        type: t.languageName + "." + t.typeName,
-        colour: getRandomInt(360),
-        message0: messageString || t.languageName + "." + t.typeName,
-        args0: args,
-        tooltip: t.languageName + "." + t.typeName,
-        coreType: t,
-      },
-      blockConnectors(t, ac)
-    );
-
-    const inlineInfo = t.tags?.find(
-      (t): t is "blockly-inline" | "blockly-external" =>
-        t === "blockly-inline" || t === "blockly-external"
-    );
-    if (inlineInfo) {
-      block.inputsInline = inlineInfo === "blockly-inline";
-    }
-
-    toReturn.push(block);
-  });
+  );
 
   return toReturn;
 }

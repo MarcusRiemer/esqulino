@@ -92,8 +92,9 @@ export function readFromNode(node: NodeDescription): WorldDescription {
         "openings"
       ].map((o) => o.properties["direction"]);
       if (tile.children["freight"]) {
-        wd.tiles[posToIdx(tile.children["position"][0])].freight =
-          tile.children["freight"].map((o) => o.properties["colour"]);
+        wd.tiles[
+          posToIdx(tile.children["position"][0])
+        ].freight = tile.children["freight"].map((o) => o.properties["colour"]);
       }
       if (
         tile.children["unloading_bay"] &&
@@ -106,15 +107,16 @@ export function readFromNode(node: NodeDescription): WorldDescription {
         tile.children["trafficLights"] &&
         tile.children["trafficLights"].length > 0
       ) {
-        wd.tiles[posToIdx(tile.children["position"][0])].trafficLights =
-          tile.children["trafficLights"].map((t) => {
-            return {
-              opening: t.children["side"][0].properties["direction"],
-              redPhase: +t.properties["redPhase"],
-              greenPhase: +t.properties["greenPhase"],
-              startPhase: +t.properties["initialPhase"],
-            };
-          });
+        wd.tiles[
+          posToIdx(tile.children["position"][0])
+        ].trafficLights = tile.children["trafficLights"].map((t) => {
+          return {
+            opening: t.children["side"][0].properties["direction"],
+            redPhase: +t.properties["redPhase"],
+            greenPhase: +t.properties["greenPhase"],
+            startPhase: +t.properties["initialPhase"],
+          };
+        });
       }
     });
   }

@@ -51,8 +51,9 @@ export function compileMath(
   const rightAst = ast.rootNode.getChildInCategory("Right");
   const right = prettierCodeGeneratorFromGrammar(nerdamerTypes, rightAst);
 
-  const astTransformExpressions =
-    ast.rootNode.getChildrenInCategory("Transforms");
+  const astTransformExpressions = ast.rootNode.getChildrenInCategory(
+    "Transforms"
+  );
   const transformationSteps = astTransformExpressions.map((expr) => ({
     operation: expr.properties["Operation"] as any,
     expression: prettierCodeGeneratorFromGrammar(

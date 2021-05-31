@@ -78,10 +78,12 @@ export interface ComparableValidationError {
  * Actual errors may contain all sorts of circular references that are handy when
  */
 export function comparableErrors(result: ValidationResult) {
-  return result.errors.map((e): ComparableValidationError => {
-    return {
-      code: e.code,
-      location: e.node.location,
-    };
-  });
+  return result.errors.map(
+    (e): ComparableValidationError => {
+      return {
+        code: e.code,
+        location: e.node.location,
+      };
+    }
+  );
 }

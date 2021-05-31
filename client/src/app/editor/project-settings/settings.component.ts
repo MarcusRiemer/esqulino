@@ -75,8 +75,9 @@ export class SettingsComponent {
     let subRef = this._projectService.activeProject.subscribe((res) => {
       this.project = res;
       // Needs permission for saving
-      this._toolbarService.saveItem.performDesc =
-        this._performData.project.update(res.id);
+      this._toolbarService.saveItem.performDesc = this._performData.project.update(
+        res.id
+      );
     });
     this._subscriptionRefs.push(subRef);
 

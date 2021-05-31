@@ -28,7 +28,7 @@ export class ProjectPerformData extends ResourcesData {
       policyAction: "change_member_role",
     };
   }
-  
+
   public changeOwner(resourceId: string): MayPerformRequestDescription {
     return {
       resourceType: this.resourceType,
@@ -44,5 +44,4 @@ export class ProjectPerformData extends ResourcesData {
       policyAction: "remove_member",
     };
   }
-
-  }
+}

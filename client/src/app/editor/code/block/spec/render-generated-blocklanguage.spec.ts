@@ -83,10 +83,11 @@ describe(`Render Generated BlockLanguages`, () => {
     const grammarDesc = specCacheGrammar(
       specBuildGrammarDescription(grammarDoc)
     );
-    const listBlockLanguage: BlockLanguageListDescription =
-      specBuildBlockLanguageDescription({
+    const listBlockLanguage: BlockLanguageListDescription = specBuildBlockLanguageDescription(
+      {
         grammarId: grammarDesc.id,
-      });
+      }
+    );
     const genBlockLanguage = specBuildBlockLanguageDescription(
       Object.assign(
         {},

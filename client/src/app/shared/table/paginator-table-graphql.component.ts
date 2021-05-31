@@ -53,8 +53,7 @@ export interface GraphQLQueryComponent<
   templateUrl: "./templates/paginator-table-graphql.html",
 })
 export class PaginatorTableGraphqlComponent
-  implements AfterContentInit, AfterViewInit, OnDestroy
-{
+  implements AfterContentInit, AfterViewInit, OnDestroy {
   // The table instance that register the column definitions
   @ViewChild(MatTable, { static: true })
   private _table: MatTable<any>;

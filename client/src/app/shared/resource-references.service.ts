@@ -316,22 +316,24 @@ export class ResourceReferencesService {
    */
   async hasResources(...req: RequiredResource[]): Promise<boolean> {
     const results = await Promise.all(
-      req.map(async (r): Promise<boolean> => {
-        switch (r.type) {
-          case "blockLanguage":
-            return !!(await this.getBlockLanguage(r.id, {
-              fetchPolicy: "cache-only",
-              onMissing: "undefined",
-            }));
-          case "grammar":
-            return !!(await this.getGrammarDescription(r.id, {
-              fetchPolicy: "cache-only",
-              onMissing: "undefined",
-            }));
-          case "blockLanguageGrammar":
-            return this.hasBlockLanguageGrammar(r.id);
+      req.map(
+        async (r): Promise<boolean> => {
+          switch (r.type) {
+            case "blockLanguage":
+              return !!(await this.getBlockLanguage(r.id, {
+                fetchPolicy: "cache-only",
+                onMissing: "undefined",
+              }));
+            case "grammar":
+              return !!(await this.getGrammarDescription(r.id, {
+                fetchPolicy: "cache-only",
+                onMissing: "undefined",
+              }));
+            case "blockLanguageGrammar":
+              return this.hasBlockLanguageGrammar(r.id);
+          }
         }
-      })
+      )
     );
 
     return results.every((v) => v);

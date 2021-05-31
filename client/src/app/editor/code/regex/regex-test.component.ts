@@ -49,28 +49,28 @@ export class RegexTestComponent {
   /**
    * The testcases to execute
    */
-  readonly test$: Observable<RegexTestBenchDescription[]> =
-    this.regexResource$.pipe(
-      mergeMap(async (res) => {
-        const p = this._projectService.cachedProject;
-        const g = (await res.validatorPeek()).getGrammarValidator(
-          "regex"
-        ).description;
-        const testRes = referencedResourceIds(
-          res.syntaxTreePeek.rootNode,
-          g,
-          "codeResourceReference"
-        );
+  readonly test$: Observable<
+    RegexTestBenchDescription[]
+  > = this.regexResource$.pipe(
+    mergeMap(async (res) => {
+      const p = this._projectService.cachedProject;
+      const g = (await res.validatorPeek()).getGrammarValidator("regex")
+        .description;
+      const testRes = referencedResourceIds(
+        res.syntaxTreePeek.rootNode,
+        g,
+        "codeResourceReference"
+      );
 
-        const testDocs = testRes.map((tId) => {
-          const t = p.getCodeResourceById(tId);
+      const testDocs = testRes.map((tId) => {
+        const t = p.getCodeResourceById(tId);
 
-          return readFromNode(t.syntaxTreePeek.rootNode);
-        });
+        return readFromNode(t.syntaxTreePeek.rootNode);
+      });
 
-        return testDocs;
-      })
-    );
+      return testDocs;
+    })
+  );
 
   readonly executedTestCases$: Observable<ExecutedTestCase[]> = combineLatest([
     this.regexCompiled$,

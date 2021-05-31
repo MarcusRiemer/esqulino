@@ -58,8 +58,9 @@ export function buildAppearanceContext(
   types: NamedLanguages,
   assertValid = true
 ): AppearanceContext {
-  const qualifiedTypes: QualifiedNodeTypeDescription[] =
-    getQualifiedTypes(types);
+  const qualifiedTypes: QualifiedNodeTypeDescription[] = getQualifiedTypes(
+    types
+  );
 
   const toReturn: AppearanceContext = {
     qualifiedTypes,

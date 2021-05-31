@@ -219,18 +219,19 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
   /**
    * The visual components that should be displayed.
    */
-  readonly editorComponents: Observable<PlacedEditorComponent[]> =
-    this.editorComponentDescriptions.pipe(
-      map((components): PlacedEditorComponent[] =>
-        components.map((c) => {
-          // Resolved component and sane defaults for components that are displayed
-          return {
-            portal: this.createEditorComponentPortal(c),
-            columnClasses: c.columnClasses || ["col-12"],
-          };
-        })
-      )
-    );
+  readonly editorComponents: Observable<
+    PlacedEditorComponent[]
+  > = this.editorComponentDescriptions.pipe(
+    map((components): PlacedEditorComponent[] =>
+      components.map((c) => {
+        // Resolved component and sane defaults for components that are displayed
+        return {
+          portal: this.createEditorComponentPortal(c),
+          columnClasses: c.columnClasses || ["col-12"],
+        };
+      })
+    )
+  );
 
   /**
    * When something draggable enters the editor area itself there is no

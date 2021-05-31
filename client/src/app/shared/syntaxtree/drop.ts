@@ -93,15 +93,17 @@ export function _exactMatches(
         const rootErrors = valResult.getErrorsOn(rootNode);
         return rootErrors.every((err) => !ROOT_ERRORS.includes(err.code));
       })
-      .map((candidate): ReplaceDropLocation => {
-        // It fits? Then we allow the insertion
-        return {
-          operation: "replace",
-          algorithm: "allowExact",
-          location: [],
-          nodeDescription: candidate,
-        };
-      });
+      .map(
+        (candidate): ReplaceDropLocation => {
+          // It fits? Then we allow the insertion
+          return {
+            operation: "replace",
+            algorithm: "allowExact",
+            location: [],
+            nodeDescription: candidate,
+          };
+        }
+      );
   }
   // Sometimes there is nothing that could be proposed
   else {
@@ -152,14 +154,16 @@ export function _singleChildReplace(
                 targetParentCategory
               );
             })
-            .map((candidate): ReplaceDropLocation => {
-              return {
-                operation: "replace",
-                algorithm: "allowReplace",
-                location: loc,
-                nodeDescription: candidate,
-              };
-            })
+            .map(
+              (candidate): ReplaceDropLocation => {
+                return {
+                  operation: "replace",
+                  algorithm: "allowReplace",
+                  location: loc,
+                  nodeDescription: candidate,
+                };
+              }
+            )
         );
       }
     }

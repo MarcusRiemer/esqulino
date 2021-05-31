@@ -41,9 +41,8 @@ export function verifySuffixFiles<T>(
   transform: (obj: T) => string
 ) {
   const input = require(`./truck-program.spec/${fileName}.json`);
-  let expected =
-    require(`raw-loader!./truck-program.spec/${fileName}-${outSuffix}.txt`)
-      .default as string;
+  let expected = require(`raw-loader!./truck-program.spec/${fileName}-${outSuffix}.txt`)
+    .default as string;
 
   if (expected.endsWith("\n")) {
     expected = expected.substr(0, expected.length - 1);

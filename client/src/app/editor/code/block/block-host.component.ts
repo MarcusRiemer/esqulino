@@ -85,8 +85,8 @@ export class BlockHostComponent implements OnChanges {
     this.rootNodeTypeName = this._rootNodeTypeName;
   }
 
-  readonly renderDataAvailable$ =
-    this._renderedCodeResourceService.dataAvailable$;
+  readonly renderDataAvailable$ = this._renderedCodeResourceService
+    .dataAvailable$;
 
   /**
    * @return The visual editor block that should be used to represent the node.

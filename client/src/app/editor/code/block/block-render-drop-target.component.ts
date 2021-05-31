@@ -240,31 +240,32 @@ export class BlockRenderDropTargetComponent {
   /**
    * @return The current targeting state of this drop target
    */
-  readonly targetState$: Observable<DragTargetState | "hole" | "optional"> =
-    combineLatest(
-      this._dragService.currentDrag,
-      this._isHole$,
-      this._parentRequiresChildren$,
-      this._hasChildren$,
-      this._renderData.validator$,
-      this._renderData.syntaxTree$
-    ).pipe(
-      map(([drag, isHole, requiresChildren, hasChildren, val, tree]) => {
-        if (this._renderData.readOnly) {
-          return "unknown";
+  readonly targetState$: Observable<
+    DragTargetState | "hole" | "optional"
+  > = combineLatest(
+    this._dragService.currentDrag,
+    this._isHole$,
+    this._parentRequiresChildren$,
+    this._hasChildren$,
+    this._renderData.validator$,
+    this._renderData.syntaxTree$
+  ).pipe(
+    map(([drag, isHole, requiresChildren, hasChildren, val, tree]) => {
+      if (this._renderData.readOnly) {
+        return "unknown";
+      } else {
+        const toReturn = targetState(drag, this.dropLocation, val, tree);
+        if (toReturn === "unknown") {
+          if (isHole || requiresChildren) return "hole";
+          else if (!hasChildren && this.visual.emptyDropTarget)
+            return "optional";
+          else return "unknown";
         } else {
-          const toReturn = targetState(drag, this.dropLocation, val, tree);
-          if (toReturn === "unknown") {
-            if (isHole || requiresChildren) return "hole";
-            else if (!hasChildren && this.visual.emptyDropTarget)
-              return "optional";
-            else return "unknown";
-          } else {
-            return toReturn;
-          }
+          return toReturn;
         }
-      })
-    );
+      }
+    })
+  );
 
   /**
    * True if the mouse is currently over this drop target

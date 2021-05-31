@@ -194,8 +194,9 @@ export function mapContainer(
   attr: NodeVisualContainerDescription,
   instructions: TypeInstructions
 ): VisualBlockDescriptions.ConcreteBlock {
-  const mappedChildren: VisualBlockDescriptions.ConcreteBlock[][] =
-    attr.children.map((a) => mapAttribute(_typeDesc, a, instructions));
+  const mappedChildren: VisualBlockDescriptions.ConcreteBlock[][] = attr.children.map(
+    (a) => mapAttribute(_typeDesc, a, instructions)
+  );
 
   const toReturn: VisualBlockDescriptions.EditorContainer = {
     blockType: "container",

@@ -51,15 +51,15 @@ export function insertAtAnyParent(
       // Find out which categories could be theoretically used for
       // the given type
       const nodeValidator = validator.getType(currNode.qualifiedName);
-      const insertionCategories =
-        nodeValidator.allowedChildrenCategoryNames.filter((existingCategory) =>
+      const insertionCategories = nodeValidator.allowedChildrenCategoryNames.filter(
+        (existingCategory) =>
           nodeValidator.allowsChildType(fillType, existingCategory)
-        );
+      );
 
       // Find out which location indices could be used for the given type
       insertionCategories.forEach((categoryName) => {
-        const theoreticalIndices =
-          currNode.getChildrenInCategory(categoryName).length;
+        const theoreticalIndices = currNode.getChildrenInCategory(categoryName)
+          .length;
 
         // <= because insertions may also occur *after* an existing element
         for (let i = 0; i <= theoreticalIndices; ++i) {
@@ -135,14 +135,16 @@ export function appendAtParent(
         .filter((c) =>
           _cardinalityAllowsInsertion(validator, parentNode, c, cat, index)
         )
-        .map((c): InsertDropLocation => {
-          return {
-            operation: "insert",
-            algorithm: "allowAnyParent",
-            location: [...parentPath, [cat, index]],
-            nodeDescription: c,
-          };
-        })
+        .map(
+          (c): InsertDropLocation => {
+            return {
+              operation: "insert",
+              algorithm: "allowAnyParent",
+              location: [...parentPath, [cat, index]],
+              nodeDescription: c,
+            };
+          }
+        )
     );
   } else {
     return [];

@@ -10,12 +10,12 @@ export interface WorldPosWithDirection {
 export class TruckWorldMouseService {
   private readonly _leftMouseButtonDown = new BehaviorSubject<boolean>(false);
   private readonly _rightMouseDown = new BehaviorSubject<boolean>(false);
-  private readonly _currentPosition =
-    new BehaviorSubject<WorldPosWithDirection>(undefined);
+  private readonly _currentPosition = new BehaviorSubject<WorldPosWithDirection>(
+    undefined
+  );
 
   // Public Observables
-  public readonly leftMouseButtonDown =
-    this._leftMouseButtonDown.asObservable();
+  public readonly leftMouseButtonDown = this._leftMouseButtonDown.asObservable();
   public readonly rightMouseButtonDown = this._rightMouseDown.asObservable();
   public readonly currentPosition = this._currentPosition.pipe(
     distinctUntilChanged(

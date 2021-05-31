@@ -8,8 +8,7 @@ type BlockLanguageAdminResponse = {
   data: AdminListBlockLanguagesQuery;
   errors: ReadonlyArray<GraphQLError>;
 };
-type AdminListBlockLanguageNode =
-  AdminListBlockLanguagesQuery["blockLanguages"]["nodes"][0];
+type AdminListBlockLanguageNode = AdminListBlockLanguagesQuery["blockLanguages"]["nodes"][0];
 
 const ADMIN_LIST_BLOCKLANGUAGE: AdminListBlockLanguageNode = {
   __typename: "BlockLanguage",
@@ -61,7 +60,6 @@ export const specAdminBuildSingleBlockLanguageResponse = (
 /**
  * Generates an empty project response
  */
-export const specAdminbuildEmptyBlockLanguageResponse =
-  (): BlockLanguageAdminResponse => {
-    return specAdminwrapBlockLanguageData([]);
-  };
+export const specAdminbuildEmptyBlockLanguageResponse = (): BlockLanguageAdminResponse => {
+  return specAdminwrapBlockLanguageData([]);
+};
