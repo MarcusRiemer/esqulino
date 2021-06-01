@@ -33,6 +33,10 @@ class ProjectPolicy < ApplicationPolicy
     user.has_role?(:admin)
   end
 
+  def deep_copy?
+    true
+  end
+
   class Scope < Scope
     def resolve
       if user.has_role?(:admin)
