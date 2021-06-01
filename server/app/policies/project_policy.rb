@@ -58,6 +58,10 @@ class ProjectPolicy < ApplicationPolicy
 
     return project.user_have_role(user,permitted_roles)
   end
+  
+  def deep_copy?
+    true
+  end
 
   class Scope < Scope
     def resolve
