@@ -54,4 +54,18 @@ class ProjectPolicy < ApplicationPolicy
 
     return project.user_have_role(user,permitted_roles)
   end
+  
+  def deep_copy?
+    true
+  end
+
+  class Scope < Scope
+    def resolve
+      if user.has_role?(:admin)
+        Project.all
+      else
+        Project.only_public
+      end
+    end
+  end
 end
