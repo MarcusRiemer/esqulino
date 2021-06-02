@@ -78,7 +78,7 @@
     "karma-jasmine-html-reporter": "1.5.4",
     "karma-junit-reporter": "2.0.1",
     "karma-sabarivka-reporter": "3.2.5",
-    "prettier": "^2.2.3",
+    "prettier": "2.3.0",
     "prettydiff": "101.2.6",
     "tslint": "6.1.0",
     "typescript": "4.1.3",
