@@ -1,5 +1,21 @@
 <div class="card mb-3">
-  <h4 class="card-header">Projekteinstellungen</h4>
+  <div class="card-header row">
+    <h4 class="col-7">Projekteinstellungen</h4>
+
+    <div class="col-3">
+      <input
+        [(ngModel)]="deepCopySlug"
+        name="deep-copy-slug"
+        class="form-control"
+        [placeholder]="'Slug für das neue Projekt'"
+        id="deep-copy-slug"
+      />
+    </div>
+    <button (click)="deepCopyProject()" class="btn btn-primary col-2">
+      Tiefe Kopie
+    </button>
+  </div>
+
   <div class="card-body">
     In diesem Abschnitt kannst du Einstellungen vornehmen, die das gesamte
     Projekt betreffen.
