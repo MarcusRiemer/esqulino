@@ -22,7 +22,7 @@ interface ProjectMember {
   displayName: string;
   roleName: string;
   joinedAt: Date;
-  changedRole: boolean;
+  changedRole: string;
 }
 
 @Component({
@@ -60,7 +60,7 @@ export class MembersComponent {
   /**
    * Field which be used to choose the role of the new user
    */
-  addMemberRole = "false";
+  addMemberRole = "participant";
   /**
    * Field which be used to change the Owner
    */
@@ -116,7 +116,7 @@ export class MembersComponent {
         joinedAt: singleMember.joinedAt
           ? new Date(singleMember.joinedAt)
           : null,
-        changedRole: singleMember.membershipType === "admin",
+        changedRole: singleMember.membershipType,
       }));
     })
   );
@@ -133,7 +133,7 @@ export class MembersComponent {
     await this._mutAddMember
       .mutate({
         projectId,
-        isAdmin: this.addMemberRole == "true",
+        isAdmin: this.addMemberRole == "admin",
         userIds: [this.addMemberId],
       })
       .pipe(first())
@@ -175,7 +175,7 @@ export class MembersComponent {
     await this._mutChangeMemberRole
       .mutate({
         projectId,
-        isAdmin: role === "true",
+        isAdmin: role === "admin",
         userId: user.id,
       })
       .pipe(first())
