@@ -211,7 +211,9 @@ export class SettingsComponent {
         this._router.navigate([
           "/",
           "editor",
-          e.data.deepCopyProject.project.slug,
+          e.data.deepCopyProject.project.slug
+            ? e.data.deepCopyProject.project.slug
+            : e.data.deepCopyProject.project.id,
         ]);
       });
   }
