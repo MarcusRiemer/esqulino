@@ -16,6 +16,7 @@ import {
   ProjectAddUsedBlockLanguageGQL,
   ProjectRemoveUsedBlockLanguageGQL,
   StoreProjectSeedGQL,
+  DeepCopyProjectGQL,
 } from "../../../generated/graphql";
 import { first, map } from "rxjs/operators";
 
@@ -46,6 +47,11 @@ export class SettingsComponent {
   addBlockLanguageInProgress = false;
 
   /**
+   * Needed for the input field which are used for the deep copy of a project
+   */
+  deepCopySlug = "";
+
+  /**
    * Used for dependency injection.
    */
   constructor(
@@ -58,6 +64,7 @@ export class SettingsComponent {
     private _removeUsedBlockLanguage: ProjectRemoveUsedBlockLanguageGQL,
     private _performData: PerformDataService,
     private _storeSeed: StoreProjectSeedGQL,
+    private _deepCopyProject: DeepCopyProjectGQL,
     private _matDialog: MatDialog
   ) {}
 
@@ -186,5 +193,26 @@ export class SettingsComponent {
 
       this.project.removeUsedBlockLanguage(usageId);
     }
+  }
+
+  /**
+   * Create a deep copy of the Project
+   * For that
+   */
+  async deepCopyProject() {
+    //TODO: Use the Pipe urlFriendlyId to get the url
+    await this._deepCopyProject
+      .mutate({
+        projectId: this.project.id,
+        slug: this.deepCopySlug,
+      })
+      .toPromise()
+      .then((e) => {
+        this._router.navigate([
+          "/",
+          "editor",
+          e.data.deepCopyProject.project.slug,
+        ]);
+      });
   }
 }
