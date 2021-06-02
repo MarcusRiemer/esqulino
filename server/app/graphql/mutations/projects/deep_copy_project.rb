@@ -1,6 +1,6 @@
 class Mutations::Projects::DeepCopyProject < Mutations::BaseMutation
     argument :project_id, ID, required: true
-    argument :slug, String, required: true
+    argument :slug, String, required: false
 
     field :project, Types::ProjectType, null: true
 
@@ -10,7 +10,7 @@ class Mutations::Projects::DeepCopyProject < Mutations::BaseMutation
       authorize project, :deep_copy?
 
       c_project = project.dup
-      c_project.slug = slug
+      c_project.slug = slug.present? ? slug : nil
 
       ActiveRecord::Base.transaction do
         
