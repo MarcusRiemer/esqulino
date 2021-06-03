@@ -15,7 +15,7 @@ module Types
     field :destroy_news, mutation: Mutations::News::DestroyNews
 
     field :create_project, mutation: Mutations::Projects::CreateProject
-    field :deep_copy_project, mutation: Mutations::Projects::DeepCopyProject
+    field :create_deep_copy_project, mutation: Mutations::Projects::CreateDeepCopyProject
     field :destroy_project, mutation: Mutations::Projects::DestroyProject
     field :update_project, mutation: Mutations::Projects::UpdateProject
     field :add_used_block_language, mutation: Mutations::Projects::AddUsedBlockLanguage

@@ -16,7 +16,7 @@ import {
   ProjectAddUsedBlockLanguageGQL,
   ProjectRemoveUsedBlockLanguageGQL,
   StoreProjectSeedGQL,
-  DeepCopyProjectGQL,
+  CreateDeepCopyProjectGQL,
 } from "../../../generated/graphql";
 import { first, map } from "rxjs/operators";
 
@@ -79,7 +79,7 @@ export class SettingsComponent {
     private _removeUsedBlockLanguage: ProjectRemoveUsedBlockLanguageGQL,
     private _performData: PerformDataService,
     private _storeSeed: StoreProjectSeedGQL,
-    private _deepCopyProject: DeepCopyProjectGQL,
+    private _createDeepCopyProject: CreateDeepCopyProjectGQL,
     private _matDialog: MatDialog
   ) {}
 
@@ -216,7 +216,7 @@ export class SettingsComponent {
    */
   async deepCopyProject() {
     //TODO: Use the Pipe urlFriendlyId to get the url
-    await this._deepCopyProject
+    await this._createDeepCopyProject
       .mutate({
         projectId: this.project.id,
         slug: this.deepCopySlug,
