@@ -12,4 +12,12 @@ export class ProjectPerformData extends ResourcesData {
       policyAction: "store_seed",
     };
   }
+
+  public createDeepCopy(resourceId: string): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "create_deep_copy",
+    };
+  }
 }

@@ -33,7 +33,7 @@ class ProjectPolicy < ApplicationPolicy
     user.has_role?(:admin)
   end
 
-  def deep_copy?
+  def create_deep_copy?
     true
   end
 
