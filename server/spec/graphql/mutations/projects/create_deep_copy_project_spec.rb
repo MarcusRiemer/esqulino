@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Mutations::Projects::DeepCopyProject do
+RSpec.describe Mutations::Projects::CreateDeepCopyProject do
 
   # These specs relies on
   # * an existing guest user

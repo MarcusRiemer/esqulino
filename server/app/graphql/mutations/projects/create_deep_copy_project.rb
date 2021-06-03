@@ -1,4 +1,4 @@
-class Mutations::Projects::DeepCopyProject < Mutations::BaseMutation
+class Mutations::Projects::CreateDeepCopyProject < Mutations::BaseMutation
     argument :project_id, ID, required: true
     argument :slug, String, required: false
 
@@ -7,7 +7,7 @@ class Mutations::Projects::DeepCopyProject < Mutations::BaseMutation
     def resolve(project_id:, slug:)
       project = Project.find_by_slug_or_id! (project_id)
 
-      authorize project, :deep_copy?
+      authorize project, :create_deep_copy?
 
       c_project = project.dup
       c_project.slug = slug.present? ? slug : nil
