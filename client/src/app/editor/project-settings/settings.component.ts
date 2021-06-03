@@ -219,16 +219,16 @@ export class SettingsComponent {
     await this._createDeepCopyProject
       .mutate({
         projectId: this.project.id,
-        slug: this.deepCopySlug,
+        newSlug: this.deepCopySlug,
       })
       .toPromise()
       .then((e) => {
         this._router.navigate([
           "/",
           "editor",
-          e.data.deepCopyProject.project.slug
-            ? e.data.deepCopyProject.project.slug
-            : e.data.deepCopyProject.project.id,
+          e.data.createDeepCopyProject.project.slug
+            ? e.data.createDeepCopyProject.project.slug
+            : e.data.createDeepCopyProject.project.id,
         ]);
       });
   }
