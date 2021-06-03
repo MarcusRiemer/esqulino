@@ -1,19 +1,23 @@
 <div class="card mb-3">
   <div class="card-header row">
-    <h4 class="col-7">Projekteinstellungen</h4>
+    <h4 class="col-sm-8">Projekteinstellungen</h4>
 
-    <div class="col-3">
-      <input
-        [(ngModel)]="deepCopySlug"
-        name="deep-copy-slug"
-        class="form-control"
-        [placeholder]="'Slug für das neue Projekt'"
-        id="deep-copy-slug"
-      />
-    </div>
-    <button (click)="deepCopyProject()" class="btn btn-primary col-2">
-      Tiefe Kopie
-    </button>
+    <may-perform [payload]="createDeepCopyPermission$ | async" class="col-sm-4">
+      <form class="row">
+        <div class="col-sm-8">
+          <input
+            [(ngModel)]="deepCopySlug"
+            name="deep-copy-slug"
+            class="form-control"
+            [placeholder]="'Slug für das neue Projekt'"
+            id="deep-copy-slug"
+          />
+        </div>
+        <button (click)="deepCopyProject()" class="btn btn-primary col-sm-4">
+          Tiefe Kopie
+        </button>
+      </form>
+    </may-perform>
   </div>
 
   <div class="card-body">

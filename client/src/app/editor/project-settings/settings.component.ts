@@ -52,6 +52,21 @@ export class SettingsComponent {
   deepCopySlug = "";
 
   /**
+   * These permissions are required to crate a deep copy of this project
+   */
+  readonly createDeepCopyPermission$ = this._projectService.activeProject.pipe(
+    map((p) => this._performData.project.createDeepCopy(p.id))
+  );
+
+  /**
+   * These permissions are required to add a code resource
+   */
+  readonly createCodeResourcePermission$ =
+    this._projectService.activeProject.pipe(
+      map((p) => this._performData.project.update(p.id))
+    );
+
+  /**
    * Used for dependency injection.
    */
   constructor(

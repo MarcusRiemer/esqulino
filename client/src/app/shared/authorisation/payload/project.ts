@@ -42,6 +42,13 @@ export class ProjectPerformData extends ResourcesData {
       resourceType: this.resourceType,
       resourceId: resourceId,
       policyAction: "remove_member",
+    }
+  }
+  public createDeepCopy(resourceId: string): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "create_deep_copy",
     };
   }
 }

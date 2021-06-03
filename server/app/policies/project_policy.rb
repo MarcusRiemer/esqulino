@@ -55,7 +55,7 @@ class ProjectPolicy < ApplicationPolicy
     return project.user_have_role(user,permitted_roles)
   end
   
-  def deep_copy?
+  def create_deep_copy?
     true
   end
 
