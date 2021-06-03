@@ -1,5 +1,5 @@
-mutation CreateDeepCopyProject($projectId: ID!, $slug: String!) {
-  createDeepCopyProject(input: { projectId: $projectId, slug: $slug }) {
+mutation CreateDeepCopyProject($projectId: ID!, $newSlug: String!) {
+  createDeepCopyProject(input: { projectId: $projectId, newSlug: $newSlug }) {
     project {
       id
       slug
