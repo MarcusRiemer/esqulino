@@ -2181,7 +2181,7 @@
               "deprecationReason": null
             },
             {
-              "name": "slug",
+              "name": "newSlug",
               "description": null,
               "type": {
                 "kind": "SCALAR",

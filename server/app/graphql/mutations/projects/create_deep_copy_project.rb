@@ -1,16 +1,24 @@
 class Mutations::Projects::CreateDeepCopyProject < Mutations::BaseMutation
     argument :project_id, ID, required: true
-    argument :slug, String, required: false
+    argument :new_slug, String, required: false
 
     field :project, Types::ProjectType, null: true
 
-    def resolve(project_id:, slug:)
+    def resolve(project_id:, new_slug:)
       project = Project.find_by_slug_or_id! (project_id)
 
       authorize project, :create_deep_copy?
 
+    
+    return createDeepCopy(project, new_slug)
+
+    rescue ActiveRecord::RecordNotFound => e
+      return (e)
+    end 
+
+    def createDeepCopy(project, new_slug)
       c_project = project.dup
-      c_project.slug = slug.present? ? slug : nil
+      c_project.slug = new_slug.present? ? new_slug : nil
 
       ActiveRecord::Base.transaction do
         
@@ -26,7 +34,7 @@ class Mutations::Projects::CreateDeepCopyProject < Mutations::BaseMutation
             project_database.project = c_project
             project_database.save!
 
-            #If the Project have a defau lt database
+            #If the Project have a default database
             if(project.default_database == v)
                 c_project.default_database = project_database
                 c_project.save!
@@ -54,8 +62,6 @@ class Mutations::Projects::CreateDeepCopyProject < Mutations::BaseMutation
       return ({
         project: c_project
       })
-    rescue ActiveRecord::RecordNotFound => e
-      return (e)
-    end 
+    end
   end
   
