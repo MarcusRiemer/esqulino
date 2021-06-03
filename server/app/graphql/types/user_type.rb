@@ -7,6 +7,9 @@ class Types::UserType < Types::Base::BaseObject
   field :identities, [Types::IdentityType], null: true
   field :news, [Types::NewsType], null: true
 
+  field :member_at, [Types::ProjectType], null: false
+  field :project_members, [Types::ProjectMemberType], null: false
+
   field :created_at, GraphQL::Types::ISO8601DateTime, null: false
   field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
 

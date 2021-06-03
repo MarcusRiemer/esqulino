@@ -1,0 +1,15 @@
+mutation ProjectRemoveMember($projectId: ID!, $userId: ID!) {
+  removeMember(input: { projectId: $projectId, userId: $userId }) {
+    project {
+      id
+      projectMembers {
+        createdAt
+        id
+        user {
+          id
+          displayName
+        }
+      }
+    }
+  }
+}

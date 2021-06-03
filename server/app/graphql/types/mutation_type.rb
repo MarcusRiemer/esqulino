@@ -18,6 +18,10 @@ module Types
     field :destroy_project, mutation: Mutations::Projects::DestroyProject
     field :update_project, mutation: Mutations::Projects::UpdateProject
     field :add_used_block_language, mutation: Mutations::Projects::AddUsedBlockLanguage
+    field :add_member, mutation: Mutations::Projects::AddMembers
+    field :change_member_role, mutation: Mutations::Projects::ChangeMemberRole
+    field :change_owner, mutation: Mutations::Projects::ChangeOwner
+    field :remove_member, mutation: Mutations::Projects::RemoveMember
     field :remove_used_block_language, mutation: Mutations::Projects::RemoveUsedBlockLanguage
     field :create_programming_language, mutation: Mutations::CreateProgrammingLanguage
     field :store_project_seed, mutation: Mutations::SeedData::StoreProject

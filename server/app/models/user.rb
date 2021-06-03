@@ -22,6 +22,10 @@ class User < ApplicationRecord
   # Some users have written news
   has_many :news
 
+  # One user can join many projects(Courses)
+  has_many :project_members
+  has_many :member_at, class_name: 'Project', :foreign_key => 'user_id', through:  :project_members, :source => :project
+
   # Only allow safe characters in usernames
   validates_format_of :display_name, :with => /\A[a-zA-Z0-9]{3}[a-zA-Z0-9\ ]{0,17}\z/i
   # Primary emails may only be used once. But because some identities do not
