@@ -10,14 +10,10 @@ import { BlockDebugOptionsService } from "./block-debug-options.service";
 })
 export class EditorToolbarComponent {
   constructor(
-    private _toolbarService: EditorToolbarService,
     private _preferences: PreferencesService,
+    readonly toolbarService: EditorToolbarService,
     readonly debugOptions: BlockDebugOptionsService
   ) {}
-
-  get toolbarService() {
-    return this._toolbarService;
-  }
 
   toggleNavbar() {
     console.log("Editor-Toolbar: Sidenav toggled");

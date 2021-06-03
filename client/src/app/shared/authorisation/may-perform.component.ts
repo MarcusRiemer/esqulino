@@ -2,6 +2,7 @@ import {
   Component,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
 } from "@angular/core";
@@ -21,7 +22,7 @@ import { MayPerformRequestDescription } from "./may-perform.description";
   selector: "may-perform",
   templateUrl: "./templates/may-perform.html",
 })
-export class MayPerformComponent implements OnChanges, OnInit {
+export class MayPerformComponent implements OnChanges, OnInit, OnDestroy {
   /**
    * The permissions to check.
    */
@@ -39,6 +40,13 @@ export class MayPerformComponent implements OnChanges, OnInit {
 
   ngOnInit(): void {
     this._payload$.next(this.payload);
+  }
+
+  ngOnDestroy() {
+    // "Close" this subject, just in case there might be a dangling
+    // subscription to it.
+    // console.debug("MayPerformComponent::ngOnDestroy()", this.payload);
+    this._payload$.complete();
   }
 
   // Used to feed the Subject for the permission request

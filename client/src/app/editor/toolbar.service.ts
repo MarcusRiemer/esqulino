@@ -16,7 +16,7 @@ export type ClickHandler = Observable<void>;
 export class ToolbarItem {
   private _inProgress: boolean = false;
 
-  private _onClick: Subject<void>;
+  private _onClick = new Subject<void>();
 
   /**
    * @param caption The text to display on the button
@@ -35,8 +35,6 @@ export class ToolbarItem {
     if (_key) {
       this._key = _key.toLowerCase();
     }
-
-    this._onClick = new Subject<void>();
   }
 
   /**
@@ -107,8 +105,10 @@ export class ToolbarItem {
   /**
    * Allows reacting to clicks.
    */
-  get onClick(): ClickHandler {
-    return this._onClick;
+  readonly onClick = this._onClick.asObservable();
+
+  public _destroy() {
+    this._onClick.complete();
   }
 }
 
@@ -171,7 +171,8 @@ export class EditorToolbarService {
   removeItem(id: string): boolean {
     const index = this._items.findIndex((item) => item.id == id);
     if (index >= 0) {
-      this._items.splice(index, 1);
+      const [item, ..._empty] = this._items.splice(index, 1);
+      item._destroy();
       return true;
     } else {
       return false;
@@ -183,6 +184,7 @@ export class EditorToolbarService {
    * the state of any known button.
    */
   resetItems() {
+    this._items.forEach((i) => i._destroy());
     this._saveItem = new ToolbarItem(
       "save",
       "Speichern",

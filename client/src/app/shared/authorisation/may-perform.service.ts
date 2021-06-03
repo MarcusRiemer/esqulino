@@ -20,10 +20,17 @@ export class MayPerformService {
   public mayPerform$(
     data: MayPerformRequestDescription
   ): Observable<MayPerformResponseDescription> {
-    return this._mayPerform
-      .watch({
-        input: data,
-      })
-      .valueChanges.pipe(map((res) => res.data.mayPerform));
+    return (
+      this._mayPerform
+        // Don't watch for the result as this observable might be used
+        // with `switchMap` which then leaks this subscription.
+        //
+        // "Do we have to unsubscribe when using switchMap operator in rxjs in Angular 2?"
+        // -> https://stackoverflow.com/questions/44748878/
+        .fetch({
+          input: data,
+        })
+        .pipe(map((res) => res.data.mayPerform))
+    );
   }
 }

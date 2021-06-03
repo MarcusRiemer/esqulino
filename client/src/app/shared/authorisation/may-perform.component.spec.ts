@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 import { ApolloTestingModule } from "apollo-angular/testing";
-import { first } from "rxjs/operators";
+import { first, last, skip } from "rxjs/operators";
 import { MayPerformGQL } from "src/generated/graphql";
 
 import { MayPerformService } from "./may-perform.service";
@@ -8,7 +8,7 @@ import { specExpectMayPerform } from "./may-perform.spec-util";
 import { MayPerformComponent } from "./may-perform.component";
 import { MayPerformRequestDescription } from "./may-perform.description";
 
-describe(`MayPerformComponent`, () => {
+fdescribe(`MayPerformComponent`, () => {
   async function createComponent(req: MayPerformRequestDescription) {
     await TestBed.configureTestingModule({
       imports: [ApolloTestingModule],
@@ -54,9 +54,9 @@ describe(`MayPerformComponent`, () => {
     specExpectMayPerform("first", true);
     await t.fixture.whenRenderingDone();
 
-    expect(await t.component.showContent$.pipe(first()).toPromise()).toEqual(
-      true
-    );
+    expect(
+      await t.component.showContent$.pipe(skip(1), first()).toPromise()
+    ).toEqual(true);
   });
 
   it(`Not shown when negative`, async () => {
@@ -68,9 +68,9 @@ describe(`MayPerformComponent`, () => {
     specExpectMayPerform("first", false);
     await t.fixture.whenRenderingDone();
 
-    expect(await t.component.showContent$.pipe(first()).toPromise()).toEqual(
-      false
-    );
+    expect(
+      await t.component.showContent$.pipe(skip(1), first()).toPromise()
+    ).toEqual(false);
   });
 
   it(`Shown when requested negative`, async () => {
@@ -84,9 +84,9 @@ describe(`MayPerformComponent`, () => {
     specExpectMayPerform("first", false);
     await t.fixture.whenRenderingDone();
 
-    expect(await t.component.showContent$.pipe(first()).toPromise()).toEqual(
-      true
-    );
+    expect(
+      await t.component.showContent$.pipe(skip(1), first()).toPromise()
+    ).toEqual(true);
   });
 
   it(`Not shown when requested negative but got positive`, async () => {
@@ -100,8 +100,8 @@ describe(`MayPerformComponent`, () => {
     specExpectMayPerform("first", true);
     await t.fixture.whenRenderingDone();
 
-    expect(await t.component.showContent$.pipe(first()).toPromise()).toEqual(
-      false
-    );
+    expect(
+      await t.component.showContent$.pipe(skip(1), first()).toPromise()
+    ).toEqual(false);
   });
 });
