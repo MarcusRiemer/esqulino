@@ -1,0 +1,22 @@
+mutation ProjectChangeMemberRole(
+  $projectId: ID!
+  $userId: ID!
+  $isAdmin: Boolean!
+) {
+  changeMemberRole(
+    input: { projectId: $projectId, userId: $userId, isAdmin: $isAdmin }
+  ) {
+    project {
+      id
+      projectMembers {
+        id
+        createdAt
+        membershipType
+        user {
+          id
+          displayName
+        }
+      }
+    }
+  }
+}
