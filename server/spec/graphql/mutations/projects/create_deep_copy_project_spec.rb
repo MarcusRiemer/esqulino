@@ -39,8 +39,56 @@ RSpec.describe Mutations::Projects::CreateDeepCopyProject do
     expect(Project.find(res[:project][:id]).user.display_name).to eq "Current"
   end
 
-  it "delete all members" do
-    #ToDo
+  fit "delete all members" do
+    creator = create(:user, display_name: "Creator")
+    project = create(:project, user: creator, slug: "Testproject")
+
+    create(:project_member, project: project, membership_type: "participant")
+    create(:project_member, project: project, membership_type: "admin")
+    create(:project_member, project: project, membership_type: "participant")
+    create(:project_member, project: project, membership_type: "admin")
+
+    mut = described_class.new(**init_args())
+
+    res = mut.resolve(project_id: project.id, new_slug: "tester")
+
+    expect(project.id).not_to eq res[:project][:id]
+    expect(Project.find(res[:project][:id]).project_members.count).to eq 0
+    expect(Project.count).to eq 2
+
+    #1 Guest, 1 Creator, 4 User
+    expect(User.count).to eq 6
+  end
+
+  fit "delete one members" do
+    creator = create(:user, display_name: "Creator")
+    project = create(:project, user: creator, slug: "Testproject")
+
+    create(:project_member, project: project, membership_type: "participant")
+
+    mut = described_class.new(**init_args())
+
+    res = mut.resolve(project_id: project.id, new_slug: "tester")
+
+    expect(Project.find(project.id).user).not_to eq Project.find(res[:project][:id]).user
+    expect(Project.find(res[:project][:id]).project_members.count).to eq 0
+    expect(Project.count).to eq 2
+
+    #1 Guest, 1 Creator, 1 User
+    expect(User.count).to eq 3
+  end
+
+  fit "copy the public state of a project" do
+    creator = create(:user, display_name: "Creator")
+    project = create(:project, user: creator, slug: "Testproject", public: true)
+
+    mut = described_class.new(**init_args())
+
+    res = mut.resolve(project_id: project.id, new_slug: "tester")
+
+    expect(project.id).not_to eq res[:project][:id]
+    expect(Project.find(res[:project][:id]).public).to eq true
+    expect(res[:project][:public]).to eq true
   end
 
   it "copied one code_resources" do
