@@ -8,6 +8,15 @@ query FullProject($id: ID!) {
     indexPageId
     createdAt
     updatedAt
+    projectMembers {
+      id
+      membershipType
+      joinedAt
+      user {
+        id
+        displayName
+      }
+    }
     user {
       id
       displayName

@@ -24,6 +24,7 @@ const DEFAULT_EMPTY_PROJECT: FullProjectNode = {
   codeResources: [],
   description: { en: "Default Empty Project" },
   grammars: [],
+  projectMembers: [],
   name: { en: "Project" },
   projectSources: [],
   projectUsesBlockLanguages: [],

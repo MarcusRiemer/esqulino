@@ -1,0 +1,23 @@
+mutation ProjectAddMember(
+  $projectId: ID!
+  $userIds: [ID!]!
+  $isAdmin: Boolean!
+) {
+  addMember(
+    input: { projectId: $projectId, userIds: $userIds, isAdmin: $isAdmin }
+  ) {
+    project {
+      id
+      projectMembers {
+        createdAt
+        membershipType
+        joinedAt
+        id
+        user {
+          id
+          displayName
+        }
+      }
+    }
+  }
+}
