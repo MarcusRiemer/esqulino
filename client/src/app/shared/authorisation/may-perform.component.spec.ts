@@ -8,7 +8,7 @@ import { specExpectMayPerform } from "./may-perform.spec-util";
 import { MayPerformComponent } from "./may-perform.component";
 import { MayPerformRequestDescription } from "./may-perform.description";
 
-fdescribe(`MayPerformComponent`, () => {
+describe(`MayPerformComponent`, () => {
   async function createComponent(req: MayPerformRequestDescription) {
     await TestBed.configureTestingModule({
       imports: [ApolloTestingModule],
