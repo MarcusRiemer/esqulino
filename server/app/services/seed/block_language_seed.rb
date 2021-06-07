@@ -11,10 +11,8 @@ module Seed
     def initialize(seed_id)
       super(
         seed_id,
-        {
-          "grammar" => GrammarSeed
-        },
-        true
+        dependencies: { "grammar" => GrammarSeed },
+        defer_referential_checks: true
       )
     end
   end

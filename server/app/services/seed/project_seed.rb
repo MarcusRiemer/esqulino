@@ -10,13 +10,17 @@ module Seed
     # PATH_TO_DATA_DIRECTORY = File.join(Rails.application.config.sqlino[:projects_dir], loaded_seed.id)
     # takes an optional arguments dependencies as hash with key as the Model and value as the directory
     def initialize(seed_id)
-      super(seed_id, dependencies = {
-        "project_uses_block_languages" => Seed::ProjectUsesBlockLanguageSeed,
-        "code_resources" => Seed::CodeResourceSeed,
-        "project_sources" => Seed::ProjectSourceSeed,
-        "project_databases" => Seed::ProjectDatabaseSeed,
-        "default_database" => Seed::ProjectDatabaseSeed,
-      }, defer_referential_checks = true)
+      super(
+        seed_id,
+        dependencies: {
+          "project_uses_block_languages" => Seed::ProjectUsesBlockLanguageSeed,
+          "code_resources" => Seed::CodeResourceSeed,
+          "project_sources" => Seed::ProjectSourceSeed,
+          "project_databases" => Seed::ProjectDatabaseSeed,
+          "default_database" => Seed::ProjectDatabaseSeed,
+        },
+        defer_referential_checks: true
+      )
     end
 
     # define base's abstract class to copy images of the project in project directory with under the project file

@@ -4,7 +4,7 @@ module Seed
     @@indent = 0
 
     # base seed class as a parent class designed as a service to store and load seed classes with all the supported methods
-    # BASE_SEED_DIRECTORY is a autoloaded pathe defined in sqlino.yaml in the config
+    # BASE_SEED_DIRECTORY is a autoloaded path defined in sqlino.yaml in the config
     BASE_SEED_DIRECTORY = Rails.configuration.sqlino.fetch(:seed).fetch(:data_dir)
 
     INFO_OUTPUT = Rails.configuration.sqlino.fetch(:seed).fetch(:output)
@@ -21,7 +21,11 @@ module Seed
     # @param dependencies {}, is an empty hash by default unless any seed class provides any dependecy hash
     # @param defer_referential_checks boolean, is false by default unleass any seed class provides other value
     # based on seed models foreign key constraints
-    def initialize(seed_id, dependencies = {}, defer_referential_checks = false)
+    def initialize(
+          seed_id,
+          dependencies: {},
+          defer_referential_checks: false
+        )
       @seed_id = seed_id
       @dependencies = dependencies
       @defer_referential_checks = defer_referential_checks

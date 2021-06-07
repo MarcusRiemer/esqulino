@@ -7,10 +7,13 @@ module Seed
     SEED_DIRECTORY = "code_resources"
 
     def initialize(seed_id)
-      super(seed_id, dependencies = {
-              "generated_block_languages" => Seed::BlockLanguageSeed,
-              "generated_grammars" => Seed::GrammarSeed,
-      })
+      super(
+        seed_id,
+        dependencies: {
+          "generated_block_languages" => Seed::BlockLanguageSeed,
+          "generated_grammars" => Seed::GrammarSeed,
+        }
+      )
     end
   end
 end

@@ -11,12 +11,12 @@ module Seed
     def initialize(seed_id)
       super(
         seed_id,
-        dependencies = {
+        dependencies: {
           "programming_language" => ProgrammingLanguageSeed,
           "targeted_grammars" => GrammarSeed,
           "grammar_reference_origins" => GrammarReferenceSeed,
         },
-        defer_referential_checks = true
+        defer_referential_checks: true
       )
     end
   end

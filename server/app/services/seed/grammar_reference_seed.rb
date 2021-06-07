@@ -5,11 +5,11 @@ class Seed::GrammarReferenceSeed < Seed::Base
   def initialize(seed_id)
     super(
       seed_id,
-      dependencies = {
+      dependencies: {
         "origin" => Seed::GrammarSeed,
         "target" => Seed::GrammarSeed,
       },
-      defer_referential_checks = true
+      defer_referential_checks: true
     )
   end
 end
