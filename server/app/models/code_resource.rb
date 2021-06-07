@@ -83,7 +83,9 @@ class CodeResource < ApplicationRecord
   # Option 3) In every controller that somehow touches this model. This
   # seems to go against the core idea of "fat models and skinny controllers",
   # so I will leave that out for the moment.
-  before_save do
+  before_save :before_save_compile
+
+  def before_save_compile
     if self.ast_changed?
       self.compiled = emit_ast!
     end
@@ -95,12 +97,14 @@ class CodeResource < ApplicationRecord
   #
   # I decided to automatically update after every save operation but to only
   # log errors in case something goes wrong due to a faulty grammar.
-  after_save do
+  after_save :after_save_update_references
+
+  def after_save_update_references
     if self.saved_change_to_attribute? :ast
       begin
         self.update_code_resource_references!(ide_service: IdeService.guaranteed_instance)
       rescue EsqulinoError::Base => ex
-        # Log message and stacktrace
+        # Log message and stacktrace but do not abort
         Rails.logger.error [ex.message, *ex.backtrace].join($/)
         Raven.capture_exception ex
       end
@@ -160,9 +164,15 @@ class CodeResource < ApplicationRecord
     end
 
     ast_referenced_code_resource_ids = ide_service.referenced_resource_ids(self, "referencedCodeResources")
+
+    # Ensure that every referenced resource does indeed exist
     referenced_ids = CodeResource
                      .where(id: ast_referenced_code_resource_ids)
                      .pluck(:id)
+    if (ast_referenced_code_resource_ids.length != referenced_ids.length)
+      unknown_ids = ast_referenced_code_resource_ids - referenced_ids
+      throw EsqulinoError::Base.new("Unknown resource references: " + unknown_ids.join(", "))
+    end
 
     updated_references = referenced_ids.map do |id|
       CodeResourceReference.find_or_initialize_by(

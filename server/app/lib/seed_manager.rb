@@ -36,7 +36,9 @@ class SeedManager
 
   # Loads all projects that are available as seeds
   def load_all_projects
-    Seed::ProjectSeed.load_all
+    run_loading_operation do
+      Seed::ProjectSeed.load_all
+    end
   end
 
   # Loads a specific block language
@@ -183,6 +185,36 @@ class SeedManager
   end
 
   private
+
+  # While some callbacks are extremely relevant for the "normal" operation
+  # of the application, they are annoying when effectively loading a
+  # database dump: They may invoke the CLI-IDE (which takes time) or depend
+  # on resources that are not yet loaded.
+  #
+  # This method is intended to be called with a block that selectively turns
+  # off such callbacks.
+  #
+  # DO NOT CALL THIS METHOD FROM A RUNNING SERVER INSTANCE! Disabling callbacks
+  # is a change to global state and although this method ensures to revert to
+  # the previously defined callbacks, bad things will happen if a live request
+  # is processed while the callbacks are skipped.
+  def run_loading_operation
+    callbacks_to_skip = [
+      { model_class: CodeResource, name: :save, moment: :before, method: :before_save_compile },
+      { model_class: CodeResource, name: :save, moment: :after,  method: :after_save_update_references }
+    ]
+
+    callbacks_to_skip.each do |h|
+      h[:model_class].skip_callback(h[:name], h[:moment], h[:method])
+    end
+
+    yield
+
+  ensure
+    callbacks_to_skip.each do |h|
+      h[:model_class].set_callback(h[:name], h[:moment], h[:method])
+    end
+  end
 
   # Singleton instance of the SeedManager
   def self.instance
