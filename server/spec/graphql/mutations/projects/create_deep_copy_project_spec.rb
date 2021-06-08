@@ -39,7 +39,7 @@ RSpec.describe Mutations::Projects::CreateDeepCopyProject do
     expect(Project.find(res[:project][:id]).user.display_name).to eq "Current"
   end
 
-  fit "delete all members" do
+  it "delete all members" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator, slug: "Testproject")
 
@@ -60,7 +60,7 @@ RSpec.describe Mutations::Projects::CreateDeepCopyProject do
     expect(User.count).to eq 6
   end
 
-  fit "delete one members" do
+  it "delete one members" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator, slug: "Testproject")
 
@@ -78,7 +78,7 @@ RSpec.describe Mutations::Projects::CreateDeepCopyProject do
     expect(User.count).to eq 3
   end
 
-  fit "copy the public state of a project" do
+  it "copy the public state of a project" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator, slug: "Testproject", public: true)
 
@@ -487,7 +487,7 @@ RSpec.describe Mutations::Projects::CreateDeepCopyProject do
     expect(ProjectSource.count).to eq 3
   end
 
-  fit "create a real deep copy of all with problems at default_database" do
+  it "create a real deep copy of all with problems at default_database" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
