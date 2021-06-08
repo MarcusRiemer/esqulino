@@ -23,8 +23,10 @@ export class SqlScratchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Ensure that the user data is fetched as early as possible. Printing it for
+    // debug purposes might also be helpful.
     this._userService.userData$.subscribe((val) =>
-      console.log("Subscription: ", val)
+      console.log("Current user data: ", val)
     );
 
     this._userService.unexpectedLogout$.subscribe((_) =>

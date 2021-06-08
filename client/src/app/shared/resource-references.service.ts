@@ -122,7 +122,7 @@ export class ResourceReferencesService {
         fetchPolicy,
       },
     ];
-    console.log(...msg);
+    console.debug(...msg);
 
     const cachedResult = this.explicitApolloCache<
       FullBlockLanguageQuery,
@@ -159,7 +159,7 @@ export class ResourceReferencesService {
       )
       .toPromise();
 
-    console.log(`DONE:`, ...msg, "=>", result);
+    console.debug(`DONE:`, ...msg, "=>", result);
     return result ? new BlockLanguage(result) : undefined;
   }
 
@@ -179,7 +179,7 @@ export class ResourceReferencesService {
         fetchPolicy,
       },
     ];
-    console.log(...msg);
+    console.debug(...msg);
 
     const cachedResult = this.explicitApolloCache<
       FullGrammarQuery,
@@ -211,7 +211,7 @@ export class ResourceReferencesService {
       )
       .toPromise();
 
-    console.log(`DONE:`, ...msg, "=>", result);
+    console.debug(`DONE:`, ...msg, "=>", result);
     return result;
   }
 
