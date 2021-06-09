@@ -1,9 +1,23 @@
-<table class="table table-sm" *ngIf="currentProgram$ | async as currentProgram">
-  <tr *ngFor="let output of currentProgram.output">
-    <td class="channel">
-      <code>{{ output.channel }}</code>
-    </td>
-    <td class="timestamp">{{ output.timestamp }}ms</td>
-    <td>{{ output.message }}</td>
-  </tr>
-</table>
+<ng-container *ngIf="currentProgram$ | async as currentProgram">
+  <div
+    *ngIf="currentProgram.started && !currentProgram.finished"
+    class="alert alert-danger"
+    role="alert"
+  >
+    Programm wurde nach dem Start abgebrochen.
+  </div>
+
+  <div *ngIf="currentProgram.error" class="alert alert-danger" role="alert">
+    Fehler bei der Programmausführung:
+    <code>{{ currentProgram.error | json }}</code>
+  </div>
+  <table class="table table-sm">
+    <tr *ngFor="let output of currentProgram.output">
+      <td class="channel">
+        <code>{{ output.channel }}</code>
+      </td>
+      <td class="timestamp">{{ output.timestamp }}ms</td>
+      <td>{{ output.message }}</td>
+    </tr>
+  </table>
+</ng-container>

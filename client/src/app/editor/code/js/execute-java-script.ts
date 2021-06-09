@@ -17,6 +17,7 @@ export interface ExecutionResult {
   result: unknown;
   finished: boolean;
   started: boolean;
+  error: false | unknown;
   runtime: number;
 }
 
@@ -43,8 +44,7 @@ const console = {
   },
 };
 
-postMessage("start");
-`;
+postMessage("start");`;
 
 const workerApiEnd = `
 postMessage("end");
@@ -62,27 +62,34 @@ export async function executeJavaScriptProgram(
     result: undefined,
     finished: false,
     started: false,
+    error: false,
     runtime: 0,
   };
 
-  console.time("blobUrl");
   // const workerSrc = [workerApiSrc, "onmessage = function() {", code, "}"].join("\n");
   const workerSrc = [workerApiSrc, code, workerApiEnd].join("\n");
   const blobUrl = URL.createObjectURL(new Blob([workerSrc]));
-  console.timeEnd("blobUrl");
-
-  console.debug("Running program:\n", workerSrc);
 
   // Required in "finally"
   let worker: Worker = undefined;
 
   try {
-    console.time("whole");
     const startTime = Date.now();
 
-    console.time("workerCreated");
+    console.log("Creating web worker with Blob url: ", blobUrl);
+
     worker = new Worker(blobUrl, {
       type: "classic",
+    });
+
+    worker.addEventListener("error", (errEvt) => {
+      console.error("JavaScript execution web worker error", errEvt);
+      // Don't count all those lines of the preface
+      const line = (workerApiSrc.match(/\n/g) ?? "").length - errEvt.lineno;
+      result.error = {
+        line,
+        message: errEvt.message,
+      };
     });
 
     worker.addEventListener("message", (msg) => {
@@ -98,22 +105,20 @@ export async function executeJavaScriptProgram(
       }
     });
 
-    console.timeEnd("workerCreated");
-
     // Busy waiting
-    console.time("busyWaiting");
-    let i = 0;
-    while (!result.finished && startTime + timeoutInMs > Date.now()) {
-      console.timeLog("busyWaiting", i);
-      i++;
+    while (
+      result.error === false &&
+      !result.finished &&
+      startTime + timeoutInMs > Date.now()
+    ) {
       await sleep(10);
     }
-    console.timeEnd("busyWaiting");
-
-    console.timeEnd("whole");
-    return result;
+  } catch (e) {
+    result.error = e;
   } finally {
     worker?.terminate();
     URL.revokeObjectURL(blobUrl);
   }
+
+  return result;
 }
