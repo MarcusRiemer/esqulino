@@ -1,0 +1,37 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 63126dc2-48c9-4be0-8677-b6070ee65ebe
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: JS04 const syntax error
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 14bdb65c-04d5-43d9-a1e2-0e4d7344aa26
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "Program", "children": {"Body": [{"name": "CallFunction",
+    "children": {"Arguments": [{"name": "ConstValue", "language": "js", "properties":
+    {"Value": "\"a\""}}]}, "language": "js", "properties": {"Name": "console.log"}},
+    {"name": "DeclareVariable", "children": {"Name": [{"name": "ExprVariable", "language":
+    "js", "properties": {"Name": "a"}}], "Value": [{"name": "ConstValue", "language":
+    "js", "properties": {"Value": "{;"}}]}, "language": "js", "properties": {"Type":
+    "const"}}]}, "language": "js"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-06-09 14:25:44.312672000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-06-09 14:44:48.121478000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 44a4409a-a51f-40f7-840f-9bba99f0ec30
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2
