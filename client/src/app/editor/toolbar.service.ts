@@ -25,44 +25,16 @@ export class ToolbarItem {
    * @param native  True, if this is a native item of the toolbar
    */
   constructor(
-    private _id: string,
+    readonly id: string,
     private _caption: string,
-    private _icon: string,
-    private _key: string | undefined,
-    private _native: boolean,
+    readonly icon: string,
+    readonly key: string | undefined,
+    readonly native: boolean,
     private _mayPerform: MayPerformRequestDescription = undefined
   ) {
-    if (_key) {
-      this._key = _key.toLowerCase();
+    if (key) {
+      this.key = key.toLowerCase();
     }
-  }
-
-  /**
-   * @return True, if this is a native item.
-   */
-  get isNative() {
-    return this._native;
-  }
-
-  /**
-   * @return The keyboard shortcut this item listens to
-   */
-  get key() {
-    return this._key;
-  }
-
-  /**
-   * @return The ID that is associated with this item
-   */
-  get id() {
-    return this._id;
-  }
-
-  /**
-   * @return The name of the icon that should be used
-   */
-  get icon() {
-    return this._icon;
   }
 
   get caption() {
@@ -74,6 +46,13 @@ export class ToolbarItem {
   }
 
   /**
+   * @return True, if a reaction to this is in progress
+   */
+  get isInProgress() {
+    return this._inProgress;
+  }
+
+  /**
    * @param inProgress True, if a reaction to this is in progress
    */
   set isInProgress(inProgress: boolean) {
@@ -82,13 +61,6 @@ export class ToolbarItem {
 
   set performDesc(desc: MayPerformRequestDescription) {
     this._mayPerform = desc;
-  }
-
-  /**
-   * @return True, if a reaction to this is in progress
-   */
-  get isInProgress() {
-    return this._inProgress;
   }
 
   get performDesc() {

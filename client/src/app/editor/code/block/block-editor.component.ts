@@ -4,7 +4,7 @@ import { ComponentPortal } from "@angular/cdk/portal";
 import { MatDialog } from "@angular/material/dialog";
 
 import { Observable } from "rxjs";
-import { map, switchMap, first, combineLatest } from "rxjs/operators";
+import { map, switchMap, first, combineLatest, take } from "rxjs/operators";
 
 import { PerformDataService } from "../../../shared/authorisation/perform-data.service";
 import { EditorComponentDescription } from "../../../shared/block/block-language.description";
@@ -66,17 +66,19 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       "Blockly Editor",
       "puzzle-piece"
     );
-    btnBlocklyEditor.onClick.pipe(first()).subscribe(async (_) => {
-      const snap = this._router.url;
-      this._router.navigateByUrl(snap + "ly");
-    });
+    const refBlockly = btnBlocklyEditor.onClick
+      .pipe(take(1))
+      .subscribe(async (_) => {
+        const snap = this._router.url;
+        this._router.navigateByUrl(snap + "ly");
+      });
 
     // Reacting to saving
     this._toolbarService.savingEnabled = true;
     let btnSave = this._toolbarService.saveItem;
     btnSave.performDesc = this._performData.project.update(this.peekProject.id);
 
-    btnSave.onClick.subscribe(async () => {
+    const refSave = btnSave.onClick.subscribe(async () => {
       btnSave.isInProgress = true;
       await this._codeResourceService.updateCodeResource(
         this.peekProject,
@@ -93,7 +95,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       undefined,
       this._performData.project.update(this.peekProject.id)
     );
-    btnClone.onClick.subscribe((_) => {
+    const refClone = btnClone.onClick.subscribe((_) => {
       this._codeResourceService
         .cloneCodeResource(this.peekProject, this.peekResource)
         .pipe(first())
@@ -111,7 +113,7 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
       undefined,
       this._performData.project.update(this.peekProject.id)
     );
-    btnDelete.onClick.subscribe(async (_) => {
+    const refDelete = btnDelete.onClick.subscribe(async (_) => {
       const confirmed = await MessageDialogComponent.confirm(this._matDialog, {
         description: $localize`:@@message.ask-delete-resource:Soll diese Resource wirklich gelöscht werden?`,
       });
@@ -130,14 +132,21 @@ export class BlockEditorComponent implements OnInit, OnDestroy {
     });
 
     // Keep the sidebar updated
-    const sub = this._currentCodeResource.currentResource.subscribe((c) => {
-      this._sidebarService.showSingleSidebar(
-        CodeSidebarComponent.SIDEBAR_IDENTIFIER,
-        c
-      );
-    });
+    const refCurrentResource =
+      this._currentCodeResource.currentResource.subscribe((c) => {
+        this._sidebarService.showSingleSidebar(
+          CodeSidebarComponent.SIDEBAR_IDENTIFIER,
+          c
+        );
+      });
 
-    this._subscriptionRefs.push(sub);
+    this._subscriptionRefs.push(
+      refBlockly,
+      refSave,
+      refClone,
+      refDelete,
+      refCurrentResource
+    );
   }
 
   /**
