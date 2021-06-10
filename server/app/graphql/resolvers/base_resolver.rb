@@ -1,10 +1,7 @@
-# A base class to build scoped and optimized SQL queries based on a
-# GraphQL query. Provides basic filtering and ordering operations alongside
-# with sparse language field selection.
-class Resolvers::BaseQueryBuilder
+class Resolvers::BaseResolver < GraphQL::Schema::Resolver
   include Resolvers::BaseQueryBuilderMethods
 
-  def initialize(
+  def scope_query(
         model_class,
         context: nil,
         scope:,
@@ -28,6 +25,4 @@ class Resolvers::BaseQueryBuilder
       include_related(context.query.query_string)
     end
   end
-
-
 end
