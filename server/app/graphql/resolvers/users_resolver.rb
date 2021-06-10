@@ -1,4 +1,4 @@
-class Resolvers::UsersResolver < Resolvers::BaseResolver
+class Resolvers::UsersResolver < Resolvers::BaseQueryBuilder
   attr_reader(:scope)
 
   def initialize(context: nil, filter: nil, order: nil, languages: nil)

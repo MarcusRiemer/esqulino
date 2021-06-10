@@ -1,4 +1,4 @@
-class Resolvers::BlockLanguageResolver < Resolvers::BaseResolver
+class Resolvers::BlockLanguageResolver < Resolvers::BaseQueryBuilder
   attr_reader(:scope)
 
   def initialize(context: nil, filter: nil, order: nil, languages: nil)

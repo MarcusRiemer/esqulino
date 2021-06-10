@@ -1,4 +1,4 @@
-class Resolvers::GrammarsResolver < Resolvers::BaseResolver
+class Resolvers::GrammarsResolver < Resolvers::BaseQueryBuilder
   attr_reader(:scope)
 
   def initialize(context: nil, filter: nil, order: nil, languages: nil)
