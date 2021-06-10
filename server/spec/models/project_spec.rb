@@ -62,4 +62,10 @@ RSpec.describe Project do
     expect(readable).to include res.name.inspect
     expect(readable).to include res.slug
   end
+
+  it "Throws exception when creating project with not provided language keys" do
+    expect {
+      FactoryBot.create(:project, name: { fr: "hallo", en: "hello" })
+    }.to raise_error(ActiveRecord::RecordInvalid)
+  end
 end

@@ -1,8 +1,11 @@
-class Resolvers::ProjectsResolver < Resolvers::BaseQueryBuilder
-  attr_reader(:scope)
+class Resolvers::ProjectsResolver < Resolvers::BaseResolver
+  def resolve(
+        filter: nil,
+        languages: nil,
+        order: nil,
+        first_only:
+      )
 
-  def initialize(context: nil, filter: nil, order: nil, languages: nil)
-    # query context instance of GraphQL::Query::Context
     scope = Project
 
     if requested_columns(context).include?("code_resource_count")
@@ -14,17 +17,49 @@ class Resolvers::ProjectsResolver < Resolvers::BaseQueryBuilder
                 .group('projects.id')
     end
 
-    super(
+    result = scope_query(
       Project,
       context: context,
       scope: scope,
       filter: filter,
-      order: order,
       languages: languages,
-      order_dir: "asc",
-      order_field: "name"
+      order: order,
+      fallback_order_dir: "asc",
+      fallback_order_field: "name"
     )
+
+    if first_only
+      return result.first
+    else
+      return result
+    end
   end
+
+  class Single < Resolvers::ProjectsResolver
+
+    argument :id, ID, required: false
+
+    def resolve(id:)
+      super(
+        filter: { id: id },
+        first_only: true
+      )
+    end
+  end
+
+  class List < Resolvers::ProjectsResolver
+
+    argument :input, Types::ProjectType::InputType, required: false
+
+    def resolve(input: {})
+      res = super(
+        **input,
+        first_only: false
+      )
+      return res
+    end
+  end
+
 
   def self.connection(input = {}, context = nil)
     new(context: context, **input).scope

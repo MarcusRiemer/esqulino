@@ -71,10 +71,12 @@ module Resolvers::BaseQueryBuilderMethods
 
   # Extends the scope with appropriate Rails `#includes` hints according to
   # the GraphQL query.
-  def include_related(graphql_query)
+  def include_related(current_scope, graphql_query)
     proposed = Resolvers::RelatedModelsVisitor.calculate(graphql_query, @model_class)
     if not proposed.empty?
-      @scope = @scope.includes(proposed)
+      return current_scope.includes(proposed)
+    else
+      return current_scope
     end
   end
 

@@ -6,20 +6,36 @@ module Types
       ProgrammingLanguage.all
     end
 
-    # Endpoint for paginated projects
-    field :projects, Types::ProjectType.connection_type, null: false do
+    # LEGACY Endpoint for paginated projects
+    field :legacy_projects, Types::ProjectType.connection_type, null: false do
       argument :input, Types::ProjectType::InputType, required: false
     end
-    def projects(input: {})
+    def legacy_projects(input: {})
       Resolvers::ProjectsResolver.connection(input, @context)
     end
 
-    # Endpoint for single project
-    field :project, Types::ProjectType, null: false do
+    # RESOLVER Endpoint for paginated projects
+    field :projects,
+          Types::ProjectType.connection_type,
+          null: false,
+          resolver: Resolvers::ProjectsResolver::List do
+      argument :input, Types::ProjectType::InputType, required: false
+    end
+
+    # LEGACY Endpoint for single project
+    field :legacy_project, Types::ProjectType, null: false do
       argument :id, ID, required: true
     end
-    def project(id:)
+    def legacy_project(id:)
       Resolvers::ProjectsResolver.single(id, @context)
+    end
+
+    # RESOLVER Endpoint for single project
+    field :project,
+          Types::ProjectType,
+          null: false,
+          resolver: Resolvers::ProjectsResolver::Single do
+      argument :id, ID, required: true
     end
 
     # Endpoint for paginated block languages

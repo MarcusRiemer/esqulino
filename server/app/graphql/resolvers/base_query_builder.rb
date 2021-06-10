@@ -25,7 +25,7 @@ class Resolvers::BaseQueryBuilder
 
     # TODO: This should happen when loading queries from disk, not for every query
     if context and context.query
-      include_related(context.query.query_string)
+      @scope = include_related(@scope, context.query.query_string)
     end
   end
 

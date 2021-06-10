@@ -3,26 +3,29 @@ class Resolvers::BaseResolver < GraphQL::Schema::Resolver
 
   def scope_query(
         model_class,
-        context: nil,
         scope:,
+        context: nil,
         filter: nil,
-        order: nil,
         languages: nil,
-        order_field:,
-        order_dir:
+        order: nil,
+        fallback_order_field:,
+        fallback_order_dir:
       )
     @model_class = model_class
     @context = context
     @languages = relevant_languages(languages)
-    @order_dir = order_dir
-    @order_field = order_field
-    scope = select_relevant_fields(scope)
-    scope = apply_filter(scope, filter)
-    @scope = apply_order(scope, order)
+    @order_dir = fallback_order_dir
+    @order_field = fallback_order_field
+
+    scope_1_column = select_relevant_fields(scope)
+    scope_2_filtered = apply_filter(scope_1_column, filter)
+    scope_3_ordered = apply_order(scope_2_filtered, order)
 
     # TODO: This should happen when loading queries from disk, not for every query
     if context and context.query
-      include_related(context.query.query_string)
+      return include_related(scope_3_ordered, context.query.query_string)
+    else
+      raise EsqulinoError::Base.new("Resolver query without query context")
     end
   end
 end
