@@ -59,15 +59,4 @@ class Resolvers::ProjectsResolver < Resolvers::BaseResolver
       return res
     end
   end
-
-
-  def self.connection(input = {}, context = nil)
-    new(context: context, **input).scope
-  end
-
-  def self.single(id, context = nil)
-    new(context: context, filter: { id: id })
-      .scope
-      .first
-  end
 end

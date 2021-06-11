@@ -85,11 +85,8 @@ class User < ApplicationRecord
     end
   end
 
-  # TODO: Should check only the ID, this is what Rails does anyway.
-  #       The `eql?` predicate may or may not load `self.guest` via
-  #       a DB query, but there is no actual reason to find out.
   def guest?
-    return self.eql? User.guest
+    return id == User.guest_id
   end
 
   # Names of the roles of a logged in user

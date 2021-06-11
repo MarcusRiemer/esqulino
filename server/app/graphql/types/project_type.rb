@@ -14,8 +14,12 @@ module Types
     field :user, Types::UserType, null: true
     field :user_id, ID, null: true
 
+    # TODO: Remove this, there must only be one path to sensitive information
     field :members, [Types::UserType], null: false
-    field :project_members, [Types::ProjectMemberType], null: false
+    field :project_members,
+          [Types::ProjectMemberType],
+          null: false,
+          resolver: Resolvers::ProjectInstanceMemberResolver
 
     field :code_resources, [Types::CodeResourceType], null: false
     field :code_resource_count, Integer, null: true
