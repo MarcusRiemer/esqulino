@@ -7,6 +7,7 @@ module Types
     field :preview, String, null: true
     field :index_page_id, String, null: true
     field :slug, String, null: true
+    field :assigments, [Types::AssigmentType], null: true
 
     field :default_database, Types::ProjectDatabaseType, null: true
     field :default_database_id, ID, null: true
