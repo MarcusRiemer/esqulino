@@ -59,6 +59,24 @@ class ProjectPolicy < ApplicationPolicy
     true
   end
 
+  def create_assigment?
+    permitted_roles = ["admin", "owner"]
+
+    return project.user_have_role(user,permitted_roles)
+  end
+
+  def create_assigment_submission?
+    permitted_roles = ["admin", "owner", "participant"]
+
+    return project.user_have_role(user,permitted_roles)
+  end
+
+  def create_assigment_submission_grade?
+    permitted_roles = ["admin", "owner"]
+
+    return project.user_have_role(user, permitted_roles)
+  end
+
   class Scope < Scope
     def resolve
       if user.has_role?(:admin)
