@@ -10,12 +10,61 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_23_132905) do
+ActiveRecord::Schema.define(version: 2021_06_08_143756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
+
+  create_table "assigment_code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.integer "resource_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "assigment_id", null: false
+    t.uuid "code_resource_id", null: false
+    t.index ["assigment_id"], name: "index_assigment_code_resources_on_assigment_id"
+    t.index ["code_resource_id"], name: "index_assigment_code_resources_on_code_resource_id"
+  end
+
+  create_table "assigment_submission_grade_users", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "assigment_submission_grade_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["assigment_submission_grade_id"], name: "index_assigment_submission_grade"
+    t.index ["user_id", "assigment_submission_grade_id"], name: "user_assigment_submission_grade_references_unique", unique: true
+    t.index ["user_id"], name: "index_assigment_submission_grade_users_on_user_id"
+  end
+
+  create_table "assigment_submission_grades", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "feedback"
+    t.integer "grade"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "user_id", null: false
+    t.uuid "assigment_submission_id", null: false
+    t.index ["assigment_submission_id"], name: "index_assigment_submission_grades_on_assigment_submission_id"
+    t.index ["user_id"], name: "index_assigment_submission_grades_on_user_id"
+  end
+
+  create_table "assigment_submissions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "assigment_id", null: false
+    t.index ["assigment_id"], name: "index_assigment_submissions_on_assigment_id"
+  end
+
+  create_table "assigments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.uuid "project_id", null: false
+    t.index ["project_id"], name: "index_assigments_on_project_id"
+  end
 
   create_table "block_languages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
@@ -203,6 +252,20 @@ ActiveRecord::Schema.define(version: 2021_06_23_132905) do
     t.string "email"
   end
 
+  create_table "users_roles", id: false, force: :cascade do |t|
+    t.uuid "user_id"
+    t.uuid "role_id"
+    t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
+  end
+
+  add_foreign_key "assigment_code_resources", "assigments"
+  add_foreign_key "assigment_code_resources", "code_resources"
+  add_foreign_key "assigment_submission_grade_users", "assigment_submission_grades"
+  add_foreign_key "assigment_submission_grade_users", "users"
+  add_foreign_key "assigment_submission_grades", "assigment_submissions"
+  add_foreign_key "assigment_submission_grades", "users"
+  add_foreign_key "assigment_submissions", "assigments"
+  add_foreign_key "assigments", "projects"
   add_foreign_key "block_languages", "code_resources", column: "generated_from_id"
   add_foreign_key "block_languages", "grammars"
   add_foreign_key "block_languages", "programming_languages", column: "default_programming_language_id"
