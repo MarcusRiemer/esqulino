@@ -1,11 +1,16 @@
-class Types::UserType < Types::Base::BaseObject
-  field :id, ID, null: false
-  field :roles, [Types::RoleType], null: false
-  field :display_name, String, null: true
-  field :email, String, null: true
-  field :projects, [Types::ProjectType], null: true
-  field :identities, [Types::IdentityType], null: true
-  field :news, [Types::NewsType], null: true
+module Types
+  class Types::UserType < Types::Base::BaseObject
+    field :id, ID, null: false
+    field :roles, Types::RoleType, null: false
+    field :display_name, String, null: true
+    field :email, String, null: true
+    field :projects, [Types::ProjectType], null: true
+    field :member_at, [Types::ProjectType], null: false
+    field :project_members, [Types::ProjectMemberType], null: false
+    field :identities, [Types::IdentityType], null: true
+    field :news, [Types::NewsType], null: true
+    field :grades, [Types::AssigmentSubmissionGradeType], null: true
+    field :assigment_submission_grades, [Types::AssigmentSubmissionGradeType], null: true
 
   field :member_at, [Types::ProjectType], null: false
   field :project_members, [Types::ProjectMemberType], null: false
