@@ -6,15 +6,7 @@ module Types
       ProgrammingLanguage.all
     end
 
-    # LEGACY Endpoint for paginated projects
-    field :legacy_projects, Types::ProjectType.connection_type, null: false do
-      argument :input, Types::ProjectType::InputType, required: false
-    end
-    def legacy_projects(input: {})
-      Resolvers::ProjectsResolver.connection(input, @context)
-    end
-
-    # RESOLVER Endpoint for paginated projects
+    # Endpoint for paginated projects
     field :projects,
           Types::ProjectType.connection_type,
           null: false,
@@ -22,15 +14,7 @@ module Types
       argument :input, Types::ProjectType::InputType, required: false
     end
 
-    # LEGACY Endpoint for single project
-    field :legacy_project, Types::ProjectType, null: false do
-      argument :id, ID, required: true
-    end
-    def legacy_project(id:)
-      Resolvers::ProjectsResolver.single(id, @context)
-    end
-
-    # RESOLVER Endpoint for single project
+    # Endpoint for single project
     field :project,
           Types::ProjectType,
           null: false,

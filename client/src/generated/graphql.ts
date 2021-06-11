@@ -970,11 +970,11 @@ export type QueryProjectArgs = {
 };
 
 export type QueryProjectsArgs = {
+  input?: Maybe<ProjectInputType>;
   after?: Maybe<Scalars["String"]>;
   before?: Maybe<Scalars["String"]>;
   first?: Maybe<Scalars["Int"]>;
   last?: Maybe<Scalars["Int"]>;
-  input?: Maybe<ProjectInputType>;
 };
 
 export type QueryRelatedBlockLanguagesArgs = {
