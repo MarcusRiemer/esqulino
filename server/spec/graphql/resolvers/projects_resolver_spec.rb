@@ -10,6 +10,7 @@ RSpec.describe Resolvers::ProjectsResolver do
           id
           name
           slug
+          description
         }
       }
     }
@@ -32,9 +33,10 @@ RSpec.describe Resolvers::ProjectsResolver do
       variables: variables
     )
 
-    # We need to keep the original order so we fetch the projects one by one
-    return res["data"]["projects"]["nodes"].pluck("id").map do |p_id|
-      Project.find(p_id)
+    # The specs expect active record models, so we built them from the response
+    # and sort of abuse the fact that active record compares models only by ID.
+    return res["data"]["projects"]["nodes"].map do |p_data|
+      Project.new(**p_data)
     end
   end
 
@@ -205,30 +207,38 @@ RSpec.describe Resolvers::ProjectsResolver do
     expect(res2.map { |p| p.name}).to eq([{ "de" => "hallo" }, { "de" => "hallo2" }, {}, {}])
   end
 
-  it "Get only languages which are requested in description column" do
-    FactoryBot.create(:project, description: { de: "hallo", en: "hello" })
-    FactoryBot.create(:project, description: { de: "hallo2" })
-    FactoryBot.create(:project, description: { en: "hello3" })
-    FactoryBot.create(:project, description: { en: "hello4" })
+  describe "Get only languages which are requested in description column" do
+    before(:each) do
+      FactoryBot.create(:project, description: { de: "hallo", en: "hello" })
+      FactoryBot.create(:project, description: { de: "hallo2" })
+      FactoryBot.create(:project, description: { en: "hello3" })
+      FactoryBot.create(:project, description: { en: "hello4" })
+    end
 
-    res = exec_project_id_query(
-      languages: ["en"]
-    )
-    res2 = exec_project_id_query(
-      languages: ["de"]
-    )
-    expect(res.map { |p| p.description}).to match_array([
-                                                          { "en" => "hello" },
-                                                          {},
-                                                          { "en" => "hello3" },
-                                                          { "en" => "hello4" }
-                                                        ])
-    expect(res2.map { |p| p.description}).to match_array([
-                                                           { "de" => "hallo" },
-                                                           { "de" => "hallo2" },
-                                                           {},
-                                                           {}
-                                                         ])
+    it "for en" do
+      res = exec_project_id_query(
+        languages: ["en"]
+      )
+      expect(res.map { |p| p.description}).to match_array([
+                                                            { "en" => "hello" },
+                                                            {},
+                                                            { "en" => "hello3" },
+                                                            { "en" => "hello4" }
+                                                          ])
+    end
+
+    it "for de" do
+      res2 = exec_project_id_query(
+        languages: ["de"]
+      )
+
+      expect(res2.map { |p| p.description}).to match_array([
+                                                             { "de" => "hallo" },
+                                                             { "de" => "hallo2" },
+                                                             {},
+                                                             {}
+                                                           ])
+    end
   end
 
 
