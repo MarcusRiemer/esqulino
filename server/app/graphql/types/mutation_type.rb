@@ -14,6 +14,10 @@ module Types
     field :update_news, mutation: Mutations::News::UpdateNews
     field :destroy_news, mutation: Mutations::News::DestroyNews
 
+    field :create_assigment, mutation: Mutations::Projects::CreateAssigment
+    field :create_assigment_submission, mutation: Mutations::Projects::CreateAssigmentSubmission
+    field :create_assigment_submission_grade, mutation: Mutations::Projects::CreateAssigmentSubmissionGrade
+
     field :create_project, mutation: Mutations::Projects::CreateProject
     field :create_deep_copy_project, mutation: Mutations::Projects::CreateDeepCopyProject
     field :destroy_project, mutation: Mutations::Projects::DestroyProject
