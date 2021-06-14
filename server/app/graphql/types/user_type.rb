@@ -9,8 +9,8 @@ module Types
     field :project_members, [Types::ProjectMemberType], null: false
     field :identities, [Types::IdentityType], null: true
     field :news, [Types::NewsType], null: true
-    field :grades, [Types::AssigmentSubmissionGradeType], null: true
-    field :assigment_submission_grades, [Types::AssigmentSubmissionGradeType], null: true
+    field :grades, [Types::AssignmentSubmissionGradeType], null: true
+    field :assignment_submission_grades, [Types::AssignmentSubmissionGradeType], null: true
 
   field :member_at, [Types::ProjectType], null: false
   field :project_members, [Types::ProjectMemberType], null: false

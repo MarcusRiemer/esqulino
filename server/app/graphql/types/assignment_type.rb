@@ -1,10 +1,10 @@
 module Types
-    class Types::AssigmentType < Types::Base::BaseObject
+    class Types::AssignmentType < Types::Base::BaseObject
         field :id, ID, null: false
 
         field :name, String, null: false
         field :description, String, null: true
-        field :assigment_submission, [Types::AssigmentSubmissionType], null: true
+        field :assignment_submission, [Types::AssignmentSubmissionType], null: true
         field :project_id, ID, null: true
         field :project, Types::ProjectType, null: true
         field :start_date, GraphQL::Types::ISO8601DateTime, null: true

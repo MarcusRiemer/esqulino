@@ -59,19 +59,19 @@ class ProjectPolicy < ApplicationPolicy
     true
   end
 
-  def create_assigment?
+  def create_assignment?
     permitted_roles = ["admin", "owner"]
 
     return project.user_have_role(user,permitted_roles)
   end
 
-  def create_assigment_submission?
+  def create_assignment_submission?
     permitted_roles = ["admin", "owner", "participant"]
 
     return project.user_have_role(user,permitted_roles)
   end
 
-  def create_assigment_submission_grade?
+  def create_assignment_submission_grade?
     permitted_roles = ["admin", "owner"]
 
     return project.user_have_role(user, permitted_roles)

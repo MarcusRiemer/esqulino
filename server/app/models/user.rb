@@ -19,12 +19,12 @@ class User < ApplicationRecord
   # Some users have written news
   has_many :news
 
-  # Some users have  rated an assigment 
-  has_many :assigment_submission_grades
+  # Some users have  rated an assignment 
+  has_many :assignment_submission_grades
 
   # Some users have grades
-  has_many :assigment_submission_grade_users
-  has_many :grades, class_name: 'User', :foreign_key => 'user_id', through:  :assigment_submission_grade_users, :source => :assigment_submission_grade  
+  has_many :assignment_submission_grade_users
+  has_many :grades, class_name: 'User', :foreign_key => 'user_id', through:  :assignment_submission_grade_users, :source => :assignment_submission_grade  
 
   # One user can join many projects(Courses)
   has_many :project_members
