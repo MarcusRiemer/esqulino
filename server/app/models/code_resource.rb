@@ -14,8 +14,12 @@ class CodeResource < ApplicationRecord
   # ... uses exactly one grammar for validation ...
   has_one :grammar, through: :block_language
 
+  # Each resource can belongs to a single assignment submittion ...
+  has_one :assignment_submitted_code_resource
+
   # May be the basis for generated grammars
   has_many :generated_grammars, foreign_key: 'generated_from_id', class_name: 'Grammar'
+
 
   # May be the basis for generated block languages
   has_many :generated_block_languages, foreign_key: 'generated_from_id', class_name: 'BlockLanguage'

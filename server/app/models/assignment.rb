@@ -1,6 +1,10 @@
 class Assignment < ApplicationRecord
+    # Each Assignment is assigned to a project 
     belongs_to :project
+
+    # Possible solutions for the Assignment 
     has_many :assignment_submissions
-    has_many :assignment_code_resources
-    has_many :code_resources, through:  :assignment_code_resources
+
+    # Required file formats to successfully pass the Assignment
+    has_many :assignment_required_code_resources
 end
