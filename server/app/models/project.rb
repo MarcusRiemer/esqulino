@@ -10,8 +10,8 @@ class Project < ApplicationRecord
   # The actual users that are participating in this course
   has_many :members, class_name: 'User', :foreign_key => 'project_id', through:  :project_members, :source => :user
   
-  # Assigments which can be created for the Project
-  has_many :assigments
+  # Assignments which can be created for the Project
+  has_many :assignments
 
   # The owner in this project
   belongs_to :user

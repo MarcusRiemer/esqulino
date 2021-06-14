@@ -1,5 +1,5 @@
 module Types
-    class Types::AssigmentSubmissionGradeType < Types::Base::BaseObject
+    class Types::AssignmentSubmissionGradeType < Types::Base::BaseObject
         field :id, ID, null: false
 
         field :name, String, null: false
@@ -11,7 +11,7 @@ module Types
 
         field :auditees, [Types::UserType], null: false
      
-        field :assigment_submission, Types::AssigmentSubmissionType, null: false
+        field :assignment_submission, Types::AssignmentSubmissionType, null: false
 
         field :created_at, GraphQL::Types::ISO8601DateTime, null: false
         field :updated_at, GraphQL::Types::ISO8601DateTime, null: false

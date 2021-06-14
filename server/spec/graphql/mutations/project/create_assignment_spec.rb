@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Mutations::Projects::CreateAssigment do
+RSpec.describe Mutations::Projects::CreateAssignment do
 
   # These specs relies on
   # * an existing guest user
@@ -18,7 +18,7 @@ RSpec.describe Mutations::Projects::CreateAssigment do
     }
   end
 
-  it "create assigment normal work" do
+  it "create assignment normal work" do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false)
 
@@ -36,15 +36,15 @@ RSpec.describe Mutations::Projects::CreateAssigment do
 
 
 
-    expect( Assigment.count ).to eq 1
-    expect( Assigment.first.name).to eq "Aufgabe 1"
-    expect( Assigment.first.description).to eq "Test"
-    expect( Assigment.first.start_date).to eq date
-    expect( Assigment.first.end_date).to eq date_later
+    expect( Assignment.count ).to eq 1
+    expect( Assignment.first.name).to eq "Aufgabe 1"
+    expect( Assignment.first.description).to eq "Test"
+    expect( Assignment.first.start_date).to eq date
+    expect( Assignment.first.end_date).to eq date_later
 
   end
 
-  it "create assigment without description, start_date and end_date" do
+  it "create n without description, start_date and end_date" do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false)
 
@@ -56,14 +56,14 @@ RSpec.describe Mutations::Projects::CreateAssigment do
       name: "Aufgabe 1",
     )
 
-    expect( Assigment.count ).to eq 1
-    expect( Assigment.first.name).to eq "Aufgabe 1"
-    expect( Assigment.first.description).to eq nil
-    expect( Assigment.first.start_date).to eq nil
-    expect( Assigment.first.end_date).to eq nil
+    expect( Assignment.count ).to eq 1
+    expect( Assignment.first.name).to eq "Aufgabe 1"
+    expect( Assignment.first.description).to eq nil
+    expect( Assignment.first.start_date).to eq nil
+    expect( Assignment.first.end_date).to eq nil
   end
 
-  it "create assigment as not a member of the project" do
+  it "create n as not a member of the project" do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false)
 
@@ -75,10 +75,10 @@ RSpec.describe Mutations::Projects::CreateAssigment do
       name: "Aufgabe 1",
     )}.to raise_error(Pundit::NotAuthorizedError)
 
-    expect( Assigment.count ).to eq 0
+    expect( Assignment.count ).to eq 0
   end
 
-  it "create assigment as not admin or owner" do
+  it "create n as not admin or owner" do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false)
 
@@ -93,10 +93,10 @@ RSpec.describe Mutations::Projects::CreateAssigment do
       name: "Aufgabe 1",
     )}.to raise_error(Pundit::NotAuthorizedError)
 
-    expect( Assigment.count ).to eq 0
+    expect( Assignment.count ).to eq 0
   end
 
-  it "create assigment as admin" do
+  it "create n as admin" do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false)
 
@@ -111,14 +111,14 @@ RSpec.describe Mutations::Projects::CreateAssigment do
       name: "Aufgabe 1",
     )
 
-    expect( Assigment.count ).to eq 1
-    expect( Assigment.first.name).to eq "Aufgabe 1"
-    expect( Assigment.first.description).to eq nil
-    expect( Assigment.first.start_date).to eq nil
-    expect( Assigment.first.end_date).to eq nil
+    expect( Assignment.count ).to eq 1
+    expect( Assignment.first.name).to eq "Aufgabe 1"
+    expect( Assignment.first.description).to eq nil
+    expect( Assignment.first.start_date).to eq nil
+    expect( Assignment.first.end_date).to eq nil
   end
 
-  it "create assigment end_date is behind the start_date" do
+  it "create n end_date is behind the start_date" do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false)
     mut = described_class.new(**init_args(user: current_user_owner))
@@ -180,7 +180,7 @@ RSpec.describe Mutations::Projects::CreateAssigment do
     )}.to raise_error(ArgumentError)
   end
 
-  it "create assigment the project is not existing" do
+  it "create assignment the project is not existing" do
     user = create(:user, display_name: "Owner")
 
     mut = described_class.new(**init_args(user: user))
@@ -189,6 +189,6 @@ RSpec.describe Mutations::Projects::CreateAssigment do
       name: "Aufgabe 1",
     )}.to raise_error(ActiveRecord::RecordNotFound)
 
-    expect( Assigment.count ).to eq 0
+    expect( Assignment.count ).to eq 0
   end
 end
