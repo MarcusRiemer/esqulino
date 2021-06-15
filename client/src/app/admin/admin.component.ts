@@ -20,7 +20,7 @@ export const adminItems: NavItem[] = [
       en: "Projects",
     },
     route: ["/admin/project"],
-    icon: "puzzle-piece",
+    icon: "code-fork",
   },
   {
     type: "link",

@@ -1,13 +1,14 @@
 import { RouterModule, Routes } from "@angular/router";
 
-import { UserComponent } from "./user.component";
 import { LoggedInGuard } from "./../shared/guards/logged-in.guard";
+
+import { UserComponent } from "./user.component";
+import { OwnProjectsOverviewComponent } from "./own-projects-overview.component";
 
 export const userRoutes: Routes = [
   {
     path: "",
     component: UserComponent,
-    canActivate: [LoggedInGuard],
     runGuardsAndResolvers: "always",
     children: [
       {
@@ -17,6 +18,10 @@ export const userRoutes: Routes = [
           import("./settings/settings.module").then(
             (m) => m.UserSettingsModule
           ),
+      },
+      {
+        path: "projects",
+        component: OwnProjectsOverviewComponent,
       },
     ],
   },
