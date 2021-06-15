@@ -43,6 +43,7 @@ module Types
       # Order Fields
       value 'name'
       value 'slug'
+      value 'createdAt', value: "created_at"
     end
 
     class OrderType < Types::Base::BaseInputObject

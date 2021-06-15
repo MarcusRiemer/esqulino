@@ -67,6 +67,7 @@ export class OverviewProjectComponent
     "totalCount",
     "id",
     "userName",
+    "createdAt",
   ];
 
   get queryData() {

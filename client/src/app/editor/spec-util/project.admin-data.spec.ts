@@ -21,6 +21,7 @@ const ADMIN_LIST_PROJECT: AdminListProjectNode = {
     __typename: "User",
     displayName: "System",
   },
+  createdAt: "2018-02-20T20:48:21Z",
 };
 
 const FRONTEND_LIST_PROJECT: FrontendListProjectNode = {

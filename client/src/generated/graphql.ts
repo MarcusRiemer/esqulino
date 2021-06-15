@@ -852,7 +852,7 @@ export type ProjectMember = {
   userId: Scalars["ID"];
 };
 
-export type ProjectOrderFieldEnum = "name" | "slug";
+export type ProjectOrderFieldEnum = "name" | "slug" | "createdAt";
 
 export type ProjectOrderType = {
   orderField?: Maybe<ProjectOrderFieldEnum>;
@@ -1399,7 +1399,7 @@ export type AdminListProjectsQuery = { __typename?: "Query" } & {
           Maybe<
             { __typename?: "Project" } & Pick<
               Project,
-              "id" | "name" | "slug" | "codeResourceCount"
+              "id" | "name" | "slug" | "codeResourceCount" | "createdAt"
             > & {
                 user?: Maybe<
                   { __typename?: "User" } & Pick<User, "displayName">
@@ -2646,6 +2646,7 @@ export const AdminListProjectsDocument = gql`
         user {
           displayName
         }
+        createdAt
       }
       totalCount
       pageInfo {
