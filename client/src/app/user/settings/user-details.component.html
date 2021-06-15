@@ -1,0 +1,19 @@
+<h2>Benutzerdetails</h2>
+<table class="table">
+  <tbody>
+    <tr>
+      <td>Benutzer-ID</td>
+      <td>
+        <code>{{ userId$ | async }}</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Rollen</td>
+      <td>
+        <span *ngFor="let role of roles$ | async">
+          {{ role }}
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>

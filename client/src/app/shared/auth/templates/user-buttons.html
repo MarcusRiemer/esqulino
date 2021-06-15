@@ -7,9 +7,17 @@
     Einstellungen
   </button>
 
+  <button
+      mat-menu-item
+      [routerLink]="['/user/projects']"
+      i18n="@@userMenuProjects"
+  >
+    Projekte
+  </button>
+
   <button mat-menu-item (click)="onLogout()" i18n="@@userMenuLogout">
     <span class="fa fa-fw fa-sign-out"></span>
-    Logout
+    Abmelden
   </button>
 </mat-menu>
 

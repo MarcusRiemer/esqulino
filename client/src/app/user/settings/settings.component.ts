@@ -28,7 +28,7 @@ export const userSettings: NavItem[] = [
 ];
 
 @Component({
-  templateUrl: "./components/templates/settings-index.html",
+  templateUrl: "./settings.component.html",
 })
 export class UserSettingsComponent implements OnInit {
   constructor(private _sideNav: SideNavService) {}

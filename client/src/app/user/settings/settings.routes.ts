@@ -1,6 +1,6 @@
 import { Routes, RouterModule } from "@angular/router";
 
-import { AccountSettingsComponent } from "./components/account-settings.component";
+import { AccountSettingsComponent } from "./account-settings.component";
 import { UserSettingsComponent } from "./settings.component";
 
 export const userSettingsRoutes: Routes = [
