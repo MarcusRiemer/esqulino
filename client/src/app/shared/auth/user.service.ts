@@ -50,7 +50,6 @@ export class UserService {
   }
 
   private fireIdentities(identities: ServerProviderDescription) {
-    console.log(identities);
     this._cachedIdentities.next(identities);
   }
 

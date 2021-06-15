@@ -6,9 +6,8 @@
     [opened]="!(isMobile$ | async)"
   >
     <!-- Sidebar item output -->
-
     <mat-nav-list id="main-nav">
-      <ng-container *ngFor="let nav of navItems">
+      <ng-container *ngFor="let nav of navItems$ | async">
         <ng-container *ngIf="userHasRoles$(nav.requireRoles) | async">
           <ng-container [ngSwitch]="nav.type">
             <!-- Rendering internal links -->

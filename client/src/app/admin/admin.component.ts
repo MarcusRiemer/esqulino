@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 import { NavItem } from "../shared/nav-interfaces";
 import { SideNavService } from "../shared/side-nav.service";
@@ -69,13 +69,12 @@ export const adminItems: NavItem[] = [
 @Component({
   templateUrl: "templates/admin.html",
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit {
   constructor(private _sideNavService: SideNavService) {}
 
-  /**
-   * All items that need to be shown in the general navigation
-   */
-  readonly adminItems = adminItems;
+  ngOnInit(): void {
+    this._sideNavService.newSideNav(adminItems);
+  }
 
   // Toggles the shared side-nav
   public navToggle(): void {

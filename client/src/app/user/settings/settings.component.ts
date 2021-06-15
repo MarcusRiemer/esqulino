@@ -10,7 +10,7 @@ export const userSettings: NavItem[] = [
       de: "Account",
       en: "Account",
     },
-    route: ["/user/settings/account"],
+    route: ["/user/settings"],
     icon: "user",
   },
   {

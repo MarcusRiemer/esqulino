@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, OnDestroy } from "@angular/core";
+import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { BrowserService } from "./browser.service";
 import { MatSidenav } from "@angular/material/sidenav";
 
@@ -14,9 +14,8 @@ import { UserService } from "./auth/user.service";
   templateUrl: "./templates/side-nav.html",
 })
 export class SideNavComponent implements OnDestroy {
-  @Input("items") navItems: NavItem[];
-
-  @ViewChild("sideNav") sidenav: MatSidenav;
+  @ViewChild("sideNav")
+  sidenav: MatSidenav;
 
   /**
    * Used for dependency injection
@@ -27,7 +26,7 @@ export class SideNavComponent implements OnDestroy {
     private readonly _userService: UserService
   ) {}
 
-  readonly navItems$ = this._sideNav.sideNavItems$();
+  readonly navItems$ = this._sideNav.sideNavItems$;
 
   // Checks if the user is logged in
   readonly loggedIn$ = this._userService.isLoggedIn$;

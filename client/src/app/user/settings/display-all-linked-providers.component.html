@@ -1,4 +1,4 @@
-<ng-container *ngIf="(providers$ | async) as providers">
+<ng-container *ngIf="providers$ | async as providers">
   <h2>Verknüpfte Konten</h2>
   <table class="table">
     <thead>
@@ -8,7 +8,7 @@
 
     <tbody>
       <tr *ngFor="let provider of providers">
-        <td>{{provider.email}}</td>
+        <td>{{ provider.email }}</td>
         <td><provider-show [provider]="provider"></provider-show></td>
       </tr>
     </tbody>

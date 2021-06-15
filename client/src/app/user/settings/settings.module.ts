@@ -6,7 +6,7 @@ import { SharedAppModule } from "../../shared/shared.module";
 import { userSettingsRouting } from "./settings.routes";
 import { DisplayAllLinkedProvidersComponent } from "./display-all-linked-providers.component";
 import { AccountSettingsComponent } from "./account-settings.component";
-import { UserDetailsComponent } from './user-details.component';
+import { UserDetailsComponent } from "./user-details.component";
 
 @NgModule({
   declarations: [
