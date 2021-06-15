@@ -45,3 +45,4 @@ module Types
     argument :languages, [Types::Base::BaseEnum::LanguageEnum], required: false
   end
 end
+end
