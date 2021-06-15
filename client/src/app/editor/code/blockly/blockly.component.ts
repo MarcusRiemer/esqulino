@@ -9,7 +9,7 @@ import {
 import { Router } from "@angular/router";
 
 import { Subscription } from "rxjs";
-import { first, skip } from "rxjs/operators";
+import { first, skip, take } from "rxjs/operators";
 
 import * as Blockly from "blockly";
 
@@ -76,7 +76,7 @@ export class BlocklyComponent implements AfterViewInit, OnDestroy, OnInit {
       "Eingebauter Editor",
       "code"
     );
-    btnBuiltinEditor.onClick.pipe(first()).subscribe(async (_) => {
+    btnBuiltinEditor.onClick.pipe(take(1)).subscribe(async (_) => {
       this.syncToCodeResource();
       const snap = this._router.url;
       this._router.navigateByUrl(snap.substring(0, snap.length - 2));
