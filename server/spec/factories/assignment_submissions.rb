@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :assignment_submission do
-    association :anssigment, factory: :anssigment
+    association :assignment, factory: :assignment
   end
 end

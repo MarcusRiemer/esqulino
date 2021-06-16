@@ -13,6 +13,13 @@ class Project < ApplicationRecord
   # Assignments which can be created for the Project
   has_many :assignments
 
+  #That are project with the assignments 
+  belongs_to  :solution_project, class_name: 'ProjectCourseParticipation', optional: true
+
+  #That are the "groups" which want to solved this assigments
+  has_many :assignments_project, class_name: 'ProjectCourseParticipation', :foreign_key => 'project_id'
+
+
   # The owner in this project
   belongs_to :user
   # Source citations for projects
