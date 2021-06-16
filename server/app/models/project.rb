@@ -13,7 +13,7 @@ class Project < ApplicationRecord
   # Assignments which can be created for the Project
   has_many :assignments
 
-  #That are project with the assignments 
+  #If this field is set it meant that it is a "Groupe" and participates in a course 
   belongs_to  :solution_project, class_name: 'ProjectCourseParticipation', optional: true
 
   #That are the "groups" which want to solved this assigments
