@@ -22,6 +22,10 @@ module Types
           null: false,
           resolver: Resolvers::ProjectInstanceMemberResolver
 
+          
+    field :solution_project, Types::ProjectCourseParticipationType, null: true
+    field :assignments_projects, [Types::ProjectCourseParticipationType], null: true
+
     field :code_resources, [Types::CodeResourceType], null: false
     field :code_resource_count, Integer, null: true
     field :project_sources, [Types::ProjectSourceType], null: false
