@@ -1,0 +1,18 @@
+mutation CreateCourseParticipation(
+  $solutionProjectId: ID!
+  $userIds: [ID!]!
+  $slug: String
+) {
+  createCourseParticipation(
+    input: {
+      solutionProjectId: $solutionProjectId
+      userIds: $userIds
+      slug: $slug
+    }
+  ) {
+    project {
+      id
+      slug
+    }
+  }
+}

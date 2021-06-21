@@ -1,7 +1,12 @@
 class ProjectCourseParticipation < ApplicationRecord
-    # Thats the project with all the assignments
-    has_one :solution_project, class_name: 'Project', :foreign_key => 'project_course_participation_id'
-
     # Thats one of the participant group
-    belongs_to  :assignments_project, class_name: 'Project' 
+    belongs_to :assignments_project, class_name: 'Project'
+   
+    # Thats the project with all the assignments
+    belongs_to  :solution_project, class_name: 'Project' 
+
+    def getAssignments()
+        return solution_project.assigments
+    end
+    
 end

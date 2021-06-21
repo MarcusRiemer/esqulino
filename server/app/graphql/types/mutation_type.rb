@@ -18,6 +18,8 @@ module Types
     field :create_assignment_submission, mutation: Mutations::Projects::CreateAssignmentSubmission
     field :create_assignment_submission_grade, mutation: Mutations::Projects::CreateAssignmentSubmissionGrade
 
+    field :create_course_participation, mutation: Mutations::Projects::CreateCourseParticipation
+
     field :create_project, mutation: Mutations::Projects::CreateProject
     field :create_deep_copy_project, mutation: Mutations::Projects::CreateDeepCopyProject
     field :destroy_project, mutation: Mutations::Projects::DestroyProject
