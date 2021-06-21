@@ -17,6 +17,52 @@ query FullProject($id: ID!) {
         displayName
       }
     }
+    solutionProject {
+      id
+      slug
+      name
+      description
+      assignments {
+        id
+        name
+        description
+        startDate
+        endDate
+        assignmentRequiredCodeResources {
+          id
+          resourceType
+        }
+      }
+    }
+
+    assignmentsProjects {
+      id
+      slug
+      name
+      description
+      projectMembers {
+        id
+        membershipType
+        joinedAt
+        user {
+          id
+          displayName
+        }
+      }
+      assignment {
+        id
+        assignmentSubmission {
+          id
+          assignmentSubmissionGrade {
+            id
+            name
+            note
+            feedback
+          }
+        }
+      }
+    }
+
     user {
       id
       displayName

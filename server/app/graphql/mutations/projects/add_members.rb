@@ -10,7 +10,7 @@ class Mutations::Projects::AddMembers < Mutations::BaseMutation
       authorize project, :add_member?
       ActiveRecord::Base.transaction do
         user_ids.each do |id|
-          project = helper_add_one_member(project, id, is_admin)
+          project = Mutations::Projects::AddMembers.helper_add_one_member(project, id, is_admin, current_user)
         end
       end
       
@@ -21,7 +21,7 @@ class Mutations::Projects::AddMembers < Mutations::BaseMutation
       return (e)
     end
 
-    def helper_add_one_member(project, user_id, is_admin)
+    def self.helper_add_one_member(project, user_id, is_admin, current_user)
       
       user = User.find(user_id)
 

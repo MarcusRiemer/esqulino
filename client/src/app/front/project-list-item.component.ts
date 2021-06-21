@@ -1,7 +1,10 @@
 import { Component, Input, PLATFORM_ID, Inject } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
-
-import { FrontpageListProjectsQuery } from "../../generated/graphql";
+import { Router } from "@angular/router";
+import {
+  CreateCourseParticipationGQL,
+  FrontpageListProjectsQuery,
+} from "../../generated/graphql";
 
 type projectNode = FrontpageListProjectsQuery["projects"]["nodes"][0];
 
@@ -20,7 +23,11 @@ export class ProjectListItemComponent {
    */
   useSobdomain = true;
 
-  public constructor(@Inject(PLATFORM_ID) private _platformId: Object) {}
+  public constructor(
+    @Inject(PLATFORM_ID) private _platformId: Object,
+    private _router: Router,
+    private _createCourseParticipation: CreateCourseParticipationGQL
+  ) {}
 
   /**
    * The returned value will start of with '//' and thus be independent
@@ -37,6 +44,24 @@ export class ProjectListItemComponent {
    */
   get hasImage(): boolean {
     return !!this.project?.preview;
+  }
+
+  async createCourseParticipation() {
+    await this._createCourseParticipation
+      .mutate({
+        solutionProjectId: this.project.id,
+        userIds: [],
+      })
+      .toPromise()
+      .then((e) => {
+        this._router.navigate([
+          "/",
+          "editor",
+          e.data.createCourseParticipation.project.slug
+            ? e.data.createCourseParticipation.project.slug
+            : e.data.createCourseParticipation.project.id,
+        ]);
+      });
   }
 
   /**
