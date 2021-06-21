@@ -4,6 +4,7 @@ import { LoggedInGuard } from "./../shared/guards/logged-in.guard";
 
 import { UserComponent } from "./user.component";
 import { OwnProjectsOverviewComponent } from "./own-projects-overview.component";
+import { CreateProjectComponent } from "./create-project.component";
 
 export const userRoutes: Routes = [
   {
@@ -22,6 +23,10 @@ export const userRoutes: Routes = [
       {
         path: "projects",
         component: OwnProjectsOverviewComponent,
+      },
+      {
+        path: "create/project",
+        component: CreateProjectComponent,
       },
     ],
   },

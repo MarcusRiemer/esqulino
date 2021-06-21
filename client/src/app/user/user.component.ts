@@ -23,6 +23,15 @@ export const userSettings: NavItem[] = [
     icon: "code-fork",
   },
   {
+    type: "link",
+    text: {
+      de: "Neues Projekt",
+      en: "New Project",
+    },
+    route: ["/user/create/project"],
+    icon: "plus",
+  },
+  {
     type: "fill",
   },
   {
@@ -37,7 +46,7 @@ export const userSettings: NavItem[] = [
 ];
 
 @Component({
-  templateUrl: "./templates/user-index.html",
+  templateUrl: "./user.component.html",
 })
 export class UserComponent implements OnInit {
   constructor(private _sideNavService: SideNavService) {}

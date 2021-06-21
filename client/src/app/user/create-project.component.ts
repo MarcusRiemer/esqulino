@@ -13,7 +13,7 @@ import { CreateProjectGQL } from "../../generated/graphql";
 import { CurrentLocaleService } from "../current-locale.service";
 
 @Component({
-  templateUrl: "templates/create-project.html",
+  templateUrl: "create-project.component.html",
 })
 export class CreateProjectComponent {
   private _currentError: string[] = [];

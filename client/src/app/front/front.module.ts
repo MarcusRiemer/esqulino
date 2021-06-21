@@ -8,7 +8,6 @@ import { frontRouting } from "./front.routes";
 
 import { AboutComponent } from "./about.component";
 import { AboutAcademiaComponent } from "./academia.component";
-import { CreateProjectComponent } from "./create-project.component";
 import { AboutPupilComponent } from "./pupil.component";
 import { AboutTeacherComponent } from "./teacher.component";
 import { ImprintComponent } from "./imprint.component";
@@ -26,7 +25,6 @@ import { DevelopmentComponent } from "./development.component";
     AboutAcademiaComponent,
     AboutPupilComponent,
     AboutTeacherComponent,
-    CreateProjectComponent,
     FrontComponent,
     ImprintComponent,
     ProjectListComponent,
