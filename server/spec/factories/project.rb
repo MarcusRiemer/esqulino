@@ -4,7 +4,10 @@ FactoryBot.define do
     sequence(:slug) { |n| "project-#{n}" }
     description { { "en" => "Generated on the fly, used for tests" } }
     index_page_id { nil }
-    public { false }
+    # Factoried projects are public because this eases test writing alot
+    # Having projects private by default would result in many projects that
+    # are hidden by resolvers.
+    public { true }
     association :user
 
     factory :project_with_default_database do

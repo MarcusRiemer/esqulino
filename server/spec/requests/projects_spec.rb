@@ -341,7 +341,7 @@ RSpec.describe ProjectsController, type: :request do
     end
 
     it 'does not list private projects' do
-      FactoryBot.create(:project)
+      FactoryBot.create(:project, :private)
       FactoryBot.create(:project, :public)
 
       send_query(query_name: "FrontpageListProjects")
