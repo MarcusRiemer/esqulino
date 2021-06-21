@@ -2,3 +2,9 @@
 table.full-width {
     width: 100%;
 }
+
+/* Hides (cached) tables until the table data is available,
+   hides progress-bar when table data arrived */
+table.hide,mat-progress-bar.hide{
+    display: none !important;
+}
