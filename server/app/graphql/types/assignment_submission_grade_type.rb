@@ -11,6 +11,7 @@ module Types
 
         field :auditees, [Types::UserType], null: false
      
+        field :assignment_submission_id, ID, null: false
         field :assignment_submission, Types::AssignmentSubmissionType, null: false
 
         field :created_at, GraphQL::Types::ISO8601DateTime, null: false
