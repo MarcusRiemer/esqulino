@@ -341,7 +341,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "AssignmentRequiredCodeResource",
+                    "name": "AssignmentSubmission",
                     "ofType": null
                   }
                 }

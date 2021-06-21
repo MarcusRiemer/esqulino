@@ -34,7 +34,6 @@ query FullProject($id: ID!) {
         }
       }
     }
-
     assignmentsProjects {
       id
       slug
@@ -49,20 +48,7 @@ query FullProject($id: ID!) {
           displayName
         }
       }
-      assignment {
-        id
-        assignmentSubmission {
-          id
-          assignmentSubmissionGrade {
-            id
-            name
-            note
-            feedback
-          }
-        }
-      }
     }
-
     user {
       id
       displayName

@@ -73,7 +73,7 @@ export type Assignment = {
   assignmentRequiredCodeResources?: Maybe<
     Array<AssignmentRequiredCodeResource>
   >;
-  assignmentSubmission?: Maybe<Array<AssignmentRequiredCodeResource>>;
+  assignmentSubmission?: Maybe<Array<AssignmentSubmission>>;
   createdAt: Scalars["ISO8601DateTime"];
   description?: Maybe<Scalars["String"]>;
   endDate?: Maybe<Scalars["ISO8601DateTime"]>;
@@ -2118,7 +2118,7 @@ export type FullProjectQuery = { __typename?: "Query" } & {
               Array<
                 { __typename?: "Assignment" } & Pick<
                   Assignment,
-                  "id" | "name" | "description"
+                  "id" | "name" | "description" | "startDate" | "endDate"
                 > & {
                     assignmentRequiredCodeResources?: Maybe<
                       Array<
@@ -3736,6 +3736,8 @@ export const FullProjectDocument = gql`
           id
           name
           description
+          startDate
+          endDate
           assignmentRequiredCodeResources {
             id
             resourceType
