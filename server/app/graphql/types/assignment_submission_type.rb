@@ -2,6 +2,9 @@ module Types
     class Types::AssignmentSubmissionType < Types::Base::BaseObject
         field :id, ID, null: false
 
+        field :project_id, ID, null: false
+        field :project, Types::ProjectType, null: false
+
         field :assignment_id, ID, null: false
         field :assignment, Types::AssignmentType, null: false
 

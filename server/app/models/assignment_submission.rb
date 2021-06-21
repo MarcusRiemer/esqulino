@@ -5,6 +5,9 @@ class AssignmentSubmission < ApplicationRecord
     # Evaluation of the submitted solutions
     belongs_to :assignment_submission_grade, optional: true
 
-    # Abgegebene Code Resoursen
+    #Thats the group which create this submission
+    belongs_to :project
+
+    # Code resources delivered
     has_many :assignment_submitted_code_resource 
 end

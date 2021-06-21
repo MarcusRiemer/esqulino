@@ -50,7 +50,9 @@ ActiveRecord::Schema.define(version: 2021_06_15_122746) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "assignment_id", null: false
+    t.uuid "project_id", null: false
     t.index ["assignment_id"], name: "index_assignment_submissions_on_assignment_id"
+    t.index ["project_id"], name: "index_assignment_submissions_on_project_id"
   end
 
   create_table "assignment_submitted_code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -186,10 +188,12 @@ ActiveRecord::Schema.define(version: 2021_06_15_122746) do
 
   create_table "project_course_participations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "access_denied"
-    t.uuid "project_id", null: false
+    t.uuid "solution_project_id", null: false
+    t.uuid "assignments_project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["project_id"], name: "index_project_course_participations_on_project_id"
+    t.index ["assignments_project_id"], name: "index_project_course_participations_on_assignments_project_id"
+    t.index ["solution_project_id"], name: "index_project_course_participations_on_solution_project_id"
   end
 
   create_table "project_databases", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -244,9 +248,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_122746) do
     t.uuid "user_id"
     t.hstore "name", default: {}, null: false
     t.hstore "description", default: {}, null: false
-    t.uuid "project_course_participation_id"
     t.index ["default_database_id"], name: "index_projects_on_default_database_id"
-    t.index ["project_course_participation_id"], name: "index_projects_on_project_course_participation_id"
     t.index ["slug"], name: "index_projects_on_slug", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
@@ -283,6 +285,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_122746) do
   add_foreign_key "assignment_submission_grades", "assignment_submissions"
   add_foreign_key "assignment_submission_grades", "users"
   add_foreign_key "assignment_submissions", "assignments"
+  add_foreign_key "assignment_submissions", "projects"
   add_foreign_key "assignment_submitted_code_resources", "assignment_required_code_resources"
   add_foreign_key "assignment_submitted_code_resources", "assignment_submissions"
   add_foreign_key "assignment_submitted_code_resources", "code_resources"
@@ -303,14 +306,14 @@ ActiveRecord::Schema.define(version: 2021_06_15_122746) do
   add_foreign_key "identities", "users"
   add_foreign_key "log_entries", "users"
   add_foreign_key "news", "users"
-  add_foreign_key "project_course_participations", "projects"
+  add_foreign_key "project_course_participations", "projects", column: "assignments_project_id"
+  add_foreign_key "project_course_participations", "projects", column: "solution_project_id"
   add_foreign_key "project_databases", "projects"
   add_foreign_key "project_members", "projects"
   add_foreign_key "project_members", "users"
   add_foreign_key "project_sources", "projects"
   add_foreign_key "project_uses_block_languages", "block_languages"
   add_foreign_key "project_uses_block_languages", "projects"
-  add_foreign_key "projects", "project_course_participations"
   add_foreign_key "projects", "project_databases", column: "default_database_id"
   add_foreign_key "projects", "users"
   add_foreign_key "user_roles", "roles"
