@@ -8,6 +8,13 @@ class Resolvers::ProjectsResolver < Resolvers::BaseResolver
 
     scope = Project
 
+    # Limit non-admin users to their own or public projects
+    # TODO: Also allow them to view projects that they have
+    #       read or write access to.
+    if not current_user.has_role? :admin
+      scope = scope.where(public: true).or(scope.where(user_id: current_user.id))
+    end
+
     if requested_columns(context).include?("code_resource_count")
 
       # code_resource_count will be used for field resolving in project_type.rb

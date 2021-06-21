@@ -19,7 +19,8 @@ RSpec.describe Resolvers::ProjectsResolver do
   def exec_project_id_query(
         languages: nil,
         order: nil,
-        filter: nil
+        filter: nil,
+        user: User.guest
       )
     variables = {
       input: {
@@ -30,7 +31,8 @@ RSpec.describe Resolvers::ProjectsResolver do
     }
     res = execute_query(
       query: IDS_QUERY,
-      variables: variables
+      variables: variables,
+      user: user
     )
 
     # The specs expect active record models, so we built them from the response
@@ -266,5 +268,46 @@ RSpec.describe Resolvers::ProjectsResolver do
     )
     expect(res1).to eq([p2, p3, p1])
     expect(res2).to eq([p3, p2, p1])
+  end
+
+  describe "filter to current user" do
+    let(:u_other) { FactoryBot.create(:user) }
+    let(:p_other) { FactoryBot.create(:project, user: u_other, public: false) }
+
+    shared_examples_for "project_listing" do
+      it "Shows no projects if there are no projects" do
+        res = exec_project_id_query()
+        expect(res).to eq([])
+      end
+
+      it "Shows no projects if there are no projects (even if filtered)" do
+        res = exec_project_id_query(
+          filter: {
+            userId: u_other.id
+          }
+        )
+        expect(res).to eq([])
+      end
+
+      it "Shows a public project of another user" do
+        p_other_public = FactoryBot.create(:project, user: u_other, public: true)
+
+        res = exec_project_id_query()
+        expect(res).to eq([p_other_public])
+      end
+    end
+
+    describe "Guest:" do
+      it_behaves_like "project_listing" do
+        let(:u_current) { User.guest }
+      end
+    end
+
+    describe "Other:" do
+      it_behaves_like "project_listing" do
+        let(:u_current) { u_other }
+      end
+    end
+
   end
 end

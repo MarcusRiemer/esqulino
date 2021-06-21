@@ -28,4 +28,8 @@ class Resolvers::BaseResolver < GraphQL::Schema::Resolver
       raise EsqulinoError::Base.new("Resolver query without query context")
     end
   end
+
+  def current_user
+    context[:user]
+  end
 end
