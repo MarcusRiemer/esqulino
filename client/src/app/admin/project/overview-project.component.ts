@@ -9,9 +9,6 @@ import {
 } from "../../../generated/graphql";
 import { MatPaginator } from "@angular/material/paginator";
 
-// TODO: Should be beautified and used
-type Query = ReturnType<AdminListProjectsGQL["watch"]>;
-
 type DataKey = Exclude<keyof AdminListProjectsQuery, "__typename">;
 
 // TODO: Resolve this from the Query type above, requires unpacking
@@ -24,7 +21,7 @@ type ColumnName = keyof ListItem | "totalCount" | "userName";
  *
  */
 @Component({
-  templateUrl: "./templates/overview-project.html",
+  templateUrl: "./overview-project.component.html",
 })
 export class OverviewProjectComponent
   implements

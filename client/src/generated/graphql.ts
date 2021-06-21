@@ -828,6 +828,7 @@ export type ProjectEdge = {
 
 export type ProjectFilterFieldType = {
   id?: Maybe<Scalars["ID"]>;
+  userId?: Maybe<Scalars["ID"]>;
   name?: Maybe<Scalars["String"]>;
   slug?: Maybe<Scalars["String"]>;
   public?: Maybe<Scalars["Boolean"]>;
@@ -2017,6 +2018,36 @@ export type GrammarGeneratedByQuery = { __typename?: "Query" } & {
       Array<Maybe<{ __typename?: "Grammar" } & Pick<Grammar, "id" | "name">>>
     >;
   };
+};
+
+export type ListUserProjectsQueryVariables = Exact<{
+  userId?: Maybe<Scalars["ID"]>;
+  first?: Maybe<Scalars["Int"]>;
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  last?: Maybe<Scalars["Int"]>;
+}>;
+
+export type ListUserProjectsQuery = { __typename?: "Query" } & {
+  projects: { __typename?: "ProjectConnection" } & Pick<
+    ProjectConnection,
+    "totalCount"
+  > & {
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: "Project" } & Pick<
+              Project,
+              "id" | "name" | "slug" | "createdAt"
+            >
+          >
+        >
+      >;
+      pageInfo: { __typename?: "PageInfo" } & Pick<
+        PageInfo,
+        "hasPreviousPage" | "hasNextPage" | "startCursor" | "endCursor"
+      >;
+    };
 };
 
 export type LoginProvidersQueryVariables = Exact<{ [key: string]: never }>;
@@ -3536,6 +3567,51 @@ export class GrammarGeneratedByGQL extends Apollo.Query<
   GrammarGeneratedByQueryVariables
 > {
   document = GrammarGeneratedByDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const ListUserProjectsDocument = gql`
+  query ListUserProjects(
+    $userId: ID
+    $first: Int
+    $after: String
+    $before: String
+    $last: Int
+  ) {
+    projects(
+      first: $first
+      after: $after
+      before: $before
+      last: $last
+      input: { filter: { userId: $userId } }
+    ) {
+      nodes {
+        id
+        name
+        slug
+        createdAt
+      }
+      totalCount
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+        startCursor
+        endCursor
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class ListUserProjectsGQL extends Apollo.Query<
+  ListUserProjectsQuery,
+  ListUserProjectsQueryVariables
+> {
+  document = ListUserProjectsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

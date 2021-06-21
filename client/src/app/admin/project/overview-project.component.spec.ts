@@ -15,6 +15,8 @@ import {
   ApolloTestingController,
   APOLLO_TESTING_CACHE,
 } from "apollo-angular/testing";
+import { getOperationName } from "@apollo/client/utilities";
+import { InMemoryCache } from "@apollo/client/core";
 
 import { NaturalLanguagesService } from "../../natural-languages.service";
 import { LinkService } from "../../link.service";
@@ -36,8 +38,6 @@ import {
 import { PaginatorTableGraphqlComponent } from "../../shared/table/paginator-table-graphql.component";
 import { ConditionalDisplayDirective } from "../../shared/table/directives/conditional-display.directive";
 import { UrlFriendlyIdPipe } from "../../shared/url-friendly-id.pipe";
-import { getOperationName } from "@apollo/client/utilities";
-import { InMemoryCache } from "@apollo/client/core";
 
 describe("OverviewProjectComponent", () => {
   async function createComponent(localeId: string = "en") {

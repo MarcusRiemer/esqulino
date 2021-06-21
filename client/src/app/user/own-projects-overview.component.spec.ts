@@ -1,16 +1,28 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { InMemoryCache } from "@apollo/client";
 
-import { OwnProjectsOverviewComponent } from './own-projects-overview.component';
+import {
+  ApolloTestingModule,
+  APOLLO_TESTING_CACHE,
+} from "apollo-angular/testing";
 
-describe('OwnProjectsOverviewComponent', () => {
+import { OwnProjectsOverviewComponent } from "./own-projects-overview.component";
+
+describe("OwnProjectsOverviewComponent", () => {
   let component: OwnProjectsOverviewComponent;
   let fixture: ComponentFixture<OwnProjectsOverviewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OwnProjectsOverviewComponent ]
-    })
-    .compileComponents();
+      declarations: [OwnProjectsOverviewComponent],
+      imports: [ApolloTestingModule],
+      providers: [
+        {
+          provide: APOLLO_TESTING_CACHE,
+          useValue: new InMemoryCache({ addTypename: true }),
+        },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +31,7 @@ describe('OwnProjectsOverviewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

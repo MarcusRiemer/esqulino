@@ -61,6 +61,7 @@ module Types
     class FilterFieldType < Types::Base::BaseInputObject
       graphql_name 'ProjectFilterFieldType'
       argument :id, type: ID, required: false
+      argument :user_id, type: ID, required: false
       argument :name, type: String, required: false
       argument :slug, type: String, required: false
       argument :public, type: Boolean, required: false

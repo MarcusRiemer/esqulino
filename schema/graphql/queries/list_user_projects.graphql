@@ -1,0 +1,33 @@
+query ListUserProjects(
+  $userId: ID,
+  $first: Int,
+  $after: String,
+  $before: String,
+  $last: Int
+) {
+  projects(
+    first:$first,
+    after:$after,
+    before:$before,
+    last:$last,
+    input: {
+      filter: {
+        userId: $userId
+      }
+    }
+  ) {
+    nodes{
+      id
+      name
+      slug
+      createdAt
+    }
+    totalCount
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+      startCursor
+      endCursor
+    }
+  }
+}

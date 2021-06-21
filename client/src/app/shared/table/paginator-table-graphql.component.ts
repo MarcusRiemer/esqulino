@@ -50,7 +50,8 @@ export interface GraphQLQueryComponent<
 
 @Component({
   selector: "app-table-paginator-graphql",
-  templateUrl: "./templates/paginator-table-graphql.html",
+  templateUrl: "./paginator-table-graphql.component.html",
+  styleUrls: ["./paginator-table-graphql.component.scss"],
 })
 export class PaginatorTableGraphqlComponent
   implements AfterContentInit, AfterViewInit, OnDestroy
