@@ -20,11 +20,18 @@ import { CurrentLanguagePipe } from "../shared/current-language.pipe";
 import { DefaultValuePipe } from "../shared/default-value.pipe";
 import { LinkService } from "../link.service";
 import { UrlFriendlyIdPipe } from "../shared/url-friendly-id.pipe";
+import { RouterTestingModule } from "@angular/router/testing";
+import { EmptyComponent } from "../shared/empty.component";
 
 describe(`Component: ProjectList`, () => {
   async function createComponent(localeId: string) {
     await TestBed.configureTestingModule({
-      imports: [ApolloTestingModule],
+      imports: [
+        ApolloTestingModule,
+        RouterTestingModule.withRoutes([
+          { path: "editor/:id", component: EmptyComponent },
+        ]),
+      ],
       providers: [
         { provide: LOCALE_ID, useValue: localeId },
         LanguageService,
