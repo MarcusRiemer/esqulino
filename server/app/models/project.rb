@@ -13,12 +13,17 @@ class Project < ApplicationRecord
   # Assignments which can be created for the Project
   has_many :assignments
 
+  has_one :solution_project_course_participation, class_name: 'ProjectCourseParticipation',  :foreign_key => 'assignments_project_id'
+  has_many :assignments_project_course_participations, class_name: 'ProjectCourseParticipation', :foreign_key => 'solution_project_id'
+
   #If this field is set it meant that it is a "Groupe" and participates in a course 
-  belongs_to  :solution_project, class_name: 'ProjectCourseParticipation', optional: true
+  has_one  :solution_project,  through:  :solution_project_course_participation,  :foreign_key => 'assignments_project_id'
 
   #That are the "groups" which want to solved this assigments
-  has_many :assignments_project, class_name: 'ProjectCourseParticipation', :foreign_key => 'project_id'
+  has_many :assignments_projects,  through:  :assignments_project_course_participations, :foreign_key => 'solution_project_id'
 
+  #Submissions which can be created to solve the assigments 
+  has_many :assigments_submissions
 
   # The owner in this project
   belongs_to :user
@@ -188,5 +193,10 @@ class Project < ApplicationRecord
   # Check if the user is the owner or a member
   def is_already_in_project?(user)
     return user.eql?(self.user) || project_members.find_by(user_id: user.id).present?
+  end
+
+  # Check if the project only a participant group of a "root" project
+  def participation_group?()
+    return solution_project.present?
   end
 end
