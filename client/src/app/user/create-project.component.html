@@ -30,7 +30,9 @@
           <div class="col-sm-10">
             <input
               [(ngModel)]="localizedName"
-              [class.form-control-danger]="name.errors && (name.dirty || name.touched)"
+              [class.form-control-danger]="
+                name.errors && (name.dirty || name.touched)
+              "
               [class.form-control-success]="name.valid"
               [pattern]="regExpName"
               #name="ngModel"
@@ -56,7 +58,9 @@
           <div class="col-sm-10">
             <input
               [(ngModel)]="params.slug"
-              [class.form-control-danger]="id.errors && (id.dirty || id.touched)"
+              [class.form-control-danger]="
+                id.errors && (id.dirty || id.touched)
+              "
               [class.form-control-success]="id.valid"
               [pattern]="regExpSlug"
               #id="ngModel"
