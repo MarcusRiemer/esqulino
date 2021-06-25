@@ -42,9 +42,6 @@ gem 'maildown'
 # Build a simple, robust and scaleable authorization system.
 gem "pundit"
 
-# Role library without any authorization
-gem "rolify"
-
 # Used for HTTP-Requests
 gem "rest-client"
 

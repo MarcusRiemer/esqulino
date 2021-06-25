@@ -9,9 +9,8 @@ class Mutations::Projects::UpdateProject < Mutations::Projects::Projects
   field :project, Types::ProjectType, null: false
 
   def resolve(**args)
-    authorize :project, :create?
-
     project = Project.find_by_slug_or_id! args[:id]
+    authorize project, :update?
 
     args = underscore_keys(args)
     project.assign_attributes(args)

@@ -3,10 +3,6 @@
 class News < ApplicationRecord
   include LocaleHelper
 
-  attr_reader :owner
-
-  resourcify
-
   belongs_to :user
 
   # Title may only use allowed languages

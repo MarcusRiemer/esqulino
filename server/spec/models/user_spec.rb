@@ -16,6 +16,61 @@ RSpec.describe User, type: :model do
     expect(User.guest.role_names).to eq ['guest']
   end
 
+  describe 'add_role and has_role?' do
+    it 'new role once' do
+      u = FactoryBot.create(:user)
+
+      u.add_role "spec"
+
+      expect(Role.count).to eq 1
+      expect(u.has_role? "spec").to eq true
+      expect(u.role_names).to eq ["spec"]
+    end
+
+    it 'two new roles once' do
+      u = FactoryBot.create(:user)
+
+      u.add_role "spec"
+      u.add_role "test"
+
+      expect(Role.count).to eq 2
+      expect(u.has_role? "spec").to eq true
+      expect(u.has_role? "test").to eq true
+      expect(u.role_names).to match_array(["spec", "test"])
+    end
+
+    it 'two roles not added' do
+      u = FactoryBot.create(:user)
+
+      expect(Role.count).to eq 0
+      expect(u.has_role? "spec").to eq false
+      expect(u.has_role? "test").to eq false
+      expect(u.role_names).to be_empty
+    end
+
+    it 'same role twice' do
+      u = FactoryBot.create(:user)
+
+      u.add_role "spec"
+      u.add_role "spec"
+
+      expect(Role.count).to eq 1
+      expect(u.has_role? "spec").to eq true
+      expect(u.role_names).to eq ["spec"]
+    end
+
+    it 'Previously existing role' do
+      r = FactoryBot.create(:role, name: "spec")
+      u = FactoryBot.create(:user)
+      u.add_role "spec"
+
+      expect(Role.count).to eq 1
+      expect(u.has_role? "spec").to eq true
+      expect(u.role_names).to eq ["spec"]
+    end
+
+  end
+
   describe 'promoting guests to admin' do
     before { create(:user, id: User.guest_id) }
 

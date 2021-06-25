@@ -31,8 +31,8 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [user_admin.id],
       is_admin: true
-    ) 
-    expect(ProjectMember.count).to eq 1 
+    )
+    expect(ProjectMember.count).to eq 1
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "admin"
 
     mut = described_class.new(**init_args(user: current_user_owner))
@@ -40,7 +40,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [user_participant.id],
       is_admin: false
-    ) 
+    )
 
     expect(ProjectMember.count).to eq 2
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "participant"
@@ -52,7 +52,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       is_admin: false
     ) }.to raise_error(ArgumentError)
 
-    expect(ProjectMember.count).to eq 2 
+    expect(ProjectMember.count).to eq 2
 
     mut = described_class.new(**init_args(user: current_user_owner))
     expect{mut.resolve(
@@ -61,8 +61,8 @@ RSpec.describe Mutations::Projects::AddMembers do
       is_admin: true
     ) }.to raise_error(ArgumentError)
 
-    expect(ProjectMember.count).to eq 2 
-    
+    expect(ProjectMember.count).to eq 2
+
   end
 
   it "add User as owner in private project" do
@@ -78,8 +78,8 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [user_admin.id],
       is_admin: true
-    ) 
-    expect(ProjectMember.count).to eq 1 
+    )
+    expect(ProjectMember.count).to eq 1
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "admin"
 
     mut = described_class.new(**init_args(user: current_user_owner))
@@ -87,7 +87,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [user_participant.id],
       is_admin: false
-    ) 
+    )
 
     expect(ProjectMember.count).to eq 2
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "participant"
@@ -99,7 +99,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       is_admin: false
     ) }.to raise_error(ArgumentError)
 
-    expect(ProjectMember.count).to eq 2 
+    expect(ProjectMember.count).to eq 2
 
     mut = described_class.new(**init_args(user: current_user_owner))
     expect{mut.resolve(
@@ -108,8 +108,8 @@ RSpec.describe Mutations::Projects::AddMembers do
       is_admin: true
     ) }.to raise_error(ArgumentError)
 
-    expect(ProjectMember.count).to eq 2 
-    
+    expect(ProjectMember.count).to eq 2
+
   end
 
   it "add User as admin in public project" do
@@ -128,7 +128,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [user_admin.id],
       is_admin: true
-    ) 
+    )
     expect(ProjectMember.count).to eq 2
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "admin"
 
@@ -137,7 +137,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [user_participant.id],
       is_admin: false
-    ) 
+    )
 
     expect(ProjectMember.count).to eq 3
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "participant"
@@ -149,7 +149,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       is_admin: false
     ) }.to raise_error(ArgumentError)
 
-    expect(ProjectMember.count).to eq 3 
+    expect(ProjectMember.count).to eq 3
 
     mut = described_class.new(**init_args(user: current_user_admin))
     expect{mut.resolve(
@@ -158,8 +158,8 @@ RSpec.describe Mutations::Projects::AddMembers do
       is_admin: true
     ) }.to raise_error(ArgumentError)
 
-    expect(ProjectMember.count).to eq 3 
-    
+    expect(ProjectMember.count).to eq 3
+
   end
 
   it "add User as admin in private project" do
@@ -178,7 +178,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [user_admin.id],
       is_admin: true
-    ) 
+    )
     expect(ProjectMember.count).to eq 2
     expect( Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq "admin"
 
@@ -187,7 +187,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [user_participant.id],
       is_admin: false
-    ) 
+    )
 
     expect(ProjectMember.count).to eq 3
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "participant"
@@ -199,7 +199,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       is_admin: false
     ) }.to raise_error(ArgumentError)
 
-    expect(ProjectMember.count).to eq 3 
+    expect(ProjectMember.count).to eq 3
 
     mut = described_class.new(**init_args(user: current_user_admin))
     expect{mut.resolve(
@@ -208,8 +208,8 @@ RSpec.describe Mutations::Projects::AddMembers do
       is_admin: true
     ) }.to raise_error(ArgumentError)
 
-    expect(ProjectMember.count).to eq 3 
-    
+    expect(ProjectMember.count).to eq 3
+
   end
 
   it "add User as participant in public project" do
@@ -238,7 +238,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [user_participant.id],
       is_admin: false
-    ) 
+    )
 
     expect(ProjectMember.count).to eq 2
     expect( Project.first.project_members.find_by(user_id: user_participant.id).membership_type).to eq "participant"
@@ -551,7 +551,7 @@ RSpec.describe Mutations::Projects::AddMembers do
     user_admin = create(:user)
     project.project_members.create(user_id: user_admin.id, membership_type: "admin")
 
-    
+
     user_participant = create(:user)
     project.project_members.create(user_id: user_participant.id, membership_type: "participant")
 
@@ -603,7 +603,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [],
       is_admin: true
-    ) 
+    )
 
     expect(ProjectMember.count).to eq 2
   end
@@ -653,7 +653,7 @@ RSpec.describe Mutations::Projects::AddMembers do
     user_admin = create(:user)
     project.project_members.create(user_id: user_admin.id, membership_type: "admin")
 
-    
+
     user_participant = create(:user)
     project.project_members.create(user_id: user_participant.id, membership_type: "participant")
 
@@ -705,7 +705,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [],
       is_admin: true
-    ) 
+    )
 
     expect(ProjectMember.count).to eq 2
   end
@@ -789,7 +789,7 @@ RSpec.describe Mutations::Projects::AddMembers do
     user_admin = create(:user)
     project.project_members.create(user_id: user_admin.id, membership_type: "admin")
 
-    
+
     user_participant = create(:user)
     project.project_members.create(user_id: user_participant.id, membership_type: "participant")
 
@@ -841,7 +841,7 @@ RSpec.describe Mutations::Projects::AddMembers do
       project_id: project.id,
       user_ids: [],
       is_admin: true
-    ) 
+    )
 
     expect(ProjectMember.count).to eq 2
   end
@@ -924,7 +924,7 @@ RSpec.describe Mutations::Projects::AddMembers do
     user_admin = create(:user)
     project.project_members.create(user_id: user_admin.id, membership_type: "admin")
 
-    
+
     user_participant = create(:user)
     project.project_members.create(user_id: user_participant.id, membership_type: "participant")
 
@@ -981,6 +981,6 @@ RSpec.describe Mutations::Projects::AddMembers do
 
     expect(ProjectMember.count).to eq 2
   end
-  
-  
+
+
 end

@@ -1,3 +1,4 @@
+# coding: utf-8
 # Users are usually real people that have signed up manually. But they may also
 # be technical accounts that exist to specify default permissions.
 #
@@ -11,10 +12,6 @@ class User < ApplicationRecord
   # The ID of the user that acts as a guest
   SYSTEM_ID = Rails.configuration.sqlino[:seed][:users][:system]
 
-  # Only return true for roles that have been manually added
-  # https://github.com/RolifyCommunity/rolify#strict-mode
-  rolify strict: true
-
   # Projects are owned by a user
   has_many :projects
   # Every user can identify himself using multiple identities
@@ -25,6 +22,13 @@ class User < ApplicationRecord
   # One user can join many projects(Courses)
   has_many :project_members
   has_many :member_at, class_name: 'Project', :foreign_key => 'user_id', through:  :project_members, :source => :project
+
+
+  # The join table for the roles of this user
+  has_many :user_roles
+
+  # The actual roles of this user
+  has_many :roles, through: :user_roles
 
   # Only allow safe characters in usernames
   validates_format_of :display_name, :with => /\A[a-zA-Z0-9]{3}[a-zA-Z0-9\ ]{0,17}\z/i
@@ -89,10 +93,29 @@ class User < ApplicationRecord
     return id == User.guest_id
   end
 
+  def add_role(role_name)
+    role = Role.where(name: role_name.to_s).first_or_create
+    self.user_roles.find_or_create_by(user_id: id, role_id: role.id)
+  end
+
+  def has_role?(role_name)
+    role_name = role_name.to_s
+
+    if not Role::COMMON_NAMES.include? role_name
+      raise EsqulinoError::Base.new("Unknown role \"#{role_name}\"", 500, true)
+    end
+
+    self.roles.exists?(name: role_name)
+  end
+
+  def is_admin?
+    has_role?(:admin)
+  end
+
   # Names of the roles of a logged in user
   # Is written in the private claim of the JWT
   def role_names
-    return self.roles.map { |v| v.name }
+    return self.roles.pluck("name")
   end
 
   # The information is used for the clientside representation

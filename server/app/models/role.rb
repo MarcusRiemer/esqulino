@@ -1,15 +1,11 @@
 class Role < ApplicationRecord
-  # Role model comes from Rolify
-  # https://github.com/RolifyCommunity/rolify
-  has_and_belongs_to_many :users, :join_table => :users_roles
+  COMMON_NAMES = Set.new(["admin", "guest", "validated", "news_editor"])
 
-  belongs_to :resource,
-             :polymorphic => true,
-             :optional => true
+  if Rails.env.test?
+    COMMON_NAMES.merge(["spec", "test"])
+  end
 
-  validates :resource_type,
-            :inclusion => { :in => Rolify.resource_types },
-            :allow_nil => true
-
-  scopify
+  validates :name,
+            uniqueness: true,
+            inclusion: { in: COMMON_NAMES }
 end

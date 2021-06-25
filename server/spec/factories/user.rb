@@ -2,7 +2,10 @@ FactoryBot.define do
   factory :user do
     sequence (:display_name) { |n| "user #{n}" }
     email {}
-    roles { [Role.find_or_create_by(name: 'user')] }
+
+    trait :validated do
+      roles { [Role.find_or_create_by(name: 'validated')] }
+    end
 
     trait :guest do
       id { User.guest_id }

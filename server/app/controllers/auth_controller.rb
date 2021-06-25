@@ -48,26 +48,6 @@ class AuthController < ApplicationController
     redirect_to redirect_url
   end
 
-  # Function is called by omniauth identity and
-  # is used to login a user with password
-  def login_with_password
-    identity = Identity::Password.find_by(uid: login_params[:email])
-    if (not identity)
-      return error_response("E-Mail not found")
-    end
-
-    if (not identity.confirmed?)
-      return error_response("Please confirm your e-mail")
-    end
-
-    if (not identity.password_eql?(params[:password]))
-      return error_response("Wrong password")
-    end
-
-    sign_in(identity, identity.access_token_duration)
-    api_response(user_information)
-  end
-
   # This register function is only for the identity provider.
   # You use this for creating an identity with a password
   # with simulated callback data

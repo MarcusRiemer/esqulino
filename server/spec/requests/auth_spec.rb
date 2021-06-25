@@ -108,7 +108,7 @@ RSpec.describe "auth controller" do
         expect(response).not_to set_cookie ["REFRESH_TOKEN"]
 
         json_data = JSON.parse(response.body)
-        expect(json_data["roles"]).to eq(["user"])
+        expect(json_data["roles"]).to eq(["validated"])
       end
     end
 

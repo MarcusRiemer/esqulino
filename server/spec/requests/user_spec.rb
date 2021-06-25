@@ -7,13 +7,13 @@ RSpec.describe "user controller" do
 
   describe "getting user description" do
     it "logged in" do
-      user = create(:user)
+      user = create(:user, :validated)
       set_access_token(user)
 
       get '/api/user'
 
       json_data = JSON.parse(response.body)
-      expect(json_data["roles"]).to eq(["user"])
+      expect(json_data["roles"]).to eq(["validated"])
     end
 
     it 'logged out' do

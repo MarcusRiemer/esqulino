@@ -58,7 +58,7 @@ RSpec.describe ProjectsController, type: :request do
   end
 
   describe 'GraphQL CreateProject' do
-    let(:user) { create(:user) }
+    let(:user) { create(:user, :validated) }
 
     describe 'valid request' do
       it 'creates a project' do

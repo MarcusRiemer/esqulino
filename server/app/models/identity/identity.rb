@@ -69,8 +69,8 @@ module Identity
       identity.save!
       user.save!
 
-      if (not user.has_role?(:user)) then
-        user.add_role :user
+      if user.email?
+        user.add_role(:validated)
       end
 
       return identity
