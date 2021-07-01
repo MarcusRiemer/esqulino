@@ -24,7 +24,6 @@ import { AdminComponent } from "./admin.component";
 import { AdminOverviewComponent } from "./admin-overview.component";
 import { LinkGrammarComponent } from "./link-grammar.component";
 import { JsonEditor } from "./json-editor.component";
-import { JsonSchemaValidationService } from "./json-schema-validation.service";
 
 import { CreateBlockLanguageComponent } from "./block-language/create-block-language.component";
 import { EditBlockLanguageComponent } from "./block-language/edit-block-language.component";
@@ -99,7 +98,6 @@ const materialModules = [
     ProgrammingLanguageSelectComponent,
     OverviewUserComponent,
   ],
-  providers: [JsonSchemaValidationService],
   exports: [],
 })
 export class AdminModule {}

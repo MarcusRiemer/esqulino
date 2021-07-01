@@ -1,11 +1,8 @@
-import * as Ajv from "ajv";
-
 /**
  * The instructions are malformed
  */
 export interface ErrorInvalidInstructions {
   type: "InvalidInstructions";
-  error: Ajv.ErrorObject;
 }
 
 /**
