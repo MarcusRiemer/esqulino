@@ -31,7 +31,6 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "aot": true,
             "sourceMap": {
               "styles": true,
               "scripts": true,
@@ -62,7 +61,12 @@
               ]
             },
             "scripts": [],
-            "showCircularDependencies": true
+            "showCircularDependencies": true,
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -85,7 +89,8 @@
                 }
               ]
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -130,8 +135,11 @@
             "localize": ["en", "de"],
             "externalDependencies": [
               "canvas"
-            ]
-          }
+            ],
+            "sourceMap": true,
+            "optimization": false
+          },
+          "defaultConfiguration": ""
         },
         "serve-ssr": {
           "builder": "@nguniversal/builders:ssr-dev-server",

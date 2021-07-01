@@ -26,7 +26,9 @@ export function validateGenerator(
       return [];
     default: {
       throw new Error(
-        `validateGenerator(): Unknown BlockLanguageGenerator "${d!.type}"`
+        `validateGenerator(): Unknown BlockLanguageGenerator "${
+          (d as any).type
+        }"`
       );
     }
   }
@@ -53,7 +55,9 @@ export function generateBlockLanguage(
         return convertGrammarTreeInstructions(d, g);
       default:
         throw new Error(
-          `generateBlockLanguage(): Unknown BlockLanguageGenerator "${d!.type}"`
+          `generateBlockLanguage(): Unknown BlockLanguageGenerator "${
+            (d as any).type
+          }"`
         );
     }
   };

@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 #front-nav {
     padding-top: 0px; /* Angular Material defines some padding that we dont want */
 }
@@ -79,7 +80,7 @@
         }
 
         &:target {
-            background-color: mat-color($ide-app-accent, 200);
+            background-color: mat.get-color-from-palette($ide-app-accent, 200);
         }
 
         .institution-logo {
