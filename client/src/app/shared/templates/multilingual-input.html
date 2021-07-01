@@ -1,4 +1,4 @@
-<select class="custom-select" name="language" [(ngModel)]="language">
+<select class="form-select" name="language" [(ngModel)]="language">
   <option *ngFor="let item of languages" [value]="item.token">
     {{ item.token | uppercase }}
   </option>

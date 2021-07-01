@@ -1,4 +1,4 @@
-<select class="custom-select" [(ngModel)]="selectedWorldId">
+<select class="form-select" [(ngModel)]="selectedWorldId">
   <option *ngFor="let world of availableWorlds" [value]="world.id">
     {{ world.name }}
   </option>

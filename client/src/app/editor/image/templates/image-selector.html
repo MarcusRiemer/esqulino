@@ -7,7 +7,7 @@
   <select
     [(ngModel)]="projectImageId"
     id="project-image"
-    class="form-control custom-select"
+    class="form-control form-select"
   >
     <option *ngFor="let image of images" [value]="image.id">
       {{image.name}}

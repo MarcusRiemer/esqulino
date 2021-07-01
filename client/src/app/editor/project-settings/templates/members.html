@@ -17,7 +17,7 @@
           <td mat-cell *matCellDef="let element">
             <may-perform [payload]="changeMemberRolePermission$ | async">
               <select
-                class="custom-select w-50"
+                class="form-select w-50"
                 [(ngModel)]="element.changedRole"
                 (change)="this.onChangeMemberRole(element, $event.target.value)"
               >
@@ -96,7 +96,7 @@
           <select
             [(ngModel)]="addMemberRole"
             name="add-member-role"
-            class="custom-select"
+            class="form-select"
           >
             <!-- ToDo: Through the permissions recognize which options are possible. -->
             <option value="admin">Admin</option>

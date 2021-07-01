@@ -24,7 +24,7 @@
           </button>
         </div>
         <!--Select to chose the amount of entrys to show-->
-        <select [(ngModel)]="showAmount" class="custom-select">
+        <select [(ngModel)]="showAmount" class="form-select">
           <option
             *ngFor="let amount of availableRowAmounts"
             value="{{ amount }}"

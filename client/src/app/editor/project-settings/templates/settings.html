@@ -92,11 +92,11 @@
     </p>
 
     <!-- Allows to add new block languages -->
-    <form class="form-inline">
-      <label class="mr-sm-2" for="block-language-select">
+    <div class="input-group">
+      <label class="input-group-text" for="block-language-select">
         Neue Blocksprache
       </label>
-      <select class="custom-select mr-sm-2" #selectedBlockLanguage>
+      <select class="form-select" #selectedBlockLanguage>
         <option
           *ngFor="let blockLanguage of availableBlockLanguages$ | async"
           [value]="blockLanguage.id"
@@ -112,7 +112,7 @@
         <span class="fa fa-link fa-fw" aria-hidden="true"></span>
         Verwenden
       </button>
-    </form>
+    </div>
   </div>
 
   <!-- Lists all used block languages -->

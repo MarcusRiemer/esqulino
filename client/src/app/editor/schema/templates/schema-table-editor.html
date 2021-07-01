@@ -63,7 +63,7 @@
         </td>
         <td>
           <select
-            class="custom-select"
+            class="form-select"
             [(ngModel)]="column.type"
             (focus)="saveTempValue($event.target.value)"
             [disabled]="column.stateName == 'deleted'"
@@ -137,7 +137,7 @@
       <div class="col-sm-2">Spaltentausch</div>
       <div class="col-sm-3">
         <select
-          class="custom-select form-control editordrop"
+          class="form-select form-control editordrop"
           [(ngModel)]="colToSwitch"
         >
           <option disabled selected value="undefined">Spalte</option>
@@ -148,7 +148,7 @@
       </div>
       <div class="col-sm-3">
         <select
-          class="custom-select form-control editordrop"
+          class="form-select form-control editordrop"
           [(ngModel)]="switch_to"
         >
           <option disabled selected value="undefined">an Position</option>
@@ -168,7 +168,7 @@
       <div class="col-sm-2">Fremdschlüssel</div>
       <div class="col-sm-3">
         <select
-          class="custom-select form-control editordrop"
+          class="form-select form-control editordrop"
           [(ngModel)]="fk_fromColumn"
         >
           <option disabled selected value="undefined">Spalte</option>
@@ -185,7 +185,7 @@
 
       <div class="col-sm-3">
         <select
-          class="custom-select form-control editordrop"
+          class="form-select form-control editordrop"
           *ngIf="fk_fromColumn"
           [(ngModel)]="fk_addTable"
         >
@@ -198,7 +198,7 @@
 
       <div class="col-sm-3">
         <select
-          class="custom-select form-control editordrop"
+          class="form-select form-control editordrop"
           *ngIf="fk_addTable"
           [(ngModel)]="fk_addColumn"
         >

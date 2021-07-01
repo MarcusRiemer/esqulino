@@ -14,7 +14,7 @@ import { WorldSelectorComponent } from "./world-selector.component";
 @Component({
   templateUrl: "templates/world-controller.html",
   styles: [
-    ":host ::ng-deep truck-world-selector select.custom-select { border-top-left-radius: 0px; border-bottom-left-radius: 0px; }",
+    ":host ::ng-deep truck-world-selector select.form-select { border-top-left-radius: 0px; border-bottom-left-radius: 0px; }",
     ".btn-full-disable.disabled, .btn-full-disable:disabled { background-color: #e4e4e4; border-color: #e4e4e4; }",
   ],
 })

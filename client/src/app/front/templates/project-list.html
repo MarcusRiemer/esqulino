@@ -16,9 +16,13 @@
   </p>
 </mat-card>
 
-<div id="available-projects" class="card-columns">
+<div
+  id="available-projects"
+  class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4"
+>
   <project-list-item
     *ngFor="let project of projects | async"
     [project]="project"
+    class="col"
   ></project-list-item>
 </div>
