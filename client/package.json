@@ -23,7 +23,7 @@
     "@types/prettier": "^2.2.3",
     "angulartics2": "10.0.0",
     "apollo-angular": "2.6.0",
-    "blockly": "4.20201217.0",
+    "blockly": "6.20210701.0",
     "bootstrap": "5.0.2",
     "brace": "0.11.1",
     "core-js": "3.6.4",
