@@ -22,8 +22,9 @@ module Types
           null: false,
           resolver: Resolvers::ProjectInstanceMemberResolver
 
-     
+    field :is_course, Boolean, null: false
     field :assignment_submissions, [Types::AssignmentSubmissionType], null: true      
+    field :assignment_submitted_code_resources, [Types::AssignmentSubmittedCodeResourceType], null: true     
     field :solution_project, Types::ProjectType, null: true
     field :assignments_projects, [Types::ProjectType], null: true
     field :solution_project_course_participation, Types::ProjectCourseParticipationType, null: true

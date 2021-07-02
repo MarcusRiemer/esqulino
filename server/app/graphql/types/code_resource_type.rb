@@ -10,6 +10,10 @@ module Types
     field :programming_language_id, ID, null: false
     field :compiled, String, null: true
 
+    field :assignment_template_code_resources, [Types::AssignmentTemplateCodeResourceType], null: true
+    field :assignment_required_code_resources, [Types::AssignmentRequiredCodeResourceType], null: true
+    field :assignment_submitted_code_resource, Types::AssignmentSubmittedCodeResourceType, null: true
+
     field :generated_grammars, [Types::GrammarType], null: true
 
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
