@@ -5,6 +5,7 @@ class CreateAssignments < ActiveRecord::Migration[6.1]
       t.timestamp :start_date
       t.timestamp :end_date
       t.text :description
+      t.integer :weight
 
       t.timestamps
     end

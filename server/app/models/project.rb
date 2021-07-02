@@ -25,6 +25,9 @@ class Project < ApplicationRecord
   #Submissions which can be created to solve the assigments 
   has_many :assigments_submissions
 
+  #Answers to the required files
+  has_many :assigments_submitted_code_resources
+
   # The owner in this project
   belongs_to :user
   # Source citations for projects
@@ -103,6 +106,11 @@ class Project < ApplicationRecord
   # Remove the data folder
   after_destroy do
     FileUtils.rm_rf data_directory_path if File.directory? data_directory_path
+  end
+
+  def is_course()
+    not slug.nil? and slug.start_with?("course")
+    
   end
 
   # Retrieves the database with the given ID or the default database if no specific
