@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_15_122746) do
+ActiveRecord::Schema.define(version: 2021_06_30_121249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -19,10 +19,14 @@ ActiveRecord::Schema.define(version: 2021_06_15_122746) do
 
   create_table "assignment_required_code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text "resource_type"
+    t.string "name"
+    t.text "description"
     t.uuid "assignment_id", null: false
+    t.uuid "code_resource_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["assignment_id"], name: "index_assignment_required_code_resources_on_assignment_id"
+    t.index ["code_resource_id"], name: "index_assignment_required_code_resources_on_code_resource_id"
   end
 
   create_table "assignment_submission_grade_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -56,14 +60,24 @@ ActiveRecord::Schema.define(version: 2021_06_15_122746) do
   end
 
   create_table "assignment_submitted_code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "assignment_required_code_resource_id"
+    t.uuid "assignment_required_code_resource_id", null: false
     t.uuid "code_resource_id", null: false
     t.uuid "assignment_submission_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["assignment_required_code_resource_id"], name: "index_required_code_ressource"
-    t.index ["assignment_submission_id"], name: "index_submitted_code_ressource"
+    t.index ["assignment_required_code_resource_id"], name: "index_assignment_submission_c_r_on_assignment_required_c_r"
+    t.index ["assignment_submission_id"], name: "index_assignment_submitted_c_r_on_assignment_submission"
     t.index ["code_resource_id"], name: "index_assignment_submitted_code_resources_on_code_resource_id"
+  end
+
+  create_table "assignment_template_code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "code_resource_id", null: false
+    t.uuid "assignment_required_code_resource_id", null: false
+    t.integer "reference_type", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["assignment_required_code_resource_id"], name: "index_assignment_template_on_assignment_required"
+    t.index ["code_resource_id"], name: "index_assignment_template_on_code_resource"
   end
 
   create_table "assignments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -71,6 +85,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_122746) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text "description"
+    t.integer "weight"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "project_id", null: false
@@ -280,6 +295,7 @@ ActiveRecord::Schema.define(version: 2021_06_15_122746) do
   end
 
   add_foreign_key "assignment_required_code_resources", "assignments"
+  add_foreign_key "assignment_required_code_resources", "code_resources"
   add_foreign_key "assignment_submission_grade_users", "assignment_submission_grades"
   add_foreign_key "assignment_submission_grade_users", "users"
   add_foreign_key "assignment_submission_grades", "assignment_submissions"
@@ -289,6 +305,8 @@ ActiveRecord::Schema.define(version: 2021_06_15_122746) do
   add_foreign_key "assignment_submitted_code_resources", "assignment_required_code_resources"
   add_foreign_key "assignment_submitted_code_resources", "assignment_submissions"
   add_foreign_key "assignment_submitted_code_resources", "code_resources"
+  add_foreign_key "assignment_template_code_resources", "assignment_required_code_resources"
+  add_foreign_key "assignment_template_code_resources", "code_resources"
   add_foreign_key "assignments", "projects"
   add_foreign_key "block_languages", "code_resources", column: "generated_from_id"
   add_foreign_key "block_languages", "grammars"
