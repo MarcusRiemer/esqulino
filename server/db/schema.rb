@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_121249) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["assignment_required_code_resource_id"], name: "index_assignment_submission_c_r_on_assignment_required_c_r"
     t.index ["assignment_submission_id"], name: "index_assignment_submitted_c_r_on_assignment_submission"
-    t.index ["code_resource_id"], name: "index_assignment_submitted_code_resources_on_code_resource_id"
+    t.index ["code_resource_id"], name: "index_assignment_submitted_code_resources_on_code_resource_id", unique: true
   end
 
   create_table "assignment_template_code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_121249) do
     t.integer "reference_type", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["assignment_required_code_resource_id"], name: "index_assignment_template_on_assignment_required"
+    t.index ["assignment_required_code_resource_id"], name: "index_assignment_template_on_assignment_required", unique: true
     t.index ["code_resource_id"], name: "index_assignment_template_on_code_resource"
   end
 
