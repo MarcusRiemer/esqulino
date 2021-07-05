@@ -6,7 +6,7 @@ module Types
         field :description, String, null: true
         field :start_date, GraphQL::Types::ISO8601DateTime, null: true
         field :end_date, GraphQL::Types::ISO8601DateTime, null: true
-        field :weight, Integer, null: true
+        field :weight, Integer, null: false
 
         field :assignment_submissions, [Types::AssignmentSubmissionType], null: true
 
