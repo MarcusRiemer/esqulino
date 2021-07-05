@@ -59,7 +59,13 @@ class ProjectPolicy < ApplicationPolicy
     true
   end
 
-  def create_assignment?
+  def create_update_assignment?
+    permitted_roles = ["admin", "owner"]
+
+    return project.user_have_role(user,permitted_roles)
+  end
+
+  def destroy_assignment?
     permitted_roles = ["admin", "owner"]
 
     return project.user_have_role(user,permitted_roles)
@@ -81,6 +87,18 @@ class ProjectPolicy < ApplicationPolicy
     permitted_roles = ["admin", "owner"]
 
     return project.user_have_role(user, permitted_roles) || project.public && user.present?
+  end
+
+  def create_update_assignment_required_code_resource?
+    permitted_roles = ["admin", "owner"]
+
+    return project.user_have_role(user,permitted_roles)
+  end
+
+  def destroy_assignment_required_code_resource?
+    permitted_roles = ["admin", "owner"]
+
+    return project.user_have_role(user,permitted_roles)
   end
 
   class Scope < Scope
