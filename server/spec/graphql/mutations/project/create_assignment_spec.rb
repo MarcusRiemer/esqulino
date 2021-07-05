@@ -20,7 +20,7 @@ RSpec.describe Mutations::Projects::CreateAssignment do
 
   it "create assignment normal work" do
     current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false)
+    project = create(:project, user: current_user_owner, public: false, slug:"course")
 
     date = DateTime.new(2000,1,1,5)
     date_later = DateTime.new(2000,3,6,5)
@@ -44,9 +44,9 @@ RSpec.describe Mutations::Projects::CreateAssignment do
 
   end
 
-  it "create n without description, start_date and end_date" do
+  it "create assignment without description, start_date and end_date" do
     current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false)
+    project = create(:project, user: current_user_owner, public: false, slug:"course")
 
     date_now = DateTime.now
 
@@ -63,9 +63,9 @@ RSpec.describe Mutations::Projects::CreateAssignment do
     expect( Assignment.first.end_date).to eq nil
   end
 
-  it "create n as not a member of the project" do
+  it "create assignment as not a member of the project" do
     current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false)
+    project = create(:project, user: current_user_owner, public: false, slug:"course")
 
     date_now = DateTime.now
 
@@ -78,9 +78,9 @@ RSpec.describe Mutations::Projects::CreateAssignment do
     expect( Assignment.count ).to eq 0
   end
 
-  it "create n as not admin or owner" do
+  it "create assingment as not admin or owner" do
     current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false)
+    project = create(:project, user: current_user_owner, public: false, slug:"course")
 
     user = create(:user)
     project.project_members.create(user_id: user.id, membership_type: "participant")
@@ -96,9 +96,23 @@ RSpec.describe Mutations::Projects::CreateAssignment do
     expect( Assignment.count ).to eq 0
   end
 
-  it "create n as admin" do
+
+  it "create assignment as project" do
     current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false)
+    project = create(:project, user: current_user_owner, public: false, slug:"test")
+
+    mut = described_class.new(**init_args(user: current_user_owner))
+    expect{mut.resolve(
+      project_id: project.id,
+      name: "Aufgabe 1",
+    )}.to raise_error(ArgumentError)
+
+    expect( Assignment.count ).to eq 0
+  end
+
+  it "create assignment as admin" do
+    current_user_owner = create(:user, display_name: "Owner")
+    project = create(:project, user: current_user_owner, public: false, slug:"course")
 
     user = create(:user)
     project.project_members.create(user_id: user.id, membership_type: "admin")
@@ -118,9 +132,9 @@ RSpec.describe Mutations::Projects::CreateAssignment do
     expect( Assignment.first.end_date).to eq nil
   end
 
-  it "create n end_date is behind the start_date" do
+  it "create assignment end_date is behind the start_date" do
     current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false)
+    project = create(:project, user: current_user_owner, public: false, slug:"course")
     mut = described_class.new(**init_args(user: current_user_owner))
 
 

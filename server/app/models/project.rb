@@ -110,7 +110,6 @@ class Project < ApplicationRecord
 
   def is_course()
     not slug.nil? and slug.start_with?("course")
-    
   end
 
   # Retrieves the database with the given ID or the default database if no specific

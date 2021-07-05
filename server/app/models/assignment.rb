@@ -6,5 +6,8 @@ class Assignment < ApplicationRecord
     has_many :assignment_submissions
 
     # Required file formats to successfully pass the Assignment
-    has_many :assignment_required_code_resources
+    has_many :assignment_required_code_resources, :dependent => :destroy
+
+    validates :name, length: { in: 1..255, allow_nil: false }
+    validates :weight, numericality: { only_integer: true, greater_than: 0 }
 end
