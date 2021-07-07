@@ -1,0 +1,10 @@
+mutation DestroyAssignment($id: ID!) {
+  destroyAssignment(input: { id: $id }) {
+    project {
+      id
+      assignments {
+        id
+      }
+    }
+  }
+}

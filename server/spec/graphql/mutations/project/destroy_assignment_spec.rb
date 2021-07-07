@@ -28,7 +28,7 @@ RSpec.describe Mutations::Projects::DestroyAssignment do
 
     mut = described_class.new(**init_args(user: current_user_owner))
     res = mut.resolve(
-        assignment_id: assignment.id
+        id: assignment.id
     )
 
     expect( Assignment.count ).to eq 0
@@ -48,7 +48,7 @@ RSpec.describe Mutations::Projects::DestroyAssignment do
 
     mut = described_class.new(**init_args(user: current_user_owner))
     expect{mut.resolve(
-        assignment_id: assignment.id
+        id: assignment.id
     )}.to raise_error(ArgumentError)
 
     expect( Assignment.count ).to eq 1
@@ -68,7 +68,7 @@ RSpec.describe Mutations::Projects::DestroyAssignment do
 
     mut = described_class.new(**init_args(user: user))
     expect{mut.resolve(
-        assignment_id: assignment.id
+        id: assignment.id
     )}.to raise_error(Pundit::NotAuthorizedError)
 
     expect( Assignment.count ).to eq 1
@@ -89,7 +89,7 @@ RSpec.describe Mutations::Projects::DestroyAssignment do
 
     mut = described_class.new(**init_args(user: current_user_owner))
     res = mut.resolve(
-        assignment_id: assignment.id
+        id: assignment.id
     )
 
     expect( Assignment.count ).to eq 0

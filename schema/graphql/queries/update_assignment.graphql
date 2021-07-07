@@ -1,0 +1,31 @@
+mutation UpdateAssignment(
+  $id: ID!
+  $name: String
+  $description: String
+  $weight: Int
+  $startDate: ISO8601DateTime
+  $endDate: ISO8601DateTime
+) {
+  updateAssignment(
+    input: {
+      id: $id
+      name: $name
+      description: $description
+      weight: $weight
+      startDate: $startDate
+      endDate: $endDate
+    }
+  ) {
+    project {
+      id
+      assignments {
+        id
+        name
+        description
+        startDate
+        endDate
+        weight
+      }
+    }
+  }
+}

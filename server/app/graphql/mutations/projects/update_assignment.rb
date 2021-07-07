@@ -1,4 +1,4 @@
-class Mutations::Projects::ChangeAssignment < Mutations::BaseMutation
+class Mutations::Projects::UpdateAssignment < Mutations::BaseMutation
     argument :id, ID, required: true
     argument :name, String, required: false
     argument :description, String, required: false
@@ -9,8 +9,6 @@ class Mutations::Projects::ChangeAssignment < Mutations::BaseMutation
     field :project, Types::ProjectType, null: true
 
     def resolve(**args)
-      
-
       assignment = Assignment.find(args[:id])
 
       project = Project.find_by_slug_or_id! (assignment.project_id)
