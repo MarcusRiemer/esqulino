@@ -19,9 +19,10 @@ RSpec.describe Mutations::Projects::CreateAssignmentSubmission do
   end
 
   it "create assignment submission normal work" do
-    a = create(:assignment)
+    based_on_project = create(:project, slug: "course-based")
+    a = create(:assignment, project_id: based_on_project.id)
 
-    project = create(:project, slug: nil)
+    project = create(:project, slug: "course-participant", based_on_project: based_on_project)
 
     mut = described_class.new(**init_args(user: project.user))
 
@@ -36,9 +37,12 @@ RSpec.describe Mutations::Projects::CreateAssignmentSubmission do
   end
 
   it "create assignment submission as member" do
-    a = create(:assignment)
+    based_on_project = create(:project, slug: "course-based")
+    a = create(:assignment, project_id: based_on_project.id)
 
-    project = create(:project, slug: nil)
+    project = create(:project, slug: "course-participant", based_on_project: based_on_project)
+
+
     user= create(:user, display_name: "participant")
     project.project_members.create(user_id: user.id, membership_type: "participant")
 
@@ -54,24 +58,26 @@ RSpec.describe Mutations::Projects::CreateAssignmentSubmission do
     expect(AssignmentSubmission.first.project_id).to eq project.id
   end
 
-  it "create assignment submission for the  assignment project" do
-    a = create(:assignment)
+  it "create assignment submission as the based course" do
+    project = create(:project, slug: "course-based")
+    a = create(:assignment, project_id: project.id)
 
-    mut = described_class.new(**init_args(user: a.project.user))
+    mut = described_class.new(**init_args(user: project.user))
 
-    res = mut.resolve(
+    expect{mut.resolve(
         assignment_id: a.id,
-        project_id:  a.project.id
-    )
+        project_id:  project.id
+    )}.to raise_error(ArgumentError)
 
-    expect( AssignmentSubmission.count ).to eq 1
-    expect(AssignmentSubmission.first.assignment_id).to eq a.id
-    expect(AssignmentSubmission.first.project_id).to eq a.project.id
+    expect( AssignmentSubmission.count ).to eq 0
   end
 
   it "create assignment submission as not a member" do
-    a = create(:assignment)
-    project = create(:project, slug: nil)
+    based_on_project = create(:project, slug: "course-based")
+    a = create(:assignment, project_id: based_on_project.id)
+
+    project = create(:project, slug: "course-participant", based_on_project: based_on_project)
+
 
     user= create(:user, display_name: "user")
 
@@ -87,8 +93,11 @@ RSpec.describe Mutations::Projects::CreateAssignmentSubmission do
 
 
   it "create assignment submission with wrong assignment_id" do
-    a = create(:assignment)
-    project = create(:project, slug: nil)
+    based_on_project = create(:project, slug: "course-based")
+    a = create(:assignment, project_id: based_on_project.id)
+
+    project = create(:project, slug: "course-participant", based_on_project: based_on_project)
+
 
     mut = described_class.new(**init_args(user: project.user))
 
@@ -98,6 +107,59 @@ RSpec.describe Mutations::Projects::CreateAssignmentSubmission do
     )}.to raise_error(ActiveRecord::RecordNotFound)
 
     expect( AssignmentSubmission.count ).to eq 0
+
+  end
+
+
+  it "create assignment submission -  2 times from on project to the same assignment" do
+    based_on_project = create(:project, slug: "course-based")
+    a = create(:assignment, project_id: based_on_project.id)
+
+    project = create(:project, slug: "course-participant", based_on_project: based_on_project)
+
+    mut = described_class.new(**init_args(user: project.user))
+
+    res = mut.resolve(
+        assignment_id: a.id,
+        project_id: project.id
+    )
+
+    expect( AssignmentSubmission.count ).to eq 1
+    expect(AssignmentSubmission.first.assignment_id).to eq a.id
+    expect(AssignmentSubmission.first.project_id).to eq project.id
+
+    expect{mut.resolve(
+      assignment_id: a.id,
+      project_id: project.id
+    )}.to raise_error(ActiveRecord::RecordNotUnique)
+
+  end
+
+  it "create assignment submission as not a  course of the course which  have the assignment" do
+    based_on_project = create(:project, slug: "course-based")
+    a = create(:assignment, project_id: based_on_project.id)
+
+    project = create(:project, slug: "course-participant")
+
+    mut = described_class.new(**init_args(user: project.user))
+
+    expect{mut.resolve(
+        assignment_id: a.id,
+        project_id: project.id
+    )}.to raise_error(ArgumentError)
+
+    expect( AssignmentSubmission.count ).to eq 0
+
+
+    other_based_on_project = create(:project, slug: "course-other-based")  
+    project = create(:project, slug: "course-participants", based_on_project: other_based_on_project)
+
+  expect{mut.resolve(
+      assignment_id: a.id,
+      project_id: project.id
+  )}.to raise_error(ActiveRecord::RecordNotFound)
+
+  expect( AssignmentSubmission.count ).to eq 0
 
   end
 

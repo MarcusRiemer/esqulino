@@ -13,20 +13,20 @@ class Project < ApplicationRecord
   # Assignments which can be created for the Project
   has_many :assignments
 
-  has_one :solution_project_course_participation, class_name: 'ProjectCourseParticipation',  :foreign_key => 'assignments_project_id'
-  has_many :assignments_project_course_participations, class_name: 'ProjectCourseParticipation', :foreign_key => 'solution_project_id'
+  has_one :based_on_project_course_participation, class_name: 'ProjectCourseParticipation',  :foreign_key => 'participant_project_id'
+  has_many :participant_project_course_participations, class_name: 'ProjectCourseParticipation', :foreign_key => 'based_on_project_id'
 
   #If this field is set it meant that it is a "Groupe" and participates in a course 
-  has_one  :solution_project,  through:  :solution_project_course_participation,  :foreign_key => 'assignments_project_id'
+  has_one  :based_on_project,  through:  :based_on_project_course_participation,  :foreign_key => 'participant_project_id'
 
-  #That are the "groups" which want to solved this assigments
-  has_many :assignments_projects,  through:  :assignments_project_course_participations, :foreign_key => 'solution_project_id'
+  #That are the "groups" which want to solved this assignments
+  has_many :participant_projects,  through:  :participant_project_course_participations, :foreign_key => 'based_on_project_id'
 
-  #Submissions which can be created to solve the assigments 
-  has_many :assigments_submissions
+  #Submissions which can be created to solve the assignments 
+  has_many :assignment_submissions
 
   #Answers to the required files
-  has_many :assigments_submitted_code_resources
+  has_many :assignment_submitted_code_resources
 
   # The owner in this project
   belongs_to :user
@@ -204,6 +204,19 @@ class Project < ApplicationRecord
 
   # Check if the project only a participant group of a "root" project
   def participation_group?()
-    return solution_project.present?
+    return based_on_project.present?
   end
+
+  def assert_is_participant_course!
+    if(!is_course() || based_on_project == nil)
+      raise ArgumentError.new("Project is not a participant course.")
+    end
+  end
+
+  def assert_is_root_course!
+    if(!is_course() || based_on_project != nil)
+      raise ArgumentError.new("Project is not a root course.")
+    end
+  end
+
 end

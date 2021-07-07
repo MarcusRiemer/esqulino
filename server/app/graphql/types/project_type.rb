@@ -25,10 +25,10 @@ module Types
     field :is_course, Boolean, null: false
     field :assignment_submissions, [Types::AssignmentSubmissionType], null: true      
     field :assignment_submitted_code_resources, [Types::AssignmentSubmittedCodeResourceType], null: true     
-    field :solution_project, Types::ProjectType, null: true
-    field :assignments_projects, [Types::ProjectType], null: true
-    field :solution_project_course_participation, Types::ProjectCourseParticipationType, null: true
-    field :assignments_project_course_participations, [Types::ProjectCourseParticipationType], null: true
+    field :based_on_project, Types::ProjectType, null: true
+    field :participant_projects, [Types::ProjectType], null: true
+    field :based_on_project_course_participation, Types::ProjectCourseParticipationType, null: true
+    field :participant_project_course_participations, [Types::ProjectCourseParticipationType], null: true
 
     field :code_resources, [Types::CodeResourceType], null: false
     field :code_resource_count, Integer, null: true

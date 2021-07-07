@@ -27,7 +27,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
 
         mut = described_class.new(**init_args(user: owner))
         res = mut.resolve(
-            solution_project_id: project.id,
+            based_on_project_id: project.id,
             user_ids: [user1.id, user2.id],
             slug: "testomesto"
           )
@@ -38,7 +38,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
         expect(Project.find_by(slug:"testomesto").members.find(user2.id)).to eq user2
         expect( Project.find_by(slug:"testomesto").project_members.find_by(user_id: user1.id).membership_type).to eq "participant"
         expect( Project.find_by(slug:"testomesto").project_members.find_by(user_id: user2.id).membership_type).to eq "participant"
-        expect( Project.find_by(slug:"testomesto").solution_project).to eq project
+        expect( Project.find_by(slug:"testomesto").based_on_project).to eq project
         expect(Project.find_by(slug:"testomesto").user).to eq owner
     end
 
@@ -54,7 +54,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
 
       mut = described_class.new(**init_args(user: owner))
        res = mut.resolve(
-          solution_project_id: project.id,
+          based_on_project_id: project.id,
           user_ids: [user1.id, user2.id]
         )
 
@@ -65,7 +65,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
       expect(Project.find(res[:project][:id]).members.find(user2.id)).to eq user2
       expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user1.id).membership_type).to eq "participant"
       expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user2.id).membership_type).to eq "participant"
-      expect( Project.find(res[:project][:id]).solution_project).to eq project
+      expect( Project.find(res[:project][:id]).based_on_project).to eq project
       expect(Project.find(res[:project][:id]).user).to eq owner
     end
 
@@ -83,7 +83,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
 
       mut = described_class.new(**init_args(user: user_admin))
       res = mut.resolve(
-        solution_project_id: project.id,
+        based_on_project_id: project.id,
         user_ids: [user1.id, user2.id],
         slug: "testomesto"
       )
@@ -94,7 +94,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
         expect(Project.find_by(slug:"testomesto").members.find(user2.id)).to eq user2
         expect( Project.find_by(slug:"testomesto").project_members.find_by(user_id: user1.id).membership_type).to eq "participant"
         expect( Project.find_by(slug:"testomesto").project_members.find_by(user_id: user2.id).membership_type).to eq "participant"
-        expect( Project.find_by(slug:"testomesto").solution_project).to eq project
+        expect( Project.find_by(slug:"testomesto").based_on_project).to eq project
         expect(Project.find_by(slug:"testomesto").user).to eq owner
     end
 
@@ -110,7 +110,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
 
       mut = described_class.new(**init_args(user: user_admin))
       expect{mut.resolve(
-        solution_project_id: project.id,
+        based_on_project_id: project.id,
         user_ids: [user1.id, user2.id, "23131313131"],
         slug: "testomesto"
       )}.to raise_error(ActiveRecord::RecordNotFound)
@@ -130,7 +130,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
 
       mut = described_class.new(**init_args(user: user_admin))
       expect{mut.resolve(
-        solution_project_id: project.id,
+        based_on_project_id: project.id,
         user_ids: [user1.id, user2.id, owner.id],
         slug: "testomesto"
       )}.to raise_error(ArgumentError)
@@ -146,7 +146,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
 
       mut = described_class.new(**init_args(user: user1))
       res = mut.resolve(
-        solution_project_id: project.id,
+        based_on_project_id: project.id,
         user_ids: [user1.id],
         slug: "testomesto"
       )
@@ -155,7 +155,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
       expect(Project.find_by(slug:"testomesto").members.count).to eq 1
       expect(Project.find_by(slug:"testomesto").members.find(user1.id)).to eq user1
       expect( Project.find_by(slug:"testomesto").project_members.find_by(user_id: user1.id).membership_type).to eq "participant"
-      expect( Project.find_by(slug:"testomesto").solution_project).to eq project
+      expect( Project.find_by(slug:"testomesto").based_on_project).to eq project
       expect(Project.find_by(slug:"testomesto").user).to eq owner
     end
 
@@ -167,7 +167,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
 
       mut = described_class.new(**init_args(user: user1))
       expect{mut.resolve(
-        solution_project_id: project.id,
+        based_on_project_id: project.id,
         user_ids: [user1.id],
         slug: "testomesto"
       )}.to raise_error(Pundit::NotAuthorizedError)
@@ -179,7 +179,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
       owner = create(:user)
       course = create(:project_course_participation)
 
-      project = course.assignments_project
+      project = course.participant_project
       project.user = owner 
       project.save!
       
@@ -187,7 +187,7 @@ RSpec.describe Mutations::Projects::CreateCourseParticipation do
 
       mut = described_class.new(**init_args(user: owner))
       expect{mut.resolve(
-        solution_project_id: project.id,
+        based_on_project_id: project.id,
         user_ids: [user1.id],
         slug: "testomesto"
       )}.to raise_error(ArgumentError)

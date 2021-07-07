@@ -1,15 +1,15 @@
 class Mutations::Projects::CreateCourseParticipation < Mutations::BaseMutation
-    argument :solution_project_id, ID, required: true
+    argument :based_on_project_id, ID, required: true
     argument :user_ids, [ID], required: true
     argument :slug, String, required: false
 
     field :project, Types::ProjectType, null: true
 
-    def resolve(solution_project_id:, user_ids:, slug: nil)
-      project = Project.find_by_slug_or_id! (solution_project_id)
+    def resolve(based_on_project_id:, user_ids:, slug: nil)
+      project = Project.find_by_slug_or_id! (based_on_project_id)
 
 
-      if project.solution_project != nil
+      if project.based_on_project != nil
         raise ArgumentError.new("Can´t create a course project of  a participant project")
       end
 
@@ -24,7 +24,7 @@ class Mutations::Projects::CreateCourseParticipation < Mutations::BaseMutation
       
       ActiveRecord::Base.transaction do
         course_project.save!
-        course_project.solution_project = project
+        course_project.based_on_project = project
         #add participants
         user_ids.each do |id|
             course_project = Mutations::Projects::AddMembers.helper_add_one_member(course_project, id, false, current_user)
