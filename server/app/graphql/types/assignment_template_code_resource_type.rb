@@ -1,5 +1,7 @@
 module Types
     class Types::AssignmentTemplateCodeResourceType < Types::Base::BaseObject
+        field :id, ID, null: false
+        
         field :code_resource, Types::CodeResourceType, null: false
         field :code_resource_id, ID, null: false
         
@@ -9,7 +11,7 @@ module Types
         class ReferenceTypeEnum < Types::Base::BaseEnum
             value "given_partially"
             value "given_full"
-        end
+        end 
         
         field :reference_type, ReferenceTypeEnum, null: false
 

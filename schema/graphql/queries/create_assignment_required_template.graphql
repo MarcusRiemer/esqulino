@@ -1,0 +1,46 @@
+mutation CreateAssignmentRequiredTemplate(
+  $assignmentId: ID!
+  $name: String!
+  $programmingLanguageId: ID!
+  $description: String
+  $referenceType: ReferenceTypeEnum!
+  $blockLanguageId: ID!
+) {
+  createAssignmentRequiredTemplate(
+    input: {
+      assignmentId: $assignmentId
+      name: $name
+      programmingLanguageId: $programmingLanguageId
+      description: $description
+      referenceType: $referenceType
+      blockLanguageId: $blockLanguageId
+    }
+  ) {
+    project {
+      id
+      assignments {
+        id
+        assignmentRequiredCodeResources {
+          id
+          name
+          description
+          programmingLanguageId
+          solution {
+            id
+          }
+          template {
+            id
+            referenceType
+            codeResource {
+              id
+              name
+              blockLanguageId
+              ast
+              programmingLanguageId
+            }
+          }
+        }
+      }
+    }
+  }
+}

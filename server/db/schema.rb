@@ -18,15 +18,16 @@ ActiveRecord::Schema.define(version: 2021_06_30_121249) do
   enable_extension "plpgsql"
 
   create_table "assignment_required_code_resources", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.text "resource_type"
     t.string "name"
     t.text "description"
     t.uuid "assignment_id", null: false
     t.uuid "code_resource_id"
+    t.text "programming_language_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["assignment_id"], name: "index_assignment_required_code_resources_on_assignment_id"
     t.index ["code_resource_id"], name: "index_assignment_required_code_resources_on_code_resource_id"
+    t.index ["programming_language_id"], name: "index_assignment_submitted_c_r_on_programming_language"
   end
 
   create_table "assignment_submission_grade_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -56,6 +57,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_121249) do
     t.uuid "assignment_id", null: false
     t.uuid "project_id", null: false
     t.index ["assignment_id"], name: "index_assignment_submissions_on_assignment_id"
+    t.index ["project_id", "assignment_id"], name: "index_assignment_submissions_on_project_id_and_assignment_id", unique: true
     t.index ["project_id"], name: "index_assignment_submissions_on_project_id"
   end
 
@@ -203,12 +205,12 @@ ActiveRecord::Schema.define(version: 2021_06_30_121249) do
 
   create_table "project_course_participations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "access_denied"
-    t.uuid "solution_project_id", null: false
-    t.uuid "assignments_project_id", null: false
+    t.uuid "based_on_project_id", null: false
+    t.uuid "participant_project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["assignments_project_id"], name: "index_project_course_participations_on_assignments_project_id"
-    t.index ["solution_project_id"], name: "index_project_course_participations_on_solution_project_id"
+    t.index ["based_on_project_id"], name: "index_project_course_participations_on_based_on_project_id"
+    t.index ["participant_project_id"], name: "index_project_course_participations_on_participant_project_id"
   end
 
   create_table "project_databases", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -296,6 +298,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_121249) do
 
   add_foreign_key "assignment_required_code_resources", "assignments"
   add_foreign_key "assignment_required_code_resources", "code_resources"
+  add_foreign_key "assignment_required_code_resources", "programming_languages"
   add_foreign_key "assignment_submission_grade_users", "assignment_submission_grades"
   add_foreign_key "assignment_submission_grade_users", "users"
   add_foreign_key "assignment_submission_grades", "assignment_submissions"
@@ -324,8 +327,8 @@ ActiveRecord::Schema.define(version: 2021_06_30_121249) do
   add_foreign_key "identities", "users"
   add_foreign_key "log_entries", "users"
   add_foreign_key "news", "users"
-  add_foreign_key "project_course_participations", "projects", column: "assignments_project_id"
-  add_foreign_key "project_course_participations", "projects", column: "solution_project_id"
+  add_foreign_key "project_course_participations", "projects", column: "based_on_project_id"
+  add_foreign_key "project_course_participations", "projects", column: "participant_project_id"
   add_foreign_key "project_databases", "projects"
   add_foreign_key "project_members", "projects"
   add_foreign_key "project_members", "users"

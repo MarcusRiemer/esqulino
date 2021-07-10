@@ -15,10 +15,10 @@ class CodeResource < ApplicationRecord
   has_one :grammar, through: :block_language
 
   # Each resource can be a template 
-  has_many :assignment_template_code_resource
+  has_many :assignment_template_code_resources
 
   # Each resource can be a solution of a requisition
-  has_many :assignment_required_code_resource
+  has_many :assignment_required_code_resources
 
   # Each resource can belongs to a single assignment submittion ...
   has_one :assignment_submitted_code_resource

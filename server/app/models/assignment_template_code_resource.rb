@@ -10,4 +10,8 @@ class AssignmentTemplateCodeResource < ApplicationRecord
         given_partially: 0,
         given_full: 1
     }
+
+    def create_copy?()
+        reference_type == "given_partially"
+    end
 end
