@@ -1,0 +1,15 @@
+mutation CreateAssignmentSubmission($assignmentId: ID!, $projectId: ID!) {
+  createAssignmentSubmission(
+    input: { assignmentId: $assignmentId, projectId: $projectId }
+  ) {
+    project {
+      id
+      assignmentSubmissions {
+        id
+        assignment {
+          id
+        }
+      }
+    }
+  }
+}

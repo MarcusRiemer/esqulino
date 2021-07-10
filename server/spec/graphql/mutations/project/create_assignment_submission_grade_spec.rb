@@ -269,4 +269,31 @@ RSpec.describe Mutations::Projects::CreateAssignmentSubmissionGrade do
     expect( AssignmentSubmissionGrade.count ).to eq 0
     expect( AssignmentSubmissionGradeUser.count).to eq 0
   end
+
+
+
+  it "create grade with one evaluted_people which are a member of a other project" do
+    project = create(:project)
+
+    assignment_submission = create(:assignment_submission)
+    evaluated_people1= create(:user, display_name: "evaluatedpeople1")
+    assignment_submission.assignment.project.project_members.create(user_id: evaluated_people1.id, membership_type: "participant")
+    
+    
+    assignment_submission2 = create(:assignment_submission, assignment_id: assignment_submission.assignment.id, project_id: project.id)
+    evaluated_people2= create(:user, display_name: "evaluatedpeople2")
+    project.project_members.create(user_id: evaluated_people2.id, membership_type: "participant")
+
+    mut = described_class.new(**init_args(user: assignment_submission.assignment.project.user))
+
+    expect{mut.resolve(
+        assignment_submission_id: assignment_submission.id,
+        feedback: "Feedback",
+        grade: 1,
+        evaluted_people_ids: [evaluated_people1.id, evaluated_people2.id]
+    )}.to raise_error(ArgumentError)
+
+    expect( AssignmentSubmissionGrade.count ).to eq 0
+    expect( AssignmentSubmissionGradeUser.count).to eq 0
+  end
 end
