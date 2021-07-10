@@ -18,122 +18,233 @@ RSpec.describe Mutations::Projects::CreateAssignmentRequiredCodeResource do
     }
   end
 
-  it "create assignment normal work" do
-    current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false, slug:"course")
-
-    date = DateTime.new(2000,1,1,5)
-    date_later = DateTime.new(2000,3,6,5)
-
-    assignment = create(:assignment, project_id: project.id, name: "Aufgabe 10", description: "Ein weiterer Test", start_date: date, end_date: date_later, weight: 3)
+  it "create assignment required normal work" do
+    owner = create(:user)
+    assignment = create(:assignment)
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    pl = create(:programming_language)
     
+    p = assignment.project
+    p.block_languages = [ block, block2, block3 ]
+    p.user = owner
+    p.save! 
 
-    mut = described_class.new(**init_args(user: current_user_owner))
+    mut = described_class.new(**init_args(user: owner))
     res = mut.resolve(
       assignment_id: assignment.id,
       name: "Aufgabe 1",
       description: "Test",
-      resource_type:  ".txt"
+      programming_language_id:  block.default_programming_language.id
     )
-
 
 
     expect( Assignment.count ).to eq 1
     expect( AssignmentRequiredCodeResource.count).to eq 1
     expect( AssignmentRequiredCodeResource.first.description).to eq "Test"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.programming_language).to eq block.default_programming_language
     expect( AssignmentRequiredCodeResource.first.name).to eq "Aufgabe 1"
+
+    mut = described_class.new(**init_args(user: owner))
+    res = mut.resolve(
+      assignment_id: assignment.id,
+      name: "Aufgabe 2",
+      description: "Test",
+      programming_language_id:  block2.default_programming_language.id
+    )
+
+    expect( Assignment.count ).to eq 1
+    expect( AssignmentRequiredCodeResource.count).to eq 2
+    expect( AssignmentRequiredCodeResource.find_by(name: "Aufgabe 2" ).description).to eq "Test"
+    expect( AssignmentRequiredCodeResource.find_by(name: "Aufgabe 2" ).programming_language).to eq block2.default_programming_language
+
+    mut = described_class.new(**init_args(user: owner))
+    res = mut.resolve(
+      assignment_id: assignment.id,
+      name: "Aufgabe 3",
+      programming_language_id:  block3.default_programming_language.id
+    )
+
+    expect( Assignment.count ).to eq 1
+    expect( AssignmentRequiredCodeResource.count).to eq 3
+    expect( AssignmentRequiredCodeResource.find_by(name: "Aufgabe 3" ).description).to eq nil
+    expect( AssignmentRequiredCodeResource.find_by(name: "Aufgabe 3" ).programming_language).to eq block3.default_programming_language
   end
 
   it "create assignment required code resource no permissions" do
-    current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false, slug:"course")
+    owner = create(:user)
+    assignment = create(:assignment)
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    pl = create(:programming_language)
+    
+    p = assignment.project
+    p.block_languages = [ block, block2, block3 ]
+    p.user = owner
+    p.save! 
 
     user = create(:user)
-
-    date = DateTime.new(2000,1,1,5)
-    date_later = DateTime.new(2000,3,6,5)
-
-    assignment = create(:assignment, project_id: project.id, name: "Aufgabe 10", description: "Ein weiterer Test", start_date: date, end_date: date_later, weight: 3)
-    
 
     mut = described_class.new(**init_args(user: user))
     expect{mut.resolve(
       assignment_id: assignment.id,
       name: "Aufgabe 1",
       description: "Test",
-      resource_type:  ".txt"
+      programming_language_id:  block.default_programming_language.id
     )}.to raise_error(Pundit::NotAuthorizedError)
 
     expect( AssignmentRequiredCodeResource.count ).to eq 0
   end
 
  it "create assignment required code resource with empty description" do
-    current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false, slug:"course")
+  owner = create(:user)
+  assignment = create(:assignment)
+  block = create(:block_language)
+  block2 = create(:block_language)
+  block3 = create(:block_language)
+  pl = create(:programming_language)
+  
+  p = assignment.project
+  p.block_languages = [ block, block2, block3 ]
+  p.user = owner
+  p.save! 
 
-    date = DateTime.new(2000,1,1,5)
-    date_later = DateTime.new(2000,3,6,5)
-
-    assignment = create(:assignment, project_id: project.id, name: "Aufgabe 10", description: "Ein weiterer Test", start_date: date, end_date: date_later, weight: 3)
-    
-
-    mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
-      assignment_id: assignment.id,
-      name: "Aufgabe 1",
-      description: "",
-      resource_type:  ".txt"
-    )
+  mut = described_class.new(**init_args(user: owner))
+  res = mut.resolve(
+    assignment_id: assignment.id,
+    name: "Aufgabe 1",
+    description: "",
+    programming_language_id:  block.default_programming_language.id
+  )
 
     expect( AssignmentRequiredCodeResource.count).to eq 1
     expect( AssignmentRequiredCodeResource.first.description).to eq nil
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.programming_language).to eq block.default_programming_language
     expect( AssignmentRequiredCodeResource.first.name).to eq "Aufgabe 1"
   end
 
 
   it "create assignment required code resource with empty name" do
-    current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false, slug:"course")
-
-    date = DateTime.new(2000,1,1,5)
-    date_later = DateTime.new(2000,3,6,5)
-
-    assignment = create(:assignment, project_id: project.id, name: "Aufgabe 10", description: "Ein weiterer Test", start_date: date, end_date: date_later, weight: 3)
+    owner = create(:user)
+    assignment = create(:assignment)
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    pl = create(:programming_language)
     
+    p = assignment.project
+    p.block_languages = [ block, block2, block3 ]
+    p.user = owner
+    p.save! 
 
-    mut = described_class.new(**init_args(user: current_user_owner))
-
+    mut = described_class.new(**init_args(user: owner))
     expect{mut.resolve(
       assignment_id: assignment.id,
       name: "",
-      description: "Test",
-      resource_type:  ".txt"
+      description: "asd",
+      programming_language_id:  block.default_programming_language.id
     )}.to raise_error(ActiveRecord::RecordInvalid)
-
+  
     expect( AssignmentRequiredCodeResource.count ).to eq 0  
 end
 
-  it "create assignment required code resource with empty resource_type" do
-    current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false, slug:"course")
-
-    date = DateTime.new(2000,1,1,5)
-    date_later = DateTime.new(2000,3,6,5)
-
-    assignment = create(:assignment, project_id: project.id, name: "Aufgabe 10", description: "Ein weiterer Test", start_date: date, end_date: date_later, weight: 3)
+  it "create assignment required code resource with empty programming language" do
+    owner = create(:user)
+    assignment = create(:assignment)
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    pl = create(:programming_language)
     
+    p = assignment.project
+    p.block_languages = [ block, block2, block3 ]
+    p.user = owner
+    p.save! 
 
-    mut = described_class.new(**init_args(user: current_user_owner))
+    mut = described_class.new(**init_args(user: owner))
     expect{mut.resolve(
       assignment_id: assignment.id,
       name: "Aufgabe 1",
       description: "Test",
-      resource_type:  ""
+      programming_language_id:  ""
     )}.to raise_error(ActiveRecord::RecordInvalid)
 
     expect( AssignmentRequiredCodeResource.count ).to eq 0  
+    end
+
+    it "create assignment required code resource with not existing programming language" do
+      owner = create(:user)
+      assignment = create(:assignment)
+      block = create(:block_language)
+      block2 = create(:block_language)
+      block3 = create(:block_language)
+
+      p = assignment.project
+      p.block_languages = [ block, block2, block3 ]
+      p.user = owner
+      p.save! 
+  
+      mut = described_class.new(**init_args(user: owner))
+      expect{mut.resolve(
+        assignment_id: assignment.id,
+        name: "Aufgabe 1",
+        description: "Test",
+        programming_language_id:  "123123"
+      )}.to raise_error(ActiveRecord::RecordInvalid)
+  
+  
+      expect( Assignment.count ).to eq 1
+      expect( AssignmentRequiredCodeResource.count).to eq 0
+    end
+
+    it "create assignment required code resource with programming language which are not allowed in this project" do
+      owner = create(:user)
+      assignment = create(:assignment)
+      block = create(:block_language)
+      block2 = create(:block_language)
+      block3 = create(:block_language)
+      pl = create(:programming_language)
+
+      p = assignment.project
+      p.block_languages = [ block, block2, block3 ]
+      p.user = owner
+      p.save! 
+  
+      mut = described_class.new(**init_args(user: owner))
+      expect{mut.resolve(
+        assignment_id: assignment.id,
+        name: "Aufgabe 1",
+        description: "Test",
+        programming_language_id:  pl.id
+      )}.to raise_error(ActiveRecord::RecordInvalid)
+  
+  
+      expect( Assignment.count ).to eq 1
+      expect( AssignmentRequiredCodeResource.count).to eq 0
+    end
+
+    it "create assignment required code resource with a project which have 0 block_languages" do
+      owner = create(:user)
+      assignment = create(:assignment)
+      pl = create(:programming_language)
+
+      p = assignment.project
+      p.user = owner
+      p.save! 
+  
+      mut = described_class.new(**init_args(user: owner))
+      expect{mut.resolve(
+        assignment_id: assignment.id,
+        name: "Aufgabe 1",
+        description: "Test",
+        programming_language_id:  pl.id
+      )}.to raise_error(ActiveRecord::RecordInvalid)
+  
+  
+      expect( Assignment.count ).to eq 1
+      expect( AssignmentRequiredCodeResource.count).to eq 0
     end
 
 end

@@ -1,0 +1,22 @@
+mutation removeAssignmentRequiredSolution(
+  $assignmentRequiredCodeResourceId: ID!
+) {
+  removeAssignmentRequiredSolution(
+    input: {
+      assignmentRequiredCodeResourceId: $assignmentRequiredCodeResourceId
+    }
+  ) {
+    project {
+      id
+      assignments {
+        id
+        assignmentRequiredCodeResources {
+          id
+          solution {
+            id
+          }
+        }
+      }
+    }
+  }
+}

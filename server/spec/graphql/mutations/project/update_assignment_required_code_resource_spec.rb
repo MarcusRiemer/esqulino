@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Mutations::Projects::ChangeAssignmentRequiredCodeResource do
+RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
 
   # These specs relies on
   # * an existing guest user
@@ -30,14 +30,13 @@ RSpec.describe Mutations::Projects::ChangeAssignmentRequiredCodeResource do
     res = mut.resolve(
       id: assignment_required_cd.id,
       name: "Anforderung",
-      resource_type: ".pdf",
       description:  "Erklaerung"
     )
 
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Anforderung"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".pdf"
+    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
     expect( AssignmentRequiredCodeResource.first.description).to eq "Erklaerung"
 
 
@@ -50,19 +49,7 @@ RSpec.describe Mutations::Projects::ChangeAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Anforderung 3"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".pdf"
-    expect( AssignmentRequiredCodeResource.first.description).to eq "Erklaerung"
-
-    mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
-      id: assignment_required_cd.id,
-      resource_type: ".jpg"
-    )
-
-    expect( AssignmentRequiredCodeResource.count ).to eq 1
-    expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
-    expect( AssignmentRequiredCodeResource.first.name).to eq "Anforderung 3"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".jpg"
+    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
     expect( AssignmentRequiredCodeResource.first.description).to eq "Erklaerung"
 
 
@@ -75,7 +62,18 @@ RSpec.describe Mutations::Projects::ChangeAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Anforderung 3"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".jpg"
+    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.description).to eq "test"
+
+    mut = described_class.new(**init_args(user: current_user_owner))
+    res = mut.resolve(
+      id: assignment_required_cd.id,
+    )
+
+    expect( AssignmentRequiredCodeResource.count ).to eq 1
+    expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
+    expect( AssignmentRequiredCodeResource.first.name).to eq "Anforderung 3"
+    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
     expect( AssignmentRequiredCodeResource.first.description).to eq "test"
 
   end
@@ -100,27 +98,7 @@ RSpec.describe Mutations::Projects::ChangeAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
     expect( AssignmentRequiredCodeResource.first.description).to eq "Beschreibung"
   end
-
-  it "create assignment required code resource - change empty resource_type" do
-    current_user_owner = create(:user, display_name: "Owner")
-    project = create(:project, user: current_user_owner, public: false, slug:"course")
-
-    assignment = create(:assignment, project_id: project.id)
-    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", resource_type: ".txt", description:"Beschreibung")
-
-
-    mut = described_class.new(**init_args(user: current_user_owner))
-    expect{mut.resolve(
-      id: assignment_required_cd.id,
-      resource_type: ""
-    )}.to raise_error(ActiveRecord::RecordInvalid)
-
-    expect( AssignmentRequiredCodeResource.count ).to eq 1
-    expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
-    expect( AssignmentRequiredCodeResource.first.name).to eq "Test"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
-    expect( AssignmentRequiredCodeResource.first.description).to eq "Beschreibung"
-  end
+      
 
   it "create assignment required code resource  - change description to blank" do
     current_user_owner = create(:user, display_name: "Owner")
@@ -167,7 +145,6 @@ RSpec.describe Mutations::Projects::ChangeAssignmentRequiredCodeResource do
     expect{mut.resolve(
       id: assignment_required_cd.id,
       name: "Anforderung",
-      resource_type: ".pdf",
       description:  "Erklaerung"
     )}.to raise_error(Pundit::NotAuthorizedError)
 

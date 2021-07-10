@@ -1,0 +1,13 @@
+mutation DestroyAssignmentRequiredCodeResource($id: ID!) {
+  destroyAssignmentRequiredCodeResource(input: { id: $id }) {
+    project {
+      id
+      assignments {
+        id
+        assignmentRequiredCodeResources {
+          id
+        }
+      }
+    }
+  }
+}

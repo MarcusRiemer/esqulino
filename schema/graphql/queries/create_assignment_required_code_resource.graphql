@@ -1,0 +1,30 @@
+mutation CreateAssignmentRequiredCodeResource(
+  $assignmentId: ID!
+  $name: String!
+  $programmingLanguageId: ID!
+  $description: String
+) {
+  createAssignmentRequiredCodeResource(
+    input: {
+      assignmentId: $assignmentId
+      programmingLanguageId: $programmingLanguageId
+      name: $name
+      description: $description
+    }
+  ) {
+    project {
+      id
+      assignments {
+        id
+        assignmentRequiredCodeResources {
+          id
+          name
+          programmingLanguage{
+            id
+          }
+          description
+        }
+      }
+    }
+  }
+}

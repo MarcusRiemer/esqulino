@@ -1,0 +1,16 @@
+mutation updateAssignmentRequiredCodeResource($id: ID!, $name: String, $description: String) {
+  updateAssignmentRequiredCodeResource(input: { id: $id, name: $name, description: $description }) {
+    project {
+      id
+      assignments {
+        id
+        assignmentRequiredCodeResources{
+          id
+          name
+          description
+          resourceType
+        }
+      }
+    }
+  }
+}

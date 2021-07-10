@@ -1,4 +1,4 @@
-require "rails_helper"
+#require "rails_helper"
 
 RSpec.describe Mutations::Projects::DestroyAssignmentRequiredCodeResource do
 
@@ -43,8 +43,11 @@ RSpec.describe Mutations::Projects::DestroyAssignmentRequiredCodeResource do
     assignment = create(:assignment, project_id: project.id)
     assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", resource_type: ".txt", description:"Beschreibung")
     
-    assignment_template_cd = create(:assignment_template_code_resource, assignment_required_code_resource_id: assignment_required_cd.id)
 
+
+    assignment_template_cd = create(:assignment_template_code_resource, assignment_required_code_resource_id: assignment_required_cd.id)
+    
+    expect( CodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.count ).to eq 1
 
     mut = described_class.new(**init_args(user: current_user_owner))
@@ -53,7 +56,7 @@ RSpec.describe Mutations::Projects::DestroyAssignmentRequiredCodeResource do
     )
 
     expect( AssignmentRequiredCodeResource.count ).to eq 0
-    expect( AssignmentTemplateCodeResource.count ).to eq 0
+    expect( CodeResource.count ).to eq 1
   end
 
   it "destroy assignment_required_code_resource without permissions" do
@@ -106,6 +109,5 @@ RSpec.describe Mutations::Projects::DestroyAssignmentRequiredCodeResource do
     )}.to raise_error(ActiveRecord::InvalidForeignKey)
 
     expect( AssignmentTemplateCodeResource.count ).to eq 1
-    expect( AssignmentRequiredCodeResource.count ).to eq 1
   end
 end

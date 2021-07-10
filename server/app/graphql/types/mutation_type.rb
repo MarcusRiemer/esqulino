@@ -15,6 +15,18 @@ module Types
     field :destroy_news, mutation: Mutations::News::DestroyNews
 
     field :create_assignment, mutation: Mutations::Projects::CreateAssignment
+    field :update_assignment, mutation: Mutations::Projects::UpdateAssignment
+    field :destroy_assignment, mutation: Mutations::Projects::DestroyAssignment
+
+    field :create_assignment_required_code_resource, mutation: Mutations::Projects::CreateAssignmentRequiredCodeResource
+    field :destroy_assignment_required_code_resource, mutation: Mutations::Projects::DestroyAssignmentRequiredCodeResource
+    field :update_assignment_required_code_resource, mutation: Mutations::Projects::UpdateAssignmentRequiredCodeResource
+
+    field :create_assignment_required_solution, mutation: Mutations::Projects::CreateAssignmentRequiredSolution
+    field :remove_assignment_required_solution, mutation: Mutations::Projects::RemoveAssignmentRequiredSolution
+
+    field :create_assignment_required_template, mutation: Mutations::Projects::CreateAssignmentRequiredTemplate
+
     field :create_assignment_submission, mutation: Mutations::Projects::CreateAssignmentSubmission
     field :create_assignment_submission_grade, mutation: Mutations::Projects::CreateAssignmentSubmissionGrade
 

@@ -1,0 +1,28 @@
+mutation CreateAssignmentRequiredSolution(
+  $assignmentRequiredCodeResourceId: ID!
+  $blockLanguageId: ID!
+) {
+  createAssignmentRequiredSolution(
+    input: {
+      assignmentRequiredCodeResourceId: $assignmentRequiredCodeResourceId
+      blockLanguageId: $blockLanguageId
+    }
+  ) {
+    project {
+      id
+      assignments {
+        id
+        assignmentRequiredCodeResources {
+          id
+          solution {
+            id
+            name
+            blockLanguageId
+            ast
+            programmingLanguageId
+          }
+        }
+      }
+    }
+  }
+}

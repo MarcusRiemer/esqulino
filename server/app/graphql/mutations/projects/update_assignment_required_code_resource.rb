@@ -1,7 +1,6 @@
-class Mutations::Projects::ChangeAssignmentRequiredCodeResource < Mutations::BaseMutation
+class Mutations::Projects::UpdateAssignmentRequiredCodeResource < Mutations::BaseMutation
     argument :id, ID, required: true
     argument :name, String, required: false
-    argument :resource_type, String, required: false
     argument :description, String, required: false
 
 

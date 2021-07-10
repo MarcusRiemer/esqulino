@@ -8,6 +8,41 @@ query FullProject($id: ID!) {
     indexPageId
     createdAt
     updatedAt
+    assignments {
+      id
+      name
+      description
+      startDate
+      endDate
+      weight
+      assignmentRequiredCodeResources {
+        id
+        name
+        programmingLanguageId
+        solution {
+          id
+        }
+        template {
+          id
+          referenceType
+          codeResource {
+            id
+          }
+        }
+      }
+    }
+    assignmentSubmissions {
+      id
+      assignment {
+        id
+      }
+      #assignmentSubmittedCodeResources {
+      #id
+      #codeResource {
+      # id
+      #}
+      #}
+    }
     projectMembers {
       id
       membershipType
@@ -17,28 +52,36 @@ query FullProject($id: ID!) {
         displayName
       }
     }
-    solutionProject {
-      id
-      slug
-      name
-      description
+    basedOnProject {
       assignments {
         id
         name
         description
         startDate
         endDate
+        weight
         assignmentRequiredCodeResources {
           id
-          resourceType
+          name
+          programmingLanguageId
+          template {
+            id
+            referenceType
+            codeResource {
+              id
+              name
+              ast
+              blockLanguageId
+              programmingLanguageId
+            }
+          }
         }
       }
     }
-    assignmentsProjects {
+    participantProjects {
       id
       slug
       name
-      description
       projectMembers {
         id
         membershipType
@@ -47,6 +90,22 @@ query FullProject($id: ID!) {
           id
           displayName
         }
+      }
+      assignmentSubmissions {
+        id
+        assignment {
+          id
+        }
+        #assignmentSubmittedCodeResources {
+        #  id
+        #  codeResource {
+        #    id
+        #    name
+        #    ast
+        #    blockLanguageId
+        #    programmingLanguageId
+        #  }
+        #}
       }
     }
     user {
@@ -78,8 +137,6 @@ query FullProject($id: ID!) {
       createdAt
       updatedAt
     }
-    # Not required by the project constructor, but by specifying
-    # it here ensures it ends up in the apollo cache
     blockLanguages {
       id
       name
