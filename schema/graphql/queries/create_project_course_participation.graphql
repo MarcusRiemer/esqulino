@@ -1,0 +1,12 @@
+mutation CreateProjectCourseParticipation(
+  $basedOnProjectId: ID!
+  $userIds: [ID!]!
+) {
+  createProjectCourseParticipation(
+    input: { basedOnProjectId: $basedOnProjectId, userIds: $userIds }
+  ) {
+    project {
+      id
+    }
+  }
+}

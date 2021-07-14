@@ -18,6 +18,8 @@ module Types
     field :update_assignment, mutation: Mutations::Projects::UpdateAssignment
     field :destroy_assignment, mutation: Mutations::Projects::DestroyAssignment
 
+    field :create_project_course_participation, mutation: Mutations::Projects::CreateProjectCourseParticipation
+
     field :create_assignment_required_code_resource, mutation: Mutations::Projects::CreateAssignmentRequiredCodeResource
     field :destroy_assignment_required_code_resource, mutation: Mutations::Projects::DestroyAssignmentRequiredCodeResource
     field :update_assignment_required_code_resource, mutation: Mutations::Projects::UpdateAssignmentRequiredCodeResource
@@ -29,8 +31,6 @@ module Types
 
     field :create_assignment_submission, mutation: Mutations::Projects::CreateAssignmentSubmission
     field :create_assignment_submission_grade, mutation: Mutations::Projects::CreateAssignmentSubmissionGrade
-
-    field :create_course_participation, mutation: Mutations::Projects::CreateCourseParticipation
 
     field :create_project, mutation: Mutations::Projects::CreateProject
     field :create_deep_copy_project, mutation: Mutations::Projects::CreateDeepCopyProject
