@@ -252,7 +252,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
 
   end
 
-  it "copied many project_databases" do
+  it "create a deep copy -copied many project_databases" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
@@ -278,7 +278,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     
   end
 
-  it "have a default database" do
+  it "create a deep copy - have a default database" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
@@ -312,7 +312,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     expect(ProjectDatabase.count).to eq 6
   end
 
-  it "create a real deep copy of all" do
+  it "create a deep copy of all" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
@@ -389,7 +389,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     expect(ProjectSource.count).to eq 6
   end
 
-  it "create a real deep copy of all with problems at default_databases" do
+  it "create a deep copy of all with problems at default_databases" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
@@ -423,7 +423,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     expect(ProjectSource.count).to eq 3
   end
 
-  it "create a real deep copy of all with problems at project_sources" do
+  it "create a deep copy of all with problems at project_sources" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
@@ -457,7 +457,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     expect(ProjectSource.count).to eq 3
   end
 
-  it "create a real deep copy of all with problems at code_resources" do
+  it "create a deep copy of all with problems at code_resources" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
@@ -491,7 +491,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     expect(ProjectSource.count).to eq 3
   end
 
-  it "create a real deep copy of all with problems at default_database" do
+  it "create a deep copy of all with problems at default_database" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
@@ -527,7 +527,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
   end
 
 
-  it "create a real deep copy of all with nil slug" do
+  it "create a deep copy of all with nil slug" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
@@ -604,7 +604,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
 
   end 
 
-  it "create a real deep copy of all with empty string of slug" do
+  it "create a deep copy of all with empty string of slug" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
@@ -621,7 +621,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
   end
 
 
-  it "create a real deep copy with project_uses_block_languages" do
+  it "create a deep copy with project_uses_block_languages" do
     creator = create(:user, display_name: "Creator")
     project = create(:project, user: creator)
 
@@ -643,7 +643,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     expect(Project.count).to eq 2
   end
 
-  xit "create a real deep copy with problems at project_uses_block_languages" do
+  xit "create a  deep copy with problems at project_uses_block_languages" do
     class MockProject < Project 
       
     end 

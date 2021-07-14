@@ -24,17 +24,13 @@ class Mutations::Projects::CreateDeepCopyProject < Mutations::BaseMutation
       ActiveRecord::Base.transaction do
         c_project.user = current_user
         c_project.save!
+        
         Mutations::Projects::CreateDeepCopyProject.helper_create_copy_of_project_uses_block_languages(project, c_project)
 
-       
+        Mutations::Projects::CreateDeepCopyProject.helper_create_copy_of_project_sources(project, c_project) 
 
         Mutations::Projects::CreateDeepCopyProject.helper_create_deep_copy_of_databases(project, c_project)
 
-        project.project_sources.each do |v|
-            project_source = v.dup
-            project_source.project = c_project
-            project_source.save!
-        end
 
         project.code_resources.each do |v|
           Mutations::Projects::CreateDeepCopyProject.helper_create_deep_copy_of_code_resource(v, c_project)
@@ -70,15 +66,24 @@ class Mutations::Projects::CreateDeepCopyProject < Mutations::BaseMutation
             c_project.save!
         end
     end
+      return c_project
     end
 
 
     def self.helper_create_copy_of_project_uses_block_languages(project, c_project)
       project.project_uses_block_languages.each do |v|
         project_uses_block_language = v.dup
-          project_uses_block_language.project = c_project
-          project_uses_block_language.save!
+        project_uses_block_language.project = c_project
+        project_uses_block_language.save!
       end
+    end
+
+    def self.helper_create_copy_of_project_sources(project, c_project)
+      project.project_sources.each do |v|
+        project_source = v.dup
+        project_source.project = c_project
+        project_source.save!
+    end
     end
 
 

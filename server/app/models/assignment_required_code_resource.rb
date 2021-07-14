@@ -18,8 +18,13 @@ class AssignmentRequiredCodeResource < ApplicationRecord
     # The associated block language must be permitted by the parent project.
     # If the project does not reference the block language that this resource
     # is referencing the reference is not allowed.
+    #
     validate do 
-        if (self.programming_language and self.assignment.project) and not self.assignment.project.block_languages.any? {|block| block.default_programming_language == self.programming_language}  then
+        relevant_changes = self.programming_language_id_changed?
+        have_values = self.programming_language and self.assignment.project
+        programming_language_is_allowed = self.assignment.project.block_languages.any? {|block| block.default_programming_language == self.programming_language}
+
+        if   relevant_changes and  have_values and not programming_language_is_allowed then
             errors.add(:programming_language, "not allowed by project")
         end
     end
