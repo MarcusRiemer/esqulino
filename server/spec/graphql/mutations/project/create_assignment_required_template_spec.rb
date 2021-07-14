@@ -131,19 +131,19 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentRequiredTemplate do
     expect( AssignmentTemplateCodeResource.count).to eq 0
     expect( CodeResource.count).to eq 0
     
-    #Does not match a block_languages of the project 
-    p.block_languages = [ block, block2 ]
-    p.save! 
+    #Does not match a block_languages of the project -> it is allowed to have a code resource with different block and programming language
+    #p.block_languages = [ block, block2 ]
+    #p.save! 
 
-    mut = described_class.new(**init_args(user: owner))
-    expect{mut.resolve(
-      assignment_id: assignment.id,
-      name: "Aufgabe 1",
-      description: "Test",
-      programming_language_id:  block3.default_programming_language.id,
-      reference_type: "given_full",
-      block_language_id: block.id
-    )}.to raise_error(ActiveRecord::RecordInvalid)
+    #mut = described_class.new(**init_args(user: owner))
+    #expect{mut.resolve(
+    #  assignment_id: assignment.id,
+    #  name: "Aufgabe 1",
+    #  description: "Test",
+    #  programming_language_id:  block3.default_programming_language.id,
+    #  reference_type: "given_full",
+    #  block_language_id: block.id
+    #)}.to raise_error(ActiveRecord::RecordInvalid)
 
 
     expect( Assignment.count ).to eq 1
@@ -219,7 +219,10 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentRequiredTemplate do
         expect( CodeResource.count).to eq 0
 
 
-    #Does not match the programming_language
+
+    
+
+    #Does not match a block_languages of the project 
     p.block_languages = [ block, block2 ]
     p.save! 
 
@@ -230,27 +233,8 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentRequiredTemplate do
       description: "Test",
       programming_language_id:  block.default_programming_language.id,
       reference_type: "given_full",
-      block_language_id: block2.id
-    )}.to raise_error(ArgumentError)
-
-
-    expect( Assignment.count ).to eq 1
-    expect( AssignmentRequiredCodeResource.count).to eq 0
-    expect( AssignmentTemplateCodeResource.count).to eq 0
-    expect( CodeResource.count).to eq 0
-
-    #Does not match a block_languages of the project 
-   
-
-    mut = described_class.new(**init_args(user: owner))
-    expect{mut.resolve(
-      assignment_id: assignment.id,
-      name: "Aufgabe 1",
-      description: "Test",
-      programming_language_id:  block.default_programming_language.id,
-      reference_type: "given_full",
       block_language_id: block3.id
-    )}.to raise_error(ArgumentError)
+    )}.to raise_error(ActiveRecord::RecordInvalid)
 
 
     expect( Assignment.count ).to eq 1
@@ -267,7 +251,7 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentRequiredTemplate do
       programming_language_id:  block.default_programming_language.id,
       reference_type: "given_full",
       block_language_id: "123123"
-    )}.to raise_error(ArgumentError)
+    )}.to raise_error(ActiveRecord::RecordInvalid)
 
 
     expect( Assignment.count ).to eq 1
