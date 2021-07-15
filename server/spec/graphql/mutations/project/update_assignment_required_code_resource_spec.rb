@@ -22,8 +22,16 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false, slug:"course")
 
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    
+    project.block_languages = [ block, block2, block3 ]
+
+    project.save!
+
     assignment = create(:assignment, project_id: project.id)
-    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", resource_type: ".txt", description:"Beschreibung")
+    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", programming_language: block.default_programming_language, description:"Beschreibung")
 
 
     mut = described_class.new(**init_args(user: current_user_owner))
@@ -36,7 +44,7 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Anforderung"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.programming_language).to eq block.default_programming_language
     expect( AssignmentRequiredCodeResource.first.description).to eq "Erklaerung"
 
 
@@ -49,7 +57,7 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Anforderung 3"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.programming_language).to eq block.default_programming_language
     expect( AssignmentRequiredCodeResource.first.description).to eq "Erklaerung"
 
 
@@ -62,7 +70,7 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Anforderung 3"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.programming_language).to eq block.default_programming_language
     expect( AssignmentRequiredCodeResource.first.description).to eq "test"
 
     mut = described_class.new(**init_args(user: current_user_owner))
@@ -73,7 +81,7 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Anforderung 3"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.programming_language).to eq block.default_programming_language
     expect( AssignmentRequiredCodeResource.first.description).to eq "test"
 
   end
@@ -82,8 +90,16 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false, slug:"course")
 
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    
+    project.block_languages = [ block, block2, block3 ]
+
+    project.save!
+
     assignment = create(:assignment, project_id: project.id)
-    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", resource_type: ".txt", description:"Beschreibung")
+    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", programming_language: block2.default_programming_language, description:"Beschreibung")
 
 
     mut = described_class.new(**init_args(user: current_user_owner))
@@ -95,7 +111,7 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Test"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.programming_language).to eq block2.default_programming_language
     expect( AssignmentRequiredCodeResource.first.description).to eq "Beschreibung"
   end
       
@@ -104,8 +120,16 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false, slug:"course")
 
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    
+    project.block_languages = [ block, block2, block3 ]
+
+    project.save!
+
     assignment = create(:assignment, project_id: project.id)
-    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", resource_type: ".txt", description:"Beschreibung")
+    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", programming_language: block.default_programming_language, description:"Beschreibung")
 
 
     mut = described_class.new(**init_args(user: current_user_owner))
@@ -117,7 +141,7 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Test"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.programming_language).to eq block.default_programming_language
     expect( AssignmentRequiredCodeResource.first.description).to eq nil
 
     res = mut.resolve(
@@ -128,7 +152,7 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Test"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.programming_language).to eq block.default_programming_language
     expect( AssignmentRequiredCodeResource.first.description).to eq nil
   end
 
@@ -137,8 +161,16 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     user = create(:user)
     project = create(:project, user: current_user_owner, public: false, slug:"course")
 
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    
+    project.block_languages = [ block, block2, block3 ]
+
+    project.save!
+
     assignment = create(:assignment, project_id: project.id)
-    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", resource_type: ".txt", description:"Beschreibung")
+    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", programming_language: block3.default_programming_language, description:"Beschreibung")
 
 
     mut = described_class.new(**init_args(user: user))
@@ -151,7 +183,7 @@ RSpec.describe Mutations::Projects::UpdateAssignmentRequiredCodeResource do
     expect( AssignmentRequiredCodeResource.count ).to eq 1
     expect( AssignmentRequiredCodeResource.first.id).to eq assignment_required_cd.id
     expect( AssignmentRequiredCodeResource.first.name).to eq "Test"
-    expect( AssignmentRequiredCodeResource.first.resource_type).to eq ".txt"
+    expect( AssignmentRequiredCodeResource.first.programming_language).to eq block3.default_programming_language
     expect( AssignmentRequiredCodeResource.first.description).to eq "Beschreibung"
   end
 

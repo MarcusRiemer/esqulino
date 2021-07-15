@@ -2328,7 +2328,9 @@ export type CreateProjectCourseParticipationMutation = {
 } & {
   createProjectCourseParticipation?: Maybe<
     { __typename?: "CreateProjectCourseParticipationPayload" } & {
-      project?: Maybe<{ __typename?: "Project" } & Pick<Project, "id">>;
+      project?: Maybe<
+        { __typename?: "Project" } & Pick<Project, "id" | "slug">
+      >;
     }
   >;
 };
@@ -4311,6 +4313,7 @@ export const CreateProjectCourseParticipationDocument = gql`
     ) {
       project {
         id
+        slug
       }
     }
   }

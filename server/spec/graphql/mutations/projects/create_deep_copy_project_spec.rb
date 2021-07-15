@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
+RSpec.describe Mutations::Projects::CreateDeepCopyProject do
 
   # These specs relies on
   # * an existing guest user
@@ -105,7 +105,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
 
     expect(res[:project][:id]).not_to eq project.id
     expect(res[:project][:slug]).to eq "tester"
-    expect(res[:project][:public]).to eq false
+    expect(res[:project][:public]).to eq true
     expect(res[:project][:name]).to eq project.name
     expect(res[:project][:description]).to eq project.description
 
@@ -131,6 +131,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     code_resource2 = create(:code_resource, project: project, name:"2")
     code_resource3 = create(:code_resource, project: project, name:"3")
 
+    
     expect(BlockLanguage.count).to eq 3
     expect(Grammar.count).to eq 3
     expect(ProjectUsesBlockLanguage.count).to eq 3
@@ -141,7 +142,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     
     expect(res[:project][:id]).not_to eq project.id
     expect(res[:project][:slug]).to eq "tester"
-    expect(res[:project][:public]).to eq false
+    expect(res[:project][:public]).to eq true
     expect(res[:project][:name]).to eq project.name
     expect(res[:project][:description]).to eq project.description
 
@@ -181,7 +182,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     
     expect(res[:project][:id]).not_to eq project.id
     expect(res[:project][:slug]).to eq "tester"
-    expect(res[:project][:public]).to eq false
+    expect(res[:project][:public]).to eq true
     expect(res[:project][:name]).to eq project.name
     expect(res[:project][:description]).to eq project.description
 
@@ -208,7 +209,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     
     expect(res[:project][:id]).not_to eq project.id
     expect(res[:project][:slug]).to eq "tester"
-    expect(res[:project][:public]).to eq false
+    expect(res[:project][:public]).to eq true
     expect(res[:project][:name]).to eq project.name
     expect(res[:project][:description]).to eq project.description
 
@@ -241,7 +242,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     
     expect(res[:project][:id]).not_to eq project.id
     expect(res[:project][:slug]).to eq "tester"
-    expect(res[:project][:public]).to eq false
+    expect(res[:project][:public]).to eq true
     expect(res[:project][:name]).to eq project.name
     expect(res[:project][:description]).to eq project.description
 
@@ -265,7 +266,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     
     expect(res[:project][:id]).not_to eq project.id
     expect(res[:project][:slug]).to eq "tester"
-    expect(res[:project][:public]).to eq false
+    expect(res[:project][:public]).to eq true
     expect(res[:project][:name]).to eq project.name
     expect(res[:project][:description]).to eq project.description
 
@@ -295,7 +296,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     
     expect(res[:project][:id]).not_to eq project.id
     expect(res[:project][:slug]).to eq "tester"
-    expect(res[:project][:public]).to eq false
+    expect(res[:project][:public]).to eq true
     expect(res[:project][:name]).to eq project.name
     expect(res[:project][:description]).to eq project.description
 
@@ -337,7 +338,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     
     expect(res[:project][:id]).not_to eq project.id
     expect(res[:project][:slug]).to eq "tester"
-    expect(res[:project][:public]).to eq false
+    expect(res[:project][:public]).to eq true
     expect(res[:project][:name]).to eq project.name
     expect(res[:project][:description]).to eq project.description
 
@@ -552,7 +553,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
 
     expect(res[:project][:id]).not_to eq project.id
     expect(res[:project][:slug]).to eq nil
-    expect(res[:project][:public]).to eq false
+    expect(res[:project][:public]).to eq true
     expect(res[:project][:name]).to eq project.name
     expect(res[:project][:description]).to eq project.description
 
@@ -613,7 +614,7 @@ RSpec.fdescribe Mutations::Projects::CreateDeepCopyProject do
     res = mut.resolve(project_id: project.id, new_slug: "") 
 
     expect(Project.find(res[:project][:id]).slug).to eq nil
-    expect(Project.find(res[:project][:id]).public).to eq false
+    expect(Project.find(res[:project][:id]).public).to eq true
     expect(Project.find(res[:project][:id]).name).to eq project.name
     expect(Project.find(res[:project][:id]).description).to eq project.description
 

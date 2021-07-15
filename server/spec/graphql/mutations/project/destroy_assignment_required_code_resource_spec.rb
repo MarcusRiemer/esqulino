@@ -21,9 +21,17 @@ RSpec.describe Mutations::Projects::DestroyAssignmentRequiredCodeResource do
   it "destroy assignment_required_code_resource normal work" do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false, slug:"course")
+    
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    
+    project.block_languages = [ block, block2, block3 ]
+
+    project.save!
 
     assignment = create(:assignment, project_id: project.id)
-    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", resource_type: ".txt", description:"Beschreibung")
+    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", programming_language: block.default_programming_language, description:"Beschreibung")
 
     
     expect( AssignmentRequiredCodeResource.count ).to eq 1
@@ -40,8 +48,16 @@ RSpec.describe Mutations::Projects::DestroyAssignmentRequiredCodeResource do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false, slug:"course")
 
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    
+    project.block_languages = [ block, block2, block3 ]
+
+    project.save!
+
     assignment = create(:assignment, project_id: project.id)
-    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", resource_type: ".txt", description:"Beschreibung")
+    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", programming_language: block2.default_programming_language, description:"Beschreibung")
     
 
 
@@ -65,8 +81,16 @@ RSpec.describe Mutations::Projects::DestroyAssignmentRequiredCodeResource do
     
     project = create(:project, user: current_user_owner, public: false, slug:"course")
 
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    
+    project.block_languages = [ block, block2, block3 ]
+
+    project.save!
+
     assignment = create(:assignment, project_id: project.id)
-    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", resource_type: ".txt", description:"Beschreibung")
+    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", programming_language: block3.default_programming_language, description:"Beschreibung")
 
     
     expect( AssignmentRequiredCodeResource.count ).to eq 1
@@ -84,9 +108,16 @@ RSpec.describe Mutations::Projects::DestroyAssignmentRequiredCodeResource do
     current_user_owner = create(:user, display_name: "Owner")
     
     project = create(:project, user: current_user_owner, public: false, slug:"course")
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    
+    project.block_languages = [ block, block2, block3 ]
+
+    project.save!
 
     assignment = create(:assignment, project_id: project.id)
-    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", resource_type: ".txt", description:"Beschreibung")
+    assignment_required_cd = create(:assignment_required_code_resource, assignment_id: assignment.id, name: "Test", programming_language: block.default_programming_language, description:"Beschreibung")
 
     assignment_submitted_cd = create(:assignment_submitted_code_resource, assignment_required_code_resource_id: assignment_required_cd.id )
     

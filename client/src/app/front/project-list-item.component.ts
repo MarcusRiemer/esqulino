@@ -2,7 +2,7 @@ import { Component, Input, PLATFORM_ID, Inject } from "@angular/core";
 import { isPlatformBrowser } from "@angular/common";
 import { Router } from "@angular/router";
 import {
-  CreateCourseParticipationGQL,
+  CreateProjectCourseParticipationGQL,
   FrontpageListProjectsQuery,
 } from "../../generated/graphql";
 
@@ -26,7 +26,7 @@ export class ProjectListItemComponent {
   public constructor(
     @Inject(PLATFORM_ID) private _platformId: Object,
     private _router: Router,
-    private _createCourseParticipation: CreateCourseParticipationGQL
+    private _createProjectCourseParticipation: CreateProjectCourseParticipationGQL
   ) {}
 
   /**
@@ -47,9 +47,9 @@ export class ProjectListItemComponent {
   }
 
   async createCourseParticipation() {
-    await this._createCourseParticipation
+    await this._createProjectCourseParticipation
       .mutate({
-        solutionProjectId: this.project.id,
+        basedOnProjectId: this.project.id,
         userIds: [],
       })
       .toPromise()
@@ -57,9 +57,9 @@ export class ProjectListItemComponent {
         this._router.navigate([
           "/",
           "editor",
-          e.data.createCourseParticipation.project.slug
-            ? e.data.createCourseParticipation.project.slug
-            : e.data.createCourseParticipation.project.id,
+          e.data.createProjectCourseParticipation.project.slug
+            ? e.data.createProjectCourseParticipation.project.slug
+            : e.data.createProjectCourseParticipation.project.id,
         ]);
       });
   }

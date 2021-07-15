@@ -17,7 +17,7 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
       end
 
 
-      fit "Create course simple" do
+      it "Create course simple" do
         project = create(:project, slug:"course-test")
         assignment = create(:assignment, project: project, name: "test")
         user1 = create(:user)

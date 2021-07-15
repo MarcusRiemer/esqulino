@@ -78,11 +78,18 @@ RSpec.describe Mutations::Projects::DestroyAssignment do
     current_user_owner = create(:user, display_name: "Owner")
     project = create(:project, user: current_user_owner, public: false)
 
+    block = create(:block_language)
+    block2 = create(:block_language)
+    block3 = create(:block_language)
+    
+    project.block_languages = [ block, block2, block3 ]
+
+    project.save!
     assignment = create(:assignment, project_id: project.id)
     
-    create(:assignment_required_code_resource, assignment_id: assignment.id)
-    create(:assignment_required_code_resource, assignment_id: assignment.id)
-    create(:assignment_required_code_resource, assignment_id: assignment.id)
+    create(:assignment_required_code_resource, assignment_id: assignment.id, programming_language: block.default_programming_language)
+    create(:assignment_required_code_resource, assignment_id: assignment.id, programming_language: block2.default_programming_language)
+    create(:assignment_required_code_resource, assignment_id: assignment.id, programming_language: block3.default_programming_language)
     
     expect( Assignment.count ).to eq 1
     expect( AssignmentRequiredCodeResource.count ).to eq 3

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.fdescribe Mutations::Projects::CreateAssignmentRequiredTemplate do
+RSpec.describe Mutations::Projects::CreateAssignmentRequiredTemplate do
 
   # These specs relies on
   # * an existing guest user
