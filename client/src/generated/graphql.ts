@@ -1422,8 +1422,6 @@ export type Role = {
   createdAt: Scalars["ISO8601DateTime"];
   id: Scalars["ID"];
   name?: Maybe<Scalars["String"]>;
-  resourceId?: Maybe<Scalars["String"]>;
-  resourceType?: Maybe<Scalars["String"]>;
   updatedAt: Scalars["ISO8601DateTime"];
   users?: Maybe<Array<User>>;
 };
@@ -1634,7 +1632,7 @@ export type User = {
   news?: Maybe<Array<News>>;
   projectMembers: Array<ProjectMember>;
   projects?: Maybe<Array<Project>>;
-  roles: Role;
+  roles: Array<Role>;
   updatedAt: Scalars["ISO8601DateTime"];
 };
 
@@ -1836,7 +1834,9 @@ export type AdminListUsersQuery = { __typename?: "Query" } & {
           { __typename?: "User" } & Pick<
             User,
             "id" | "displayName" | "email"
-          > & { roles: { __typename?: "Role" } & Pick<Role, "id" | "name"> }
+          > & {
+              roles: Array<{ __typename?: "Role" } & Pick<Role, "id" | "name">>;
+            }
         >
       >
     >;
@@ -3056,14 +3056,11 @@ export type PromoteUserAdminMutation = { __typename?: "Mutation" } & {
   promoteUserAdmin?: Maybe<
     { __typename?: "PromoteAdminPayload" } & {
       user: { __typename?: "User" } & Pick<User, "id"> & {
-          roles: { __typename?: "Role" } & Pick<
-            Role,
-            | "id"
-            | "name"
-            | "resourceId"
-            | "resourceType"
-            | "updatedAt"
-            | "createdAt"
+          roles: Array<
+            { __typename?: "Role" } & Pick<
+              Role,
+              "id" | "name" | "updatedAt" | "createdAt"
+            >
           >;
         };
     }
@@ -5226,8 +5223,6 @@ export const PromoteUserAdminDocument = gql`
         roles {
           id
           name
-          resourceId
-          resourceType
           updatedAt
           createdAt
         }
