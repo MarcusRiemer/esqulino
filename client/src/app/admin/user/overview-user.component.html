@@ -9,8 +9,8 @@
     <th mat-header-cell *matHeaderCellDef>Roles</th>
     <td mat-cell *matCellDef="let user">
       <ul class="list-inline">
-        <li *ngFor="let role of user.roles" class="list-inline-item">
-          <span class="badge badge-secondary">{{ role.name }}</span>
+        <li *ngFor="let role of typed(user).roles" class="list-inline-item">
+          <span class="badge rounded-pill bg-secondary">{{ role.name }}</span>
         </li>
       </ul>
     </td>
