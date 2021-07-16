@@ -1,10 +1,6 @@
-import { UniqueSelectionDispatcher } from "@angular/cdk/collections";
-import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
-import { MatTableDataSource } from "@angular/material/table";
-import { ActivatedRoute } from "@angular/router";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs";
 import { filter, first, map, pluck, switchMap } from "rxjs/operators";
-import { PerformDataService } from "./../../../../src/app/shared/authorisation/perform-data.service";
 
 import {
   FullProjectGQL,
@@ -16,6 +12,7 @@ import {
 
 import { ProjectService } from "../project.service";
 import { User } from "@sentry/types";
+import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
 
 interface ProjectMember {
   id: string;

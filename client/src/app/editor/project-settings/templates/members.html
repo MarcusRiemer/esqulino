@@ -35,7 +35,7 @@
           </th>
           <td mat-cell *matCellDef="let element">
             <div *ngIf="element.joinedAt; else notAccepted">
-              {{tranformDate(element.joinedAt)}}
+              {{ element.joinedAt | date: "yyyy.MM.dd" }}
             </div>
             <ng-template #notAccepted>Noch nicht Akzeptiert</ng-template>
           </td>

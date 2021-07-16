@@ -7,7 +7,7 @@ import {
   FullProjectQuery,
 } from "../../../generated/graphql";
 
-import { ProjectFullDescription, Project } from "../../shared/project";
+import { Project } from "../../shared/project";
 import { generateUUIDv4 } from "../../shared/util-browser";
 import { ApolloTestingController } from "apollo-angular/testing";
 import { GraphQLError } from "graphql";
@@ -38,6 +38,7 @@ const DEFAULT_EMPTY_PROJECT: FullProjectNode = {
     schema: [],
   },
   public: false,
+  isCourse: false,
   indexPageId: null,
   slug: null,
 };

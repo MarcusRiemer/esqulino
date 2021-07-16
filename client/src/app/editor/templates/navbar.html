@@ -91,4 +91,6 @@
       {{ source.title }}
     </a>
   </ng-container>
+
+  <course-nav *ngIf="isCourse$ | async"></course-nav>
 </mat-nav-list>

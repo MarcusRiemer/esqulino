@@ -8,6 +8,7 @@ import { ProjectExistsGuard } from "./project-exists.guard";
 
 import { imageEditorRoutes } from "./image/image.routes";
 import { codeEditorRoutes } from "./code/code.routes";
+import { courseRoutes } from "./course/course.routes";
 
 export const editorRoutes: Routes = [
   {
@@ -28,6 +29,15 @@ export const editorRoutes: Routes = [
         path: "schema",
         loadChildren: () =>
           import("./schema/schema.module").then((m) => m.SchemaEditorModule),
+      },
+      // {
+      //   path: "assignment",
+      //   loadChildren: () =>
+      //     import("./course/course.module").then((m) => m.CourseModule),
+      // },
+      {
+        path: "assignment",
+        children: [...courseRoutes],
       },
       {
         path: "ast",

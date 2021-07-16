@@ -1,0 +1,19 @@
+<a
+  mat-list-item
+  [routerLink]="['assignment']"
+  [routerLinkActiveOptions]="{ exact: true }"
+  routerLinkActive="router-link-active"
+>
+  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
+  Kursübersicht
+</a>
+
+<a
+  *ngFor="let a of assignments$ | async"
+  mat-list-item
+  [routerLink]="['assignment', 'test']"
+  routerLinkActive="router-link-active"
+>
+  <span class="fa fa-fw fa-graduation-cap" aria-hidden="true"></span>
+  {{ a.name }}
+</a>

@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { of } from "rxjs";
 import { map, shareReplay } from "rxjs/operators";
 
-import { GrammarGeneratedByGQL } from "../../generated/graphql";
+import { FullProjectGQL, GrammarGeneratedByGQL } from "../../generated/graphql";
 
 import { CodeResource } from "../shared";
 import { tailorResourceReferences } from "../shared/syntaxtree/tailor-resource-references";
@@ -21,7 +21,8 @@ export class NavbarComponent {
     private readonly _projectService: ProjectService,
     private readonly _dragService: DragService,
     private readonly _grammarGeneratedBy: GrammarGeneratedByGQL,
-    private readonly _currentCodeResource: CurrentCodeResourceService
+    private readonly _currentCodeResource: CurrentCodeResourceService,
+    private readonly _fullProject: FullProjectGQL
   ) {}
 
   readonly hasDatabase$ = this._projectService.activeProject.pipe(
@@ -36,6 +37,10 @@ export class NavbarComponent {
   readonly imagesEnabled$ = of(false);
 
   readonly project$ = this._projectService.activeProject;
+
+  readonly isCourse$ = this._fullProject
+    .watch({ id: this._projectService.cachedProject.id })
+    .valueChanges.pipe(map((project) => project.data.project.isCourse));
 
   /**
    * The user has decided to start dragging something from the sidebar.

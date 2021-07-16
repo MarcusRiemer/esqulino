@@ -5,6 +5,7 @@ query FullProject($id: ID!) {
     name
     description
     public
+    isCourse
     indexPageId
     createdAt
     updatedAt

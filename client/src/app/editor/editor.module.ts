@@ -8,6 +8,7 @@ import { editorRouting } from "./editor.routes";
 
 import { ImageEditorModule } from "./image/image.module";
 import { CodeEditorModule } from "./code/code.module";
+import { CourseModule } from "./course/course.module";
 
 import { EditorComponent } from "./editor.component";
 
@@ -41,6 +42,7 @@ import { MembersComponent } from "./project-settings/members.component";
 
     ImageEditorModule.forRoot(),
     CodeEditorModule.forRoot(),
+    CourseModule.forRoot(),
   ],
   declarations: [
     DraggedBlockComponent,

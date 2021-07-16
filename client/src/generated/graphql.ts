@@ -2573,6 +2573,7 @@ export type FullProjectQuery = { __typename?: "Query" } & {
     | "name"
     | "description"
     | "public"
+    | "isCourse"
     | "indexPageId"
     | "createdAt"
     | "updatedAt"
@@ -4656,6 +4657,7 @@ export const FullProjectDocument = gql`
       name
       description
       public
+      isCourse
       indexPageId
       createdAt
       updatedAt
