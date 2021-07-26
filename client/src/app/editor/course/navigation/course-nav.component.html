@@ -1,0 +1,92 @@
+<a
+  mat-list-item
+  [routerLink]="['course']"
+  [routerLinkActiveOptions]="{ exact: true }"
+  routerLinkActive="router-link-active"
+>
+  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
+  Kursübersicht
+</a>
+<mat-divider></mat-divider>
+<a
+  mat-list-item
+  [routerLink]="['course/assignments']"
+  [routerLinkActiveOptions]="{ exact: true }"
+  routerLinkActive="router-link-active"
+>
+  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
+  Aufgaben
+</a>
+
+<div *ngFor="let a of assignments$ | async">
+  <a
+    mat-list-item
+    [routerLink]="['course/assignments/', a.id]"
+    routerLinkActive="router-link-active"
+  >
+    <span class="fa fa-fw fa-graduation-cap" aria-hidden="true"></span>
+    {{ a.name }}
+  </a>
+
+  <ng-container *ngFor="let solution of a.solutions">
+    <a
+      mat-list-item
+      [routerLink]="['assignment', 'test']"
+      routerLinkActive="router-link-active"
+      class="indent"
+    >
+      <span class="fa fa-fw fa-check-circle" aria-hidden="true"></span>
+      L: {{ solution.name }}
+    </a>
+  </ng-container>
+
+  <ng-container *ngFor="let template of a.templates">
+    <a
+      mat-list-item
+      [routerLink]="['assignment', 'test']"
+      routerLinkActive="router-link-active"
+      class="indent"
+    >
+      <span
+        *ngIf="template.reference_type == 'given_partially'"
+        class="fa fa-fw fa-file"
+        aria-hidden="true"
+      ></span>
+      <span
+        *ngIf="template.reference_type == 'given_full'"
+        class="fa fa-fw fa-file-text"
+        aria-hidden="true"
+      ></span>
+      {{ template.code_resource.name }}
+    </a>
+  </ng-container>
+</div>
+<mat-divider></mat-divider>
+<a
+  mat-list-item
+  [routerLink]="['rating']"
+  [routerLinkActiveOptions]="{ exact: true }"
+  routerLinkActive="router-link-active"
+>
+  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
+  Bewertung
+</a>
+<a
+  mat-list-item
+  [routerLink]="['rating/submissions']"
+  [routerLinkActiveOptions]="{ exact: true }"
+  routerLinkActive="router-link-active"
+>
+  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
+  Bewertung
+</a>
+<mat-divider></mat-divider>
+<a
+  mat-list-item
+  [routerLink]="['assignment']"
+  [routerLinkActiveOptions]="{ exact: true }"
+  routerLinkActive="router-link-active"
+>
+  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
+  Teilnehmer
+</a>

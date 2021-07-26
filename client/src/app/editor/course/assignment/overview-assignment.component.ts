@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: "app-assignment-overview",
-  templateUrl: "./assignment-overview.component.html",
-  styleUrls: ["./assignment-overview.component.scss"],
+  selector: "app-overview-assignment",
+  templateUrl: "./overview-assignment.component.html",
+  styleUrls: ["./overview-assignment.component.scss"],
 })
 export class AssignmentOverviewComponent implements OnInit {
   constructor() {}

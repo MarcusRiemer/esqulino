@@ -3,12 +3,19 @@ import { CommonModule } from "@angular/common";
 
 import { SharedAppModule } from "../../shared/shared.module";
 
-import { CourseNavComponent } from "./course-nav.component";
-import { AssignmentOverviewComponent } from "./assignment-overview.component";
+import { CourseNavComponent } from "./navigation/course-nav.component";
+import { AssignmentOverviewComponent } from "./assignment/overview-assignment.component";
+import { OverviewCourseConponent } from "./overview-course.component";
+import { AssignmentComponent } from "./assignment/assignment.component";
 
 @NgModule({
   imports: [CommonModule, SharedAppModule],
-  declarations: [CourseNavComponent, AssignmentOverviewComponent],
+  declarations: [
+    CourseNavComponent,
+    AssignmentOverviewComponent,
+    OverviewCourseConponent,
+    AssignmentComponent,
+  ],
   exports: [CourseNavComponent],
 })
 export class CourseModule {

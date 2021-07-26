@@ -36,7 +36,7 @@ export const editorRoutes: Routes = [
       //     import("./course/course.module").then((m) => m.CourseModule),
       // },
       {
-        path: "assignment",
+        path: "course",
         children: [...courseRoutes],
       },
       {
