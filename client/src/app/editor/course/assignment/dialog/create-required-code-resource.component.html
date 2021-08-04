@@ -1,0 +1,97 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <h4 *ngIf="requiredCodeResource.referenceType == 'given_full'">
+      Vollständig gegeben anlegen
+    </h4>
+    <h4 *ngIf="requiredCodeResource.referenceType == 'given_partially'">
+      Teilweise gegeben anlegen
+    </h4>
+    <h4 *ngIf="!requiredCodeResource.referenceType">Gefordert anlegen</h4>
+  </div>
+  <div class="card-body">
+    <div class="form-group row mb-3">
+      <label for="assignment-name" class="col-sm-2 form-control-label">
+        Aufgabenname
+      </label>
+      <div class="col-sm-10">
+        <input
+          type="text"
+          [(ngModel)]="requiredCodeResource.name"
+          name="required-code-resource-name"
+          class="form-control"
+        />
+        <small class="text-muted">
+          Dieser Name wird der Name der Code Resource sein.
+        </small>
+      </div>
+    </div>
+    <div class="form-group row mb-3">
+      <label for="assignment-description" class="col-sm-2 form-control-label">
+        Beschreibung
+      </label>
+      <div class="col-sm-10">
+        <textarea
+          [(ngModel)]="requiredCodeResource.description"
+          class="form-control"
+          name="required-code-resource-descirption"
+        ></textarea>
+        <small class="text-muted">
+          Beschreibt näher, was bei dieser Anfoderung getan werden muss.
+        </small>
+      </div>
+    </div>
+
+    <!-- TODO: steck es in eine eigene Componente wir 2 mal verwendet  -->
+    <div class="form-group row mb-3">
+      <label for="programming-language-id" class="col-sm-2 col-form-label">
+        Programmiersprache
+      </label>
+      <div class="col-sm-10">
+        <select
+          id="programming-language-id"
+          name="programming_language_id"
+          class="form-select"
+          [(ngModel)]="requiredCodeResource.programmingLanguageId"
+          (ngModelChange)="changeProgrammingLanguage($event)"
+        >
+          <option
+            *ngFor="let progLang of availableProgrammingLanguages"
+            [value]="progLang.programmingLanguageId"
+          >
+            {{ progLang.name }}
+          </option>
+        </select>
+        <small class="text-muted">
+          Welche Programmiersprache soll genutzt werden?
+        </small>
+      </div>
+    </div>
+
+    <div class="from-group row mb-3" *ngIf="requiredCodeResource.referenceType">
+      <label class="col-sm-2 col-form-label">Blocksprache</label>
+      <div class="col-sm-10">
+        <select
+          [disabled]="!requiredCodeResource.programmingLanguageId"
+          name="block_language"
+          class="form-select"
+          [(ngModel)]="requiredCodeResource.blockLanguageId"
+        >
+          <option value="undefined">-- Blocksprache wählen --</option>
+          <option
+            *ngFor="let block of availableBlockLanguages$ | async"
+            [value]="block.id"
+          >
+            {{ block.name }}
+          </option>
+        </select>
+        <small class="text-muted">
+          Welche Blocksprache soll genutzt werden?
+        </small>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit" (click)="createRequirement()">
+      Speichern
+    </button>
+  </div>
+</div>

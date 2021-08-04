@@ -16,12 +16,15 @@ mutation CreateAssignmentRequiredSolution(
           id
           solution {
             id
-            name
-            blockLanguageId
-            ast
-            programmingLanguageId
           }
         }
+      }
+      codeResources {
+        id
+        name
+        ast
+        blockLanguageId
+        programmingLanguageId
       }
     }
   }

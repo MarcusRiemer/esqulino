@@ -1,0 +1,24 @@
+<h2>Bearbeite: {{ data.requirementName }}</h2>
+
+<div class="form-group row mb-2">
+  <label for="assignment-description" class="col-sm-2 form-control-label">
+    Beschreibung
+  </label>
+  <div class="col-sm-10">
+    <textarea
+      [(ngModel)]="data.requirementDescription"
+      class="form-control"
+      name="descirption"
+    ></textarea>
+    <small class="text-muted">
+      Beschreibe deine Anforderung mit ein paar kurzen Sätzen. Erläutere dabei
+      welche Probleme du damit gelöst haben möchtest oder welche Dinge du
+      erklären möchtest.
+    </small>
+  </div>
+</div>
+
+<button class="btn btn-danger" type="button" mat-dialog-close>Abbrechen</button>
+<button class="btn btn-primary" type="button" (click)="saveUpdate()">
+  Speichern
+</button>

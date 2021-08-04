@@ -51,4 +51,58 @@ export class ProjectPerformData extends ResourcesData {
       policyAction: "create_deep_copy",
     };
   }
+
+  public createAssignment(resourceId: string): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "create_update_assignment",
+    };
+  }
+
+  public updateAssignment(resourceId: string): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "create_update_assignment",
+    };
+  }
+
+  public deleteAssignment(resourceId: string): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "create_update_assignment",
+    };
+  }
+
+  public deleteAssignmentRequirement(
+    resourceId: string
+  ): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "destroy_assignment_required_code_resource",
+    };
+  }
+
+  public createAssignmentRequirements(
+    resourceId: string
+  ): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "create_update_assignment_required_code_resource",
+    };
+  }
+
+  public updateAssignmentRequirements(
+    resourceId: string
+  ): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "create_update_assignment_required_code_resource",
+    };
+  }
 }

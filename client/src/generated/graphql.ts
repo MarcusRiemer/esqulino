@@ -2027,6 +2027,16 @@ export type CreateAssignmentRequiredSolutionMutation = {
                   }
               >
             >;
+            codeResources: Array<
+              { __typename?: "CodeResource" } & Pick<
+                CodeResource,
+                | "id"
+                | "name"
+                | "ast"
+                | "blockLanguageId"
+                | "programmingLanguageId"
+              >
+            >;
           }
       >;
     }
@@ -2078,20 +2088,23 @@ export type CreateAssignmentRequiredTemplateMutation = {
                               > & {
                                   codeResource: {
                                     __typename?: "CodeResource";
-                                  } & Pick<
-                                    CodeResource,
-                                    | "id"
-                                    | "name"
-                                    | "blockLanguageId"
-                                    | "ast"
-                                    | "programmingLanguageId"
-                                  >;
+                                  } & Pick<CodeResource, "id">;
                                 }
                             >;
                           }
                       >
                     >;
                   }
+              >
+            >;
+            codeResources: Array<
+              { __typename?: "CodeResource" } & Pick<
+                CodeResource,
+                | "id"
+                | "name"
+                | "ast"
+                | "blockLanguageId"
+                | "programmingLanguageId"
               >
             >;
           }
@@ -2588,7 +2601,7 @@ export type FullProjectQuery = { __typename?: "Query" } & {
                 Array<
                   { __typename?: "AssignmentRequiredCodeResource" } & Pick<
                     AssignmentRequiredCodeResource,
-                    "id" | "name" | "programmingLanguageId"
+                    "id" | "name" | "programmingLanguageId" | "description"
                   > & {
                       solution?: Maybe<
                         { __typename?: "CodeResource" } & Pick<
@@ -3890,6 +3903,13 @@ export const CreateAssignmentRequiredSolutionDocument = gql`
             }
           }
         }
+        codeResources {
+          id
+          name
+          ast
+          blockLanguageId
+          programmingLanguageId
+        }
       }
     }
   }
@@ -3944,13 +3964,16 @@ export const CreateAssignmentRequiredTemplateDocument = gql`
               referenceType
               codeResource {
                 id
-                name
-                blockLanguageId
-                ast
-                programmingLanguageId
               }
             }
           }
+        }
+        codeResources {
+          id
+          name
+          ast
+          blockLanguageId
+          programmingLanguageId
         }
       }
     }
@@ -4669,6 +4692,7 @@ export const FullProjectDocument = gql`
           id
           name
           programmingLanguageId
+          description
           solution {
             id
           }
