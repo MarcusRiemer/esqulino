@@ -1,4 +1,3 @@
-# coding: utf-8
 # Users are usually real people that have signed up manually. But they may also
 # be technical accounts that exist to specify default permissions.
 #
@@ -15,21 +14,20 @@ class User < ApplicationRecord
   # Projects are owned by a user
   has_many :projects
   # Every user can identify himself using multiple identities
-  has_many :identities, class_name: "Identity::Identity"
+  has_many :identities, class_name: 'Identity::Identity'
   # Some users have written news
   has_many :news
 
-  # Some users have  rated an assignment 
+  # Some users have  rated an assignment
   has_many :assignment_submission_grades
 
   # Some users have grades
   has_many :assignment_submission_grade_users
-  has_many :grades, class_name: 'User', :foreign_key => 'user_id', through:  :assignment_submission_grade_users, :source => :assignment_submission_grade  
+  has_many :grades, class_name: 'AssignmentSubmissionGrade', foreign_key: 'user_id', through: :assignment_submission_grade_users, source: :assignment_submission_grade
 
   # One user can join many projects(Courses)
   has_many :project_members
-  has_many :member_at, class_name: 'Project', :foreign_key => 'user_id', through:  :project_members, :source => :project
-
+  has_many :member_at, class_name: 'Project', foreign_key: 'user_id', through: :project_members, source: :project
 
   # The join table for the roles of this user
   has_many :user_roles
@@ -38,26 +36,26 @@ class User < ApplicationRecord
   has_many :roles, through: :user_roles
 
   # Only allow safe characters in usernames
-  validates_format_of :display_name, :with => /\A[a-zA-Z0-9]{3}[a-zA-Z0-9\ ]{0,17}\z/i
+  validates_format_of :display_name, with: /\A[a-zA-Z0-9]{3}[a-zA-Z0-9\ ]{0,17}\z/i
   # Primary emails may only be used once. But because some identities do not
   # provide an email, they may also be empty
-  validates_uniqueness_of :email, :allow_nil => true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates_uniqueness_of :email, allow_nil: true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   # The guest user is always present and used to represent users that are
   # currently not logged in. Every role and permission of this user applies
   # to logged out user sessions.
   def self.guest
-    self.find(GUEST_ID)
+    find(GUEST_ID)
   end
 
   # The guest user has a static ID
   def self.guest_id
-    return GUEST_ID
+    GUEST_ID
   end
 
   # The system user has a static ID
   def self.system_id
-    return SYSTEM_ID
+    SYSTEM_ID
   end
 
   # Creates a new user from a hash
@@ -79,7 +77,7 @@ class User < ApplicationRecord
   #
   # THIS IS ONLY ALLOWED DURING DEVELOPMENT!
   def self.make_guest_admin!
-    if Rails.env.development? or Rails.env.test?
+    if Rails.env.development? || Rails.env.test?
       User.guest.add_role(:admin)
     else
       raise EsqulinoError::Base.new("Guests can't be admins outside of development environments", 401)
@@ -88,7 +86,7 @@ class User < ApplicationRecord
 
   # Promotes the user with the given ID to be an admin.
   def self.make_user_admin!(user_id)
-    if (user_id === GUEST_ID)
+    if user_id === GUEST_ID
       User.make_guest_admin!
     else
       user = User.find(user_id)
@@ -97,74 +95,74 @@ class User < ApplicationRecord
   end
 
   def guest?
-    return id == User.guest_id
+    id == User.guest_id
   end
 
   def add_role(role_name)
     role = Role.where(name: role_name.to_s).first_or_create
-    self.user_roles.find_or_create_by(user_id: id, role_id: role.id)
+    user_roles.find_or_create_by(user_id: id, role_id: role.id)
   end
 
   def has_role?(role_name)
     role_name = role_name.to_s
 
-    if not Role::COMMON_NAMES.include? role_name
-      raise EsqulinoError::Base.new("Unknown role \"#{role_name}\"", 500, true)
-    end
+    raise EsqulinoError::Base.new("Unknown role \"#{role_name}\"", 500, true) unless Role::COMMON_NAMES.include? role_name
 
-    self.roles.exists?(name: role_name)
+    roles.exists?(name: role_name)
   end
 
   def is_admin?
     has_role?(:admin)
   end
 
+  def has_grade_for?(assignment_submission)
+    grades.exists?(assignment_submission_id: assignment_submission.id)
+  end
+
   # Names of the roles of a logged in user
   # Is written in the private claim of the JWT
   def role_names
-    return self.roles.pluck("name")
+    roles.pluck('name')
   end
 
   # The information is used for the clientside representation
   # of a either signed in or signed out user
   def information
     to_return = {
-      user_id: self.id,
-      display_name: self.display_name,
-      roles: self.role_names,
+      user_id: id,
+      display_name: display_name,
+      roles: role_names
     }
 
-    if self.email?
-      to_return[:email] = self.email
-    end
+    to_return[:email] = email if email?
 
-    return to_return
+    to_return
   end
 
   # The resulting hash will be rendered as json and is used
   # for displaying all linked identities and selected primary email
-  def all_providers()
-    return {
-      providers: self.identities.map { |i| i.to_list_api_response },
-      primary: self.email
+  def all_providers
+    {
+      providers: identities.map { |i| i.to_list_api_response },
+      primary: email
     }
   end
 
   # Is current user owner of something
   def owner_of?(instance)
-    return instance.owner?(self)
+    instance.owner?(self)
   end
 
   # Returns the current global role of a user
   def global_role
-    to_return = "guest"
-    if (self.has_role? :admin) then
-      to_return = "admin"
-    elsif (self.has_role? :user) then
-      to_return = "user"
+    to_return = 'guest'
+    if has_role? :admin
+      to_return = 'admin'
+    elsif has_role? :user
+      to_return = 'user'
     end
 
-    return to_return
+    to_return
   end
 
   # Returns a nicely readable representation of id and name

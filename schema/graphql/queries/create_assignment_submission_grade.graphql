@@ -1,0 +1,49 @@
+mutation CreateAssignmentSubmissionGrade(
+  $assignmentSubmissionId: ID!
+  $feedback: String
+  $grade: Int!
+  $evalutedPeopleIds: [ID!]!
+) {
+  createAssignmentSubmissionGrade(
+    input: {
+      assignmentSubmissionId: $assignmentSubmissionId
+      feedback: $feedback
+      grade: $grade
+      evalutedPeopleIds: $evalutedPeopleIds
+    }
+  ) {
+    project {
+      id
+      participantProjects {
+        id
+        slug
+        name
+        assignmentSubmissions {
+          id
+          assignmentSubmissionGrades {
+            id
+            feedback
+            grade
+            auditees {
+              id
+              displayName
+            }
+            user {
+              id
+              displayName
+            }
+          }
+          assignment {
+            id
+          }
+        }
+        projectMembers {
+          id
+          user {
+            id
+          }
+        }
+      }
+    }
+  }
+}
