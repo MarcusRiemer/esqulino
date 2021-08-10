@@ -30,7 +30,7 @@ interface CreateRequiredCodeResourceMutationVariables {
 export class CreateRequiredCodeResourceComponent implements OnInit {
   @Input() type: ReferenceTypeEnum;
 
-  //TODO: refactor ?
+  //TODO: refactor ? -> lesen aus der URL, type kein wert übergeben dann in der URL schauen
   ngOnChanges(changes: SimpleChanges) {
     this.requiredCodeResource.referenceType = changes.type.currentValue;
   }

@@ -1,41 +1,61 @@
 class Mutations::Projects::CreateAssignmentSubmittedCodeResource < Mutations::BaseMutation
-    argument :assignment_submission_id, ID, required: true
-    argument :assignment_required_code_resource_id, ID, required: true
+  argument :group_id, ID, required: true
+  argument :required_code_resource_id, ID, required: true
+  argument :block_language_id, ID, required: false
 
+  field :project, Types::ProjectType, null: true
 
-    field :project, Types::ProjectType, null: true
+  def resolve(group_id:, block_language_id:, required_code_resource_id:)
+    required_code_resource = AssignmentRequiredCodeResource.find(required_code_resource_id)
 
-    def resolve(assignment_submission_id:, assignment_required_code_resource_id:)
-        assignment_submission = AssignmentSubmission.find(assignment_submission_id)
-        required_code_resource = AssignmentRequiredCodeResource(assignment_required_code_resource_id)
+    assignment = required_code_resource.assignment
 
-        project = Project.find_by_slug_or_id! (assignment_submission.assignment.project.id)
-        
-        authorize project, :create_update_assignment?
+    course_project = Project.find_by_slug_or_id!(assignment.project.id)
 
-        ActiveRecord::Base.transaction do
-            assignment_submitted = AssignmentSubmittedCodeResource.new()
+    group = Project.find_by_slug_or_id!(group_id)
 
+    raise Pundit::NotAuthorizedError if group.based_on_project != course_project
 
-            #TODO: Effizienter gestalten indem man sich mit einer Query alle Templates holt um weniger abfragen zu habe ? 
-            if required_code_resource.is_template()
-                if required_code_resource.template.create_copy?
-                    
-                else
-                    assignment_submitted.code_resource_id = required_code_resource.template.code_resource.id
-                end
+    authorize group, :create_assignment_submitted_code_resource?
 
-  
-                
-            else
-                #TODO: Woher weiß ich was für weitere Attribute die Code Resource besitzt. Eventuell immer eine Code Resource vorgeben ? 
-            end
+    ActiveRecord::Base.transaction do
+      # Submission ist already present
+      assignment_submission = if !group.assignment_submissions.any? { |submission| submission.assignment_id == assignment.id }
+                                group.assignment_submissions.create(assignment_id: assignment.id)
+                              else
+                                group.assignment_submissions.find_by(assignment_id: assignment.id)
+                              end
+
+      # TODO: find_or_create_by
+
+      raise ArgumentError, 'There is already a submission' if assignment_submission.assignment_submitted_code_resource.where(assignment_required_code_resource_id: required_code_resource.id).any?
+
+      assignment_submitted = AssignmentSubmittedCodeResource.new(assignment_submission_id: assignment_submission.id, assignment_required_code_resource_id: required_code_resource.id)
+
+      if required_code_resource.is_template
+        if required_code_resource.template.create_copy?
+          code_resource = Mutations::Projects::CreateDeepCopyProject.helper_create_copy_of_one_project_source(group, required_code_resource.template.code_resource)
+          assignment_submitted.code_resource = code_resource
+        else
+          # reference
+          assignment_submitted.code_resource = required_code_resource.template.code_resource
         end
-  
-        Assignment.create(project_id: project.id, name: name, description: description, start_date: start_date, end_date: end_date, weight: weight)
-  
-          return ({
-            project: project
-          })
-          end   
+
+      else
+        # TODO: Die prüfung habe ich schon mal verwendet
+        raise ArgumentError, 'The programming_language is not supported by the block_language' if BlockLanguage.find(block_language_id).default_programming_language.id != required_code_resource.programming_language.id
+
+        code_resource = CodeResource.create(name: required_code_resource.name, project: group, programming_language_id: required_code_resource.programming_language_id, block_language_id: block_language_id)
+        code_resource.save!
+        assignment_submitted.code_resource = code_resource
+        # TODO: Woher weiß ich was für weitere Attribute die Code Resource besitzt. Eventuell immer eine Code Resource vorgeben ?
+
+      end
+      assignment_submitted.save!
+    end
+
+    {
+      project: course_project
+    }
+  end
 end

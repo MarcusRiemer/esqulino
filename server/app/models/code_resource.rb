@@ -48,7 +48,7 @@ class CodeResource < ApplicationRecord
   # If the project does not reference the block language that this resource
   # is referencing the reference is not allowed.
   validate do
-    if (self.block_language and self.project) and not self.project.block_languages.include? self.block_language then
+    if (self.block_language and self.project ) and not self.project.block_languages.include? self.block_language or (self.block_language and self.project.based_on_project ) and not self.project.based_on_project.block_languages.include? self.block_language  then
       errors.add(:block_language, "not allowed by project")
     end
   end
