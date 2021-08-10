@@ -4,6 +4,7 @@ import { AssignmentComponent } from "./assignment/assignment.component";
 import { CreateAssignmentComponent } from "./assignment/dialog/create-assignment.component";
 import { AssignmentOverviewComponent } from "./assignment/overview-assignment.component";
 import { OverviewCourseConponent } from "./overview-course.component";
+import { OverviewParticipantComponent } from "./participants/overview-participant.component";
 
 export const courseRoutes: Routes = [
   {
@@ -22,6 +23,10 @@ export const courseRoutes: Routes = [
   {
     path: "assignments",
     component: AssignmentOverviewComponent,
+  },
+  {
+    path: "participants",
+    component: OverviewParticipantComponent,
   },
 ];
 

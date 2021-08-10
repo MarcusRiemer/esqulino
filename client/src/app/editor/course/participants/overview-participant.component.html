@@ -1,0 +1,76 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <h4>Teilnehmer</h4>
+  </div>
+  <div class="card-body"></div>
+
+  <table
+    mat-table
+    [dataSource]="participants$ | async"
+    class="mat-elevation-z8 col-12"
+  >
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let participant">
+        <button
+          data-spec="edit"
+          type="button"
+          class="btn btn-outline-primary btn-sm"
+        >
+          <course-icon [iconType]="'list-edit'"></course-icon>
+        </button>
+        <button
+          data-spec="edit-singel"
+          type="button"
+          class="btn btn-outline-warning btn-sm"
+        >
+          <course-icon [iconType]="'list-edit-singel'"></course-icon>
+        </button>
+
+        <button
+          data-spec="delete"
+          type="button"
+          class="btn btn-outline-danger btn-sm"
+        >
+          <course-icon [iconType]="'list-delete'"></course-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Teilnehmer</th>
+      <td mat-cell *matCellDef="let participant">{{ participant.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="group">
+      <th mat-header-cell *matHeaderCellDef>Gruppe</th>
+      <td mat-cell *matCellDef="let participant">
+        {{ participant.groupName | currentLanguage }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef>Rolle</th>
+      <td mat-cell *matCellDef="let participant">
+        {{ participant.role }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="joinedAt">
+      <th mat-header-cell *matHeaderCellDef>Akzeptiert</th>
+      <td mat-cell *matCellDef="let participant">
+        <div *ngIf="participant.joinedAt != null; else not_accepted">Ja</div>
+        <ng-template #not_accepted>Nein</ng-template>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="mail">
+      <th mat-header-cell *matHeaderCellDef>E-Mail</th>
+      <td mat-cell *matCellDef="let participant">{{ participant.joinedAt }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
+<create-participant-group></create-participant-group>
