@@ -1,13 +1,32 @@
 mutation CreateProjectCourseParticipation(
   $basedOnProjectId: ID!
+  $groupName: LangJson!
   $userIds: [ID!]!
 ) {
   createProjectCourseParticipation(
-    input: { basedOnProjectId: $basedOnProjectId, userIds: $userIds }
+    input: {
+      basedOnProjectId: $basedOnProjectId
+      userIds: $userIds
+      groupName: $groupName
+    }
   ) {
     project {
       id
       slug
+      participantProjects {
+        id
+        slug
+        name
+        projectMembers {
+          id
+          membershipType
+          joinedAt
+          user {
+            id
+            displayName
+          }
+        }
+      }
     }
   }
 }
