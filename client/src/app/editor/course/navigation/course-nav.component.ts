@@ -1,25 +1,30 @@
 import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { map, pluck } from "rxjs/operators";
 
 import {
   AssignmentTemplateCodeResource,
   FullProjectGQL,
 } from "../../../../generated/graphql";
 import { ProjectService } from "../../project.service";
+import { CourseService } from "../course.service";
 
 interface CourseNavEntry {
   id: string;
   name: string;
   templates: {
+    name: string;
     id: string;
     reference_type: AssignmentTemplateCodeResource["referenceType"];
   }[];
   solutions: {
     name: string;
+    id: string;
   }[];
 }
 
+/*
 interface CourseNavEntryAlternative {
   id: string;
   name: string;
@@ -53,6 +58,7 @@ interface CourseNavEntryAlternativeWithPick {
       }
   )[];
 }
+*/
 
 @Component({
   selector: "course-nav",
@@ -60,44 +66,34 @@ interface CourseNavEntryAlternativeWithPick {
   styleUrls: ["./course-nav.component.scss"],
 })
 export class CourseNavComponent {
-  _fullProject$: any;
-  // TODO: Diese felder auslagern in einen Service
-  constructor(
-    private readonly _projectService: ProjectService,
-    private readonly _fullProject: FullProjectGQL
-  ) {}
+  constructor(private readonly _courseService: CourseService) {}
 
-  readonly fullCourseData$ = this._fullProject
-    .watch({ id: this._projectService.cachedProject.id })
-    .valueChanges.pipe(map((project) => project.data.project));
+  assignments$: Observable<CourseNavEntry[]> =
+    this._courseService.fullCourseData$.pipe(
+      map((fullData) => {
+        const toReturn: CourseNavEntry[] = fullData.assignments.map((a) => {
+          const navData = {
+            id: a.id,
+            name: a.name,
+            solutions: a.assignmentRequiredCodeResources
+              .filter((req) => req.solution)
+              .map((req) =>
+                fullData.codeResources.find((res) => res.id === req.solution.id)
+              ), // TODO: refactor
+            templates: a.assignmentRequiredCodeResources
+              .filter((req) => req.template)
+              .map((req) => ({
+                ...fullData.codeResources.find(
+                  (res) => res.id === req.template.codeResource.id
+                ),
+                reference_type: req.template.referenceType,
+              })),
+          };
 
-  readonly fullAssignments$ = this.fullCourseData$.pipe(
-    map((data) => data.assignments)
-  );
+          return navData;
+        });
 
-  assignments$: Observable<CourseNavEntry[]> = this.fullCourseData$.pipe(
-    map((fullData) => {
-      const toReturn: CourseNavEntry[] = fullData.assignments.map((a) => {
-        const navData = {
-          id: a.id,
-          name: a.name,
-          solutions: a.assignmentRequiredCodeResources
-            .filter((req) => req.solution)
-            .map((req) =>
-              fullData.codeResources.find((res) => res.id === req.solution.id)
-            ),
-          templates: a.assignmentRequiredCodeResources
-            .filter((req) => req.template)
-            .map((req) => ({
-              id: req.template.codeResource.id,
-              reference_type: req.template.referenceType,
-            })),
-        };
-
-        return navData;
-      });
-
-      return toReturn;
-    })
-  );
+        return toReturn;
+      })
+    );
 }

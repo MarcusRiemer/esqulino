@@ -23,6 +23,7 @@
     mat-list-item
     [routerLink]="['course/assignments/', a.id]"
     routerLinkActive="router-link-active"
+    class="indent"
   >
     <span class="fa fa-fw fa-graduation-cap" aria-hidden="true"></span>
     {{ a.name }}
@@ -31,9 +32,9 @@
   <ng-container *ngFor="let solution of a.solutions">
     <a
       mat-list-item
-      [routerLink]="['assignment', 'test']"
+      [routerLink]="['ast', solution.id]"
       routerLinkActive="router-link-active"
-      class="indent"
+      class="indent-2"
     >
       <span class="fa fa-fw fa-check-circle" aria-hidden="true"></span>
       L: {{ solution.name }}
@@ -43,9 +44,9 @@
   <ng-container *ngFor="let template of a.templates">
     <a
       mat-list-item
-      [routerLink]="['assignment', 'test']"
+      [routerLink]="['ast', template.id]"
       routerLinkActive="router-link-active"
-      class="indent"
+      class="indent-2"
     >
       <span
         *ngIf="template.reference_type == 'given_partially'"
@@ -57,7 +58,7 @@
         class="fa fa-fw fa-file-text"
         aria-hidden="true"
       ></span>
-      {{ template.code_resource.name }}
+      {{ template.name }}
     </a>
   </ng-container>
 </div>
@@ -73,7 +74,7 @@
 </a>
 <a
   mat-list-item
-  [routerLink]="['rating/submissions']"
+  [routerLink]="['course/rating']"
   [routerLinkActiveOptions]="{ exact: true }"
   routerLinkActive="router-link-active"
 >
@@ -83,7 +84,7 @@
 <mat-divider></mat-divider>
 <a
   mat-list-item
-  [routerLink]="['assignment']"
+  [routerLink]="['course/participants']"
   [routerLinkActiveOptions]="{ exact: true }"
   routerLinkActive="router-link-active"
 >
