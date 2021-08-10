@@ -1,2 +1,250 @@
-<p>
-Singel Assignment</p>
+<div *ngIf="assignment">
+  <div class="card mb-3">
+    <div class="card-header">
+      <div class="row">
+        <h4 class="col-sm-10">Aufgabeneinstellung</h4>
+        <div class="col-sm-2">
+          <may-perform [payload]="updateAssignmentPermission$ | async">
+            <button
+              class="btn btn-primary col-sm-12"
+              (click)="saveAssingment()"
+            >
+              Speichern
+            </button>
+          </may-perform>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-group row mb-3">
+        <label for="assignment-name" class="col-sm-2 form-control-label">
+          Aufgabenname
+        </label>
+        <div class="col-sm-10">
+          <input
+            type="text"
+            [(ngModel)]="assignment.name"
+            id="name"
+            name="assignment-name"
+            class="form-control"
+          />
+          <small class="text-muted">
+            Dieser Name beschreibt, was sich hinter deiner Aufgabe verbirgt.
+          </small>
+        </div>
+      </div>
+      <div class="form-group row mb-3">
+        <label for="assignment-description" class="col-sm-2 form-control-label">
+          Beschreibung
+        </label>
+        <div class="col-sm-10">
+          <textarea
+            [(ngModel)]="assignment.description"
+            class="form-control"
+            name="descirption"
+          ></textarea>
+          <small class="text-muted">
+            Beschreibe deine Aufgabe mit ein paar kurzen Sätzen. Erläutere dabei
+            welche Probleme du damit löst haben möchtest oder welche Dinge du
+            erklären möchtest.
+          </small>
+        </div>
+      </div>
+      <div class="form-group row mb-3">
+        <label class="col-sm-2 from-control_label">Gewichtung</label>
+        <div class="col-sm-10">
+          <input
+            type="number"
+            [(ngModel)]="assignment.weight"
+            class="form-control"
+            min="1"
+          />
+          <small class="text-muted">
+            Wenn diese Aufgabe eine höhere Komplexität haben sollte und du es in
+            der Wertung sichtbar machen möchtest, kannst du hier einen
+            Multiplikator hinterlegen.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header"><h4>Fristen</h4></div>
+    <div class="card-body">
+      <div class="form-group row">
+        <div class="input-group mb-3">
+          <label class="form-control-label col-sm-2">Startdatum</label>
+
+          <input
+            type="date"
+            class="form-control"
+            placeholder="Startdatum"
+            name="startDate"
+            [ngModel]="assignment.startDate | date: 'yyyy-MM-dd'"
+            (ngModelChange)="assignment.changedStartDate = $event"
+          />
+          <span class="input-group-text">Datum</span>
+          <input
+            type="time"
+            [ngModel]="assignment.startDate | date: 'HH:mm'"
+            (ngModelChange)="assignment.changedStartTime = $event"
+            name="startDateTime"
+            class="form-control"
+          />
+          <span class="input-group-text">Uhrzeit</span>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="form-control-label col-sm-2">Abgabedatum</label>
+          <input
+            type="date"
+            class="form-control"
+            placeholder="Enddatum"
+            name="endDate"
+            [ngModel]="assignment.endDate | date: 'yyyy-MM-dd'"
+            (ngModelChange)="assignment.changedEndDate = $event"
+          />
+          <span class="input-group-text">Datum</span>
+          <input
+            type="time"
+            [ngModel]="assignment.endDate | date: 'HH:mm'"
+            (ngModelChange)="assignment.changedEndTime = $event"
+            name="endDateTime"
+            class="form-control"
+          />
+          <span class="input-group-text">Uhrzeit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header">
+      <div class="row">
+        <h4 class="col-sm-3">Files</h4>
+        <may-perform
+          class="col-sm-9"
+          [payload]="createRequirementPermission$ | async"
+        >
+          <button
+            class="btn btn-primary col-sm-4"
+            (click)="currentType = 'given_full'"
+          >
+            Vollständig gegeben anlegen
+          </button>
+          <button
+            class="btn btn-primary col-sm-4"
+            (click)="currentType = 'given_partially'"
+          >
+            Teilweise gegeben anlegen
+          </button>
+          <button
+            class="btn btn-primary col-sm-4"
+            (click)="currentType = undefined"
+          >
+            Gefordert anlegen
+          </button>
+        </may-perform>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="form-group row">
+        <table
+          mat-table
+          [dataSource]="assignment.requirements"
+          class="mat-elevation-z8 col-12"
+        >
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let requirement">
+              <may-perform [payload]="updateRequirementPermission$ | async">
+                <button
+                  (click)="
+                    updateRequirement(
+                      requirement.id,
+                      requirement.name,
+                      requirement.description
+                    )
+                  "
+                  data-spec="change"
+                  type="button"
+                  class="btn btn-outline-warning btn-sm"
+                >
+                  <course-icon [iconType]="'list-edit-singel'"></course-icon>
+                </button>
+              </may-perform>
+              <may-perform [payload]="deleteRequirementPermission$ | async">
+                <button
+                  (click)="deleteFile(requirement.id)"
+                  data-spec="delete"
+                  type="button"
+                  class="btn btn-outline-danger btn-sm"
+                >
+                  <course-icon [iconType]="'list-delete'"></course-icon>
+                </button>
+              </may-perform>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Aufgabenname</th>
+            <td mat-cell *matCellDef="let requirement">
+              {{ requirement.name }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>AnfoderungsTyp</th>
+            <td mat-cell *matCellDef="let requirement">
+              <!--TODO: refactor?-->
+              <div *ngIf="requirement.referenceType == 'given_full'">
+                vollständig gegeben
+              </div>
+              <div *ngIf="requirement.referenceType == 'given_partially'">
+                teilweise gegeben
+              </div>
+              <div *ngIf="!requirement.referenceType">gefordert</div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let requirement">status</td>
+          </ng-container>
+
+          <ng-container matColumnDef="solution">
+            <th mat-header-cell *matHeaderCellDef>Lösung</th>
+            <td mat-cell *matCellDef="let requirement">
+              <div
+                *ngIf="
+                  requirement.referenceType != 'given_full' &&
+                    requirement.solution.name == undefined;
+                  else solutionName
+                "
+              >
+                <button
+                  class="btn btn-primary"
+                  (click)="createSolution(requirement.id)"
+                >
+                  Musterlösung erstellen
+                </button>
+              </div>
+              <ng-template #solutionName>
+                {{ requirement.solution.name || "-" }}
+              </ng-template>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<may-perform [payload]="createRequirementPermission$ | async">
+  <app-create-required-code-resource
+    [type]="currentType"
+  ></app-create-required-code-resource>
+</may-perform>

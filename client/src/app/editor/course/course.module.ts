@@ -16,9 +16,13 @@ import { CreateRequiredCodeResourceComponent } from "./assignment/dialog/create-
 import { CreateRequiredCodeResourceSolutionComponent } from "./assignment/dialog/create-required-code-resource-solution.component";
 import { ChangeRequiredCodeResourceDialogComponent } from "./assignment/dialog/change-required-code-resource-dialog.component";
 import { CodeEditorModule } from "../code/code.module";
+import { CourseIconComponent } from "./icons/course-icon.component";
+import { UpdateAssignmentDialogComponent } from "./assignment/dialog/update-assignment-dialog.component";
+import { OverviewParticipantComponent } from "./participants/overview-participant.component";
+import { CreateParticipantGroup } from "./participants/create-participant-group.component";
 
 @NgModule({
-  imports: [CommonModule, SharedAppModule, CodeEditorModule.forRoot()],
+  imports: [CommonModule, SharedAppModule, CodeEditorModule],
   declarations: [
     CourseNavComponent,
     AssignmentOverviewComponent,
@@ -28,6 +32,10 @@ import { CodeEditorModule } from "../code/code.module";
     CreateRequiredCodeResourceComponent,
     CreateRequiredCodeResourceSolutionComponent,
     ChangeRequiredCodeResourceDialogComponent,
+    CourseIconComponent,
+    UpdateAssignmentDialogComponent,
+    OverviewParticipantComponent,
+    CreateParticipantGroup,
   ],
   exports: [CourseNavComponent],
 })
