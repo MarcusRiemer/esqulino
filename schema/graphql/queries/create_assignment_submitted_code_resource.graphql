@@ -1,0 +1,36 @@
+mutation CreateAssignmentSubmittedCodeResource(
+  $groupId: ID!
+  $requiredCodeResourceId: ID!
+  $blockLanguageId: ID!
+) {
+  createAssignmentSubmittedCodeResource(
+    input: {
+      groupId: $groupId
+      requiredCodeResourceId: $requiredCodeResourceId
+      blockLanguageId: $blockLanguageId
+    }
+  ) {
+    project {
+      id
+      participantProjects {
+        id
+        slug
+        name
+        assignmentSubmissions {
+          id
+          assignmentSubmittedCodeResources {
+            codeResource {
+              id
+            }
+            assignmentRequiredCodeResource {
+              id
+            }
+          }
+          assignment {
+            id
+          }
+        }
+      }
+    }
+  }
+}

@@ -18,6 +18,10 @@ module Types
     field :update_assignment, mutation: Mutations::Projects::UpdateAssignment
     field :destroy_assignment, mutation: Mutations::Projects::DestroyAssignment
 
+    field :create_assignment_submission_grade, mutation: Mutations::Projects::CreateAssignmentSubmissionGrade
+
+    field :create_assignment_submitted_code_resource, mutation: Mutations::Projects::CreateAssignmentSubmittedCodeResource
+
     field :create_project_course_participation, mutation: Mutations::Projects::CreateProjectCourseParticipation
 
     field :create_assignment_required_code_resource, mutation: Mutations::Projects::CreateAssignmentRequiredCodeResource

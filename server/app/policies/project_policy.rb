@@ -107,6 +107,13 @@ class ProjectPolicy < ApplicationPolicy
     return project.user_have_role(user, permitted_roles) || project.public && user.present?
   end
 
+
+  def create_assignment_submitted_code_resource? 
+    permitted_roles = ["participant"]
+
+    return project.user_have_role(user,permitted_roles)
+  end
+
   class Scope < Scope
     def resolve
       if user.has_role?(:admin)

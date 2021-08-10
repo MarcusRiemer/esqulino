@@ -1,13 +1,13 @@
 class AssignmentSubmission < ApplicationRecord
-    #Assignment to which the levies relate
-    belongs_to :assignment
+  # Assignment to which the levies relate
+  belongs_to :assignment
 
-    # Evaluation of the submitted solutions
-    belongs_to :assignment_submission_grade, optional: true
+  # Evaluation of the submitted solutions
+  has_many :assignment_submission_grades
 
-    #Thats the group which create this submission
-    belongs_to :project
+  # Thats the group which create this submission
+  belongs_to :project
 
-    # Code resources delivered
-    has_many :assignment_submitted_code_resource 
+  # Code resources delivered
+  has_many :assignment_submitted_code_resource, dependent: :destroy
 end
