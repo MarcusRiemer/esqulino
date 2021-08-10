@@ -22,8 +22,10 @@ class Mutations::Projects::CreateAssignment < Mutations::BaseMutation
       if start_date != nil && end_date != nil && (start_date >= end_date)
         raise ArgumentError.new "The end date must be higher than the start date"
       end
+
       #project. <- trigger ich project.assignments.create
-       Assignment.create(project_id: project.id, name: name, description: description, start_date: start_date, end_date: end_date, weight: weight)
+      project.assignments.create(project_id: project.id, name: name, description: description, start_date: start_date, end_date: end_date, weight: weight)
+       #Assignment.create(project_id: project.id, name: name, description: description, start_date: start_date, end_date: end_date, weight: weight)
 
         return ({
           project: project # <- geift auf diese Werte zu, erst wenn hier was Fehlt wird die Methode aufgerufen

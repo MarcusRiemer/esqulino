@@ -1,0 +1,120 @@
+<div class="card mb-3">
+  <div class="card-header">
+    <h4>Aufgabe erstellen</h4>
+  </div>
+  <div class="card-body">
+    <may-perform [payload]="createAssignmentPermission$ | async">
+      <form>
+        <div class="form-group row mb-3">
+          <label for="assignment-name" class="col-sm-2 form-control-label">
+            Aufgabenname
+          </label>
+          <div class="col-sm-10">
+            <input
+              type="text"
+              [(ngModel)]="createName"
+              id="name"
+              name="assignment-name"
+              class="form-control"
+            />
+            <small class="text-muted">
+              Dieser Name beschreibt, was sich hinter deiner Aufgabe verbirgt.
+            </small>
+          </div>
+        </div>
+        <div class="form-group row mb-3">
+          <label
+            for="assignment-description"
+            class="col-sm-2 form-control-label"
+          >
+            Beschreibung
+          </label>
+          <div class="col-sm-10">
+            <textarea
+              [(ngModel)]="createDescription"
+              class="form-control"
+              name="descirption"
+            ></textarea>
+            <small class="text-muted">
+              Beschreibe deine Aufgabe mit ein paar kurzen Sätzen. Erläutere
+              dabei welche Probleme du damit löst haben möchtest oder welche
+              Dinge du erklären möchtest.
+            </small>
+          </div>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="form-control-label col-sm-2">Startdatum</label>
+
+          <input
+            type="date"
+            class="form-control"
+            placeholder="Startdatum"
+            name="startDate"
+            [(ngModel)]="createStartDate"
+          />
+          <span class="input-group-text">Datum</span>
+          <input
+            type="time"
+            [(ngModel)]="createStartDateTime"
+            name="startDateTime"
+            class="form-control"
+          />
+          <span class="input-group-text">Uhrzeit</span>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="form-control-label col-sm-2">Abgabedatum</label>
+          <input
+            type="date"
+            class="form-control"
+            placeholder="Enddatum"
+            name="endDate"
+            [(ngModel)]="createEndDate"
+          />
+          <span class="input-group-text">Datum</span>
+          <input
+            type="time"
+            [(ngModel)]="createEndDateTime"
+            name="endDateTime"
+            class="form-control"
+          />
+          <span class="input-group-text">Uhrzeit</span>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="from-controll-label col-sm-2">Gewichtung</label>
+          <div class="col-sm-10">
+            <input
+              class="form-control"
+              type="number"
+              [(ngModel)]="createWeight"
+              name="weight"
+              min="1"
+            />
+            <small class="text-muted">
+              Wenn diese Aufgabe eine höhere Komplexität haben sollte und du es
+              in der Wertung sichtbar machen möchtest, kannst du hier einen
+              Multiplikator hinterlegen.
+            </small>
+          </div>
+        </div>
+
+        <input
+          type="submit"
+          class="btn btn-primary col-4"
+          value="Aufgabe erstellen"
+          (click)="createAssignment()"
+        />
+      </form>
+      <h4 denied class="card-title">
+        Nicht möglich: Eine neue Aufgabe anzulegen
+      </h4>
+      <p denied>
+        Hier würde man normalerweise neue Aufgaben anelgen, aber irgendwie ist
+        dir das nicht erlaubt. Bist du eingeloggt und besitzt du die nötigen
+        Berechtigungen für diesen Kurs ?
+      </p>
+    </may-perform>
+  </div>
+</div>
