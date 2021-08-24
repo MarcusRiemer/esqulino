@@ -28,6 +28,12 @@
   class="fa fa-exclamation-circle"
   aria-hidden="true"
 ></span>
+<span *ngIf="iconType == 'assignment'" aria-hidden="true">
+  <p>assingment</p>
+</span>
+<span *ngIf="iconType == 'assignment-state-planned'" aria-hidden="true">
+  <p>assignment-state-planned</p>
+</span>
 <span *ngIf="iconType == 'assignment-state-open'" aria-hidden="true">
   <p>assignment-state-open</p>
 </span>
@@ -37,9 +43,26 @@
 <span *ngIf="iconType == 'assignment-state-done'" aria-hidden="true">
   <p>assignment-state-done</p>
 </span>
+<span *ngIf="iconType == 'assignment-type-given_full'" aria-hidden="true">
+  <p>assignment-given-ful</p>
+</span>
+<span *ngIf="iconType == 'assignment-type-given_partially'" aria-hidden="true">
+  <p>assignment-given-partially</p>
+</span>
+<span *ngIf="iconType == 'assignment-type-required'" aria-hidden="true">
+  <p>assignment-required</p>
+</span>
+
 <span *ngIf="iconType == 'to-evalute'" aria-hidden="true">
   <p>to-evalute</p>
 </span>
 <span *ngIf="iconType == 'participant'" aria-hidden="true">
   <p>participant</p>
+</span>
+
+<span *ngIf="iconType == 'database'" aria-hidden="true">
+  <p>database</p>
+</span>
+<span *ngIf="iconType == 'course-overview'" aria-hidden="true">
+  <p>course-overview</p>
 </span>

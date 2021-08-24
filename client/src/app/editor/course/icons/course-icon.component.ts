@@ -12,11 +12,18 @@ export class CourseIconComponent implements OnInit {
     | "list-done"
     | "list-pending"
     | "compilation-problem"
+    | "assignment-state-planned"
     | "assignment-state-open"
     | "assignment-state-pending"
     | "assignment-state-done"
+    | "assignment-type-given_full"
+    | "assignment-type-given_partially"
+    | "assignment-type-required"
     | "to-evalute"
-    | "participant";
+    | "participant"
+    | "assignment"
+    | "database"
+    | "course-overview";
 
   ngOnInit(): void {}
 }
