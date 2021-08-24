@@ -5,7 +5,7 @@ class Mutations::Projects::CreateAssignmentSubmittedCodeResource < Mutations::Ba
 
   field :project, Types::ProjectType, null: true
 
-  def resolve(group_id:, block_language_id:, required_code_resource_id:)
+  def resolve(group_id:, required_code_resource_id:, block_language_id: nil)
     required_code_resource = AssignmentRequiredCodeResource.find(required_code_resource_id)
 
     assignment = required_code_resource.assignment
@@ -28,7 +28,7 @@ class Mutations::Projects::CreateAssignmentSubmittedCodeResource < Mutations::Ba
 
       # TODO: find_or_create_by
 
-      raise ArgumentError, 'There is already a submission' if assignment_submission.assignment_submitted_code_resource.where(assignment_required_code_resource_id: required_code_resource.id).any?
+      raise ArgumentError, 'There is already a submission' if assignment_submission.assignment_submitted_code_resources.where(assignment_required_code_resource_id: required_code_resource.id).any?
 
       assignment_submitted = AssignmentSubmittedCodeResource.new(assignment_submission_id: assignment_submission.id, assignment_required_code_resource_id: required_code_resource.id)
 

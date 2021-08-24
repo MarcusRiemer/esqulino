@@ -38,12 +38,28 @@ query FullProject($id: ID!) {
       assignment {
         id
       }
-      #assignmentSubmittedCodeResources {
-      #id
-      #codeResource {
-      # id
-      #}
-      #}
+      assignmentSubmissionGrades {
+        id
+        grade
+        feedback
+        user {
+          id
+          displayName
+        }
+      }
+      assignmentSubmittedCodeResources {
+        id
+        assignmentRequiredCodeResource {
+          id
+          template {
+            id
+            referenceType
+          }
+        }
+        codeResource {
+          id
+        }
+      }
     }
     projectMembers {
       id
@@ -55,6 +71,18 @@ query FullProject($id: ID!) {
       }
     }
     basedOnProject {
+      codeResources {
+        id
+        name
+        ast
+        blockLanguageId
+        programmingLanguageId
+      }
+      blockLanguages {
+        id
+        defaultProgrammingLanguageId
+        name
+      }
       assignments {
         id
         name
@@ -66,6 +94,7 @@ query FullProject($id: ID!) {
           id
           name
           programmingLanguageId
+          description
           template {
             id
             referenceType
@@ -98,16 +127,17 @@ query FullProject($id: ID!) {
         assignment {
           id
         }
-        #assignmentSubmittedCodeResources {
-        #  id
-        #  codeResource {
-        #    id
-        #    name
-        #    ast
-        #    blockLanguageId
-        #    programmingLanguageId
-        #  }
-        #}
+
+        assignmentSubmittedCodeResources {
+          id
+          codeResource {
+            id
+            name
+            ast
+            blockLanguageId
+            programmingLanguageId
+          }
+        }
       }
     }
     user {

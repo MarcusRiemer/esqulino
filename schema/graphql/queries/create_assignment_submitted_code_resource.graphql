@@ -1,7 +1,7 @@
 mutation CreateAssignmentSubmittedCodeResource(
   $groupId: ID!
   $requiredCodeResourceId: ID!
-  $blockLanguageId: ID!
+  $blockLanguageId: ID
 ) {
   createAssignmentSubmittedCodeResource(
     input: {

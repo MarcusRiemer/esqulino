@@ -758,29 +758,23 @@
               "deprecationReason": null
             },
             {
-              "name": "assignmentSubmissionGradeId",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "assignmentSubmissionGrades",
               "description": null,
               "args": [
 
               ],
               "type": {
-                "kind": "OBJECT",
-                "name": "AssignmentSubmissionGrade",
-                "ofType": null
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "AssignmentSubmissionGrade",
+                    "ofType": null
+                  }
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null

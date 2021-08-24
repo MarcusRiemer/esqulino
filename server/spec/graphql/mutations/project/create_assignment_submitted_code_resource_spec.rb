@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
+RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
   before(:each) do
     create(:user, :guest)
     course = create(:project, slug: 'course-test')
