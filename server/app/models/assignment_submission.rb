@@ -9,5 +9,5 @@ class AssignmentSubmission < ApplicationRecord
   belongs_to :project
 
   # Code resources delivered
-  has_many :assignment_submitted_code_resource, dependent: :destroy
+  has_many :assignment_submitted_code_resources, dependent: :destroy
 end

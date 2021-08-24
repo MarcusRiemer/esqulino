@@ -1,0 +1,14 @@
+<div class="card mb-3">
+  <div class="card-header">
+    {{ singleAssignment.name }}
+  </div>
+  <div class="card-body" [routerLink]="['../assignment/', singleAssignment.id]">
+    {{ singleAssignment.description }}
+
+    <div *ngIf="singleAssignment.endDate">
+      <p>Abgabetermin</p>
+      {{ singleAssignment.endDate | date: "dd/MM/yyyy" }} um
+      {{ singleAssignment.endDate | date: "HH:mm" }} Uhr
+    </div>
+  </div>
+</div>

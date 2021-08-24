@@ -5,6 +5,8 @@ import {
   CreateProjectCourseParticipationGQL,
   FrontpageListProjectsQuery,
 } from "../../generated/graphql";
+import { MultiLangString } from "../shared/multilingual-string.description";
+import { CurrentLocaleService } from "../current-locale.service";
 
 type projectNode = FrontpageListProjectsQuery["projects"]["nodes"][0];
 
@@ -26,7 +28,8 @@ export class ProjectListItemComponent {
   public constructor(
     @Inject(PLATFORM_ID) private _platformId: Object,
     private _router: Router,
-    private _createProjectCourseParticipation: CreateProjectCourseParticipationGQL
+    private _createProjectCourseParticipation: CreateProjectCourseParticipationGQL,
+    private readonly _locale: CurrentLocaleService
   ) {}
 
   /**
@@ -47,10 +50,15 @@ export class ProjectListItemComponent {
   }
 
   async createCourseParticipation() {
+    const localizedName: MultiLangString = {};
+    //TODO: create own name
+    localizedName[this._locale.localeId] = "Group 01";
+
     await this._createProjectCourseParticipation
       .mutate({
         basedOnProjectId: this.project.id,
         userIds: [],
+        groupName: localizedName,
       })
       .toPromise()
       .then((e) => {

@@ -22,6 +22,7 @@ import { first, map } from "rxjs/operators";
 
 @Component({
   templateUrl: "templates/settings.html",
+  selector: "project-settings",
 })
 export class SettingsComponent {
   /**

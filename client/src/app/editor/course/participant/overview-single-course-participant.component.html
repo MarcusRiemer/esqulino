@@ -1,0 +1,17 @@
+<div *ngIf="course$ | async as course">
+  <div class="card mb-3">
+    <div class="card-header">
+      <div class="row">
+        <h3 class="col-sm-10">{{ course.name | currentLanguage }}</h3>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>{{ course.description | currentLanguage }}</p>
+    </div>
+  </div>
+  <div *ngFor="let assignment of course.assignments">
+    <singel-assignment-card
+      [singleAssignment]="assignment"
+    ></singel-assignment-card>
+  </div>
+</div>
