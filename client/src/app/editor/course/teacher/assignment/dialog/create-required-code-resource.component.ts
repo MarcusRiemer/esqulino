@@ -12,7 +12,7 @@ import {
   CreateAssignmentRequiredTemplateInput,
   ReferenceTypeEnum,
 } from "src/generated/graphql";
-import { CourseService } from "../../course.service";
+import { CourseService } from "../../../course.service";
 
 interface CreateRequiredCodeResourceMutationVariables {
   assignmentId: string;

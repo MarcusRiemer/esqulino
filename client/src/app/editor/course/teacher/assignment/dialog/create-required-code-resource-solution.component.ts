@@ -11,7 +11,7 @@ import {
   ReferenceTypeEnum,
   SelectionListBlockLanguagesGQL,
 } from "src/generated/graphql";
-import { CourseService } from "../../course.service";
+import { CourseService } from "../../../course.service";
 
 interface requirementSolutionDialogInput {
   requiredId: string;

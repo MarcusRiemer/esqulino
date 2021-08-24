@@ -4,7 +4,7 @@ import { first } from "rxjs/operators";
 import { CurrentLocaleService } from "src/app/current-locale.service";
 import { MultiLangString } from "src/app/shared/multilingual-string.description";
 import { CreateProjectCourseParticipationGQL } from "src/generated/graphql";
-import { CourseService } from "../course.service";
+import { CourseService } from "../../course.service";
 
 @Component({
   templateUrl: "create-participant-group.component.html",

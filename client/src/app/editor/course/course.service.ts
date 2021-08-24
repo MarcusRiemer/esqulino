@@ -7,6 +7,7 @@ import {
   AssignmentTemplateCodeResource,
   FullProjectGQL,
   Project,
+  ReferenceTypeEnum,
 } from "src/generated/graphql";
 import { map } from "rxjs/operators";
 

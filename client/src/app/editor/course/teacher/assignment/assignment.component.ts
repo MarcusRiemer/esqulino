@@ -12,7 +12,7 @@ import {
   ReferenceTypeEnum,
   UpdateAssignmentGQL,
 } from "src/generated/graphql";
-import { CourseService } from "../course.service";
+import { CourseService } from "../../course.service";
 import { ChangeRequiredCodeResourceDialogComponent } from "./dialog/change-required-code-resource-dialog.component";
 import { CreateRequiredCodeResourceSolutionComponent } from "./dialog/create-required-code-resource-solution.component";
 
@@ -92,6 +92,7 @@ export class AssignmentComponent implements OnInit {
       map((p) => this._performData.project.deleteAssignmentRequirement(p.id))
     );
 
+  //TODO: refactor wie in assingment für participants
   ngOnInit(): void {
     this.assignmentId$
       .pipe(

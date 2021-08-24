@@ -11,8 +11,8 @@ import {
   DestroyAssignmentGQL,
 } from "src/generated/graphql";
 import Observable from "zen-observable";
-import { CourseService } from "../course.service";
-import { PerformDataService } from "../../../shared/authorisation/perform-data.service";
+import { CourseService } from "../../course.service";
+import { PerformDataService } from "../../../../shared/authorisation/perform-data.service";
 
 @Component({
   selector: "app-overview-assignment",

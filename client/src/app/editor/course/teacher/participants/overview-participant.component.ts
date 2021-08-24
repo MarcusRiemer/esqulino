@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { first, map, tap } from "rxjs/operators";
-import { CourseService } from "../course.service";
+import { CourseService } from "../../course.service";
 
 @Component({
   templateUrl: "overview-participant.component.html",

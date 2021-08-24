@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
 import { UpdateAssignmentRequiredCodeResourceGQL } from "src/generated/graphql";
-import { CourseService } from "../../course.service";
+import { CourseService } from "../../../course.service";
 
 interface changedRequiredCodeResourceDialogInput {
   requirementId: string;

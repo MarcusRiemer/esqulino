@@ -1,0 +1,85 @@
+<mat-divider></mat-divider>
+<mat-divider></mat-divider>
+<a
+  mat-list-item
+  [routerLink]="['course/participant/overview']"
+  [routerLinkActiveOptions]="{ exact: true }"
+  routerLinkActive="router-link-active"
+>
+  <course-icon [iconType]="'course-overview'"></course-icon>
+  Kursübersicht
+</a>
+<div *ngFor="let a of assignments$ | async">
+  <a
+    mat-list-item
+    [routerLink]="['course/participant/assignment/', a.id]"
+    routerLinkActive="router-link-active"
+    class="indent"
+  >
+    <course-icon [iconType]="'assignment'"></course-icon>
+    {{ a.name }}
+    <course-icon
+      *ngIf="a.startDate && !dateExceeded(a.startDate)"
+      [iconType]="'assignment-state-planned'"
+    ></course-icon>
+    <course-icon
+      *ngIf="
+        (!a.startDate || dateExceeded(a.startDate)) &&
+        (!a.endDate || !dateExceeded(a.endDate))
+      "
+      [iconType]="'assignment-state-open'"
+    ></course-icon>
+    <course-icon
+      *ngIf="a.endDate && dateExceeded(a.endDate) && !a.graded"
+      [iconType]="'assignment-state-pending'"
+    ></course-icon>
+    <course-icon
+      *ngIf="(!a.endDate || dateExceeded(a.endDate)) && a.graded"
+      [iconType]="'assignment-state-done'"
+    ></course-icon>
+  </a>
+  <div *ngFor="let submission of a.submittedCodeResources">
+    <a
+      mat-list-item
+      [routerLink]="[
+        'course/participant/assignment/',
+        a.id,
+        'submitted',
+        submission.id
+      ]"
+      routerLinkActive="router-link-active"
+      class="indent-2"
+    >
+      <course-icon
+        *ngIf="submission.referenceType == 'given_full'"
+        [iconType]="'assignment-type-given_full'"
+      ></course-icon>
+      <course-icon
+        *ngIf="submission.referenceType == 'given_partially'"
+        [iconType]="'assignment-type-given_partially'"
+      ></course-icon>
+      <course-icon
+        *ngIf="submission.referenceType == undefined"
+        [iconType]="'assignment-type-required'"
+      ></course-icon>
+      {{ submission.name }}
+    </a>
+  </div>
+</div>
+
+<!-- <ng-container *ngFor="let submitted of a.submitted_code_resources">
+    <a mat-list-item routerLinkActive="router-link-active" class="indent-2">
+      <span class="fa fa-fw fa-check-circle" aria-hidden="true"></span>
+      L: {{ submitted.name }}
+    </a>
+  </ng-container> -->
+<mat-divider></mat-divider>
+<a mat-list-item routerLinkActive="router-link-active">
+  <course-icon [iconType]="'database'"></course-icon>
+  Datenbank
+</a>
+<mat-divider></mat-divider>
+<a mat-list-item routerLinkActive="router-link-active">
+  <course-icon [iconType]="'participant'"></course-icon>
+  Teilnehmer
+</a>

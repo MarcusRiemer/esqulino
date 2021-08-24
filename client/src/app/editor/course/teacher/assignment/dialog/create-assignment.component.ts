@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { first, map } from "rxjs/operators";
 import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
 import { CreateAssignmentGQL, ReferenceTypeEnum } from "src/generated/graphql";
-import { CourseService } from "../../course.service";
+import { CourseService } from "../../../course.service";
 
 @Component({
   selector: "app-assignment",

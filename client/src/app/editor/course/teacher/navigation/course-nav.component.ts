@@ -6,9 +6,9 @@ import { map, pluck } from "rxjs/operators";
 import {
   AssignmentTemplateCodeResource,
   FullProjectGQL,
-} from "../../../../generated/graphql";
-import { ProjectService } from "../../project.service";
-import { CourseService } from "../course.service";
+} from "../../../../../generated/graphql";
+import { ProjectService } from "../../../project.service";
+import { CourseService } from "../../course.service";
 
 interface CourseNavEntry {
   id: string;
@@ -63,7 +63,6 @@ interface CourseNavEntryAlternativeWithPick {
 @Component({
   selector: "course-nav",
   templateUrl: "./course-nav.component.html",
-  styleUrls: ["./course-nav.component.scss"],
 })
 export class CourseNavComponent {
   constructor(private readonly _courseService: CourseService) {}
