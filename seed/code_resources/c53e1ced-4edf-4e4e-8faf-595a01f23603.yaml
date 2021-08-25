@@ -25,7 +25,7 @@ concise_attributes:
     "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "Expression",
     "languageName": "nerdamer"}}]}, "language": "MetaGrammar", "properties": {"base":
     "sequence", "name": "Left"}}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "="}}, {"name": "children", "children": {"references":
+    "properties": {"symbol": "= "}}, {"name": "children", "children": {"references":
     [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
     "Expression", "languageName": "nerdamer"}}]}, "language": "MetaGrammar", "properties":
     {"base": "sequence", "name": "Right"}}], "orientation": [{"name": "orientation",
@@ -98,7 +98,7 @@ concise_attributes:
   value_before_type_cast: 2021-05-21 11:55:11.130131000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-08-17 13:30:07.721264000 Z
+  value_before_type_cast: 2021-08-25 11:20:31.165579000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -151,7 +151,7 @@ concise_attributes:
                       },
                       {
                         "type": "terminal",
-                        "symbol": "="
+                        "symbol": "= "
                       },
                       {
                         "type": "sequence",
@@ -214,6 +214,15 @@ concise_attributes:
                 "type": "property",
                 "base": "string",
                 "name": "Name",
+                "restrictions": [
+                  {
+                    "type": "enum",
+                    "value": [
+                      "X",
+                      "Y"
+                    ]
+                  }
+                ],
                 "tags": [
                   "keyword"
                 ]
@@ -244,7 +253,19 @@ concise_attributes:
                   {
                     "type": "property",
                     "base": "string",
-                    "name": "Operation"
+                    "name": "Operation",
+                    "restrictions": [
+                      {
+                        "type": "enum",
+                        "value": [
+                          "^",
+                          "+",
+                          "-",
+                          "×",
+                          "/"
+                        ]
+                      }
+                    ]
                   },
                   {
                     "type": "sequence",
@@ -281,7 +302,19 @@ concise_attributes:
                   {
                     "type": "property",
                     "base": "string",
-                    "name": "Operation"
+                    "name": "Operation",
+                    "restrictions": [
+                      {
+                        "type": "enum",
+                        "value": [
+                          "^",
+                          "+",
+                          "-",
+                          "×",
+                          "/"
+                        ]
+                      }
+                    ]
                   },
                   {
                     "type": "sequence",

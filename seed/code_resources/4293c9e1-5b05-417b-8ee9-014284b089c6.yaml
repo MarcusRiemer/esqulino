@@ -1,0 +1,33 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: a90b5fdd-69ad-4915-b555-508206a2c6e1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: X = 1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 4293c9e1-5b05-417b-8ee9-014284b089c6
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "Equation", "children": {"Left": [{"name": "Variable",
+    "language": "nerdamer", "properties": {"Name": ""}}], "Transforms": []}, "language":
+    "nerdamer"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-08-25 10:50:56.907164000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-08-25 10:51:13.874074000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 0b70b0f3-87d9-4804-9467-48638c31f513
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

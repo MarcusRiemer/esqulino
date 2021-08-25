@@ -20,8 +20,8 @@ concise_attributes:
     "Text": "Neue Sprache: GraphViz / Automaten"}}, {"name": "Item", "language": "todo",
     "properties": {"Done": "false", "Text": "Neue Sprache: Reguläre Ausdrücke (Seminar
     & WIP)"}}, {"name": "Item", "language": "todo", "properties": {"Done": "false",
-    "Text": "Neu: SQL Schritte (Seminar)"}}, {"name": "Item", "language": "todo",
-    "properties": {"Done": "false", "Text": "Überarbeitet: Truck-Editor (Seminar)"}},
+    "Text": "Neu: SQL Schritte (Seminar, `../sql-steps`)"}}, {"name": "Item", "language":
+    "todo", "properties": {"Done": "false", "Text": "Überarbeitet: Truck-Editor (Seminar)"}},
     {"name": "Item", "language": "todo", "properties": {"Done": "false", "Text": "Aktuell:
     Bachelor-Arbeit zur Rechteverwaltung & zum Aufgaben-Stellen"}}, {"name": "Item",
     "language": "todo", "properties": {"Done": "false", "Text": "Neu: Verweise auf
@@ -35,13 +35,14 @@ concise_attributes:
     {"Done": "false", "Text": "Offen: Visuelle Vorschau in den Seitenleisten"}}, {"name":
     "Item", "language": "todo", "properties": {"Done": "false", "Text": "Offen: Kollegin
     mit viel Spaß an Informatik-Didaktik würde gerne über Möglichkeiten einer Promotion
-    reden"}}]}, "language": "todo"}'
+    reden"}}, {"name": "Item", "language": "todo", "properties": {"Done": "false",
+    "Text": "Meta: Marcus verlässt den Elfenbeinturm"}}]}, "language": "todo"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2021-05-25 07:31:55.753276000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-25 10:38:59.778858000 Z
+  value_before_type_cast: 2021-08-25 10:48:40.083060000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 3962ad91-72c8-4718-b3f4-5dbec5b84125
