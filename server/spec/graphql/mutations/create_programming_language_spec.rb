@@ -20,13 +20,13 @@ RSpec.describe Mutations::CreateProgrammingLanguage do
 
     create(
       :block_language,
-      id: BlockLanguage.meta_grammar_id,
+      id: Grammar.meta_block_language_id,
       grammar: meta_grammar
     )
 
     meta_block_lang_grammar = create(
       :grammar,
-      id: Grammar.meta_block_language_id,
+      id: BlockLanguage.meta_grammar_id,
       programming_language: meta_block_lang
     )
 
@@ -96,7 +96,7 @@ RSpec.describe Mutations::CreateProgrammingLanguage do
 
     # Project must reference meta language and newly created language
     expect(p.project_uses_block_languages.pluck "block_language_id")
-      .to match_array([block_language.id, BlockLanguage.meta_grammar_id])
+      .to match_array([block_language.id, Grammar.meta_block_language_id])
   end
 
   it "New language: single grammar, initial code resource but no meta block language" do
@@ -148,7 +148,7 @@ RSpec.describe Mutations::CreateProgrammingLanguage do
 
     # Project must reference meta language and newly created language
     expect(p.project_uses_block_languages.pluck "block_language_id")
-      .to match_array([block_language.id, BlockLanguage.meta_grammar_id])
+      .to match_array([block_language.id, Grammar.meta_block_language_id])
   end
 
   it "New language: structure and syntax grammar, no initial resource, no meta block language" do

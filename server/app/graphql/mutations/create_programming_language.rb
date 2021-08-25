@@ -44,7 +44,7 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
       # Ensure that the project uses the meta grammar block language
       ProjectUsesBlockLanguage.where(
         project_id: project_id,
-        block_language_id: BlockLanguage.meta_grammar_id
+        block_language_id: Grammar.meta_block_language_id
       ).first_or_create!
 
       # Create a code resource for the structural grammar
@@ -52,7 +52,7 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
         name: "Grammar: " + language_display_name,
         project: p,
         programming_language_id: "meta-grammar",
-        block_language_id: BlockLanguage.meta_grammar_id,
+        block_language_id: Grammar.meta_block_language_id,
         ast: ast_structure_grammar(language_technical_name)
       )
 
@@ -74,7 +74,7 @@ class Mutations::CreateProgrammingLanguage < Mutations::BaseMutation
           name: "Syntax: " + language_display_name,
           project: p,
           programming_language_id: "meta-grammar",
-          block_language_id: BlockLanguage.meta_grammar_id,
+          block_language_id: Grammar.meta_block_language_id,
           ast: ast_syntax_grammar(language_technical_name, structure_grammar.id)
         )
 
