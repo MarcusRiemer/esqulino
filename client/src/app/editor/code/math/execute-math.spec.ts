@@ -1,3 +1,4 @@
+import { NodeDescription } from "src/app/shared";
 import { executeMath, TransformationInput } from "./execute-math";
 
 export interface StringResultStep {
@@ -30,7 +31,7 @@ describe(`Execute math`, () => {
       transformationSteps: transforms,
     });
 
-    const stringResult: StringResultStep[] = result.map((r) => ({
+    const stringResult: StringResultStep[] = result.steps.map((r) => ({
       newExpression: {
         left: r.newExpression.left.text(),
         right: r.newExpression.right.text(),

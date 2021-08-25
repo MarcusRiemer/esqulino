@@ -1,5 +1,4 @@
 import nerdamer from "nerdamer";
-//import "nerdamer/algebra";
 
 import { prettierCodeGeneratorFromGrammar } from "../../../shared/syntaxtree/codegenerator-prettier";
 import {
@@ -71,7 +70,12 @@ export function compileMath(
   };
 }
 
-export function executeMath(input: ExecutionInput): ResultStep[] {
+export interface ExecuteMathResult {
+  initial: ExecutionInput["rootExpression"];
+  steps: ResultStep[];
+}
+
+export function executeMath(input: ExecutionInput): ExecuteMathResult {
   const transformFunc = (
     current: Equation,
     step: TransformationInput
@@ -112,10 +116,10 @@ export function executeMath(input: ExecutionInput): ResultStep[] {
   };
 
   let prev = root;
-  const toReturn: ResultStep[] = [];
+  const steps: ResultStep[] = [];
   input.transformationSteps.forEach((step) => {
     let next = transformFunc(prev, step);
-    toReturn.push({
+    steps.push({
       newExpression: next,
       oldExpression: prev,
       transform: step,
@@ -124,5 +128,8 @@ export function executeMath(input: ExecutionInput): ResultStep[] {
     prev = next;
   });
 
-  return toReturn;
+  return {
+    initial: input.rootExpression,
+    steps,
+  };
 }

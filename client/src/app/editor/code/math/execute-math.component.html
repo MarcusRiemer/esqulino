@@ -1,27 +1,28 @@
 <table>
-  <ng-container *ngFor="let step of currentResult$ | async; let first = first">
-    <tr *ngIf="first">
-      <td>
-        {{ step.oldExpression.left | nerdamer }}
-      </td>
-      <td>=</td>
-      <td>
-        {{ step.oldExpression.right | nerdamer }}
-      </td>
-      <td class="operation"></td>
-    </tr>
-    <tr>
-      <td>
-        {{ step.newExpression.left | nerdamer }}
-      </td>
-      <td>=</td>
-      <td>
-        {{ step.newExpression.right | nerdamer }}
-      </td>
-      <td class="operation">
-        | {{ step.transform.operation }}{{ step.transform.expression }}
-      </td>
-    </tr>
-  </ng-container>
+  <tr *ngIf="currentInput$ | async as currentInput">
+    <td>
+      {{ currentInput.rootExpression.left | nerdamer }}
+    </td>
+    <td>=</td>
+    <td>
+      {{ currentInput.rootExpression.right | nerdamer }}
+    </td>
+    <td class="operation"></td>
+  </tr>
+  <tr *ngFor="let step of (currentResult$ | async)?.steps">
+    <td>
+      {{ step.newExpression.left | nerdamer }}
+    </td>
+    <td>=</td>
+    <td>
+      {{ step.newExpression.right | nerdamer }}
+    </td>
+    <td class="operation">
+      | {{ step.transform.operation }}{{ step.transform.expression }}
+    </td>
+  </tr>
 </table>
-<!-- <pre>{{ currentInput$ | async | json }}</pre>  -->
+<!--
+     Useful for debugging
+     <pre>{{ currentInput$ | async | json }}</pre>
+-->

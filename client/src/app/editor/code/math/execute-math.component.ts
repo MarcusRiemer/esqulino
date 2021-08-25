@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
 import { Observable, combineLatest } from "rxjs";
-import { filter, map, shareReplay, switchMap, tap } from "rxjs/operators";
+import { filter, map, shareReplay, switchMap } from "rxjs/operators";
+
 import { allVisualisableTypes } from "../../../shared/syntaxtree/grammar-type-util";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
-import { compileMath, executeMath, ResultStep } from "./execute-math";
+import { compileMath, executeMath, ExecuteMathResult } from "./execute-math";
 
 @Component({
   templateUrl: "./execute-math.component.html",
@@ -42,7 +43,7 @@ export class ExecuteMathComponent {
     map(([ast, types, _]) => compileMath(ast, types))
   );
 
-  readonly currentResult$: Observable<ResultStep[]> = combineLatest([
+  readonly currentResult$: Observable<ExecuteMathResult> = combineLatest([
     this.currentCodeResource.validationResult,
     this.currentInput$,
   ]).pipe(
