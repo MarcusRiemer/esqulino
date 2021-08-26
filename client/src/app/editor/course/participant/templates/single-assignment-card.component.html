@@ -1,14 +1,52 @@
-<div class="card mb-3">
+<div class="card h-100">
   <div class="card-header">
-    {{ singleAssignment.name }}
+    <div class="row justify-content-between">
+      <div class="col">
+        {{ singleAssignment.name }}
+      </div>
+      <div class="col justify-content-end row">
+        <div class="col-auto">
+          <course-icon
+            class="mb-2"
+            [iconType]="'compilation-problem'"
+          ></course-icon>
+          <course-icon [iconType]="'assignment-state-planned'"></course-icon>
+          <course-icon [iconType]="'assignment-state-open'"></course-icon>
+          <course-icon [iconType]="'assignment-state-pending'"></course-icon>
+          <course-icon [iconType]="'assignment-state-done'"></course-icon>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="card-body" [routerLink]="['../assignment/', singleAssignment.id]">
-    {{ singleAssignment.description }}
+  <div
+    class="card-body row"
+    [routerLink]="['../assignment/', singleAssignment.id]"
+  >
+    <div class="mb-3">
+      {{ singleAssignment.description }}
+    </div>
+    <div class="row justify-content-between align-items-end">
+      <div *ngIf="singleAssignment.endDate" class="col justify-content-end">
+        <div><b>Abgabetermin</b></div>
 
-    <div *ngIf="singleAssignment.endDate">
-      <p>Abgabetermin</p>
-      {{ singleAssignment.endDate | date: "dd/MM/yyyy" }} um
-      {{ singleAssignment.endDate | date: "HH:mm" }} Uhr
+        {{ singleAssignment.endDate | date: "dd.MM.yyyy" }} um
+        {{ singleAssignment.endDate | date: "HH:mm" }}
+      </div>
+      <ng-template
+        #elseBlock
+        class="col row justify-content-end align-items-end"
+      >
+        <b class="col-auto">{{ singleAssignment.endDate | remainingDays }}</b>
+      </ng-template>
+      <div
+        *ngIf="singleAssignment.grade; else elseBlock"
+        class="col row justify-content-end align-items-end"
+      >
+        <div class="col-auto">
+          <b>Note</b>
+          <div>3</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

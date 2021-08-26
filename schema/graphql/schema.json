@@ -758,6 +758,20 @@
               "deprecationReason": null
             },
             {
+              "name": "assignmentSubmissionGradeParticipant",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "AssignmentSubmissionGrade",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "assignmentSubmissionGrades",
               "description": null,
               "args": [

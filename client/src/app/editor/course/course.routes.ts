@@ -8,6 +8,7 @@ import { OverviewParticipantComponent } from "./teacher/participants/overview-pa
 import { OverviewSingelCourseParticipantComponent } from "./participant/overview-single-course-participant.component";
 import { AssignmentParticipantComponent } from "./participant/assignment/assignment-participant.component";
 import { SubmittedCodeResourceEditorParticipantComponente } from "./participant/assignment/submitted-code-resource-editor-participant";
+import { OverviewParticipantsPrticipantComponent } from "./participant/participants/overview-participants-participant.component";
 
 export const courseRoutes: Routes = [
   {
@@ -42,6 +43,10 @@ export const courseRoutes: Routes = [
   {
     path: "participant/assignment/:assignmentId/submitted/:resourceId/template",
     component: SubmittedCodeResourceEditorParticipantComponente,
+  },
+  {
+    path: "participant/participants",
+    component: OverviewParticipantsPrticipantComponent,
   },
 
   {

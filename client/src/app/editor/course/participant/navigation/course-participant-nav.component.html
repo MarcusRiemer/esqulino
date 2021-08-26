@@ -79,7 +79,12 @@
   Datenbank
 </a>
 <mat-divider></mat-divider>
-<a mat-list-item routerLinkActive="router-link-active">
+<a
+  [routerLink]="['course/participant/participants']"
+  [routerLinkActiveOptions]="{ exact: true }"
+  mat-list-item
+  routerLinkActive="router-link-active"
+>
   <course-icon [iconType]="'participant'"></course-icon>
-  Teilnehmer
+  Mitglieder
 </a>

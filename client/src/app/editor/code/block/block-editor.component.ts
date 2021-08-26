@@ -32,6 +32,7 @@ interface PlacedEditorComponent {
  */
 @Component({
   templateUrl: "templates/block-editor.html",
+  selector: "block-editor",
 })
 export class BlockEditorComponent implements OnInit, OnDestroy {
   /**

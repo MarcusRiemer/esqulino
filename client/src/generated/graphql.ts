@@ -107,6 +107,7 @@ export type AssignmentSubmission = {
   __typename?: "AssignmentSubmission";
   assignment: Assignment;
   assignmentId: Scalars["ID"];
+  assignmentSubmissionGradeParticipant?: Maybe<AssignmentSubmissionGrade>;
   assignmentSubmissionGrades?: Maybe<Array<AssignmentSubmissionGrade>>;
   assignmentSubmittedCodeResources?: Maybe<
     Array<AssignmentSubmittedCodeResource>
@@ -2804,18 +2805,16 @@ export type FullProjectQuery = { __typename?: "Query" } & {
                 Assignment,
                 "id"
               >;
-              assignmentSubmissionGrades?: Maybe<
-                Array<
-                  { __typename?: "AssignmentSubmissionGrade" } & Pick<
-                    AssignmentSubmissionGrade,
-                    "id" | "grade" | "feedback"
-                  > & {
-                      user: { __typename?: "User" } & Pick<
-                        User,
-                        "id" | "displayName"
-                      >;
-                    }
-                >
+              assignmentSubmissionGradeParticipant?: Maybe<
+                { __typename?: "AssignmentSubmissionGrade" } & Pick<
+                  AssignmentSubmissionGrade,
+                  "id" | "grade" | "feedback"
+                > & {
+                    user: { __typename?: "User" } & Pick<
+                      User,
+                      "id" | "displayName"
+                    >;
+                  }
               >;
               assignmentSubmittedCodeResources?: Maybe<
                 Array<
@@ -5081,7 +5080,7 @@ export const FullProjectDocument = gql`
         assignment {
           id
         }
-        assignmentSubmissionGrades {
+        assignmentSubmissionGradeParticipant {
           id
           grade
           feedback

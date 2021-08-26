@@ -1,0 +1,120 @@
+<div *ngIf="assignment$ | async as assignment">
+  <div class="row">
+    <div class="col-sm mb-3">
+      <div class="card h-100">
+        <div class="card-header">
+          <h4>{{ assignment.name }}</h4>
+        </div>
+        <div class="card-body">{{ assignment.description }}</div>
+      </div>
+    </div>
+    <div *ngIf="assignment.startDate && assignment.endDate" class="col-sm-3">
+      <div *ngIf="assignment.startDate" class="card mb-3">
+        <div class="card-header">
+          <h4>Starttermin</h4>
+        </div>
+        <div class="card-body">
+          {{ assignment.startDate | date: "dd.MM.yyyy" }} um
+          {{ assignment.startDate | date: "HH:mm" }} Uhr
+        </div>
+      </div>
+      <div *ngIf="assignment.endDate" class="card mb-3">
+        <div class="card-header">
+          <h4>Abgabetermin</h4>
+        </div>
+        <div class="card-body">
+          {{ assignment.endDate | date: "dd.MM.yyyy" }} um
+          {{ assignment.endDate | date: "HH:mm" }} Uhr
+          <div>
+            <b>{{ assignment.endDate | remainingDays }}</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="assignment.grade" class="row mb-3">
+    <div class="col-sm-9">
+      <div class="card">
+        <div class="card-header">
+          <h4>Feedback</h4>
+        </div>
+        <div class="card-body">
+          {{ assignment.feedback }}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card">
+        <div class="card-header">
+          <h4>Note</h4>
+        </div>
+        <div class="card-body">
+          {{ assignment.grade }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header"><h4>Files</h4></div>
+
+    <div class="card-body">
+      <table mat-table [dataSource]="assignment.requirements" class="col-12">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Aufgabenname</th>
+          <td mat-cell *matCellDef="let requirement">
+            {{ requirement.name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Typ</th>
+          <td mat-cell *matCellDef="let requirement">
+            <div *ngIf="requirement.referenceType == 'given_full'">
+              vollständig gegeben
+            </div>
+            <div *ngIf="requirement.referenceType == 'given_partially'">
+              teilweise gegeben
+            </div>
+            <div *ngIf="requirement.referenceType == undefined">Gefordert</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="request">
+          <th mat-header-cell *matHeaderCellDef>Lösung</th>
+          <td mat-cell *matCellDef="let requirement">
+            <div class="row align-items-center">
+              <div class="col-auto">{{ requirement?.solution?.name }}</div>
+              <div class="col">
+                <button
+                  type="button"
+                  class="btn-close align-self-center"
+                  aria-label="Close"
+                  (click)="onDeleteSubmittedCodeResource()"
+                ></button>
+              </div>
+              <div class="col" *ngIf="!requirement.solution">
+                <button
+                  class="btn btn-primary col-sm-4"
+                  (click)="onCreateSubmission(requirement)"
+                >
+                  Datei erstellen
+                </button>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="problem">
+          <th mat-header-cell *matHeaderCellDef>Valide</th>
+          <td mat-cell *matCellDef="let requirement"></td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+  <h1>TODO: Kompilierte Files</h1>
+</div>

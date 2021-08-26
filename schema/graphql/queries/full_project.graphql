@@ -38,7 +38,7 @@ query FullProject($id: ID!) {
       assignment {
         id
       }
-      assignmentSubmissionGrades {
+      assignmentSubmissionGradeParticipant {
         id
         grade
         feedback

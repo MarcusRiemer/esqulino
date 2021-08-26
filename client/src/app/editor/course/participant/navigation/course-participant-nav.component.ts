@@ -69,7 +69,7 @@ export class CourseParticipantNavComponent {
               graded:
                 fullData.assignmentSubmissions?.find(
                   (submission) => submission.assignment.id == a.id
-                )?.assignmentSubmissionGrades?.length > 0 || false,
+                )?.assignmentSubmissionGradeParticipant !== undefined,
               submittedCodeResources: fullData?.assignmentSubmissions
                 ?.find((submission) => submission?.assignment.id == a.id)
                 ?.assignmentSubmittedCodeResources.map((submitted) => {

@@ -112,6 +112,12 @@ class ProjectPolicy < ApplicationPolicy
     project.user_have_role(user, permitted_roles)
   end
 
+  def destroy_assignment_submitted_code_resource?
+    permitted_roles = %w[participant owner]
+
+    project.user_have_role(user, permitted_roles)
+  end
+
   class Scope < Scope
     def resolve
       if user.has_role?(:admin)

@@ -10,8 +10,9 @@ module Types
 
     field :assignment_submitted_code_resources, [Types::AssignmentSubmittedCodeResourceType], null: true
 
-    field :assignment_submission_grade_id, ID, null: true
-    field :assignment_submission_grades, Types::AssignmentSubmissionGradeType, null: true
+    field :assignment_submission_grades, [Types::AssignmentSubmissionGradeType], null: true
+
+    field :assignment_submission_grade_participant, Types::AssignmentSubmissionGradeType, null: true, resolver: Resolvers::AssignmentSubmissionGradeParticipantResolver
 
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false

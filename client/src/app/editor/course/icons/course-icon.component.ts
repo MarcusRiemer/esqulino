@@ -23,7 +23,9 @@ export class CourseIconComponent implements OnInit {
     | "participant"
     | "assignment"
     | "database"
-    | "course-overview";
+    | "course-overview"
+    | "date-reached"
+    | "date-unreached";
 
   ngOnInit(): void {}
 }

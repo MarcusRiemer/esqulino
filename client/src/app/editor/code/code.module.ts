@@ -96,7 +96,7 @@ import { NerdamerPipe } from "./math/nerdamer.pipe";
     NerdamerPipe,
   ],
   providers: [ResourceChangedGuard],
-  exports: [BlockHostComponent],
+  exports: [BlockHostComponent, BlockEditorComponent],
 })
 export class CodeEditorModule {
   public static forRoot(): ModuleWithProviders<CodeEditorModule> {

@@ -10,8 +10,7 @@ export class RemainingDaysPipe implements PipeTransform {
     var different = inputDate.getTime() - today.getTime();
     if (different > 0) {
       return (
-        Math.round(different / millisecondsPerDay).toString() +
-        " Tage verbleibend"
+        "in " + Math.round(different / millisecondsPerDay).toString() + " Tagen"
       );
     } else {
       return "";

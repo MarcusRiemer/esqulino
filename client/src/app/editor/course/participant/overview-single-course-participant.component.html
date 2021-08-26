@@ -9,9 +9,11 @@
       <p>{{ course.description | currentLanguage }}</p>
     </div>
   </div>
-  <div *ngFor="let assignment of course.assignments">
-    <singel-assignment-card
-      [singleAssignment]="assignment"
-    ></singel-assignment-card>
+  <div class="row">
+    <div *ngFor="let assignment of course.assignments" class="col-sm-4 mb-3">
+      <singel-assignment-card
+        [singleAssignment]="assignment"
+      ></singel-assignment-card>
+    </div>
   </div>
 </div>

@@ -1,0 +1,46 @@
+<div *ngIf="submittedCodeResource$ | async as submitted">
+  <div class="row">
+    <div class="col-sm mb-3">
+      <div class="card h-100">
+        <div class="card-header">
+          <h4>{{ submitted.name }}</h4>
+        </div>
+        <div class="card-body">
+          <div
+            *ngIf="submitted.requiredCodeResourceDescription; else elseBlock"
+          >
+            {{ submitted.requiredCodeResourceDescription }}
+          </div>
+          <ng-template #elseBlock>
+            {{ submitted.assignmentDescription }}
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div *ngIf="submitted.startDate" class="card mb-3">
+        <div class="card-header">
+          <h4>Starttermin</h4>
+        </div>
+        <div class="card-body">
+          {{ submitted.startDate | date: "dd.MM.yyyy" }} um
+          {{ submitted.startDate | date: "HH:mm" }} Uhr
+        </div>
+      </div>
+      <div *ngIf="submitted.endDate" class="card mb-3">
+        <div class="card-header">
+          <h4>Abgabetermin</h4>
+        </div>
+        <div class="card-body">
+          {{ submitted.endDate | date: "dd.MM.yyyy" }} um
+          {{ submitted.endDate | date: "HH:mm" }} Uhr
+          <div>
+            <b>{{ submitted.endDate | remainingDays }}</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h1>TODO: EDITOR</h1>
