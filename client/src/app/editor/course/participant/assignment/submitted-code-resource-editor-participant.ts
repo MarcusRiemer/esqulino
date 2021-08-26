@@ -1,14 +1,24 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute, Params } from "@angular/router";
-import { Observable } from "rxjs";
-import { map, tap } from "rxjs/operators";
-import { StringMappingType } from "typescript";
+import { combineLatest, Observable } from "rxjs";
+import {
+  distinctUntilChanged,
+  map,
+  startWith,
+  switchMap,
+  tap,
+} from "rxjs/operators";
 
+//import * as GraphQL from "../../../../../generated/graphql";
+import { CodeResource } from "../../../../shared";
+import { BlockLanguage } from "../../../../shared/block";
+import { ProjectService } from "../../../../editor/project.service";
 import { CourseService } from "../../course.service";
 
+// TODO: All of these properties are navigational data, they can be
+//       expressed as observable properties.
 interface SubmittedCodeResourceEntry {
-  id: string;
-  name: string;
+  codeResourceId: string;
   startDate: string;
   endDate: string;
   assignmentName: string;
@@ -19,23 +29,17 @@ interface SubmittedCodeResourceEntry {
 @Component({
   templateUrl: "./submitted-code-resource-editor-participant.component.html",
 })
-export class SubmittedCodeResourceEditorParticipantComponente
-  implements OnInit
-{
+export class SubmittedCodeResourceEditorParticipantComponente {
   constructor(
+    private readonly _projectService: ProjectService,
     private readonly _courseService: CourseService,
     private readonly _activatedRoute: ActivatedRoute
   ) {}
 
-  submittedCodeResource$: Observable<SubmittedCodeResourceEntry>;
-
-  //TODO:
-  //this.submittedCodeResource$ = this._activatedRoute.params.pipe(map())
-
-  ngOnInit(): void {
-    this._activatedRoute.params.forEach(
-      (param: Params) =>
-        (this.submittedCodeResource$ = this._courseService.fullCourseData$.pipe(
+  readonly submittedCodeResource$: Observable<SubmittedCodeResourceEntry> =
+    this._activatedRoute.params.pipe(
+      switchMap((param: Params) =>
+        this._courseService.fullCourseData$.pipe(
           map((course) => {
             console.log("URL changed");
             const assignment = course.basedOnProject.assignments.find(
@@ -60,14 +64,51 @@ export class SubmittedCodeResourceEditorParticipantComponente
                 assignment.assignmentRequiredCodeResources.find(
                   (required) => required.id === requiredCodeResource.id
                 ).description,
-              name: course.codeResources.find((resource) => param["resourceId"])
-                .name,
-              id: param["resourceId"],
+              codeResourceId: param["resourceId"],
             };
             return toReturn;
           }),
           tap(console.log)
-        ))
+        )
+      )
     );
-  }
+
+  readonly paramCodeResourceId$ = this._activatedRoute.params.pipe(
+    map((p) => p["resourceId"]),
+    distinctUntilChanged()
+  );
+
+  readonly paramAssignmentId$ = this._activatedRoute.params.pipe(
+    map((p) => p["assignmentId"]),
+    distinctUntilChanged()
+  );
+
+  readonly assignment$ = combineLatest([
+    this._courseService.fullCourseData$,
+    this.paramAssignmentId$,
+  ]).pipe(
+    map(([course, id]) =>
+      course.basedOnProject.assignments.find(
+        (assignment) => assignment.id == id
+      )
+    )
+  );
+
+  readonly currentCodeResource$: Observable<CodeResource> = combineLatest([
+    this._projectService.activeProject,
+    this.submittedCodeResource$,
+  ]).pipe(map(([p, current]) => p.getCodeResourceById(current.codeResourceId)));
+
+  readonly currentBlockLanguage$: Observable<BlockLanguage> =
+    this.currentCodeResource$.pipe(switchMap((c) => c.blockLanguage$));
+
+  // Probably not required
+  readonly renderDataReady$ = combineLatest([
+    this.assignment$,
+    this.currentCodeResource$,
+    this.currentBlockLanguage$,
+  ]).pipe(map((renderData) => renderData.every((d) => !!d), startWith(false)));
+
+  //TODO:
+  //this.submittedCodeResource$ = this._activatedRoute.params.pipe(map())
 }
