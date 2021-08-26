@@ -1,0 +1,138 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Augmenting \enquote{normal} programming languages to be syntax free and better accessible for people learning to program.
+
+\section{Syntaxfree Programming}
+\label{sec:syntaxfree-programming}
+
+
+
+\section{Overview: From Grammar to IDE}
+
+The term \enquote{Grammar} is of fundamental importance for this whole article and the whole field of compiler construction. In mathematical terms a grammar $G$ is usually described as a 4-tuple $G = (V, T, P, S)$ where $V$ is a set of variables, $T$ is a set of terminal symbols, $P$ are the so called \textit{productions} and $S$ is the starting symbol\cite[Chapter 5]{hopcroft_formal_languages}. We can than use a grammar $G$ to check any text input whether it is valid in the context of the grammar.
+
+\subsection{Differentiation from Traditional Compiler Construction}
+
+Apart from using a grammar to classify whether a certain text-input is well formed, the \textit{parser tree} is an important by-product of the parsing process. In compiler construction this tree is usually known as the first \textit{intermediate representation} or an \textit{Abstract Syntax Tree} (AST)\cite[Chapter 6]{dragon_book}.
+
+This intermediate representation may then be transformed to e.g. optimize for speed, size or any other goal. But all of these transformations usually transform on AST into another AST. The result may not be compatible in the sense of being the exact same datatype, but it will still be a tree. During a process called \textit{code generation}, the AST is then transformed into some machine-readable format like binary \texttt{x86} machine code\cite[Chapter 8]{dragon_book}.
+
+Image: \texttt{Source Code (Text) -> AST -> Machine Code}
+
+And while the topic of this dissertation also is a compiler, it has a quite different set of datatypes for input and output. A syntax-free program as described in \fullref{sec:syntaxfree-programming} is not read in is text-form by the user, but instead presented through a visualisation program. This allows the designer of a syntax-free language to optimize the data representation for a compiler, instead of a human. Commonly these programs are therefore stored in data exchange formats like \texttt{XML} or \texttt{JSON}. Which in turn means, that the whole parsing process (which is covered by more than 300 pages in \cite{dragon_book} is almost irrelevant for this article.
+
+The result of the compilation process is also different: As the aim of this work is to augment \textit{existing} programming languages (see \fullref{sec:introduction}), the result of the code generation is not machine code, but source code. Which again means that the remaining 700 pages of \cite{dragon_book} are not directly of interest: The book provides the framing of high level concepts and terms for this work, but the machine-oriented details are not relevant in this specific context.
+
+Image: \texttt{AST -> Source Code}
+
+So in the context of this dissertation, the term compiler doesn't refer to a traditional compiler like \texttt{gcc}, \texttt{javac} or \texttt{ghc}: Instead the term is used in the most general sense as outlined on the first page of \cite{dragon_book}: \enquote{Simply stated, a compiler is a program that can read a program in one language, the source language, and translate it into an equivalent program in another language, the target language}.
+
+\subsection{Comparision to Programming Language Engineering Tools}
+
+Compiler construction is a mature field and there are various tools ease programming language engineering. The typical low level tools like \texttt{yacc}, \texttt{flex}, \texttt{bison} or higher level abstractions like \texttt{llvm} are not relevant for this work because they work on a different level. But the idea of providing \enquote{Domain Specific Languages} or \enquote{Micro Languages} has inspired tools like XText \cite{efftinge_xtext} which are very comparable in their concepts.
+
+\subsection{Syntaxtree}
+
+All operations of the generated syntaxfree IDEs have to use the same basic data structure for the AST. It must not matter whether the augmented language has very significant whitespace like Python or Haskell, uses (very (many) (pairs) of brackets) like Lisp or is not actually a programming language but a mathematical formula, ... The goal is to define a tree that can represent any kind of text. Therefore the concept of the described syntaxtree is based on \texttt{XML}\cite{xml_spec}.
+
+A \textit{node} in the AST is a recursive data structure that can store two things:
+
+\begin{itemize}
+\item Named, atomic \textit{properties} in the form of \texttt{number}, \texttt{string} or \texttt{boolean} values. The analogous \texttt{XML}-concept here would be the \textit{attribute}, which is denoted as a \texttt{key='value'}.
+\item Other \textit{nodes} as child nodes. The analogous \texttt{XML}-concept here are nested elements, denoted as \texttt{<parent><child></child></parent>}.
+\end{itemize}
+
+TODO: Name, language and Named children.
+
+The used syntax to store these trees is however simply \texttt{JSON}
+
+\subsubsection{Benefits compared to text representation}
+
+\subsection{Validation}
+
+\subsubsection{Irrelevance of Whitespace}
+
+Traditional approaches like the (extended) Backus-Naur-Form \cite{knuth_backus_1964} are great tools for tokenization
+
+\subsubsection{RelaxNG, XML Schema and JSON Schema}
+
+\subsection{Grammar}
+
+\subsubsection{\texttt{node}}
+
+\subsubsection{\texttt{property}}
+
+\subsubsection{\texttt{children}}
+
+\subsubsection{\texttt{allowed}}
+
+\subsubsection{\texttt{container}}
+
+\subsubsection{\texttt{typedef}}
+
+\subsection{BlockLanguage}
+
+\subsubsection{Node representation}
+
+\subsubsection{Available Blocks (Sidebars)}
+
+\subsubsection{Language Levels}
+
+\subsection{Generation: Code Generation}
+
+\section{Generating IDES}
+
+And technically this dissertation does not describe only a compiler to transform an AST into source code, but also a second compiler to transform a Grammar into one of two IDE backends.
+
+\subsection{Generation: BlattWerkzeug}
+
+\subsection{Generation: Blockly}
+
+\subsection{Runtimes}
+
+\section{Transformations}
+
+\subsection{Insertion Location}
+
+\subsection{Copying vs Moving}
+
+\subsection{Appending vs Overwriting}
+
+\subsection{Embracing}
+
+\subsection{Typed Holes}
+
+Missing branches in the tree can be seen as typed holes as known from languages like Haskell (which was inspired by Agda) \cite{jones_haskell_2014} or Idris \cite{brady_type-driven_2017}. Filling these holes in real world programming languages is a difficult task, because narrowing down the vast number of choices to a \textit{reasonable} choice requires much context.
+
+\subsection{Internal Syntaxtree References}
+
+\subsection{External Syntaxtree References}
+
+\section{Practical Examples}
+
+\subsection{XML}
+
+\subsection{Mathematical Expressions and Algebraic Transformations}
+
+\subsection{JavaScript}
+
+\subsection{Python}
+
+\subsection{SQL}
+
+\section{Practical implications of Grammar Ambiguity for User Interfaces}
+
+\subsection{SQL Distinct}
+
+\section{Self Hosting}
+
+\subsection{Meta Grammar}
+
+\subsection{Meta Block Language}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:

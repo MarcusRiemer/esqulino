@@ -1,0 +1,84 @@
+\documentclass[paper=a4,fontsize=12pt,parskip=half]{scrartcl}
+
+%% packages
+\usepackage{amsmath}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[absolute]{textpos}
+\usepackage[hidelinks=true,colorlinks=false]{hyperref}
+\usepackage{nameref}
+\usepackage[format=plain,labelfont=bf]{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{wrapfig}
+\usepackage{xargs}   % Use more than one optional parameter in a new commands
+\usepackage[colorinlistoftodos,prependcaption]{todonotes}
+\usepackage{dirtree}
+\usepackage{float}
+\usepackage{newfloat}
+\usepackage{framed}
+\usepackage{tikz}
+\usepackage[simplified]{pgf-umlcd}
+\usepackage[pass]{geometry} % Use `showframe` to test for overly full boxes
+\usepackage[onehalfspacing]{setspace}
+\usepackage{multicol}
+\usepackage{enumitem}       % Narrower enumerations
+\usepackage[normalem]{ulem} % Striking out stuff
+\usepackage{datetime}       % \currenttime
+\usepackage[autostyle=true,german=quotes]{csquotes}       % \enquote
+\usepackage[automark,headsepline=1pt]{scrlayer-scrpage}
+\usepackage[export]{adjustbox} % \includegraphis[frame]
+
+\usepackage[backend=biber,defernumbers=true]{biblatex}
+\addbibresource{thesis.bib}
+
+\renewcommand*{\headfont}{\normalfont}
+
+%% additional ressources
+\input{tex-definitions}
+
+\usetikzlibrary{calc,intersections,shapes,fit}
+
+%% meta information
+\hypersetup{
+  pdftitle={\doctitle},
+  pdfsubject={\docsubtitle},
+  pdfauthor={\docpdfauthors},
+  linkcolor=blue,
+  urlcolor=blue,
+}
+
+\title{\doctitle}
+\subtitle{\docsubtitle}
+\author{\docauthors}
+\date{\today{}}
+
+
+ %% document
+\begin{document}
+\pagenumbering{Roman}
+\input{titlepage}
+
+\cleardoublepage
+
+\cleardoublepage
+
+\tableofcontents{}
+
+\cleardoublepage
+
+\pagenumbering{arabic}
+
+\input{diss}
+
+\cleardoublepage
+
+\section{Literaturverzeichnis}
+\printbibliography[heading=none]
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
