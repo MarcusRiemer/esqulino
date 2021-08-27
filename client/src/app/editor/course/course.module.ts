@@ -25,7 +25,7 @@ import { CreateAssignmentSubmittedCodeResourceDialogComponent } from "./particip
 import { BlockEditorComponent } from "../code/block/block-editor.component";
 import { SubmittedCodeResourceEditorParticipantComponente } from "./participant/assignment/submitted-code-resource-editor-participant";
 import { RemainingDaysPipe } from "./participant/assignment/remaining-days.pipe";
-import { OverviewParticipantsPrticipantComponent } from "./participant/participants/overview-participants-participant.component";
+import { OverviewParticipantsParticipantComponent } from "./participant/participants/overview-participants-participant.component";
 
 @NgModule({
   imports: [CommonModule, SharedAppModule, CodeEditorModule],
@@ -49,7 +49,7 @@ import { OverviewParticipantsPrticipantComponent } from "./participant/participa
     CreateAssignmentSubmittedCodeResourceDialogComponent,
     SubmittedCodeResourceEditorParticipantComponente,
     RemainingDaysPipe,
-    OverviewParticipantsPrticipantComponent,
+    OverviewParticipantsParticipantComponent,
   ],
   exports: [CourseNavComponent, CourseParticipantNavComponent],
 })

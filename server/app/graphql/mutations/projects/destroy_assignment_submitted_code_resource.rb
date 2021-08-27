@@ -14,14 +14,16 @@ class Mutations::Projects::DestroyAssignmentSubmittedCodeResource < Mutations::B
 
     authorize group, :destroy_assignment_submitted_code_resource?
 
-    if assignment_submitted_code_resource.required_code_resource.is_template
-      assignment_submitted_code_resource.code_resource = nil if assignment_submitted_code_resource.required_code_resource.template.create_copy?
+    code_resource = assignment_submitted_code_resource.code_resource
+
+    ActiveRecord::Base.transaction do
+      assignment_submitted_code_resource.destroy!
+
+      code_resource.destroy! unless assignment_submitted_code_resource.assignment_required_code_resource.is_template && !assignment_submitted_code_resource.assignment_required_code_resource.template.create_copy?
     end
 
-    assignment_submitted_code_resource.destroy!
-
     {
-      project: course_project
+      project: group
     }
   end
 end

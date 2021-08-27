@@ -63,7 +63,7 @@ export class CourseParticipantNavComponent {
     this._courseService.fullCourseData$.pipe(
       map((fullData) => {
         const toReturn: CourseNavEntry[] =
-          fullData.basedOnProject.assignments?.map((a) => {
+          fullData.basedOnProject?.assignments?.map((a) => {
             const navData = {
               ...a,
               graded:

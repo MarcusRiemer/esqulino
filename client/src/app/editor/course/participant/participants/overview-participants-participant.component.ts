@@ -15,7 +15,7 @@ interface ProjectMember {
 @Component({
   templateUrl: "./overview-participants-participant.component.html",
 })
-export class OverviewParticipantsPrticipantComponent {
+export class OverviewParticipantsParticipantComponent {
   constructor(private readonly _courseProject: CourseService) {}
 
   /**

@@ -1,10 +1,10 @@
 class AssignmentSubmittedCodeResource < ApplicationRecord
-    #Whose "group" the code resource refers to
-    belongs_to :assignment_submission
+  # Whose "group" the code resource refers to
+  belongs_to :assignment_submission
 
-    #Code resource with which the assignment should be solved
-    belongs_to :code_resource, :dependent => :destroy
+  # Code resource with which the assignment should be solved
+  belongs_to :code_resource
 
-    # Requirement to be met with this code
-    belongs_to :assignment_required_code_resource
+  # Requirement to be met with this code
+  belongs_to :assignment_required_code_resource
 end

@@ -88,15 +88,20 @@
               <div class="col-auto">{{ requirement?.solution?.name }}</div>
               <div class="col">
                 <button
+                  *ngIf="requirement.solution"
                   type="button"
                   class="btn-close align-self-center"
                   aria-label="Close"
-                  (click)="onDeleteSubmittedCodeResource()"
+                  (click)="
+                    onDeleteSubmittedCodeResource(
+                      requirement?.submittedCodeResourceId
+                    )
+                  "
                 ></button>
               </div>
               <div class="col" *ngIf="!requirement.solution">
                 <button
-                  class="btn btn-primary col-sm-4"
+                  class="btn btn-primary"
                   (click)="onCreateSubmission(requirement)"
                 >
                   Datei erstellen

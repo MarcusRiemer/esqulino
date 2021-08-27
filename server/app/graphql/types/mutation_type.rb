@@ -21,6 +21,7 @@ module Types
     field :create_assignment_submission_grade, mutation: Mutations::Projects::CreateAssignmentSubmissionGrade
 
     field :create_assignment_submitted_code_resource, mutation: Mutations::Projects::CreateAssignmentSubmittedCodeResource
+    field :destroy_assignment_submitted_code_resource, mutation: Mutations::Projects::DestroyAssignmentSubmittedCodeResource
 
     field :create_project_course_participation, mutation: Mutations::Projects::CreateProjectCourseParticipation
 

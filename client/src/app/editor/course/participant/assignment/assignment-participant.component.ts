@@ -6,6 +6,7 @@ import { Observable } from "rxjs";
 import { first, map, mergeMap, tap } from "rxjs/operators";
 import {
   CreateAssignmentSubmittedCodeResourceGQL,
+  DestroyAssignmentSubmittedCodeResourceGQL,
   ReferenceTypeEnum,
 } from "../../../../../generated/graphql";
 import { MessageDialogComponent } from "../../../../shared/message-dialog.component";
@@ -27,6 +28,7 @@ interface AssignmentEntry {
     name: string;
     programmingLanguageId: string;
     referenceType: ReferenceTypeEnum;
+    submittedCodeResourceId?: string;
     solution: {
       name: string;
       id: string;
@@ -44,7 +46,8 @@ export class AssignmentParticipantComponent implements OnInit {
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _matDialog: MatDialog,
     private readonly _router: Router,
-    private readonly _mutCreateAssignmentSubmittedCodeResource: CreateAssignmentSubmittedCodeResourceGQL
+    private readonly _mutCreateAssignmentSubmittedCodeResource: CreateAssignmentSubmittedCodeResourceGQL,
+    private readonly _mutDestroyAssignmentSubmittedCodeResource: DestroyAssignmentSubmittedCodeResourceGQL
   ) {}
   ngOnInit(): void {
     this._activatedRoute.params.forEach(
@@ -59,22 +62,24 @@ export class AssignmentParticipantComponent implements OnInit {
               ...assignment,
               grade: course?.assignmentSubmissions?.find(
                 (a) => a?.assignment?.id == param["assignmentId"]
-              ).assignmentSubmissionGradeParticipant?.grade,
+              )?.assignmentSubmissionGradeParticipant?.grade,
               feedback: course?.assignmentSubmissions?.find(
                 (a) => a?.assignment?.id == param["assignmentId"]
-              ).assignmentSubmissionGradeParticipant?.feedback,
+              )?.assignmentSubmissionGradeParticipant?.feedback,
               requirements: assignment.assignmentRequiredCodeResources.map(
                 (r) => {
-                  const codeResourceId = course?.assignmentSubmissions
+                  const submittedCodeResource = course?.assignmentSubmissions
                     ?.find((a) => a?.assignment?.id == param["assignmentId"])
                     ?.assignmentSubmittedCodeResources?.find(
                       (resource) =>
                         resource.assignmentRequiredCodeResource.id == r.id
-                    )?.codeResource.id;
+                    );
+                  const codeResourceId = submittedCodeResource?.codeResource.id;
 
                   const toReturn = {
                     ...r,
                     referenceType: r?.template?.referenceType,
+                    submittedCodeResourceId: submittedCodeResource?.id,
                     solution:
                       r?.template?.referenceType == "given_full"
                         ? course.basedOnProject.codeResources.find(
@@ -129,13 +134,20 @@ export class AssignmentParticipantComponent implements OnInit {
     });
   }
 
-  async onDeleteSubmittedCodeResource() {
+  async onDeleteSubmittedCodeResource(
+    assignmentSubmittedCodeResourceId: string
+  ) {
     const confirmed = await MessageDialogComponent.confirm(this._matDialog, {
       description: $localize`:@@message.ask-delete-resource:Soll diese Resource wirklich gelöscht werden?`,
     });
 
     if (confirmed) {
-      //TODO
+      await this._mutDestroyAssignmentSubmittedCodeResource
+        .mutate({
+          assignmentSubmittedCodeResourceId,
+        })
+        .pipe(first())
+        .toPromise();
     }
   }
 

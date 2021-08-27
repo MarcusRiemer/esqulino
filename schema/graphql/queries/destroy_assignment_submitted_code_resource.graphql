@@ -1,0 +1,24 @@
+mutation DestroyAssignmentSubmittedCodeResource(
+  $assignmentSubmittedCodeResourceId: ID!
+) {
+  destroyAssignmentSubmittedCodeResource(
+    input: {
+      assignmentSubmittedCodeResourceId: $assignmentSubmittedCodeResourceId
+    }
+  ) {
+    project {
+      id
+      codeResources {
+        id
+      }
+      assignmentSubmissions {
+        id
+        assignmentSubmittedCodeResources {
+          codeResource {
+            id
+          }
+        }
+      }
+    }
+  }
+}
