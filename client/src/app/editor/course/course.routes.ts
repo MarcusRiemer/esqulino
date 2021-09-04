@@ -9,6 +9,9 @@ import { OverviewSingelCourseParticipantComponent } from "./participant/overview
 import { AssignmentParticipantComponent } from "./participant/assignment/assignment-participant.component";
 import { SubmittedCodeResourceEditorParticipantComponente } from "./participant/assignment/submitted-code-resource-editor-participant";
 import { OverviewParticipantsParticipantComponent } from "./participant/participants/overview-participants-participant.component";
+import { OverviewGradeComponent } from "./teacher/grade/overview-grade.component";
+import { ToGradeListComponent } from "./teacher/grade/to-grade-list.component";
+import { ToGradeComponent } from "./teacher/grade/to-grade.component";
 
 export const courseRoutes: Routes = [
   {
@@ -27,6 +30,19 @@ export const courseRoutes: Routes = [
   {
     path: "assignments",
     component: AssignmentOverviewComponent,
+  },
+  {
+    path: "grade/overview",
+    component: OverviewGradeComponent,
+  },
+
+  {
+    path: "grade/to-grade",
+    component: ToGradeListComponent,
+  },
+  {
+    path: "grade/to-grade/:submissionId",
+    component: ToGradeComponent,
   },
   {
     path: "participant/overview",

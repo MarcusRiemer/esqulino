@@ -8,7 +8,7 @@
         <div class="card-body">{{ assignment.description }}</div>
       </div>
     </div>
-    <div *ngIf="assignment.startDate && assignment.endDate" class="col-sm-3">
+    <div *ngIf="assignment.startDate || assignment.endDate" class="col-sm-3">
       <div *ngIf="assignment.startDate" class="card mb-3">
         <div class="card-header">
           <h4>Starttermin</h4>
@@ -85,10 +85,11 @@
           <th mat-header-cell *matHeaderCellDef>Lösung</th>
           <td mat-cell *matCellDef="let requirement">
             <div class="row align-items-center">
-              <div class="col-auto">{{ requirement?.solution?.name }}</div>
-              <div class="col">
+              <div class="col-auto">
+                {{ requirement?.solution?.name }}
+              </div>
+              <div class="col" *ngIf="requirement.solution">
                 <button
-                  *ngIf="requirement.solution"
                   type="button"
                   class="btn-close align-self-center"
                   aria-label="Close"

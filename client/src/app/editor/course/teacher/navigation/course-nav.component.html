@@ -4,7 +4,7 @@
   [routerLinkActiveOptions]="{ exact: true }"
   routerLinkActive="router-link-active"
 >
-  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
+  <course-icon [iconType]="'course-overview'"></course-icon>
   Kursübersicht
 </a>
 <mat-divider></mat-divider>
@@ -14,7 +14,7 @@
   [routerLinkActiveOptions]="{ exact: true }"
   routerLinkActive="router-link-active"
 >
-  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
+  <course-icon [iconType]="'assignment-teacher-overview'"></course-icon>
   Aufgaben
 </a>
 
@@ -25,7 +25,7 @@
     routerLinkActive="router-link-active"
     class="indent"
   >
-    <span class="fa fa-fw fa-graduation-cap" aria-hidden="true"></span>
+    <course-icon [iconType]="'assignment'"></course-icon>
     {{ a.name }}
   </a>
 
@@ -36,7 +36,7 @@
       routerLinkActive="router-link-active"
       class="indent-2"
     >
-      <span class="fa fa-fw fa-check-circle" aria-hidden="true"></span>
+      <course-icon [iconType]="'assignment-teacher-solution'"></course-icon>
       L: {{ solution.name }}
     </a>
   </ng-container>
@@ -48,16 +48,15 @@
       routerLinkActive="router-link-active"
       class="indent-2"
     >
-      <span
+      <course-icon
         *ngIf="template.reference_type == 'given_partially'"
-        class="fa fa-fw fa-file"
-        aria-hidden="true"
-      ></span>
-      <span
+        [iconType]="'assignment-type-given_partially'"
+      ></course-icon>
+      <course-icon
         *ngIf="template.reference_type == 'given_full'"
-        class="fa fa-fw fa-file-text"
-        aria-hidden="true"
-      ></span>
+        [iconType]="'assignment-type-given_full'"
+      ></course-icon>
+
       {{ template.name }}
     </a>
   </ng-container>
@@ -65,21 +64,32 @@
 <mat-divider></mat-divider>
 <a
   mat-list-item
-  [routerLink]="['rating']"
+  [routerLink]="['course/grade/overview']"
   [routerLinkActiveOptions]="{ exact: true }"
   routerLinkActive="router-link-active"
 >
-  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
-  Bewertung
+  <course-icon [iconType]="'grade-overview'"></course-icon>
+  Bewertungsübersicht
 </a>
 <a
   mat-list-item
-  [routerLink]="['course/rating']"
+  class="indent"
+  [routerLink]="['course/grade/to-grade']"
   [routerLinkActiveOptions]="{ exact: true }"
   routerLinkActive="router-link-active"
 >
-  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
-  Bewertung
+  <course-icon [iconType]="'grade'"></course-icon>
+  zu Bewerten
+</a>
+<mat-divider></mat-divider>
+<a
+  mat-list-item
+  [routerLink]="['schema/default']"
+  [routerLinkActiveOptions]="{ exact: true }"
+  routerLinkActive="router-link-active"
+>
+  <course-icon [iconType]="'database'"></course-icon>
+  Datenbank
 </a>
 <mat-divider></mat-divider>
 <a
@@ -88,6 +98,6 @@
   [routerLinkActiveOptions]="{ exact: true }"
   routerLinkActive="router-link-active"
 >
-  <span class="fa fa-fw fa-list" aria-hidden="true"></span>
+  <course-icon [iconType]="'participant'"></course-icon>
   Teilnehmer
 </a>

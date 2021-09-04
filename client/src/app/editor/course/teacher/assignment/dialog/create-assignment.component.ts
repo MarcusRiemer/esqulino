@@ -65,7 +65,7 @@ export class CreateAssignmentComponent implements OnInit {
       .toPromise()
       .then((e) =>
         this._router.navigate(
-          ["assignments/", e.data.createAssignment.project.id],
+          ["assignments/", e.data.createAssignment.assignment.id],
           { relativeTo: this._activatedRoute.parent }
         )
       );

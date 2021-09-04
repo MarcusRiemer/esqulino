@@ -16,16 +16,13 @@ mutation CreateAssignment(
       endDate: $endDate
     }
   ) {
-    project {
+    assignment {
       id
-      assignments {
-        id
-        name
-        description
-        startDate
-        endDate
-        weight
-      }
+      name
+      description
+      startDate
+      endDate
+      weight
     }
   }
 }

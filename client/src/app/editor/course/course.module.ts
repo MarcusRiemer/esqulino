@@ -26,6 +26,11 @@ import { BlockEditorComponent } from "../code/block/block-editor.component";
 import { SubmittedCodeResourceEditorParticipantComponente } from "./participant/assignment/submitted-code-resource-editor-participant";
 import { RemainingDaysPipe } from "./participant/assignment/remaining-days.pipe";
 import { OverviewParticipantsParticipantComponent } from "./participant/participants/overview-participants-participant.component";
+import { ToGradeListComponent } from "./teacher/grade/to-grade-list.component";
+import { OverviewGradeComponent } from "./teacher/grade/overview-grade.component";
+import { ToGradeComponent } from "./teacher/grade/to-grade.component";
+import { CreateGradeComponent } from "./teacher/grade/template/create-grade.component";
+import { CreateGradeSettingComponent } from "./teacher/grade/template/create-grade-setting.component";
 
 @NgModule({
   imports: [CommonModule, SharedAppModule, CodeEditorModule],
@@ -50,6 +55,11 @@ import { OverviewParticipantsParticipantComponent } from "./participant/particip
     SubmittedCodeResourceEditorParticipantComponente,
     RemainingDaysPipe,
     OverviewParticipantsParticipantComponent,
+    ToGradeListComponent,
+    OverviewGradeComponent,
+    ToGradeComponent,
+    CreateGradeComponent,
+    CreateGradeSettingComponent,
   ],
   exports: [CourseNavComponent, CourseParticipantNavComponent],
 })

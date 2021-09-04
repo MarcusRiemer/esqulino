@@ -2,15 +2,19 @@ import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 
-import { Observable } from "rxjs";
+import { combineLatest, Observable } from "rxjs";
 import { first, map, mergeMap, tap } from "rxjs/operators";
 import {
+  CodeResource,
   CreateAssignmentSubmittedCodeResourceGQL,
   DestroyAssignmentSubmittedCodeResourceGQL,
   ReferenceTypeEnum,
 } from "../../../../../generated/graphql";
+import { ToolbarService } from "../../../../shared";
 import { MessageDialogComponent } from "../../../../shared/message-dialog.component";
 import { CurrentCodeResourceService } from "../../../current-coderesource.service";
+import { SidebarService } from "../../../sidebar.service";
+import { EditorToolbarService } from "../../../toolbar.service";
 import { CourseService } from "../../course.service";
 import { CreateAssignmentSubmittedCodeResourceDialogComponent } from "./dialog/create-assignment-submitteed-code-resource-dialog.component";
 
@@ -47,15 +51,28 @@ export class AssignmentParticipantComponent implements OnInit {
     private readonly _matDialog: MatDialog,
     private readonly _router: Router,
     private readonly _mutCreateAssignmentSubmittedCodeResource: CreateAssignmentSubmittedCodeResourceGQL,
-    private readonly _mutDestroyAssignmentSubmittedCodeResource: DestroyAssignmentSubmittedCodeResourceGQL
+    private readonly _mutDestroyAssignmentSubmittedCodeResource: DestroyAssignmentSubmittedCodeResourceGQL,
+    private _toolbarService: EditorToolbarService,
+    private _sidebarService: SidebarService
   ) {}
   ngOnInit(): void {
+    // Ensure sane default state
+    this._sidebarService.hideSidebar();
+    this._toolbarService.resetItems();
+
     this._activatedRoute.params.forEach(
       (param: Params) =>
         (this.assignment$ = this._courseService.fullCourseData$.pipe(
           map((course) => {
             const assignment = course.basedOnProject.assignments.find(
               (assignment) => assignment.id == param["assignmentId"]
+            );
+
+            console.log("-------");
+            console.log(
+              course?.assignmentSubmissions?.find(
+                (a) => a?.assignment?.id == param["assignmentId"]
+              )
             );
 
             const toReturn: AssignmentEntry = {
@@ -113,7 +130,7 @@ export class AssignmentParticipantComponent implements OnInit {
       .pipe(first())
       .toPromise();
 
-    if (requirement.referenceType == "given_full") {
+    if (requirement.referenceType != null) {
       await this._mutCreateAssignmentSubmittedCodeResource
         .mutate({
           groupId: groupId,
@@ -122,16 +139,19 @@ export class AssignmentParticipantComponent implements OnInit {
         .pipe(first())
         .toPromise()
         .then((e) => this._router.navigate([]));
+    } else {
+      this._matDialog.open(
+        CreateAssignmentSubmittedCodeResourceDialogComponent,
+        {
+          data: {
+            groupId: groupId,
+            requiredId: requirement.id,
+            programmingLanguageId: requirement.programmingLanguageId,
+            referenceType: requirement.referenceType,
+          },
+        }
+      );
     }
-
-    this._matDialog.open(CreateAssignmentSubmittedCodeResourceDialogComponent, {
-      data: {
-        groupId: groupId,
-        requiredId: requirement.id,
-        programmingLanguageId: requirement.programmingLanguageId,
-        referenceType: requirement.referenceType,
-      },
-    });
   }
 
   async onDeleteSubmittedCodeResource(

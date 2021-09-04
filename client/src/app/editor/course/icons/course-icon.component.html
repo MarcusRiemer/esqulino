@@ -1,76 +1,99 @@
 <span
   *ngIf="iconType == 'list-delete'"
-  class="fa fa-trash-o"
+  class="fa fa-trash-o fa-fw"
   aria-hidden="true"
 ></span>
 <span
   *ngIf="iconType == 'list-edit'"
-  class="fa fa-pencil"
+  class="fa fa-pencil fa-fw"
   aria-hidden="true"
 ></span>
 <span
   *ngIf="iconType == 'list-edit-singel'"
-  class="fa fa-pencil-square-o"
+  class="fa fa-pencil-square-o fa-fw"
   aria-hidden="true"
 ></span>
 <span
   *ngIf="iconType == 'list-done'"
-  class="fa fa-check-circle-o"
+  class="fa fa-check-circle-o fa-fw"
   aria-hidden="true"
 ></span>
 <span
   *ngIf="iconType == 'list-pending'"
-  class="fa fa-clock-o"
+  class="fa fa-clock-o fa-fw"
   aria-hidden="true"
 ></span>
 <span
   *ngIf="iconType == 'compilation-problem'"
-  class="fa fa-exclamation-circle"
+  class="fa fa-exclamation-circle fa-fw"
   aria-hidden="true"
 ></span>
 <span
-  class="fa fa-graduation-cap"
+  class="fa fa-book fa-fw"
   *ngIf="iconType == 'assignment'"
   aria-hidden="true"
 ></span>
 
 <span
-  class="fa fa-times-circle-o"
+  class="fa fa-times-circle-o fa-fw"
   *ngIf="iconType == 'assignment-state-planned'"
   aria-hidden="true"
 ></span>
 <span
-  class="fa fa-circle-thin"
+  class="fa fa-circle-thin fa-fw"
   *ngIf="iconType == 'assignment-state-open'"
   aria-hidden="true"
 ></span>
 <span
-  class="fa fa-user-circle"
+  class="fa fa-user-circle fa-fw"
   *ngIf="iconType == 'assignment-state-pending'"
   aria-hidden="true"
 ></span>
 <span
-  class="fa fa-check-circle-o"
+  class="fa fa-check-circle-o fa-fw"
   *ngIf="iconType == 'assignment-state-done'"
   aria-hidden="true"
 ></span>
 
-<span *ngIf="iconType == 'assignment-type-given_full'" aria-hidden="true">
-  <p>assignment-given-ful</p>
-</span>
-<span *ngIf="iconType == 'assignment-type-given_partially'" aria-hidden="true">
-  <p>assignment-given-partially</p>
-</span>
-<span *ngIf="iconType == 'assignment-type-required'" aria-hidden="true">
-  <p>assignment-required</p>
-</span>
-
-<span *ngIf="iconType == 'to-evalute'" aria-hidden="true">
-  <p>to-evalute</p>
-</span>
 <span
-  class="fa fa-users"
+  class="fa fa-file-text fa-fw"
+  *ngIf="iconType == 'assignment-type-given_full'"
+  aria-hidden="true"
+></span>
+<span
+  class="fa fa-file-text-o fa-fw"
+  *ngIf="iconType == 'assignment-type-given_partially'"
+  aria-hidden="true"
+></span>
+<span
+  class="fa fa-file-o fa-fw"
+  *ngIf="iconType == 'assignment-type-required'"
+  aria-hidden="true"
+></span>
+<span
+  class="fa fa-table fa-fw"
+  *ngIf="iconType == 'grade-overview'"
+  aria-hidden="true"
+></span>
+<span
+  class="fa fa-pencil fa-fw"
+  *ngIf="iconType == 'grade'"
+  aria-hidden="true"
+></span>
+<span
+  class="fa fa-users fa-fw"
   *ngIf="iconType == 'participant'"
+  aria-hidden="true"
+></span>
+
+<span
+  class="fa fa-graduation-cap fa-fw"
+  *ngIf="iconType == 'assignment-teacher-overview'"
+  aria-hidden="true"
+></span>
+<span
+  class="fa fa-fw fa-check-circle"
+  *ngIf="iconType == 'assignment-teacher-solution'"
   aria-hidden="true"
 ></span>
 
@@ -80,9 +103,11 @@
   aria-hidden="true"
 ></span>
 
-<span *ngIf="iconType == 'course-overview'" aria-hidden="true">
-  <p>course-overview</p>
-</span>
+<span
+  class="fa fa-window-maximize fa-fw"
+  *ngIf="iconType == 'course-overview'"
+  aria-hidden="true"
+></span>
 
 <span *ngIf="iconType == 'date-reached'" aria-hidden="true">
   <p>reached</p>

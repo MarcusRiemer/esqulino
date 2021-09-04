@@ -127,6 +127,20 @@ query FullProject($id: ID!) {
         assignment {
           id
         }
+        assignmentSubmissionGrades {
+          id
+          user {
+            id
+            displayName
+          }
+          auditees {
+            id
+            displayName
+          }
+          grade
+          feedback
+          createdAt
+        }
 
         assignmentSubmittedCodeResources {
           id
