@@ -13,11 +13,13 @@ import {
 import Observable from "zen-observable";
 import { CourseService } from "../../course.service";
 import { PerformDataService } from "../../../../shared/authorisation/perform-data.service";
+import { ToolbarService } from "../../../../shared";
+import { SidebarService } from "../../../sidebar.service";
+import { EditorToolbarService } from "../../../toolbar.service";
 
 @Component({
   selector: "app-overview-assignment",
   templateUrl: "./overview-assignment.component.html",
-  styleUrls: ["./overview-assignment.component.scss"],
 })
 export class AssignmentOverviewComponent implements OnInit {
   constructor(
@@ -26,7 +28,9 @@ export class AssignmentOverviewComponent implements OnInit {
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _mutDestroyAssignment: DestroyAssignmentGQL,
     private readonly _matDialog: MatDialog,
-    private readonly _performData: PerformDataService
+    private readonly _performData: PerformDataService,
+    private readonly _toolbarService: EditorToolbarService,
+    private _sidebarService: SidebarService
   ) {}
 
   async onDestroyAssignment(assignmentId: string) {
@@ -82,7 +86,11 @@ export class AssignmentOverviewComponent implements OnInit {
     "weight",
   ];
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Ensure sane default state
+    this._sidebarService.hideSidebar();
+    this._toolbarService.resetItems();
+  }
 
   createAssignment(): void {
     this._router.navigate(["create/assignment"], {

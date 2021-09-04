@@ -52,8 +52,6 @@ export class SubmittedCodeResourceEditorParticipantComponente {
               submission.assignmentSubmittedCodeResources.find(
                 (submitted) => submitted.codeResource.id === param["resourceId"]
               ).assignmentRequiredCodeResource;
-            console.log(requiredCodeResource);
-            console.log(assignment.assignmentRequiredCodeResources);
 
             const toReturn: SubmittedCodeResourceEntry = {
               startDate: assignment.startDate,

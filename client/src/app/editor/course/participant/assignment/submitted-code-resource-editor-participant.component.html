@@ -44,3 +44,8 @@
 </div>
 
 <h1>TODO: EDITOR</h1>
+
+<div *ngIf="currentCodeResource$ | async as resource">
+  <h4>{{ resource.name }}</h4>
+  <pre> <code [innerText]="resource.generatedCode$ | async"></code></pre>
+</div>

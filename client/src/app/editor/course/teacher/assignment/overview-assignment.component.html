@@ -17,11 +17,7 @@
     </div>
   </div>
   <div class="card-body">
-    <table
-      mat-table
-      [dataSource]="$assignments | async"
-      class="mat-elevation-z8 col-12"
-    >
+    <table mat-table [dataSource]="$assignments | async" class="col-12">
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let assignment">
@@ -59,7 +55,6 @@
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Aufgabenname</th>
         <td mat-cell *matCellDef="let element">
-          <input [(ngModel)]="element.name" type="text" name="testname" />
           {{ element.name }}
         </td>
       </ng-container>

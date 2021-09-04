@@ -12,6 +12,9 @@ import {
   ReferenceTypeEnum,
   UpdateAssignmentGQL,
 } from "src/generated/graphql";
+import { ToolbarService } from "../../../../shared";
+import { SidebarService } from "../../../sidebar.service";
+import { EditorToolbarService } from "../../../toolbar.service";
 import { CourseService } from "../../course.service";
 import { ChangeRequiredCodeResourceDialogComponent } from "./dialog/change-required-code-resource-dialog.component";
 import { CreateRequiredCodeResourceSolutionComponent } from "./dialog/create-required-code-resource-solution.component";
@@ -53,6 +56,8 @@ export class AssignmentComponent implements OnInit {
     private readonly _mutUpdateAssignment: UpdateAssignmentGQL,
     private readonly _performData: PerformDataService,
     private readonly _matDialog: MatDialog,
+    private _toolbarService: EditorToolbarService,
+    private _sidebarService: SidebarService,
     @Inject(LOCALE_ID) private _locale: string
   ) {}
   assignmentId$ = this._activatedRoute.paramMap.pipe(
@@ -94,6 +99,10 @@ export class AssignmentComponent implements OnInit {
 
   //TODO: refactor wie in assingment für participants
   ngOnInit(): void {
+    // Ensure sane default state
+    this._sidebarService.hideSidebar();
+    this._toolbarService.resetItems();
+
     this.assignmentId$
       .pipe(
         map((assignmentId) =>

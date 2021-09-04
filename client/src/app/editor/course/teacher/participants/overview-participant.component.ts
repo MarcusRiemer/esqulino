@@ -1,12 +1,24 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { first, map, tap } from "rxjs/operators";
+import { SidebarService } from "../../../sidebar.service";
+import { EditorToolbarService } from "../../../toolbar.service";
 import { CourseService } from "../../course.service";
 
 @Component({
   templateUrl: "overview-participant.component.html",
 })
-export class OverviewParticipantComponent {
-  constructor(private readonly _courseService: CourseService) {}
+export class OverviewParticipantComponent implements OnInit {
+  constructor(
+    private readonly _courseService: CourseService,
+    private _toolbarService: EditorToolbarService,
+    private _sidebarService: SidebarService
+  ) {}
+
+  ngOnInit(): void {
+    // Ensure sane default state
+    this._sidebarService.hideSidebar();
+    this._toolbarService.resetItems();
+  }
 
   //TODO TYPEN
   participants$ = this._courseService.fullCourseData$.pipe(

@@ -4,11 +4,7 @@
   </div>
   <div class="card-body"></div>
 
-  <table
-    mat-table
-    [dataSource]="participants$ | async"
-    class="mat-elevation-z8 col-12"
-  >
+  <table mat-table [dataSource]="participants$ | async" class="col-12">
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let participant">
