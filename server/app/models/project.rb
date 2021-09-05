@@ -112,6 +112,10 @@ class Project < ApplicationRecord
     !slug.nil? and slug.start_with?('course') or !based_on_project.nil?
   end
 
+  def is_participant_course
+    !based_on_project.nil?
+  end
+
   # Retrieves the database with the given ID or the default database if no specific
   # ID to search for is given. This can't be used to access any database, only
   # databases that are part of this project are considered.

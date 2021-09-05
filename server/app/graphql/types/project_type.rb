@@ -23,10 +23,10 @@ module Types
           resolver: Resolvers::ProjectInstanceMemberResolver
 
     field :is_course, Boolean, null: false
-    field :assignment_submissions, [Types::AssignmentSubmissionType], null: true      
-    field :assignment_submitted_code_resources, [Types::AssignmentSubmittedCodeResourceType], null: true  
+    field :is_participant_course, Boolean, null: false
+    field :assignment_submissions, [Types::AssignmentSubmissionType], null: true
+    field :assignment_submitted_code_resources, [Types::AssignmentSubmittedCodeResourceType], null: true
 
-    
     field :based_on_project, Types::ProjectType, null: true
 
     field :participant_projects, [Types::ProjectType], null: true
@@ -55,7 +55,7 @@ module Types
       # Order Fields
       value 'name'
       value 'slug'
-      value 'createdAt', value: "created_at"
+      value 'createdAt', value: 'created_at'
     end
 
     class OrderType < Types::Base::BaseInputObject
@@ -66,8 +66,8 @@ module Types
 
     class MultilingualColumnsEnum < Types::Base::BaseEnum
       graphql_name 'ProjectMultilingualColumnsEnum'
-      value "name"
-      value "description"
+      value 'name'
+      value 'description'
     end
 
     class FilterFieldType < Types::Base::BaseInputObject

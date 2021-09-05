@@ -103,7 +103,7 @@ class ProjectPolicy < ApplicationPolicy
   def create_project_course_participation?
     permitted_roles = %w[admin owner]
 
-    project.user_have_role(user, permitted_roles) || project.public && user.present?
+    project.user_have_role(user, permitted_roles) # || project.public && user.present?
   end
 
   def create_assignment_submitted_code_resource?
@@ -114,6 +114,18 @@ class ProjectPolicy < ApplicationPolicy
 
   def destroy_assignment_submitted_code_resource?
     permitted_roles = %w[participant owner]
+
+    project.user_have_role(user, permitted_roles)
+  end
+
+  def destroy_project_course_participation?
+    permitted_roles = %w[admin owner]
+
+    project.user_have_role(user, permitted_roles)
+  end
+
+  def update_project_course_participation?
+    permitted_roles = %w[admin owner]
 
     project.user_have_role(user, permitted_roles)
   end
