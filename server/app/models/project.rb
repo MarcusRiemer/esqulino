@@ -6,14 +6,14 @@ class Project < ApplicationRecord
   self.ignored_columns = %w[name_single description_single]
 
   # The Participants of this project / course with their roles
-  has_many :project_members
+  has_many :project_members, dependent: :destroy
   # The actual users that are participating in this course
   has_many :members, class_name: 'User', foreign_key: 'project_id', through: :project_members, source: :user
 
   # Assignments which can be created for the Project
   has_many :assignments
 
-  has_one :based_on_project_course_participation, class_name: 'ProjectCourseParticipation', foreign_key: 'participant_project_id'
+  has_one :based_on_project_course_participation, class_name: 'ProjectCourseParticipation', foreign_key: 'participant_project_id', dependent: :destroy
   has_many :participant_project_course_participations, class_name: 'ProjectCourseParticipation', foreign_key: 'based_on_project_id'
 
   # If this field is set it meant that it is a "Groupe" and participates in a course
@@ -109,7 +109,7 @@ class Project < ApplicationRecord
   end
 
   def is_course
-    !slug.nil? and slug.start_with?('course') or !based_on_project.nil?
+    !slug.nil? and slug.start_with?('course')
   end
 
   def is_participant_course
@@ -209,6 +209,10 @@ class Project < ApplicationRecord
   # Check if the project only a participant group of a "root" project
   def participation_group?
     based_on_project.present?
+  end
+
+  def is_already_a_participant?(user)
+    participant_projects.any? { |x| x.project_members.find_by(user_id: user.id).present? }
   end
 
   def assert_is_participant_course!

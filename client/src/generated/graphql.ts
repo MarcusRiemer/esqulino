@@ -1161,6 +1161,7 @@ export type Project = {
   id: Scalars["ID"];
   indexPageId?: Maybe<Scalars["String"]>;
   isCourse: Scalars["Boolean"];
+  isParticipantCourse: Scalars["Boolean"];
   members: Array<User>;
   name: Scalars["LangJson"];
   participantProjectCourseParticipations?: Maybe<
@@ -1974,7 +1975,10 @@ export type CreateAssignmentMutation = { __typename?: "Mutation" } & {
   createAssignment?: Maybe<
     { __typename?: "CreateAssignmentPayload" } & {
       assignment?: Maybe<
-        { __typename?: "Assignment" } & Pick<Assignment, "id" | "name">
+        { __typename?: "Assignment" } & Pick<
+          Assignment,
+          "id" | "name" | "description" | "startDate" | "endDate" | "weight"
+        >
       >;
     }
   >;
@@ -2800,6 +2804,7 @@ export type FullProjectQuery = { __typename?: "Query" } & {
     | "description"
     | "public"
     | "isCourse"
+    | "isParticipantCourse"
     | "indexPageId"
     | "createdAt"
     | "updatedAt"
@@ -4108,6 +4113,10 @@ export const CreateAssignmentDocument = gql`
       assignment {
         id
         name
+        description
+        startDate
+        endDate
+        weight
       }
     }
   }
@@ -5145,6 +5154,7 @@ export const FullProjectDocument = gql`
       description
       public
       isCourse
+      isParticipantCourse
       indexPageId
       createdAt
       updatedAt
