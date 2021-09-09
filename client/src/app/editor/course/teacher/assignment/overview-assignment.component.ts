@@ -16,6 +16,7 @@ import { PerformDataService } from "../../../../shared/authorisation/perform-dat
 import { ToolbarService } from "../../../../shared";
 import { SidebarService } from "../../../sidebar.service";
 import { EditorToolbarService } from "../../../toolbar.service";
+import { ProjectService } from "../../../project.service";
 
 @Component({
   selector: "app-overview-assignment",
@@ -24,6 +25,7 @@ import { EditorToolbarService } from "../../../toolbar.service";
 export class AssignmentOverviewComponent implements OnInit {
   constructor(
     private readonly _courseService: CourseService,
+    private readonly _projectService: ProjectService,
     private _router: Router,
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _mutDestroyAssignment: DestroyAssignmentGQL,
@@ -86,15 +88,31 @@ export class AssignmentOverviewComponent implements OnInit {
     "weight",
   ];
 
+  /**
+   * @return A peek at the project of the currently edited resource
+   */
+  get peekProject() {
+    return this._projectService.cachedProject;
+  }
+
   ngOnInit(): void {
     // Ensure sane default state
     this._sidebarService.hideSidebar();
     this._toolbarService.resetItems();
-  }
-
-  createAssignment(): void {
-    this._router.navigate(["create/assignment"], {
-      relativeTo: this._activatedRoute.parent,
+    this._toolbarService.savingEnabled = false;
+    //------
+    // Making a copy
+    const btnCreate = this._toolbarService.addButton(
+      "create",
+      "Augabe erstellen",
+      "files-o",
+      undefined,
+      this._performData.project.createAssignment(this.peekProject.id)
+    );
+    const refClone = btnCreate.onClick.subscribe((_) => {
+      this._router.navigate(["create/assignment"], {
+        relativeTo: this._activatedRoute.parent,
+      });
     });
   }
 }

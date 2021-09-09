@@ -94,5 +94,7 @@
 
   <course-nav *ngIf="isCourse$ | async"></course-nav>
 
-  <course-participant-nav *ngIf="isCourse$ | async"></course-participant-nav>
+  <course-participant-nav
+    *ngIf="isParticipantProject$ | async"
+  ></course-participant-nav>
 </mat-nav-list>

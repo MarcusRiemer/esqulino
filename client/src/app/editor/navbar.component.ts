@@ -42,6 +42,12 @@ export class NavbarComponent {
     .watch({ id: this._projectService.cachedProject.id })
     .valueChanges.pipe(map((project) => project.data.project.isCourse));
 
+  readonly isParticipantProject$ = this._fullProject
+    .watch({ id: this._projectService.cachedProject.id })
+    .valueChanges.pipe(
+      map((project) => project.data.project.isParticipantCourse)
+    );
+
   /**
    * The user has decided to start dragging something from the sidebar.
    */
