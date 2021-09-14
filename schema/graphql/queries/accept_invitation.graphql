@@ -1,0 +1,16 @@
+mutation AcceptInivation($projectId: ID!) {
+  acceptInvitation(input: { projectId: $projectId }) {
+    project {
+      id
+      projectMembers {
+        id
+        membershipType
+        joinedAt
+        user {
+          id
+          displayName
+        }
+      }
+    }
+  }
+}
