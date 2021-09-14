@@ -1,0 +1,18 @@
+mutation RemoveMemberFromParticipantGroup($groupId: ID!, $userId: ID!) {
+  removeMemberFromParticipantGroup(
+    input: { groupId: $groupId, userId: $userId }
+  ) {
+    project {
+      id
+      slug
+      participantProjects {
+        id
+        slug
+        name
+        projectMembers {
+          id
+        }
+      }
+    }
+  }
+}

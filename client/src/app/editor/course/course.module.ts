@@ -17,12 +17,10 @@ import { OverviewParticipantComponent } from "./teacher/participants/overview-pa
 import { CreateParticipantGroup } from "./teacher/participants/create-participant-group.component";
 import { CourseService } from "./course.service";
 import { CourseParticipantNavComponent } from "./participant/navigation/course-participant-nav.component";
-import { MultiLingualInputComponent } from "../../shared/multilingual-input.component";
 import { OverviewSingelCourseParticipantComponent } from "./participant/overview-single-course-participant.component";
 import { SingleAssignmentCardComponent } from "./participant/templates/single-assignment-card.component";
 import { AssignmentParticipantComponent } from "./participant/assignment/assignment-participant.component";
 import { CreateAssignmentSubmittedCodeResourceDialogComponent } from "./participant/assignment/dialog/create-assignment-submitteed-code-resource-dialog.component";
-import { BlockEditorComponent } from "../code/block/block-editor.component";
 import { SubmittedCodeResourceEditorParticipantComponente } from "./participant/assignment/submitted-code-resource-editor-participant";
 import { RemainingDaysPipe } from "./participant/assignment/remaining-days.pipe";
 import { OverviewParticipantsParticipantComponent } from "./participant/participants/overview-participants-participant.component";
@@ -31,6 +29,7 @@ import { OverviewGradeComponent } from "./teacher/grade/overview-grade.component
 import { ToGradeComponent } from "./teacher/grade/to-grade.component";
 import { CreateGradeComponent } from "./teacher/grade/template/create-grade.component";
 import { CreateGradeSettingComponent } from "./teacher/grade/template/create-grade-setting.component";
+import { CreateParticipantGroupsComponent } from "./teacher/participants/create-participant-groups.component";
 
 @NgModule({
   imports: [CommonModule, SharedAppModule, CodeEditorModule],
@@ -60,6 +59,7 @@ import { CreateGradeSettingComponent } from "./teacher/grade/template/create-gra
     ToGradeComponent,
     CreateGradeComponent,
     CreateGradeSettingComponent,
+    CreateParticipantGroupsComponent,
   ],
   exports: [CourseNavComponent, CourseParticipantNavComponent],
 })

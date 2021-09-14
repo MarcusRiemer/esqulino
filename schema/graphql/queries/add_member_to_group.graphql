@@ -1,0 +1,22 @@
+mutation AddMemberToGroup($groupId: ID!, $userId: ID!, $role: String!) {
+  addMemberToGroup(input: { groupId: $groupId, userId: $userId, role: $role }) {
+    project {
+      id
+      slug
+      participantProjects {
+        id
+        slug
+        name
+        projectMembers {
+          id
+          membershipType
+          joinedAt
+          user {
+            id
+            displayName
+          }
+        }
+      }
+    }
+  }
+}

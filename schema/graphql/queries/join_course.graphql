@@ -1,0 +1,8 @@
+mutation JoinCourse($courseId: ID!) {
+  joinCourse(input: { courseId: $courseId }) {
+    project {
+      id
+      slug
+    }
+  }
+}

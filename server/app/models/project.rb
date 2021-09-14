@@ -54,6 +54,13 @@ class Project < ApplicationRecord
   # updating logic.
   belongs_to :default_database, class_name: 'ProjectDatabase', optional: true
 
+  enum selection_group_type: {
+    fixed_number_of_groups: 0,
+    as_many_groups_as_was_created: 1,
+    no_group_number_limitation: 2,
+    self_selection: 3
+  }
+
   # Name may not be empty
   validates :name, valid_languages: []
   validates :name, multilang_string_present: []

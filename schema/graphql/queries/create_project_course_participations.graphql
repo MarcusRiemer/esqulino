@@ -1,0 +1,21 @@
+mutation CreateProjectCourseParticipations(
+  $basedOnProjectId: ID!
+  $numberOfGroups: Int!
+) {
+  createProjectCourseParticipations(
+    input: {
+      basedOnProjectId: $basedOnProjectId
+      numberOfGroups: $numberOfGroups
+    }
+  ) {
+    project {
+      id
+      slug
+      participantProjects {
+        id
+        slug
+        name
+      }
+    }
+  }
+}

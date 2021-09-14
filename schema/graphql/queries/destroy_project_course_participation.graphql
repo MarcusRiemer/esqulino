@@ -1,0 +1,10 @@
+mutation DestroyProjectCourseParticipation($groupId: ID!) {
+  destroyProjectCourseParticipation(input: { groupId: $groupId }) {
+    project {
+      id
+      participantProjects {
+        id
+      }
+    }
+  }
+}

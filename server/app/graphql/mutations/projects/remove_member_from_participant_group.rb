@@ -2,7 +2,7 @@ class Mutations::Projects::RemoveMemberFromParticipantGroup < Mutations::Project
   argument :group_id, ID, required: true
   argument :user_id, ID, required: true
 
-  field :project, Types::ProjectType, null: false
+  field :project, Types::ProjectType, null: true
 
   def resolve(group_id:, user_id:)
     group = Project.find_by_slug_or_id!(group_id)
@@ -10,7 +10,7 @@ class Mutations::Projects::RemoveMemberFromParticipantGroup < Mutations::Project
 
     raise ArgumentError, 'The Project must be a group of a course.' if group.based_on_project.nil?
 
-    course = group.based_on_project
+    course = Project.find(group.based_on_project.id)
 
     raise ArgumentError, 'Can´t delete a Group with submissions' if group.assignment_submissions.count > 0
 
@@ -22,6 +22,6 @@ class Mutations::Projects::RemoveMemberFromParticipantGroup < Mutations::Project
       raise ArgumentError, 'The User is not a member of this participant group'
     end
 
-    course
+    { project: course }
   end
 end

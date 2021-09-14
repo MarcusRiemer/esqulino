@@ -130,6 +130,18 @@ class ProjectPolicy < ApplicationPolicy
     project.user_have_role(user, permitted_roles)
   end
 
+  def join_course?
+    project.public && !project.is_already_in_project?(user) && !project.is_already_a_participant?(user)
+  end
+
+  def join_Participant_group?
+    project.public && !project.is_already_in_project?(user)
+  end
+
+  def accept_invitation?
+    !project.owner?(user) && project.is_already_in_project?(user)
+  end
+
   class Scope < Scope
     def resolve
       if user.has_role?(:admin)

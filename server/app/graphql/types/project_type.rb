@@ -9,6 +9,20 @@ module Types
     field :slug, String, null: true
     field :assignments, [Types::AssignmentType], null: true
 
+    field :enrollment_start, GraphQL::Types::ISO8601DateTime, null: true
+    field :enrollment_end, GraphQL::Types::ISO8601DateTime, null: true
+    field :max_group_size, Integer, null: true
+    field :max_number_of_groups, Integer, null: true
+
+    class SelectionGroupTypeEnum < Types::Base::BaseEnum
+      value 'fixed_number_of_groups'
+      value 'as_many_groups_as_was_created'
+      value 'no_group_number_limitation'
+      value 'self_selection'
+    end
+
+    field :selection_group_type, SelectionGroupTypeEnum, null: true
+
     field :default_database, Types::ProjectDatabaseType, null: true
     field :default_database_id, ID, null: true
 

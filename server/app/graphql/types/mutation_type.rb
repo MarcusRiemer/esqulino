@@ -24,6 +24,11 @@ module Types
     field :destroy_assignment_submitted_code_resource, mutation: Mutations::Projects::DestroyAssignmentSubmittedCodeResource
 
     field :create_project_course_participation, mutation: Mutations::Projects::CreateProjectCourseParticipation
+    field :create_project_course_participations, mutation: Mutations::Projects::CreateProjectCourseParticipations
+    field :destroy_project_course_participation, mutation: Mutations::Projects::DestroyProjectCourseParticipation
+
+    field :join_course, mutation: Mutations::Projects::JoinCourse
+    field :join_participant_group, mutation: Mutations::Projects::JoinParticipantGroup
 
     field :create_assignment_required_code_resource, mutation: Mutations::Projects::CreateAssignmentRequiredCodeResource
     field :destroy_assignment_required_code_resource, mutation: Mutations::Projects::DestroyAssignmentRequiredCodeResource
@@ -46,6 +51,11 @@ module Types
     field :change_member_role, mutation: Mutations::Projects::ChangeMemberRole
     field :change_owner, mutation: Mutations::Projects::ChangeOwner
     field :remove_member, mutation: Mutations::Projects::RemoveMember
+
+    field :accept_invitation, mutation: Mutations::Projects::AcceptInvitation
+    field :add_member_to_group, mutation: Mutations::Projects::AddMemberToGroup
+    field :remove_member_from_participant_group, mutation: Mutations::Projects::RemoveMemberFromParticipantGroup
+
     field :remove_used_block_language, mutation: Mutations::Projects::RemoveUsedBlockLanguage
     field :create_programming_language, mutation: Mutations::CreateProgrammingLanguage
     field :store_project_seed, mutation: Mutations::SeedData::StoreProject

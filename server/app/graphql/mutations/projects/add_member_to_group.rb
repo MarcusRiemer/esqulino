@@ -3,6 +3,8 @@ class Mutations::Projects::AddMemberToGroup < Mutations::Projects::Projects
   argument :user_id, ID, required: true
   argument :role, String, required: true
 
+  field :project, Types::ProjectType, null: true
+
   def resolve(group_id:, user_id:, role:)
     group = Project.find_by_slug_or_id!(group_id)
 

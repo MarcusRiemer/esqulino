@@ -1,0 +1,8 @@
+mutation JoinParticipantGroup($groupId: ID!) {
+  joinParticipantGroup(input: { groupId: $groupId }) {
+    project {
+      id
+      slug
+    }
+  }
+}

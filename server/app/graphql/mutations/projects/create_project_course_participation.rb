@@ -43,4 +43,27 @@ class Mutations::Projects::CreateProjectCourseParticipation < Mutations::BaseMut
       project: project
     }
   end
+
+  def self.helper_create_project_course(project, group_name, user_ids)
+    c_project = project.dup
+    c_project.slug = nil
+    c_project.based_on_project = project
+    c_project.public = false
+    c_project.name = group_name
+
+    c_project.save!
+
+    user_ids.each do |id|
+      raise ArgumentError, 'Can´t add a member of the root course' if project.is_already_in_project?(User.find(id))
+
+      c_project.project_members.create(user_id: id, membership_type: 'participant')
+    end
+
+    # TODO: DOn´t Copy Project
+    Mutations::Projects::CreateDeepCopyProject.helper_create_copy_of_project_uses_block_languages(project, c_project)
+
+    Mutations::Projects::CreateDeepCopyProject.helper_create_copy_of_project_sources(project, c_project)
+
+    Mutations::Projects::CreateDeepCopyProject.helper_create_deep_copy_of_databases(project, c_project)
+  end
 end

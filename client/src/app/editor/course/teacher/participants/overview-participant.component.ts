@@ -1,5 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { first, map, tap } from "rxjs/operators";
+import {
+  DestroyProjectCourseParticipationGQL,
+  RemoveMemberFromParticipantGroupGQL,
+} from "../../../../../generated/graphql";
 import { SidebarService } from "../../../sidebar.service";
 import { EditorToolbarService } from "../../../toolbar.service";
 import { CourseService } from "../../course.service";
@@ -10,8 +14,10 @@ import { CourseService } from "../../course.service";
 export class OverviewParticipantComponent implements OnInit {
   constructor(
     private readonly _courseService: CourseService,
-    private _toolbarService: EditorToolbarService,
-    private _sidebarService: SidebarService
+    private readonly _toolbarService: EditorToolbarService,
+    private readonly _sidebarService: SidebarService,
+    private readonly _mutDestroyProjectCourseParticipation: DestroyProjectCourseParticipationGQL,
+    private readonly _mutRemoveMemberFromParticipantGroup: RemoveMemberFromParticipantGroupGQL
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +45,41 @@ export class OverviewParticipantComponent implements OnInit {
       return toReturn;
     })
   );
+
+  groups$ = this._courseService.fullCourseData$.pipe(
+    map((courseData) =>
+      courseData.participantProjects.map((project) => ({
+        id: project.id,
+        numberOfMember: project.projectMembers?.length,
+        numberOfMaxMember: courseData.maxGroupSize,
+        groupName: project.name,
+        memberName: project.projectMembers
+          .map((member) => member.user.displayName)
+          .reduce((a, b) => a.toString() + b.toString() + ",", ""),
+      }))
+    )
+  );
+
+  async onDeleteGroup(groupId: string) {
+    this._mutDestroyProjectCourseParticipation
+      .mutate({ groupId: groupId })
+      .pipe(first())
+      .toPromise();
+  }
+
+  async onRemoveMember(groupId: string, userId: string) {
+    this._mutRemoveMemberFromParticipantGroup
+      .mutate({ groupId, userId })
+      .pipe(first())
+      .toPromise();
+  }
+
+  groupsDisplayedColumns: string[] = [
+    "actions",
+    "name",
+    "numberOfMember",
+    "memberNames",
+  ];
 
   displayedColumns: string[] = [
     "actions",
