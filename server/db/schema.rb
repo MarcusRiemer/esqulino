@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_30_121249) do
+ActiveRecord::Schema.define(version: 2021_09_09_091913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -266,6 +266,11 @@ ActiveRecord::Schema.define(version: 2021_06_30_121249) do
     t.uuid "user_id"
     t.hstore "name", default: {}, null: false
     t.hstore "description", default: {}, null: false
+    t.integer "max_group_size"
+    t.integer "max_number_of_groups"
+    t.integer "selection_group_type"
+    t.datetime "enrollment_start"
+    t.datetime "enrollment_end"
     t.index ["default_database_id"], name: "index_projects_on_default_database_id"
     t.index ["slug"], name: "index_projects_on_slug", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
