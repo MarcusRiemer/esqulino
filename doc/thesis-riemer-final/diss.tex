@@ -6,13 +6,35 @@ Augmenting \enquote{normal} programming languages to be syntax free and better a
 \section{Syntaxfree Programming}
 \label{sec:syntaxfree-programming}
 
+Common high level programming languages like Ruby, JavaScript, C\#, Haskell, Lisp~... all share a characteristic that usually goes without saying: Their source code is stored as plain text files. This is an obviously proven model that has many benefits regarding the ease to read or edit these files: Any text editor is sufficient. For people new to programming this however imposes a serious drawback: Text files are not very discoverable. Environments that teach the absolute basics semantics of programming (sequences, alternatives and jumps) therefore often resort to radically different program representations.
+
+One such program is Lightbot \cite{yaroslavski_lightbot}. It requires the user to guide a little robot through various worlds initially using seven commands: \texttt{forward}, \texttt{turnLeft}, \texttt{turnRight}, \texttt{jump}, \texttt{light}, \texttt{proc1} and \texttt{proc2}. The fundamental idea of this approach is very similar to \enquote{Turtle Programs} as described by \cite{papert_mindstorms_1982}, it however adds an environment that requires the user to solve puzzles.
+
+And in contrast to a classic turtle program, a lightbot program is not a textfile that requires the user to enter these commands by hand. Instead the commands are little, graphical blocks that are inserted via click or drag \& drop (see \autoref{fig:lightbot}). No matter how hard a programmer tries to create a syntactically incorrect program: It's just not possible. On top of that every action is directly represented as a UI element that can be interacted with.
+
+The same concept is described as \enquote{Mini Languages} by \cite{brusilovsky_mini-languages_1997} which defines properties that such languages should have:
+
+\begin{itemize}
+\item TODO
+\end{itemize}
+
+The probably most common implementation of these ideas of syntaxfree programming and mini languages is Scratch which originated in 2004 \cite{maloney_scratch_2004} and is still under active development.
+
+\begin{figure}
+  \includegraphics[width=\textwidth]{images/lightbot-example}
+  \caption{Lightbot syntaxfree programming environment}
+  \label{fig:lightbot}
+\end{figure}
 
 
 \section{Overview: From Grammar to IDE}
 
-The term \enquote{Grammar} is of fundamental importance for this whole article and the whole field of compiler construction. In mathematical terms a grammar $G$ is usually described as a 4-tuple $G = (V, T, P, S)$ where $V$ is a set of variables, $T$ is a set of terminal symbols, $P$ are the so called \textit{productions} and $S$ is the starting symbol\cite[Chapter 5]{hopcroft_formal_languages}. We can than use a grammar $G$ to check any text input whether it is valid in the context of the grammar.
+This chapter is an outline to the IDE generation process as a whole and introduces most of the relevant concepts on a level that is beneficial to explain the connections between the various concepts, data structures and transformations. The details of these steps are explained later in the document, but this section will contain forward-references so that you can jump into the details if you prefer to do so right away.
 
 \subsection{Differentiation from Traditional Compiler Construction}
+\label{sec:diff-traditional-compiler}
+
+The term \enquote{Grammar} is of fundamental importance for this whole article and the whole field of compiler construction. In mathematical terms a grammar $G$ is usually described as a 4-tuple $G = (V, T, P, S)$ where $V$ is a set of variables, $T$ is a set of terminal symbols, $P$ are the so called \textit{productions} and $S$ is the starting symbol\cite[Chapter 5]{hopcroft_formal_languages}. We can than use a grammar $G$ to check any text input whether it is valid in the context of the grammar.
 
 Apart from using a grammar to classify whether a certain text-input is well formed, the \textit{parser tree} is an important by-product of the parsing process. In compiler construction this tree is usually known as the first \textit{intermediate representation} or an \textit{Abstract Syntax Tree} (AST)\cite[Chapter 6]{dragon_book}.
 
@@ -30,7 +52,9 @@ So in the context of this dissertation, the term compiler doesn't refer to a tra
 
 \subsection{Comparision to Programming Language Engineering Tools}
 
-Compiler construction is a mature field and there are various tools ease programming language engineering. The typical low level tools like \texttt{yacc}, \texttt{flex}, \texttt{bison} or higher level abstractions like \texttt{llvm} are not relevant for this work because they work on a different level. But the idea of providing \enquote{Domain Specific Languages} or \enquote{Micro Languages} has inspired tools like XText \cite{efftinge_xtext} which are very comparable in their concepts.
+Compiler construction is a mature field and there are various tools ease programming language engineering. The typical low level tools like \texttt{yacc}, \texttt{flex}, \texttt{bison} or higher level abstractions like \texttt{llvm} are not relevant for this work because they solve problems of parsing and code generation as outlined in \fullref{sec:diff-traditional-compiler}. But with the increasing popularity to provide \textit{Domain Specific Languages} instead of general purpose programming or configuration languages a set of much higher level tools has surfaced \cite{mernik_dsl_2005}.
+
+One of the tools that was a direct inspiration is the Xtext Framework for Eclipse \cite{efftinge_xtext}. The fundamental idea of Xtext is to provide a grammar file as a basis for the programming language that is to be designed. This grammar can then serve as a basis that enables a language designer to provide many of the convenience features that developers expect from their IDE. Aspects like syntax highlighting, error markers, automatic indentation, navigation in the source code by jumping to definitions and code completion can all be implemented for Eclipse with reduced effort compared to an implementation from scratch.
 
 \subsection{Syntaxtree}
 
@@ -51,11 +75,34 @@ The used syntax to store these trees is however simply \texttt{JSON}
 
 \subsection{Validation}
 
-\subsubsection{Irrelevance of Whitespace}
+Now that we have seen how to define ASTs, the natural follow up question \enquote{Is this particular AST a valid program?} In traditional compiler construction the first step is to define a grammar in notations like the (extended) Backus-Naur-Form \cite{knuth_backus_1964}. Not re-inventing the wheel is an important aspect of computer science, so re-using a common notation would seem like a valid approach. But in the case of this dissertation, the Backus-Naur-Form is not directly applicable: Its result is an AST, but as we already haven an AST to begin with there is no reason to be concerned with the \texttt{String -> AST} transformation. As the general structure of the AST is already loosely modeled after \texttt{XML} it seems natural to dive into this domain for validation.
 
-Traditional approaches like the (extended) Backus-Naur-Form \cite{knuth_backus_1964} are great tools for tokenization
+\subsubsection{XML Schema / Relax NG}
 
-\subsubsection{RelaxNG, XML Schema and JSON Schema}
+As one of the de-facto standard formats for data exchange the question \enquote{Does this particular \texttt{XML}-document contain the data in a structure that is expected?} arises every time a system receives an \texttt{XML} document. Or to put the question in more technical terms: \enquote{Is this document \textit{well-formed} with respect to a certain \textit{schema}?}
+
+An \texttt{XML} Schema (\texttt{XSD}) \cite{xml_schema} can be seen as a datatype definition or as a grammar, from an abstract viewpoint these terms are interchangeable \cite[Chapter 5.3.4 \enquote{XML and Document Type Definitions}]{hopcroft_formal_languages}. But as an \texttt{XML}-schema is used to validate inputs for programming languages, it provides a way to define that typical datatypes like \texttt{string}, \texttt{integer}, \texttt{float}, \texttt{boolean}, ... are expected in the document, e.g. as attributes. It is also possible to directly generate e.g. a Java \texttt{class} from an \texttt{XML} schema.
+
+The details of \texttt{XML} schema are quite complex, but from a birds-eye perspective the rules for child elements can be defined in three different ways:
+
+\begin{itemize}
+\item \texttt{sequence} expects child nodes to be present in an exact order. The expected cardinality of each item may be specified for each child.
+\item \texttt{choice} is a way to describe mutually exclusive children: A child node may be either one of the provided items, but not none or multiple ones.
+\item \texttt{all} treats the child node as an unordered multiset: The expected cardinality of each item may be specified, but the order does not matter.
+\end{itemize}
+
+An \texttt{XML} schema is itself an \texttt{XML} document and therefore trivially parseable but sometimes a little convoluted to read. The alternative RELAX NG syntax defines a compact syntax (or for that matter: a domain specific language) that is semantically equivalent but easier to read.
+
+\subsubsection{Semantic Analysis}
+
+Semantic analysis of an AST strongly depends on the language that is being represented. Rules for e.g. typical errors such as undeclared variables differ from language to language. One way of defining these relationships is via so called \textit{attribute grammars} \cite{knuth_semantics_1968}. Knuth describes the goal for such a formalism as follows: \enquote{All of the known methods for defining the meaning of computer programs were
+based on rather intricate algorithms having roughly the same degree of complexity as
+compilers, or worse. This was in stark contrast to Chomsky’s simple and elegant method
+of syntax definition via context-free grammars.} \cite{knuth_genesis_1990}.
+
+On top of that semantic analysis may require information that is not part of the AST itself: In \texttt{SQL} for example the same query may be valid in database \textit{A} but invalid in database \textit{B}. This depends on the names of the tables and columns and their respective datatypes. Therefore semantic analysis in the context of this dissertation is done through ordinary code, TypeScript to be exact.
+
+
 
 \subsection{Grammar}
 
@@ -63,13 +110,19 @@ Traditional approaches like the (extended) Backus-Naur-Form \cite{knuth_backus_1
 
 \subsubsection{\texttt{property}}
 
-\subsubsection{\texttt{children}}
+\subsubsection{children: \texttt{sequence}}
 
-\subsubsection{\texttt{allowed}}
-
-\subsubsection{\texttt{container}}
+\subsubsection{children: \texttt{allowed}}
 
 \subsubsection{\texttt{typedef}}
+
+\subsection{Visual Grammar}
+
+\subsubsection{\texttt{interpolate}}
+
+\subsubsection{\texttt{each}}
+
+\subsubsection{\texttt{container}}
 
 \subsection{BlockLanguage}
 
@@ -79,11 +132,48 @@ Traditional approaches like the (extended) Backus-Naur-Form \cite{knuth_backus_1
 
 \subsubsection{Language Levels}
 
-\subsection{Generation: Code Generation}
+As outlined by \cite{klaeren_macht_2007}.
 
-\section{Generating IDES}
+\subsection{Generation: Target Source Code}
+
+As outlined in \fullref{sec:diff-traditional-compiler} the term \enquote{Code Generation} does not refer to traditional generation of machine code. Instead the generated code is assumed to be human readable text in any higher level language. The provided primitives for code generation are therefore concerned with concepts like indentation, pair-wise insertion of brackets and insertion of delimiters like commas or semicolons. \fullref{sec:code-generation-detail} explains the details of the \texttt{AST -> String} in more technical detail.
+
+The source code that is generated from the AST must follow the established standards of the target language as good as possible. This is an explicit goal, even if it wouldn't matter for the current language runtime. The (admittedly a little tongue-in-cheek) \enquote{Law of Leaky Abstractions} \cite{spolsky_law_2002} predicts, that any abstraction at some point may break. Or in the context of this dissertation: It must not be assumed that the generated target source code is always flawless, therefore glossing over it (or worse: debugging it) must be as frictionless as possible. And on top of that a \enquote{nice} code generation could provide students with a viable way to take their program out of the syntaxfree IDE.
+
+\subsubsection{Target Language Formatters}
+
+As the goal of this project is the augmentation of existing programming languages, it would be possible to tap into the vast ecosystem of modern source code formatters that are available for almost any language. One could for example use a tool HTML Tidy\footnote{\url{https://www.html-tidy.org/}} to process the following snippet that is perfectly fine from the perspective of a browser:
+
+\begin{minted}{html}
+<html><head><title>My Page</title></head><body><h1>Hi</h1></body></html>
+\end{minted}
+
+After using HTML Tidy, the source code could be formatted as follows:
+
+\begin{minted}{html}
+<html>
+  <head>
+    <title>My Page</title>
+  </head>
+  <body>
+    <h1>Hi</h1>
+  </body>
+</html>
+\end{minted}
+
+Technically speaking this approach is a \texttt{String -> String} transformation that would have to be implemented once for every target language: HTML could use HTML tidy, JavaScript could use Prettier\footnote{\url{https://prettier.io/}}, Ruby could use Rubocop\footnote{\url{https://rubocop.org/}}, ... If one assumes that a viable tool is available for every language that is worth augmenting, this more or less guarantees proper formatting results as we can assume that the most popular of these tools are tested and maintained by a large community.
+
+\subsubsection{Pretty Printing}
+
+But doing a \texttt{String -> String} transformation seems rather wasteful if the original syntax tree is still available. \cite{wadler_prettier_printer} describes a set of line-oriented operations that may be used to transform any AST into a tree of text nodes which are in turn well suited to be turned into a string.
+
+\section{Generating IDEs}
 
 And technically this dissertation does not describe only a compiler to transform an AST into source code, but also a second compiler to transform a Grammar into one of two IDE backends.
+
+\cite{fraser_ten_2015} provides insight on visual cues that have been identified during the development of Blockly.
+
+Wichtig: Turnaround-Zeit minimieren.
 
 \subsection{Generation: BlattWerkzeug}
 
@@ -95,15 +185,19 @@ And technically this dissertation does not describe only a compiler to transform
 
 \subsection{Insertion Location}
 
+\cite{fraser_ten_2015} describes \enquote{Transitive Connections} and doesn't like the idea of moving things after they have been dropped.
+
 \subsection{Copying vs Moving}
 
 \subsection{Appending vs Overwriting}
 
 \subsection{Embracing}
 
+\subsection{Derived values}
+
 \subsection{Typed Holes}
 
-Missing branches in the tree can be seen as typed holes as known from languages like Haskell (which was inspired by Agda) \cite{jones_haskell_2014} or Idris \cite{brady_type-driven_2017}. Filling these holes in real world programming languages is a difficult task, because narrowing down the vast number of choices to a \textit{reasonable} choice requires much context.
+Missing branches in the tree can be seen as typed holes as known from languages like Haskell (which was inspired by Agda) \cite{jones_haskell_2014} or Idris \cite{brady_type-driven_2017}. Filling these holes in real world programming languages is a difficult task, because narrowing down the vast number of choices to a \textit{reasonable} choice requires much context. Proposals to fill holes have been made for Haskell \cite{gissurarson_suggesting_2018} and attempts to create function implementations from a type signature and metadata like the name or a free form comment are under active research (e.g. \cite{chen_evaluating_2021} which is one of the parts that powers the currently not publicly available GitHub CoPilot\footnote{\url{https://copilot.github.com/}}.
 
 \subsection{Internal Syntaxtree References}
 
@@ -125,11 +219,24 @@ Missing branches in the tree can be seen as typed holes as known from languages 
 
 \subsection{SQL Distinct}
 
+With single child list, with two child lists or with a property.
+
 \section{Self Hosting}
+
+Defining languages via the generated IDE requires the definition of a grammar and a block language that describes a grammar and a block language. We will call these special languages \textit{Meta Grammar} and \textit{Meta Block Language}.
 
 \subsection{Meta Grammar}
 
 \subsection{Meta Block Language}
+
+\section{Code Generation}
+\label{sec:code-generation-detail}
+
+\subsection{Testing}
+
+Testing code generation is a relatively simple process: The Syntaxtree can be defined as a \texttt{JSON}-file and the endresult is normal text.
+
+\section{Conclusion}
 
 
 %%% Local Variables:
