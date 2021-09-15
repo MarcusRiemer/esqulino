@@ -91,6 +91,7 @@ module Types
       argument :name, type: String, required: false
       argument :slug, type: String, required: false
       argument :public, type: Boolean, required: false
+      argument :omit_associated, type: Boolean, required: false
     end
 
     class InputType < Types::Base::BaseInputObject

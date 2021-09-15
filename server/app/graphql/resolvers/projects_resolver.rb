@@ -15,6 +15,14 @@ class Resolvers::ProjectsResolver < Resolvers::BaseResolver
       scope = scope.where(public: true).or(scope.where(user_id: current_user.id))
     end
 
+    # Maybe a user wants to see all public projects but not the ones
+    # he owns or he is associated with?
+    if (not filter.nil? and filter.fetch(:omit_associated, false))
+      # TODO: Also filter out projects that they have read
+      #       or write access to.
+      scope = scope.where.not(user_id: current_user.id)
+    end
+
     if requested_columns(context).include?("code_resource_count")
 
       # code_resource_count will be used for field resolving in project_type.rb
@@ -43,7 +51,6 @@ class Resolvers::ProjectsResolver < Resolvers::BaseResolver
   end
 
   class Single < Resolvers::ProjectsResolver
-
     argument :id, ID, required: false
 
     def resolve(id:)
@@ -55,7 +62,6 @@ class Resolvers::ProjectsResolver < Resolvers::BaseResolver
   end
 
   class List < Resolvers::ProjectsResolver
-
     argument :input, Types::ProjectType::InputType, required: false
 
     def resolve(input: {})

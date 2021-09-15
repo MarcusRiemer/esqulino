@@ -24,10 +24,22 @@ module Resolvers::BaseQueryBuilderMethods
     scope
   end
 
+  # Adds the WHERE statements to the scope that correspond to the filtered values.
+  # Takes into account the type of the column, but only works for the root model,
+  # not for models that are associated.
   def apply_filter(scope, value)
+    # Keys that are not in this set are not part of the database and can't be filtered
+    # directly using a WHERE statement. The logic for these filters must be part of the
+    # custom resolver code.
+    database_columns = Set.new(self.relevant_columns)
+
     # When filtering via pattern (substring) matching
     # https://stackoverflow.com/questions/57612020/rails-hstore-column-search-for-the-same-value-in-all-keys-in-fastest-way
-    value.to_h.transform_keys { |k| k.to_s.underscore}.each do |filter_key, filter_value|
+    value
+      .to_h
+      .transform_keys { |k| k.to_s.underscore}
+      .filter { |k,v| database_columns.include? k  }
+      .each do |filter_key, filter_value|
       if is_uuid_column? filter_key
         if BlattwerkzeugUtil::string_is_uuid? filter_value
           scope = scope.where "#{@model_class.table_name}.#{filter_key}::text LIKE ?", filter_value

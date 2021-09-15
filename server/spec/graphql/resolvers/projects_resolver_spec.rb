@@ -309,5 +309,15 @@ RSpec.describe Resolvers::ProjectsResolver do
       end
     end
 
+    it "Omits courses the user is associated with" do
+      p_other_public = FactoryBot.create(:project, user: u_other, public: true)
+
+      res = exec_project_id_query(
+        filter: { omitAssociated: true },
+        user: u_other
+      )
+      expect(res).to eq([])
+    end
+
   end
 end
