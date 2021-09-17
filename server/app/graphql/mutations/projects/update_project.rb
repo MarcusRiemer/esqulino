@@ -7,19 +7,11 @@ class Mutations::Projects::UpdateProject < Mutations::Projects::Projects
   argument :preview, ID, required: false
   argument :slug, String, required: false
 
-  argument :maxGroupSize, Integer, required: false
-  argument :maxNumberOfGroups, Integer, required: false
-  argument :selectionGroupType, Integer, required: false
-
   field :project, Types::ProjectType, null: false
 
   def resolve(**args)
     project = Project.find_by_slug_or_id! args[:id]
     authorize project, :update?
-
-    raise ArgumentError, 'The maximum number of groups must not be less than 0' if maxGroupSize.is_present? && maxGroupSize < 0
-
-    raise ArgumentError, 'The maximum number of groups must not be less than 0' if maxNumberOfGroups.is_present? && maxNumberOfGroups < 0
 
     args = underscore_keys(args)
     project.assign_attributes(args)

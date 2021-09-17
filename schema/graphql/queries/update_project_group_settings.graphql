@@ -1,0 +1,31 @@
+mutation UpdateProjectGroupSettings(
+  $id: ID!
+  $maxGroupSize: Int
+  $maxNumberOfGroups: Int
+  $selectionGroupType: SelectionGroupTypeEnum
+  $enrollmentStart: ISO8601DateTime
+  $enrollmentEnd: ISO8601DateTime
+  $public: Boolean
+) {
+  updateProjectGroupSettings(
+    input: {
+      id: $id
+      maxGroupSize: $maxGroupSize
+      maxNumberOfGroups: $maxNumberOfGroups
+      selectionGroupType: $selectionGroupType
+      enrollmentStart: $enrollmentStart
+      enrollmentEnd: $enrollmentEnd
+      public: $public
+    }
+  ) {
+    project {
+      name
+      public
+      maxGroupSize
+      maxNumberOfGroups
+      selectionGroupType
+      enrollmentStart
+      enrollmentEnd
+    }
+  }
+}

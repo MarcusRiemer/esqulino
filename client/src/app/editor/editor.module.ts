@@ -32,6 +32,7 @@ import { EditorDebugMenuComponent } from "./debug-menu.component";
 
 import { SettingsComponent } from "./project-settings/settings.component";
 import { MembersComponent } from "./project-settings/members.component";
+import { CourseGroupSettingsComponent } from "./project-settings/course-group-settings.component";
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { MembersComponent } from "./project-settings/members.component";
     TrashComponent,
     SourceIconComponent,
     MembersComponent,
+    CourseGroupSettingsComponent,
   ],
   providers: [
     TrashService,

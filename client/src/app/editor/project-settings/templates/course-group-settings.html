@@ -1,0 +1,155 @@
+<div
+  class="card mb-3"
+  id="used-block-languages"
+  *ngIf="course$ | async; let course "
+>
+  <h4 class="card-header">Gruppeneinstellung</h4>
+  <div class="card-body">
+    <form
+      (ngSubmit)="onUpdateGroupSettings()"
+      [formGroup]="updateGroupSettings"
+    >
+      <div class="input-group mb-3">
+        <label class="form-control-label col-sm-2">
+          Den Kurs öffentlich stellen
+        </label>
+
+        <input
+          formControlName="public"
+          class="form-check-input"
+          type="checkbox"
+        />
+        <small class="text-muted">
+          Wenn die Gruppe nicht öffentlich ist, kann man sich auch nicht in
+          einen Kurs einschreiben und muss manuell die Gruppen erstellen. Beim
+          Deaktivieren, bleiben vorhandene Gruppen bestehen.
+        </small>
+      </div>
+      <div *ngIf="updateGroupSettings.get('public').value">
+        <div
+          class="input-group mb-3"
+          *ngIf="!updateGroupSettings.get('limitNumberOfGroups').value"
+        >
+          <label class="form-control-label col-sm-2">
+            Gruppen sind gegeben
+          </label>
+          <input
+            formControlName="groupsAreGiven"
+            class="form-check-input mt-0"
+            type="checkbox"
+          />
+          <small class="text-muted">
+            Die Gruppen können in dem Reiter "Teilnehmer" erstellt werden.
+          </small>
+        </div>
+        <div
+          class="input-group mb-3"
+          *ngIf="updateGroupSettings.get('groupsAreGiven').value"
+        >
+          <div class="col-sm-2"></div>
+          <input
+            formControlName="selfSelection"
+            class="form-check-input mt-0"
+            type="checkbox"
+            value=""
+          />
+          <label class="form-control-label col-sm-4">
+            Teilnehmer sollen die Gruppe selbst auswählen
+          </label>
+        </div>
+        <div
+          class="input-group mb-3"
+          *ngIf="!updateGroupSettings.get('groupsAreGiven').value"
+        >
+          <label class="form-control-label col-sm-2">Gruppen limitieren</label>
+          <input
+            formControlName="limitNumberOfGroups"
+            class="form-check-input mt-0"
+            type="checkbox"
+            value=""
+          />
+        </div>
+        <div
+          class="input-group mb-3"
+          *ngIf="updateGroupSettings.get('limitNumberOfGroups').value"
+        >
+          <div class="col-sm-2"></div>
+          <label class="form-control-label col-sm-2">
+            Maximale Gruppenanzahl
+          </label>
+          <input
+            formControlName="maxNumberOfGroups"
+            type="number"
+            class="form-control col-sm-8"
+            min="{{course.numberOfExistingGroups || 1 }}"
+          />
+          <small class="text-muted">
+            Wenn bereits Gruppen vorhanden sind, kann der minimal Wert nur so
+            klein sein, wie Gruppen bereits vorhanden sind.
+          </small>
+        </div>
+        <div class="input-group mb-3">
+          <label class="form-control-label col-sm-2">
+            Maximale Gruppengröße
+          </label>
+          <input
+            formControlName="maxNumberOfMembers"
+            type="number"
+            class="form-control"
+            min=" 1"
+          />
+          <small class="text-muted">
+            Anzahl der maximalen Mitglieder einer einzelnen Gruppe.
+          </small>
+        </div>
+
+        <div class="input-group mb-3">
+          <label class="form-control-label col-sm-2">Einschreibungsstart</label>
+          <input
+            type="date"
+            class="form-control"
+            placeholder="Enddatum"
+            name="startDate"
+            formControlName="startDate"
+          />
+          <span class="input-group-text">Datum</span>
+          <input
+            formControlName="startTime"
+            type="time"
+            name="startTime"
+            class="form-control"
+          />
+          <span class="input-group-text">Uhrzeit</span>
+
+          <small class="text-muted">
+            Wenn kein Eintrittsdatum vorhanden ist, können Teilnehmer sofort dem
+            Kurs beitreten
+          </small>
+        </div>
+        <div class="input-group mb-3">
+          <label class="form-control-label col-sm-2">Einschreibungsende</label>
+          <input
+            formControlName="endDate"
+            type="date"
+            class="form-control"
+            placeholder="Enddatum"
+            name="endDate"
+          />
+          <span class="input-group-text">Datum</span>
+          <input
+            formControlName="endTime"
+            type="time"
+            name="endDateTime"
+            class="form-control"
+          />
+          <span class="input-group-text">Uhrzeit</span>
+          <small class="text-muted">
+            Wenn kein Enddatum vorhanden ist, können Teilnehmer jederzeit dem
+            Kurs beitreten.
+          </small>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Speichern</button>
+    </form>
+  </div>
+</div>
