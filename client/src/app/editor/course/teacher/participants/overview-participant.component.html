@@ -85,6 +85,7 @@
           data-spec="edit-singel"
           type="button"
           class="btn btn-outline-warning btn-sm"
+          (click)="onOpenGroupMemberDialog(participant.id)"
         >
           <course-icon [iconType]="'list-edit-singel'"></course-icon>
         </button>

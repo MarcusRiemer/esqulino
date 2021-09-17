@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { first, map, tap } from "rxjs/operators";
 import {
   DestroyProjectCourseParticipationGQL,
@@ -7,6 +8,7 @@ import {
 import { SidebarService } from "../../../sidebar.service";
 import { EditorToolbarService } from "../../../toolbar.service";
 import { CourseService } from "../../course.service";
+import { ParticipantMemberGroupDialogComponent } from "./dialog/participant-member-group-dialog.component";
 
 @Component({
   templateUrl: "overview-participant.component.html",
@@ -17,7 +19,8 @@ export class OverviewParticipantComponent implements OnInit {
     private readonly _toolbarService: EditorToolbarService,
     private readonly _sidebarService: SidebarService,
     private readonly _mutDestroyProjectCourseParticipation: DestroyProjectCourseParticipationGQL,
-    private readonly _mutRemoveMemberFromParticipantGroup: RemoveMemberFromParticipantGroupGQL
+    private readonly _mutRemoveMemberFromParticipantGroup: RemoveMemberFromParticipantGroupGQL,
+    private readonly _matDialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +48,12 @@ export class OverviewParticipantComponent implements OnInit {
       return toReturn;
     })
   );
+
+  onOpenGroupMemberDialog(groupId: string) {
+    this._matDialog.open(ParticipantMemberGroupDialogComponent, {
+      data: { groupId },
+    });
+  }
 
   groups$ = this._courseService.fullCourseData$.pipe(
     map((courseData) =>

@@ -28,7 +28,8 @@ export class CourseIconComponent implements OnInit {
     | "database"
     | "course-overview"
     | "date-reached"
-    | "date-unreached";
+    | "date-unreached"
+    | "info-description";
 
   ngOnInit(): void {}
 }

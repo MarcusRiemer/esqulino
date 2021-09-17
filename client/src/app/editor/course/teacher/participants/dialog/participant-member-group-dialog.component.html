@@ -1,0 +1,55 @@
+<div class="card mb-3" id="used-block-languages">
+  <h4 class="card-header">Gruppenmitglieder</h4>
+  <div class="card-body">
+    <div class="mb-3">
+      <table mat-table [dataSource]="members$" matSort class="container-fluid">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let member">
+            {{ member.user.displayName }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="roleName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Rolle</th>
+          <td mat-cell *matCellDef="let member">
+            {{ member.membershipType }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="joinedAt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Eintrittsdatum
+          </th>
+          <td mat-cell *matCellDef="let member">
+            <div *ngIf="member.joinedAt; else notAccepted">
+              {{ member.joinedAt | date: "yyyy.MM.dd" }}
+            </div>
+            <ng-template #notAccepted>Noch nicht Akzeptiert</ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Aktion</th>
+          <td mat-cell *matCellDef="let member">
+            <button
+              data-spec="delete"
+              type="button"
+              class="btn btn-outline-danger btn-sm"
+              (click)="onRemoveMember(member.user.id)"
+            >
+              <course-icon [iconType]="'list-delete'"></course-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <form (ngSubmit)="onAddMemberToGroup()">
+        <label>Mitglied hinzufügen</label>
+        <input type="text" [formControl]="formControlUserName" />
+        <button type="submit">Speichern</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -12,7 +12,7 @@ class Mutations::Projects::AddMemberToGroup < Mutations::Projects::Projects
 
     raise ArgumentError, 'The Project must be a group of a course.' if group.based_on_project.nil?
 
-    course = group.based_on_project
+    course = Project.find(group.based_on_project.id)
 
     raise ArgumentError, 'Can´t delete a Group with submissions' if group.assignment_submissions.count > 0
 
@@ -23,5 +23,7 @@ class Mutations::Projects::AddMemberToGroup < Mutations::Projects::Projects
     raise ArgumentError, 'User is member of the root course' if course.is_already_in_project?(user)
 
     group.project_members.create(user_id: user.id, membership_type: role)
+
+    { project: course }
   end
 end

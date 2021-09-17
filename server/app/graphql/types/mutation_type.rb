@@ -30,6 +30,8 @@ module Types
     field :join_course, mutation: Mutations::Projects::JoinCourse
     field :join_participant_group, mutation: Mutations::Projects::JoinParticipantGroup
 
+    field :update_project_group_settings, mutation: Mutations::Projects::UpdateProjectGroupSettings
+
     field :create_assignment_required_code_resource, mutation: Mutations::Projects::CreateAssignmentRequiredCodeResource
     field :destroy_assignment_required_code_resource, mutation: Mutations::Projects::DestroyAssignmentRequiredCodeResource
     field :update_assignment_required_code_resource, mutation: Mutations::Projects::UpdateAssignmentRequiredCodeResource
