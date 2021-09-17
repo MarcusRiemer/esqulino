@@ -81,11 +81,11 @@ export class AssignmentOverviewComponent implements OnInit {
   readonly $assignments = this._courseService.fullAssignments$;
 
   displayedColumns: string[] = [
-    "actions",
     "name",
     "startDate",
     "endDate",
     "weight",
+    "actions",
   ];
 
   /**

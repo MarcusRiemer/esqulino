@@ -1,14 +1,34 @@
 <div class="card mb-3">
   <div class="card-header">
     <h4 *ngIf="requiredCodeResource.referenceType == 'given_full'">
-      Vollständig gegeben anlegen
+      Schreibgeschütz gegeben Ressource anlegen
     </h4>
     <h4 *ngIf="requiredCodeResource.referenceType == 'given_partially'">
-      Teilweise gegeben anlegen
+      Editierbar gegeben Ressource anlegen
     </h4>
-    <h4 *ngIf="!requiredCodeResource.referenceType">Gefordert anlegen</h4>
+    <h4 *ngIf="!requiredCodeResource.referenceType">
+      Gefordert Ressource anlegen
+    </h4>
   </div>
   <div class="card-body">
+    <p *ngIf="requiredCodeResource.referenceType == 'given_full'">
+      <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
+      <b>Schreibgeschütz gegebene Ressourcen</b>
+      können von dem Schüler nicht bearbeitet werden. Sie können gegeben falls
+      in anderen Code Ressourcen eingebunden werden, nicht aber verändert
+      werden.
+    </p>
+    <p *ngIf="requiredCodeResource.referenceType == 'given_partially'">
+      <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
+      <b>Editierbar gegebene Ressourcen</b>
+      können vom Schüler bearbeitet werde. Dabei wird eine Kopie von dem
+      erstellen Code dem Schüler bereitgestellt.
+    </p>
+    <p *ngIf="!requiredCodeResource.referenceType">
+      <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
+      <b>Geforderte Ressourcen</b>
+      müssen von dem Schüler komplett selbst erstellt werden.
+    </p>
     <div class="form-group row mb-3">
       <label for="assignment-name" class="col-sm-2 form-control-label">
         Aufgabenname
