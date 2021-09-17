@@ -6,6 +6,8 @@ import { userRouting } from "./user.routes";
 import { UserComponent } from "./user.component";
 import { OwnProjectsOverviewComponent } from "./own-projects-overview.component";
 import { CreateProjectComponent } from "./create-project.component";
+import { frontRouting } from "../front/front.routes";
+import { ListCorusesOverviewComponent } from "./list-courses-overview.component";
 
 @NgModule({
   imports: [SharedAppModule, userRouting],
@@ -13,6 +15,7 @@ import { CreateProjectComponent } from "./create-project.component";
     UserComponent,
     OwnProjectsOverviewComponent,
     CreateProjectComponent,
+    ListCorusesOverviewComponent,
   ],
   exports: [UserComponent],
 })

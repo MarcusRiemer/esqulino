@@ -7,6 +7,24 @@ export const userSettings: NavItem[] = [
   {
     type: "link",
     text: {
+      de: "Meine Kurse",
+      en: "My Courses",
+    },
+    route: ["/user/my-courses"],
+    icon: "user",
+  },
+  {
+    type: "link",
+    text: {
+      de: "Kurs Übersicht",
+      en: "Course Overview",
+    },
+    route: ["/user/courses"],
+    icon: "user",
+  },
+  {
+    type: "link",
+    text: {
       de: "Account",
       en: "Account",
     },

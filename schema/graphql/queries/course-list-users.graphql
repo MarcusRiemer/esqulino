@@ -1,0 +1,8 @@
+query CourseListUsers {
+  users {
+    nodes {
+      id
+      displayName
+    }
+  }
+}
