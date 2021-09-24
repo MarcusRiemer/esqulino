@@ -1,6 +1,12 @@
-mutation CreateProject($name:LangJson!,$slug:String){
-    createProject(input:{name:$name,slug:$slug}) {
-        errors
-        id
-    }
+mutation CreateProject(
+  $name: LangJson!
+  $slug: String
+  $courseTemplate: Boolean
+) {
+  createProject(
+    input: { name: $name, slug: $slug, courseTemplate: $courseTemplate }
+  ) {
+    errors
+    id
+  }
 }

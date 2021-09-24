@@ -10,6 +10,7 @@ query FullProject($id: ID!) {
     indexPageId
     createdAt
     updatedAt
+    courseTemplate
     maxGroupSize
     maxNumberOfGroups
     selectionGroupType

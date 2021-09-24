@@ -271,6 +271,7 @@ ActiveRecord::Schema.define(version: 2021_09_09_091913) do
     t.integer "selection_group_type"
     t.datetime "enrollment_start"
     t.datetime "enrollment_end"
+    t.boolean "course_template"
     t.index ["default_database_id"], name: "index_projects_on_default_database_id"
     t.index ["slug"], name: "index_projects_on_slug", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"

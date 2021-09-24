@@ -37,6 +37,20 @@ RSpec.describe Mutations::Projects::CreateProject do
 
     expect(p.user_id).to eq admin.id
     expect(p.name).to eq({ "en" => "Test" })
+    expect(p.course_template).to eq(false)
+  end
+
+  it "Create a course as admin works" do
+    admin = create(:user, :admin)
+    mut = described_class.new(**init_args(user: admin))
+
+    result = mut.resolve(name: { "en" => "Test" }, course_template: true)
+
+    p = Project.find(result[:id])
+
+    expect(p.user_id).to eq admin.id
+    expect(p.name).to eq({ "en" => "Test" })
+    expect(p.course_template).to eq(true)
   end
 
   it "Creation as admin guest ends up as system creation" do

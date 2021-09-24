@@ -116,7 +116,7 @@ class Project < ApplicationRecord
   end
 
   def is_course
-    !slug.nil? and slug.start_with?('course')
+    !slug.nil? and slug.start_with?('course') or course_template == true
   end
 
   def is_participant_course

@@ -18,6 +18,7 @@ class Mutations::Projects::CreateProjectCourseParticipation < Mutations::BaseMut
     c_project.slug = nil
     c_project.based_on_project = project
     c_project.public = false
+    c_project.course_template = false
     c_project.name = group_name
 
     ActiveRecord::Base.transaction do
