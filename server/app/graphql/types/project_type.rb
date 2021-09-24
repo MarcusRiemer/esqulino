@@ -9,6 +9,8 @@ module Types
     field :slug, String, null: true
     field :assignments, [Types::AssignmentType], null: true
 
+
+    field :course_template, Boolean, null: true
     field :enrollment_start, GraphQL::Types::ISO8601DateTime, null: true
     field :enrollment_end, GraphQL::Types::ISO8601DateTime, null: true
     field :max_group_size, Integer, null: true
@@ -91,7 +93,16 @@ module Types
       argument :name, type: String, required: false
       argument :slug, type: String, required: false
       argument :public, type: Boolean, required: false
+      argument :is_course, type: Boolean, required: false
+      argument :is_member, type: Boolean, required: false
+      argument :is_not_participant_of_course, type: Boolean, required: false
+      argument :is_participant_course, type: Boolean, required: false
+      argument :is_not_participant_course, type: Boolean, required: false
+      argument :course_template, type: Boolean, required: false
+      argument :is_associated, type: Boolean, required: false
       argument :omit_associated, type: Boolean, required: false
+      argument :enrollment_period_valid, type: Boolean, required: false
+      
     end
 
     class InputType < Types::Base::BaseInputObject
