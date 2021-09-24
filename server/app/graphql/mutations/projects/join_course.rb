@@ -21,7 +21,7 @@ class Mutations::Projects::JoinCourse < Mutations::Projects::Projects
 
         if group_with_place.present?
 
-          group_with_place.project_members.create(user_id: current_user.id, membership_type: 'participant')
+          group_with_place.project_members.create(user_id: current_user.id, membership_type: 'participant', joined_at: Date.today)
         elsif course.max_number_of_groups > course.participant_projects.count
           group_with_place = Mutations::Projects::CreateProjectCourseParticipation.helper_create_project_course(course, { 'de' => 'Gruppe-' + (course.participant_projects.count + 1).to_s }, [current_user.id])
         else
@@ -29,13 +29,13 @@ class Mutations::Projects::JoinCourse < Mutations::Projects::Projects
         end
       when 'as_many_groups_as_was_created'
         if group_with_place.present?
-          group_with_place.project_members.create(user_id: current_user.id, membership_type: 'participant')
+          group_with_place.project_members.create(user_id: current_user.id, membership_type: 'participant', joined_at: Date.today)
         else
           raise ArgumentError, 'The Course is full'
         end
       when 'no_group_number_limitation'
         if group_with_place.present?
-          group_with_place.project_members.create(user_id: current_user.id, membership_type: 'participant')
+          group_with_place.project_members.create(user_id: current_user.id, membership_type: 'participant', joined_at: Date.today)
         else
           group_with_place = Mutations::Projects::CreateProjectCourseParticipation.helper_create_project_course(course, { 'de' => 'Gruppe-' + (course.participant_projects.count + 1).to_s }, [current_user.id])
         end
@@ -44,6 +44,10 @@ class Mutations::Projects::JoinCourse < Mutations::Projects::Projects
       end
     end
 
-    group_with_place
+
+    {
+      project: group_with_place
+    }
+    
   end
 end

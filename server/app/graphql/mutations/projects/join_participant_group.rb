@@ -26,9 +26,9 @@ class Mutations::Projects::JoinParticipantGroup < Mutations::Projects::Projects
         group_with_user.project_members.find_by(user_id: current_user.id).destroy!
       end
 
-      group.project_members.create(user_id: current_user.id, membership_type: 'participant')
+      group.project_members.create(user_id: current_user.id, membership_type: 'participant', joined_at: Date.today)
     end
 
-    group
+    {project: group}
   end
 end

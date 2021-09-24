@@ -1,4 +1,4 @@
-mutation AcceptInivation($projectId: ID!) {
+mutation AcceptInvitation($projectId: ID!) {
   acceptInvitation(input: { projectId: $projectId }) {
     project {
       id

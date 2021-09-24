@@ -15,7 +15,7 @@ class Mutations::Projects::AcceptInvitation < Mutations::Projects::Projects
     member.joined_at = Date.today
     member.save!
 
-    # TODO: so richtig =?
+
     project
   end
 end
