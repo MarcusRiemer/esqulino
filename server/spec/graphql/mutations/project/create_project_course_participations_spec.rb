@@ -17,7 +17,7 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
   end
 
   it 'Create course simple' do
-    project = create(:project, slug: 'course-test')
+    project = create(:project, slug: 'course-test', course_template: true)
     assignment = create(:assignment, project: project, name: 'test')
     user1 = create(:user)
 
@@ -25,22 +25,86 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
 
     res = mut.resolve(
       based_on_project_id: project.id,
-      number_of_groups: 3
+      number_of_groups: 3,
+      name: "Gruppe-###",
+      start_name_counter: 10
     )
 
     expect(Project.count).to eq 4
     expect(ProjectCourseParticipation.count).to eq 3
-    expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).based_on_project).to eq project
-    expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).assignments.count).to eq 0
-    expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).user).to eq project.user
+    expect(Project.find_by(name: { 'de' => 'Gruppe-010' }).based_on_project).to eq project
+    expect(Project.find_by(name: { 'de' => 'Gruppe-011' }).assignments.count).to eq 0
+    expect(Project.find_by(name: { 'de' => 'Gruppe-012' }).user).to eq project.user
 
-    expect(Project.find_by(name: { 'de' => 'Gruppe-3' }).based_on_project).to eq project
-    expect(Project.find_by(name: { 'de' => 'Gruppe-3' }).assignments.count).to eq 0
-    expect(Project.find_by(name: { 'de' => 'Gruppe-3' }).user).to eq project.user
+  end
+
+  it 'without a # symbol' do
+    project = create(:project, slug: 'course-test', course_template: true)
+    assignment = create(:assignment, project: project, name: 'test')
+    user1 = create(:user)
+
+    mut = described_class.new(**init_args(user: project.user))
+
+    res = mut.resolve(
+      based_on_project_id: project.id,
+      number_of_groups: 3,
+      name: "Gruppe",
+      start_name_counter: 10
+    )
+
+    expect(Project.count).to eq 4
+    expect(ProjectCourseParticipation.count).to eq 3
+    expect(Project.where(name: { 'de' => 'Gruppe' }).count).to eq 3
+  end
+
+  it ' with more than one # phrases' do
+    project = create(:project, slug: 'course-test', course_template: true)
+    assignment = create(:assignment, project: project, name: 'test')
+    user1 = create(:user)
+
+    mut = described_class.new(**init_args(user: project.user))
+
+    res = mut.resolve(
+      based_on_project_id: project.id,
+      number_of_groups: 3,
+      name: "###Gruppe-###",
+      start_name_counter: 10
+    )
+
+    expect(Project.count).to eq 4
+    expect(ProjectCourseParticipation.count).to eq 3
+    expect(Project.find_by(name: { 'de' => '010Gruppe-###' })).not_to eq nil
+    expect(Project.find_by(name: { 'de' => '011Gruppe-###' })).not_to eq nil
+    expect(Project.find_by(name: { 'de' => '012Gruppe-###' })).not_to eq nil
+  end
+
+  it 'negativ start_name_counter ' do
+    project = create(:project, slug: 'course-test', course_template: true)
+    assignment = create(:assignment, project: project, name: 'test')
+    user1 = create(:user)
+
+    mut = described_class.new(**init_args(user: project.user))
+
+    expect{mut.resolve(
+      based_on_project_id: project.id,
+      number_of_groups: 3,
+      name: "###Gruppe-###",
+      start_name_counter: -1
+    )}.to raise_error(ArgumentError)
+
+    expect{mut.resolve(
+      based_on_project_id: project.id,
+      number_of_groups: 3,
+      name: "Gruppe-",
+      start_name_counter: -10
+    )}.to raise_error(ArgumentError)
+
+    expect(Project.count).to eq 1
+    expect(ProjectCourseParticipation.count).to eq 0
   end
 
   it 'Create course simple without permissions' do
-    project = create(:project, slug: 'course-test')
+    project = create(:project, slug: 'course-test', course_template: true)
     assignment = create(:assignment, project: project, name: 'test')
     user1 = create(:user)
 
@@ -49,7 +113,9 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
     expect do
       mut.resolve(
         based_on_project_id: project.id,
-        number_of_groups: 3
+        number_of_groups: 3,
+        name: "Gruppe-###",
+        start_name_counter: 10
       )
     end.to raise_error(Pundit::NotAuthorizedError)
 
@@ -58,7 +124,7 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
   end
 
   it 'create groups two times for on project' do
-    project = create(:project, slug: 'course-test')
+    project = create(:project, slug: 'course-test', course_template: true)
     assignment = create(:assignment, project: project, name: 'test')
     user1 = create(:user)
 
@@ -66,27 +132,31 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
 
     res = mut.resolve(
       based_on_project_id: project.id,
-      number_of_groups: 3
+      number_of_groups: 3,
+      name: "Gruppe-###",
+      start_name_counter: 10
     )
 
     res = mut.resolve(
       based_on_project_id: project.id,
-      number_of_groups: 3
+      number_of_groups: 3,
+      name: "Gruppe-###",
+      start_name_counter: 110
     )
 
     expect(Project.count).to eq 7
     expect(ProjectCourseParticipation.count).to eq 6
-    expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).based_on_project).to eq project
-    expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).assignments.count).to eq 0
-    expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).user).to eq project.user
+    expect(Project.find_by(name: { 'de' => 'Gruppe-012' }).based_on_project).to eq project
+    expect(Project.find_by(name: { 'de' => 'Gruppe-012' }).assignments.count).to eq 0
+    expect(Project.find_by(name: { 'de' => 'Gruppe-012' }).user).to eq project.user
 
-    expect(Project.find_by(name: { 'de' => 'Gruppe-5' }).based_on_project).to eq project
-    expect(Project.find_by(name: { 'de' => 'Gruppe-5' }).assignments.count).to eq 0
-    expect(Project.find_by(name: { 'de' => 'Gruppe-5' }).user).to eq project.user
+    expect(Project.find_by(name: { 'de' => 'Gruppe-110' }).based_on_project).to eq project
+    expect(Project.find_by(name: { 'de' => 'Gruppe-110' }).assignments.count).to eq 0
+    expect(Project.find_by(name: { 'de' => 'Gruppe-110' }).user).to eq project.user
   end
 
-  it 'Create negativ number' do
-    project = create(:project, slug: 'course-test')
+  it 'negativ number_of_groups' do
+    project = create(:project, slug: 'course-test', course_template: true)
     assignment = create(:assignment, project: project, name: 'test')
     user1 = create(:user)
 
@@ -95,7 +165,9 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
     expect do
       mut.resolve(
         based_on_project_id: project.id,
-        number_of_groups: -3
+        number_of_groups: -3,
+        name: "Gruppe-###",
+        start_name_counter: 110
       )
     end.to raise_error(ArgumentError)
 
@@ -105,7 +177,9 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
     expect do
       mut.resolve(
         based_on_project_id: project.id,
-        number_of_groups: 0
+        number_of_groups: 0,
+        name: "Gruppe-###",
+        start_name_counter: 110
       )
     end.to raise_error(ArgumentError)
 
@@ -114,7 +188,7 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
   end
 
   it 'create with all other referenzes' do
-    project2 = create(:project, slug: 'course-123')
+    project2 = create(:project, slug: 'course-123', course_template: true)
 
     assignment = create(:assignment, project: project2, name: 'test')
 
@@ -130,7 +204,9 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
 
     res = mut.resolve(
       based_on_project_id: project2.id,
-      number_of_groups: 10
+      number_of_groups: 10,
+      name: "Gruppe-#",
+      start_name_counter: 0
     )
 
     expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).code_resources.count).to eq 0
@@ -155,5 +231,38 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
     expect(ProjectDatabase.count).to eq 11
     expect(ProjectSource.count).to eq 11
     expect(ProjectUsesBlockLanguage.count).to eq 22
+  end
+
+  it 'not a course' do
+    
+
+    
+
+    project  = create(:project)
+   
+    mut = described_class.new(**init_args(user: project.user))
+
+   expect{mut.resolve(
+      based_on_project_id: project.id,
+      number_of_groups: 3,
+      name: "Gruppe",
+      start_name_counter: 10
+    )}.to raise_error(ArgumentError)
+
+
+    course = create(:project, slug: 'course-test', course_template: true)
+    group  = create(:project, based_on_project: course)
+
+    mut = described_class.new(**init_args(user: group.user))
+
+    expect{mut.resolve(
+      based_on_project_id: group.id,
+      number_of_groups: 3,
+      name: "Gruppe",
+      start_name_counter: 10
+    )}.to raise_error(ArgumentError)
+
+    expect(Project.count).to eq 3
+    expect(ProjectCourseParticipation.count).to eq 0
   end
 end

@@ -1,11 +1,15 @@
 mutation CreateProjectCourseParticipations(
   $basedOnProjectId: ID!
   $numberOfGroups: Int!
+  $name: String!
+  $startNameCounter: Int!
 ) {
   createProjectCourseParticipations(
     input: {
       basedOnProjectId: $basedOnProjectId
       numberOfGroups: $numberOfGroups
+      name: $name
+      startNameCounter: $startNameCounter
     }
   ) {
     project {
