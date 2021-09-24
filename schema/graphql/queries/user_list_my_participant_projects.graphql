@@ -1,0 +1,29 @@
+query UserListMyParticipantProjects {
+  projects(input: { filter: { isMember: true, isParticipantCourse: true } }) {
+    nodes {
+      id
+      createdAt
+      projectMembers {
+        id
+        userId
+        joinedAt
+      }
+      basedOnProject {
+        name
+        description
+        id
+        preview
+        description
+        courseTemplate
+        enrollmentStart
+        enrollmentEnd
+        selectionGroupType
+        assignments {
+          id
+          startDate
+          endDate
+        }
+      }
+    }
+  }
+}

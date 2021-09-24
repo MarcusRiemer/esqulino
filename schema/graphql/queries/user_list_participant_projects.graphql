@@ -1,0 +1,27 @@
+query UserListParticipantProjects($id: ID!) {
+  project(id: $id) {
+    id
+    slug
+    name
+    isCourse
+    isParticipantCourse
+    courseTemplate
+    maxGroupSize
+    maxNumberOfGroups
+    selectionGroupType
+    enrollmentStart
+    enrollmentEnd
+    participantProjects {
+      name
+      id
+      members {
+        id
+        displayName
+      }
+    }
+    user {
+      id
+      displayName
+    }
+  }
+}

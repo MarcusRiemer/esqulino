@@ -1,0 +1,29 @@
+query UserListOwnCourses {
+  projects(input: { filter: { isAssociated: true, courseTemplate: true } }) {
+    nodes {
+      id
+      createdAt
+      name
+      description
+      id
+      preview
+      description
+      courseTemplate
+      enrollmentStart
+      enrollmentEnd
+      preview
+      public
+      assignments {
+        id
+        startDate
+        endDate
+        assignmentSubmissions {
+          id
+          assignmentSubmissionGrades {
+            id
+          }
+        }
+      }
+    }
+  }
+}

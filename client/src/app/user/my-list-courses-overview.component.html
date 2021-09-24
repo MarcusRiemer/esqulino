@@ -1,0 +1,18 @@
+<h2>Teilgenommene Kurse</h2>
+
+<div class="row">
+  <div *ngFor="let course of combinedCourses$ | async" class="col-sm-4 mb-3">
+    <participated-list-courses-card
+      [course]="course"
+    ></participated-list-courses-card>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+<h2>Selbsterstellte Kurse</h2>
+
+<div class="row">
+  <div *ngFor="let course of ownCourses$ | async" class="col-sm-4 mb-3">
+    <own-list-courses-card [course]="course"></own-list-courses-card>
+  </div>
+</div>

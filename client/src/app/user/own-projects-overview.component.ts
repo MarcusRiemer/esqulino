@@ -45,9 +45,9 @@ export class OwnProjectsOverviewComponent
     // TODO: It seems rather unpleasant to set the variable in here
     //       as a side effect, there probably is a nicer way to do this.
     //       Possible root problem: `this.query` must be a plain value.
-    this.userService.userId$.subscribe((userId) => {
-      this.query.setVariables({ userId });
-    });
+    // this.userService.userId$.subscribe((userId) => {
+    //   this.query.setVariables({});
+    // });
   }
 
   typed(doc: any): ListItem {

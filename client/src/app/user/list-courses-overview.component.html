@@ -1,0 +1,6 @@
+<h1>Kursangebot</h1>
+<div class="row">
+  <div *ngFor="let course of courses$ | async" class="col-sm-4 mb-3">
+    <course-overview-item [course]="course"></course-overview-item>
+  </div>
+</div>

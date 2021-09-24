@@ -1,0 +1,29 @@
+query UserListCourses {
+  projects(
+    input: {
+      filter: {
+        omitAssociated: true
+        courseTemplate: true
+        isNotParticipantOfCourse: true
+        public: true
+      }
+    }
+  ) {
+    nodes {
+      id
+      name
+      slug
+      createdAt
+      preview
+      selectionGroupType
+      courseTemplate
+      enrollmentStart
+      enrollmentEnd
+      description
+      user {
+        id
+        displayName
+      }
+    }
+  }
+}

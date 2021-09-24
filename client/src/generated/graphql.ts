@@ -658,6 +658,7 @@ export type CreateProjectCourseParticipationsPayload = {
 export type CreateProjectInput = {
   name: Scalars["LangJson"];
   slug?: Maybe<Scalars["String"]>;
+  courseTemplate?: Maybe<Scalars["Boolean"]>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars["String"]>;
 };
@@ -1291,6 +1292,7 @@ export type Project = {
   blockLanguages: Array<BlockLanguage>;
   codeResourceCount?: Maybe<Scalars["Int"]>;
   codeResources: Array<CodeResource>;
+  courseTemplate?: Maybe<Scalars["Boolean"]>;
   createdAt: Scalars["ISO8601DateTime"];
   defaultDatabase?: Maybe<ProjectDatabase>;
   defaultDatabaseId?: Maybe<Scalars["ID"]>;
@@ -1368,6 +1370,14 @@ export type ProjectFilterFieldType = {
   slug?: Maybe<Scalars["String"]>;
   public?: Maybe<Scalars["Boolean"]>;
   isCourse?: Maybe<Scalars["Boolean"]>;
+  isMember?: Maybe<Scalars["Boolean"]>;
+  isNotParticipantOfCourse?: Maybe<Scalars["Boolean"]>;
+  isParticipantCourse?: Maybe<Scalars["Boolean"]>;
+  isNotParticipantCourse?: Maybe<Scalars["Boolean"]>;
+  courseTemplate?: Maybe<Scalars["Boolean"]>;
+  isAssociated?: Maybe<Scalars["Boolean"]>;
+  omitAssociated?: Maybe<Scalars["Boolean"]>;
+  enrollmentPeriodValid?: Maybe<Scalars["Boolean"]>;
 };
 
 export type ProjectInputType = {
@@ -1909,11 +1919,11 @@ export type UserOrderType = {
   orderDirection?: Maybe<OrderDirectionEnum>;
 };
 
-export type AcceptInivationMutationVariables = Exact<{
+export type AcceptInvitationMutationVariables = Exact<{
   projectId: Scalars["ID"];
 }>;
 
-export type AcceptInivationMutation = { __typename?: "Mutation" } & {
+export type AcceptInvitationMutation = { __typename?: "Mutation" } & {
   acceptInvitation?: Maybe<
     { __typename?: "AcceptInvitationPayload" } & {
       project?: Maybe<
@@ -2738,6 +2748,7 @@ export type CreateProgrammingLanguageMutation = { __typename?: "Mutation" } & {
 export type CreateProjectMutationVariables = Exact<{
   name: Scalars["LangJson"];
   slug?: Maybe<Scalars["String"]>;
+  courseTemplate?: Maybe<Scalars["Boolean"]>;
 }>;
 
 export type CreateProjectMutation = { __typename?: "Mutation" } & {
@@ -3116,6 +3127,7 @@ export type FullProjectQuery = { __typename?: "Query" } & {
     | "indexPageId"
     | "createdAt"
     | "updatedAt"
+    | "courseTemplate"
     | "maxGroupSize"
     | "maxNumberOfGroups"
     | "selectionGroupType"
@@ -3500,38 +3512,7 @@ export type JoinParticipantGroupMutation = { __typename?: "Mutation" } & {
   >;
 };
 
-export type ListUserCoursesQueryVariables = Exact<{
-  userId?: Maybe<Scalars["ID"]>;
-}>;
-
-export type ListUserCoursesQuery = { __typename?: "Query" } & {
-  projects: { __typename?: "ProjectConnection" } & Pick<
-    ProjectConnection,
-    "totalCount"
-  > & {
-      nodes?: Maybe<
-        Array<
-          Maybe<
-            { __typename?: "Project" } & Pick<
-              Project,
-              "id" | "name" | "slug" | "createdAt"
-            > & {
-                user?: Maybe<
-                  { __typename?: "User" } & Pick<User, "id" | "displayName">
-                >;
-              }
-          >
-        >
-      >;
-      pageInfo: { __typename?: "PageInfo" } & Pick<
-        PageInfo,
-        "hasPreviousPage" | "hasNextPage" | "startCursor" | "endCursor"
-      >;
-    };
-};
-
 export type ListUserProjectsQueryVariables = Exact<{
-  userId?: Maybe<Scalars["ID"]>;
   first?: Maybe<Scalars["Int"]>;
   after?: Maybe<Scalars["String"]>;
   before?: Maybe<Scalars["String"]>;
@@ -3548,7 +3529,7 @@ export type ListUserProjectsQuery = { __typename?: "Query" } & {
           Maybe<
             { __typename?: "Project" } & Pick<
               Project,
-              "id" | "name" | "slug" | "createdAt"
+              "id" | "name" | "slug" | "createdAt" | "courseTemplate"
             >
           >
         >
@@ -4180,8 +4161,166 @@ export type UpdateProjectGroupSettingsMutation = { __typename?: "Mutation" } & {
   >;
 };
 
-export const AcceptInivationDocument = gql`
-  mutation AcceptInivation($projectId: ID!) {
+export type UserListCoursesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type UserListCoursesQuery = { __typename?: "Query" } & {
+  projects: { __typename?: "ProjectConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "Project" } & Pick<
+            Project,
+            | "id"
+            | "name"
+            | "slug"
+            | "createdAt"
+            | "preview"
+            | "selectionGroupType"
+            | "courseTemplate"
+            | "enrollmentStart"
+            | "enrollmentEnd"
+            | "description"
+          > & {
+              user?: Maybe<
+                { __typename?: "User" } & Pick<User, "id" | "displayName">
+              >;
+            }
+        >
+      >
+    >;
+  };
+};
+
+export type UserListMyParticipantProjectsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type UserListMyParticipantProjectsQuery = { __typename?: "Query" } & {
+  projects: { __typename?: "ProjectConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "Project" } & Pick<Project, "id" | "createdAt"> & {
+              projectMembers: Array<
+                { __typename?: "ProjectMember" } & Pick<
+                  ProjectMember,
+                  "id" | "userId" | "joinedAt"
+                >
+              >;
+              basedOnProject?: Maybe<
+                { __typename?: "Project" } & Pick<
+                  Project,
+                  | "name"
+                  | "description"
+                  | "id"
+                  | "preview"
+                  | "courseTemplate"
+                  | "enrollmentStart"
+                  | "enrollmentEnd"
+                  | "selectionGroupType"
+                > & {
+                    assignments?: Maybe<
+                      Array<
+                        { __typename?: "Assignment" } & Pick<
+                          Assignment,
+                          "id" | "startDate" | "endDate"
+                        >
+                      >
+                    >;
+                  }
+              >;
+            }
+        >
+      >
+    >;
+  };
+};
+
+export type UserListOwnCoursesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type UserListOwnCoursesQuery = { __typename?: "Query" } & {
+  projects: { __typename?: "ProjectConnection" } & {
+    nodes?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: "Project" } & Pick<
+            Project,
+            | "id"
+            | "createdAt"
+            | "name"
+            | "description"
+            | "preview"
+            | "courseTemplate"
+            | "enrollmentStart"
+            | "enrollmentEnd"
+            | "public"
+          > & {
+              assignments?: Maybe<
+                Array<
+                  { __typename?: "Assignment" } & Pick<
+                    Assignment,
+                    "id" | "startDate" | "endDate"
+                  > & {
+                      assignmentSubmissions?: Maybe<
+                        Array<
+                          { __typename?: "AssignmentSubmission" } & Pick<
+                            AssignmentSubmission,
+                            "id"
+                          > & {
+                              assignmentSubmissionGrades?: Maybe<
+                                Array<
+                                  {
+                                    __typename?: "AssignmentSubmissionGrade";
+                                  } & Pick<AssignmentSubmissionGrade, "id">
+                                >
+                              >;
+                            }
+                        >
+                      >;
+                    }
+                >
+              >;
+            }
+        >
+      >
+    >;
+  };
+};
+
+export type UserListParticipantProjectsQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type UserListParticipantProjectsQuery = { __typename?: "Query" } & {
+  project: { __typename?: "Project" } & Pick<
+    Project,
+    | "id"
+    | "slug"
+    | "name"
+    | "isCourse"
+    | "isParticipantCourse"
+    | "courseTemplate"
+    | "maxGroupSize"
+    | "maxNumberOfGroups"
+    | "selectionGroupType"
+    | "enrollmentStart"
+    | "enrollmentEnd"
+  > & {
+      participantProjects?: Maybe<
+        Array<
+          { __typename?: "Project" } & Pick<Project, "name" | "id"> & {
+              members: Array<
+                { __typename?: "User" } & Pick<User, "id" | "displayName">
+              >;
+            }
+        >
+      >;
+      user?: Maybe<{ __typename?: "User" } & Pick<User, "id" | "displayName">>;
+    };
+};
+
+export const AcceptInvitationDocument = gql`
+  mutation AcceptInvitation($projectId: ID!) {
     acceptInvitation(input: { projectId: $projectId }) {
       project {
         id
@@ -4202,11 +4341,11 @@ export const AcceptInivationDocument = gql`
 @Injectable({
   providedIn: "root",
 })
-export class AcceptInivationGQL extends Apollo.Mutation<
-  AcceptInivationMutation,
-  AcceptInivationMutationVariables
+export class AcceptInvitationGQL extends Apollo.Mutation<
+  AcceptInvitationMutation,
+  AcceptInvitationMutationVariables
 > {
-  document = AcceptInivationDocument;
+  document = AcceptInvitationDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
@@ -5247,8 +5386,14 @@ export class CreateProgrammingLanguageGQL extends Apollo.Mutation<
   }
 }
 export const CreateProjectDocument = gql`
-  mutation CreateProject($name: LangJson!, $slug: String) {
-    createProject(input: { name: $name, slug: $slug }) {
+  mutation CreateProject(
+    $name: LangJson!
+    $slug: String
+    $courseTemplate: Boolean
+  ) {
+    createProject(
+      input: { name: $name, slug: $slug, courseTemplate: $courseTemplate }
+    ) {
       errors
       id
     }
@@ -5748,6 +5893,7 @@ export const FullProjectDocument = gql`
       indexPageId
       createdAt
       updatedAt
+      courseTemplate
       maxGroupSize
       maxNumberOfGroups
       selectionGroupType
@@ -6111,46 +6257,8 @@ export class JoinParticipantGroupGQL extends Apollo.Mutation<
     super(apollo);
   }
 }
-export const ListUserCoursesDocument = gql`
-  query ListUserCourses($userId: ID) {
-    projects(input: { filter: { userId: $userId, public: true } }) {
-      nodes {
-        id
-        name
-        slug
-        createdAt
-        user {
-          id
-          displayName
-        }
-      }
-      totalCount
-      pageInfo {
-        hasPreviousPage
-        hasNextPage
-        startCursor
-        endCursor
-      }
-    }
-  }
-`;
-
-@Injectable({
-  providedIn: "root",
-})
-export class ListUserCoursesGQL extends Apollo.Query<
-  ListUserCoursesQuery,
-  ListUserCoursesQueryVariables
-> {
-  document = ListUserCoursesDocument;
-
-  constructor(apollo: Apollo.Apollo) {
-    super(apollo);
-  }
-}
 export const ListUserProjectsDocument = gql`
   query ListUserProjects(
-    $userId: ID
     $first: Int
     $after: String
     $before: String
@@ -6161,13 +6269,20 @@ export const ListUserProjectsDocument = gql`
       after: $after
       before: $before
       last: $last
-      input: { filter: { userId: $userId } }
+      input: {
+        filter: {
+          isAssociated: true
+          isNotParticipantCourse: true
+          courseTemplate: false
+        }
+      }
     ) {
       nodes {
         id
         name
         slug
         createdAt
+        courseTemplate
       }
       totalCount
       pageInfo {
@@ -7074,6 +7189,184 @@ export class UpdateProjectGroupSettingsGQL extends Apollo.Mutation<
   UpdateProjectGroupSettingsMutationVariables
 > {
   document = UpdateProjectGroupSettingsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UserListCoursesDocument = gql`
+  query UserListCourses {
+    projects(
+      input: {
+        filter: {
+          omitAssociated: true
+          courseTemplate: true
+          isNotParticipantOfCourse: true
+          public: true
+        }
+      }
+    ) {
+      nodes {
+        id
+        name
+        slug
+        createdAt
+        preview
+        selectionGroupType
+        courseTemplate
+        enrollmentStart
+        enrollmentEnd
+        description
+        user {
+          id
+          displayName
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class UserListCoursesGQL extends Apollo.Query<
+  UserListCoursesQuery,
+  UserListCoursesQueryVariables
+> {
+  document = UserListCoursesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UserListMyParticipantProjectsDocument = gql`
+  query UserListMyParticipantProjects {
+    projects(input: { filter: { isMember: true, isParticipantCourse: true } }) {
+      nodes {
+        id
+        createdAt
+        projectMembers {
+          id
+          userId
+          joinedAt
+        }
+        basedOnProject {
+          name
+          description
+          id
+          preview
+          description
+          courseTemplate
+          enrollmentStart
+          enrollmentEnd
+          selectionGroupType
+          assignments {
+            id
+            startDate
+            endDate
+          }
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class UserListMyParticipantProjectsGQL extends Apollo.Query<
+  UserListMyParticipantProjectsQuery,
+  UserListMyParticipantProjectsQueryVariables
+> {
+  document = UserListMyParticipantProjectsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UserListOwnCoursesDocument = gql`
+  query UserListOwnCourses {
+    projects(input: { filter: { isAssociated: true, courseTemplate: true } }) {
+      nodes {
+        id
+        createdAt
+        name
+        description
+        id
+        preview
+        description
+        courseTemplate
+        enrollmentStart
+        enrollmentEnd
+        preview
+        public
+        assignments {
+          id
+          startDate
+          endDate
+          assignmentSubmissions {
+            id
+            assignmentSubmissionGrades {
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class UserListOwnCoursesGQL extends Apollo.Query<
+  UserListOwnCoursesQuery,
+  UserListOwnCoursesQueryVariables
+> {
+  document = UserListOwnCoursesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const UserListParticipantProjectsDocument = gql`
+  query UserListParticipantProjects($id: ID!) {
+    project(id: $id) {
+      id
+      slug
+      name
+      isCourse
+      isParticipantCourse
+      courseTemplate
+      maxGroupSize
+      maxNumberOfGroups
+      selectionGroupType
+      enrollmentStart
+      enrollmentEnd
+      participantProjects {
+        name
+        id
+        members {
+          id
+          displayName
+        }
+      }
+      user {
+        id
+        displayName
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class UserListParticipantProjectsGQL extends Apollo.Query<
+  UserListParticipantProjectsQuery,
+  UserListParticipantProjectsQueryVariables
+> {
+  document = UserListParticipantProjectsDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

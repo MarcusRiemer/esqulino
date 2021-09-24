@@ -6,6 +6,8 @@ import { UserComponent } from "./user.component";
 import { OwnProjectsOverviewComponent } from "./own-projects-overview.component";
 import { CreateProjectComponent } from "./create-project.component";
 import { ListCorusesOverviewComponent } from "./list-courses-overview.component";
+import { MyListCoursesOverviewComponent } from "./my-list-courses-overview.component";
+import { ListJoinCourseGroup } from "./template/list-join-course-groups";
 
 export const userRoutes: Routes = [
   {
@@ -28,6 +30,14 @@ export const userRoutes: Routes = [
       {
         path: "courses",
         component: ListCorusesOverviewComponent,
+      },
+      {
+        path: "courses/select-group/:courseId",
+        component: ListJoinCourseGroup,
+      },
+      {
+        path: "own-courses",
+        component: MyListCoursesOverviewComponent,
       },
       {
         path: "create/project",

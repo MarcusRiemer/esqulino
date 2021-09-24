@@ -1,0 +1,63 @@
+<div class="card h-100 project-list-item">
+  <img
+    *ngIf="hasImage"
+    class="card-img-top"
+    [src]="imageUrl"
+    alt="Preview Image"
+  />
+
+  <div class="card-body row">
+    <h2 class="card-title">{{ course.name | currentLanguage }}</h2>
+    <div>
+      <span
+        class="badge rounded-pill bg-warning me-1"
+        *ngIf="course.selectionGroupType != 'no_group_number_limitation'"
+      >
+        Kursteilnahme beschränkt
+      </span>
+      <span
+        class="badge rounded-pill bg-secondary"
+        *ngIf="course.selectionGroupType == 'self_selection' "
+      >
+        Selbstzuweisen
+      </span>
+    </div>
+    <div class="card-text">{{ course.description | currentLanguage }}</div>
+    <p class="card-text">
+      <small class="text-muted">Lehrer: {{course.user.displayName}}</small>
+    </p>
+  </div>
+
+  <div class="card-footer">
+    <div class="row justify-content-between align-items-end">
+      <div *ngIf="course.enrollmentEnd" class="col justify-content-end">
+        <div><b>Einschreibungsende</b></div>
+
+        {{ course.enrollmentEnd | date: "dd.MM.yyyy" }} um {{
+        course.enrollmentEnd | date: "HH:mm" }}
+      </div>
+
+      <div class="col row justify-content-end align-self-center">
+        <div class="col-auto">
+          <button
+            *ngIf='course.selectionGroupType != "self_selection"'
+            type="button"
+            (click)="onJoinCourse()"
+            class="btn btn-primary"
+          >
+            Einschreiben
+          </button>
+
+          <button
+            *ngIf='course.selectionGroupType == "self_selection"'
+            type="button"
+            class="btn btn-primary"
+            [routerLink]="['select-group',course.id]"
+          >
+            Gruppe beitreten
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

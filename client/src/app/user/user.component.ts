@@ -10,7 +10,7 @@ export const userSettings: NavItem[] = [
       de: "Meine Kurse",
       en: "My Courses",
     },
-    route: ["/user/my-courses"],
+    route: ["/user/own-courses"],
     icon: "user",
   },
   {
