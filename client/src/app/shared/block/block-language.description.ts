@@ -5,6 +5,7 @@ import {
 import { BlockLanguageGeneratorDocument } from "./generator/generator.description";
 
 import { JsonApiListResponse } from "../serverdata/json-api-response";
+import { QualifiedTypeName } from "../syntaxtree";
 
 /**
  * Augments a language with information about the UI layer. This definition is
@@ -51,6 +52,11 @@ export interface BlockLanguageListDescription {
    * block language.
    */
   blockLanguageGeneratorId?: string;
+
+  /**
+   * Didactically motivated restrictions that apply to this block language.
+   */
+  level?: BlockLanguageLevelDescription;
 
   /**
    * The grammar that this block language may visualize.
@@ -201,6 +207,14 @@ export interface TruckSensorsComponentDescription
 export interface TruckWorldEditorMenuComponentDescription
   extends EditorComponentBaseDescription {
   componentType: "truck-world-editor";
+}
+
+/**
+ * Restricts types that are available in a block language
+ */
+export interface BlockLanguageLevelDescription {
+  type: "blackList" | "whiteList";
+  levelTypes: QualifiedTypeName[];
 }
 
 /**

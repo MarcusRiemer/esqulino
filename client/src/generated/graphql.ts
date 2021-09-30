@@ -80,6 +80,7 @@ export type BlockLanguage = {
   grammar?: Maybe<Grammar>;
   grammarId?: Maybe<Scalars["ID"]>;
   id: Scalars["ID"];
+  level?: Maybe<LanguageLevel>;
   localGeneratorInstructions?: Maybe<Scalars["JSON"]>;
   name: Scalars["String"];
   rootCssClasses: Array<Scalars["String"]>;
@@ -121,6 +122,8 @@ export type BlockLanguageInputType = {
   filter?: Maybe<BlockLanguageFilterFieldType>;
   languages?: Maybe<Array<LanguageEnum>>;
 };
+
+export type BlockLanguageLevelRestrictionType = "whiteList" | "blackList";
 
 export type BlockLanguageOrderFieldEnum = "name" | "slug" | "grammar";
 
@@ -515,6 +518,12 @@ export type Identity = {
 };
 
 export type LanguageEnum = "en" | "de";
+
+export type LanguageLevel = {
+  __typename?: "LanguageLevel";
+  id: BlockLanguageLevelRestrictionType;
+  levelTypes: Array<Scalars["QualifiedTypeName"]>;
+};
 
 export type LoginProvider = {
   __typename?: "LoginProvider";

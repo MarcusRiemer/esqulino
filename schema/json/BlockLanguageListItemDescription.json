@@ -2,6 +2,30 @@
   "$ref": "#/definitions/BlockLanguageListItemDescription",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "BlockLanguageLevelDescription": {
+      "additionalProperties": false,
+      "description": "Restricts types that are available in a block language",
+      "properties": {
+        "levelTypes": {
+          "items": {
+            "$ref": "#/definitions/QualifiedTypeName"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "blackList",
+            "whiteList"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "levelTypes"
+      ],
+      "type": "object"
+    },
     "BlockLanguageListItemDescription": {
       "additionalProperties": false,
       "description": "The server hands out additional information that is only used for display purposes.",
@@ -29,6 +53,10 @@
           "description": "The internal ID of this language model.",
           "type": "string"
         },
+        "level": {
+          "$ref": "#/definitions/BlockLanguageLevelDescription",
+          "description": "Didactically motivated restrictions that apply to this block language."
+        },
         "name": {
           "description": "The name that should be displayed to the user.",
           "type": "string"
@@ -47,6 +75,23 @@
         "generated",
         "id",
         "name"
+      ],
+      "type": "object"
+    },
+    "QualifiedTypeName": {
+      "additionalProperties": false,
+      "description": "Used when refererring to types that are defined other languages.",
+      "properties": {
+        "languageName": {
+          "type": "string"
+        },
+        "typeName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "typeName",
+        "languageName"
       ],
       "type": "object"
     }

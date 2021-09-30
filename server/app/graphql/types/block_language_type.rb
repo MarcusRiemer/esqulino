@@ -4,6 +4,18 @@
     field :name, String, null: false
     field :slug, String, null: true
 
+    class LanguageLevelType < Types::Base::BaseObject
+      class Type < Types::Base::BaseEnum
+        graphql_name 'BlockLanguageLevelRestrictionType'
+        value 'whiteList'
+        value 'blackList'
+      end
+
+      field :id, LanguageLevelType::Type, null: false
+      field :level_types, [Types::Scalar::QualifiedTypeName], null: false
+    end
+    field :level, LanguageLevelType, null: true
+
     field :sidebars, GraphQL::Types::JSON, null: false
     field :editor_blocks, GraphQL::Types::JSON, null: false
     field :editor_components, GraphQL::Types::JSON, null: false

@@ -93,6 +93,10 @@
           "description": "The internal ID of this language model.",
           "type": "string"
         },
+        "level": {
+          "$ref": "#/definitions/BlockLanguageLevelDescription",
+          "description": "Didactically motivated restrictions that apply to this block language."
+        },
         "localGeneratorInstructions": {
           "$ref": "#/definitions/BlockLanguageGeneratorDocument",
           "description": "Information on how to (re)-generate this block language."
@@ -154,6 +158,30 @@
         }
       ],
       "description": "All possible instructions to generate a block language."
+    },
+    "BlockLanguageLevelDescription": {
+      "additionalProperties": false,
+      "description": "Restricts types that are available in a block language",
+      "properties": {
+        "levelTypes": {
+          "items": {
+            "$ref": "#/definitions/QualifiedTypeName"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "blackList",
+            "whiteList"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "levelTypes"
+      ],
+      "type": "object"
     },
     "BlockLanguageSidebarsDescription": {
       "items": {

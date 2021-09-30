@@ -6,7 +6,7 @@
 TYPESCRIPT_JSON_SCHEMA_BIN = npx ts-json-schema-generator
 
 # Names of the schema files to generate
-JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json GrammarDocument.json NodeDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json VisualisedLanguages.json QualifiedTypeName.json BlockLanguageGeneratorDocument.json BlockLanguageSidebarsDescription.json BlockLanguageEditorBlocksDescription.json BlockLanguageEditorComponentsDescription.json
+JSON_SCHEMA_FILES = AlterSchemaRequestDescription.json ArbitraryQueryRequestDescription.json BlockLanguageDescription.json BlockLanguageDocument.json BlockLanguageListDescription.json BlockLanguageListItemDescription.json BlockLanguageListResponseDescription.json GrammarDocument.json NodeDescription.json RequestTabularInsertDescription.json ResponseTabularInsertDescription.json ServerProviderDescription.json TableDescription.json NamedLanguages.json VisualisedLanguages.json QualifiedTypeName.json BlockLanguageGeneratorDocument.json BlockLanguageSidebarsDescription.json BlockLanguageEditorBlocksDescription.json BlockLanguageEditorComponentsDescription.json BlockLanguageLevelDescription.json
 
 # How to generate a JSON description from a source file
 %.json : %.ts
@@ -36,6 +36,8 @@ BlockLanguageListResponseDescription.json : $(SRC_PATH)/shared/block/block-langu
 BlockLanguageDocument.json : $(SRC_PATH)/shared/block/block-language.description.ts $(SRC_PATH)/shared/block/block.description.ts
 	$(CONVERT_COMMAND)
 BlockLanguageGeneratorDocument.json: $(SRC_PATH)/shared/block/generator/generator.description.ts $(SRC_PATH)/shared/block/block-language.description.ts
+	$(CONVERT_COMMAND)
+BlockLanguageLevelDescription.json : $(SRC_PATH)/shared/block/block-language.description.ts
 	$(CONVERT_COMMAND)
 NodeDescription.json : $(SRC_PATH)/shared/syntaxtree/syntaxtree.description.ts
 	$(CONVERT_COMMAND)

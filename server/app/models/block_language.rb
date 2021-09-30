@@ -33,6 +33,7 @@ class BlockLanguage < ApplicationRecord
   validates :editor_blocks, json_schema: 'BlockLanguageEditorBlocksDescription'
   validates :editor_components, json_schema: 'BlockLanguageEditorComponentsDescription'
   validates :local_generator_instructions, json_schema: 'BlockLanguageGeneratorDocument', allow_nil: true
+  validates :level, json_schema: 'BlockLanguageLevelDescription', allow_nil: true
 
   # The programming language that should be chosen as a default when
   # creating code resources.

@@ -1,0 +1,47 @@
+{
+  "$ref": "#/definitions/BlockLanguageLevelDescription",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BlockLanguageLevelDescription": {
+      "additionalProperties": false,
+      "description": "Restricts types that are available in a block language",
+      "properties": {
+        "levelTypes": {
+          "items": {
+            "$ref": "#/definitions/QualifiedTypeName"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            "blackList",
+            "whiteList"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "levelTypes"
+      ],
+      "type": "object"
+    },
+    "QualifiedTypeName": {
+      "additionalProperties": false,
+      "description": "Used when refererring to types that are defined other languages.",
+      "properties": {
+        "languageName": {
+          "type": "string"
+        },
+        "typeName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "typeName",
+        "languageName"
+      ],
+      "type": "object"
+    }
+  }
+}

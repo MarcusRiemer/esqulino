@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_23_132905) do
+ActiveRecord::Schema.define(version: 2021_09_30_083329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2021_06_23_132905) do
     t.jsonb "local_generator_instructions"
     t.string "root_css_classes", default: [], array: true
     t.uuid "generated_from_id"
+    t.jsonb "level"
     t.index ["default_programming_language_id"], name: "index_block_languages_on_default_programming_language_id"
     t.index ["generated_from_id"], name: "index_block_languages_on_generated_from_id"
     t.index ["grammar_id"], name: "index_block_languages_on_grammar_id"
