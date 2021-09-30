@@ -16,7 +16,7 @@ concise_attributes:
   value_before_type_cast: 2021-04-15 13:41:15.632266000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-24 10:19:50.549086000 Z
+  value_before_type_cast: 2021-09-30 11:12:49.362992000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic
@@ -50,23 +50,31 @@ concise_attributes:
     [{"style": {"color": "white", "border": "2px solid red", "cursor": "default",
     "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color":
     "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"style": {"display": "inline-flex"}, "property": "Name", "blockType": "input"}],
-    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "CssClass",
+    {"style": {"display": "inline-flex"}, "property": "type", "blockType": "input"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "LanguageLevel",
     "languageName": "MetaBlockLang"}}, {"visual": [{"children": [{"style": {"color":
     "white", "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch",
     "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"}, "blockType":
     "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style":
     {"display": "inline-flex"}, "property": "Name", "blockType": "input"}], "blockType":
-    "block", "dropTarget": {}}], "describedType": {"typeName": "EditorComponent",
-    "languageName": "MetaBlockLang"}}]'
+    "block", "dropTarget": {}}], "describedType": {"typeName": "CssClass", "languageName":
+    "MetaBlockLang"}}, {"visual": [{"children": [{"style": {"color": "white", "border":
+    "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
+    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
+    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"style": {"display": "inline-flex"},
+    "property": "Name", "blockType": "input"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "EditorComponent", "languageName": "MetaBlockLang"}}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: editor_components
-  value_before_type_cast: '[{"componentType": "block-root"}]'
+  value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "validator"},
+    {"componentType": "generated-code"}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: local_generator_instructions
   value_before_type_cast: '{"type": "manual"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root_css_classes
   value_before_type_cast: "{activate-block-outline}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: level
 new_record: false
 active_record_yaml_version: 2

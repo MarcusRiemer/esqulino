@@ -46,19 +46,26 @@ concise_attributes:
     "orientation", "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]},
     "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName":
     "EditorComponents", "languageName": "MetaBlockLang"}}, {"name": "concreteNode",
-    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
-    {"base": "string", "name": "Name"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "CssClass", "languageName": "MetaBlockLang"}}, {"name": "concreteNode",
-    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
-    {"base": "string", "name": "Name"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "EditorComponent", "languageName": "MetaBlockLang"}}]}, "language":
-    "MetaGrammar", "properties": {"name": "MetaBlockLang"}}'
+    "children": {"attributes": [{"name": "property", "children": {"restrictions":
+    [{"name": "restrictionEnum", "children": {"values": [{"name": "restrictionEnumValue",
+    "language": "MetaGrammar", "properties": {"value": "blackList"}}, {"name": "restrictionEnumValue",
+    "language": "MetaGrammar", "properties": {"value": "whiteList"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "string",
+    "name": "type"}}]}, "language": "MetaGrammar", "properties": {"typeName": "LanguageLevel",
+    "languageName": "MetaBlockLang"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
+    "name": "Name"}}]}, "language": "MetaGrammar", "properties": {"typeName": "CssClass",
+    "languageName": "MetaBlockLang"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "property", "language": "MetaGrammar", "properties": {"base": "string",
+    "name": "Name"}}]}, "language": "MetaGrammar", "properties": {"typeName": "EditorComponent",
+    "languageName": "MetaBlockLang"}}]}, "language": "MetaGrammar", "properties":
+    {"name": "MetaBlockLang"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2021-04-15 13:41:15.419967000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2021-05-24 10:10:39.653991000 Z
+  value_before_type_cast: 2021-09-30 11:12:49.161492000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -146,6 +153,25 @@ concise_attributes:
                         },
                         "occurs": "*"
                       }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "LanguageLevel": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "type",
+                "restrictions": [
+                  {
+                    "type": "enum",
+                    "value": [
+                      "blackList",
+                      "whiteList"
                     ]
                   }
                 ]
