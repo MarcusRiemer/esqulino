@@ -1066,8 +1066,6 @@ export type Role = {
   createdAt: Scalars["ISO8601DateTime"];
   id: Scalars["ID"];
   name?: Maybe<Scalars["String"]>;
-  resourceId?: Maybe<Scalars["String"]>;
-  resourceType?: Maybe<Scalars["String"]>;
   updatedAt: Scalars["ISO8601DateTime"];
   users?: Maybe<Array<User>>;
 };
@@ -2249,12 +2247,7 @@ export type PromoteUserAdminMutation = { __typename?: "Mutation" } & {
           roles: Array<
             { __typename?: "Role" } & Pick<
               Role,
-              | "id"
-              | "name"
-              | "resourceId"
-              | "resourceType"
-              | "updatedAt"
-              | "createdAt"
+              "id" | "name" | "updatedAt" | "createdAt"
             >
           >;
         };
@@ -3896,8 +3889,6 @@ export const PromoteUserAdminDocument = gql`
         roles {
           id
           name
-          resourceId
-          resourceType
           updatedAt
           createdAt
         }

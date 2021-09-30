@@ -7,8 +7,6 @@ mutation PromoteUserAdmin($userId: ID!) {
       roles {
         id
         name
-        resourceId
-        resourceType
         updatedAt
         createdAt
       }
