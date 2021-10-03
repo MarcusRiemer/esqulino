@@ -44,6 +44,10 @@ class Mutations::Projects::CreateProjectCourseParticipations < Mutations::BaseMu
         #replace the placeholder. If there are no placeholder, the name is taken without adding numbers.
         character_difference = number_of_replace_symbols - start_name_counter.digits.count
         combined_name = name.dup
+        if(character_difference < 0)
+          character_difference = 0
+        end
+
         if(number_of_replace_symbols > 0)
           combined_name = combined_name.sub! "#"*number_of_replace_symbols, "0"*character_difference + start_name_counter.to_s
         end

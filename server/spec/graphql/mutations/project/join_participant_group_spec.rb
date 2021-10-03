@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.fdescribe Mutations::Projects::JoinParticipantGroup do
+RSpec.describe Mutations::Projects::JoinParticipantGroup do
   # These specs relies on
   # * an existing guest user
   before(:each) do

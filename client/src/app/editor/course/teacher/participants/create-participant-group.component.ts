@@ -40,7 +40,7 @@ export class CreateParticipantGroup implements OnInit {
       .mutate({
         basedOnProjectId: courseId,
         groupName: localizedName,
-        userIds: this.createGroup.controls["userIds"].value.split(","),
+        userIds: [],
       })
       .pipe(first())
       .toPromise()

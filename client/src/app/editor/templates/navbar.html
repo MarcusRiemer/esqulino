@@ -1,4 +1,10 @@
 <mat-nav-list *ngIf="project$ | async as project" id="main-nav">
+  <course-nav *ngIf="isCourse$ | async"></course-nav>
+
+  <course-participant-nav
+    *ngIf="isParticipantProject$ | async"
+  ></course-participant-nav>
+
   <a
     mat-list-item
     [routerLink]="['settings']"
@@ -91,10 +97,4 @@
       {{ source.title }}
     </a>
   </ng-container>
-
-  <course-nav *ngIf="isCourse$ | async"></course-nav>
-
-  <course-participant-nav
-    *ngIf="isParticipantProject$ | async"
-  ></course-participant-nav>
 </mat-nav-list>

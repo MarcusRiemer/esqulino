@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.fdescribe Mutations::Projects::DestroyAssignmentSubmittedCodeResource do
+RSpec.describe Mutations::Projects::DestroyAssignmentSubmittedCodeResource do
   # These specs relies on
   # * an existing guest user
   before(:each) do

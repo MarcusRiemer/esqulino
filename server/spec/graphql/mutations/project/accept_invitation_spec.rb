@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.fdescribe Mutations::Projects::AcceptInvitation do
+RSpec.describe Mutations::Projects::AcceptInvitation do
   # These specs relies on
   # * an existing guest user
   before(:each) do
@@ -103,7 +103,7 @@ RSpec.fdescribe Mutations::Projects::AcceptInvitation do
     expect(ProjectMember.find_by(user_id: admin.id).joined_at).not_to eq nil
   end
 
-  it 'accept not a member of the project' do
+  it 'not a member of the project' do
     course = Project.find_by_slug_or_id!('course-test')
 
     user = create(:user)

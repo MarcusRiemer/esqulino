@@ -12,7 +12,7 @@ class Mutations::Projects::CreateProjectCourseParticipation < Mutations::BaseMut
 
     raise ArgumentError, 'The Project must be a course and must not be a child course' if !project.is_course || !project.based_on_project.nil?
 
-    raise ArgumentError, 'A course requires at least one participant' if user_ids.count == 0
+    #raise ArgumentError, 'A course requires at least one participant' if user_ids.count == 0
 
     c_project = project.dup
     c_project.slug = nil

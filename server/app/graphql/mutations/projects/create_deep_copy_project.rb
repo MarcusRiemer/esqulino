@@ -73,13 +73,20 @@ class Mutations::Projects::CreateDeepCopyProject < Mutations::BaseMutation
     end
   end
 
-  def self.helper_create_copy_of_project_sources(project, _c_project)
+  def self.helper_create_copy_of_project_sources(project, c_project)
     project.project_sources.each do |v|
-      helper_create_copy_of_one_project_source(project, v)
+      helper_create_copy_of_one_project_source(c_project, v)
     end
   end
 
-  def self.helper_create_copy_of_one_project_source(project, code_resource)
+  def self.helper_create_copy_of_one_project_source(project, project_source)
+    project_source = project_source.dup
+    project_source.project = project
+    project_source.save!
+    project_source
+  end
+
+  def self.helper_create_copy_of_one_code_resource(project, code_resource)
     project_source = code_resource.dup
     project_source.project = project
     project_source.save!

@@ -298,17 +298,34 @@ RSpec.describe Mutations::Projects::CreateAssignmentSubmissionGrade do
 
     mut = described_class.new(**init_args(user: assignment_submission.assignment.project.user))
 
-    expect do
-      mut.resolve(
+
+      res = mut.resolve(
         assignment_submission_id: assignment_submission.id,
         feedback: 'Feedback',
         grade: 1,
         evaluted_people_ids: [evaluated_people1.id, evaluated_people2.id, evaluated_people1.id]
       )
-    end.to raise_error(ActiveRecord::RecordNotUnique)
 
-    expect(AssignmentSubmissionGrade.count).to eq 0
-    expect(AssignmentSubmissionGradeUser.count).to eq 0
+
+    expect(AssignmentSubmissionGrade.count).to eq 1
+    expect(AssignmentSubmissionGradeUser.count).to eq 2
+    expect(User.find(evaluated_people1.id).grades.count).to eq 1
+    expect(User.find(evaluated_people2.id).grades.count).to eq 1
+
+
+    res = mut.resolve(
+      assignment_submission_id: assignment_submission.id,
+      feedback: 'Feedback',
+      grade: 1,
+      evaluted_people_ids: [evaluated_people1.id, evaluated_people2.id, evaluated_people1.id]
+    )
+
+
+  expect(AssignmentSubmissionGrade.count).to eq 1
+  expect(AssignmentSubmissionGradeUser.count).to eq 2
+  expect(User.find(evaluated_people1.id).grades.count).to eq 1
+  expect(User.find(evaluated_people2.id).grades.count).to eq 1
+
   end
 
   it 'create grade with one evaluted_people which are a member of a other project' do
@@ -341,7 +358,7 @@ RSpec.describe Mutations::Projects::CreateAssignmentSubmissionGrade do
     # TODO: Möglich ?
   end
 
-  fit 'create new grade for a already existing grade' do
+  it 'create new grade for a already existing grade' do
     assignment_submission = create(:assignment_submission)
 
     evaluated_people1 = create(:user, display_name: 'evaluatedpeople1')
@@ -399,7 +416,7 @@ RSpec.describe Mutations::Projects::CreateAssignmentSubmissionGrade do
     expect(AssignmentSubmissionGrade.find_by(grade: 100).assignment_submission_grade_users.count).to eq 1
   end
 
-  fit 'create new grade for a already existing grade with more than one user' do
+  it 'create new grade for a already existing grade with more than one user' do
     assignment_submission = create(:assignment_submission)
 
     evaluated_people1 = create(:user, display_name: 'evaluatedpeople1')

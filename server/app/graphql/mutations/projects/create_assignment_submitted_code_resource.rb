@@ -34,7 +34,7 @@ class Mutations::Projects::CreateAssignmentSubmittedCodeResource < Mutations::Ba
 
       if required_code_resource.is_template
         if required_code_resource.template.create_copy?
-          code_resource = Mutations::Projects::CreateDeepCopyProject.helper_create_copy_of_one_project_source(group, required_code_resource.template.code_resource)
+          code_resource = Mutations::Projects::CreateDeepCopyProject.helper_create_copy_of_one_code_resource(group, required_code_resource.template.code_resource)
           assignment_submitted.code_resource = code_resource
         else
           # reference
@@ -43,6 +43,8 @@ class Mutations::Projects::CreateAssignmentSubmittedCodeResource < Mutations::Ba
 
       else
         # TODO: Die prüfung habe ich schon mal verwendet
+
+        raise ArgumentError, 'Cannot create a submitted code resource without block language if it is not a template' if !block_language_id.present?
         raise ArgumentError, 'The programming_language is not supported by the block_language' if BlockLanguage.find(block_language_id).default_programming_language.id != required_code_resource.programming_language.id
 
         code_resource = CodeResource.create(name: required_code_resource.name, project: group, programming_language_id: required_code_resource.programming_language_id, block_language_id: block_language_id)

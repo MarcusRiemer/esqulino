@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.fdescribe Mutations::Projects::UpdateProjectGroupSettings do
+RSpec.describe Mutations::Projects::UpdateProjectGroupSettings do
   before(:each) do
     create(:user, :guest)
   end
@@ -101,7 +101,7 @@ RSpec.fdescribe Mutations::Projects::UpdateProjectGroupSettings do
     expect(Project.find(course.id).enrollment_end).to eq nil
   end
 
-  it ' type fixed_number_of_groups without maxNumberOfGroups' do
+  it 'type fixed_number_of_groups without maxNumberOfGroups' do
     course = create(:project, slug: 'course-test')
 
     mut = described_class.new(**init_args(user: course.user))
@@ -110,6 +110,18 @@ RSpec.fdescribe Mutations::Projects::UpdateProjectGroupSettings do
         id: course.id,
         maxGroupSize: 1,
         selectionGroupType: 'fixed_number_of_groups'
+      )
+    end.to raise_error(ArgumentError)
+
+    expect(Project.find(course.id).max_group_size).to eq nil
+    expect(Project.find(course.id).max_number_of_groups).to eq nil
+    expect(Project.find(course.id).selection_group_type).to eq nil
+
+    mut = described_class.new(**init_args(user: course.user))
+    expect do
+      mut.resolve(
+        id: course.id,
+        maxNumberOfGroups: nil
       )
     end.to raise_error(ArgumentError)
 
@@ -362,4 +374,6 @@ RSpec.fdescribe Mutations::Projects::UpdateProjectGroupSettings do
     expect(Project.find(course.id).enrollment_start).to eq nil
     expect(Project.find(course.id).enrollment_end).to eq nil
   end
+
+
 end

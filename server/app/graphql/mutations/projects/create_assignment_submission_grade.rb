@@ -39,8 +39,10 @@ class Mutations::Projects::CreateAssignmentSubmissionGrade < Mutations::BaseMuta
       end
     end
 
+    
+
     {
-      project: group
+      project: course
     }
   end
 end

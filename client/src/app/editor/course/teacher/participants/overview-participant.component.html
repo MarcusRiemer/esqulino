@@ -1,130 +1,140 @@
-<div class="card mb-3">
-  <div class="card-header">
-    <h4>Teilnehmer</h4>
-  </div>
-  <div class="card-body"></div>
+<mat-tab-group mat-align-tabs="start">
+  <mat-tab label="Gruppen">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h4>Gruppen</h4>
+      </div>
+      <div class="card-body"></div>
 
-  <table mat-table [dataSource]="participants$ | async" class="col-12">
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let participant">
-        <button
-          data-spec="edit"
-          type="button"
-          class="btn btn-outline-primary btn-sm"
-        >
-          <course-icon [iconType]="'list-edit'"></course-icon>
-        </button>
-        <button
-          data-spec="edit-singel"
-          type="button"
-          class="btn btn-outline-warning btn-sm"
-        >
-          <course-icon [iconType]="'list-edit-singel'"></course-icon>
-        </button>
+      <table mat-table [dataSource]="groups$ | async" class="col-12">
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Aktionen</th>
+          <td mat-cell *matCellDef="let participant">
+            <button
+              data-spec="edit-singel"
+              type="button"
+              class="btn btn-outline-warning btn-sm"
+              (click)="onOpenGroupMemberDialog(participant.id)"
+            >
+              <course-icon [iconType]="'list-edit-singel'"></course-icon>
+            </button>
+            <button
+              data-spec="delete"
+              type="button"
+              class="btn btn-outline-danger btn-sm"
+              (click)="onDeleteGroup(participant.id)"
+            >
+              <course-icon [iconType]="'list-delete'"></course-icon>
+            </button>
+          </td>
+        </ng-container>
 
-        <button
-          data-spec="delete"
-          type="button"
-          class="btn btn-outline-danger btn-sm"
-          (click)="onRemoveMember(participant.groupId, participant.userId)"
-        >
-          <course-icon [iconType]="'list-delete'"></course-icon>
-        </button>
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Gruppe</th>
+          <td mat-cell *matCellDef="let participant">
+            {{ participant.groupName | currentLanguage }}
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Teilnehmer</th>
-      <td mat-cell *matCellDef="let participant">{{ participant.name }}</td>
-    </ng-container>
+        <ng-container matColumnDef="numberOfMember">
+          <th mat-header-cell *matHeaderCellDef>Member</th>
+          <td mat-cell *matCellDef="let participant">
+            {{ participant.numberOfMember }} /
+            {{ participant.numberOfMaxMember }}
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="group">
-      <th mat-header-cell *matHeaderCellDef>Gruppe</th>
-      <td mat-cell *matCellDef="let participant">
-        {{ participant.groupName | currentLanguage }}
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="memberNames">
+          <th mat-header-cell *matHeaderCellDef>Namen</th>
+          <td mat-cell *matCellDef="let participant">
+            {{ participant.memberName }}
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="role">
-      <th mat-header-cell *matHeaderCellDef>Rolle</th>
-      <td mat-cell *matCellDef="let participant">
-        {{ participant.role }}
-      </td>
-    </ng-container>
+        <tr mat-header-row *matHeaderRowDef="groupsDisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: groupsDisplayedColumns"></tr>
+      </table>
+    </div>
+  </mat-tab>
+  <mat-tab label="Teilnehmer">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h4>Teilnehmer</h4>
+      </div>
+      <div class="card-body"></div>
 
-    <ng-container matColumnDef="joinedAt">
-      <th mat-header-cell *matHeaderCellDef>Akzeptiert</th>
-      <td mat-cell *matCellDef="let participant">
-        <div *ngIf="participant.joinedAt != null; else not_accepted">Ja</div>
-        <ng-template #not_accepted>Nein</ng-template>
-      </td>
-    </ng-container>
+      <table mat-table [dataSource]="participants$ | async" class="col-12">
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let participant">
+            <button
+              data-spec="edit"
+              type="button"
+              class="btn btn-outline-primary btn-sm"
+            >
+              <course-icon [iconType]="'list-edit'"></course-icon>
+            </button>
+            <button
+              data-spec="edit-singel"
+              type="button"
+              class="btn btn-outline-warning btn-sm"
+            >
+              <course-icon [iconType]="'list-edit-singel'"></course-icon>
+            </button>
 
-    <ng-container matColumnDef="mail">
-      <th mat-header-cell *matHeaderCellDef>E-Mail</th>
-      <td mat-cell *matCellDef="let participant">{{ participant.joinedAt }}</td>
-    </ng-container>
+            <button
+              data-spec="delete"
+              type="button"
+              class="btn btn-outline-danger btn-sm"
+              (click)="onRemoveMember(participant.groupId, participant.userId)"
+            >
+              <course-icon [iconType]="'list-delete'"></course-icon>
+            </button>
+          </td>
+        </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-</div>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Teilnehmer</th>
+          <td mat-cell *matCellDef="let participant">{{ participant.name }}</td>
+        </ng-container>
 
-<div class="card mb-3">
-  <div class="card-header">
-    <h4>Gruppen</h4>
-  </div>
-  <div class="card-body"></div>
+        <ng-container matColumnDef="group">
+          <th mat-header-cell *matHeaderCellDef>Gruppe</th>
+          <td mat-cell *matCellDef="let participant">
+            {{ participant.groupName | currentLanguage }}
+          </td>
+        </ng-container>
 
-  <table mat-table [dataSource]="groups$ | async" class="col-12">
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef>Aktionen</th>
-      <td mat-cell *matCellDef="let participant">
-        <button
-          data-spec="edit-singel"
-          type="button"
-          class="btn btn-outline-warning btn-sm"
-          (click)="onOpenGroupMemberDialog(participant.id)"
-        >
-          <course-icon [iconType]="'list-edit-singel'"></course-icon>
-        </button>
-        <button
-          data-spec="delete"
-          type="button"
-          class="btn btn-outline-danger btn-sm"
-          (click)="onDeleteGroup(participant.id)"
-        >
-          <course-icon [iconType]="'list-delete'"></course-icon>
-        </button>
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Rolle</th>
+          <td mat-cell *matCellDef="let participant">
+            {{ participant.role }}
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Gruppe</th>
-      <td mat-cell *matCellDef="let participant">
-        {{ participant.groupName | currentLanguage }}
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="joinedAt">
+          <th mat-header-cell *matHeaderCellDef>Akzeptiert</th>
+          <td mat-cell *matCellDef="let participant">
+            <div *ngIf="participant.joinedAt != null; else not_accepted">
+              Ja
+            </div>
+            <ng-template #not_accepted>Nein</ng-template>
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="numberOfMember">
-      <th mat-header-cell *matHeaderCellDef>Member</th>
-      <td mat-cell *matCellDef="let participant">
-        {{ participant.numberOfMember }} / {{ participant.numberOfMaxMember }}
-      </td>
-    </ng-container>
+        <ng-container matColumnDef="mail">
+          <th mat-header-cell *matHeaderCellDef>E-Mail</th>
+          <td mat-cell *matCellDef="let participant">
+            {{ participant.joinedAt }}
+          </td>
+        </ng-container>
 
-    <ng-container matColumnDef="memberNames">
-      <th mat-header-cell *matHeaderCellDef>Namen</th>
-      <td mat-cell *matCellDef="let participant">
-        {{ participant.memberName }}
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="groupsDisplayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: groupsDisplayedColumns"></tr>
-  </table>
-</div>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </mat-tab>
+</mat-tab-group>
 
 <create-participant-group></create-participant-group>
 <create-participant-groups></create-participant-groups>

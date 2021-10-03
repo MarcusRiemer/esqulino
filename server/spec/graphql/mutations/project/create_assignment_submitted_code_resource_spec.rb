@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
+RSpec.describe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
   before(:each) do
     create(:user, :guest)
-    course = create(:project, slug: 'course-test')
+    course = create(:project, slug: 'course-test', course_template: true)
     block = create(:block_language)
     block2 = create(:block_language)
     block3 = create(:block_language)
@@ -30,6 +30,9 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
     required = create(:assignment_required_code_resource, assignment_id: assignment.id, programming_language: block.default_programming_language)
 
     group = create(:project, based_on_project: course)
+    group.block_languages = [block]
+    group.save!
+
     participant = create(:user)
     group.project_members.create(user_id: participant.id, membership_type: 'participant')
 
@@ -50,6 +53,8 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
     expect(AssignmentSubmittedCodeResource.first.assignment_submission.project.id).to eq group.id
 
     block2 = course.block_languages.last
+    group.block_languages = [block,block2]
+    group.save!
 
     assignment = create(:assignment, project: course)
     required2 = create(:assignment_required_code_resource, assignment_id: assignment.id, programming_language: block2.default_programming_language)
@@ -104,6 +109,9 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
     group = create(:project, based_on_project: course)
     participant = create(:user)
     group.project_members.create(user_id: participant.id, membership_type: 'participant')
+    group.block_languages = [block,block2]
+    group.save!
+
 
     mut = described_class.new(**init_args(user: participant))
     expect do
@@ -269,6 +277,9 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
     group = create(:project, based_on_project: course)
     participant = create(:user)
     group.project_members.create(user_id: participant.id, membership_type: 'participant')
+    group.block_languages = [block]
+    group.save!
+
 
     mut = described_class.new(**init_args(user: participant))
     res = mut.resolve(
@@ -288,6 +299,8 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
     expect(AssignmentSubmittedCodeResource.first.assignment_submission.project.id).to eq group.id
 
     block2 = course.block_languages.last
+    group.block_languages = [block, block2]
+    group.save!
 
     assignment = create(:assignment, project: course)
 
@@ -344,14 +357,19 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
     course = Project.find_by_slug_or_id!('course-test')
     block = course.block_languages.first
 
+    user= create(:user)
+
     assignment = create(:assignment, project: course)
     required = create(:assignment_required_code_resource, assignment_id: assignment.id, programming_language: block.default_programming_language)
 
     group = create(:project, based_on_project: course)
     participant = create(:user)
     group.project_members.create(user_id: participant.id, membership_type: 'participant')
+    group.block_languages = [block]
+    group.save!
 
-    mut = described_class.new(**init_args(user: group.user))
+
+    mut = described_class.new(**init_args(user: user))
     expect do
       mut.resolve(
         required_code_resource_id: required.id,
@@ -476,6 +494,10 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
     group = create(:project, based_on_project: course)
     participant = create(:user)
     group.project_members.create(user_id: participant.id, membership_type: 'participant')
+    group.block_languages = [block]
+    group.save!
+
+
 
     mut = described_class.new(**init_args(user: participant))
     res = mut.resolve(
@@ -499,6 +521,9 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
     group = create(:project, based_on_project: course)
     participant = create(:user)
     group.project_members.create(user_id: participant.id, membership_type: 'participant')
+    group.block_languages = [block]
+    group.save!
+
 
     mut = described_class.new(**init_args(user: participant))
     res = mut.resolve(
@@ -528,6 +553,9 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
     group = create(:project, based_on_project: course)
     participant = create(:user)
     group.project_members.create(user_id: participant.id, membership_type: 'participant')
+    group.block_languages = [block]
+    group.save!
+
 
     mut = described_class.new(**init_args(user: participant))
     res = mut.resolve(
@@ -549,5 +577,36 @@ RSpec.fdescribe Mutations::Projects::CreateAssignmentSubmittedCodeResource do
     expect(CodeResource.count).to eq 1
     expect(AssignmentSubmission.count).to eq 1
     expect(AssignmentSubmittedCodeResource.count).to eq 1
+  end
+
+  it 'Block language which owns only the group' do
+    course = Project.find_by_slug_or_id!('course-test')
+    block = course.block_languages.first
+
+    assignment = create(:assignment, project: course)
+    required = create(:assignment_required_code_resource, assignment_id: assignment.id, programming_language: block.default_programming_language)
+
+    group = create(:project, based_on_project: course)
+    participant = create(:user)
+    group.project_members.create(user_id: participant.id, membership_type: 'participant')
+    group_block = create(:block_language)
+    group_block.default_programming_language = block.default_programming_language
+    group_block.save!
+    group.block_languages = [block,group_block]
+    group.save!
+
+
+    mut = described_class.new(**init_args(user: participant))
+    expect{mut.resolve(
+      required_code_resource_id: required.id,
+      group_id: group.id,
+      block_language_id: group_block.id
+    )}.to raise_error(ActiveRecord::RecordInvalid)
+
+    expect(Assignment.count).to eq 1
+    expect(AssignmentRequiredCodeResource.count).to eq 1
+    expect(CodeResource.count).to eq 0
+    expect(AssignmentSubmission.count).to eq 0
+    expect(AssignmentSubmittedCodeResource.count).to eq 0
   end
 end

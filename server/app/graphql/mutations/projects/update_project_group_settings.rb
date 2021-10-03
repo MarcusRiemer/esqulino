@@ -14,13 +14,18 @@ class Mutations::Projects::UpdateProjectGroupSettings < Mutations::Projects::Pro
     course = Project.find_by_slug_or_id! args[:id]
     authorize course, :update?
 
-    raise ArgumentError, 'The maximum number of groups must not be less than 0' if args.key?(:selectionGroupType) && !args.key?(:maxGroupSize) && !course.max_group_size.present?
 
-    # raise ArgumentError, 'The maximum number of groups must not be less than 0' if args.key?(:maxGroupSize) && args[:maxGroupSize] < 0
 
-    # raise ArgumentError, 'The maximum number of groups must not be less than 0' if args.key?(:maxNumberOfGroups) && args[:maxNumberOfGroups] < 0
+    group_size_present = args.key?(:maxGroupSize) && args[:maxGroupSize].present?
+    raise ArgumentError, 'The maximum size of groups must not be less than 0'    if group_size_present  && args[:maxGroupSize] < 0
 
-    # raise ArgumentError, 'The end date must be higher than the start date' if args.key?(:enrollmentStart) && args.key?(:enrollmentEnd) && (args[:enrollmentStart] >= args[:enrollmentEnd])
+    raise ArgumentError, 'You must set a max group size' if !group_size_present  &&  !course.max_group_size.present?
+
+    number_of_groups_present= args.key?(:maxNumberOfGroups) && args[:maxNumberOfGroups].present?
+    raise ArgumentError, 'The maximum number of groups must not be less than 0' if number_of_groups_present && args[:maxNumberOfGroups] < 0
+
+    enrollments_present= args.key?(:enrollmentStart) && args.key?(:enrollmentEnd) && args[:enrollmentStart].present? && args[:enrollmentEnd].present?
+    raise ArgumentError, 'The end date must be higher than the start date' if enrollments_present && (args[:enrollmentStart] >= args[:enrollmentEnd])
 
     raise ArgumentError, 'For the type fixed_number_of_groups you must set the maxNumberOfGroups ' if !course.max_number_of_groups.present? && !args.key?(:maxNumberOfGroups) && args.key?(:selectionGroupType) && args[:selectionGroupType] == 'fixed_number_of_groups'
 

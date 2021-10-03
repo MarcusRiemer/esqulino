@@ -1,10 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { first } from "rxjs/operators";
-import {
-  CreateProjectCourseParticipationGQL,
-  CreateProjectCourseParticipationsGQL,
-} from "../../../../../generated/graphql";
+import { CreateProjectCourseParticipationsGQL } from "../../../../../generated/graphql";
 import { CurrentLocaleService } from "../../../../current-locale.service";
 import { CourseService } from "../../course.service";
 import { CreateParticipantGroup } from "./create-participant-group.component";
@@ -26,6 +23,8 @@ export class CreateParticipantGroupsComponent implements OnInit {
   ngOnInit(): void {
     this.createGroups = this._fromBuilder.group({
       groupNumber: [null],
+      groupName: [0],
+      nameCounter: [1],
     });
   }
 
@@ -37,6 +36,8 @@ export class CreateParticipantGroupsComponent implements OnInit {
       .mutate({
         basedOnProjectId: courseId,
         numberOfGroups: this.createGroups.controls["groupNumber"].value,
+        name: this.createGroups.controls["groupName"].value,
+        startNameCounter: this.createGroups.controls["nameCounter"].value,
       })
       .pipe(first())
       .toPromise()

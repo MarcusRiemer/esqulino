@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { Router, UrlTree } from "@angular/router";
 
 import { of } from "rxjs";
 import { map, shareReplay } from "rxjs/operators";
@@ -22,8 +23,22 @@ export class NavbarComponent {
     private readonly _dragService: DragService,
     private readonly _grammarGeneratedBy: GrammarGeneratedByGQL,
     private readonly _currentCodeResource: CurrentCodeResourceService,
-    private readonly _fullProject: FullProjectGQL
+    private readonly _fullProject: FullProjectGQL,
+    private readonly _router: Router
   ) {}
+
+  isActive(instruction: string | UrlTree): boolean {
+    console.log("---------------------");
+    console.log(
+      this._router.isActive(
+        "/editor/5de1f5e5-80fb-46ae-91e7-cef40db24332/ast/create",
+        false
+      )
+    );
+    console.log(this._router.isActive("/ast/create", false));
+    console.log(this._router.isActive("/ast/create", true));
+    return this._router.isActive(instruction, false);
+  }
 
   readonly hasDatabase$ = this._projectService.activeProject.pipe(
     map((p) => !!p.currentDatabaseName)

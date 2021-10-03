@@ -28,17 +28,17 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
           based_on_project_id: project.id,
           user_ids: [user1.id],
           group_name: {"de"=>"Group 1"}
-        
+
         )
 
         expect(Project.count).to eq 2 
         expect(ProjectCourseParticipation.count).to eq 1
-        expect(Project.find(res[:project][:id]).name).to eq ({"de"=>"Group 1"})
-        expect(Project.find(res[:project][:id]).assignments.count).to eq 0
-        expect(Project.find(res[:project][:id]).user).to eq project.user
-        expect(Project.find(res[:project][:id]).based_on_project).to eq project
+        group = Project.find_by(name: {"de"=>"Group 1"})
+        expect(group.assignments.count).to eq 0
+        expect(group.user).to eq project.user
+        expect(group.based_on_project).to eq project
         expect(ProjectMember.count).to eq 1 
-        expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user1.id).membership_type).to eq "participant"
+        expect( group.project_members.find_by(user_id: user1.id).membership_type).to eq "participant"
 
 
 
@@ -55,13 +55,13 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
 
         expect(Project.count).to eq 3
         expect(ProjectCourseParticipation.count).to eq 2
-        expect(Project.find(res[:project][:id]).name).to eq({"de"=>"Group 2"})
-        expect(Project.find(res[:project][:id]).assignments.count).to eq 0
-        expect(Project.find(res[:project][:id]).user).to eq project.user
-        expect(Project.find(res[:project][:id]).based_on_project).to eq project
+        group = Project.find_by(name: {"de"=>"Group 2"})
+        expect(group.assignments.count).to eq 0
+        expect(group.user).to eq project.user
+        expect(group.based_on_project).to eq project
         expect(ProjectMember.count).to eq 3
-        expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user2.id).membership_type).to eq "participant"
-        expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user3.id).membership_type).to eq "participant"
+        expect(group.project_members.find_by(user_id: user2.id).membership_type).to eq "participant"
+        expect(group.project_members.find_by(user_id: user3.id).membership_type).to eq "participant"
 
 
         
@@ -93,14 +93,14 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
           group_name: {"de"=>"Group 3"}
         )
   
-
-        expect(Project.find(res[:project][:id]).code_resources.count).to eq 0
-        expect(Project.find(res[:project][:id]).assignments.count).to eq 0
-        expect(Project.find(res[:project][:id]).project_databases.first).not_to eq project_database
-        expect(Project.find(res[:project][:id]).project_databases.count).to eq  1
-        expect(Project.find(res[:project][:id]).project_sources.first).not_to eq code_resource
-        expect(Project.find(res[:project][:id]).project_sources.count).to eq 1
-        expect(Project.find(res[:project][:id]).project_uses_block_languages.count).to eq 2
+        group = Project.find_by(name: {"de"=>"Group 3"})
+        expect(group.code_resources.count).to eq 0
+        expect(group.assignments.count).to eq 0
+        expect(group.project_databases.first).not_to eq project_database
+        expect(group.project_databases.count).to eq  1
+        expect(group.project_sources.first).not_to eq project_source
+        expect(group.project_sources.count).to eq 1
+        expect(group.project_uses_block_languages.count).to eq 2
 
         expect(Project.count).to eq 5
         expect(ProjectCourseParticipation.count).to eq 3
@@ -134,13 +134,13 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
 
       expect(Project.count).to eq 2 
       expect(ProjectCourseParticipation.count).to eq 1
-      expect(Project.find(res[:project][:id]).name).to eq({"de"=>"Group 1"})
-      expect(Project.find(res[:project][:id]).assignments.count).to eq 0
-      expect(Project.find(res[:project][:id]).user).to eq project.user
-      expect(Project.find(res[:project][:id]).based_on_project).to eq project
+      group = Project.find_by(name: {"de"=>"Group 1"})
+      expect(group.assignments.count).to eq 0
+      expect(group.user).to eq project.user
+      expect(group.based_on_project).to eq project
       expect(ProjectMember.count).to eq 3
-      expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user1.id).membership_type).to eq "participant"
-      expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user2.id).membership_type).to eq "participant"
+      expect( group.project_members.find_by(user_id: user1.id).membership_type).to eq "participant"
+      expect( group.project_members.find_by(user_id: user2.id).membership_type).to eq "participant"
 
 
       mut = described_class.new(**init_args(user: user1))
@@ -198,13 +198,13 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
 
       expect(Project.count).to eq 2 
       expect(ProjectCourseParticipation.count).to eq 1
-      expect(Project.find(res[:project][:id]).name).to eq({"de"=>"Group 1"})
-      expect(Project.find(res[:project][:id]).assignments.count).to eq 0
-      expect(Project.find(res[:project][:id]).user).to eq project.user
-      expect(Project.find(res[:project][:id]).based_on_project).to eq project
+      group = Project.find_by(name: {"de"=>"Group 1"})
+      expect(group.assignments.count).to eq 0
+      expect(group.user).to eq project.user
+      expect(group.based_on_project).to eq project
       expect(ProjectMember.count).to eq 3
-      expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user1.id).membership_type).to eq "participant"
-      expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user2.id).membership_type).to eq "participant"
+      expect( group.project_members.find_by(user_id: user1.id).membership_type).to eq "participant"
+      expect( group.project_members.find_by(user_id: user2.id).membership_type).to eq "participant"
 
 
       mut = described_class.new(**init_args(user: user1))
@@ -212,21 +212,19 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
       user3 = create(:user)
       user4 = create(:user)
 
-      res = mut.resolve(
+      expect{mut.resolve(
         based_on_project_id: project.id,
         user_ids: [user3.id, user4.id],
-        group_name: {"de"=>"Group 1"}
-      )
+        group_name: {"de"=>"Group 2"}
+      )}.to raise_error(Pundit::NotAuthorizedError)
 
-      expect(Project.count).to eq 3
-      expect(ProjectCourseParticipation.count).to eq 2
-      expect(ProjectMember.count).to eq 5
-      expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user3.id).membership_type).to eq "participant"
-      expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user4.id).membership_type).to eq "participant"
-
+      expect(Project.count).to eq 2
+      expect(ProjectCourseParticipation.count).to eq 1
+      expect(ProjectMember.count).to eq 3
+  
 
 
-      project2 = create(:project, slug:"course-test2", public: true)
+      project2 = create(:project, slug:"course-test2", public: true, course_template: true)
 
       mut = described_class.new(**init_args(user: project2.user))
 
@@ -234,21 +232,23 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
       user6 = create(:user)
 
       res = mut.resolve(
-        based_on_project_id: project.id,
+        based_on_project_id: project2.id,
         user_ids: [user5.id, user6.id],
-        group_name: {"de"=>"Group 1"}
+        group_name: {"de"=>"Group 3"}
       )
 
-      expect(Project.count).to eq 5
-      expect(ProjectCourseParticipation.count).to eq 3
-      expect(ProjectMember.count).to eq 7
-      expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user5.id).membership_type).to eq "participant"
-      expect( Project.find(res[:project][:id]).project_members.find_by(user_id: user6.id).membership_type).to eq "participant"
+      expect(Project.count).to eq 4
+      expect(ProjectCourseParticipation.count).to eq 2
+      expect(ProjectMember.count).to eq 5
+      group = Project.find_by(name: {"de"=>"Group 3"})
+      expect( group.based_on_project).to eq project2
+      expect( group.project_members.find_by(user_id: user5.id).membership_type).to eq "participant"
+      expect( group.project_members.find_by(user_id: user6.id).membership_type).to eq "participant"
 
     end
 
     it "Create course of a project which is not a course" do
-      project = create(:project, slug:"test2")
+      project = create(:project, slug:"test2", course_template: false)
       user1 = create(:user)
       user2 = create(:user)
       assignment = create(:assignment, project: project, name: "test")
@@ -308,14 +308,16 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
         
         mut = described_class.new(**init_args(user: project.user))
   
-        expect{mut.resolve(
+        res = mut.resolve(
           based_on_project_id: project.id,
           user_ids: [],
-          group_name: "Group 1"
-        )}.to raise_error(ArgumentError)
+          group_name: {"de"=>"Group 1"}
+        )
   
-        expect(Project.count).to eq 1
-        expect(ProjectCourseParticipation.count).to eq 0
+        expect(Project.count).to eq 2
+        expect(Project.find_by(name:  {"de"=>"Group 1"}).project_members.count).to eq 0
+        expect(ProjectCourseParticipation.count).to eq 1
+
       end
 
       it "Create course added users with on not allowed user" do
