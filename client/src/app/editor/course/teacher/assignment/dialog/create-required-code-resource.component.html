@@ -1,7 +1,27 @@
+<mat-tab-group animationDuration="0ms" [selectedIndex]="getDefaultTap()">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <span (click)="updateQueryParams(null)">Gefordert</span>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <span (click)="updateQueryParams('given_partially')">Editierbar</span>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <span (click)="updateQueryParams('given_full')">Schreibgeschützt</span>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+
 <div class="card mb-3">
   <div class="card-header">
     <h4 *ngIf="requiredCodeResource.referenceType == 'given_full'">
-      Schreibgeschütz gegeben Ressource anlegen
+      Schreibgeschützt gegeben Ressource anlegen
     </h4>
     <h4 *ngIf="requiredCodeResource.referenceType == 'given_partially'">
       Editierbar gegeben Ressource anlegen
@@ -11,107 +31,210 @@
     </h4>
   </div>
   <div class="card-body">
-    <p *ngIf="requiredCodeResource.referenceType == 'given_full'">
-      <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
-      <b>Schreibgeschütz gegebene Ressourcen</b>
-      können von dem Schüler nicht bearbeitet werden. Sie können gegeben falls
-      in anderen Code Ressourcen eingebunden werden, nicht aber verändert
-      werden.
-    </p>
-    <p *ngIf="requiredCodeResource.referenceType == 'given_partially'">
-      <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
-      <b>Editierbar gegebene Ressourcen</b>
-      können vom Schüler bearbeitet werde. Dabei wird eine Kopie von dem
-      erstellen Code dem Schüler bereitgestellt.
-    </p>
-    <p *ngIf="!requiredCodeResource.referenceType">
-      <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
-      <b>Geforderte Ressourcen</b>
-      müssen von dem Schüler komplett selbst erstellt werden.
-    </p>
-    <div class="form-group row mb-3">
-      <label for="assignment-name" class="col-sm-2 form-control-label">
-        Aufgabenname
-      </label>
-      <div class="col-sm-10">
-        <input
-          type="text"
-          [(ngModel)]="requiredCodeResource.name"
-          name="required-code-resource-name"
-          class="form-control"
-        />
-        <small class="text-muted">
-          Dieser Name wird der Name der Code Resource sein.
-        </small>
-      </div>
-    </div>
-    <div class="form-group row mb-3">
-      <label for="assignment-description" class="col-sm-2 form-control-label">
-        Beschreibung
-      </label>
-      <div class="col-sm-10">
-        <textarea
-          [(ngModel)]="requiredCodeResource.description"
-          class="form-control"
-          name="required-code-resource-descirption"
-        ></textarea>
-        <small class="text-muted">
-          Beschreibt näher, was bei dieser Anforderung getan werden muss.
-        </small>
-      </div>
-    </div>
+    <form (ngSubmit)="onCreateRequirement()" [formGroup]="createRequiredForm">
+      <div
+        *ngIf="
+          requiredCodeResource.referenceType == 'given_full' ||
+          requiredCodeResource.referenceType == 'given_partially'
+        "
+      >
+        <h5>Erstellungstypen auswählen</h5>
 
-    <!-- TODO: steck es in eine eigene Componente wir 2 mal verwendet  -->
-    <div class="form-group row mb-3">
-      <label for="programming-language-id" class="col-sm-2 col-form-label">
-        Programmiersprache
-      </label>
-      <div class="col-sm-10">
-        <select
-          id="programming-language-id"
-          name="programming_language_id"
-          class="form-select"
-          [(ngModel)]="requiredCodeResource.programmingLanguageId"
-          (ngModelChange)="changeProgrammingLanguage($event)"
-        >
-          <option
-            *ngFor="let progLang of availableProgrammingLanguages"
-            [value]="progLang.programmingLanguageId"
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="selectedCreateType"
+            id="new-code-resource"
+            value="new-code-resource"
+            formControlName="selectedCreateType"
+          />
+          <label class="form-check-label" for="new-code-resource">
+            Neue Code Resource erstellen
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="selectedCreateType"
+            id="copy-code-resource"
+            value="copy-code-resource"
+            formControlName="selectedCreateType"
+          />
+          <label class="form-check-label" for="copy-code-resource">
+            Von vorhandene Code Resource kopieren
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="selectedCreateType"
+            id="reference-code-resource"
+            formControlName="selectedCreateType"
+            value="reference-code-resource"
+          />
+          <label class="form-check-label" for="reference-code-resource">
+            Gleiche Code Resource verwenden
+          </label>
+          <p>
+            * Dabei wird auf die gleiche Code Resource verwiesen, wenn eine
+            andere in der Datei gemacht wird, wird damit auch eine änderung bei
+            den anderen Referenen erzeugt.
+          </p>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+
+      <p *ngIf="requiredCodeResource.referenceType == 'given_full'">
+        <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
+        <b>Schreibgeschützt gegebene Ressourcen</b>
+        können von dem Schüler nicht bearbeitet werden. Sie können gegeben falls
+        in anderen Code Ressourcen eingebunden werden, nicht aber verändert
+        werden.
+      </p>
+      <p *ngIf="requiredCodeResource.referenceType == 'given_partially'">
+        <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
+        <b>Editierbar gegebene Ressourcen</b>
+        können vom Schüler bearbeitet werde. Dabei wird eine Kopie von dem
+        erstellen Code dem Schüler bereitgestellt.
+      </p>
+      <p *ngIf="!requiredCodeResource.referenceType">
+        <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
+        <b>Geforderte Ressourcen</b>
+        müssen von dem Schüler komplett selbst erstellt werden.
+      </p>
+      <div class="form-group row mb-3">
+        <label for="assignment-name" class="col-sm-2 form-control-label">
+          Aufgabenname
+        </label>
+        <div class="col-sm-10">
+          <input
+            type="text"
+            formControlName="requiredName"
+            name="requiredName"
+            class="form-control"
+          />
+          <small class="text-muted">
+            Dieser Name wird der Name der Code Resource sein.
+          </small>
+        </div>
+      </div>
+      <div class="form-group row mb-3">
+        <label for="assignment-description" class="col-sm-2 form-control-label">
+          Beschreibung
+        </label>
+        <div class="col-sm-10">
+          <textarea
+            formControlName="requiredDescription"
+            class="form-control"
+            name="requiredDescription"
+          ></textarea>
+          <small class="text-muted">
+            Beschreibt näher, was bei dieser Anforderung getan werden muss.
+          </small>
+        </div>
+      </div>
+
+      <div
+        class="form-group row mb-3"
+        *ngIf="
+          requiredCodeResource.referenceType != null &&
+          createRequiredForm.get('selectedCreateType').value !=
+            'new-code-resource'
+        "
+      >
+        <label for="programming-language-id" class="col-sm-2 col-form-label">
+          Code Resource
+        </label>
+        <div class="col-sm-10">
+          <select
+            name="selectedCodeResourceId"
+            class="form-select"
+            formControlName="selectedCodeResourceId"
           >
-            {{ progLang.name }}
-          </option>
-        </select>
-        <small class="text-muted">
-          Welche Programmiersprache soll genutzt werden?
-        </small>
+            <option
+              *ngFor="let codeResources of availableCodeResources$ | async"
+              [value]="codeResources.id"
+            >
+              {{ codeResources.name }}
+            </option>
+          </select>
+          <small class="text-muted">
+            Welche exestierende Code Resource soll genutzt werden?
+          </small>
+        </div>
       </div>
-    </div>
 
-    <div class="from-group row mb-3" *ngIf="requiredCodeResource.referenceType">
-      <label class="col-sm-2 col-form-label">Blocksprache</label>
-      <div class="col-sm-10">
-        <select
-          [disabled]="!requiredCodeResource.programmingLanguageId"
-          name="block_language"
-          class="form-select"
-          [(ngModel)]="requiredCodeResource.blockLanguageId"
-        >
-          <option value="undefined">-- Blocksprache wählen --</option>
-          <option
-            *ngFor="let block of availableBlockLanguages$ | async"
-            [value]="block.id"
+      <!-- TODO: steck es in eine eigene Componente wir 2 mal verwendet  -->
+      <div
+        class="form-group row mb-3"
+        *ngIf="
+          !requiredCodeResource.referenceType ||
+          createRequiredForm.get('selectedCreateType').value ==
+            'new-code-resource'
+        "
+      >
+        <label for="programming-language-id" class="col-sm-2 col-form-label">
+          Programmiersprache
+        </label>
+        <div class="col-sm-10">
+          <select
+            name="selectedProgrammingId"
+            class="form-select"
+            formControlName="selectedProgrammingId"
+            (ngModelChange)="changeProgrammingLanguage($event)"
           >
-            {{ block.name }}
-          </option>
-        </select>
-        <small class="text-muted">
-          Welche Blocksprache soll genutzt werden?
-        </small>
+            <option
+              *ngFor="let progLang of availableProgrammingLanguages"
+              [value]="progLang.programmingLanguageId"
+            >
+              {{ progLang.name }}
+            </option>
+          </select>
+          <small class="text-muted">
+            Welche Programmiersprache soll genutzt werden?
+          </small>
+        </div>
       </div>
-    </div>
 
-    <button class="btn btn-primary" type="submit" (click)="createRequirement()">
-      Speichern
-    </button>
+      <div
+        class="from-group row mb-3"
+        *ngIf="
+          !requiredCodeResource.referenceType ||
+          createRequiredForm.get('selectedCreateType').value ==
+            'new-code-resource'
+        "
+      >
+        <label class="col-sm-2 col-form-label">Blocksprache</label>
+        <div class="col-sm-10">
+          <select
+            [disabled]="
+              createRequiredForm.get('selectedProgrammingId').value ==
+              'undefined'
+            "
+            name="selectedBlockLanguageId"
+            class="form-select"
+            formControlName="selectedBlockLanguageId"
+          >
+            <option value="undefined">-- Blocksprache wählen --</option>
+            <option
+              *ngFor="let block of availableBlockLanguages$ | async"
+              [value]="block.id"
+            >
+              {{ block.name }}
+            </option>
+          </select>
+          <small class="text-muted">
+            Welche Blocksprache soll genutzt werden?
+          </small>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" type="submit">
+        Code-Resource anlegen
+      </button>
+    </form>
   </div>
 </div>

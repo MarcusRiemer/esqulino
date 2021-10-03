@@ -12,6 +12,7 @@ import { OverviewParticipantsParticipantComponent } from "./participant/particip
 import { OverviewGradeComponent } from "./teacher/grade/overview-grade.component";
 import { ToGradeListComponent } from "./teacher/grade/to-grade-list.component";
 import { ToGradeComponent } from "./teacher/grade/to-grade.component";
+import { CreateRequiredCodeResourceComponent } from "./teacher/assignment/dialog/create-required-code-resource.component";
 
 export const courseRoutes: Routes = [
   {
@@ -26,6 +27,10 @@ export const courseRoutes: Routes = [
   {
     path: "assignments/:assignmentId",
     component: AssignmentComponent,
+  },
+  {
+    path: "assignments/:assignmentId/create/file",
+    component: CreateRequiredCodeResourceComponent,
   },
   {
     path: "assignments",

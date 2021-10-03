@@ -3,31 +3,114 @@
     <h4>Musterlösung</h4>
   </div>
   <div class="card-body">
-    <div class="from-group row mb-3">
-      <label class="col-sm-2 col-form-label">Blocksprache</label>
-      <div class="col-sm-10">
-        <select
-          [disabled]=""
-          name="block_language"
-          class="form-select"
-          [(ngModel)]="solutionBlockLanguageId"
-        >
-          <option value="undefined">-- Blocksprache wählen --</option>
-          <option
-            *ngFor="let block of availableBlockLanguages$ | async"
-            [value]="block.id"
-          >
-            {{ block.name }}
-          </option>
-        </select>
-        <small class="text-muted">
-          Welche Blocksprache soll genutzt werden?
-        </small>
-      </div>
-    </div>
-  </div>
+    <form [formGroup]="createSolutionForm" (ngSubmit)="onSaveSolution()">
+      <h5>Erstellungstypen auswählen</h5>
 
-  <button class="btn btn-primary" type="submit" (click)="saveSolution()">
-    Speichern
-  </button>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          id="solution-new"
+          name="selectedSolutionCreateType"
+          value="new-code-resource"
+          formControlName="selectedSolutionCreateType"
+        />
+        <label class="form-check-label" for="solution-new">
+          Neue Code Resource erstellen
+        </label>
+      </div>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          id="solution-copy"
+          name="selectedSolutionCreateType"
+          value="copy-code-resource"
+          formControlName="selectedSolutionCreateType"
+        />
+        <label class="form-check-label" for="solution-copy">
+          Von vorhandene Code Resource kopieren
+        </label>
+      </div>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="selectedSolutionCreateType"
+          formControlName="selectedSolutionCreateType"
+          value="reference-code-resource"
+          id="soluton-reference"
+        />
+        <label class="form-check-label" for="soluton-reference">
+          Gleiche Code Resource verwenden
+        </label>
+        <p>
+          * Dabei wird auf die gleiche Code Resource verwiesen, wenn eine andere
+          in der Datei gemacht wird, wird damit auch eine änderung bei den
+          anderen Referenen erzeugt.
+        </p>
+      </div>
+
+      <mat-divider></mat-divider>
+      <h5>Details</h5>
+
+      <div
+        class="from-group row mb-3"
+        *ngIf="
+          createSolutionForm.get('selectedSolutionCreateType').value !=
+          'new-code-resource'
+        "
+      >
+        <label class="col-sm-2 col-form-label">Code Resource auswählen</label>
+        <div class="col-sm-10">
+          <select
+            name="code-resource"
+            class="form-select"
+            formControlName="selectedSolutionCodeResourceId"
+          >
+            <option value="undefined">-- Code Resource wählen --</option>
+            <option
+              *ngFor="let codeResource of availableCodeResources$ | async"
+              [value]="codeResource.id"
+            >
+              {{ codeResource.name }}
+            </option>
+          </select>
+          <small class="text-muted">
+            Welche vorhandene Code Resource soll genutzt werden?
+          </small>
+        </div>
+      </div>
+
+      <div
+        class="from-group row mb-3"
+        *ngIf="
+          createSolutionForm.get('selectedSolutionCreateType').value ==
+          'new-code-resource'
+        "
+      >
+        <label class="col-sm-2 col-form-label">Blocksprache</label>
+        <div class="col-sm-10">
+          <select
+            [disabled]=""
+            name="block_language"
+            class="form-select"
+            formControlName="selectedSolutionBlockLanguageId"
+          >
+            <option value="undefined">-- Blocksprache wählen --</option>
+            <option
+              *ngFor="let block of availableBlockLanguages$ | async"
+              [value]="block.id"
+            >
+              {{ block.name }}
+            </option>
+          </select>
+          <small class="text-muted">
+            Welche Blocksprache soll genutzt werden?
+          </small>
+        </div>
+      </div>
+      <button class="btn btn-primary" type="submit">Erstellen</button>
+    </form>
+  </div>
 </div>

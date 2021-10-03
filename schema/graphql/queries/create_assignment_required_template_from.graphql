@@ -1,0 +1,49 @@
+mutation CreateAssignmentRequiredTemplateFrom(
+  $assignmentId: ID!
+  $name: String!
+  $codeResourceId: ID!
+  $description: String
+  $referenceType: ReferenceTypeEnum!
+  $deepCopy: Boolean!
+) {
+  createAssignmentRequiredTemplateFrom(
+    input: {
+      assignmentId: $assignmentId
+      name: $name
+      codeResourceId: $codeResourceId
+      description: $description
+      referenceType: $referenceType
+      deepCopy: $deepCopy
+    }
+  ) {
+    project {
+      id
+      assignments {
+        id
+        assignmentRequiredCodeResources {
+          id
+          name
+          description
+          programmingLanguageId
+          solution {
+            id
+          }
+          template {
+            id
+            referenceType
+            codeResource {
+              id
+            }
+          }
+        }
+      }
+      codeResources {
+        id
+        name
+        ast
+        blockLanguageId
+        programmingLanguageId
+      }
+    }
+  }
+}

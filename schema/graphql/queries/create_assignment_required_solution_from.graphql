@@ -1,0 +1,33 @@
+mutation CreateAssignmentRequiredSolutionFrom(
+  $assignmentRequiredCodeResourceId: ID!
+  $codeResourceId: ID!
+  $deepCopy: Boolean!
+) {
+  createAssignmentRequiredSolutionFrom(
+    input: {
+      assignmentRequiredCodeResourceId: $assignmentRequiredCodeResourceId
+      codeResourceId: $codeResourceId
+      deepCopy: $deepCopy
+    }
+  ) {
+    project {
+      id
+      assignments {
+        id
+        assignmentRequiredCodeResources {
+          id
+          solution {
+            id
+          }
+        }
+      }
+      codeResources {
+        id
+        name
+        ast
+        blockLanguageId
+        programmingLanguageId
+      }
+    }
+  }
+}

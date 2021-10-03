@@ -37,9 +37,11 @@ module Types
     field :update_assignment_required_code_resource, mutation: Mutations::Projects::UpdateAssignmentRequiredCodeResource
 
     field :create_assignment_required_solution, mutation: Mutations::Projects::CreateAssignmentRequiredSolution
+    field :create_assignment_required_solution_from, mutation: Mutations::Projects::CreateAssignmentRequiredSolutionFrom
     field :remove_assignment_required_solution, mutation: Mutations::Projects::RemoveAssignmentRequiredSolution
 
     field :create_assignment_required_template, mutation: Mutations::Projects::CreateAssignmentRequiredTemplate
+    field :create_assignment_required_template_from, mutation: Mutations::Projects::CreateAssignmentRequiredTemplateFrom
 
     field :create_assignment_submission, mutation: Mutations::Projects::CreateAssignmentSubmission
     field :create_assignment_submission_grade, mutation: Mutations::Projects::CreateAssignmentSubmissionGrade
