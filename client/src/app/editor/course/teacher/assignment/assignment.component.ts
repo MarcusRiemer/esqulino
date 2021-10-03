@@ -1,7 +1,7 @@
 import { DatePipe, formatDate } from "@angular/common";
 import { Component, Inject, LOCALE_ID, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { filter, find, first, map, mergeMap, tap } from "rxjs/operators";
 import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
@@ -13,6 +13,7 @@ import {
   UpdateAssignmentGQL,
 } from "src/generated/graphql";
 import { ToolbarService } from "../../../../shared";
+import { ProjectService } from "../../../project.service";
 import { SidebarService } from "../../../sidebar.service";
 import { EditorToolbarService } from "../../../toolbar.service";
 import { CourseService } from "../../course.service";
@@ -56,6 +57,8 @@ export class AssignmentComponent implements OnInit {
     private readonly _mutUpdateAssignment: UpdateAssignmentGQL,
     private readonly _performData: PerformDataService,
     private readonly _matDialog: MatDialog,
+    private _router: Router,
+    private _projectService: ProjectService,
     private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService,
     @Inject(LOCALE_ID) private _locale: string
@@ -68,6 +71,8 @@ export class AssignmentComponent implements OnInit {
 
   /**
    * These permissions are required to add a member
+   *
+   * not in use
    */
   readonly updateAssignmentPermission$ = this._courseService.activeCourse$.pipe(
     map((p) => this._performData.project.updateAssignment(p.id))
@@ -97,11 +102,37 @@ export class AssignmentComponent implements OnInit {
       map((p) => this._performData.project.deleteAssignmentRequirement(p.id))
     );
 
+  /**
+   * @return A peek at the project of the currently edited resource
+   */
+  get peekProject() {
+    return this._projectService.cachedProject;
+  }
+
   //TODO: refactor wie in assingment für participants
   ngOnInit(): void {
     // Ensure sane default state
     this._sidebarService.hideSidebar();
     this._toolbarService.resetItems();
+    this._toolbarService.savingEnabled = true;
+
+    const btnCreate = this._toolbarService.addButton(
+      "create",
+      "Files anlegen",
+      "files-o",
+      undefined,
+      this._performData.project.updateAssignment(this.peekProject.id)
+    );
+    const refClone = btnCreate.onClick.subscribe((_) => {
+      this._router.navigate([this._router.url, "create", "file"], {
+        queryParams: { referenceType: "" },
+      });
+    });
+
+    //updateAssignmentPermission$ | async
+    const refSafe = this._toolbarService.saveItem.onClick.subscribe((_) => {
+      this.saveAssingment();
+    });
 
     this.assignmentId$
       .pipe(
@@ -159,6 +190,7 @@ export class AssignmentComponent implements OnInit {
             })
           )
         ),
+        tap((e) => console.log("asdasd-----------")),
         mergeMap((e) => e),
         tap(console.log)
       )
@@ -234,10 +266,10 @@ export class AssignmentComponent implements OnInit {
   }
 
   displayedColumns: string[] = [
-    "actions",
     "name",
     "type",
     "solution",
     "status",
+    "actions",
   ];
 }

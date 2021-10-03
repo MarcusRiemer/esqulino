@@ -3,16 +3,6 @@
     <div class="card-header">
       <div class="row">
         <h4 class="col-sm-10">Aufgabeneinstellung</h4>
-        <div class="col-sm-2">
-          <may-perform [payload]="updateAssignmentPermission$ | async">
-            <button
-              class="btn btn-primary col-sm-12"
-              (click)="saveAssingment()"
-            >
-              Speichern
-            </button>
-          </may-perform>
-        </div>
       </div>
     </div>
     <div class="card-body">
@@ -123,29 +113,6 @@
     <div class="card-header">
       <div class="row">
         <h4 class="col-sm-3">Files</h4>
-        <may-perform
-          class="col-sm-9"
-          [payload]="createRequirementPermission$ | async"
-        >
-          <button
-            class="btn btn-primary col-sm-4"
-            (click)="currentType = 'given_full'"
-          >
-            Vollständig gegeben anlegen
-          </button>
-          <button
-            class="btn btn-primary col-sm-4"
-            (click)="currentType = 'given_partially'"
-          >
-            Teilweise gegeben anlegen
-          </button>
-          <button
-            class="btn btn-primary col-sm-4"
-            (click)="currentType = undefined"
-          >
-            Gefordert anlegen
-          </button>
-        </may-perform>
       </div>
     </div>
     <div class="card-body">
@@ -165,21 +132,22 @@
                   "
                   data-spec="change"
                   type="button"
-                  class="btn btn-outline-warning btn-sm"
+                  class="btn btn-outline-warning btn-sm me-1"
                 >
                   <course-icon [iconType]="'list-edit-singel'"></course-icon>
                 </button>
               </may-perform>
-              <may-perform [payload]="deleteRequirementPermission$ | async">
-                <button
-                  (click)="deleteFile(requirement.id)"
-                  data-spec="delete"
-                  type="button"
-                  class="btn btn-outline-danger btn-sm"
-                >
-                  <course-icon [iconType]="'list-delete'"></course-icon>
-                </button>
-              </may-perform>
+              <button
+                (click)="deleteFile(requirement.id)"
+                data-spec="delete"
+                type="button"
+                class="btn btn-outline-danger btn-sm me-1"
+              >
+                <course-icon [iconType]="'list-delete'"></course-icon>
+              </button>
+              <may-perform
+                [payload]="deleteRequirementPermission$ | async"
+              ></may-perform>
             </td>
           </ng-container>
 
@@ -239,8 +207,8 @@
     </div>
   </div>
 </div>
-<may-perform [payload]="createRequirementPermission$ | async">
+<!-- <may-perform [payload]="createRequirementPermission$ | async">
   <app-create-required-code-resource
     [type]="currentType"
   ></app-create-required-code-resource>
-</may-perform>
+</may-perform> -->
