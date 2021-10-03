@@ -1,8 +1,5 @@
 <div *ngIf="renderDataReady$">
   <div *ngIf="users && users.length > 1" class="form-check form-switch">
-    <label class="form-check-label" for="flexSwitchCheckDefault">
-      Einzelbewertung
-    </label>
     <input
       [(ngModel)]="groupGrading"
       class="form-check-input"
@@ -14,7 +11,7 @@
     </label>
   </div>
 
-  <div *ngIf="users && groupGrading">
+  <div *ngIf="users && groupGrading" class="me-3">
     <button (click)="downUser()">
       <span class="fa fa-arrow-circle-left" aria-hidden="true"></span>
     </button>

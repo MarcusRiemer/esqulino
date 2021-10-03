@@ -1,24 +1,36 @@
 <form (ngSubmit)="onCreateGrade()" [formGroup]="createGradeForm">
   <div>
     <label class="col-sm-2 from-control_label">Bewertung</label>
-    <input
-      class="form-control"
-      type="number"
-      formControlName="grade"
-      name="grade"
-    />
+    <div class="col-sm-10">
+      <input
+        class="form-control"
+        type="number"
+        formControlName="grade"
+        name="grade"
+        min="0"
+      />
+      <small class="text-muted">
+        Note die für das Ergebniss dieser Aufgabe.
+      </small>
+    </div>
   </div>
   <div>
-    <label>Feedback</label>
-    <textarea
-      class="form-control"
-      formControlName="feedback"
-      name="feedback"
-    ></textarea>
+    <div class="col-sm-10">
+      <label>Feedback</label>
+      <textarea
+        class="form-control"
+        formControlName="feedback"
+        name="feedback"
+      ></textarea>
+      <small class="text-muted">
+        Mit diesem Feedback, kann man den Bearbeitern dieser Aufgabe mitteilen,
+        was eventuell noch verbesserungs würdig ist oder bereits gut war.
+      </small>
+    </div>
   </div>
   <button
     type="submit"
-    class="btn btn-primary btn-block"
+    class="btn btn-primary"
     [disabled]="!createGradeForm.valid"
   >
     Feedback Abschicken

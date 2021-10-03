@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Observable } from "rxjs";
+import { combineLatest, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { SidebarService } from "../../../sidebar.service";
 import { EditorToolbarService } from "../../../toolbar.service";
@@ -18,8 +18,22 @@ export class ToGradeComponent implements OnInit {
     private readonly _activatedRoute: ActivatedRoute
   ) {}
 
-  assignmentSubmissionId: Observable<string> =
+  assignmentSubmissionId$: Observable<string> =
     this._activatedRoute.paramMap.pipe(map((p) => p.get("submissionId")));
+
+  //TODO: Show compiled files
+  codeResources = combineLatest([
+    this.assignmentSubmissionId$,
+    this._courseService.fullCourseData$,
+  ]).pipe(
+    map(([id, course]) => {
+      course.assignmentSubmissions
+        .find((submission) => submission.id == id)
+        .assignmentSubmittedCodeResources.map(
+          (submitted) => submitted.codeResource
+        );
+    })
+  );
 
   ngOnInit() {
     // Ensure sane default state

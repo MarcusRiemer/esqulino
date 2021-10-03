@@ -22,6 +22,10 @@ export class CreateGradeComponent implements OnInit {
   async ngOnChanges(changes: SimpleChanges) {
     console.log("------------------");
     console.log(changes.evaluatedPeopleIds.currentValue);
+    this.createGradeForm = this._fromBuilder.group({
+      grade: [1],
+      feedback: [""],
+    });
     if (changes.evaluatedPeopleIds.currentValue == undefined) {
       const project = await this._courseService.fullCourseData$
         .pipe(
@@ -41,6 +45,7 @@ export class CreateGradeComponent implements OnInit {
         (submission) => submission.id == this.assignmentSubmissionId
       );
       console.log(submission);
+
       if (submission.assignmentSubmissionGrades.length == 1) {
         const grade = submission.assignmentSubmissionGrades[0];
         if (grade.auditees.length == member) {
@@ -50,12 +55,16 @@ export class CreateGradeComponent implements OnInit {
         }
       }
     } else {
+      console.log("asdad----");
       this.createGradeForm
         .get("grade")
         .setValue(changes.evaluatedPeopleIds.currentValue.grade);
       this.createGradeForm
         .get("feedback")
         .setValue(changes.evaluatedPeopleIds.currentValue.gradeFeedback);
+
+      console.log(this.createGradeForm.get("grade").value);
+      console.log(this.createGradeForm.get("feedback").value);
     }
   }
 
@@ -67,12 +76,7 @@ export class CreateGradeComponent implements OnInit {
 
   createGradeForm: FormGroup;
 
-  ngOnInit(): void {
-    this.createGradeForm = this._fromBuilder.group({
-      grade: [1],
-      feedback: [""],
-    });
-  }
+  ngOnInit(): void {}
   async onCreateGrade() {
     console.log("asdasdadasdsa");
     console.log(this.createGradeForm.get("grade").value);
