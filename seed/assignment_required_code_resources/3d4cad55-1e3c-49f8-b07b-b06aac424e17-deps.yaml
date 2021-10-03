@@ -1,0 +1,4 @@
+---
+- - "../seed/code_resources"
+  - 4ddf121f-dc09-419e-9e36-37991251105a
+  - !ruby/class 'Seed::CodeResourceSeed'

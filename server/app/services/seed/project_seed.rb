@@ -15,6 +15,7 @@ module Seed
         dependencies: {
           "project_uses_block_languages" => Seed::ProjectUsesBlockLanguageSeed,
           "code_resources" => Seed::CodeResourceSeed,
+          "assignments" => Seed::AssignmentSeed,
           "project_sources" => Seed::ProjectSourceSeed,
           "project_databases" => Seed::ProjectDatabaseSeed,
           "default_database" => Seed::ProjectDatabaseSeed,

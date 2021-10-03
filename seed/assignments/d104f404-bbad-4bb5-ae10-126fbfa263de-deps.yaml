@@ -1,0 +1,10 @@
+---
+- - "../seed/assignment_required_code_resources"
+  - b856ccad-4477-4fc7-aa70-58f9e38517c6
+  - &1 !ruby/class 'Seed::AssignmentRequiredCodeResourceSeed'
+- - "../seed/assignment_required_code_resources"
+  - 4b15339c-5375-4c7b-af3c-000d41c3f747
+  - *1
+- - "../seed/assignment_required_code_resources"
+  - 3d4cad55-1e3c-49f8-b07b-b06aac424e17
+  - *1

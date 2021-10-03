@@ -1,0 +1,4 @@
+---
+- - "../seed/assignment_template_code_resources"
+  - 3ed09eb1-449d-4014-b4ff-b020d6f11e9a
+  - !ruby/class 'Seed::AssignmentTemplateCodeResourceSeed'

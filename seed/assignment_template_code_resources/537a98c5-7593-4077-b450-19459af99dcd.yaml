@@ -1,0 +1,22 @@
+--- !ruby/object:AssignmentTemplateCodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: assignment_required_code_resource_id
+  value_before_type_cast: 4b15339c-5375-4c7b-af3c-000d41c3f747
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 537a98c5-7593-4077-b450-19459af99dcd
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: code_resource_id
+  value_before_type_cast: eddee466-e369-46eb-abb9-c74366456e8a
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: reference_type
+  value_before_type_cast: 1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-10-03 20:39:59.178424000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-10-03 20:39:59.178424000 Z
+new_record: false
+active_record_yaml_version: 2

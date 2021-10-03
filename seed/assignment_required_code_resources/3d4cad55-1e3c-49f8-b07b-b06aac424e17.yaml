@@ -1,0 +1,27 @@
+--- !ruby/object:AssignmentRequiredCodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: assignment_id
+  value_before_type_cast: d104f404-bbad-4bb5-ae10-126fbfa263de
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Gefordert
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 3d4cad55-1e3c-49f8-b07b-b06aac424e17
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: code_resource_id
+  value_before_type_cast: 4ddf121f-dc09-419e-9e36-37991251105a
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: json
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-10-03 20:38:33.770172000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-10-03 20:40:05.331304000 Z
+new_record: false
+active_record_yaml_version: 2

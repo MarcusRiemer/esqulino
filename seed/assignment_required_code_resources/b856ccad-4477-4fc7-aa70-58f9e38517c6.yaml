@@ -1,0 +1,26 @@
+--- !ruby/object:AssignmentRequiredCodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: assignment_id
+  value_before_type_cast: d104f404-bbad-4bb5-ae10-126fbfa263de
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Editierbar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: b856ccad-4477-4fc7-aa70-58f9e38517c6
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: code_resource_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: json
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-10-03 20:38:47.843590000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-10-03 20:38:47.843590000 Z
+new_record: false
+active_record_yaml_version: 2

@@ -1,0 +1,47 @@
+--- !ruby/object:Project
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+  value_before_type_cast: db
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: '"de"=>"Einführung in Datenbanken"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 5ec5d74f-7ff5-4358-92f3-19f1ca9ec543
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: public
+  value_before_type_cast: false
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: preview
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: index_page_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2021-10-03 20:38:07.238062000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2021-10-03 20:41:01.401987000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_database_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: user_id
+  value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: ''
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: max_group_size
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: max_number_of_groups
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: selection_group_type
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: enrollment_start
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: enrollment_end
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: course_template
+  value_before_type_cast: true
+new_record: false
+active_record_yaml_version: 2
