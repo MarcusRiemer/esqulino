@@ -181,6 +181,7 @@
     </li>
   </ul>
 </div>
-
-<course-group-settings></course-group-settings>
+<div *ngIf="project.courseTemplate">
+  <course-group-settings></course-group-settings>
+</div>
 <project-members></project-members>

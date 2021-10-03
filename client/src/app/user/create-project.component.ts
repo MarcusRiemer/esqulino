@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { BehaviorSubject } from "rxjs";
-import { map } from "rxjs/operators";
+import { first, map } from "rxjs/operators";
 
 import {
   ProjectCreationRequest,
@@ -25,6 +25,7 @@ export class CreateProjectComponent {
   public params: ProjectCreationRequest = {
     slug: undefined,
     name: undefined,
+    courseTemplate: false,
   };
 
   public constructor(
@@ -60,10 +61,16 @@ export class CreateProjectComponent {
       try {
         const res = await this._createProjectGQL
           .mutate(this.params)
-          .pipe(map((response) => response.data.createProject))
+          .pipe(
+            first(),
+            map((response) => response.data.createProject)
+          )
           .toPromise();
         this._currentError = res.errors;
+        console.log("navigation sollte funktionieren");
+        console.log(`/editor/${res.id}`);
         this._router.navigateByUrl(`/editor/${res.id}`);
+
         return res;
       } finally {
         this._requested$.next(false);

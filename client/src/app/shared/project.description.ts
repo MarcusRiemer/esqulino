@@ -20,6 +20,11 @@ export type ProjectSlug = string;
 export type ProjectName = MultiLangString;
 
 /**
+ * Indicates whether the project is a course
+ */
+export type ProjectCourseTemplate = boolean;
+
+/**
  * The name of a user for a specific project.
  * @pattern ^[a-zA-Z0-9\-_]{4,}$
  */
@@ -90,6 +95,7 @@ export interface ProjectListDescription {
   createdAt?: string;
   updatedAt?: string;
   userId?: string;
+  courseTemplate?: boolean;
 }
 
 /**
@@ -154,4 +160,5 @@ export interface ProjectUpdateDescription {
 export interface ProjectCreationRequest {
   slug: ProjectSlug;
   name: ProjectName;
+  courseTemplate: ProjectCourseTemplate;
 }

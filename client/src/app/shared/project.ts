@@ -57,6 +57,8 @@ export class Project implements Saveable {
 
   private _usesBlockLanguages: ProjectUsesBlockLanguageDescription[];
 
+  private _courseTemplate: boolean;
+
   readonly grammarDescriptions: GrammarDescription[];
 
   /**
@@ -73,6 +75,7 @@ export class Project implements Saveable {
     this._description = json.description;
     this._indexPageId = json.indexPageId;
     this._projectImageId = json.preview;
+    this._courseTemplate = json.courseTemplate;
     this._sources = json.projectSources ?? []; // Sources may be undefined
     this._usesBlockLanguages = [...json.projectUsesBlockLanguages];
     this._currentDatabase = json.defaultDatabase?.name;
@@ -196,6 +199,13 @@ export class Project implements Saveable {
    */
   get description() {
     return this._description;
+  }
+
+  /**
+   * @return true, if the project a course.
+   */
+  get courseTemplate() {
+    return this._courseTemplate;
   }
 
   /**
