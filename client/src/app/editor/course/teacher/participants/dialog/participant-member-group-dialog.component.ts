@@ -31,22 +31,21 @@ export class ParticipantMemberGroupDialogComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.allPossibleUserNames = this._courseListUsers
-      .fetch({})
-      .pipe(first(), pluck("data"))
-      .toPromise();
-
-    console.log(this.allPossibleUserNames);
+    // this.allPossibleUserNames = this._courseListUsers
+    //   .fetch({})
+    //   .pipe(first(), pluck("data"))
+    //   .toPromise();
+    // console.log(this.allPossibleUserNames);
   }
 
   formControlUserName = new FormControl("");
   allPossibleUserNames;
 
   readonly displayedColumns: string[] = [
-    "actions",
     "name",
     "roleName",
     "joinedAt",
+    "actions",
   ];
 
   async onRemoveMember(userId: string) {
@@ -57,6 +56,7 @@ export class ParticipantMemberGroupDialogComponent implements OnInit {
   }
 
   async onAddMemberToGroup() {
+    console.log("add");
     this._mutAddMemberToGroup
       .mutate({
         groupId: this.data.groupId,

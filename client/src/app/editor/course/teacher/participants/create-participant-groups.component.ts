@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 import { CreateProjectCourseParticipationsGQL } from "../../../../../generated/graphql";
 import { CurrentLocaleService } from "../../../../current-locale.service";
@@ -17,7 +18,9 @@ export class CreateParticipantGroupsComponent implements OnInit {
     private readonly _locale: CurrentLocaleService,
     private readonly _courseService: CourseService,
     private readonly _fromBuilder: FormBuilder,
-    private readonly _mutCreateProjectCourseParticipation: CreateProjectCourseParticipationsGQL
+    private readonly _mutCreateProjectCourseParticipation: CreateProjectCourseParticipationsGQL,
+    private readonly _activatedRoute: ActivatedRoute,
+    private readonly _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +44,8 @@ export class CreateParticipantGroupsComponent implements OnInit {
       })
       .pipe(first())
       .toPromise()
-      .then((e) => this.createGroups.reset());
+      .then((e) =>
+        this._router.navigate(["../../"], { relativeTo: this._activatedRoute })
+      );
   }
 }

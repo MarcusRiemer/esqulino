@@ -1,25 +1,23 @@
-<div class="card mb-3" id="used-block-languages">
+<div class="card" id="used-block-languages">
   <h4 class="card-header">Gruppenmitglieder</h4>
   <div class="card-body">
-    <div class="mb-3">
-      <table mat-table [dataSource]="members$" matSort class="container-fluid">
+    <div class="">
+      <table mat-table [dataSource]="members$" class="container-fluid">
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <th mat-header-cell *matHeaderCellDef r>Name</th>
           <td mat-cell *matCellDef="let member">
             {{ member.user.displayName }}
           </td>
         </ng-container>
         <ng-container matColumnDef="roleName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Rolle</th>
+          <th mat-header-cell *matHeaderCellDef>Rolle</th>
           <td mat-cell *matCellDef="let member">
             {{ member.membershipType }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="joinedAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Eintrittsdatum
-          </th>
+          <th mat-header-cell *matHeaderCellDef>Eintrittsdatum</th>
           <td mat-cell *matCellDef="let member">
             <div *ngIf="member.joinedAt; else notAccepted">
               {{ member.joinedAt | date: "yyyy.MM.dd" }}
@@ -29,7 +27,7 @@
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Aktion</th>
+          <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let member">
             <button
               data-spec="delete"
@@ -45,10 +43,18 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <form (ngSubmit)="onAddMemberToGroup()">
-        <label>Mitglied hinzufügen</label>
-        <input type="text" [formControl]="formControlUserName" />
-        <button type="submit">Speichern</button>
+      <form (ngSubmit)="onAddMemberToGroup()" class="form-group row">
+        <h5 class="col-sm-12 mt-2">Mitglied hinzufügen</h5>
+        <div class="col-sm-8">
+          <input
+            class="form-control"
+            type="text"
+            [formControl]="formControlUserName"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary col-sm-4">
+          Speichern
+        </button>
       </form>
     </div>
   </div>
