@@ -11,8 +11,11 @@ class Mutations::Projects::CreateProjectCourseParticipation < Mutations::BaseMut
     authorize project, :create_project_course_participation?
 
     raise ArgumentError, 'The Project must be a course and must not be a child course' if !project.is_course || !project.based_on_project.nil?
+    raise ArgumentError, 'The name of the group must not be empty' if group_name.empty?
 
-    #raise ArgumentError, 'A course requires at least one participant' if user_ids.count == 0
+    group_name.values.each do |value|
+      raise ArgumentError, 'It is not allowed that a value of a language key is empty ' if value.blank?
+    end
 
     c_project = project.dup
     c_project.slug = nil
@@ -26,10 +29,12 @@ class Mutations::Projects::CreateProjectCourseParticipation < Mutations::BaseMut
 
       user_ids.each do |id|
         raise ArgumentError, 'Can´t add a member of the root course' if project.is_already_in_project?(User.find(id))
+        raise ArgumentError, 'The user is already a member of participant group' if project.is_already_a_participant?(User.find(id))
+
 
         c_project.project_members.create(user_id: id, membership_type: 'participant')
       end
-
+      
       # TODO: DOn´t Copy Project
       Mutations::Projects::CreateDeepCopyProject.helper_create_copy_of_project_uses_block_languages(project, c_project)
 
@@ -51,6 +56,7 @@ class Mutations::Projects::CreateProjectCourseParticipation < Mutations::BaseMut
     c_project.based_on_project = project
     c_project.public = false
     c_project.name = group_name
+    c_project.course_template = false
 
     c_project.save!
 

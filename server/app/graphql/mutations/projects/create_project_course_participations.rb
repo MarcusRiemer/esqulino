@@ -18,6 +18,7 @@ class Mutations::Projects::CreateProjectCourseParticipations < Mutations::BaseMu
 
     raise ArgumentError, 'start_counter can´t be negativ' if start_name_counter < 0
 
+    raise ArgumentError, 'The name of the group must not be empty' if name.empty?
 
     ActiveRecord::Base.transaction do
       counter = 0

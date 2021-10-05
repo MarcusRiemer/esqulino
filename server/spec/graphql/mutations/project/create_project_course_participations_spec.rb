@@ -57,6 +57,25 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
     expect(Project.where(name: { 'de' => 'Gruppe' }).count).to eq 3
   end
 
+
+  it 'empty name is not allowed' do
+    project = create(:project, slug: 'course-test', course_template: true)
+    assignment = create(:assignment, project: project, name: 'test')
+    user1 = create(:user)
+
+    mut = described_class.new(**init_args(user: project.user))
+
+    expect{mut.resolve(
+      based_on_project_id: project.id,
+      number_of_groups: 3,
+      name: "",
+      start_name_counter: 10
+    )}.to raise_error(ArgumentError)
+
+    expect(Project.count).to eq 1
+    expect(ProjectCourseParticipation.count).to eq 0
+  end
+
   it ' with more than one # phrases' do
     project = create(:project, slug: 'course-test', course_template: true)
     assignment = create(:assignment, project: project, name: 'test')

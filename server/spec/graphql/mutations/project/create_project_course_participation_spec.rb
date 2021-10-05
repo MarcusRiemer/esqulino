@@ -113,6 +113,33 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
         
       end
 
+
+      it "empty group_name is not allowed" do
+        project = create(:project, slug:"course-test")
+        assignment = create(:assignment, project: project, name: "test")
+        user1 = create(:user)
+        
+        mut = described_class.new(**init_args(user: project.user))
+
+        expect{mut.resolve(
+          based_on_project_id: project.id,
+          user_ids: [user1.id],
+          group_name: {"de"=>""}
+        )}.to raise_error(ArgumentError)
+
+        expect(Project.count).to eq 1
+
+        expect{mut.resolve(
+          based_on_project_id: project.id,
+          user_ids: [user1.id],
+          group_name: {"de"=> nil}
+        )}.to raise_error(ArgumentError)
+
+        expect(Project.count).to eq 1
+
+      end
+
+
     it "private course add users" do
       project = create(:project, slug:"course-test", public: false)
       assignment = create(:assignment, project: project, name: "test")
@@ -371,11 +398,12 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
 
 
       #TODO
-      it "Create course added a user 2 times" do
+      fit "Create course added a user 2 times" do
         project = create(:project, slug:"course-test")
         assignment = create(:assignment, project: project, name: "test")
         user1 = create(:user)
-        
+        user2 = create(:user)
+
         mut = described_class.new(**init_args(user: project.user))
 
         res = mut.resolve(
@@ -383,15 +411,26 @@ RSpec.describe Mutations::Projects::CreateProjectCourseParticipation do
           user_ids: [user1.id],
           group_name: {"de"=>"Group 1"}
         )
-        res = mut.resolve(
+
+        expect{mut.resolve(
           based_on_project_id: project.id,
           user_ids: [user1.id],
-          group_name: {"de"=>"Group 1"}
-        )
+          group_name: {"de"=>"Group 2"}
+        )}.to raise_error(ArgumentError)
 
-        expect(Project.count).to eq 3
-        expect(ProjectCourseParticipation.count).to eq 2
-        expect(ProjectMember.count).to eq 2 
+        expect(Project.count).to eq 2
+        expect(ProjectCourseParticipation.count).to eq 1
+        expect(ProjectMember.count).to eq 1
+
+        expect{mut.resolve(
+          based_on_project_id: project.id,
+          user_ids: [user2.id, user1.id],
+          group_name: {"de"=>"Group 3"}
+        )}.to raise_error(ArgumentError)
+
+        expect(Project.count).to eq 2
+        expect(ProjectCourseParticipation.count).to eq 1
+        expect(ProjectMember.count).to eq 1
 
       end
 
