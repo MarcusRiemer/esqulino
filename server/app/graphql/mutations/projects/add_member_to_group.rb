@@ -13,14 +13,16 @@ class Mutations::Projects::AddMemberToGroup < Mutations::Projects::Projects
     raise ArgumentError, 'The Project must be a group of a course.' if group.based_on_project.nil?
 
     course = Project.find(group.based_on_project.id)
+    
+    raise ArgumentError, 'User is already a participant of this course' if course.is_already_a_participant?(user)
+
+    raise ArgumentError, 'User is member of the root course' if course.is_already_in_project?(user)
 
     raise ArgumentError, 'Can´t delete a Group with submissions' if group.assignment_submissions.count > 0
 
     authorize course, :destroy_project_course_participation?
 
-    raise ArgumentError, 'User is already a participant of this course' if course.is_already_a_participant?(user)
-
-    raise ArgumentError, 'User is member of the root course' if course.is_already_in_project?(user)
+    
 
     group.project_members.create(user_id: user.id, membership_type: role)
 

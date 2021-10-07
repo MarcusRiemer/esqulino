@@ -29,6 +29,10 @@ class Mutations::Projects::AddMembers < Mutations::BaseMutation
         raise ArgumentError.new "User is already member"
       end
 
+      if(project.is_already_a_participant?(user))
+        raise ArgumentError.new "User is in a participant group"
+      end
+
       if(project.user_have_role(current_user, ["participant"]) && (is_admin || !project.public))
         raise Pundit::NotAuthorizedError
       end
