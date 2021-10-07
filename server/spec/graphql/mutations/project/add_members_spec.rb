@@ -983,4 +983,26 @@ RSpec.describe Mutations::Projects::AddMembers do
   end
 
 
+  fit "add user which is member of participant group" do
+    current_user_owner = create(:user, display_name: "Owner")
+    course = create(:project, user: current_user_owner, public: true, course_template: true)
+
+    group = create(:project, based_on_project: course)
+    participant = create(:user)
+    group.project_members.create(user_id: participant.id, membership_type: 'participant')
+
+    mut = described_class.new(**init_args(user: current_user_owner))
+    expect{mut.resolve(
+      project_id: course.id,
+      user_ids: [participant.id],
+      is_admin: true
+    )}.to raise_error(ArgumentError)
+
+
+    expect(ProjectMember.count).to eq 1
+    expect(Project.find(course.id).members.count).to eq 0
+
+  end
+
+
 end
