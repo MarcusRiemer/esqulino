@@ -544,5 +544,22 @@ RSpec.describe Mutations::Projects::ChangeOwner do
     expect( ProjectMember.count ).to eq 2
     expect( Project.first.user).to eq owner
   end
+
+  fit "change owner which is member of participant group" do
+    current_user_owner = create(:user, display_name: "Owner")
+    course = create(:project, user: current_user_owner, public: false, course_template: true)
+
+    group = create(:project, based_on_project: course)
+    participant = create(:user)
+    group.project_members.create(user_id: participant.id, membership_type: 'participant')
+
+    mut = described_class.new(**init_args(user: current_user_owner))
+    expect{mut.resolve(
+      project_id: course.id,
+      user_id: participant.id,
+    )}.to raise_error(ArgumentError)
+
+    expect(Project.find(course.id).user).to eq current_user_owner
+    end
   
 end

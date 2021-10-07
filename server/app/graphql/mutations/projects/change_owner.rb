@@ -10,6 +10,10 @@ class Mutations::Projects::ChangeOwner < Mutations::BaseMutation
      
       user = User.find(user_id)
 
+      if(project.is_already_a_participant?(user))
+        raise ArgumentError.new "User is in a participant group"
+      end
+
       if(!project.owner?(user))
       ActiveRecord::Base.transaction do
 
