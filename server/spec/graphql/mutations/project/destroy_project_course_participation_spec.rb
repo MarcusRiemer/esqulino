@@ -151,6 +151,68 @@ RSpec.describe Mutations::Projects::DestroyProjectCourseParticipation do
     expect(Project.count).to eq 2
   end
 
+ it 'destroy the group with database reference' do
+    course = Project.find_by_slug_or_id!('course-test')
+    block = course.block_languages.first
+
+    assignment = create(:assignment, project: course, end_date: (Date.today + 5))
+    required = create(:assignment_required_code_resource, assignment: assignment, programming_language: block.default_programming_language)
+
+    group = create(:project, based_on_project: course)
+    create(:project_database, project: group)
+    participant = create(:user)
+    group.project_members.create(user_id: participant.id, membership_type: 'participant')
+
+    mut = described_class.new(**init_args(user: course.user))
+
+     res = mut.resolve(
+        group_id: group.id
+      )
+  
+    expect(Project.count).to eq 1
+    expect(ProjectCourseParticipation.count).to eq 0
+    expect(ProjectDatabase.count).to eq 0
+
+
+    group = create(:project, based_on_project: course)
+    create(:project_database, project: group)
+    create(:project_database, project: group)
+    participant = create(:user)
+    group.project_members.create(user_id: participant.id, membership_type: 'participant')
+
+    res = mut.resolve(
+      group_id: group.id
+    )
+
+    expect(Project.count).to eq 1
+    expect(ProjectCourseParticipation.count).to eq 0
+    expect(ProjectDatabase.count).to eq 0
+
+  end
+
+  it 'destroy the group with project sources' do
+    course = Project.find_by_slug_or_id!('course-test')
+    block = course.block_languages.first
+
+    assignment = create(:assignment, project: course, end_date: (Date.today + 5))
+    required = create(:assignment_required_code_resource, assignment: assignment, programming_language: block.default_programming_language)
+
+    group = create(:project, based_on_project: course)
+    create(:project_source, project: group)
+    participant = create(:user)
+    group.project_members.create(user_id: participant.id, membership_type: 'participant')
+
+    mut = described_class.new(**init_args(user: course.user))
+
+     res = mut.resolve(
+        group_id: group.id
+      )
+  
+    expect(Project.count).to eq 1
+    expect(ProjectCourseParticipation.count).to eq 0
+    expect(ProjectDatabase.count).to eq 0
+  end
+
   it 'destroy the course' do
     course = Project.find_by_slug_or_id!('course-test')
     block = course.block_languages.first

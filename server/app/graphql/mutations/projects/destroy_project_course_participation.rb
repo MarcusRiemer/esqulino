@@ -12,7 +12,20 @@ class Mutations::Projects::DestroyProjectCourseParticipation < Mutations::Projec
 
     authorize course, :destroy_project_course_participation?
 
+
+    ActiveRecord::Base.transaction do
+
+
+    group.default_database = nil
+    group.save!
+  
+
+    group.project_databases.each {
+      |database| database.destroy!
+    }
+
     group.destroy!
+  end
 
     {
       project: course
