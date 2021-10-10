@@ -1,5 +1,7 @@
-<h2>Teilgenommene Kurse</h2>
-
+<h2>Eingeschriebene Kurse</h2>
+<p class="text-muted" *ngIf="(combinedCourses$ | async)?.length <= 0">
+  - Sie sind noch keinem Kurs beigetreten
+</p>
 <div class="row">
   <div *ngFor="let course of combinedCourses$ | async" class="col-sm-4 mb-3">
     <participated-list-courses-card
@@ -10,7 +12,9 @@
 
 <mat-divider></mat-divider>
 <h2>Selbsterstellte Kurse</h2>
-
+<p class="text-muted" *ngIf="(ownCourses$ | async)?.length <= 0">
+  - Sie haben noch keine eigenen Kurse erstellt
+</p>
 <div class="row">
   <div *ngFor="let course of ownCourses$ | async" class="col-sm-4 mb-3">
     <own-list-courses-card [course]="course"></own-list-courses-card>

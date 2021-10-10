@@ -1,4 +1,7 @@
 <h1>Kursangebot</h1>
+<p class="text-muted" *ngIf="(courses$ | async)?.length <= 0">
+  - Aktuell gibt es keine Kursangebote
+</p>
 <div class="row">
   <div *ngFor="let course of courses$ | async" class="col-sm-4 mb-3">
     <course-overview-item [course]="course"></course-overview-item>

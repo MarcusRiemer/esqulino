@@ -1,61 +1,69 @@
-<form (ngSubmit)="onUpdateAssignment()" [formGroup]="updateAssignmentForm">
-  <div class="input-group mb-3">
-    <label class="form-control-label col-sm-2">Startdatum</label>
-    <input
-      type="date"
-      class="form-control"
-      placeholder="Startdatum"
-      name="startDate"
-      formControlName="updateStartDate"
-    />
-    <span class="input-group-text">Datum</span>
-    <input
-      type="time"
-      name="startDateTime"
-      class="form-control"
-      formControlName="updateStartTime"
-    />
-    <span class="input-group-text">Uhrzeit</span>
+<div class="card">
+  <div class="card-header">
+    <h4>{{ data.name }}</h4>
   </div>
+  <div class="card-body">
+    <form (ngSubmit)="onUpdateAssignment()" [formGroup]="updateAssignmentForm">
+      <div class="input-group mb-3">
+        <label class="form-control-label col-sm-2">Startdatum</label>
+        <input
+          type="date"
+          class="form-control"
+          placeholder="Startdatum"
+          name="startDate"
+          formControlName="updateStartDate"
+        />
+        <span class="input-group-text">Datum</span>
+        <input
+          type="time"
+          name="startDateTime"
+          class="form-control"
+          formControlName="updateStartTime"
+        />
+        <span class="input-group-text">Uhrzeit</span>
+      </div>
 
-  <div class="input-group mb-3">
-    <label class="form-control-label col-sm-2">Abgabedatum</label>
-    <input
-      type="date"
-      class="form-control"
-      placeholder="Enddatum"
-      name="endDate"
-      formControlName="updateEndDate"
-    />
-    <span class="input-group-text">Datum</span>
-    <input
-      formControlName="updateEndTime"
-      type="time"
-      name="endDateTime"
-      class="form-control"
-    />
-    <span class="input-group-text">Uhrzeit</span>
+      <div class="input-group mb-3">
+        <label class="form-control-label col-sm-2">Abgabedatum</label>
+        <input
+          type="date"
+          class="form-control"
+          placeholder="Enddatum"
+          name="endDate"
+          formControlName="updateEndDate"
+        />
+        <span class="input-group-text">Datum</span>
+        <input
+          formControlName="updateEndTime"
+          type="time"
+          name="endDateTime"
+          class="form-control"
+        />
+        <span class="input-group-text">Uhrzeit</span>
+      </div>
+      <div class="form-group row mb-3">
+        <label class="col-sm-2 from-control_label">Gewichtung</label>
+        <div class="col-sm-10">
+          <input
+            type="number"
+            formControlName="updateWeight"
+            class="form-control"
+            name="weight"
+            min="1"
+          />
+          <small class="text-muted">
+            Wenn diese Aufgabe eine höhere Komplexität haben sollte und du es in
+            der Wertung sichtbar machen möchtest, kannst du hier einen
+            Multiplikator hinterlegen.
+          </small>
+        </div>
+      </div>
+      <div class="d-flex flex-row-reverse">
+        <button class="btn btn-danger me-1" type="button" mat-dialog-close>
+          Abbrechen
+        </button>
+        <button class="btn btn-primary me-1" type="submit">Speichern</button>
+      </div>
+    </form>
   </div>
-  <div class="form-group row mb-3">
-    <label class="col-sm-2 from-control_label">Gewichtung</label>
-    <div class="col-sm-10">
-      <input
-        type="number"
-        formControlName="updateWeight"
-        class="form-control"
-        name="weight"
-        min="1"
-      />
-      <small class="text-muted">
-        Wenn diese Aufgabe eine höhere Komplexität haben sollte und du es in der
-        Wertung sichtbar machen möchtest, kannst du hier einen Multiplikator
-        hinterlegen.
-      </small>
-    </div>
-  </div>
-
-  <button class="btn btn-danger" type="button" mat-dialog-close>
-    Abbrechen
-  </button>
-  <button class="btn btn-primary" type="submit">Speichern</button>
-</form>
+</div>

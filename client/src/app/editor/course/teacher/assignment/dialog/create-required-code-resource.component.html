@@ -80,31 +80,41 @@
           </label>
           <p>
             * Dabei wird auf die gleiche Code Resource verwiesen, wenn eine
-            andere in der Datei gemacht wird, wird damit auch eine änderung bei
-            den anderen Referenen erzeugt.
+            änderung in der Datei gemacht wird, wird damit auch eine änderung
+            bei den anderen Referenzen erzeugt.
           </p>
         </div>
       </div>
-      <mat-divider></mat-divider>
-
-      <p *ngIf="requiredCodeResource.referenceType == 'given_full'">
-        <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
-        <b>Schreibgeschützt gegebene Ressourcen</b>
-        können von dem Schüler nicht bearbeitet werden. Sie können gegeben falls
-        in anderen Code Ressourcen eingebunden werden, nicht aber verändert
-        werden.
-      </p>
-      <p *ngIf="requiredCodeResource.referenceType == 'given_partially'">
-        <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
-        <b>Editierbar gegebene Ressourcen</b>
-        können vom Schüler bearbeitet werde. Dabei wird eine Kopie von dem
-        erstellen Code dem Schüler bereitgestellt.
-      </p>
-      <p *ngIf="!requiredCodeResource.referenceType">
-        <course-icon class="m-3" [iconType]="'info-description'"></course-icon>
-        <b>Geforderte Ressourcen</b>
-        müssen von dem Schüler komplett selbst erstellt werden.
-      </p>
+      <mat-divider *ngIf="requiredCodeResource.referenceType"></mat-divider>
+      <div class="mt-2">
+        <p *ngIf="requiredCodeResource.referenceType == 'given_full'">
+          <course-icon
+            class="m-3"
+            [iconType]="'info-description'"
+          ></course-icon>
+          <b>Schreibgeschützt gegebene Ressourcen</b>
+          können von dem Schüler nicht bearbeitet werden. Sie können gegeben
+          falls in anderen Code Ressourcen eingebunden werden, nicht aber
+          verändert werden.
+        </p>
+        <p *ngIf="requiredCodeResource.referenceType == 'given_partially'">
+          <course-icon
+            class="m-3"
+            [iconType]="'info-description'"
+          ></course-icon>
+          <b>Editierbar gegebene Ressourcen</b>
+          können vom Schüler bearbeitet werde. Dabei wird eine Kopie von dem
+          erstellten Code dem Schüler zur bearbeitung bereitgestellt.
+        </p>
+        <p *ngIf="!requiredCodeResource.referenceType">
+          <course-icon
+            class="m-3"
+            [iconType]="'info-description'"
+          ></course-icon>
+          <b>Geforderte Ressourcen</b>
+          müssen von dem Schüler komplett selbst erstellt werden.
+        </p>
+      </div>
       <div class="form-group row mb-3">
         <label for="assignment-name" class="col-sm-2 form-control-label">
           Aufgabenname
@@ -202,7 +212,7 @@
       <div
         class="from-group row mb-3"
         *ngIf="
-          !requiredCodeResource.referenceType ||
+          requiredCodeResource.referenceType &&
           createRequiredForm.get('selectedCreateType').value ==
             'new-code-resource'
         "
@@ -210,9 +220,11 @@
         <label class="col-sm-2 col-form-label">Blocksprache</label>
         <div class="col-sm-10">
           <select
-            [disabled]="
+            [attr.disabled]="
               createRequiredForm.get('selectedProgrammingId').value ==
               'undefined'
+                ? true
+                : null
             "
             name="selectedBlockLanguageId"
             class="form-select"
@@ -227,7 +239,12 @@
             </option>
           </select>
           <small class="text-muted">
-            Welche Blocksprache soll genutzt werden?
+            Welche Blocksprache soll genutzt werden? - Sollte
+            <b>keine Blocksprache</b>
+
+            für eine Programmierprache vorhanden sein muss zuerst in der
+            <a routerLink="../../../../">Kursübersicht</a>
+            die dazugehörgie Blocksprachen ausgwählt werden.
           </small>
         </div>
       </div>

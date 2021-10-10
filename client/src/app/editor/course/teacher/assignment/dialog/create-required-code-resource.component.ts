@@ -110,7 +110,6 @@ export class CreateRequiredCodeResourceComponent implements OnInit {
     this._router.navigate([], {
       relativeTo: this._activatedRoute,
       queryParams: { referenceType: type },
-      queryParamsHandling: "merge",
     });
   }
 

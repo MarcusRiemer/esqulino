@@ -163,10 +163,10 @@
             <td mat-cell *matCellDef="let requirement">
               <!--TODO: refactor?-->
               <div *ngIf="requirement.referenceType == 'given_full'">
-                vollständig gegeben
+                schreibgeschützt
               </div>
               <div *ngIf="requirement.referenceType == 'given_partially'">
-                teilweise gegeben
+                editierbar
               </div>
               <div *ngIf="!requirement.referenceType">gefordert</div>
             </td>
@@ -194,9 +194,30 @@
                   Musterlösung erstellen
                 </button>
               </div>
-              <ng-template #solutionName>
-                {{ requirement.solution.name || "-" }}
-              </ng-template>
+              <div>
+                <ng-template #solutionName>
+                  <div class="row align-items-center">
+                    <div class="col-auto">
+                      {{ requirement.solution.name || "-" }}
+                    </div>
+                    <div class="col d-flex" *ngIf="requirement.solution.name">
+                      <may-perform
+                        class="d-flex align-items-center"
+                        [payload]="
+                          removeAssignmentRequiredSolutionPermission$ | async
+                        "
+                      >
+                        <button
+                          type="button"
+                          class="btn-close align-self-center"
+                          aria-label="Close"
+                          (click)="onRemoveSolution(requirement.id)"
+                        ></button>
+                      </may-perform>
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
             </td>
           </ng-container>
 

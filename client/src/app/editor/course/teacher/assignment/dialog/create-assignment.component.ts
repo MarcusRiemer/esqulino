@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { first, map } from "rxjs/operators";
 import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
 import { CreateAssignmentGQL, ReferenceTypeEnum } from "src/generated/graphql";
+import { SidebarService } from "../../../../sidebar.service";
+import { EditorToolbarService } from "../../../../toolbar.service";
 import { CourseService } from "../../../course.service";
 
 @Component({
@@ -17,7 +19,9 @@ export class CreateAssignmentComponent implements OnInit {
     private readonly _mutCreateAssignment: CreateAssignmentGQL,
     private readonly _router: Router,
     private readonly _activatedRoute: ActivatedRoute,
-    private readonly _performData: PerformDataService
+    private readonly _performData: PerformDataService,
+    private readonly _toolbarService: EditorToolbarService,
+    private _sidebarService: SidebarService
   ) {}
 
   createName: string;
@@ -28,7 +32,12 @@ export class CreateAssignmentComponent implements OnInit {
   createEndDateTime: string;
   createWeight: number = 1;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Ensure sane default state
+    this._sidebarService.hideSidebar();
+    this._toolbarService.resetItems();
+    this._toolbarService.savingEnabled = false;
+  }
 
   /**
    * These permissions are required to create a assignment

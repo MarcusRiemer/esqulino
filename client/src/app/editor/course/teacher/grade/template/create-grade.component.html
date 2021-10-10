@@ -28,11 +28,16 @@
       </small>
     </div>
   </div>
-  <button
-    type="submit"
-    class="btn btn-primary"
-    [disabled]="!createGradeForm.valid"
-  >
-    Feedback Abschicken
-  </button>
+  <may-perform [payload]="createAssignmentSubmissionGrade$ | async">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!createGradeForm.valid"
+    >
+      Feedback Abschicken
+    </button>
+    <h3 denied class="card-title">
+      Keine Berechtigung: Das Feedback zu bearbeiten.
+    </h3>
+  </may-perform>
 </form>

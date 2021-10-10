@@ -6,13 +6,13 @@ import { Observable } from "rxjs";
 import { filter, find, first, map, mergeMap, tap } from "rxjs/operators";
 import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
 import {
-  AssignmentTemplateCodeResource,
   DestroyAssignmentRequiredCodeResourceGQL,
-  MutationDestroyAssignmentRequiredCodeResourceArgs,
   ReferenceTypeEnum,
+  RemoveAssignmentRequiredSolutionGQL,
   UpdateAssignmentGQL,
 } from "src/generated/graphql";
 import { ToolbarService } from "../../../../shared";
+import { MessageDialogComponent } from "../../../../shared/message-dialog.component";
 import { ProjectService } from "../../../project.service";
 import { SidebarService } from "../../../sidebar.service";
 import { EditorToolbarService } from "../../../toolbar.service";
@@ -57,6 +57,7 @@ export class AssignmentComponent implements OnInit {
     private readonly _mutUpdateAssignment: UpdateAssignmentGQL,
     private readonly _performData: PerformDataService,
     private readonly _matDialog: MatDialog,
+    private readonly _removeAssignmentSolution: RemoveAssignmentRequiredSolutionGQL,
     private _router: Router,
     private _projectService: ProjectService,
     private _toolbarService: EditorToolbarService,
@@ -100,6 +101,16 @@ export class AssignmentComponent implements OnInit {
   readonly deleteRequirementPermission$ =
     this._courseService.activeCourse$.pipe(
       map((p) => this._performData.project.deleteAssignmentRequirement(p.id))
+    );
+
+  /**
+   * These permissions are required to remove the solution
+   */
+  readonly removeAssignmentRequiredSolutionPermission$ =
+    this._courseService.activeCourse$.pipe(
+      map((p) =>
+        this._performData.project.removeAssignmentRequiredSolution(p.id)
+      )
     );
 
   /**
@@ -197,13 +208,32 @@ export class AssignmentComponent implements OnInit {
       .subscribe((e) => (this.assignment = e));
   }
 
+  async onRemoveSolution(assignmentRequiredCodeResourceId: string) {
+    const confirmed = await MessageDialogComponent.confirm(this._matDialog, {
+      description: $localize`:@@message.ask-delete-resource: Soll diese Musterlösung wirklich entfernt werden?`,
+    });
+
+    if (confirmed) {
+      this._removeAssignmentSolution
+        .mutate({ assignmentRequiredCodeResourceId })
+        .pipe(first())
+        .toPromise();
+    }
+  }
+
   async deleteFile(assignmentId: string) {
-    await this._mutDestroyRequirement
-      .mutate({
-        id: assignmentId,
-      })
-      .pipe(first())
-      .toPromise();
+    const confirmed = await MessageDialogComponent.confirm(this._matDialog, {
+      description: $localize`:@@message.ask-delete-resource:Soll diese Resource wirklich gelöscht werden?`,
+    });
+
+    if (confirmed) {
+      await this._mutDestroyRequirement
+        .mutate({
+          id: assignmentId,
+        })
+        .pipe(first())
+        .toPromise();
+    }
   }
 
   async saveAssingment() {
