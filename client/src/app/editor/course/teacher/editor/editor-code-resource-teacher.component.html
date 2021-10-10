@@ -1,6 +1,10 @@
 <div class="card mb-3">
   <div class="card-header"><h4>Beschreibung</h4></div>
-  <div class="card-body"></div>
+  <div class="card-body">
+    <div *ngIf="required$ | async as requried">
+      <p>{{ requried.description }}</p>
+    </div>
+  </div>
 </div>
 
 <h1>TODO:Editor</h1>

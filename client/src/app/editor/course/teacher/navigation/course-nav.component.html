@@ -21,7 +21,7 @@
 <div *ngFor="let a of assignments$ | async">
   <a
     mat-list-item
-    [routerLink]="['course/assignments/', a.id]"
+    [routerLink]="['course/assignments/', a.assignmentId]"
     routerLinkActive="router-link-active"
     class="indent"
   >
@@ -32,6 +32,13 @@
   <ng-container *ngFor="let solution of a.solutions">
     <a
       mat-list-item
+      [routerLink]="[
+        'course/assignments/',
+        a.assignmentId,
+        'editor',
+        solution.requiredId,
+        solution.id
+      ]"
       [routerLink]="['ast', solution.id]"
       routerLinkActive="router-link-active"
       class="indent-2"
@@ -44,7 +51,13 @@
   <ng-container *ngFor="let template of a.templates">
     <a
       mat-list-item
-      [routerLink]="['ast', template.id]"
+      [routerLink]="[
+        'course/assignments/',
+        a.assignmentId,
+        'editor',
+        template.requiredId,
+        template.id
+      ]"
       routerLinkActive="router-link-active"
       class="indent-2"
     >

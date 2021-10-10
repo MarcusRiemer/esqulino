@@ -12,7 +12,7 @@ import {
 
 import { ProjectService } from "../project.service";
 import { User } from "@sentry/types";
-import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 
 interface ProjectMember {
   id: string;

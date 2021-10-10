@@ -11,16 +11,18 @@ import { ProjectService } from "../../../project.service";
 import { CourseService } from "../../course.service";
 
 interface CourseNavEntry {
-  id: string;
+  assignmentId: string;
   name: string;
   templates: {
     name: string;
     id: string;
     reference_type: AssignmentTemplateCodeResource["referenceType"];
+    requiredId: string;
   }[];
   solutions: {
     name: string;
     id: string;
+    requiredId: string;
   }[];
 }
 
@@ -72,13 +74,16 @@ export class CourseNavComponent {
       map((fullData) => {
         const toReturn: CourseNavEntry[] = fullData.assignments.map((a) => {
           const navData = {
-            id: a.id,
+            assignmentId: a.id,
             name: a.name,
             solutions: a.assignmentRequiredCodeResources
               .filter((req) => req.solution)
-              .map((req) =>
-                fullData.codeResources.find((res) => res.id === req.solution.id)
-              ), // TODO: refactor
+              .map((req) => ({
+                requiredId: req.id,
+                ...fullData.codeResources.find(
+                  (res) => res.id === req.solution.id
+                ),
+              })), // TODO: refactor
             templates: a.assignmentRequiredCodeResources
               .filter((req) => req.template)
               .map((req) => ({
@@ -86,6 +91,7 @@ export class CourseNavComponent {
                   (res) => res.id === req.template.codeResource.id
                 ),
                 reference_type: req.template.referenceType,
+                requiredId: req.id,
               })),
           };
 

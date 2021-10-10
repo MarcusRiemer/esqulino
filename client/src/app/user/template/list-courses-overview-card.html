@@ -22,23 +22,26 @@
         Selbstzuweisen
       </span>
     </div>
-    <div class="card-text">{{ course.description | currentLanguage }}</div>
+    <div class="card-text">
+      {{ course.description | currentLanguage | slice:0:100 }}
+    </div>
     <p class="card-text">
       <small class="text-muted">Lehrer: {{course.user.displayName}}</small>
     </p>
   </div>
 
   <div class="card-footer">
-    <div class="row justify-content-between align-items-end">
-      <div *ngIf="course.enrollmentEnd" class="col justify-content-end">
-        <div><b>Einschreibungsende</b></div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div *ngIf="course.enrollmentEnd" class="col justify-content-end">
+          <div><b>Einschreibungsende</b></div>
 
-        {{ course.enrollmentEnd | date: "dd.MM.yyyy" }} um {{
-        course.enrollmentEnd | date: "HH:mm" }}
+          {{ course.enrollmentEnd | date: "dd.MM.yyyy" }} um {{
+          course.enrollmentEnd | date: "HH:mm" }}
+        </div>
       </div>
-
-      <div class="col row justify-content-end align-self-center">
-        <div class="col-auto">
+      <div class="col-sm-6 align-self-center">
+        <div class="d-flex justify-content-end">
           <button
             *ngIf='course.selectionGroupType != "self_selection"'
             type="button"

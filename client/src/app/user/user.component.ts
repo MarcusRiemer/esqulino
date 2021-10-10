@@ -11,7 +11,7 @@ export const userSettings: NavItem[] = [
       en: "My Courses",
     },
     route: ["/user/own-courses"],
-    icon: "user",
+    icon: "graduation-cap",
   },
   {
     type: "link",
@@ -20,7 +20,7 @@ export const userSettings: NavItem[] = [
       en: "Course Overview",
     },
     route: ["/user/courses"],
-    icon: "user",
+    icon: "list",
   },
   {
     type: "link",

@@ -6,6 +6,7 @@
   ></course-participant-nav>
 
   <a
+    *ngIf="!(isCourse$ | async) && !(isParticipantProject$ | async)"
     mat-list-item
     [routerLink]="['settings']"
     routerLinkActive="router-link-active"
@@ -16,33 +17,36 @@
   <mat-divider></mat-divider>
 
   <!-- Code Resources -->
-  <a
-    mat-list-item
-    [routerLink]="['ast', 'create']"
-    [routerLinkActiveOptions]="{exact: true}"
-    routerLinkActive="router-link-active"
-  >
-    <span class="fa fa-puzzle-piece fa-fw" aria-hidden="true"></span>
-    Code
-  </a>
+  <div *ngIf="!(isParticipantProject$ | async)">
+    <a
+      mat-list-item
+      [routerLink]="['ast', 'create']"
+      [routerLinkActiveOptions]="{exact: true}"
+      routerLinkActive="router-link-active"
+    >
+      <span class="fa fa-puzzle-piece fa-fw" aria-hidden="true"></span>
+      Code
+    </a>
 
-  <!-- TODO: Wrap these in their own component to meaningfully
+    <!-- TODO: Wrap these in their own component to meaningfully
              pre-fetch the state for the resource dragging. -->
-  <a
-    *ngFor="let codeResource of project?.codeResources"
-    mat-list-item
-    class="indent"
-    [routerLink]="['ast', codeResource.id]"
-    routerLinkActive="router-link-active"
-    (dragstart)="startResourceDrag($event, codeResource)"
-  >
-    <span class="fa fa-file-code-o fa-fw"></span>
-    <span class="nav-target">{{ codeResource.name }}</span>
-    <span
-      [style.visibility]="codeResource?.isSavingRequired ? 'visible' : 'hidden'"
-      class="save-icon fa fa-floppy-o"
-    ></span>
-  </a>
+
+    <a
+      *ngFor="let codeResource of project?.codeResources"
+      mat-list-item
+      class="indent"
+      [routerLink]="['ast', codeResource.id]"
+      routerLinkActive="router-link-active"
+      (dragstart)="startResourceDrag($event, codeResource)"
+    >
+      <span class="fa fa-file-code-o fa-fw"></span>
+      <span class="nav-target">{{ codeResource.name }}</span>
+      <span
+        [style.visibility]="codeResource?.isSavingRequired ? 'visible' : 'hidden'"
+        class="save-icon fa fa-floppy-o"
+      ></span>
+    </a>
+  </div>
   <mat-divider></mat-divider>
 
   <!-- Images -->

@@ -6,6 +6,7 @@ import {
   CreateAssignmentSubmissionGradeGQL,
   MutationCreateAssignmentSubmissionGradeArgs,
 } from "../../../../../../generated/graphql";
+import { PerformDataService } from "../../../../../shared/authorisation/perform-data.service";
 import { CourseService } from "../../../course.service";
 import { CreateGradeEntry } from "./create-grade-setting.component";
 
@@ -71,12 +72,29 @@ export class CreateGradeComponent implements OnInit {
   constructor(
     private readonly _courseService: CourseService,
     private readonly _fromBuilder: FormBuilder,
-    private readonly _mutCreateGrade: CreateAssignmentSubmissionGradeGQL
+    private readonly _mutCreateGrade: CreateAssignmentSubmissionGradeGQL,
+    private readonly _performData: PerformDataService
   ) {}
 
   createGradeForm: FormGroup;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.createGradeForm = this._fromBuilder.group({
+      grade: [1],
+      feedback: [""],
+    });
+  }
+
+  /**
+   * These permissions are required to create a feedback
+   */
+  readonly createAssignmentSubmissionGrade$ =
+    this._courseService.activeCourse$.pipe(
+      map((p) =>
+        this._performData.project.createAssignmentSubmissionGrade(p.id)
+      )
+    );
+
   async onCreateGrade() {
     console.log("asdasdadasdsa");
     console.log(this.createGradeForm.get("grade").value);

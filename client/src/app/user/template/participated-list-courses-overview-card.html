@@ -12,31 +12,31 @@
     </h2>
     <div class="row">
       <div class="mb-3" *ngIf="course.basedOnProject.description">
-        {{ course.basedOnProject.description | currentLanguage }}
+        {{ course.basedOnProject.description | currentLanguage | slice:0:100 }}
       </div>
     </div>
   </div>
   <div class="card-footer">
-    <div class="row justify-content-between align-items-end">
-      <div
-        *ngIf="course.basedOnProject.enrollmentEnd"
-        class="col justify-content-end"
-      >
-        <div><b>Einschreibungsende</b></div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div
+          *ngIf="course.basedOnProject.enrollmentEnd"
+          class="col justify-content-end"
+        >
+          <div><b>Einschreibungsende</b></div>
 
-        {{ course.basedOnProject.enrollmentEnd | date: "dd.MM.yyyy" }} um {{
-        course.basedOnProject.enrollmentEnd | date: "HH:mm" }}
+          {{ course.basedOnProject.enrollmentEnd | date: "dd.MM.yyyy" }} um {{
+          course.basedOnProject.enrollmentEnd | date: "HH:mm" }}
+        </div>
+        <ng-template
+          #elseBlock
+          class="col row justify-content-end align-items-end"
+        >
+          <b class="col-auto">{{ course.basedOnProject.enrollmentEnd }}</b>
+        </ng-template>
       </div>
-      <ng-template
-        #elseBlock
-        class="col row justify-content-end align-items-end"
-      >
-        <b class="col-auto">{{ course.basedOnProject.enrollmentEnd }}</b>
-      </ng-template>
-      <div
-        class="col row justify-content-end align-items-end align-self-center"
-      >
-        <div class="col-auto">
+      <div class="col-sm-6 align-self-center">
+        <div class="d-flex justify-content-end">
           <button
             type="button"
             class="btn btn-primary"

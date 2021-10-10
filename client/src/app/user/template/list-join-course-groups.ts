@@ -7,6 +7,7 @@ import {
   JoinParticipantGroupGQL,
   UserListParticipantProjectsGQL,
 } from "../../../generated/graphql";
+import { ProjectService } from "../../editor/project.service";
 import { UserService } from "../../shared/auth/user.service";
 
 @Component({
@@ -41,8 +42,15 @@ export class ListJoinCourseGroup {
   );
 
   readonly participantProjects$ = this.course$.pipe(
-    pluck("participantProjects")
+    pluck("participantProjects"),
+    map((projects) =>
+      projects.map((project) => ({
+        ...project,
+        members: project.members.map((member) => member.displayName),
+      }))
+    )
   );
+
 
   async onJoinParticipantGroup(groupId: string) {
     this._mutJoinParticipantGroup.mutate({ groupId }).pipe(first()).toPromise();

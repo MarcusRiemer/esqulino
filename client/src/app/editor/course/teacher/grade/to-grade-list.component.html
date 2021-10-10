@@ -3,7 +3,7 @@
     <h4>Gruppen Übersicht</h4>
   </div>
   <div class="card-body">
-    <table mat-table [dataSource]="toGrade$ | async" class="col-12">
+    <table mat-table [dataSource]="filterdToGrade$ | async" class="col-12">
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Aktion</th>
         <td mat-cell *matCellDef="let assignment">
@@ -17,13 +17,6 @@
             ]"
           >
             bewerten
-          </button>
-          <button
-            data-spec="edit"
-            type="button"
-            class="btn btn-outline-primary btn-sm"
-          >
-            bearbeiten
           </button>
         </td>
       </ng-container>
@@ -47,6 +40,11 @@
         <td mat-cell *matCellDef="let assignment">
           {{ assignment.assignmentEndDate | date: "dd.MM.yyyy - hh:mm" }}
         </td>
+      </ng-container>
+
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef>Gewichtung</th>
+        <td mat-cell *matCellDef="let assignment">{{ assignment.weight }}</td>
       </ng-container>
 
       <ng-container matColumnDef="numberOfSubmittedFiles">

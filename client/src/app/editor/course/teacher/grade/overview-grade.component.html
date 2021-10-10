@@ -1,128 +1,147 @@
-<div class="card mb-3">
-  <div class="card-header">
-    <h4>Aufgaben Übersicht</h4>
-  </div>
-  <div class="card-body">
-    <table mat-table [dataSource]="assignmentsOverview$ | async" class="col-12">
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Aktion</th>
-        <td mat-cell *matCellDef="let assignment"></td>
-      </ng-container>
+<mat-tab-group>
+  <mat-tab label="Aufgabenübersicht">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h4>Aufgaben Übersicht</h4>
+      </div>
+      <div class="card-body">
+        <table
+          mat-table
+          [dataSource]="assignmentsOverview$ | async"
+          class="col-12"
+        >
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Aufgabenname</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.assignmentName }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Aufgabenname</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.assignmentName }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="group">
+            <th mat-header-cell *matHeaderCellDef>Anzahl Gruppen</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.numberOfGroups }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="group">
-        <th mat-header-cell *matHeaderCellDef>Anzahl Gruppen</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.numberOfGroups }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="submission">
+            <th mat-header-cell *matHeaderCellDef>Abgaben</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.numberOfSubmissions }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="submission">
-        <th mat-header-cell *matHeaderCellDef>Abgaben</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.numberOfSubmissions }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="numberOfGradedGroups">
+            <th mat-header-cell *matHeaderCellDef>Bewertet</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.numberOfGradedGroups }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="startDate">
-        <th mat-header-cell *matHeaderCellDef>Startdatum</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.assingmentStartDate | date: "dd.MM.yyyy - hh:mm" }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="startDate">
+            <th mat-header-cell *matHeaderCellDef>Startdatum</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.assingmentStartDate | date: "dd.MM.yyyy - hh:mm" }}
+              <span *ngIf="!assignment.assingmentStartDate">-</span>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="endDate">
-        <th mat-header-cell *matHeaderCellDef>Enddatum</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.assignmentEndDate | date: "dd.MM.yyyy - hh:mm" }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="endDate">
+            <th mat-header-cell *matHeaderCellDef>Enddatum</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.assignmentEndDate | date: "dd.MM.yyyy - hh:mm" }}
+              <span *ngIf="!assignment.assignmentEndDate">-</span>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="toEvaluate">
-        <th mat-header-cell *matHeaderCellDef>Ausstehende Bewertungen</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.numberOfToEvaluate }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="toEvaluate">
+            <th mat-header-cell *matHeaderCellDef>Ausstehende Bewertungen</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{
+                assignment.numberOfSubmissions - assignment.numberOfGradedGroups
+              }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="failed">
-        <th mat-header-cell *matHeaderCellDef>Durchgefallen</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.numberOfFailed }}
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedAssignmentColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedAssignmentColumns"
-      ></tr>
-    </table>
-  </div>
-</div>
+          <tr mat-header-row *matHeaderRowDef="displayedAssignmentColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedAssignmentColumns"
+          ></tr>
+        </table>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Gruppenübersicht">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h4>Gruppen Übersicht</h4>
+      </div>
+      <div class="card-body">
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="" #input />
+        </mat-form-field>
+        <table mat-table [dataSource]="dataSource" class="col-12">
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Aktion</th>
+            <td mat-cell *matCellDef="let assignment">
+              <button
+                data-spec="edit"
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                [routerLink]="['../to-grade', assignment.submissionId]"
+              >
+                Bearbeiten
+              </button>
+            </td>
+          </ng-container>
 
-<div class="card mb-3">
-  <div class="card-header">
-    <h4>Gruppen Übersicht</h4>
-  </div>
-  <div class="card-body">
-    <table mat-table [dataSource]="gradeOverview$ | async" class="col-12">
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Aktion</th>
-        <td mat-cell *matCellDef="let assignment">
-          <button
-            data-spec="edit"
-            type="button"
-            class="btn btn-outline-primary btn-sm"
-            [routerLink]="['../to-grade', assignment.submissionId]"
-          >
-            Bearbeiten
-          </button>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="groupName">
+            <th mat-header-cell *matHeaderCellDef>Gruppenname</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.groupName | currentLanguage }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="groupName">
-        <th mat-header-cell *matHeaderCellDef>Gruppenname</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.groupName | currentLanguage }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="assignmentName">
+            <th mat-header-cell *matHeaderCellDef>Aufgabenname</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.assignmentName }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="assignmentName">
-        <th mat-header-cell *matHeaderCellDef>Aufgabenname</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.assignmentName }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="auditees">
+            <th mat-header-cell *matHeaderCellDef>Bewertete</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.userName }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="auditees">
-        <th mat-header-cell *matHeaderCellDef>Bewertete</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.userName }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="evaluator">
+            <th mat-header-cell *matHeaderCellDef>Bewerter</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.gradedBy }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="evaluator">
-        <th mat-header-cell *matHeaderCellDef>Bewerter</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.gradedBy }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="assignmentWeight">
+            <th mat-header-cell *matHeaderCellDef>Aufgabengewichtung</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.assignmentWeight }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="grade">
+            <th mat-header-cell *matHeaderCellDef>Note</th>
+            <td mat-cell *matCellDef="let assignment">
+              {{ assignment.userGrade }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="grade">
-        <th mat-header-cell *matHeaderCellDef>Note</th>
-        <td mat-cell *matCellDef="let assignment">
-          {{ assignment.userGrade }}
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedGradeColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedGradeColumns"></tr>
-    </table>
-  </div>
-</div>
+          <tr mat-header-row *matHeaderRowDef="displayedGradeColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedGradeColumns"></tr>
+        </table>
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>

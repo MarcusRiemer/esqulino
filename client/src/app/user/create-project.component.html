@@ -19,13 +19,34 @@
     </mat-card>
     <div class="card mb-3">
       <form class="card-body">
+        <div class="form-group row mb-3">
+          <label for="project-is-course" class="col-sm-2 form-control-label">
+            Als Kurs anlegen
+          </label>
+          <div class="col-sm-10 form-switch">
+            <input
+              class="form-check-input"
+              [(ngModel)]="params.courseTemplate"
+              type="checkbox"
+              id="project-is-course"
+              name="project-is-course"
+            />
+            <small class="text-muted ms-1">
+              In Kursen können Aufgaben und Gruppen organisiert werden.
+            </small>
+          </div>
+        </div>
+
         <div
           class="form-group row"
           [class.has-danger]="name.errors && (name.dirty || name.touched)"
           [class.has-success]="name.valid"
         >
           <label for="project-name" class="col-sm-2 form-control-label">
-            Projektname
+            <span *ngIf="params.courseTemplate; else other_content">
+              Kursname
+            </span>
+            <ng-template #other_content>Projektname</ng-template>
           </label>
           <div class="col-sm-10">
             <input
@@ -87,24 +108,6 @@
           <strong>Projekt konnte nicht angelegt werden!</strong>
           Der Server meldet das folgende Problem:
           <pre [innerText]="currentError | json"></pre>
-        </div>
-
-        <div class="form-group row">
-          <label for="project-is-course" class="col-sm-2 form-control-label">
-            Als Kurs anlegen
-          </label>
-          <div class="col-sm-10 form-switch">
-            <input
-              class="form-check-input"
-              [(ngModel)]="params.courseTemplate"
-              type="checkbox"
-              id="project-is-course"
-              name="project-is-course"
-            />
-            <small class="text-muted">
-              In Kursen können Aufgaben und Gruppen organisiert werden.
-            </small>
-          </div>
         </div>
 
         <button

@@ -29,6 +29,8 @@ export class ListCoursesOverviewCard {
           "editor",
           result.data.joinCourse.project.id,
           "course",
+          "participant",
+          "overview",
         ])
       );
   }

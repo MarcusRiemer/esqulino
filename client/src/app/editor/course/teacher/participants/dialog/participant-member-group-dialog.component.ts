@@ -64,7 +64,8 @@ export class ParticipantMemberGroupDialogComponent implements OnInit {
         role: "participant",
       })
       .pipe(first())
-      .toPromise();
+      .toPromise()
+      .then((_) => this.formControlUserName.reset());
   }
 
   members$ = this._courseService.fullCourseData$.pipe(

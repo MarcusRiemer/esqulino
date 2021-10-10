@@ -82,7 +82,7 @@ export class CreateGradeSettingComponent implements OnDestroy {
         //TODO: Marcus, darf ich tap so verwenden oder ist es eine entartung ?
         this.groupGrading =
           submission.assignmentSubmissionGrades.length > 1 ||
-          submission?.assignmentSubmissionGrades[0].auditees.length !=
+          submission?.assignmentSubmissionGrades[0]?.auditees.length !=
             members.length;
       }),
       map(([submission, members]) =>

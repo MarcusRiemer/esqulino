@@ -86,6 +86,16 @@ export class ProjectPerformData extends ResourcesData {
     };
   }
 
+  public removeAssignmentRequiredSolution(
+    resourceId: string
+  ): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "destroy_assignment_required_code_resource",
+    };
+  }
+
   public createAssignmentRequirements(
     resourceId: string
   ): MayPerformRequestDescription {
@@ -93,6 +103,16 @@ export class ProjectPerformData extends ResourcesData {
       resourceType: this.resourceType,
       resourceId: resourceId,
       policyAction: "create_update_assignment_required_code_resource",
+    };
+  }
+
+  public createAssignmentSubmissionGrade(
+    resourceId: string
+  ): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "create_assignment_submission_grade",
     };
   }
 

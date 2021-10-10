@@ -15,12 +15,14 @@
 
       <ng-container matColumnDef="memberNames">
         <th mat-header-cell *matHeaderCellDef>Mitglieder</th>
-        <td mat-cell *matCellDef="let group">{{group?.members}}</td>
+        <td mat-cell *matCellDef="let group">{{group?.members.join(",")}}</td>
       </ng-container>
 
       <ng-container matColumnDef="groupSize">
         <th mat-header-cell *matHeaderCellDef>Gruppengröße</th>
-        <td mat-cell *matCellDef="let group">{{group.members?.length}} /</td>
+        <td mat-cell *matCellDef="let group">
+          {{group.members?.length}} / {{(course$ | async)?.maxGroupSize}}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -29,6 +31,7 @@
           <button
             class="btn btn-primary"
             (click)="onJoinParticipantGroup(group.id)"
+            *ngIf="group.members?.length != (course$ | async)?.maxGroupSize"
           >
             Beitreten
           </button>

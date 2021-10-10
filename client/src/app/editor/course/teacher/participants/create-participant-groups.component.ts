@@ -25,8 +25,8 @@ export class CreateParticipantGroupsComponent implements OnInit {
 
   ngOnInit(): void {
     this.createGroups = this._fromBuilder.group({
-      groupNumber: [null],
-      groupName: [0],
+      groupNumber: [1],
+      groupName: [null],
       nameCounter: [1],
     });
   }

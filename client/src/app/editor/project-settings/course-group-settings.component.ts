@@ -25,6 +25,7 @@ export class CourseGroupSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.updateGroupSettings = this._fromBuilder.group({
       public: [null],
+      groupType: ["auto-create-groups"],
       groupsAreGiven: [null],
       selfSelection: [null],
       limitNumberOfGroups: [null],
@@ -37,42 +38,58 @@ export class CourseGroupSettingsComponent implements OnInit {
     });
   }
 
+  onRadioButton(value: String) {
+    console.log(value);
+    if (value == "auto-create-groups") {
+      this.updateGroupSettings.get("selfSelection").setValue(null);
+    }
+    if (value == "self-create-groups") {
+      this.updateGroupSettings.get("limitNumberOfGroups").setValue(null);
+      this.updateGroupSettings.get("maxNumberOfGroups").setValue(null);
+    }
+  }
+
   course$ = this._courseService.fullCourseData$.pipe(
-    map((course) => ({
-      numberOfExistingGroups: course.participantProjects?.length,
-      courseId: course.id,
-      public: course.public,
-      selfSelection: course.selectionGroupType == "self_selection",
-      groupsAreGiven:
+    tap((e) => console.log("neu")),
+    map((course) => {
+      const groupType =
         course.selectionGroupType == "as_many_groups_as_was_created" ||
-        course.selectionGroupType == "self_selection",
-      limitNumberOfGroups:
-        course.selectionGroupType == "fixed_number_of_groups",
-      maxNumberOfMembers: course.maxGroupSize,
-      maxNumberOfGroups: course.maxNumberOfGroups,
-      startDate: course.enrollmentStart
-        ? formatDate(course.enrollmentStart, "yyyy-MM-dd", this._locale)
-        : undefined,
-      startTime: course.enrollmentStart
-        ? formatDate(course.enrollmentStart, "HH:mm", this._locale)
-        : undefined,
-      endDate: course.enrollmentEnd
-        ? formatDate(course.enrollmentEnd, "yyyy-MM-dd", this._locale)
-        : undefined,
-      endTime: course.enrollmentEnd
-        ? formatDate(course.enrollmentEnd, "HH:mm", this._locale)
-        : undefined,
-    })),
+        course.selectionGroupType == "self_selection"
+          ? "self-create-groups"
+          : "auto-create-groups";
+      return {
+        numberOfExistingGroups: course.participantProjects?.length,
+        courseId: course.id,
+        public: course.public,
+        groupType,
+        selfSelection: course.selectionGroupType == "self_selection",
+        groupsAreGiven:
+          course.selectionGroupType == "as_many_groups_as_was_created" ||
+          course.selectionGroupType == "self_selection",
+        limitNumberOfGroups:
+          course.selectionGroupType == "fixed_number_of_groups",
+        maxNumberOfMembers: course.maxGroupSize ? course.maxGroupSize : 1,
+        maxNumberOfGroups: course.maxNumberOfGroups,
+        startDate: course.enrollmentStart
+          ? formatDate(course.enrollmentStart, "yyyy-MM-dd", this._locale)
+          : undefined,
+        startTime: course.enrollmentStart
+          ? formatDate(course.enrollmentStart, "HH:mm", this._locale)
+          : undefined,
+        endDate: course.enrollmentEnd
+          ? formatDate(course.enrollmentEnd, "yyyy-MM-dd", this._locale)
+          : undefined,
+        endTime: course.enrollmentEnd
+          ? formatDate(course.enrollmentEnd, "HH:mm", this._locale)
+          : undefined,
+      };
+    }),
     tap((course) => this.updateGroupSettings.patchValue(course)),
     tap(console.log)
   );
 
   async onUpdateGroupSettings() {
-    console.log("sad");
     this.updateGroupSettings.get("maxNumberOfMembers").value;
-    console.log(this.updateGroupSettings.get("maxNumberOfMembers").value);
-    console.log(this.updateGroupSettings.get("maxNumberOfGroups").value);
-    console.log(this.updateGroupSettings);
     const tempStartDate = this.mergeDateAndTime(
       this.updateGroupSettings.get("startDate").value,
       this.updateGroupSettings.get("startTime").value
@@ -88,7 +105,9 @@ export class CourseGroupSettingsComponent implements OnInit {
 
     let selectionGroupType: SelectionGroupTypeEnum;
 
-    if (this.updateGroupSettings.get("groupsAreGiven").value) {
+    if (
+      this.updateGroupSettings.get("groupType").value == "self-create-groups"
+    ) {
       if (this.updateGroupSettings.get("selfSelection").value) {
         selectionGroupType = "self_selection";
       } else {
@@ -102,11 +121,6 @@ export class CourseGroupSettingsComponent implements OnInit {
     if (selectionGroupType == null) {
       selectionGroupType = "no_group_number_limitation";
     }
-
-    console.log("----");
-
-    console.log(this.updateGroupSettings.get("maxNumberOfMembers").value);
-    console.log(this.updateGroupSettings.get("maxNumberOfGroups").value);
 
     this._mutUpdateProjectGroupeSettings
       .mutate({

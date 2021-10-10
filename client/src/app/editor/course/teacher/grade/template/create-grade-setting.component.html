@@ -11,7 +11,7 @@
     </label>
   </div>
 
-  <div *ngIf="users && groupGrading" class="me-3">
+  <div *ngIf="users && groupGrading && users.length > 1" class="me-3">
     <button (click)="downUser()">
       <span class="fa fa-arrow-circle-left" aria-hidden="true"></span>
     </button>

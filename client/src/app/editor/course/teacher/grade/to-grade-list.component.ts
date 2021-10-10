@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { filter, map } from "rxjs/operators";
 import { MultiLangString } from "../../../../shared/multilingual-string.description";
 import { SidebarService } from "../../../sidebar.service";
 import { EditorToolbarService } from "../../../toolbar.service";
@@ -15,6 +15,7 @@ interface ToGradeEntry {
   numberOfGroupMember: number;
   numberOfSubmittedFiles: number;
   numberOfRequiredFiles: number;
+  weight: number;
 }
 
 @Component({
@@ -45,6 +46,9 @@ export class ToGradeListComponent implements OnInit {
                 .map((grade) => grade.auditees.length)
                 ?.reduce((acc, cur) => acc + cur, 0),
               numberOfGroupMember: project.projectMembers.length,
+              weight: course.assignments.find(
+                (assignments) => submission.assignment.id === assignments.id
+              ).weight,
               assignmentName: course.assignments.find(
                 (assignments) => submission.assignment.id === assignments.id
               ).name,
@@ -64,12 +68,21 @@ export class ToGradeListComponent implements OnInit {
       })
     );
 
+  filterdToGrade$ = this.toGrade$.pipe(
+    map((grades) =>
+      grades.filter(
+        (grade) => grade.numberOfGroupMember != grade.numberOfRatedParticipants
+      )
+    )
+  );
+
   displayedToGradeColumns: string[] = [
-    "actions",
     "assignmentName",
     "groupName",
     "assignmentEndDate",
+    "weight",
     "numberOfSubmittedFiles",
     "numberOfRatedParticipants",
+    "actions",
   ];
 }

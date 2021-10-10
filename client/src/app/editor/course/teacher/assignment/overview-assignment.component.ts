@@ -17,6 +17,7 @@ import { ToolbarService } from "../../../../shared";
 import { SidebarService } from "../../../sidebar.service";
 import { EditorToolbarService } from "../../../toolbar.service";
 import { ProjectService } from "../../../project.service";
+import { MessageDialogComponent } from "../../../../shared/message-dialog.component";
 
 @Component({
   selector: "app-overview-assignment",
@@ -36,12 +37,18 @@ export class AssignmentOverviewComponent implements OnInit {
   ) {}
 
   async onDestroyAssignment(assignmentId: string) {
-    await this._mutDestroyAssignment
-      .mutate({
-        id: assignmentId,
-      })
-      .pipe(first())
-      .toPromise();
+    const confirmed = await MessageDialogComponent.confirm(this._matDialog, {
+      description: $localize`:@@message.ask-delete-resource:Soll diese Aufgabe wirklich gelöscht werden?`,
+    });
+
+    if (confirmed) {
+      await this._mutDestroyAssignment
+        .mutate({
+          id: assignmentId,
+        })
+        .pipe(first())
+        .toPromise();
+    }
   }
   onEditAssignment(assignmentId: {
     id: string;

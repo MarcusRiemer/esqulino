@@ -13,6 +13,9 @@ import { OverviewGradeComponent } from "./teacher/grade/overview-grade.component
 import { ToGradeListComponent } from "./teacher/grade/to-grade-list.component";
 import { ToGradeComponent } from "./teacher/grade/to-grade.component";
 import { CreateRequiredCodeResourceComponent } from "./teacher/assignment/dialog/create-required-code-resource.component";
+import { EditorCodeResourceTeacherComponent } from "./teacher/editor/editor-code-resource-teacher.component";
+import { CreateParticipantGroup } from "./teacher/participants/create-participant-group.component";
+import { CreateParticipantGroupsComponent } from "./teacher/participants/create-participant-groups.component";
 
 export const courseRoutes: Routes = [
   {
@@ -27,6 +30,14 @@ export const courseRoutes: Routes = [
   {
     path: "assignments/:assignmentId",
     component: AssignmentComponent,
+  },
+  {
+    path: "assignments/:assignmentId",
+    component: AssignmentComponent,
+  },
+  {
+    path: "assignments/:assignmentId/editor/:requiredId/:codeResourceId",
+    component: EditorCodeResourceTeacherComponent,
   },
   {
     path: "assignments/:assignmentId/create/file",
@@ -73,6 +84,14 @@ export const courseRoutes: Routes = [
   {
     path: "participants",
     component: OverviewParticipantComponent,
+  },
+  {
+    path: "participants/create/group",
+    component: CreateParticipantGroup,
+  },
+  {
+    path: "participants/create/groups",
+    component: CreateParticipantGroupsComponent,
   },
 ];
 
