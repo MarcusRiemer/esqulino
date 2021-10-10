@@ -19,6 +19,7 @@ mutation UpdateProjectGroupSettings(
     }
   ) {
     project {
+      id
       name
       public
       maxGroupSize

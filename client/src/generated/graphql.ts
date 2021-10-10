@@ -1669,6 +1669,9 @@ export type Resource =
   | "ProjectSeed"
   | "ProjectUsesBlockLanguageSeed"
   | "CodeResourceSeed"
+  | "AssignmentSeed"
+  | "AssignmentTemplateCodeResourceSeed"
+  | "AssignmentRequiredCodeResourceSeed"
   | "BlockLanguageSeed"
   | "GrammarSeed"
   | "GrammarReferenceSeed"
@@ -4319,6 +4322,7 @@ export type UpdateProjectGroupSettingsMutation = { __typename?: "Mutation" } & {
     { __typename?: "UpdateProjectGroupSettingsPayload" } & {
       project: { __typename?: "Project" } & Pick<
         Project,
+        | "id"
         | "name"
         | "public"
         | "maxGroupSize"
@@ -7457,6 +7461,7 @@ export const UpdateProjectGroupSettingsDocument = gql`
       }
     ) {
       project {
+        id
         name
         public
         maxGroupSize
@@ -7491,6 +7496,7 @@ export const UserListCoursesDocument = gql`
           courseTemplate: true
           isNotParticipantOfCourse: true
           public: true
+          enrollmentPeriodValid: true
         }
       }
     ) {
