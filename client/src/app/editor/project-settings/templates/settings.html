@@ -1,3 +1,29 @@
+<mat-card
+  class="alert-warning mb-3"
+  role="alert"
+  *ngIf="project.courseTemplate"
+>
+  <p>
+    <strong>
+      Bevor Gruppen erstellt werden oder der Kurs öffentlich gestellt wird,
+      sollte folgendes beachtet werden:
+    </strong>
+  </p>
+  <ul>
+    <li>
+      Die Blocksprachen die für die Aufgaben notwendig sind, sollten bereits
+      hinzugefügt sein.
+    </li>
+    <li>Die Datenbanken sollten bereits erstellt worden sein.</li>
+    <li>Die Projekt-Quellen angelegt sein.</li>
+  </ul>
+
+  <p>
+    Die Aufgaben so wie Beschreibungen etc. würde automatische auch in den
+    Gruppen aktuallisiert werden.
+  </p>
+</mat-card>
+
 <div class="card mb-3">
   <div class="card-header">
     <div class="row">
