@@ -7,8 +7,8 @@ module Types
     field :preview, String, null: true
     field :index_page_id, String, null: true
     field :slug, String, null: true
-    field :assignments, [Types::AssignmentType], null: true
-
+    field :assignments, [Types::AssignmentType], null: true, resolver: Resolvers::ProjectInstanceAssignmentResolver
+    
 
     field :course_template, Boolean, null: true
     field :enrollment_start, GraphQL::Types::ISO8601DateTime, null: true
