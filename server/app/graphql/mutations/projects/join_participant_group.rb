@@ -18,6 +18,9 @@ class Mutations::Projects::JoinParticipantGroup < Mutations::Projects::Projects
 
     raise ArgumentError, 'Not supported selection_group_type: ' + course.selection_group_type.to_s if !course.selection_group_type.present? || course.selection_group_type != 'self_selection'
 
+    raise ArgumentError, 'Cant change group with submissions' if group.assignment_submissions.count > 0
+
+
     authorize course, :join_Participant_group?
 
     ActiveRecord::Base.transaction do

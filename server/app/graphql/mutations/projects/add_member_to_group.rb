@@ -18,7 +18,7 @@ class Mutations::Projects::AddMemberToGroup < Mutations::Projects::Projects
 
     raise ArgumentError, 'User is member of the root course' if course.is_already_in_project?(user)
 
-    raise ArgumentError, 'Can´t delete a Group with submissions' if group.assignment_submissions.count > 0
+    raise ArgumentError, 'Can´t add member to group with submissions' if group.assignment_submissions.count > 0
 
     authorize course, :destroy_project_course_participation?
 

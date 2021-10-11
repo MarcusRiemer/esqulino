@@ -95,7 +95,7 @@ export class OverviewParticipantComponent implements OnInit {
         groupName: project.name,
         memberName: project.projectMembers
           .map((member) => member.user.displayName)
-          .reduce((a, b) => a.toString() + b.toString() + ",", ""),
+          .join(", "),
       }))
     )
   );

@@ -1,7 +1,7 @@
 <form (ngSubmit)="onCreateGrade()" [formGroup]="createGradeForm">
   <div>
     <label class="col-sm-2 from-control_label">Bewertung</label>
-    <div class="col-sm-10">
+    <div class="">
       <input
         class="form-control"
         type="number"
@@ -15,7 +15,7 @@
     </div>
   </div>
   <div>
-    <div class="col-sm-10">
+    <div class="">
       <label>Feedback</label>
       <textarea
         class="form-control"
@@ -31,7 +31,7 @@
   <may-perform [payload]="createAssignmentSubmissionGrade$ | async">
     <button
       type="submit"
-      class="btn btn-primary"
+      class="btn btn-primary mt-2"
       [disabled]="!createGradeForm.valid"
     >
       Feedback Abschicken

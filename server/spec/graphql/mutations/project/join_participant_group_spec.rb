@@ -362,4 +362,43 @@ RSpec.describe Mutations::Projects::JoinParticipantGroup do
     expect(ProjectMember.count).to eq 0
     expect(ProjectCourseParticipation.count).to eq 6
   end
+
+  it ' cant join participant group with submissions' do
+    course = create(:project, slug: 'course-test', max_group_size: 2,  selection_group_type: 'self_selection')
+
+    group = create(:project, based_on_project: course, name: { 'de' => 'Gruppe-1' })
+    create(:assignment_submission, project: group)
+
+    user = create(:user)
+
+    mut = described_class.new(**init_args(user: user))
+    expect{mut.resolve(
+      group_id: group.id
+    )}.to raise_error(ArgumentError)
+
+    expect(ProjectMember.count).to eq 0
+
+  end
+
+  it ' cant leave participant group with submissions' do
+    course = create(:project, slug: 'course-test', max_group_size: 2,  selection_group_type: 'self_selection')
+
+
+    participant = create(:user)
+    group = create(:project, based_on_project: course, name: { 'de' => 'Gruppe-1' })
+    create(:assignment_submission, project: group)
+    group.project_members.create(user_id: participant.id, membership_type: 'participant')
+
+    group2 = create(:project, based_on_project: course, name: { 'de' => 'Gruppe-2' })
+    
+
+    mut = described_class.new(**init_args(user: participant))
+    expect{mut.resolve(
+      group_id: group.id
+    )}.to raise_error(ArgumentError)
+
+    expect(ProjectMember.count).to eq 1
+    expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).members.count).to eq 1
+    expect(Project.find_by(name: { 'de' => 'Gruppe-2' }).members.count).to eq 0
+  end
 end

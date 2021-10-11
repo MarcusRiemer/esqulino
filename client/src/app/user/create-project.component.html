@@ -23,17 +23,19 @@
           <label for="project-is-course" class="col-sm-2 form-control-label">
             Als Kurs anlegen
           </label>
-          <div class="col-sm-10 form-switch">
-            <input
-              class="form-check-input"
-              [(ngModel)]="params.courseTemplate"
-              type="checkbox"
-              id="project-is-course"
-              name="project-is-course"
-            />
-            <small class="text-muted ms-1">
-              In Kursen können Aufgaben und Gruppen organisiert werden.
-            </small>
+          <div class="col-sm-10">
+            <div class="form-switch">
+              <input
+                class="form-check-input"
+                [(ngModel)]="params.courseTemplate"
+                type="checkbox"
+                id="project-is-course"
+                name="project-is-course"
+              />
+              <small class="text-muted ms-1">
+                In Kursen können Aufgaben und Gruppen organisiert werden.
+              </small>
+            </div>
           </div>
         </div>
 
@@ -43,10 +45,10 @@
           [class.has-success]="name.valid"
         >
           <label for="project-name" class="col-sm-2 form-control-label">
-            <span *ngIf="params.courseTemplate; else other_content">
+            <span *ngIf="params.courseTemplate; else project_name">
               Kursname
             </span>
-            <ng-template #other_content>Projektname</ng-template>
+            <ng-template #project_name>Projektname</ng-template>
           </label>
           <div class="col-sm-10">
             <input
@@ -114,10 +116,10 @@
           (click)="createProject()"
           [disabled]="inProgress | async"
           type="submit"
-          class="btn btn-primary btn-lg btn-block"
+          class="btn btn-primary btn-lg btn-block mt-3"
         >
-          <span *ngIf="params.courseTemplate; else other_content">Kurs</span>
-          <ng-template #other_content>Projekt</ng-template>
+          <span *ngIf="params.courseTemplate; else project">Kurs</span>
+          <ng-template #project>Projekt</ng-template>
           Anlegen!
         </button>
       </form>

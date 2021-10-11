@@ -11,16 +11,17 @@
     </label>
   </div>
 
-  <div *ngIf="users && groupGrading && users.length > 1" class="me-3">
-    <button (click)="downUser()">
+  <div *ngIf="users && groupGrading && users.length > 1" class="me-3 mt-2 mb-3">
+    <button (click)="downUser()" class="btn btn-primary">
       <span class="fa fa-arrow-circle-left" aria-hidden="true"></span>
     </button>
     {{ users[selectedUser]?.userName }} - {{ selectedUser + 1 }}/
     {{ users.length }}
-    <button (click)="upUser()">
+    <button (click)="upUser()" class="btn btn-primary">
       <span class="fa fa-arrow-circle-right" aria-hidden="true"></span>
     </button>
   </div>
+  <mat-divider *ngIf="users && users.length > 1" class="mb-2"></mat-divider>
   <create-grade
     [assignmentSubmissionId]="paramSubmissionId$ | async"
     [evaluatedPeopleIds]="groupGrading ? users[selectedUser] : undefined"

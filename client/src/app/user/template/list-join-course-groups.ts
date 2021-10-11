@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { combineLatest } from "rxjs";
 import { first, map, pluck, switchMap, tap } from "rxjs/operators";
 import Observable from "zen-observable";
@@ -16,6 +16,7 @@ import { UserService } from "../../shared/auth/user.service";
 export class ListJoinCourseGroup {
   constructor(
     private readonly _userService: UserService,
+    private readonly _router: Router,
     private readonly _activatedRouter: ActivatedRoute,
     private readonly _participantProjects: UserListParticipantProjectsGQL,
     private readonly _mutJoinParticipantGroup: JoinParticipantGroupGQL
@@ -51,9 +52,21 @@ export class ListJoinCourseGroup {
     )
   );
 
-
   async onJoinParticipantGroup(groupId: string) {
-    this._mutJoinParticipantGroup.mutate({ groupId }).pipe(first()).toPromise();
+    this._mutJoinParticipantGroup
+      .mutate({ groupId })
+      .pipe(first())
+      .toPromise()
+      .then((result) =>
+        this._router.navigate([
+          "../../",
+          "editor",
+          result.data.joinParticipantGroup.project.id,
+          "course",
+          "participant",
+          "overview",
+        ])
+      );
   }
 
   readonly displayedColumns = ["name", "memberNames", "groupSize", "actions"];

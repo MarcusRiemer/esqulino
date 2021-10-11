@@ -49,6 +49,14 @@ export class ParticipatedListCoursesOverviewCard {
     return !!this.course?.basedOnProject?.preview;
   }
 
+  enrollmentDateExceeded(): boolean {
+    const today: Date = new Date();
+    const enrollmentDate: Date = this.course.basedOnProject.enrollmentEnd
+      ? new Date(this.course.basedOnProject.enrollmentEnd)
+      : null;
+    return enrollmentDate && today >= enrollmentDate;
+  }
+
   onAcceptInivation(projectId: string) {
     this._mutAcceptInvitation
       .mutate({ projectId })

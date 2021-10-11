@@ -2,8 +2,8 @@
 <p class="text-muted" *ngIf="(combinedCourses$ | async)?.length <= 0">
   - Sie sind noch keinem Kurs beigetreten
 </p>
-<div class="row">
-  <div *ngFor="let course of combinedCourses$ | async" class="col-sm-4 mb-3">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <div *ngFor="let course of combinedCourses$ | async" class="">
     <participated-list-courses-card
       [course]="course"
     ></participated-list-courses-card>
@@ -15,8 +15,8 @@
 <p class="text-muted" *ngIf="(ownCourses$ | async)?.length <= 0">
   - Sie haben noch keine eigenen Kurse erstellt
 </p>
-<div class="row">
-  <div *ngFor="let course of ownCourses$ | async" class="col-sm-4 mb-3">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <div *ngFor="let course of ownCourses$ | async" class="">
     <own-list-courses-card [course]="course"></own-list-courses-card>
   </div>
 </div>

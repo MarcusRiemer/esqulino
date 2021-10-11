@@ -78,6 +78,9 @@ query FullProject($id: ID!) {
       }
     }
     basedOnProject {
+      id
+      description
+      name
       codeResources {
         id
         name

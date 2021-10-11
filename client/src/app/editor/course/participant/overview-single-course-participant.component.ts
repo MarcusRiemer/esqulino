@@ -14,7 +14,7 @@ interface participantCourseInfos {
     startDate?: string;
     endDate?: string;
     description?: string;
-    grade?: string;
+    grade?: number;
     requiredCodeResource: {
       id: string;
       submittion: boolean;
@@ -33,16 +33,18 @@ export class OverviewSingelCourseParticipantComponent {
     this._courseService.fullCourseData$.pipe(
       map((course) => {
         const toReturn: participantCourseInfos = {
-          name: course.name,
-          description: course.description,
+          name: course.basedOnProject.name,
+          description: course.basedOnProject.description,
           assignments: course.basedOnProject.assignments.map((assignment) => ({
             ...assignment,
             requiredCodeResource: null,
+            grade: course?.assignmentSubmissions.find(
+              (sub) => sub?.assignment?.id == assignment.id
+            )?.assignmentSubmissionGradeParticipant?.grade,
           })),
         };
         return toReturn;
       }),
-      tap((e) => console.log("-----test -----")),
       tap(console.log)
     );
 }

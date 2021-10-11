@@ -3399,66 +3399,74 @@ export type FullProjectQuery = { __typename?: "Query" } & {
         > & { user: { __typename?: "User" } & Pick<User, "id" | "displayName"> }
       >;
       basedOnProject?: Maybe<
-        { __typename?: "Project" } & {
-          codeResources: Array<
-            { __typename?: "CodeResource" } & Pick<
-              CodeResource,
-              | "id"
-              | "name"
-              | "ast"
-              | "blockLanguageId"
-              | "programmingLanguageId"
-            >
-          >;
-          blockLanguages: Array<
-            { __typename?: "BlockLanguage" } & Pick<
-              BlockLanguage,
-              "id" | "defaultProgrammingLanguageId" | "name"
-            >
-          >;
-          assignments?: Maybe<
-            Array<
-              { __typename?: "Assignment" } & Pick<
-                Assignment,
+        { __typename?: "Project" } & Pick<
+          Project,
+          "id" | "description" | "name"
+        > & {
+            codeResources: Array<
+              { __typename?: "CodeResource" } & Pick<
+                CodeResource,
                 | "id"
                 | "name"
-                | "description"
-                | "startDate"
-                | "endDate"
-                | "weight"
-              > & {
-                  assignmentRequiredCodeResources?: Maybe<
-                    Array<
-                      { __typename?: "AssignmentRequiredCodeResource" } & Pick<
-                        AssignmentRequiredCodeResource,
-                        "id" | "name" | "programmingLanguageId" | "description"
-                      > & {
-                          template?: Maybe<
-                            {
-                              __typename?: "AssignmentTemplateCodeResource";
-                            } & Pick<
-                              AssignmentTemplateCodeResource,
-                              "id" | "referenceType"
-                            > & {
-                                codeResource: {
-                                  __typename?: "CodeResource";
-                                } & Pick<
-                                  CodeResource,
-                                  | "id"
-                                  | "name"
-                                  | "ast"
-                                  | "blockLanguageId"
-                                  | "programmingLanguageId"
-                                >;
-                              }
-                          >;
-                        }
-                    >
-                  >;
-                }
-            >
-          >;
-        }
+                | "ast"
+                | "blockLanguageId"
+                | "programmingLanguageId"
+              >
+            >;
+            blockLanguages: Array<
+              { __typename?: "BlockLanguage" } & Pick<
+                BlockLanguage,
+                "id" | "defaultProgrammingLanguageId" | "name"
+              >
+            >;
+            assignments?: Maybe<
+              Array<
+                { __typename?: "Assignment" } & Pick<
+                  Assignment,
+                  | "id"
+                  | "name"
+                  | "description"
+                  | "startDate"
+                  | "endDate"
+                  | "weight"
+                > & {
+                    assignmentRequiredCodeResources?: Maybe<
+                      Array<
+                        {
+                          __typename?: "AssignmentRequiredCodeResource";
+                        } & Pick<
+                          AssignmentRequiredCodeResource,
+                          | "id"
+                          | "name"
+                          | "programmingLanguageId"
+                          | "description"
+                        > & {
+                            template?: Maybe<
+                              {
+                                __typename?: "AssignmentTemplateCodeResource";
+                              } & Pick<
+                                AssignmentTemplateCodeResource,
+                                "id" | "referenceType"
+                              > & {
+                                  codeResource: {
+                                    __typename?: "CodeResource";
+                                  } & Pick<
+                                    CodeResource,
+                                    | "id"
+                                    | "name"
+                                    | "ast"
+                                    | "blockLanguageId"
+                                    | "programmingLanguageId"
+                                  >;
+                                }
+                            >;
+                          }
+                      >
+                    >;
+                  }
+              >
+            >;
+          }
       >;
       participantProjects?: Maybe<
         Array<
@@ -6253,6 +6261,9 @@ export const FullProjectDocument = gql`
         }
       }
       basedOnProject {
+        id
+        description
+        name
         codeResources {
           id
           name
