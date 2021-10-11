@@ -6,14 +6,9 @@
       </div>
       <div class="col justify-content-end row">
         <div class="col-auto">
-          <course-icon
-            class="mb-2"
-            [iconType]="'compilation-problem'"
-          ></course-icon>
-          <course-icon [iconType]="'assignment-state-planned'"></course-icon>
-          <course-icon [iconType]="'assignment-state-open'"></course-icon>
-          <course-icon [iconType]="'assignment-state-pending'"></course-icon>
-          <course-icon [iconType]="'assignment-state-done'"></course-icon>
+          <assignment-status
+            [assignment]="assignmentStatus"
+          ></assignment-status>
         </div>
       </div>
     </div>
@@ -44,7 +39,7 @@
       >
         <div class="col-auto">
           <b>Note</b>
-          <div>3</div>
+          <div>{{ singleAssignment.grade }}</div>
         </div>
       </div>
     </div>

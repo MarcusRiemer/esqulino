@@ -18,25 +18,8 @@
   >
     <course-icon [iconType]="'assignment'"></course-icon>
     {{ a.name }}
-    <course-icon
-      *ngIf="a.startDate && !dateExceeded(a.startDate)"
-      [iconType]="'assignment-state-planned'"
-    ></course-icon>
-    <course-icon
-      *ngIf="
-        (!a.startDate || dateExceeded(a.startDate)) &&
-        (!a.endDate || !dateExceeded(a.endDate))
-      "
-      [iconType]="'assignment-state-open'"
-    ></course-icon>
-    <course-icon
-      *ngIf="a.endDate && dateExceeded(a.endDate) && !a.graded"
-      [iconType]="'assignment-state-pending'"
-    ></course-icon>
-    <course-icon
-      *ngIf="(!a.endDate || dateExceeded(a.endDate)) && a.graded"
-      [iconType]="'assignment-state-done'"
-    ></course-icon>
+
+    <assignment-status [assignment]="a.assignmentStatus"></assignment-status>
   </a>
   <div *ngFor="let submission of a.submittedCodeResources">
     <a

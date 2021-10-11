@@ -5,6 +5,7 @@ import { first, map, tap } from "rxjs/operators";
 import { AssignmentTemplateCodeResource } from "../../../../../generated/graphql";
 import { MultiLangString } from "../../../../shared/multilingual-string.description";
 import { CourseService } from "../../course.service";
+import { AssignmentStatusInput } from "../../icons/course-assignment-status.component";
 
 interface CourseNavEntry {
   id: string;
@@ -12,6 +13,7 @@ interface CourseNavEntry {
   startDate?: string;
   endDate?: string;
   graded: boolean;
+  assignmentStatus: AssignmentStatusInput;
   submittedCodeResources: {
     name: string;
     id: string;
@@ -66,6 +68,14 @@ export class CourseParticipantNavComponent {
           fullData.basedOnProject?.assignments?.map((a) => {
             const navData = {
               ...a,
+              assignmentStatus: {
+                startDate: a.startDate,
+                endDate: a.endDate,
+                isGraded:
+                  fullData.assignmentSubmissions?.find(
+                    (submission) => submission.assignment.id == a.id
+                  )?.assignmentSubmissionGradeParticipant !== undefined,
+              },
               graded:
                 fullData.assignmentSubmissions?.find(
                   (submission) => submission.assignment.id == a.id

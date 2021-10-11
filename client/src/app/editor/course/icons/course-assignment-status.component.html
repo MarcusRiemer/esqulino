@@ -1,0 +1,37 @@
+<course-icon
+  *ngIf="assignment.startDate && !dateExceeded(assignment.startDate)"
+  [iconType]="'assignment-state-planned'"
+  data-toggle="tooltip"
+  data-placement="top"
+  title="Das Startdatum ist noch nicht erreicht"
+></course-icon>
+<course-icon
+  *ngIf="
+    (!assignment.startDate || dateExceeded(assignment.startDate)) &&
+    (!assignment.endDate || !dateExceeded(assignment.endDate)) &&
+    !assignment.isGraded
+  "
+  [iconType]="'assignment-state-open'"
+  data-toggle="tooltip"
+  data-placement="top"
+  title="Die Aufgabe steht zur bearbeitung bereit"
+></course-icon>
+<course-icon
+  *ngIf="
+    assignment.endDate &&
+    dateExceeded(assignment.endDate) &&
+    !assignment.isGraded
+  "
+  [iconType]="'assignment-state-pending'"
+  data-toggle="tooltip"
+  data-placement="top"
+  title="Die Aufgabe befindet sich im Bewertungsstadium"
+></course-icon>
+
+<course-icon
+  *ngIf="assignment.isGraded"
+  [iconType]="'assignment-state-done'"
+  data-toggle="tooltip"
+  data-placement="top"
+  title="Die Aufgabe wurde bewertet"
+></course-icon>

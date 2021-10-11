@@ -32,6 +32,7 @@ import { CreateGradeSettingComponent } from "./teacher/grade/template/create-gra
 import { CreateParticipantGroupsComponent } from "./teacher/participants/create-participant-groups.component";
 import { ParticipantMemberGroupDialogComponent } from "./teacher/participants/dialog/participant-member-group-dialog.component";
 import { EditorCodeResourceTeacherComponent } from "./teacher/editor/editor-code-resource-teacher.component";
+import { CourseAssignmentStatusComponent } from "./icons/course-assignment-status.component";
 
 @NgModule({
   imports: [CommonModule, SharedAppModule, CodeEditorModule],
@@ -64,6 +65,7 @@ import { EditorCodeResourceTeacherComponent } from "./teacher/editor/editor-code
     CreateParticipantGroupsComponent,
     ParticipantMemberGroupDialogComponent,
     EditorCodeResourceTeacherComponent,
+    CourseAssignmentStatusComponent,
   ],
   exports: [CourseNavComponent, CourseParticipantNavComponent],
 })
