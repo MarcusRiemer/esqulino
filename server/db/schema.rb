@@ -266,7 +266,7 @@ ActiveRecord::Schema.define(version: 2021_09_09_091913) do
     t.uuid "user_id"
     t.hstore "name", default: {}, null: false
     t.hstore "description", default: {}, null: false
-    t.integer "max_group_size"
+    t.integer "max_group_size", default: 1
     t.integer "max_number_of_groups"
     t.integer "selection_group_type"
     t.datetime "enrollment_start"

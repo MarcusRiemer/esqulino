@@ -19,11 +19,26 @@ mutation CreateAssignmentRequiredCodeResource(
         assignmentRequiredCodeResources {
           id
           name
-          programmingLanguage{
+          programmingLanguageId
+          description
+          solution {
             id
           }
-          description
+          template {
+            id
+            referenceType
+            codeResource {
+              id
+            }
+          }
         }
+      }
+      codeResources {
+        id
+        name
+        ast
+        blockLanguageId
+        programmingLanguageId
       }
     }
   }

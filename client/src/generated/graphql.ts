@@ -2331,15 +2331,43 @@ export type CreateAssignmentRequiredCodeResourceMutation = {
                           __typename?: "AssignmentRequiredCodeResource";
                         } & Pick<
                           AssignmentRequiredCodeResource,
-                          "id" | "name" | "description"
+                          | "id"
+                          | "name"
+                          | "programmingLanguageId"
+                          | "description"
                         > & {
-                            programmingLanguage: {
-                              __typename?: "ProgrammingLanguage";
-                            } & Pick<ProgrammingLanguage, "id">;
+                            solution?: Maybe<
+                              { __typename?: "CodeResource" } & Pick<
+                                CodeResource,
+                                "id"
+                              >
+                            >;
+                            template?: Maybe<
+                              {
+                                __typename?: "AssignmentTemplateCodeResource";
+                              } & Pick<
+                                AssignmentTemplateCodeResource,
+                                "id" | "referenceType"
+                              > & {
+                                  codeResource: {
+                                    __typename?: "CodeResource";
+                                  } & Pick<CodeResource, "id">;
+                                }
+                            >;
                           }
                       >
                     >;
                   }
+              >
+            >;
+            codeResources: Array<
+              { __typename?: "CodeResource" } & Pick<
+                CodeResource,
+                | "id"
+                | "name"
+                | "ast"
+                | "blockLanguageId"
+                | "programmingLanguageId"
               >
             >;
           }
@@ -2367,12 +2395,30 @@ export type CreateAssignmentRequiredSolutionMutation = {
                       Array<
                         {
                           __typename?: "AssignmentRequiredCodeResource";
-                        } & Pick<AssignmentRequiredCodeResource, "id"> & {
+                        } & Pick<
+                          AssignmentRequiredCodeResource,
+                          | "id"
+                          | "name"
+                          | "programmingLanguageId"
+                          | "description"
+                        > & {
                             solution?: Maybe<
                               { __typename?: "CodeResource" } & Pick<
                                 CodeResource,
                                 "id"
                               >
+                            >;
+                            template?: Maybe<
+                              {
+                                __typename?: "AssignmentTemplateCodeResource";
+                              } & Pick<
+                                AssignmentTemplateCodeResource,
+                                "id" | "referenceType"
+                              > & {
+                                  codeResource: {
+                                    __typename?: "CodeResource";
+                                  } & Pick<CodeResource, "id">;
+                                }
                             >;
                           }
                       >
@@ -2416,12 +2462,30 @@ export type CreateAssignmentRequiredSolutionFromMutation = {
                       Array<
                         {
                           __typename?: "AssignmentRequiredCodeResource";
-                        } & Pick<AssignmentRequiredCodeResource, "id"> & {
+                        } & Pick<
+                          AssignmentRequiredCodeResource,
+                          | "id"
+                          | "name"
+                          | "programmingLanguageId"
+                          | "description"
+                        > & {
                             solution?: Maybe<
                               { __typename?: "CodeResource" } & Pick<
                                 CodeResource,
                                 "id"
                               >
+                            >;
+                            template?: Maybe<
+                              {
+                                __typename?: "AssignmentTemplateCodeResource";
+                              } & Pick<
+                                AssignmentTemplateCodeResource,
+                                "id" | "referenceType"
+                              > & {
+                                  codeResource: {
+                                    __typename?: "CodeResource";
+                                  } & Pick<CodeResource, "id">;
+                                }
                             >;
                           }
                       >
@@ -2472,8 +2536,8 @@ export type CreateAssignmentRequiredTemplateMutation = {
                           AssignmentRequiredCodeResource,
                           | "id"
                           | "name"
-                          | "description"
                           | "programmingLanguageId"
+                          | "description"
                         > & {
                             solution?: Maybe<
                               { __typename?: "CodeResource" } & Pick<
@@ -2542,8 +2606,8 @@ export type CreateAssignmentRequiredTemplateFromMutation = {
                           AssignmentRequiredCodeResource,
                           | "id"
                           | "name"
-                          | "description"
                           | "programmingLanguageId"
+                          | "description"
                         > & {
                             solution?: Maybe<
                               { __typename?: "CodeResource" } & Pick<
@@ -2630,10 +2694,7 @@ export type CreateAssignmentSubmissionGradeMutation = {
         { __typename?: "Project" } & Pick<Project, "id"> & {
             participantProjects?: Maybe<
               Array<
-                { __typename?: "Project" } & Pick<
-                  Project,
-                  "id" | "slug" | "name"
-                > & {
+                { __typename?: "Project" } & Pick<Project, "id"> & {
                     assignmentSubmissions?: Maybe<
                       Array<
                         { __typename?: "AssignmentSubmission" } & Pick<
@@ -2646,17 +2707,17 @@ export type CreateAssignmentSubmissionGradeMutation = {
                                   __typename?: "AssignmentSubmissionGrade";
                                 } & Pick<
                                   AssignmentSubmissionGrade,
-                                  "id" | "feedback" | "grade"
+                                  "id" | "grade" | "feedback" | "createdAt"
                                 > & {
+                                    user: { __typename?: "User" } & Pick<
+                                      User,
+                                      "id" | "displayName"
+                                    >;
                                     auditees: Array<
                                       { __typename?: "User" } & Pick<
                                         User,
                                         "id" | "displayName"
                                       >
-                                    >;
-                                    user: { __typename?: "User" } & Pick<
-                                      User,
-                                      "id" | "displayName"
                                     >;
                                   }
                               >
@@ -2961,6 +3022,61 @@ export type CreateProjectCourseParticipationMutation = {
                           >;
                         }
                     >;
+                    assignmentSubmissions?: Maybe<
+                      Array<
+                        { __typename?: "AssignmentSubmission" } & Pick<
+                          AssignmentSubmission,
+                          "id"
+                        > & {
+                            assignment: { __typename?: "Assignment" } & Pick<
+                              Assignment,
+                              "id"
+                            >;
+                            assignmentSubmissionGrades?: Maybe<
+                              Array<
+                                {
+                                  __typename?: "AssignmentSubmissionGrade";
+                                } & Pick<
+                                  AssignmentSubmissionGrade,
+                                  "id" | "grade" | "feedback" | "createdAt"
+                                > & {
+                                    user: { __typename?: "User" } & Pick<
+                                      User,
+                                      "id" | "displayName"
+                                    >;
+                                    auditees: Array<
+                                      { __typename?: "User" } & Pick<
+                                        User,
+                                        "id" | "displayName"
+                                      >
+                                    >;
+                                  }
+                              >
+                            >;
+                            assignmentSubmittedCodeResources?: Maybe<
+                              Array<
+                                {
+                                  __typename?: "AssignmentSubmittedCodeResource";
+                                } & Pick<
+                                  AssignmentSubmittedCodeResource,
+                                  "id"
+                                > & {
+                                    codeResource: {
+                                      __typename?: "CodeResource";
+                                    } & Pick<
+                                      CodeResource,
+                                      | "id"
+                                      | "name"
+                                      | "ast"
+                                      | "blockLanguageId"
+                                      | "programmingLanguageId"
+                                    >;
+                                  }
+                              >
+                            >;
+                          }
+                      >
+                    >;
                   }
               >
             >;
@@ -2989,7 +3105,74 @@ export type CreateProjectCourseParticipationsMutation = {
                 { __typename?: "Project" } & Pick<
                   Project,
                   "id" | "slug" | "name"
-                >
+                > & {
+                    projectMembers: Array<
+                      { __typename?: "ProjectMember" } & Pick<
+                        ProjectMember,
+                        "id" | "membershipType" | "joinedAt"
+                      > & {
+                          user: { __typename?: "User" } & Pick<
+                            User,
+                            "id" | "displayName"
+                          >;
+                        }
+                    >;
+                    assignmentSubmissions?: Maybe<
+                      Array<
+                        { __typename?: "AssignmentSubmission" } & Pick<
+                          AssignmentSubmission,
+                          "id"
+                        > & {
+                            assignment: { __typename?: "Assignment" } & Pick<
+                              Assignment,
+                              "id"
+                            >;
+                            assignmentSubmissionGrades?: Maybe<
+                              Array<
+                                {
+                                  __typename?: "AssignmentSubmissionGrade";
+                                } & Pick<
+                                  AssignmentSubmissionGrade,
+                                  "id" | "grade" | "feedback" | "createdAt"
+                                > & {
+                                    user: { __typename?: "User" } & Pick<
+                                      User,
+                                      "id" | "displayName"
+                                    >;
+                                    auditees: Array<
+                                      { __typename?: "User" } & Pick<
+                                        User,
+                                        "id" | "displayName"
+                                      >
+                                    >;
+                                  }
+                              >
+                            >;
+                            assignmentSubmittedCodeResources?: Maybe<
+                              Array<
+                                {
+                                  __typename?: "AssignmentSubmittedCodeResource";
+                                } & Pick<
+                                  AssignmentSubmittedCodeResource,
+                                  "id"
+                                > & {
+                                    codeResource: {
+                                      __typename?: "CodeResource";
+                                    } & Pick<
+                                      CodeResource,
+                                      | "id"
+                                      | "name"
+                                      | "ast"
+                                      | "blockLanguageId"
+                                      | "programmingLanguageId"
+                                    >;
+                                  }
+                              >
+                            >;
+                          }
+                      >
+                    >;
+                  }
               >
             >;
           }
@@ -5005,11 +5188,26 @@ export const CreateAssignmentRequiredCodeResourceDocument = gql`
           assignmentRequiredCodeResources {
             id
             name
-            programmingLanguage {
+            programmingLanguageId
+            description
+            solution {
               id
             }
-            description
+            template {
+              id
+              referenceType
+              codeResource {
+                id
+              }
+            }
           }
+        }
+        codeResources {
+          id
+          name
+          ast
+          blockLanguageId
+          programmingLanguageId
         }
       }
     }
@@ -5046,8 +5244,18 @@ export const CreateAssignmentRequiredSolutionDocument = gql`
           id
           assignmentRequiredCodeResources {
             id
+            name
+            programmingLanguageId
+            description
             solution {
               id
+            }
+            template {
+              id
+              referenceType
+              codeResource {
+                id
+              }
             }
           }
         }
@@ -5095,8 +5303,18 @@ export const CreateAssignmentRequiredSolutionFromDocument = gql`
           id
           assignmentRequiredCodeResources {
             id
+            name
+            programmingLanguageId
+            description
             solution {
               id
+            }
+            template {
+              id
+              referenceType
+              codeResource {
+                id
+              }
             }
           }
         }
@@ -5151,8 +5369,8 @@ export const CreateAssignmentRequiredTemplateDocument = gql`
           assignmentRequiredCodeResources {
             id
             name
-            description
             programmingLanguageId
+            description
             solution {
               id
             }
@@ -5216,8 +5434,8 @@ export const CreateAssignmentRequiredTemplateFromDocument = gql`
           assignmentRequiredCodeResources {
             id
             name
-            description
             programmingLanguageId
+            description
             solution {
               id
             }
@@ -5305,22 +5523,21 @@ export const CreateAssignmentSubmissionGradeDocument = gql`
         id
         participantProjects {
           id
-          slug
-          name
           assignmentSubmissions {
             id
             assignmentSubmissionGrades {
               id
-              feedback
-              grade
-              auditees {
-                id
-                displayName
-              }
               user {
                 id
                 displayName
               }
+              auditees {
+                id
+                displayName
+              }
+              grade
+              feedback
+              createdAt
             }
             assignment {
               id
@@ -5738,6 +5955,36 @@ export const CreateProjectCourseParticipationDocument = gql`
               displayName
             }
           }
+          assignmentSubmissions {
+            id
+            assignment {
+              id
+            }
+            assignmentSubmissionGrades {
+              id
+              user {
+                id
+                displayName
+              }
+              auditees {
+                id
+                displayName
+              }
+              grade
+              feedback
+              createdAt
+            }
+            assignmentSubmittedCodeResources {
+              id
+              codeResource {
+                id
+                name
+                ast
+                blockLanguageId
+                programmingLanguageId
+              }
+            }
+          }
         }
       }
     }
@@ -5779,6 +6026,45 @@ export const CreateProjectCourseParticipationsDocument = gql`
           id
           slug
           name
+          projectMembers {
+            id
+            membershipType
+            joinedAt
+            user {
+              id
+              displayName
+            }
+          }
+          assignmentSubmissions {
+            id
+            assignment {
+              id
+            }
+            assignmentSubmissionGrades {
+              id
+              user {
+                id
+                displayName
+              }
+              auditees {
+                id
+                displayName
+              }
+              grade
+              feedback
+              createdAt
+            }
+            assignmentSubmittedCodeResources {
+              id
+              codeResource {
+                id
+                name
+                ast
+                blockLanguageId
+                programmingLanguageId
+              }
+            }
+          }
         }
       }
     }

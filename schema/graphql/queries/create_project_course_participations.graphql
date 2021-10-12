@@ -19,6 +19,46 @@ mutation CreateProjectCourseParticipations(
         id
         slug
         name
+        projectMembers {
+          id
+          membershipType
+          joinedAt
+          user {
+            id
+            displayName
+          }
+        }
+        assignmentSubmissions {
+          id
+          assignment {
+            id
+          }
+          assignmentSubmissionGrades {
+            id
+            user {
+              id
+              displayName
+            }
+            auditees {
+              id
+              displayName
+            }
+            grade
+            feedback
+            createdAt
+          }
+
+          assignmentSubmittedCodeResources {
+            id
+            codeResource {
+              id
+              name
+              ast
+              blockLanguageId
+              programmingLanguageId
+            }
+          }
+        }
       }
     }
   }

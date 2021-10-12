@@ -23,8 +23,8 @@ mutation CreateAssignmentRequiredTemplate(
         assignmentRequiredCodeResources {
           id
           name
-          description
           programmingLanguageId
+          description
           solution {
             id
           }

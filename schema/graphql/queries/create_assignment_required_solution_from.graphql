@@ -16,8 +16,18 @@ mutation CreateAssignmentRequiredSolutionFrom(
         id
         assignmentRequiredCodeResources {
           id
+          name
+          programmingLanguageId
+          description
           solution {
             id
+          }
+          template {
+            id
+            referenceType
+            codeResource {
+              id
+            }
           }
         }
       }

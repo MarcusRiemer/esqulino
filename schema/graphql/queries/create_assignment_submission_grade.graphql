@@ -16,22 +16,21 @@ mutation CreateAssignmentSubmissionGrade(
       id
       participantProjects {
         id
-        slug
-        name
         assignmentSubmissions {
           id
           assignmentSubmissionGrades {
             id
-            feedback
-            grade
-            auditees {
-              id
-              displayName
-            }
             user {
               id
               displayName
             }
+            auditees {
+              id
+              displayName
+            }
+            grade
+            feedback
+            createdAt
           }
           assignment {
             id
