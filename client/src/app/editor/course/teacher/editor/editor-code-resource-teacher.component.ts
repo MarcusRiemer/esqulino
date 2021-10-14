@@ -1,8 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
-import { combineLatest } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 import { first, map, tap } from "rxjs/operators";
 import { SidebarService } from "../../../sidebar.service";
 import { EditorToolbarService } from "../../../toolbar.service";
@@ -10,7 +10,7 @@ import { CourseService } from "../../course.service";
 import { ChangeRequiredCodeResourceDialogComponent } from "../assignment/dialog/change-required-code-resource-dialog.component";
 
 @Component({ templateUrl: "./editor-code-resource-teacher.component.html" })
-export class EditorCodeResourceTeacherComponent implements OnInit {
+export class EditorCodeResourceTeacherComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _courseService: CourseService,
     private readonly _activatedRoute: ActivatedRoute,
@@ -18,6 +18,8 @@ export class EditorCodeResourceTeacherComponent implements OnInit {
     private _sidebarService: SidebarService,
     private readonly _matDialog: MatDialog
   ) {}
+
+  private _subscriptionRefs: Subscription[] = [];
 
   ngOnInit(): void {
     // Ensure sane default state
@@ -43,6 +45,16 @@ export class EditorCodeResourceTeacherComponent implements OnInit {
         },
       });
     });
+
+    this._subscriptionRefs.push(refClone);
+  }
+
+  /**
+   * Cleans up all acquired references
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
+    this._subscriptionRefs = [];
   }
 
   requiredId$ = this._activatedRoute.paramMap.pipe(

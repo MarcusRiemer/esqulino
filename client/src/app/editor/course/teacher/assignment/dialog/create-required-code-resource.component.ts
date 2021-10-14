@@ -1,8 +1,15 @@
-import { Component, Input, OnInit, SimpleChanges } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from "@angular/core";
 import { async } from "@angular/core/testing";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { endWith, first, map, tap } from "rxjs/operators";
+import { Subscription } from "rxjs";
+import { first, map, tap } from "rxjs/operators";
 import { LanguageService } from "src/app/shared/language.service";
 import {
   CreateAssignmentRequiredCodeResourceGQL,
@@ -27,7 +34,7 @@ interface CreateRequiredCodeResourceMutationVariables {
   selector: "app-create-required-code-resource",
   templateUrl: "./create-required-code-resource.component.html",
 })
-export class CreateRequiredCodeResourceComponent implements OnInit {
+export class CreateRequiredCodeResourceComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _courseService: CourseService,
     private readonly _mutCreateRequiredCodeResource: CreateAssignmentRequiredCodeResourceGQL,
@@ -65,7 +72,7 @@ export class CreateRequiredCodeResourceComponent implements OnInit {
 
   createRequiredForm: FormGroup;
 
-  subcriptionList = [];
+  private _subscriptionRefs: Subscription[] = [];
 
   ngOnInit(): void {
     // Ensure sane default state
@@ -81,17 +88,26 @@ export class CreateRequiredCodeResourceComponent implements OnInit {
       requiredDescription: [""],
       selectedCreateType: ["new-code-resource"],
     });
-    this.subcriptionList.push(
+
+    this._subscriptionRefs.push(
       this.referenceType$.subscribe((reference) => {
         this.requiredCodeResource.referenceType = reference;
       })
     );
 
-    this.subcriptionList.push(
+    this._subscriptionRefs.push(
       this.assignmentId$.subscribe(
         (id) => (this.requiredCodeResource.assignmentId = id)
       )
     );
+  }
+
+  /**
+   * Cleans up all acquired references
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
+    this._subscriptionRefs = [];
   }
 
   getDefaultTap(): number {

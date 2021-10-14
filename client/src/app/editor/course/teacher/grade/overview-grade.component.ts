@@ -1,6 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { MultiLangString } from "../../../../shared/multilingual-string.description";
 import { SidebarService } from "../../../sidebar.service";
@@ -30,14 +30,14 @@ interface OverviewGradeEntry {
 @Component({
   templateUrl: "./overview-grade.component.html",
 })
-export class OverviewGradeComponent implements OnInit {
+export class OverviewGradeComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _courseService: CourseService,
     private _toolbarService: EditorToolbarService,
     private _sidebarService: SidebarService
   ) {}
 
-  subscriptionList = [];
+  private _subscriptionRefs: Subscription[] = [];
 
   ngOnInit(): void {
     // Ensure sane default state
@@ -45,7 +45,7 @@ export class OverviewGradeComponent implements OnInit {
     this._toolbarService.resetItems();
     this._toolbarService.savingEnabled = false;
 
-    this.subscriptionList.push(
+    this._subscriptionRefs.push(
       this._courseService.fullCourseData$
         .pipe(
           map((course) => {
@@ -80,6 +80,14 @@ export class OverviewGradeComponent implements OnInit {
           (result) => (this.dataSource = new MatTableDataSource(result))
         )
     );
+  }
+
+  /**
+   * Cleans up all acquired references
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
+    this._subscriptionRefs = [];
   }
 
   //TODO: einfacher ?

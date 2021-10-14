@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import e from "express";
@@ -18,12 +18,13 @@ import { SidebarService } from "../../../sidebar.service";
 import { EditorToolbarService } from "../../../toolbar.service";
 import { ProjectService } from "../../../project.service";
 import { MessageDialogComponent } from "../../../../shared/message-dialog.component";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-overview-assignment",
   templateUrl: "./overview-assignment.component.html",
 })
-export class AssignmentOverviewComponent implements OnInit {
+export class AssignmentOverviewComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _courseService: CourseService,
     private readonly _projectService: ProjectService,
@@ -87,6 +88,8 @@ export class AssignmentOverviewComponent implements OnInit {
 
   readonly $assignments = this._courseService.fullAssignments$;
 
+  private _subscriptionRefs: Subscription[] = [];
+
   displayedColumns: string[] = [
     "name",
     "startDate",
@@ -121,5 +124,15 @@ export class AssignmentOverviewComponent implements OnInit {
         relativeTo: this._activatedRoute.parent,
       });
     });
+
+    this._subscriptionRefs.push(refClone);
+  }
+
+  /**
+   * Cleans up all acquired references
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
+    this._subscriptionRefs = [];
   }
 }

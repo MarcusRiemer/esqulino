@@ -1,8 +1,8 @@
 import { DatePipe, formatDate } from "@angular/common";
-import { Component, Inject, LOCALE_ID, OnInit } from "@angular/core";
+import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { filter, find, first, map, mergeMap, tap } from "rxjs/operators";
 import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
 import {
@@ -49,7 +49,7 @@ interface AssignmentEntry {
   selector: "app-assignment",
   templateUrl: "./assignment.component.html",
 })
-export class AssignmentComponent implements OnInit {
+export class AssignmentComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _courseService: CourseService,
@@ -64,6 +64,9 @@ export class AssignmentComponent implements OnInit {
     private _sidebarService: SidebarService,
     @Inject(LOCALE_ID) private _locale: string
   ) {}
+
+  private _subscriptionRefs: Subscription[] = [];
+
   assignmentId$ = this._activatedRoute.paramMap.pipe(
     map((param) => param.get("assignmentId"))
   );
@@ -145,67 +148,79 @@ export class AssignmentComponent implements OnInit {
       this.saveAssingment();
     });
 
-    this.assignmentId$
-      .pipe(
-        map((assignmentId) =>
-          this._courseService.fullCourseData$.pipe(
-            map((fullData) => {
-              const toReturn: AssignmentEntry = fullData.assignments
-                .map((a) => {
-                  //TODO: maybe refactor ? the dates ?
-                  const navData = {
-                    id: a.id,
-                    name: a.name,
-                    description: a.description,
-                    weight: a.weight,
-                    startDate: a.startDate,
-                    changedStartDate: a.startDate
-                      ? formatDate(a.startDate, "yyyy-MM-dd", this._locale)
-                      : undefined,
-                    changedStartTime: a.startDate
-                      ? formatDate(
-                          a.startDate,
-                          "HH:mm",
-                          this._locale,
-                          "GMT+02:00"
-                        )
-                      : undefined,
-                    endDate: a.endDate,
-                    changedEndDate: a.endDate
-                      ? formatDate(a.endDate, "yyyy-MM-dd", this._locale)
-                      : undefined,
-                    changedEndTime: a.endDate
-                      ? formatDate(a.endDate, "HH:mm", this._locale)
-                      : undefined,
-                    requirements: [
-                      ...a.assignmentRequiredCodeResources.map((req) => ({
-                        id: req.id,
-                        name: req.name,
-                        description: req.description,
-                        programmingLanguageId: req.programmingLanguageId,
-                        solution: {
-                          ...fullData.codeResources.find(
-                            (res) => res.id === req?.solution?.id
-                          ),
-                        },
-                        referenceType: req?.template?.referenceType,
-                      })),
-                    ],
-                  };
+    this._subscriptionRefs.push(
+      this.assignmentId$
+        .pipe(
+          map((assignmentId) =>
+            this._courseService.fullCourseData$.pipe(
+              map((fullData) => {
+                const toReturn: AssignmentEntry = fullData.assignments
+                  .map((a) => {
+                    //TODO: maybe refactor ? the dates ?
+                    const navData = {
+                      id: a.id,
+                      name: a.name,
+                      description: a.description,
+                      weight: a.weight,
+                      startDate: a.startDate,
+                      changedStartDate: a.startDate
+                        ? formatDate(a.startDate, "yyyy-MM-dd", this._locale)
+                        : undefined,
+                      changedStartTime: a.startDate
+                        ? formatDate(
+                            a.startDate,
+                            "HH:mm",
+                            this._locale,
+                            "GMT+02:00"
+                          )
+                        : undefined,
+                      endDate: a.endDate,
+                      changedEndDate: a.endDate
+                        ? formatDate(a.endDate, "yyyy-MM-dd", this._locale)
+                        : undefined,
+                      changedEndTime: a.endDate
+                        ? formatDate(a.endDate, "HH:mm", this._locale)
+                        : undefined,
+                      requirements: [
+                        ...a.assignmentRequiredCodeResources.map((req) => ({
+                          id: req.id,
+                          name: req.name,
+                          description: req.description,
+                          programmingLanguageId: req.programmingLanguageId,
+                          solution: {
+                            ...fullData.codeResources.find(
+                              (res) => res.id === req?.solution?.id
+                            ),
+                          },
+                          referenceType: req?.template?.referenceType,
+                        })),
+                      ],
+                    };
 
-                  return navData;
-                })
-                .find((e) => e.id == assignmentId);
+                    return navData;
+                  })
+                  .find((e) => e.id == assignmentId);
 
-              return toReturn;
-            })
-          )
-        ),
-        tap((e) => console.log("asdasd-----------")),
-        mergeMap((e) => e),
-        tap(console.log)
-      )
-      .subscribe((e) => (this.assignment = e));
+                return toReturn;
+              })
+            )
+          ),
+          tap((e) => console.log("asdasd-----------")),
+          mergeMap((e) => e),
+          tap(console.log)
+        )
+        .subscribe((e) => (this.assignment = e))
+    );
+
+    this._subscriptionRefs.push(refClone, refSafe);
+  }
+
+  /**
+   * Cleans up all acquired references
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
+    this._subscriptionRefs = [];
   }
 
   async onRemoveSolution(assignmentRequiredCodeResourceId: string) {

@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription } from "rxjs";
 import { first, map, tap } from "rxjs/operators";
 import {
   DestroyProjectCourseParticipationGQL,
@@ -15,7 +16,7 @@ import { ParticipantMemberGroupDialogComponent } from "./dialog/participant-memb
 @Component({
   templateUrl: "overview-participant.component.html",
 })
-export class OverviewParticipantComponent implements OnInit {
+export class OverviewParticipantComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _courseService: CourseService,
     private readonly _toolbarService: EditorToolbarService,
@@ -26,6 +27,8 @@ export class OverviewParticipantComponent implements OnInit {
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _router: Router
   ) {}
+
+  private _subscriptionRefs: Subscription[] = [];
 
   ngOnInit(): void {
     // Ensure sane default state
@@ -58,6 +61,16 @@ export class OverviewParticipantComponent implements OnInit {
         relativeTo: this._activatedRoute.parent,
       });
     });
+
+    this._subscriptionRefs.push(refCloneGroups, refCloneGroup);
+  }
+
+  /**
+   * Cleans up all acquired references
+   */
+  ngOnDestroy() {
+    this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
+    this._subscriptionRefs = [];
   }
 
   //TODO TYPEN
