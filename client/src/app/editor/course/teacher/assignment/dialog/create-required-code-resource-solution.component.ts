@@ -1,15 +1,12 @@
-import { WHITE_ON_BLACK_CSS_CLASS } from "@angular/cdk/a11y/high-contrast-mode/high-contrast-mode-detector";
-import { Time } from "@angular/common";
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { ActivatedRoute, Router } from "@angular/router";
-import { find, first, map } from "rxjs/operators";
-import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
+import { first, map } from "rxjs/operators";
 import {
   CreateAssignmentRequiredSolutionFromGQL,
   CreateAssignmentRequiredSolutionGQL,
-} from "src/generated/graphql";
+} from "../../../../../../generated/graphql";
+
 import { CourseService } from "../../../course.service";
 
 interface requirementSolutionDialogInput {

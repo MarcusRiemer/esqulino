@@ -3,13 +3,12 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 
 import { ProjectService } from "../project.service";
+
+import { map } from "rxjs/operators";
 import {
   AssignmentTemplateCodeResource,
   FullProjectGQL,
-  Project,
-  ReferenceTypeEnum,
-} from "src/generated/graphql";
-import { map } from "rxjs/operators";
+} from "../../../generated/graphql";
 
 export interface AssignmentEntry {
   id: string;

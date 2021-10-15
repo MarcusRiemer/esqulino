@@ -2,32 +2,36 @@
   <div class="card-header">
     <h4>Datei anlegen</h4>
   </div>
-  <div class="card-body">
-    <div class="from-group row mb-3">
-      <label class="col-sm-2 col-form-label">Blocksprache</label>
-      <div class="col-sm-10">
-        <select
-          [disabled]=""
-          name="block_language"
-          class="form-select"
-          [(ngModel)]="solutionBlockLanguageId"
-        >
-          <option value="undefined">-- Blocksprache wählen --</option>
-          <option
-            *ngFor="let block of availableBlockLanguages$ | async"
-            [value]="block.id"
-          >
-            {{ block.name }}
-          </option>
-        </select>
-        <small class="text-muted">
-          Welche Blocksprache soll genutzt werden?
-        </small>
-      </div>
-    </div>
-  </div>
 
-  <button class="btn btn-primary" type="submit" (click)="saveSolution()">
-    Speichern
-  </button>
+  <div class="card-body">
+    <form [formGroup]="createSubmittedResourceForm" (ngSubmit)="saveSolution()">
+      <div class="from-group row mb-3">
+        <label class="col-sm-4 col-form-label">Blocksprache</label>
+        <div class="col-sm-8">
+          <select
+            name="block_language"
+            class="form-select"
+            formControlName="solutionBlockLanguageId"
+          >
+            <option value="undefined">-- Blocksprache wählen --</option>
+            <option
+              *ngFor="let block of availableBlockLanguages$ | async"
+              [value]="block.id"
+            >
+              {{ block.name }}
+            </option>
+          </select>
+          <small class="text-muted">
+            Welche Blocksprache soll genutzt werden?
+          </small>
+        </div>
+      </div>
+      <div class="d-flex flex-row-reverse">
+        <button class="btn btn-danger me-1" type="button" mat-dialog-close>
+          Abbrechen
+        </button>
+        <button class="btn btn-primary me-1" type="submit">Speichern</button>
+      </div>
+    </form>
+  </div>
 </div>

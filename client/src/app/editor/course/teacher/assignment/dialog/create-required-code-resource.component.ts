@@ -10,13 +10,14 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 import { first, map, tap } from "rxjs/operators";
-import { LanguageService } from "src/app/shared/language.service";
 import {
   CreateAssignmentRequiredCodeResourceGQL,
-  CreateAssignmentRequiredTemplateGQL,
   CreateAssignmentRequiredTemplateFromGQL,
+  CreateAssignmentRequiredTemplateGQL,
   ReferenceTypeEnum,
-} from "src/generated/graphql";
+} from "../../../../../../generated/graphql";
+import { LanguageService } from "../../../../../shared";
+
 import { SidebarService } from "../../../../sidebar.service";
 import { EditorToolbarService } from "../../../../toolbar.service";
 import { CourseService } from "../../../course.service";

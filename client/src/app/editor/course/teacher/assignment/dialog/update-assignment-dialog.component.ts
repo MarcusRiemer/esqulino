@@ -3,7 +3,7 @@ import { Component, Inject, LOCALE_ID, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
-import { UpdateAssignmentGQL } from "src/generated/graphql";
+import { UpdateAssignmentGQL } from "../../../../../../generated/graphql";
 
 interface UpdateAssignmentInput {
   id: string;

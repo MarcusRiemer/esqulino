@@ -5,11 +5,7 @@ import e from "express";
 import { first, map } from "rxjs/operators";
 
 import { UpdateAssignmentDialogComponent } from "./dialog/update-assignment-dialog.component";
-import {
-  Assignment,
-  AssignmentTemplateCodeResource,
-  DestroyAssignmentGQL,
-} from "src/generated/graphql";
+
 import Observable from "zen-observable";
 import { CourseService } from "../../course.service";
 import { PerformDataService } from "../../../../shared/authorisation/perform-data.service";
@@ -19,6 +15,10 @@ import { EditorToolbarService } from "../../../toolbar.service";
 import { ProjectService } from "../../../project.service";
 import { MessageDialogComponent } from "../../../../shared/message-dialog.component";
 import { Subscription } from "rxjs";
+import {
+  Assignment,
+  DestroyAssignmentGQL,
+} from "../../../../../generated/graphql";
 
 @Component({
   selector: "app-overview-assignment",

@@ -12,12 +12,18 @@
       <span
         class="badge rounded-pill bg-warning me-1"
         *ngIf="course.selectionGroupType != 'no_group_number_limitation'"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Es ist nur eine bestimmte Teilnehmerzahl erlaubt"
       >
         Kursteilnahme beschränkt
       </span>
       <span
         class="badge rounded-pill bg-secondary"
         *ngIf="course.selectionGroupType == 'self_selection' "
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Es kann selbst eine Gruppe ausgewählt, der man zugeteilt werden soll "
       >
         Selbstzuweisen
       </span>
@@ -57,7 +63,7 @@
             class="btn btn-primary"
             [routerLink]="['select-group',course.id]"
           >
-            Gruppe beitreten
+            Einschreiben
           </button>
         </div>
       </div>

@@ -2,9 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
-import { CurrentLocaleService } from "src/app/current-locale.service";
-import { MultiLangString } from "src/app/shared/multilingual-string.description";
-import { CreateProjectCourseParticipationGQL } from "src/generated/graphql";
+import { CreateProjectCourseParticipationGQL } from "../../../../../generated/graphql";
+import { CurrentLocaleService } from "../../../../current-locale.service";
+import { MultiLangString } from "../../../../shared/multilingual-string.description";
+
 import { CourseService } from "../../course.service";
 
 @Component({

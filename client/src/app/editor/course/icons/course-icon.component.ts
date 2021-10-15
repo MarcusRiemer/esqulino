@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 @Component({
   templateUrl: "course-icon.component.html",
   selector: "course-icon",
 })
-export class CourseIconComponent implements OnInit {
+export class CourseIconComponent {
   @Input() iconType:
     | "list-delete"
     | "list-edit"
@@ -30,6 +30,4 @@ export class CourseIconComponent implements OnInit {
     | "date-reached"
     | "date-unreached"
     | "info-description";
-
-  ngOnInit(): void {}
 }

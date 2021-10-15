@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { first } from "rxjs/operators";
-import { UpdateAssignmentRequiredCodeResourceGQL } from "src/generated/graphql";
+import { UpdateAssignmentRequiredCodeResourceGQL } from "../../../../../../generated/graphql";
+
 import { CourseService } from "../../../course.service";
 
 interface changedRequiredCodeResourceDialogInput {
@@ -15,18 +17,24 @@ interface changedRequiredCodeResourceDialogInput {
 })
 export class ChangeRequiredCodeResourceDialogComponent implements OnInit {
   constructor(
-    private readonly _courseService: CourseService,
     public dialogRef: MatDialogRef<ChangeRequiredCodeResourceDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: changedRequiredCodeResourceDialogInput,
-    private readonly _mutUpdateRequiredCodeResource: UpdateAssignmentRequiredCodeResourceGQL
+    private readonly _mutUpdateRequiredCodeResource: UpdateAssignmentRequiredCodeResourceGQL,
+    private readonly _formBuilder: FormBuilder
   ) {}
+
+  changeAssignmentDescriptionForm: FormGroup = this._formBuilder.group({
+    requirementDescription: [],
+  });
 
   async saveUpdate() {
     await this._mutUpdateRequiredCodeResource
       .mutate({
         id: this.data.requirementId,
-        description: this.data.requirementDescription,
+        description: this.changeAssignmentDescriptionForm.get(
+          "requirementDescription"
+        ).value,
       })
       .pipe(first())
       .toPromise()
@@ -35,5 +43,7 @@ export class ChangeRequiredCodeResourceDialogComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.changeAssignmentDescriptionForm.patchValue(this.data);
+  }
 }

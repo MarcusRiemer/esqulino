@@ -4,7 +4,7 @@
   </div>
   <div class="card-body">
     <may-perform [payload]="createAssignmentPermission$ | async">
-      <form>
+      <form [formGroup]="createAssignmentForm" (ngSubmit)="createAssignment()">
         <div class="form-group row mb-3">
           <label for="assignment-name" class="col-sm-2 form-control-label">
             Aufgabenname
@@ -12,7 +12,7 @@
           <div class="col-sm-10">
             <input
               type="text"
-              [(ngModel)]="createName"
+              formControlName="createName"
               id="name"
               name="assignment-name"
               class="form-control"
@@ -32,7 +32,7 @@
           </label>
           <div class="col-sm-10">
             <textarea
-              [(ngModel)]="createDescription"
+              formControlName="createDescription"
               class="form-control"
               name="descirption"
             ></textarea>
@@ -51,12 +51,12 @@
             class="form-control"
             placeholder="Startdatum"
             name="startDate"
-            [(ngModel)]="createStartDate"
+            formControlName="createStartDate"
           />
           <span class="input-group-text">Datum</span>
           <input
             type="time"
-            [(ngModel)]="createStartDateTime"
+            formControlName="createStartDateTime"
             name="startDateTime"
             class="form-control"
           />
@@ -70,12 +70,12 @@
             class="form-control"
             placeholder="Enddatum"
             name="endDate"
-            [(ngModel)]="createEndDate"
+            formControlName="createEndDate"
           />
           <span class="input-group-text">Datum</span>
           <input
             type="time"
-            [(ngModel)]="createEndDateTime"
+            formControlName="createEndDateTime"
             name="endDateTime"
             class="form-control"
           />
@@ -88,7 +88,7 @@
             <input
               class="form-control"
               type="number"
-              [(ngModel)]="createWeight"
+              formControlName="createWeight"
               name="weight"
               min="1"
             />
@@ -104,7 +104,6 @@
           type="submit"
           class="btn btn-primary col-4"
           value="Aufgabe erstellen"
-          (click)="createAssignment()"
         />
       </form>
       <h4 denied class="card-title">

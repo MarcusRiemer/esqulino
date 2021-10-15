@@ -1,10 +1,12 @@
 import { WHITE_ON_BLACK_CSS_CLASS } from "@angular/cdk/a11y/high-contrast-mode/high-contrast-mode-detector";
 import { Time } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first, map } from "rxjs/operators";
-import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
-import { CreateAssignmentGQL, ReferenceTypeEnum } from "src/generated/graphql";
+import { CreateAssignmentGQL } from "../../../../../../generated/graphql";
+import { PerformDataService } from "../../../../../shared/authorisation/perform-data.service";
+
 import { SidebarService } from "../../../../sidebar.service";
 import { EditorToolbarService } from "../../../../toolbar.service";
 import { CourseService } from "../../../course.service";
@@ -21,16 +23,19 @@ export class CreateAssignmentComponent implements OnInit {
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _performData: PerformDataService,
     private readonly _toolbarService: EditorToolbarService,
-    private _sidebarService: SidebarService
+    private _sidebarService: SidebarService,
+    private readonly _formBuilder: FormBuilder
   ) {}
 
-  createName: string;
-  createDescription: string;
-  createStartDate: string;
-  createStartDateTime: string;
-  createEndDate: string;
-  createEndDateTime: string;
-  createWeight: number = 1;
+  createAssignmentForm = this._formBuilder.group({
+    createName: [],
+    createDescription: [],
+    createStartDate: [],
+    createStartDateTime: [],
+    createEndDate: [],
+    createEndDateTime: [],
+    createWeight: [1],
+  });
 
   ngOnInit(): void {
     // Ensure sane default state
@@ -52,23 +57,25 @@ export class CreateAssignmentComponent implements OnInit {
       .toPromise();
 
     const startDate = this.mergeDateAndTime(
-      this.createStartDate,
-      this.createStartDateTime
+      this.createAssignmentForm.get("createStartDate").value,
+      this.createAssignmentForm.get("createStartDateTime").value
     );
 
     const endDate = this.mergeDateAndTime(
-      this.createEndDate,
-      this.createEndDateTime
+      this.createAssignmentForm.get("createEndDate").value,
+      this.createAssignmentForm.get("createEndDateTime").value
     );
 
     await this._mutCreateAssignment
       .mutate({
         projectId,
-        name: this.createName || undefined,
-        description: this.createDescription || undefined,
+        name: this.createAssignmentForm.get("createName").value || undefined,
+        description:
+          this.createAssignmentForm.get("createDescription").value || undefined,
         startDate: startDate?.toISOString(),
         endDate: endDate?.toISOString(),
-        weight: this.createWeight || undefined,
+        weight:
+          this.createAssignmentForm.get("createWeight").value || undefined,
       })
       .pipe(first())
       .toPromise()

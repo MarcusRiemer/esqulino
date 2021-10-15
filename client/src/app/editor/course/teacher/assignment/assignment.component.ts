@@ -1,17 +1,19 @@
 import { DatePipe, formatDate } from "@angular/common";
 import { Component, Inject, LOCALE_ID, OnDestroy, OnInit } from "@angular/core";
+import { FormBuilder } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable, Subscription } from "rxjs";
-import { filter, find, first, map, mergeMap, tap } from "rxjs/operators";
-import { PerformDataService } from "src/app/shared/authorisation/perform-data.service";
+import { Subscription } from "rxjs";
+import { first, map, mergeMap, tap } from "rxjs/operators";
 import {
   DestroyAssignmentRequiredCodeResourceGQL,
   ReferenceTypeEnum,
   RemoveAssignmentRequiredSolutionGQL,
   UpdateAssignmentGQL,
-} from "src/generated/graphql";
+} from "../../../../../generated/graphql";
+
 import { ToolbarService } from "../../../../shared";
+import { PerformDataService } from "../../../../shared/authorisation/perform-data.service";
 import { MessageDialogComponent } from "../../../../shared/message-dialog.component";
 import { ProjectService } from "../../../project.service";
 import { SidebarService } from "../../../sidebar.service";
@@ -58,6 +60,7 @@ export class AssignmentComponent implements OnInit, OnDestroy {
     private readonly _performData: PerformDataService,
     private readonly _matDialog: MatDialog,
     private readonly _removeAssignmentSolution: RemoveAssignmentRequiredSolutionGQL,
+    private readonly _FormBuilder: FormBuilder,
     private _router: Router,
     private _projectService: ProjectService,
     private _toolbarService: EditorToolbarService,
@@ -71,7 +74,6 @@ export class AssignmentComponent implements OnInit, OnDestroy {
     map((param) => param.get("assignmentId"))
   );
   assignment: AssignmentEntry;
-  currentType: ReferenceTypeEnum = "given_full";
 
   /**
    * These permissions are required to add a member
@@ -205,7 +207,6 @@ export class AssignmentComponent implements OnInit, OnDestroy {
               })
             )
           ),
-          tap((e) => console.log("asdasd-----------")),
           mergeMap((e) => e),
           tap(console.log)
         )

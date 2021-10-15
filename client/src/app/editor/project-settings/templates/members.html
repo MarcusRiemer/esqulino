@@ -59,21 +59,24 @@
       </table>
     </div>
     <may-perform [payload]="changeOwnerPermission$ | async">
-      <form class="form-group row">
+      <form
+        class="form-group row"
+        [formGroup]="changeOwnerForm"
+        (ngSubmit)="onChangeOwner()"
+      >
         <h4 class="col-sm-12">Wechsel Eigentümer</h4>
         <div class="col-sm-6">
           <input
             name="new-owner-id"
             type="text"
-            [(ngModel)]="changeOwnerId"
             class="form-control"
+            formControlName="changeOwnerId"
             placeholder="User-ID des neuen Eigentümers"
           />
         </div>
         <button
           name="change-owner"
           type="submit"
-          (click)="onChangeOwner()"
           class="btn btn-primary col-sm-2"
         >
           Wechsel Eigentümer
@@ -81,20 +84,24 @@
       </form>
     </may-perform>
     <may-perform [payload]="addMemberPermission$ | async">
-      <form class="form-group row mt-2">
+      <form
+        class="form-group row mt-2"
+        [formGroup]="addMemberForm"
+        (ngSubmit)="onAddMember()"
+      >
         <h4 class="col-sm-12">Hinzufügen neuer Mitglieder</h4>
         <div class="col-sm-4">
           <input
-            [(ngModel)]="addMemberId"
             type="text"
             class="form-control"
             name="add-member-id"
+            formControlName="addMemberId"
             placeholder="User-ID des neuen Mitgliedes"
           />
         </div>
         <div class="col-sm-2">
           <select
-            [(ngModel)]="addMemberRole"
+            formControlName="addMemberRole"
             name="add-member-role"
             class="form-select"
           >
@@ -103,11 +110,7 @@
             <option value="participant">Mitglied</option>
           </select>
         </div>
-        <button
-          type="submit"
-          class="btn btn-primary col-sm-2"
-          (click)="onAddMember()"
-        >
+        <button type="submit" class="btn btn-primary col-sm-2">
           Benutzer Hinzufügen
         </button>
       </form>

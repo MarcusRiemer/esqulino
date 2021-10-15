@@ -13,6 +13,7 @@ import {
 import { ProjectService } from "../project.service";
 import { User } from "@sentry/types";
 import { PerformDataService } from "../../shared/authorisation/perform-data.service";
+import { FormBuilder, FormGroup } from "@angular/forms";
 
 interface ProjectMember {
   id: string;
@@ -37,7 +38,8 @@ export class MembersComponent {
     private readonly _mutRemoveMember: ProjectRemoveMemberGQL,
     private readonly _mutChangeOwner: ProjectChangeOwnerGQL,
     private readonly _mutChangeMemberRole: ProjectChangeMemberRoleGQL,
-    private readonly _performData: PerformDataService
+    private readonly _performData: PerformDataService,
+    private readonly _formBuilder: FormBuilder
   ) {}
 
   /**
@@ -50,18 +52,14 @@ export class MembersComponent {
     "actions",
   ];
 
-  /**
-   * Field which be used to add a new user
-   */
-  addMemberId = "";
-  /**
-   * Field which be used to choose the role of the new user
-   */
-  addMemberRole = "participant";
-  /**
-   * Field which be used to change the Owner
-   */
-  changeOwnerId = "";
+  addMemberForm: FormGroup = this._formBuilder.group({
+    addMemberId: [],
+    addMemberRole: ["participant"],
+  });
+
+  changeOwnerForm: FormGroup = this._formBuilder.group({
+    changeOwnerId: [],
+  });
 
   /**
    * These permissions are required to add a member
@@ -130,14 +128,14 @@ export class MembersComponent {
     await this._mutAddMember
       .mutate({
         projectId,
-        isAdmin: this.addMemberRole == "admin",
-        userIds: [this.addMemberId],
+        isAdmin: this.addMemberForm.get("addMemberRole").value == "admin",
+        userIds: [this.addMemberForm.get("addMemberId").value],
       })
       .pipe(first())
       .toPromise();
 
     //Clean the Field
-    this.addMemberId = "";
+    this.addMemberForm.get("addMemberId").reset();
   }
 
   /**
@@ -191,13 +189,13 @@ export class MembersComponent {
     await this._mutChangeOwner
       .mutate({
         projectId,
-        userId: this.changeOwnerId,
+        userId: this.changeOwnerForm.get("changeOwnerId").value,
       })
       .pipe(first())
       .toPromise();
 
     //Clean the Field
-    this.changeOwnerId = "";
+    this.changeOwnerForm.reset();
   }
 }
 
