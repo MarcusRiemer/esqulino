@@ -71,7 +71,7 @@ export class SchemaComponent implements OnInit {
   readonly visualSchemaUrl = zip(this.schemaRevision, this.schemaName).pipe(
     map(
       ([rev, name]) =>
-        `/api/project/${this.project.slug}/db/${name}/visual_schema?format=svg&revision=${rev}`
+        `/api/project/${this.project.id}/db/${name}/visual_schema?format=svg&revision=${rev}`
     )
   );
 

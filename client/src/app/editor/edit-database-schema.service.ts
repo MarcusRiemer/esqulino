@@ -127,7 +127,7 @@ export class EditDatabaseSchemaService {
     amount: number
   ): Observable<RawTableDataDescription> {
     const url = this._server.getTableEntriesUrl(
-      project.slug,
+      project.id,
       project.currentDatabaseName,
       table.name,
       from,
@@ -148,7 +148,7 @@ export class EditDatabaseSchemaService {
    */
   getTableRowAmount(project: Project, table: Table): Observable<number> {
     const url = this._server.getTableEntriesCountUrl(
-      project.slug,
+      project.id,
       project.currentDatabaseName,
       table.name
     );
@@ -167,7 +167,7 @@ export class EditDatabaseSchemaService {
    */
   async saveNewTable(project: Project, table: Table): Promise<void> {
     const url = this._server.getCreateTableUrl(
-      project.slug,
+      project.id,
       project.currentDatabaseName
     );
     const body = JSON.stringify(table.toModel());
@@ -180,7 +180,7 @@ export class EditDatabaseSchemaService {
         first(),
         tap(async () => {
           this.incrementChangeCount();
-          await this._projectService.setActiveProject(project.slug, true);
+          await this._projectService.setActiveProject(project.id, true);
           this.clearCurrentlyEdited();
         }),
         catchError(this.handleError)
@@ -199,7 +199,7 @@ export class EditDatabaseSchemaService {
     commandHolder: TableCommandHolder
   ): Promise<void> {
     const url = this._server.getTableAlterUrl(
-      project.slug,
+      project.id,
       project.currentDatabaseName,
       tableName
     );
@@ -215,7 +215,7 @@ export class EditDatabaseSchemaService {
         catchError(this.handleError),
         tap(async () => {
           this.incrementChangeCount();
-          await this._projectService.setActiveProject(project.slug, true);
+          await this._projectService.setActiveProject(project.id, true);
           this.clearCurrentlyEdited();
         })
       );
@@ -229,7 +229,7 @@ export class EditDatabaseSchemaService {
    */
   async deleteTable(project: Project, table: Table): Promise<void> {
     const url = this._server.getDropTableUrl(
-      project.slug,
+      project.id,
       project.currentDatabaseName,
       table.name
     );
@@ -240,7 +240,7 @@ export class EditDatabaseSchemaService {
         first(),
         tap(async () => {
           this.incrementChangeCount();
-          await this._projectService.setActiveProject(project.slug, true);
+          await this._projectService.setActiveProject(project.id, true);
         }),
         catchError(this.handleError)
       );

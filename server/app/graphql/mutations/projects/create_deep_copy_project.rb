@@ -56,6 +56,9 @@ class Mutations::Projects::CreateDeepCopyProject < Mutations::BaseMutation
       project_database.project = c_project
       project_database.save!
 
+      #TODO: The Databases must created, but the problem is it is not allowed that a table have the same name.
+      #project_database.table_create(project_database.schema)
+
       # If the Project have a default database
       if project.default_database == v
         c_project.default_database = project_database
@@ -87,9 +90,42 @@ class Mutations::Projects::CreateDeepCopyProject < Mutations::BaseMutation
   end
 
   def self.helper_create_copy_of_one_code_resource(project, code_resource)
-    project_source = code_resource.dup
-    project_source.project = project
-    project_source.save!
-    project_source
+    code_resource = code_resource.dup
+    code_resource.project = project
+    code_resource.save!
+    code_resource
   end
+
+  # def self.helper_create_copy_of_code_resource_and_assignment(project, c_project)
+
+  #   project.assignments.each do |a|
+  #     assignment = a.dup
+  #     assignment.project_id = project.id
+  #     assignment.save!
+
+  #     project.requriedCodeResource.each do |cr|
+  #       requriedCodeResource = cr.dup
+  #       requriedCodeResource.assignment_id = assignment.id
+
+  #       requriedCodeResource.code_resource_id = 
+  #       if(cr.code_resource.present?){
+  #         code_resource = Mutations::Projects::CreateDeepCopyProject.helper_create_copy_of_one_code_resource(project, cr.code_resource)
+  #       }
+
+  #       if(cr.template.present?){
+  #         template = cr.template.dup
+  #         tempalte.assignment_required_code_resource = 
+  #       end
+
+
+  #     end
+  #   end
+
+
+
+  #   code_resource = code_resource.dup
+  #   code_resource.project = project
+  #   code_resource.save!
+  #   code_resource
+  # end
 end
