@@ -27,19 +27,6 @@ export class NavbarComponent {
     private readonly _router: Router
   ) {}
 
-  isActive(instruction: string | UrlTree): boolean {
-    console.log("---------------------");
-    console.log(
-      this._router.isActive(
-        "/editor/5de1f5e5-80fb-46ae-91e7-cef40db24332/ast/create",
-        false
-      )
-    );
-    console.log(this._router.isActive("/ast/create", false));
-    console.log(this._router.isActive("/ast/create", true));
-    return this._router.isActive(instruction, false);
-  }
-
   readonly hasDatabase$ = this._projectService.activeProject.pipe(
     map((p) => !!p.currentDatabaseName)
   );

@@ -23,7 +23,7 @@ export class CreateAssignmentComponent implements OnInit {
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _performData: PerformDataService,
     private readonly _toolbarService: EditorToolbarService,
-    private _sidebarService: SidebarService,
+    private readonly _sidebarService: SidebarService,
     private readonly _formBuilder: FormBuilder
   ) {}
 

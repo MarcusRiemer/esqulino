@@ -137,7 +137,7 @@ RSpec.describe Mutations::Projects::DestroyAssignmentSubmittedCodeResource do
       mut.resolve(
         assignment_submitted_code_resource_id: assignment_submitted_cd.id
       )
-    end.to raise_error(Pundit::NotAuthorizedError)
+    end.to raise_error(ArgumentError)
 
     expect(Assignment.count).to eq 1
     expect(AssignmentRequiredCodeResource.count).to eq 1

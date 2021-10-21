@@ -66,21 +66,21 @@ export class AssignmentOverviewComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * These permissions are required to add a member
+   * These permissions are required to create a assignment
    */
   readonly createAssignmentPermission$ = this._courseService.activeCourse$.pipe(
     map((p) => this._performData.project.createAssignment(p.id))
   );
 
   /**
-   * These permissions are required to add a member
+   * These permissions are required to update a assignment
    */
   readonly updateAssignmentPermission$ = this._courseService.activeCourse$.pipe(
     map((p) => this._performData.project.updateAssignment(p.id))
   );
 
   /**
-   * These permissions are required to add a member
+   * These permissions are required to delete a assignment
    */
   readonly deleteAssignmentPermission$ = this._courseService.activeCourse$.pipe(
     map((p) => this._performData.project.deleteAssignment(p.id))

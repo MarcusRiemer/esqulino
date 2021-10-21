@@ -12,8 +12,6 @@ class Mutations::Projects::UpdateProjectCourseParticipation < Mutations::Project
 
     authorize course, :update_project_course_participation?
 
-    course = group.base_on_project
-
     group.assign_attributes(args)
     group.save!
   rescue Pundit::NotAuthorizedError, ActiveRecord::RecordNotFound => e

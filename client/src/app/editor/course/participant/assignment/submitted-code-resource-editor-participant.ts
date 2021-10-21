@@ -26,6 +26,11 @@ interface SubmittedCodeResourceEntry {
   requiredCodeResourceDescription?: string;
 }
 
+interface urlIdEntry {
+  assignmentId: string;
+  resourceId: string;
+}
+
 @Component({
   templateUrl: "./submitted-code-resource-editor-participant.component.html",
 })
@@ -36,58 +41,61 @@ export class SubmittedCodeResourceEditorParticipantComponente {
     private readonly _activatedRoute: ActivatedRoute
   ) {}
 
+  urlIds$: Observable<urlIdEntry> = this._activatedRoute.paramMap.pipe(
+    map((params) => ({
+      assignmentId: params.get("assignmentId")?.toString(),
+      resourceId: params.get("resourceId")?.toString(),
+    })),
+    tap(console.log)
+  );
+
+  // resourceId$: Observable<String> = this._activatedRoute.paramMap.pipe(
+  //   map((param) => param.get("resourceId")),
+  //   tap(console.log)
+  // );
+
   readonly submittedCodeResource$: Observable<SubmittedCodeResourceEntry> =
-    this._activatedRoute.params.pipe(
-      switchMap((param: Params) =>
-        this._courseService.fullCourseData$.pipe(
-          map((course) => {
-            console.log("URL changed");
-            const assignment = course.basedOnProject.assignments.find(
-              (assignment) => assignment.id == param["assignmentId"]
-            );
-            const submission = course.assignmentSubmissions.find(
-              (a) => a.assignment.id === param["assignmentId"]
-            );
-            const requiredCodeResource =
-              submission.assignmentSubmittedCodeResources.find(
-                (submitted) => submitted.codeResource.id === param["resourceId"]
-              ).assignmentRequiredCodeResource;
+    combineLatest([this.urlIds$, this._courseService.fullCourseData$]).pipe(
+      map(([urlIds, course]) => {
+        console.log("URL changed");
+        console.log("assignment");
+        console.log(urlIds.assignmentId);
+        console.log(urlIds.resourceId);
+        const assignment = course.basedOnProject.assignments.find(
+          (assignment) => assignment.id == urlIds.assignmentId
+        );
+        const submission = course.assignmentSubmissions.find(
+          (a) => a.assignment.id === urlIds.assignmentId
+        );
 
-            const toReturn: SubmittedCodeResourceEntry = {
-              startDate: assignment.startDate,
-              endDate: assignment.endDate,
-              assignmentDescription: assignment.description,
-              assignmentName: assignment.name,
-              requiredCodeResourceDescription:
-                assignment.assignmentRequiredCodeResources.find(
-                  (required) => required.id === requiredCodeResource.id
-                ).description,
-              codeResourceId: param["resourceId"],
-            };
-            return toReturn;
-          }),
-          tap(console.log)
-        )
-      )
+        const requiredCodeResource =
+          submission.assignmentSubmittedCodeResources.find(
+            (submitted) =>
+              submitted.codeResource.id === urlIds.resourceId.toString()
+          ).assignmentRequiredCodeResource;
+
+        const toReturn: SubmittedCodeResourceEntry = {
+          startDate: assignment.startDate,
+          endDate: assignment.endDate,
+          assignmentDescription: assignment.description,
+          assignmentName: assignment.name,
+          requiredCodeResourceDescription:
+            assignment.assignmentRequiredCodeResources.find(
+              (required) => required.id === requiredCodeResource.id
+            ).description,
+          codeResourceId: urlIds.resourceId.toString(),
+        };
+        return toReturn;
+      })
     );
-
-  readonly paramCodeResourceId$ = this._activatedRoute.params.pipe(
-    map((p) => p["resourceId"]),
-    distinctUntilChanged()
-  );
-
-  readonly paramAssignmentId$ = this._activatedRoute.params.pipe(
-    map((p) => p["assignmentId"]),
-    distinctUntilChanged()
-  );
 
   readonly assignment$ = combineLatest([
     this._courseService.fullCourseData$,
-    this.paramAssignmentId$,
+    this.urlIds$,
   ]).pipe(
-    map(([course, id]) =>
+    map(([course, ids]) =>
       course.basedOnProject.assignments.find(
-        (assignment) => assignment.id == id
+        (assignment) => assignment.id == ids.assignmentId
       )
     )
   );

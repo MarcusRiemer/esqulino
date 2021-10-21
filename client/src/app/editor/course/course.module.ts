@@ -22,7 +22,6 @@ import { SingleAssignmentCardComponent } from "./participant/templates/single-as
 import { AssignmentParticipantComponent } from "./participant/assignment/assignment-participant.component";
 import { CreateAssignmentSubmittedCodeResourceDialogComponent } from "./participant/assignment/dialog/create-assignment-submitteed-code-resource-dialog.component";
 import { SubmittedCodeResourceEditorParticipantComponente } from "./participant/assignment/submitted-code-resource-editor-participant";
-import { RemainingDaysPipe } from "./participant/assignment/remaining-days.pipe";
 import { OverviewParticipantsParticipantComponent } from "./participant/participants/overview-participants-participant.component";
 import { ToGradeListComponent } from "./teacher/grade/to-grade-list.component";
 import { OverviewGradeComponent } from "./teacher/grade/overview-grade.component";
@@ -55,7 +54,6 @@ import { CourseAssignmentStatusComponent } from "./icons/course-assignment-statu
     AssignmentParticipantComponent,
     CreateAssignmentSubmittedCodeResourceDialogComponent,
     SubmittedCodeResourceEditorParticipantComponente,
-    RemainingDaysPipe,
     OverviewParticipantsParticipantComponent,
     ToGradeListComponent,
     OverviewGradeComponent,

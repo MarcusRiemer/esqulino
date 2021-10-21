@@ -9,8 +9,8 @@ class Mutations::Projects::DestroyAssignmentSubmittedCodeResource < Mutations::B
     submission = assignment_submitted_code_resource.assignment_submission
 
     group = Project.find_by_slug_or_id!(submission.project.id)
-
-    raise Pundit::NotAuthorizedError if !submission.assignment.end_date.nil? && (submission.assignment.end_date <= DateTime.current)
+    
+    submission.assignment.assert_is_delivery_date_exceeded!
 
     authorize group, :destroy_assignment_submitted_code_resource?
 

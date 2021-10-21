@@ -77,6 +77,7 @@ import { ChangeDetectionLogDirective } from "./change-detection-log.directive";
 import { UrlFriendlyIdPipe } from "./url-friendly-id.pipe";
 import { AffectedResourcesDialogComponent } from "./affected-resources-dialog.component";
 import { DisplayResourcePipe } from "./display-resource.pipe";
+import { RemainingDaysPipe } from "./remaining-days.pipe";
 
 const materialModules = [
   MatToolbarModule,
@@ -127,6 +128,7 @@ const materialModules = [
     EmptyComponent,
     DefaultValuePipe,
     CurrentLanguagePipe,
+    RemainingDaysPipe,
     FlashMessageListComponent,
     ToolbarComponent,
     ChangeLanguageComponent,
@@ -169,6 +171,7 @@ const materialModules = [
     FlashMessageListComponent,
     DefaultValuePipe,
     CurrentLanguagePipe,
+    RemainingDaysPipe,
     ChangeLanguageComponent,
     JavascriptRequiredComponent,
     SideNavComponent,

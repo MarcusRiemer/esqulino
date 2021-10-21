@@ -16,6 +16,8 @@ class Mutations::Projects::CreateAssignmentSubmittedCodeResource < Mutations::Ba
 
     raise Pundit::NotAuthorizedError if group.based_on_project != course_project
 
+    assignment.assert_is_delivery_date_exceeded!
+
     authorize group, :create_assignment_submitted_code_resource?
 
     ActiveRecord::Base.transaction do

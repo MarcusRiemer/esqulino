@@ -31,6 +31,7 @@ const DEFAULT_EMPTY_PROJECT: FullProjectNode = {
   blockLanguages: [],
   createdAt: Date(),
   updatedAt: Date(),
+  isParticipantCourse: false,
   defaultDatabase: {
     __typename: "ProjectDatabase",
     id: "4861f7ad-53c6-481f-b4a7-2b19aeffb021",
