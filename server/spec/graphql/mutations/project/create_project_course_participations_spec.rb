@@ -330,4 +330,54 @@ RSpec.fdescribe Mutations::Projects::CreateProjectCourseParticipations do
     expect(Project.count).to eq 3
     expect(ProjectCourseParticipation.count).to eq 1
   end
+
+
+  fit "Create group with many Databases" do
+    course = create(:project, course_template: true)
+    assignment = create(:assignment, project: course, name: "test")
+    database = create(:project_database, project:course )
+    database.refresh_schema
+    database2 = create(:project_database, project:course )
+    database2.refresh_schema
+
+    mut = described_class.new(**init_args(user: course.user))
+
+    res = mut.resolve(
+      based_on_project_id: course.id,
+      number_of_groups: 10,
+      name: "Gruppe-#",
+      start_name_counter: 0
+    )
+
+
+    expect(ProjectDatabase.count).to eq 22
+    expect(Project.all.count).to eq 11
+
+    group = Project.find_by(name: { 'de' => 'Gruppe-1' })
+    group_db = group.project_databases.find_by(name: database.name)
+    group_db2 = group.project_databases.find_by(name: database2.name)
+
+
+    expect(group_db.schema).to eq database.schema
+    expect(group_db2.schema).to eq database2.schema
+
+    expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).code_resources.count).to eq 0
+    expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).assignments.count).to eq 0
+    expect(Project.find_by(name: { 'de' => 'Gruppe-1' }).project_databases.count).to eq  2
+
+
+
+    group = Project.find_by(name: { 'de' => 'Gruppe-3' })
+    group_db = group.project_databases.find_by(name: database.name)
+    group_db2 = group.project_databases.find_by(name: database2.name)
+
+
+    expect(group_db.schema).to eq database.schema
+    expect(group_db2.schema).to eq database2.schema
+
+    expect(Project.find_by(name: { 'de' => 'Gruppe-3' }).code_resources.count).to eq 0
+    expect(Project.find_by(name: { 'de' => 'Gruppe-3' }).assignments.count).to eq 0
+    expect(Project.find_by(name: { 'de' => 'Gruppe-3' }).project_databases.count).to eq  2
+  end
+
 end

@@ -125,4 +125,12 @@ export class ProjectPerformData extends ResourcesData {
       policyAction: "create_update_assignment_required_code_resource",
     };
   }
+
+  public updateDatabase(resourceId: string): MayPerformRequestDescription {
+    return {
+      resourceType: this.resourceType,
+      resourceId: resourceId,
+      policyAction: "update_database",
+    };
+  }
 }

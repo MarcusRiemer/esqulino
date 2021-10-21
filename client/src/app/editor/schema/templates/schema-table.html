@@ -14,23 +14,26 @@
   </div>
   <div>
     <!-- Button to the table-editing view -->
-    <a
-      *ngIf="!readOnly"
-      [routerLink]="['edit', table.name]"
-      class="btn btn-sm btn-primary"
-    >
-      <span class="fa fa-pencil-square-o" aria-hidden="true"></span>
-      Struktur Editieren
-    </a>
-    <!-- Button to drop table -->
-    <button
-      *ngIf="!readOnly"
-      (click)="deleteTable()"
-      class="btn btn-sm btn-danger"
-    >
-      <span class="fa fa-trash" aria-hidden="true"></span>
-      Löschen
-    </button>
+    <may-perform [payload]="updateDatabasePermission$">
+      <a
+        *ngIf="!readOnly"
+        [routerLink]="['edit', table.name]"
+        class="btn btn-sm btn-primary"
+      >
+        <span class="fa fa-pencil-square-o" aria-hidden="true"></span>
+        Struktur Editieren
+      </a>
+
+      <!-- Button to drop table -->
+      <button
+        *ngIf="!readOnly"
+        (click)="deleteTable()"
+        class="btn btn-sm btn-danger"
+      >
+        <span class="fa fa-trash" aria-hidden="true"></span>
+        Löschen
+      </button>
+    </may-perform>
   </div>
 </div>
 

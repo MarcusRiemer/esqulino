@@ -218,6 +218,10 @@ class Project < ApplicationRecord
     based_on_project.present?
   end
 
+  def is_project?
+    !participation_group? and !is_course
+  end
+  
   def is_already_a_participant?(user)
     participant_projects.any? { |x| x.project_members.find_by(user_id: user.id).present? }
   end

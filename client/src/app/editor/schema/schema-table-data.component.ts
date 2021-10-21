@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 
-import { first } from "rxjs/operators";
+import { first, map } from "rxjs/operators";
 
 import { Table } from "../../shared/schema";
 
@@ -9,6 +9,7 @@ import { EditDatabaseSchemaService } from "../edit-database-schema.service";
 import { ProjectService, Project } from "../project.service";
 import { EditorToolbarService } from "../toolbar.service";
 import { SidebarService } from "../sidebar.service";
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 
 /**
  * Displays the schema as a list of tables.
@@ -19,13 +20,14 @@ import { SidebarService } from "../sidebar.service";
 })
 export class SchemaTableDataComponent implements OnInit, OnDestroy {
   constructor(
-    private _schemaService: EditDatabaseSchemaService,
-    private _projectService: ProjectService,
-    private _routeParams: ActivatedRoute,
-    private _router: Router,
-    private _route: ActivatedRoute,
-    private _toolbarService: EditorToolbarService,
-    private _sidebarService: SidebarService
+    private readonly _schemaService: EditDatabaseSchemaService,
+    private readonly _projectService: ProjectService,
+    private readonly _routeParams: ActivatedRoute,
+    private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
+    private readonly _toolbarService: EditorToolbarService,
+    private readonly _sidebarService: SidebarService,
+    private readonly _performData: PerformDataService
   ) {}
 
   readonly availableRowAmounts = [50, 100, 200];
@@ -69,6 +71,20 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
    * True, if creation should be allowed from this component.
    */
   @Input() isChild: boolean = false;
+
+  /**
+   * These permissions are required to update a database
+   */
+  readonly updateDatabasePermission$ = this._projectService.activeProject.pipe(
+    map((p) => this._performData.project.updateDatabase(p.id))
+  );
+
+  /**
+   * @return A peek at the project of the currently edited resource
+   */
+  get peekProject() {
+    return this._projectService.cachedProject;
+  }
 
   /**
    * Load the project to access the schema
@@ -120,7 +136,8 @@ export class SchemaTableDataComponent implements OnInit, OnDestroy {
         "edit",
         "Struktur Editieren",
         "edit",
-        "e"
+        "e",
+        this._performData.project.updateDatabase(this.peekProject.id)
       );
       subRef = btnEdit.onClick.subscribe((_) => {
         this._router.navigate(["../../edit", this.table.name], {

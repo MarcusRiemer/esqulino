@@ -12,6 +12,7 @@ import { ProjectService, Project } from "../project.service";
 import { EditDatabaseSchemaService } from "../edit-database-schema.service";
 import { SidebarService } from "../sidebar.service";
 import { EditorToolbarService } from "../toolbar.service";
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 
 /**
  * A class as entry-point for the representation of a schema
@@ -34,15 +35,16 @@ export class SchemaComponent implements OnInit {
    * Used for dependency injection.
    */
   constructor(
-    private _sanitizer: DomSanitizer,
-    private _http: HttpClient,
-    private _projectService: ProjectService,
-    private _toolbarService: EditorToolbarService,
-    private _router: Router,
-    private _route: ActivatedRoute,
-    private _sidebarService: SidebarService,
-    private _schemaService: EditDatabaseSchemaService,
-    private _serverApi: ServerApiService
+    private readonly _sanitizer: DomSanitizer,
+    private readonly _http: HttpClient,
+    private readonly _projectService: ProjectService,
+    private readonly _toolbarService: EditorToolbarService,
+    private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
+    private readonly _sidebarService: SidebarService,
+    private readonly _schemaService: EditDatabaseSchemaService,
+    private readonly _serverApi: ServerApiService,
+    private readonly _performData: PerformDataService
   ) {}
 
   /**
@@ -89,6 +91,13 @@ export class SchemaComponent implements OnInit {
   );
 
   /**
+   * @return A peek at the project of the currently edited resource
+   */
+  get peekProject() {
+    return this._projectService.cachedProject;
+  }
+
+  /**
    * Load the project to access the schema
    */
   ngOnInit() {
@@ -102,7 +111,8 @@ export class SchemaComponent implements OnInit {
       "createTable",
       "Neue Tabelle",
       "table",
-      "n"
+      "n",
+      this._performData.project.updateDatabase(this.peekProject.id)
     );
     let subRef = btnCreate.onClick.subscribe((_) => {
       this._router.navigate(["./create"], { relativeTo: this._route });
@@ -116,7 +126,8 @@ export class SchemaComponent implements OnInit {
         "importTable",
         "Daten Importieren",
         "file-text",
-        "i"
+        "i",
+        this._performData.project.updateDatabase(this.peekProject.id)
       );
       subRef = btnImport.onClick.subscribe((_) => {
         this._router.navigate(["./import"], { relativeTo: this._route });
@@ -129,7 +140,8 @@ export class SchemaComponent implements OnInit {
       "uploadDatabase",
       "Datenbank hochladen",
       "upload",
-      "u"
+      "u",
+      this._performData.project.updateDatabase(this.peekProject.id)
     );
     subRef = btnUpload.onClick.subscribe((_) => {
       this._router.navigate(["./upload"], { relativeTo: this._route });

@@ -56,14 +56,17 @@ class Mutations::Projects::CreateDeepCopyProject < Mutations::BaseMutation
       project_database.project = c_project
       project_database.save!
 
-      #TODO: The Databases must created, but the problem is it is not allowed that a table have the same name.
-      #project_database.table_create(project_database.schema)
+      FileUtils.cp(v.sqlite_file_path, project_database.sqlite_file_path)
+      project_database.refresh_schema!
 
       # If the Project have a default database
       if project.default_database == v
         c_project.default_database = project_database
         c_project.save!
       end
+
+
+
     end
     c_project
   end

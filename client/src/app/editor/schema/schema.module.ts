@@ -16,9 +16,10 @@ import { SchemaTableDataComponent } from "./schema-table-data.component";
 import { SchemaTableImportComponent } from "./schema-table-import.component";
 import { TableEditorSidebarStackComponent } from "./table-editor-stack.sidebar";
 import { TableEditorSidebarControlsComponent } from "./table-editor-controls.sidebar";
+import { SharedAppModule } from "../../shared/shared.module";
 
 @NgModule({
-  imports: [EditorSharedComponentsModule, schemaEditorRouting],
+  imports: [EditorSharedComponentsModule, schemaEditorRouting, SharedAppModule],
   declarations: [
     SchemaHostComponent,
     SchemaRedirectComponent,

@@ -627,7 +627,79 @@ RSpec.describe Mutations::Projects::JoinCourse do
     expect(ProjectCourseParticipation.count).to eq 0
   end
 
-  it 'coruse have a group_type which is not covered ' do
+  it 'course have a group_type which is not covered ' do
     # TODO: Type which is not used
+  end
+
+  fit "Create group with many Databases - no group number limit" do
+    course = create(:project, slug: 'course-test', max_group_size: 2,  selection_group_type: 'no_group_number_limitation')
+    database = create(:project_database, project:course )
+    database.refresh_schema
+    database2 = create(:project_database, project:course )
+    database2.refresh_schema
+    
+    user = create(:user)
+
+    mut = described_class.new(**init_args(user: user))
+    res = mut.resolve(
+      course_id: course.id
+    )
+
+    group = Project.find_by(name: {"de"=>"Gruppe-1"})
+
+
+    group_db = group.project_databases.find_by(name: database.name)
+    group_db2 = group.project_databases.find_by(name: database2.name)
+
+    group_db.refresh_schema
+    group_db2.refresh_schema
+    expect(ProjectDatabase.count).to eq 4
+    expect(ProjectDatabase.count).to eq 4
+    expect(group_db.schema).to eq database.schema
+    expect(group_db2.schema).to eq database2.schema
+    expect(Project.count).to eq 2
+    expect(group.based_on_project).to eq course
+    expect(group.members.count).to eq 1
+    expect(ProjectMember.count).to eq 1
+    expect(ProjectMember.first.user).to eq user
+    expect(ProjectMember.first.project).not_to eq course
+    expect(ProjectMember.first.membership_type).to eq 'participant'
+    expect(ProjectCourseParticipation.count).to eq 1
+  end
+
+  fit "Create group with many Databases -fixed_number_of_groups" do
+    course = create(:project,  course_template: true, max_group_size: 2, max_number_of_groups: 2, selection_group_type: 'fixed_number_of_groups')
+    database = create(:project_database, project:course )
+    database.refresh_schema
+    database2 = create(:project_database, project:course )
+    database2.refresh_schema
+
+    user = create(:user)
+
+    mut = described_class.new(**init_args(user: user))
+    res = mut.resolve(
+      course_id: course.id
+    )
+   
+    group = Project.find_by(name: {"de"=>"Gruppe-1"})
+
+
+    group_db = group.project_databases.find_by(name: database.name)
+    group_db2 = group.project_databases.find_by(name: database2.name)
+
+    group_db.refresh_schema
+    group_db2.refresh_schema
+    expect(ProjectDatabase.count).to eq 4
+    expect(ProjectDatabase.count).to eq 4
+    expect(group_db.schema).to eq database.schema
+    expect(group_db2.schema).to eq database2.schema
+    expect(Project.count).to eq 2
+    expect(group.based_on_project).to eq course
+    expect(group.members.count).to eq 1
+    expect(ProjectMember.count).to eq 1
+    expect(ProjectMember.first.user).to eq user
+    expect(ProjectMember.first.project).not_to eq course
+    expect(ProjectMember.first.membership_type).to eq 'participant'
+    expect(ProjectCourseParticipation.count).to eq 1
   end
 end

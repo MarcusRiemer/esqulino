@@ -23,6 +23,14 @@ class ProjectPolicy < ApplicationPolicy
     user.owner_of?(project) || user.has_role?(:admin)
   end
 
+
+    def update_database?
+      permitted_roles = %w[admin owner]
+
+      project.user_have_role(user, permitted_roles) or project.is_project?
+    end
+
+
   # May the user persist the current state of the project to the seed data?
   # If this is permitted, the stored data may end up in git.
   def store_seed?

@@ -1,4 +1,6 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { map } from "rxjs/operators";
+import { PerformDataService } from "../../shared/authorisation/perform-data.service";
 
 import { Table } from "../../shared/schema";
 
@@ -28,6 +30,20 @@ export class SchemaTableComponent {
    */
   private _subscriptionRefs: any[] = [];
 
+  /**
+   * @return A peek at the project of the currently edited resource
+   */
+  get peekProject() {
+    return this._projectService.cachedProject;
+  }
+
+  /**
+   * These permissions are required to update a database
+   */
+  readonly updateDatabasePermission$ = this._performData.project.updateDatabase(
+    this.peekProject.id
+  );
+
   @Input() readOnly: boolean;
 
   @Input() columnToHighlight: any;
@@ -35,8 +51,9 @@ export class SchemaTableComponent {
   @Output("columnToHighlightChange") selectedColumnName = new EventEmitter();
 
   constructor(
-    private _schemaService: EditDatabaseSchemaService,
-    private _projectService: ProjectService
+    private readonly _schemaService: EditDatabaseSchemaService,
+    private readonly _projectService: ProjectService,
+    private readonly _performData: PerformDataService
   ) {}
 
   ngOnInit() {
