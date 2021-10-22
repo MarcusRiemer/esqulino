@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe ProjectDatabasesController, type: :request do
+  before(:each) { create(:user, :guest) }
+
   # A database with a single table
   def database_description_key_value
     [
@@ -79,6 +81,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
     it 'creating a single table in an empty database' do
       project = FactoryBot.create(:project_with_default_database)
 
+      set_access_token(project.user)
       post "#{default_db_api_url project}/create",
            :headers => json_headers,
            :params => database_description_key_value[0].to_json
@@ -89,6 +92,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
     it 'creating a single table twice' do
       project = FactoryBot.create(:project_with_default_database)
 
+      set_access_token(project.user)
       post "#{default_db_api_url project}/create",
            :headers => json_headers,
            :params => database_description_key_value[0].to_json
@@ -107,6 +111,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
+      set_access_token(project.user)
       post "#{default_db_api_url project}/alter/key_value",
            :headers => json_headers,
            :params => {
@@ -128,6 +133,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
+      set_access_token(project.user)
       post "#{default_db_api_url project}/alter/doesntexist",
            :headers => json_headers,
            :params => {
@@ -146,7 +152,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
   end
 
   describe 'DELETE /api/project/:project_id/db/:database_id/drop/:tablename' do
-    it 'deleting an existing table' do
+    it 'Unpermitted: Deleting an existing table' do
       project = FactoryBot.create(:project_with_default_database)
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
@@ -154,7 +160,25 @@ RSpec.describe ProjectDatabasesController, type: :request do
       delete "#{default_db_api_url project}/drop/key_value",
              :headers => json_headers
 
+      expect(response.status).to eq 403
+
+      project.default_database.reload
+      expect(project.default_database.table_exists? "key_value").to eq true
+    end
+
+    it 'deleting an existing table' do
+      project = FactoryBot.create(:project_with_default_database)
+      project.default_database.table_create(database_description_key_value[0])
+      project.default_database.save
+
+      set_access_token(project.user)
+      delete "#{default_db_api_url project}/drop/key_value",
+             :headers => json_headers
+
       expect(response.status).to eq 204
+
+      project.default_database.reload
+      expect(project.default_database.table_exists? "key_value").to eq false
     end
 
     it 'deleting a not existing table' do
@@ -162,6 +186,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
+      set_access_token(project.user)
       delete "#{default_db_api_url project}/drop/doesntexist",
              :headers => json_headers
 
@@ -207,6 +232,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
+      set_access_token(project.user)
       post "#{default_db_api_url project}/data/key_value/bulk-insert",
            :headers => json_headers,
            :params => {
@@ -234,6 +260,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
+      set_access_token(project.user)
       post "#{default_db_api_url project}/data/key_value/bulk-insert",
            :headers => json_headers,
            :params => {
@@ -263,6 +290,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
+      set_access_token(project.user)
       post "#{default_db_api_url project}/data/key_value/bulk-insert",
            :headers => json_headers,
            :params => {
@@ -279,6 +307,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project.default_database.table_create(database_description_key_value[0])
       project.default_database.save
 
+      set_access_token(project.user)
       post "#{default_db_api_url project}/data/key_value/bulk-insert",
            :headers => json_headers,
            :params => {
@@ -297,6 +326,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
       project = FactoryBot.create(:project_with_default_database)
       db = project.default_database
 
+      set_access_token(project.user)
       post "#{default_db_api_url project}/upload",
            :headers => json_headers,
            :params => {}.to_json
@@ -313,6 +343,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
 
       emptyFile = Tempfile.new('empty.sqlite')
 
+      set_access_token(project.user)
       post "#{default_db_api_url project}/upload",
            :headers => json_headers,
            :params => {
@@ -333,6 +364,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
 
       db.execute "create table numbers (name varchar(30),val int);"
 
+      set_access_token(project.user)
       # Upload the file
       post "/api/project/#{project.slug}/db/default/upload",
            :headers => json_headers,
@@ -361,6 +393,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
 
       db.execute "create table numbers (name varchar(30),val int);"
 
+      set_access_token(project.user)
       # Upload the file
       post "#{default_db_api_url project}/upload",
            :headers => json_headers,

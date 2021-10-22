@@ -2,6 +2,7 @@ require 'open3'
 
 class ProjectDatabasesController < ApplicationController
   include ProjectsHelper
+  include UserHelper
   include JsonSchemaHelper
 
   # Returns a visual representation of the schema, rendered with Graphviz
@@ -56,35 +57,35 @@ class ProjectDatabasesController < ApplicationController
 
   # Replaces the whole database with the given database
   def database_upload
-    ensure_write_access do
-      # An ActionDispatch::Http::UploadedFile object that encapsulates access
-      # to the uploaded file
-      uploaded = params['database']
+    authorize current_project, :update?
 
-      if uploaded and uploaded.size > 0 then
-        # There might not be a current database, therefore it has to be created
-        if not current_database then
-          create_new_default_database!
-        end
+    # An ActionDispatch::Http::UploadedFile object that encapsulates access
+    # to the uploaded file
+    uploaded = params['database']
 
-        # The path of the currently loaded database
-        db_path = current_database.sqlite_file_path
-
-        # Overwrite the previously stored database
-        File.open(db_path, 'wb') do |file|
-          file.write(uploaded.read)
-        end
-
-        # The JSON representation of the schema is stored in the databases and
-        # requires an explicit refresh after external changes.
-        current_database.refresh_schema!
-
-        # Tell the client about the new schema
-        render :json => { :schema => current_database.schema }
-      else
-        render :status => 400,
-               :json => { :errors => [{ :status => 400, :title => "Given database is 0 byte large" }] }
+    if uploaded and uploaded.size > 0 then
+      # There might not be a current database, therefore it has to be created
+      if not current_database then
+        create_new_default_database!
       end
+
+      # The path of the currently loaded database
+      db_path = current_database.sqlite_file_path
+
+      # Overwrite the previously stored database
+      File.open(db_path, 'wb') do |file|
+        file.write(uploaded.read)
+      end
+
+      # The JSON representation of the schema is stored in the databases and
+      # requires an explicit refresh after external changes.
+      current_database.refresh_schema!
+
+      # Tell the client about the new schema
+      render :json => { :schema => current_database.schema }
+    else
+      render :status => 400,
+             :json => { :errors => [{ :status => 400, :title => "Given database is 0 byte large" }] }
     end
   end
 
@@ -98,62 +99,62 @@ class ProjectDatabasesController < ApplicationController
 
   # Creates a new table in the given database
   def table_create
-    ensure_write_access do
-      table_description = ensure_request("TableDescription", request.body.read, underscore_keys: false)
+    authorize current_project, :update?
 
-      # Grab the database and modify it
-      if (current_database.nil?) then
-        # TODO: Actually throw an error, databases should be added seperatly
-        current_project.create_default_database(name: "default", project_id: current_project.id)
-        current_project.save!
-      end
-      current_database.table_create table_description
-      current_database.save!
+    table_description = ensure_request("TableDescription", request.body.read, underscore_keys: false)
+
+    # Grab the database and modify it
+    if (current_database.nil?) then
+      # TODO: Actually throw an error, databases should be added seperatly
+      current_project.create_default_database(name: "default", project_id: current_project.id)
+      current_project.save!
     end
+    current_database.table_create table_description
+    current_database.save!
   end
 
   # Alters a certain table of a database
   def table_alter
-    ensure_write_access do
-      # Grab parameters
-      table_name = params['tablename']
-      alter_schema_request = ensure_request("AlterSchemaRequestDescription", request.body.read, underscore_keys: false)
+    authorize current_project, :update?
 
-      # Alter the database
-      current_database.table_alter table_name, alter_schema_request['commands']
-      current_database.save!
+    # Grab parameters
+    table_name = params['tablename']
+    alter_schema_request = ensure_request("AlterSchemaRequestDescription", request.body.read, underscore_keys: false)
 
-      # And tell the client about the new schema
-      render :json => { :schema => current_database.schema }
-    end
+    # Alter the database
+    current_database.table_alter table_name, alter_schema_request['commands']
+    current_database.save!
+
+    # And tell the client about the new schema
+    render :json => { :schema => current_database.schema }
   end
 
   # Bulk insertion of larger amounts of data
   def table_tabular_insert
-    ensure_write_access do
-      table_name = params['tablename']
-      tabular_data = ensure_request("RequestTabularInsertDescription", request.body.read)
+    authorize current_project, :update?
 
-      result = current_database.table_bulk_insert(
-        table_name,
-        tabular_data['column_names'],
-        tabular_data['data']
-      )
+    table_name = params['tablename']
+    tabular_data = ensure_request("RequestTabularInsertDescription", request.body.read)
 
-      render status: 200, :json => {
-        :numInsertedRows => result['changes'],
-        :numTotalRows => current_database.table_row_count(table_name)
-      }
-    end
+    result = current_database.table_bulk_insert(
+      table_name,
+      tabular_data['column_names'],
+      tabular_data['data']
+    )
+
+    render status: 200, :json => {
+             :numInsertedRows => result['changes'],
+             :numTotalRows => current_database.table_row_count(table_name)
+           }
   end
 
   # Drops a single table of the given database.
   def table_delete
-    ensure_write_access do
-      # Grab the database and modify it
-      current_database.table_delete params['tablename']
-      current_database.save!
-    end
+    authorize current_project, :update?
+
+    # Grab the database and modify it
+    current_database.table_delete params['tablename']
+    current_database.save!
   end
 
   # Retrieves the actual data for a number of rows in a certain table
