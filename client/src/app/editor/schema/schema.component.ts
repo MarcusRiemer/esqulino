@@ -3,12 +3,12 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 
-import { map, flatMap, first, share } from "rxjs/operators";
+import { mergeMap, map, first, share } from "rxjs/operators";
 import { zip } from "rxjs";
 
 import { ServerApiService } from "../../shared";
 
-import { ProjectService, Project } from "../project.service";
+import { ProjectService } from "../project.service";
 import { EditDatabaseSchemaService } from "../edit-database-schema.service";
 import { SidebarService } from "../sidebar.service";
 import { EditorToolbarService } from "../toolbar.service";
@@ -20,11 +20,6 @@ import { EditorToolbarService } from "../toolbar.service";
   templateUrl: "templates/schema.html",
 })
 export class SchemaComponent implements OnInit {
-  /**
-   * The currently edited project
-   */
-  public project: Project;
-
   /**
    * Subscriptions that need to be released
    */
@@ -79,7 +74,7 @@ export class SchemaComponent implements OnInit {
    * The SVG DOM of the currently edited schema.
    */
   readonly visualSchemaDom = this.visualSchemaUrl.pipe(
-    flatMap((url) => this._http.get(url, { responseType: "text" })),
+    mergeMap((url) => this._http.get(url, { responseType: "text" })),
     first(),
     share(),
     map((svg) =>
@@ -129,7 +124,12 @@ export class SchemaComponent implements OnInit {
       "uploadDatabase",
       "Datenbank hochladen",
       "upload",
-      "u"
+      "u",
+      {
+        resourceType: "Project",
+        policyAction: "update",
+        resourceId: this.project.id,
+      }
     );
     subRef = btnUpload.onClick.subscribe((_) => {
       this._router.navigate(["./upload"], { relativeTo: this._route });
@@ -150,16 +150,14 @@ export class SchemaComponent implements OnInit {
       );
     });
     this._subscriptionRefs.push(subRef);
-
-    // Ensure that the active project is always available
-    subRef = this._projectService.activeProject.subscribe((res) => {
-      this.project = res;
-    });
-    this._subscriptionRefs.push(subRef);
   }
 
   ngOnDestroy() {
     this._subscriptionRefs.forEach((ref) => ref.unsubscribe());
     this._subscriptionRefs = [];
+  }
+
+  get project() {
+    return this._projectService.cachedProject;
   }
 }
