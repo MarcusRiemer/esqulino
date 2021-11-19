@@ -1,0 +1,19 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: esqulino
+      POSTGRES_DB: esqulino_prod
+      POSTGRES_HOST_AUTH_METHOD: trust
+  
+  server:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "9292:9292"
+    environment:
+      DATABASE_HOST: db
+      SECRET_KEY_BASE: 91d0386c9fd3725789392331472c276f90c2e039a35eb8833deba92884b57f167dc4175166d9d8bb20d8cba082d5ae4efe5102c80e846b42c213419227c87817
+    command: ["make", "--directory", "/esqulino/server", "run"]
