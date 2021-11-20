@@ -21,10 +21,11 @@ RUN apt-get update && \
 	curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
 	apt-get install -y nodejs
 RUN apt-get install -y --reinstall build-essential
-ADD esqulino /esqulino
-RUN echo n | TPUT_BIN=/bin/false make --directory /esqulino/client install-deps
 RUN apt-get install -y git
+RUN git clone https://tinf103898@bitbucket.org/marcusriemer/esqulino.git
+RUN mkdir -p ./esqulino/data/prod/projects
+RUN echo n | TPUT_BIN=/bin/false make --directory /esqulino/client install-deps
 RUN make --directory /esqulino/client cli-compile
+RUN make --directory /esqulino/client client-compile
 RUN TPUT_BIN=/bin/false make --directory /esqulino/server install-deps
-RUN apt-get install net-tools
 CMD ["/bin/bash"]
