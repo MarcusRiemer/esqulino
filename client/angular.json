@@ -119,13 +119,6 @@
             "tsConfig": "src/tsconfig.test.json"
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.test.json"],
-            "exclude": []
-          }
-        },
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {

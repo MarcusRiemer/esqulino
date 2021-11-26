@@ -1,4 +1,4 @@
-@use '~@angular/material' as mat;
+@use '@angular/material' as mat;
 
 // The default fonts are too tiny
 $custom-typography: mat.define-typography-config(

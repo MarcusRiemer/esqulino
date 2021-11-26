@@ -29,7 +29,7 @@ TEST_SINGLE_RUN ?= true
 TEST_BROWSERS   ?= ChromeHeadless,FirefoxHeadless
 
 # Default to production build in complete build
-NG_PROD         ?= --prod
+NG_PROD         ?= --configuration production
 NG_LOCALIZE     ?= true
 
 # Targets that may be used in the `dist` target have some special flags
