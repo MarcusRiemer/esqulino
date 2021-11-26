@@ -11,7 +11,6 @@ module Types
           Types::ProjectType.connection_type,
           null: false,
           resolver: Resolvers::ProjectsResolver::List do
-      argument :input, Types::ProjectType::InputType, required: false
     end
 
     # Endpoint for single project
@@ -19,7 +18,6 @@ module Types
           Types::ProjectType,
           null: false,
           resolver: Resolvers::ProjectsResolver::Single do
-      argument :id, ID, required: true
     end
 
     # Endpoint for paginated block languages

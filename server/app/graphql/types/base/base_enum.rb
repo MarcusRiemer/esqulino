@@ -1,8 +1,5 @@
 module Types
   class Types::Base::BaseEnum < GraphQL::Schema::Enum
-    def self.enum_values
-      values.values.map(&:value)
-    end
 
     class LanguageEnum < Types::Base::BaseEnum
       graphql_name 'LanguageEnum'

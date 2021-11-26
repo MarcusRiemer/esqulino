@@ -3,7 +3,7 @@ module Resolvers::BaseQueryBuilderMethods
   def relevant_languages(languages)
     # No language given at all? Use default languages
     if languages.nil?
-      return Types::Base::BaseEnum::LanguageEnum.enum_values
+      return ["de", "en"]
     # Explicitly asking for no language at all? Must be an error
     elsif languages.empty?
       raise GraphQL::ExecutionError, "An empty Array is not allowed as languages input field."
@@ -85,7 +85,7 @@ module Resolvers::BaseQueryBuilderMethods
   end
 
   def to_single_quotes_array(arr)
-    "[" + arr.map { |e| "'" + e + "'"}.join(", ") + "]"
+    "[" + arr.map { |e| "'" + e.to_s + "'"}.join(", ") + "]"
   end
 
   # Returns the requested columns except for transient columns which don't exist in

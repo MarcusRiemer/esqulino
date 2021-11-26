@@ -56,7 +56,7 @@ class Resolvers::ProjectsResolver < Resolvers::BaseResolver
 
   class List < Resolvers::ProjectsResolver
 
-    argument :input, Types::ProjectType::InputType, required: false
+    argument :input, Types::ProjectType::ListInputType, required: false
 
     def resolve(input: {})
       res = super(
