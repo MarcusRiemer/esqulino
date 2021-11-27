@@ -12,4 +12,8 @@ if [ ! -e $FILE_NAME ]; then
 	echo "If you remove this File, the Server and Database will be reset after a newstart." >$FILE_NAME
 fi
 
-exec "$@"
+if [ $# -eq 0 ]; then
+	make --directory /esqulino/server run
+else
+	exec "$@"
+fi

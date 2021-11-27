@@ -28,6 +28,5 @@ RUN echo n | TPUT_BIN=/bin/false make --directory /esqulino/client install-deps
 RUN make --directory /esqulino/client cli-compile
 RUN make --directory /esqulino/client client-compile
 RUN TPUT_BIN=/bin/false make --directory /esqulino/server install-deps
-COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["make", "--directory", "/esqulino/server", "run"]
+COPY ./entrypoint.sh /
