@@ -1,0 +1,22 @@
+version: '3'
+services:
+  backup_restore:
+    build:
+      context: .
+      dockerfile: backup.Dockerfile
+    depends_on:
+      - db
+    environment:
+      MODUS: restore
+      DB_USER: esqulino
+      DB_HOST: db
+      DB_NAME: esqulino_prod
+      DATA_DIR: data
+      BACKUP_DIR: backup
+    volumes:
+      - esqulino_backup:/backup
+      - esqulino_data:/data  
+      
+volumes:
+  esqulino_backup:
+  esqulino_data:
