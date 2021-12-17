@@ -1,5 +1,5 @@
 #Creat a throw away container to compile the client
-FROM node as builder_client
+FROM node:lts as builder_client
 #Download and extract the complet sources
 RUN curl -L https://bitbucket.org/marcusriemer/esqulino/get/HEAD.tar.gz > tmp_git.tar.gz    
 RUN mkdir esqulino && tar --extract --strip-components=1 --file tmp_git.tar.gz --directory esqulino && rm tmp_git.tar.gz
