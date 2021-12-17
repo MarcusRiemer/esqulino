@@ -24,7 +24,8 @@ RUN apt-get update && \
         graphviz \
         sqlite3 \
         libsqlite3-dev \
-        sqlite3-pcre &&\
+        sqlite3-pcre \
+        postgresql-client &&\
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 #Copy source and client
