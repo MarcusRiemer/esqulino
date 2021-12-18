@@ -17,7 +17,7 @@ if [ "$MODUS" = create ]; then
   mv "$BACKUP_NAME" "$BACKUP_DIR" 
 elif [ "$MODUS" = restore ]; then
   #Check if the backup is available
-  if [ ! -e "$BACKUP_DIR"/"$BACKUP_NAME" ]; then
+  if [ ! -f "$BACKUP_DIR"/"$BACKUP_NAME" ]; then
     echo "$BACKUP_NAME is missing" 1>&2
     exit 2
   fi
@@ -26,7 +26,15 @@ elif [ "$MODUS" = restore ]; then
   rm --recursive --force "$DATA_DIR"/* "$DATA_DIR"/.[!.]* "$DATA_DIR"/..?*
   #Restore the data
   tar --extract --file "$BACKUP_DIR"/"$BACKUP_NAME"
-  #Restore the database
+  
+  #Restore the database 
+  if ! pg_isready --host "$DB_HOST" --quiet; then
+    echo "Waiting for database..."
+  while ! pg_isready --host "$DB_HOST" --quiet; do 
+    :
+  done
+    echo "Database is ready"
+  fi
   psql --host "$DB_HOST" --username "$DB_USER" --no-password --dbname "$DB_NAME" --file "$DB_DUMP"
   
   rm "$DB_DUMP" 
