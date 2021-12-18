@@ -14,9 +14,8 @@ services:
       DATA_DIR: data
       BACKUP_DIR: backup
     volumes:
-      - esqulino_backup:/backup
+      - ./backup.tar:/backup/backup.tar
       - esqulino_data:/data  
       
 volumes:
-  esqulino_backup:
   esqulino_data:

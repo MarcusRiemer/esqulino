@@ -7,16 +7,15 @@ services:
     depends_on:
       - db
     environment:
-      MODUS: creat
+      MODUS: create
       DB_USER: esqulino
       DB_HOST: db
       DB_NAME: esqulino_prod
       DATA_DIR: data
       BACKUP_DIR: backup
     volumes:
-      - esqulino_backup:/backup
+      - .:/backup
       - esqulino_data:/data  
       
 volumes:
-  esqulino_backup:
   esqulino_data:

@@ -6,7 +6,7 @@ DB_DUMP=dump.sql
 #Name of the backup-file
 BACKUP_NAME=backup.tar
 
-if [ "$MODUS" = creat ]; then
+if [ "$MODUS" = create ]; then
   #Crating the database-dump
   pg_dump --host "$DB_HOST" --username "$DB_USER" --no-password --file "$DB_DUMP" "$DB_NAME"
   #Creating an archiv with the data from the server
