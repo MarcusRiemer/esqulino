@@ -30,8 +30,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 #Copy source and client
 COPY --from=builder /esqulino ./esqulino
-#Creat a empty direcory which is required for the application
-RUN mkdir -p ./esqulino/data/prod/projects
 #Install all dependencies for the server
 RUN TPUT_BIN=/bin/false make --directory /esqulino/server install-deps
 #Set up the script as the entrypoint
