@@ -8,7 +8,10 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
   
   server:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: server
     depends_on:
       - db
     ports:
@@ -20,6 +23,25 @@ services:
       DATA_DIR: /esqulino/data/prod
     volumes:
       - esqulino_data:/esqulino/data/prod
+      
+  data_loader:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: data_loader
+    depends_on:
+      - db
+    environment:
+      DATABASE_USER: esqulino
+      DATABASE_HOST: db
+      DATABASE_NAME: esqulino_prod
+      BACKUP_DIR: /backup
+      RAILS_ENV: production
+      DATA_DIR: /esqulino/data/prod
+    volumes:
+      - ./backup:/backup
+      - esqulino_data:/esqulino/data/prod  
+      
 
 volumes:
   esqulino_data:
