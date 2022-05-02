@@ -1,6 +1,6 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 require 'factory_bot'
+require 'database_cleaner/active_record'
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
@@ -195,10 +195,6 @@ RSpec::Matchers.define :delete_cookie do |names|
 end
 
 RSpec.configure do |config|
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
-
-  config.use_transactional_fixtures = true
-
   config.infer_spec_type_from_file_location!
 
   config.filter_rails_from_backtrace!
@@ -207,10 +203,13 @@ RSpec.configure do |config|
   # make sure our tests starts with clean slate
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :transaction
   end
 
-  config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
   end
 
   config.after(:suite) do

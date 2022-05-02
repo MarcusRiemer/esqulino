@@ -9,7 +9,7 @@ module Mutations
     object_class Types::Base::BaseObject
 
     # Used for authentication
-    include Pundit
+    include Pundit::Authorization
 
     # Pundit requires a `current_user` method to be available
     attr_reader :current_user

@@ -295,7 +295,7 @@ RSpec.describe BlockLanguagesController, type: :request do
 
     it 'keeps referenced language' do
       b = FactoryBot.create(:block_language)
-      FactoryBot.build(:code_resource, block_language: b)
+      FactoryBot.create(:code_resource, block_language: b)
 
       send_query(
         query_name: "DestroyBlockLanguage",

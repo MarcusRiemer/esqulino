@@ -247,7 +247,11 @@ module Seed
     def seed_instance
       raise "Could not find project with slug or ID \"#{load_id}\"" unless File.exist? seed_file_path
 
-      YAML.load_file(seed_file_path)
+      yaml_safe_classes= ::Seed.constants
+                           .select {|c| ::Seed.const_get(c).is_a? Class }
+                           .map {|c| ::Seed.const_get(c) }
+
+      YAML.unsafe_load_file(seed_file_path)
     end
 
     # raise if the seed_instance class does not match with the seed_class (model or Identifier) are not matched
@@ -270,7 +274,7 @@ module Seed
     def load_dependencies(loaded)
       deps = File.join seed_directory, "#{load_id}-deps.yaml"
 
-      deps = YAML.load_file(deps)
+      deps = YAML.unsafe_load_file(deps)
       deps
         .select do |_, seed_id| not loaded.include? seed_id end
         .each do |_, seed_id, seed| seed.new(seed_id).start_load(loaded) end
@@ -301,7 +305,7 @@ module Seed
       Dir.glob(File.join seed_directory, "*.yaml").each do |f|
         next if f =~ /deps/
 
-        seed_file_data = YAML.load_file(f)
+        seed_file_data = YAML.unsafe_load_file(f)
         return load_seed_id unless seed_file_data.has_attribute?(:slug)
         if seed_file_data.slug == load_seed_id
           return seed_file_data.id

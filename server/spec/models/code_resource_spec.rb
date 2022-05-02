@@ -78,7 +78,7 @@ RSpec.describe CodeResource, type: :model do
 
   context "to_full_api_response" do
     it "without AST" do
-      api_response = FactoryBot.build(:code_resource, project: nil, ast: nil).to_full_api_response
+      api_response = FactoryBot.create(:code_resource, ast: nil).to_full_api_response
 
       expect(api_response['name']).to be_a String
       expect(api_response['programmingLanguageId']).to be_a String

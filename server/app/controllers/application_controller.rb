@@ -2,7 +2,7 @@
 # in every controller.
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
-  include Pundit
+  include Pundit::Authorization
   include JwtHelper # This pulls very many things only to handle the unexpected logout ...
 
   # Hand out 404 errors as fallbacks if Active Record doesn't find something

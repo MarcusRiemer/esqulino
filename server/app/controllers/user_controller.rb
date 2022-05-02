@@ -16,7 +16,7 @@ class UserController < ApplicationController
     site = config[:auth_provider_keys][:keycloak_site]
     realm = config[:auth_provider_keys][:keycloak_realm]
 
-    redirect_to "#{site}/auth/realms/#{realm}/account/"
+    redirect_to "#{site}/auth/realms/#{realm}/account/", allow_other_host: true
   end
 
   private

@@ -1,4 +1,3 @@
-require 'database_cleaner'
 require 'simplecov'
 require 'simplecov-cobertura'
 require 'webmock/rspec'
