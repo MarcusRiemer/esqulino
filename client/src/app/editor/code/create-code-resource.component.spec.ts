@@ -120,7 +120,9 @@ describe(`CreateCodeResourceComponent`, () => {
     return {
       fixture,
       component,
-      element: fixture.nativeElement as HTMLElement,
+      rootElement: fixture.nativeElement as HTMLElement,
+      blockLangSelectElement: () =>
+        fixture.nativeElement.querySelector("select"),
       projectService,
       project,
       httpTesting: TestBed.inject(HttpTestingController),
@@ -159,7 +161,9 @@ describe(`CreateCodeResourceComponent`, () => {
     );
 
     expect(t.component.blockLanguageId).toEqual(id);
-    expect(t.element.innerText).toContain("B1");
+    expect(t.blockLangSelectElement().selectedOptions[0].innerText).toContain(
+      "B1"
+    );
   });
 
   it(`Shows the first availabe block language as default`, async () => {
