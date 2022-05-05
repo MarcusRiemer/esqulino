@@ -12,11 +12,11 @@ install-deps : msg-pre-install-deps
 
 # Running in production mode
 run : msg-pre-run-prod
-	PING_IDE_SERVICE=true RAILS_ENV=production RACK_HANDLER=falcon $(BUNDLE_BIN) exec rails server --port 9292
+	PING_IDE_SERVICE=true RAILS_ENV=production $(BUNDLE_BIN) exec rails server --port 9292
 
 # Running in development mode, this mode attempts to reload changed code
 run-dev : msg-pre-run-dev
-	PING_IDE_SERVICE=true RACK_HANDLER=falcon $(BUNDLE_BIN) exec rails server -b 0.0.0.0 --port 9292
+	PING_IDE_SERVICE=true $(BUNDLE_BIN) exec rails server -b 0.0.0.0 --port 9292
 
 # Ensures that there is a correctly named and structured database available
 setup-database-schema:

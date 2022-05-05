@@ -58,9 +58,7 @@ gem 'pg'
 # Adding CORS headers
 gem 'rack-cors'
 
-# Use falcon as the server, puma has shown to hang under certain
-# hard to reproduce load scenarios.
-gem 'falcon'
+gem 'puma'
 
 # Speed up Ruby by caching some expensive operations
 gem 'bootsnap'
