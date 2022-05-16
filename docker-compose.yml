@@ -70,12 +70,13 @@ services:
       - data-postgres-volume:/var/lib/postgresql/data
 
   accounts:
-    image: jboss/keycloak
+    image: quay.io/keycloak/keycloak:17.0.1
+    command: start-dev
     ports:
       - 8080:8080
     environment:
-      - KEYCLOAK_USER=${KEYCLOAK_USER}
-      - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
 #      - DB_VENDOR=postgres
 #      - DB_ADDR=db
 

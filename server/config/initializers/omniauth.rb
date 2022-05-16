@@ -22,7 +22,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              nil, # No secret required
              client_options: {
                site: config[:auth_provider_keys][:keycloak_site],
-               realm: config[:auth_provider_keys][:keycloak_realm]
+               realm: config[:auth_provider_keys][:keycloak_realm],
+               base_url: '/'
              }
   end
 end

@@ -62,6 +62,8 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
 
+  config.log_level = :debug
+
   # Allow requests from the localhost
   config.middleware.insert_before 0, Rack::Cors do
     allow do
