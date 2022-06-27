@@ -1,0 +1,112 @@
+\documentclass[sigconf,review=true]{acmart}
+
+\usepackage{minted}
+\usepackage{csquotes}
+\usepackage[pdf]{graphviz}
+
+\begin{document}
+\title[]{Generating syntaxfree development environments for real world programming languages}
+
+\author{Marcus Riemer}
+\affiliation{%
+  \institution{Christian-Albrechts-Universität}
+  \city{Kiel}
+  \country{Germany}
+}
+\email{post@marcusriemer.de}
+
+\begin{abstract}
+  Computer science introduction often uses syntaxfree drag-and-drop programming languages to ease the first steps in the field. This approach has the benefit of eliminating the whole possibility to confront learners with syntax errors. But the actual languages that are not relevant in the actual programming industry.
+
+  This thesis presents an grammar driven approach to augment traditional programming and markup languages like SQL, JavaScript and HTML in way that allows them to be used in a drag-and-drop manner using either Google Blockly or a custom editor that closely resembles the textual structure. Augmenting traditional languages in such a way allow users to become familiar with the syntax language and concentrate on learning the semantics of the language.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+\section{Architecture Overview}
+
+Blatt\-Werkzeug defines the common set of core data structures: Syntax\-trees, grammars \& validators. The main reason for this re-invention the wheel is the differing focus of existing software: The syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations.
+
+BlattWerkzeug instead focuses exclusively on working with a syntaxtree that lends itself well to be directly presented to the end user. Most importantly, there must not be any node that has no visual or textual representation. Typical compiler tasks that have to do with lexical analysis or parsing are not relevant for Blatt\-Werkzeug.
+
+\section{Abstract Syntax Tree}
+
+The syntax tree itself is purely a \texttt{JSON} data structure that follows the TypeScript definition in listing~\ref{lst:typescript-ast} and has no concept of being \textit{valid} or \textit{invalid} on its own (this is the task of validators). It also has no idea how to it should be represented in its block form (this is the task of block languages) or textual representation (this is the task of code generators).
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+export interface NodeDescription {
+  name: string
+  language: string
+  children?: {
+    [childrenCategory: string]: NodeDescription[];
+  }
+  properties?: {
+    [propertyName: string]: string;
+  }
+}
+\end{minted}
+\caption{TypeScript definition of AST}
+\label{lst:typescript-ast}
+\end{listing}
+
+A single node in the syntaxtree has at least a \textbf{type} that consists of two strings: A local name and a language. This type is the premier way for different tools to decide how the node in question should be treated. The language is essentially a namespace that allows the use of identical names in different contexts. This is useful when describing identical concepts like imperative loops or semantic markup for \enquote{heading} in different languages.
+
+Nodes may define so called \textbf{properties} which hold atomic values in the form of texts or integers, but never in the form of child nodes. Each of these properties needs to have a name that is unique in the scope of the current node.
+
+The children of nodes have to be organized in so called \textbf{child groups}. Each of these groups has a name and contains any number of subtrees in order. Naming the child groups enables the grammars to specify complex subtrees without relying on the ordering of sub-trees. The resulting structure has a strong resemblance to an \texttt{XML}-tree, but instead of grouping all children in a single, implicit scope, they are organised into their own-subtrees.
+
+\subsection{Syntax Tree Example}
+
+The tree in listing~\ref{lst:ast-expr-binary} is shown in two equivalent representations: \texttt{JSON} and a rendered tree. It is a possible representation of the expression \texttt{numRattles == null} for any language that allows to compare a \texttt{null} value against a variable. It consists of three nodes: The root node is of type \texttt{lang.expBin}, the dot (\enquote{\texttt{.}}) is used as a separator between the \texttt{language} and \texttt{name} of a node.
+
+\begin{listing}[H]
+\begin{minted}{typescript}
+{
+  "language": "lang",
+  "name": "expBin",
+  "properties": { "op": "eq" },
+  "children": {
+    "lhs": [
+      {
+        "language": "lang",
+        "name": "expVar",
+        "properties": { "name": "numRattles" }
+      }
+    ],
+    "rhs": [
+      { "language": "lang", "name": "null" }
+    ]
+  }
+}
+\end{minted}
+\digraph[scale=0.7]{astExprBinary}{
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  node [fontsize=10 fontname="Verdana" shape=Mrecord];
+  edge [fontsize=10 fontname="Verdana"];
+  r [label="{{lang.expBin}|{op|eq}}"];
+  subgraph cluster_r_lhs {
+    label="lhs";
+    r_lhs_0 [label="{{lang.expVar}|{name|numRattles}}"];
+  }
+  r -> r_lhs_0;
+  subgraph cluster_r_rhs {
+    label="rhs";
+    r_rhs_0 [label="{lang.null}"];
+  }
+  r -> r_rhs_0;
+}
+\caption{AST for expression \texttt{null}}
+\label{lst:ast-expr-binary}
+\end{listing}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-command-extra-options: "-shell-escape"
+%%% TeX-engine: xetex
+%%% TeX-master: t
+%%% End:
