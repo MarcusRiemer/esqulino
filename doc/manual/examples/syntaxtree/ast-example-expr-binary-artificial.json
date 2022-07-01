@@ -1,0 +1,40 @@
+{
+  "language": "lang",
+  "name": "expBin",
+  "properties": {
+    "op": "eq"
+  },
+  "children": {
+    "lhs": [
+      {
+        "language": "lang",
+        "name": "expAny",
+        "children": {
+          "exp": [
+            {
+              "language": "lang",
+              "name": "expVar",
+              "properties": {
+                "name": "numRattles"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "rhs": [
+      {
+        "language": "lang",
+        "name": "expAny",
+        "children": {
+          "exp": [
+            {
+              "language": "lang",
+              "name": "null"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

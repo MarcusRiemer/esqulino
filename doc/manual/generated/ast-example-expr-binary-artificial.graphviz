@@ -1,0 +1,26 @@
+digraph SyntaxTree {
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  node [fontsize=10 fontname="Verdana" shape=Mrecord];
+  edge [fontsize=10 fontname="Verdana"];
+  r [label="{{lang.expBin}|{op|eq}}"];
+  subgraph cluster_r_lhs {
+    label="lhs";
+    r_lhs_0 [label="{lang.expAny}"];
+    subgraph cluster_r_lhs_0_exp {
+      label="exp";
+      r_lhs_0_exp_0 [label="{{lang.expVar}|{name|numRattles}}"];
+    }
+    r_lhs_0 -> r_lhs_0_exp_0;
+  }
+  r -> r_lhs_0;
+  subgraph cluster_r_rhs {
+    label="rhs";
+    r_rhs_0 [label="{lang.expAny}"];
+    subgraph cluster_r_rhs_0_exp {
+      label="exp";
+      r_rhs_0_exp_0 [label="{lang.null}"];
+    }
+    r_rhs_0 -> r_rhs_0_exp_0;
+  }
+  r -> r_rhs_0;
+}

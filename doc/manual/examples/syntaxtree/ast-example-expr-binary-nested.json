@@ -1,0 +1,48 @@
+{
+  "language": "lang",
+  "name": "expBin",
+  "properties": {
+    "op": "*"
+  },
+  "children": {
+    "lhs": [
+      {
+        "language": "lang",
+        "name": "expVar",
+        "properties": {
+          "name": "2"
+        }
+      }
+    ],
+    "rhs": [
+      {
+        "language": "lang",
+        "name": "expBin",
+        "properties": {
+          "op": "+"
+        },
+        "children": {
+          "lhs": [
+            {
+              "language": "lang",
+              "name": "expVar",
+              "properties": {
+                "name": "α"
+              }
+            }
+          ],
+          "rhs": [
+            {
+              "language": "lang",
+              "name": "expVar",
+              "properties": {
+                "name": "π"
+              }
+            }
+          ]
+        }
+      }
+
+    ]
+  }
+}

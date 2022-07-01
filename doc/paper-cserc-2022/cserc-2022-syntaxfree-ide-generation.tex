@@ -21,7 +21,7 @@
 \begin{abstract}
   Computer science introduction often uses syntaxfree drag-and-drop programming languages to ease the first steps in the field. This approach has the benefit of eliminating the whole possibility to confront learners with syntax errors. But the actual languages that are not relevant in the actual programming industry.
 
-  This thesis presents an grammar driven approach to augment traditional programming and markup languages like SQL, JavaScript and HTML in way that allows them to be used in a drag-and-drop manner using either Google Blockly or a custom editor that closely resembles the textual structure. Augmenting traditional languages in such a way allow users to become familiar with the syntax language and concentrate on learning the semantics of the language.
+  We present a grammar driven approach to augment traditional programming and markup languages like SQL, JavaScript and HTML in way that allows them to be used in a drag-and-drop manner using either Google Blockly or a custom editor that closely resembles the textual structure. Augmenting traditional languages in such a way allow users to become familiar with the syntax language and concentrate on learning the semantics of the language.
 \end{abstract}
 
 \maketitle
@@ -150,7 +150,7 @@ In contrast to grammars in general compiler construction, the grammar described 
 
 In comparision to traditional grammars, this shifts the way one has to reason about the validation rules inside of BlattWerkzeug: There is no need to worry about the syntactic aspects of a certain language, the grammar that is required doesn’t need to know anything about keywords or separating characters. Its sole job is to describe the structure and the semantics of trees that are valid in that specific language. If keywords are included in the grammar, this is solemly for the purpose of blocks that resemble the underlying programming language or for code generation. The actual grammar validation does not use these keywords at all.
 
-\subsection{Example: Expressions}
+\subsection{Example: Expression Semantics}
 
 In this example we will construct a grammar to validate structures like the expression in listing~\ref{lst:ast-expr-binary}.
 
@@ -201,7 +201,9 @@ grammar "lang" {
 \label{lst:grammar-expr-expBin-verbose}
 \end{listing}
 
-Unfortunately there is already some duplication in the definitions of the child groups \texttt{lhs} and \texttt{rhs}: Both should always allow the exact same types. And on top of that it is not possible to nest expressions, because \texttt{lang.expBin} is not an allowed child for either of the sides. In a typical grammar we would simply introduce a new node of type like \texttt{lang.expAny} which would consist of a single child group that lists all permitted values (see the following listing~\ref{lst:grammar-expr-expBin-choiceNode}):
+Unfortunately there is already some duplication in the definitions of the child groups \texttt{lhs} and \texttt{rhs}: Both should always allow the exact same types. And on top of that it is not possible to nest expressions, because \texttt{lang.expBin} is not an allowed child for either of the sides.
+
+In a typical grammar we would introduce a new node type like \texttt{lang.expAny} which would consist of a single child group that lists all permitted values. Listing~\ref{lst:grammar-expr-expBin-choiceNode} shows the relevant excerpt of the grammar and figure~\ref{fig:ast-choice-node} demonstrates how a valid tree for this grammar could look like: The immediate children of \texttt{lang.expBin} are no longer the actual nodes with semantic meaning, but the artifical choice nodes of type \texttt{lang.expAny}.
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
@@ -223,9 +225,15 @@ grammar "lang" {
 \label{lst:grammar-expr-expBin-choiceNode}
 \end{listing}
 
-A tree for such a grammar would however contain nodes of type \texttt{expAny} that do not have any kind of possible representation for the end user: \pdfmarkupcomment[markup=Squiggly]{As there is no possible textual representation for such a node, it would appear as a completely empty block that can only host another block.}{Visual argument}
+\begin{figure}
+  \includegraphics[scale=\astScale]{../manual/generated/ast-example-expr-binary-artificial}
+  \caption{Expression tree with artificial choice nodes}
+  \label{fig:ast-choice-node}
+\end{figure}
 
-Therefore any kind of recurring choice between multiple node types is treated differently in these grammars: By introducing a pure virtual node type that is referrable by name in the grammar, but may never appear in an actual syntax tree. The textual grammar representation uses the keyword \texttt{typedef} to introduce such a type, the following listing~\ref{lst:grammar-expr-expBin-typedef} changes the definition of \texttt{nodeAny} to be such a virtual node. The definition of \texttt{expBin} can be unaffected by this change, altough the trees that are validated by the grammars are different.
+The tree for such a grammar would however contain nodes of type \texttt{expAny} that do not have any kind of possible representation for the end user: As there is no possible textual representation for such a node, it would appear as a completely empty block that can only host another block. The examples syntax trees in  figure~\ref{fig:ast-choice-node} and listing~\ref{lst:ast-expr-binary} would both be compiled to the exact same textual representation \texttt{numRattles == null}.
+
+To avoid these nodes without visual or textual representation any kind of recurring choice between multiple node types is treated differently from the conventional approach in these grammars: By introducing a pure virtual node type that is referrable by name in the grammar, but may never appear in an actual syntax tree. The textual grammar representation uses the keyword \texttt{typedef} to introduce such a type, the following listing~\ref{lst:grammar-expr-expBin-typedef} changes the definition of \texttt{nodeAny} to be such a virtual node and shows the final grammar for the semantics of simple expressions in entirety. The previous definition of \texttt{expBin} (as in listing~\ref{lst:grammar-expr-expBin-choiceNode} is unaffected by this change, altough the trees that are validated by the grammars are different. This updated grammar that uses the \texttt{typedef} approach will successfully validate the example binary expression from listing~\ref{lst:ast-expr-binary}.
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
@@ -246,21 +254,51 @@ grammar "lang" {
   }
 }
 \end{minted}
-\caption{Final Grammar for expression \texttt{expBin}}
+\caption{Final semantic grammar for expression \texttt{expBin}}
 \label{lst:grammar-expr-expBin-typedef}
 \end{listing}
 
+\subsection{Example: Expression Syntax}
+
+Although the syntax trees that are validated by the final semantic grammar for the expression language (listing~\ref{lst:grammar-expr-expBin-typedef}) are unambiguous in tree form, their default textual representation is possibly not. Figure~\ref{fig:ast-nested-ambiguous} shows a tree that in a depth first evaluation would effectively calculate $\alpha+\pi$ first and then multiply the result with $2$. Or in textual form: The intended order of operation is $2 * (\alpha+\pi)$.
+
+\begin{figure}
+  \includegraphics[scale=\astScale]{../manual/generated/ast-example-expr-binary-nested}
+  \caption{Expression with addition before multiplication}
+  \label{fig:ast-nested-ambiguous}
+\end{figure}
+
 \section{Block Language}
+
+Brief explanation about the nature of block languages.
+
 \subsection{Builtin Editor}
+
+Backend #1: Some screenshots.
+
 \subsection{Blockly Editor}
+
+Backend #2: Some screenshots.
+
 \subsection{Sidebar}
 
+Available in both.
+
 \section{Runtime}
+
 \subsection{PrettyPrinting}
 
-\section{Example: HTML}
+Backend #3: Some Listings
 
 \section{Example: HTML}
+
+\subsection{Order Of Children}
+
+\section{Example: SQL}
+
+\subsection{Validation}
+
+\section{Design Principles}
 
 \end{document}
 

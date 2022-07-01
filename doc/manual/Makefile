@@ -11,7 +11,7 @@ BUILDDIR      = _build
 MAKE_CLIENT = make --no-print-directory -C ../../client
 CLI_PROG_CLIENT = ../../client/dist/cli/main.cli.js
 
-GRAPHVIZ_FILES = generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz generated/ast-example-null.graphviz generated/ast-example-expr-variable.graphviz generated/ast-example-expr-binary.graphviz generated/ast-sql-column-name.graphviz generated/ast-example-xml-node-two-attributes.graphviz generated/ast-trucklino-wait-traffic-light.graphviz
+GRAPHVIZ_FILES = generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz generated/ast-example-null.graphviz generated/ast-example-expr-variable.graphviz generated/ast-example-expr-binary.graphviz generated/ast-example-expr-binary-artificial.graphviz generated/ast-example-expr-binary-nested.graphviz generated/ast-sql-column-name.graphviz generated/ast-example-xml-node-two-attributes.graphviz generated/ast-trucklino-wait-traffic-light.graphviz
 
 GRAPHVIZ_PDFS = $(GRAPHVIZ_FILES:.graphviz=.pdf)
 
