@@ -90,7 +90,7 @@ In this example we will create a grammar that is able to describe ``XML`` like t
     }
   }
 
-This grammer defines a language named ``ex1`` which allows a single node with the name ``element`` to be present in the syntax tree. This node may not have any children or properties, so the only valid syntaxtree would consist of a single node.
+This grammar defines a language named ``ex1`` which allows a single node with the name ``element`` to be present in the syntax tree. This node may not have any children or properties, so the only valid syntaxtree would consist of a single node.
 
 In order to allow nodes to be named, we introduce a ``property``::
 

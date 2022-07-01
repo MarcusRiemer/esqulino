@@ -1,7 +1,10 @@
 auto
+_minted*
 
 *.aux
 *.log
 *.out
 *.pdf
 *.dot
+*.upa
+*.upb

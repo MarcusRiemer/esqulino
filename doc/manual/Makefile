@@ -11,6 +11,10 @@ BUILDDIR      = _build
 MAKE_CLIENT = make --no-print-directory -C ../../client
 CLI_PROG_CLIENT = ../../client/dist/cli/main.cli.js
 
+GRAPHVIZ_FILES = generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz generated/ast-example-null.graphviz generated/ast-example-expr-variable.graphviz generated/ast-example-expr-binary.graphviz generated/ast-sql-column-name.graphviz generated/ast-example-xml-node-two-attributes.graphviz generated/ast-trucklino-wait-traffic-light.graphviz
+
+GRAPHVIZ_PDFS = $(GRAPHVIZ_FILES:.graphviz=.pdf)
+
 # Put help first so that "make" without argument is like "make help".
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
@@ -35,6 +39,9 @@ generated/%.graphviz: examples/syntaxtree/%.json $(CLI_PROG_CLIENT)
 	@mkdir -p generated
 	@echo '{ "type": "graphvizTree", "model": $(shell cat "$<" | jq -c .)}' | node $(CLI_PROG_CLIENT) | jq -r . | tee "generated/$*.graphviz"
 
+%.pdf: %.graphviz
+	dot -Tpdf -o $@ $^
+
 # Default set of pretty printed grammar files
 pretty-grammars: generated/sql.grammar generated/dxml.grammar generated/regex.grammar generated/css.grammar generated/json.grammar generated/trucklino-program.grammar
 
@@ -42,7 +49,8 @@ pretty-grammars: generated/sql.grammar generated/dxml.grammar generated/regex.gr
 pretty-blocks: generated/sql.blocks
 
 # Default set of graphviz trees
-graphviz-trees: generated/ast-example-if.graphviz generated/ast-example-if-no-pred.graphviz generated/ast-example-null.graphviz generated/ast-example-expr-variable.graphviz generated/ast-example-expr-binary.graphviz generated/ast-sql-column-name.graphviz generated/ast-example-xml-node-two-attributes.graphviz generated/ast-trucklino-wait-traffic-light.graphviz
+graphviz-trees: $(GRAPHVIZ_FILES)
+graphviz-trees-pdf: $(GRAPHVIZ_PDFS)
 
 # Re-generate everything that can be created dynamically
 all-generated: pretty-grammars pretty-blocks graphviz-trees
