@@ -1,9 +1,10 @@
 digraph SyntaxTree {
-  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent" margin="0"];
   node [fontsize=10 fontname="Verdana" shape=Mrecord];
   edge [fontsize=10 fontname="Verdana"];
   r [label="{t0.root}"];
   subgraph cluster_r_c1 {
+    margin=10;
     label="c1";
     r_c1_0 [label="{t0.r_c1_0}"];
   }

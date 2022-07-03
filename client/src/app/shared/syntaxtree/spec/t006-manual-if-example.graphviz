@@ -1,17 +1,20 @@
 digraph SyntaxTree {
-  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent" margin="0"];
   node [fontsize=10 fontname="Verdana" shape=Mrecord];
   edge [fontsize=10 fontname="Verdana"];
   r [label="{lang.if}"];
   subgraph cluster_r_pred {
+    margin=10;
     label="pred";
     r_pred_0 [label="{{lang.expBin}|{op|gt}}"];
     subgraph cluster_r_pred_0_lhs {
+      margin=10;
       label="lhs";
       r_pred_0_lhs_0 [label="{{lang.expVar}|{name|a}}"];
     }
     r_pred_0 -> r_pred_0_lhs_0;
     subgraph cluster_r_pred_0_rhs {
+      margin=10;
       label="rhs";
       r_pred_0_rhs_0 [label="{{lang.expVar}|{name|b}}"];
     }
@@ -19,9 +22,11 @@ digraph SyntaxTree {
   }
   r -> r_pred_0;
   subgraph cluster_r_positive {
+    margin=10;
     label="positive";
     r_positive_0 [label="{{lang.call}|{name|writeln}}"];
     subgraph cluster_r_positive_0_arguments {
+      margin=10;
       label="arguments";
       r_positive_0_arguments_0 [label="{{lang.expConst}|{value|'bar'}}"];
     }
@@ -29,9 +34,11 @@ digraph SyntaxTree {
   }
   r -> r_positive_0;
   subgraph cluster_r_negative {
+    margin=10;
     label="negative";
     r_negative_0 [label="{{lang.call}|{name|err}}"];
     subgraph cluster_r_negative_0_arguments {
+      margin=10;
       label="arguments";
       r_negative_0_arguments_1 [label="{{lang.expConst}|{value|'foo'}}"];
       r_negative_0_arguments_0 [label="{{lang.expConst}|{value|2}}"];

@@ -407,7 +407,7 @@ export function graphvizSyntaxTree(desc: NodeDescription): string {
   const tree = [
     `digraph SyntaxTree {`,
     [
-      `graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];`,
+      `graph [fontsize=10 fontname="Verdana" bgcolor="transparent" margin="0"];`,
       `node [fontsize=10 fontname="Verdana" shape=Mrecord];`,
       `edge [fontsize=10 fontname="Verdana"];`,
     ],
@@ -438,6 +438,8 @@ export function graphvizSyntaxTreeNode(
       // Beware: GraphViz requires subgraphs to be prefixed with `cluster_` in order
       // to render a box around it.
       `subgraph cluster_${path}_${k} {`,
+      // The root sets the margin to 0, but we need some on the subtrees
+      [`margin=10;`],
       [`label="${k}";`],
       // Append the name of the child group and the index of the node to
       // form a unique path
