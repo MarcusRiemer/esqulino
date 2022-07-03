@@ -35,9 +35,9 @@
         <option value="">-- Programmiersprache Wählen --</option>
         <option
           *ngFor="let progLang of availableProgrammingLanguages"
-          [value]="progLang.id"
+          [value]="progLang.programmingLanguageId"
         >
-          {{ progLang.name }}
+          {{ progLang.name }} ({{ progLang.programmingLanguageId }})
         </option>
       </select>
     </div>

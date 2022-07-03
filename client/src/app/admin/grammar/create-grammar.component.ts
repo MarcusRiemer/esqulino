@@ -45,6 +45,8 @@ export class CreateGrammarComponent {
       delete toCreate.slug;
     }
 
+    debugger;
+
     this._mutation.mutate(this.grammar).subscribe(
       (res) => {
         this._router.navigateByUrl(
