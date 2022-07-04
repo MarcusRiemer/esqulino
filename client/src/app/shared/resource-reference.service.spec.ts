@@ -59,7 +59,7 @@ describe(`ResourceReferencesService`, () => {
       expect(result.id).toEqual(b.id);
     });
 
-    it(`not requestable, throw, network-only`, async (done) => {
+    it(`not requestable, throw, network-only`, async () => {
       const s = instantiate();
 
       const id = "00000000-0000-0000-0000-0000000000a1";
@@ -76,7 +76,6 @@ describe(`ResourceReferencesService`, () => {
         fail();
       } catch (e) {
         expect(e).toBeInstanceOf(ResourceRetrievalError);
-        done();
       }
     });
 
@@ -97,7 +96,7 @@ describe(`ResourceReferencesService`, () => {
       expect(result.id).toEqual(b.id);
     });
 
-    it(`missing, throw, cache-only`, async (done) => {
+    it(`missing, throw, cache-only`, async () => {
       const s = instantiate();
 
       try {
@@ -108,7 +107,6 @@ describe(`ResourceReferencesService`, () => {
         fail();
       } catch (e) {
         expect(e).toBeInstanceOf(ResourceRetrievalError);
-        done();
       }
     });
 
@@ -158,7 +156,7 @@ describe(`ResourceReferencesService`, () => {
       expect(result.id).toEqual(b.id);
     });
 
-    it(`missing and not requestable, throw, cache-first`, async (done) => {
+    it(`missing and not requestable, throw, cache-first`, async () => {
       const s = instantiate();
 
       const id = "00000000-0000-0000-0000-000000000007";
@@ -175,7 +173,6 @@ describe(`ResourceReferencesService`, () => {
         fail();
       } catch (e) {
         expect(e).toBeInstanceOf(ResourceRetrievalError);
-        done();
       }
     });
 
