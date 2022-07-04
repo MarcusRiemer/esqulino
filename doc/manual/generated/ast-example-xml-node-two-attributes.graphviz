@@ -1,9 +1,10 @@
 digraph SyntaxTree {
-  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent" margin="0"];
   node [fontsize=10 fontname="Verdana" shape=Mrecord];
   edge [fontsize=10 fontname="Verdana"];
   r [label="{{xml.element}|{name|parent}}"];
   subgraph cluster_r_attributes {
+    margin=10;
     label="attributes";
     r_attributes_1 [label="{{xml.attribute}|{name|a2}|{value|}}"];
     r_attributes_0 [label="{{xml.attribute}|{name|att1}|{value|Neuer Text}}"];

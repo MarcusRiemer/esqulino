@@ -8,9 +8,9 @@
     "lhs": [
       {
         "language": "lang",
-        "name": "expVar",
+        "name": "expConst",
         "properties": {
-          "name": "2"
+          "value": "2"
         }
       }
     ],
@@ -27,7 +27,7 @@
               "language": "lang",
               "name": "expVar",
               "properties": {
-                "name": "α"
+                "name": "A"
               }
             }
           ],
@@ -36,7 +36,7 @@
               "language": "lang",
               "name": "expVar",
               "properties": {
-                "name": "π"
+                "name": "B"
               }
             }
           ]

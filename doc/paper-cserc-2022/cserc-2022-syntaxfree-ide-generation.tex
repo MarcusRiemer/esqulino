@@ -18,9 +18,15 @@
 }
 \email{post@marcusriemer.de}
 
-\begin{abstract}
-  Computer science introduction often uses syntaxfree drag-and-drop programming languages to ease the first steps in the field. This approach has the benefit of eliminating the whole possibility to confront learners with syntax errors. But the actual languages that are not relevant in the actual programming industry.
+\author{Frank Huch}
+\affiliation{%
+  \institution{Christian-Albrechts-Universität}
+  \city{Kiel}
+  \country{Germany}
+}
+\email{fhu@informatik.uni-kiel.de}
 
+\begin{abstract}
   We present a grammar driven approach to augment traditional programming and markup languages like SQL, JavaScript and HTML in way that allows them to be used in a drag-and-drop manner using either Google Blockly or a custom editor that closely resembles the textual structure. Augmenting traditional languages in such a way allow users to become familiar with the syntax language and concentrate on learning the semantics of the language.
 \end{abstract}
 
@@ -28,11 +34,19 @@
 
 \section{Introduction}
 
+Computer science introduction often uses syntaxfree drag-and-drop programming languages to ease the first steps when learning how to program. This approach has the benefit of eliminating the whole possibility to confront learners with syntax errors. But the actual languages that are being thaugt this way are not relevant in the programming industry.
+
+This paper therefore proposes an approach to rapidly generate block language variations of conventional programming languages. Instead of hiding syntax details like parentheses, semicolons, commas, ... these are organically made part of the blocks. Therefore learners are continously confronted with the syntax details of their language of choice without having to actually type it.
+
 \section{Architecture Overview}
 
 Blatt\-Werkzeug defines the common set of core data structures: Syntax\-trees, grammars \& validators. The main reason for this re-invention the wheel is the differing focus of existing software: The syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations.
 
 BlattWerkzeug instead focuses exclusively on working with a syntaxtree that lends itself well to be directly presented to the end user. Most importantly, there must not be any node that has no visual or textual representation. Typical compiler tasks that have to do with lexical analysis or parsing are not relevant for Blatt\-Werkzeug.
+
+At the core Blatt\-Werkzeug is about representing the same syntax tree in two different ways: Either as a block editor that can be used to edit the syntax tree. Or as a valid textual representation in the augmented programming language. For both of these representations and for general validation the desired structure is defined as a grammar.
+
+On a technical level Blatt\-Werkzeug is split into a frontend and a backend, communication between these layers works via GraphQL. The backend is a Ruby on Rails application that uses PostgreSQL as a database, the frontend is written in TypeScript and uses Angular.
 
 \section{Abstract Syntax Tree}
 
@@ -127,7 +141,7 @@ else
   \label{fig:if-stmt-pred}
 \end{figure*}
 
-\section{Grammars \& Structure Validation}
+\section{Expression Grammar}
 
 As syntaxtrees may define arbitrary tree structures, but for practical reasons only trees conforming to a certain set of known properties and children are of relevance. The example in listing~\ref{lst:ast-expr-binary} implicitly relied on a few limitations:
 
@@ -150,7 +164,7 @@ In contrast to grammars in general compiler construction, the grammar described 
 
 In comparision to traditional grammars, this shifts the way one has to reason about the validation rules inside of BlattWerkzeug: There is no need to worry about the syntactic aspects of a certain language, the grammar that is required doesn’t need to know anything about keywords or separating characters. Its sole job is to describe the structure and the semantics of trees that are valid in that specific language. If keywords are included in the grammar, this is solemly for the purpose of blocks that resemble the underlying programming language or for code generation. The actual grammar validation does not use these keywords at all.
 
-\subsection{Example: Expression Semantics}
+\subsection{Expression Semantics}
 
 In this example we will construct a grammar to validate structures like the expression in listing~\ref{lst:ast-expr-binary}.
 
@@ -233,7 +247,7 @@ grammar "lang" {
 
 The tree for such a grammar would however contain nodes of type \texttt{expAny} that do not have any kind of possible representation for the end user: As there is no possible textual representation for such a node, it would appear as a completely empty block that can only host another block. The examples syntax trees in  figure~\ref{fig:ast-choice-node} and listing~\ref{lst:ast-expr-binary} would both be compiled to the exact same textual representation \texttt{numRattles == null}.
 
-To avoid these nodes without visual or textual representation any kind of recurring choice between multiple node types is treated differently from the conventional approach in these grammars: By introducing a pure virtual node type that is referrable by name in the grammar, but may never appear in an actual syntax tree. The textual grammar representation uses the keyword \texttt{typedef} to introduce such a type, the following listing~\ref{lst:grammar-expr-expBin-typedef} changes the definition of \texttt{nodeAny} to be such a virtual node and shows the final grammar for the semantics of simple expressions in entirety. The previous definition of \texttt{expBin} (as in listing~\ref{lst:grammar-expr-expBin-choiceNode} is unaffected by this change, altough the trees that are validated by the grammars are different. This updated grammar that uses the \texttt{typedef} approach will successfully validate the example binary expression from listing~\ref{lst:ast-expr-binary}.
+To avoid these nodes without visual or textual representation any kind of recurring choice between multiple node types is treated differently from the conventional approach in these grammars: By introducing a pure virtual node type that is referrable by name in the grammar, but may never appear in an actual syntax tree. The textual grammar representation uses the keyword \texttt{typedef} to introduce such a type, the following listing~\ref{lst:grammar-expr-expBin-typedef} changes the definition of \texttt{nodeAny} to be such a virtual node and shows the final grammar for the semantics of simple expressions in entirety. The previous definition of \texttt{expBin} (as in listing~\ref{lst:grammar-expr-expBin-choiceNode} is unaffected by this change, altough the trees that are validated by the grammars are different. This updated grammar that uses the \texttt{typedef} approach will successfully validate the example binary expression from listing~\ref{lst:ast-expr-binary}. Additionally we have added a type \texttt{lang.expConst} to express constant values.
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
@@ -245,7 +259,12 @@ grammar "lang" {
     prop "name" { string }
   }
 
-  typedef "expAny" ::= expBin | expNull | expVar
+  node "expConst" {
+    prop "value" { number }
+  }
+
+  typedef "expAny" ::= expBin | expNull
+                         | expVar | expConst
 
   node "expBin" {
     children "lhs" ::= expAny
@@ -254,13 +273,13 @@ grammar "lang" {
   }
 }
 \end{minted}
-\caption{Final semantic grammar for expression \texttt{expBin}}
+\caption{Final semantic grammar for expressions}
 \label{lst:grammar-expr-expBin-typedef}
 \end{listing}
 
 \subsection{Example: Expression Syntax}
 
-Although the syntax trees that are validated by the final semantic grammar for the expression language (listing~\ref{lst:grammar-expr-expBin-typedef}) are unambiguous in tree form, their default textual representation is possibly not. Figure~\ref{fig:ast-nested-ambiguous} shows a tree that in a depth first evaluation would effectively calculate $\alpha+\pi$ first and then multiply the result with $2$. Or in textual form: The intended order of operation is $2 * (\alpha+\pi)$.
+Although the syntax trees that are validated by the final semantic grammar for the expression language (listing~\ref{lst:grammar-expr-expBin-typedef}) are unambiguous in tree form, their default textual representation is possibly not. Figure~\ref{fig:ast-nested-ambiguous} shows a tree that in a depth first evaluation would effectively calculate $A+B$ first and then multiply the result with $2$. Or in textual form: The intended order of operation is $2 * (A+B)$. The textual form however would evaluate to $2 * A + B$.
 
 \begin{figure}
   \includegraphics[scale=\astScale]{../manual/generated/ast-example-expr-binary-nested}
@@ -268,37 +287,117 @@ Although the syntax trees that are validated by the final semantic grammar for t
   \label{fig:ast-nested-ambiguous}
 \end{figure}
 
-\section{Block Language}
+This demonstrates, that even for the simple expression language we require some basic form of extra terminal symbols, namely the parenthesis in the textual representation. Without such additional syntax the structural information that is part of the tree can't be represented in the textual representation. For this basic example we can mix the semantic structural definition with the syntactic information about terminal symbols in the same grammar by simply adding the parentheses in double quotation marks (listing \ref{lst:grammar-expr-expBin-syntax}). On top of that the \texttt{lang.expNull} node had absolutly no textual representation so far.
 
-Brief explanation about the nature of block languages.
+These terminal symbols are absolutly irrelevant for the validation process: As the syntax tree never contains any terminal symbols, they can't be validated. But the generated block language and the pretty printer will incorporate these tokens when generating the output. Therefore the grammar that includes the terminal symbol will compile the tree in figure~\ref{fig:ast-nested-ambiguous} to $(2 * (A + B))$.
+
+For conventional programming languages, these terminal symbols are not only used for parentheses but also for keywords (\texttt{if}, \texttt{for}, \texttt{while}, \texttt{SELECT}, \texttt{FROM} ...) and other syntactic information like semicolons, commas, ...
+
+\begin{listing}[H]
+\begin{minted}[]{typescript}
+grammar "lang" {
+  // expAny, expConst and expVar as before
+
+  node "expNull" {
+    "null"
+  }
+
+  node "expBin" {
+    "("
+    children "lhs" ::= expAny
+    prop     "op"  { string }
+    children "rhs" ::= expAny
+    ")"
+  }
+}
+\end{minted}
+\caption{Final syntactic grammar for expression \texttt{expBin}}
+\label{lst:grammar-expr-expBin-syntax}
+\end{listing}
+
+\section{Expression Block Language}
+
+Block languages are a data structure that contain the relevant information on how to represent a syntax tree visually. Technically they are a \texttt{JSON}-document that contains instructions like \enquote{render a terminal symbol} or \enquote{render all sub-trees of a certain child group}.
+
+Every block editor requires a source of block that is commonly called the sidebar. Whenever the user wants to add to the program at hand, he will search the sidebar for the block he desires and drag it to the central canvas.
 
 \subsection{Builtin Editor}
 
-Backend #1: Some screenshots.
+The builtin editor draws a black border around each block and renders the terminal symbols and the properties of the tree as closely as possible to the textual representation, see figure~\ref{fig:screen-editor-expr-internal} for the rendered representation of the syntax tree in figure~\ref{fig:ast-nested-ambiguous}. The underlined operators \texttt{*} and \texttt{+} can be clicked to open a drop down to select possible operators from the enum.
+
+\begin{figure}
+  \includegraphics[width=0.45\textwidth]{screens/expr-blocks-internal}
+  \caption{Builtin editor for expressions}
+  \label{fig:screen-editor-expr-internal}
+\end{figure}
 
 \subsection{Blockly Editor}
 
-Backend #2: Some screenshots.
+Without any further hints, the blockly representation is readable, but not quite a friendly representation, see figure~\ref{fig:screen-editor-expr-blockly}. This is due to a conceptual mismatch: The proposed grammar defines number of elements in child group on parent. In Blockly each block defines whether follow-up is allowed or not. So without any further information, the blockly representation assumes each child group to host a possibly infinite amount of sub-trees. This is rather unfortunate in the two strictly single node children of \texttt{lang.expBin}.
 
-\subsection{Sidebar}
+\begin{figure}
+  \includegraphics[width=0.45\textwidth]{screens/expr-blocks-blockly}
+  \caption{Blockly editor for expressions}
+  \label{fig:screen-editor-expr-blockly}
+\end{figure}
 
-Available in both.
+\subsection{Textual Representation}
 
-\section{Runtime}
+Backend \#3: Some Listings
 
-\subsection{PrettyPrinting}
+\subsection{Fallback Representation}
 
-Backend #3: Some Listings
+When confronted with defect block language definitions, the block editor can resort to a fallback that is generated on the fly based on the grammar. This representation is a mixture of \texttt{JSON} and grammar notation which should be immediatly obvious to people that are familiar with the syntax tree representation. It uses the terms \enquote{node}, \enquote{prop} and \enquote{children} to visualize the data in the tree. Figure~\ref{fig:screen-editor-expr-fallback} shows the fallback representation of the four nodes of the example syntax tree that has been visualized in the two previous screenshots of the editor.
+
+As this representation is technically a normal blockl language, it is also fully editable. Everything that is underlined may be clicked and changed. The blocks also may be dragged and new blocks can be added from the sidebar.
+
+\begin{figure}
+  \includegraphics[width=0.3\textwidth]{screens/expr-blocks-fallback}
+  \caption{Internal fallback representation for expressions}
+  \label{fig:screen-editor-expr-fallback}
+\end{figure}
+
+\subsection{CSS Styling}
+
+\section{Programming Language Runtimes}
+
+So far we have discussed how grammars can be used to validate the structure of a syntax tree, to derive a visual editor that can change the structure of the syntax tree and how to derive a textual representation of the syntax tree. But to have an actually complete example for a real world programming language the actual possibility to run the code is still missing.
+
+\section{Self Hosting}
+
+The syntax that has been used so far to describe the grammars is a textual representation of the grammar editor that is available within Blatt\-Werkzeug. It is therefore possible to create grammars for new programming languages from inside the tool itself. The grammar to describe .
+
+\begin{figure}
+  \includegraphics[width=0.45\textwidth]{screens/expr-blocks-grammar}
+  \caption{Rendered grammar for expressions}
+  \label{fig:screen-editor-expr-grammar}
+\end{figure}
+
+\section{Example: XML}
+
+\subsection{Multiple Children}
+
+\subsection{Order Of Children}
+
+Most \texttt{HTML} elements can appear in any order.
 
 \section{Example: HTML}
 
-\subsection{Order Of Children}
+Reduction of possible DOM values without sacrificing the semenatic structure.
 
 \section{Example: SQL}
 
 \subsection{Validation}
 
-\section{Design Principles}
+Only columns mentioned in the \texttt{FROM} clause may be used in the other clauses.
+
+\section{Example: JavaScript}
+
+\subsection{Problem: Virtual Root}
+
+\subsection{Runtime}
+
+\section{Conclusion}
 
 \end{document}
 

@@ -1,12 +1,14 @@
 digraph SyntaxTree {
-  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent" margin="0"];
   node [fontsize=10 fontname="Verdana" shape=Mrecord];
   edge [fontsize=10 fontname="Verdana"];
   r [label="{{lang.expBin}|{op|eq}}"];
   subgraph cluster_r_lhs {
+    margin=10;
     label="lhs";
     r_lhs_0 [label="{lang.expAny}"];
     subgraph cluster_r_lhs_0_exp {
+      margin=10;
       label="exp";
       r_lhs_0_exp_0 [label="{{lang.expVar}|{name|numRattles}}"];
     }
@@ -14,9 +16,11 @@ digraph SyntaxTree {
   }
   r -> r_lhs_0;
   subgraph cluster_r_rhs {
+    margin=10;
     label="rhs";
     r_rhs_0 [label="{lang.expAny}"];
     subgraph cluster_r_rhs_0_exp {
+      margin=10;
       label="exp";
       r_rhs_0_exp_0 [label="{lang.null}"];
     }

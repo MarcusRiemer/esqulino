@@ -1,12 +1,14 @@
 digraph SyntaxTree {
-  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent" margin="0"];
   node [fontsize=10 fontname="Verdana" shape=Mrecord];
   edge [fontsize=10 fontname="Verdana"];
   r [label="{lang.if}"];
   subgraph cluster_r_positive {
+    margin=10;
     label="positive";
     r_positive_0 [label="{{lang.call}|{name|writeln}}"];
     subgraph cluster_r_positive_0_arguments {
+      margin=10;
       label="arguments";
       r_positive_0_arguments_0 [label="{{lang.expConst}|{value|foo}}"];
     }
@@ -14,9 +16,11 @@ digraph SyntaxTree {
   }
   r -> r_positive_0;
   subgraph cluster_r_negative {
+    margin=10;
     label="negative";
     r_negative_0 [label="{{lang.call}|{name|err}}"];
     subgraph cluster_r_negative_0_arguments {
+      margin=10;
       label="arguments";
       r_negative_0_arguments_1 [label="{{lang.expConst}|{value|bar}}"];
       r_negative_0_arguments_0 [label="{{lang.expConst}|{value|2}}"];
