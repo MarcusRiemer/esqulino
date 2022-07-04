@@ -10,8 +10,21 @@ import {
 } from "../block.description";
 
 export function mapColumn(t: Table, c: Column): SidebarBlockDescription {
+  // Commonly column names are prefixed with the name of the
+  // table. This costs a lot of space in the sidebar, so we
+  // hide this convenvention.
+  let displayName = c.name;
+  if (displayName.startsWith(t.name)) {
+    debugger;
+    displayName = displayName.substring(t.name.length);
+
+    if (displayName.startsWith("_")) {
+      displayName = displayName.substring(1);
+    }
+  }
+
   return {
-    displayName: c.name,
+    displayName,
     defaultNode: {
       language: "sql",
       name: "columnName",

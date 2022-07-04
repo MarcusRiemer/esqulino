@@ -65,6 +65,50 @@ describe(`DatabaseSchemaSidebarService`, () => {
     );
   });
 
+  it(`Single table, single column with table prefix`, async () => {
+    await expectBlocks(
+      [
+        {
+          name: "geschichte",
+          columns: [
+            {
+              name: "geschichte_id",
+              index: 0,
+              notNull: true,
+              primary: true,
+              type: "int",
+            },
+          ],
+          foreignKeys: [],
+          systemTable: false,
+        },
+      ],
+      [
+        {
+          displayName: "geschichte",
+          defaultNode: {
+            language: "sql",
+            name: "tableIntroduction",
+            properties: {
+              name: "geschichte",
+            },
+          },
+        },
+        {
+          displayName: "id",
+          defaultNode: {
+            language: "sql",
+            name: "columnName",
+            properties: {
+              refTableName: "geschichte",
+              columnName: "geschichte_id",
+            },
+          },
+        },
+      ]
+    );
+  });
+
   it(`Two table, multiple columns`, async () => {
     await expectBlocks(
       [
