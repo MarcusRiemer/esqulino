@@ -16,6 +16,7 @@ export function generateUUIDv4() {
 export function urlParamsFromObject(
   params: Object | Array<unknown>,
   skipobjects = false,
+  whitelist: string[] = [],
   prefix = ""
 ) {
   var isObj = function (a: unknown): boolean {
@@ -29,12 +30,26 @@ export function urlParamsFromObject(
     return prefix + "=" + encodeURIComponent(params) + "&";
   }
   for (var param in params) {
+    if (whitelist.length > 0 && !whitelist.includes(param)) {
+      continue;
+    }
+
     var c = "" + prefix + _st(param, prefix);
     if (isObj(params[param]) && !skipobjects) {
-      result += urlParamsFromObject(params[param], false, "" + c);
+      result += urlParamsFromObject(
+        params[param],
+        skipobjects,
+        whitelist,
+        "" + c
+      );
     } else if (Array.isArray(params[param]) && !skipobjects) {
       params[param].forEach((item, ind) => {
-        result += urlParamsFromObject(item, false, c + "[" + ind + "]");
+        result += urlParamsFromObject(
+          item,
+          skipobjects,
+          whitelist,
+          c + "[" + ind + "]"
+        );
       });
     } else {
       result += c + "=" + encodeURIComponent(params[param]) + "&";
