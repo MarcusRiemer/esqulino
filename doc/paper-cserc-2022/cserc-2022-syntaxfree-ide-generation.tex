@@ -1,4 +1,15 @@
-\documentclass[sigconf,review=true]{acmart}
+\documentclass[sigconf,natbib=false,review=true]{acmart}
+
+\usepackage[
+datamodel=acmdatamodel,
+backend=biber,
+style=acmnumeric, % use style=acmauthoryear for publications that require it
+]{biblatex}
+
+\addbibresource{CSERC22.bib}
+
+%\usepackage[style=ACM-Reference-Format,backend=bibtex,sorting=none]{biblatex}
+%\addbibresource{CSERC22.bib}
 
 \usepackage{minted}    % Source code formatting
 \usepackage{csquotes}  % Eases working with quotes
@@ -8,6 +19,7 @@
 \newcommand\astScale{0.75}
 
 \begin{document}
+
 \title[]{Generating syntaxfree development environments for real world programming languages}
 
 \author{Marcus Riemer}
@@ -27,16 +39,22 @@
 \email{fhu@informatik.uni-kiel.de}
 
 \begin{abstract}
-  We present a grammar driven approach to augment traditional programming and markup languages like SQL, JavaScript and HTML in way that allows them to be used in a drag-and-drop manner using either Google Blockly or a custom editor that closely resembles the textual structure. Augmenting traditional languages in such a way allow users to become familiar with the syntax language and concentrate on learning the semantics of the language.
+  We present a grammar driven approach to augment traditional programming and markup languages like SQL, JavaScript and HTML in way that allows them to be used in a drag-and-drop manner using either Google Blockly or a custom editor that closely resembles the textual structure.
 \end{abstract}
+
+\begin{teaserfigure}
+  \includegraphics[width=\textwidth]{screens/banner.png}
+  \caption{Builtin block editor that resembles the syntax of the augmented SQL}
+  \label{fig:banner}
+\end{teaserfigure}
 
 \maketitle
 
 \section{Introduction}
 
-Computer science introduction often uses syntaxfree drag-and-drop programming languages to ease the first steps when learning how to program. This approach has the benefit of eliminating the whole possibility to confront learners with syntax errors. But the actual languages that are being thaugt this way are not relevant in the programming industry.
+Computer science introduction often uses syntaxfree drag-and-drop programming languages to ease the first steps when learning how to program. This approach has the benefit of eliminating the whole possibility to confront learners with syntax errors. But the actual languages that are being thaugt this way are not relevant in the programming industry. For educators, this is a inconvenient situation: Block languages are proven to be great tools to spark interest in programming. But making the step from block languages to conventional programming languages is still difficult. Additionally, some students view these environments as overly restrictive and \enquote{not real programming}\cite{braune_learning_2020}.
 
-This paper therefore proposes an approach to rapidly generate block language variations of conventional programming languages. Instead of hiding syntax details like parentheses, semicolons, commas, ... these are organically made part of the blocks. Therefore learners are continously confronted with the syntax details of their language of choice without having to actually type it.
+One important aspect is to explicitly plan the transition from block based languages to text based languages. In \cite{fraser_ten_2015} this is called the \enquote{exit strategy} and \cite{alrubaye_comparison_2019} shows promising results when confronting students with block and textual programming simultaneously. This paper therefore follows these ideas and presents an approach to rapidly generate block language variations of conventional programming languages. Instead of hiding syntax details like parentheses, semicolons, commas, ... these are organically made part of the blocks. Therefore learners are continously confronted with the syntax details of their language of choice without having to actually type it. Additionally the resulting program is not meant to be run only in some learning environment. On a technical level the program can be compiled to proper source code in the target language and be run.
 
 \section{Architecture Overview}
 
@@ -153,7 +171,7 @@ As syntaxtrees may define arbitrary tree structures, but for practical reasons o
 \item \texttt{lang.expBin} has two child groups named \texttt{lhs} and \texttt{rhs} which stand for the two sides of the equation. These child groups may themselves contain a single \texttt{null}, \texttt{expVar} or \texttt{expBin}. The property \texttt{op} will treat the value \texttt{eq} with the meaning \enquote{equality} and possibly allows other values such as \texttt{leq} or \texttt{gt}.
 \end{enumerate}
 
-Imposing such structural requirements by restricting the allowed or required properties and child groups is done with a grammar. The underlying validation concept is losely based on XML Schema and RelaxNG, the syntax of the latter is also used as the inspiration to describe the grammars in a user friendly textual representation.
+Imposing such structural requirements by restricting the allowed or required properties and child groups is done with a grammar. The underlying validation concept is losely based on \texttt{XML} Schema and RelaxNG, the syntax of the latter is also used as the inspiration to describe the grammars in a user friendly textual representation.
 
 In contrast to grammars in general compiler construction, the grammar described here is not meant to create a syntax tree from some stream of tokens but rather begins with an empty syntax tree. This frees it from many of the problems that have been mentioned above:
 
@@ -189,7 +207,7 @@ grammar "lang" {
   // node null as before
 
   node "expVar" {
-    prop "name" { string }
+    prop "name" string
   }
 }
 \end{minted}
@@ -206,7 +224,7 @@ grammar "lang" {
 
   node "expBin" {
     children "lhs" ::= expNull | expVar
-    prop     "op"  { string }
+    prop     "op"  string
     children "rhs" ::= expNull | expVar
   }
 }
@@ -230,7 +248,7 @@ grammar "lang" {
 
   node "expBin" {
     children "lhs" ::= expAny
-    prop     "op"  { string }
+    prop     "op"  string
     children "rhs" ::= expAny
   }
 }
@@ -247,7 +265,9 @@ grammar "lang" {
 
 The tree for such a grammar would however contain nodes of type \texttt{expAny} that do not have any kind of possible representation for the end user: As there is no possible textual representation for such a node, it would appear as a completely empty block that can only host another block. The examples syntax trees in  figure~\ref{fig:ast-choice-node} and listing~\ref{lst:ast-expr-binary} would both be compiled to the exact same textual representation \texttt{numRattles == null}.
 
-To avoid these nodes without visual or textual representation any kind of recurring choice between multiple node types is treated differently from the conventional approach in these grammars: By introducing a pure virtual node type that is referrable by name in the grammar, but may never appear in an actual syntax tree. The textual grammar representation uses the keyword \texttt{typedef} to introduce such a type, the following listing~\ref{lst:grammar-expr-expBin-typedef} changes the definition of \texttt{nodeAny} to be such a virtual node and shows the final grammar for the semantics of simple expressions in entirety. The previous definition of \texttt{expBin} (as in listing~\ref{lst:grammar-expr-expBin-choiceNode} is unaffected by this change, altough the trees that are validated by the grammars are different. This updated grammar that uses the \texttt{typedef} approach will successfully validate the example binary expression from listing~\ref{lst:ast-expr-binary}. Additionally we have added a type \texttt{lang.expConst} to express constant values.
+To avoid these nodes without visual or textual representation any kind of recurring choice between multiple node types is treated differently from the conventional approach in these grammars: By introducing a pure virtual node type that is referrable by name in the grammar, but may never appear in an actual syntax tree. The textual grammar representation uses the keyword \texttt{typedef} to introduce such a type, the following listing~\ref{lst:grammar-expr-expBin-typedef} changes the definition of \texttt{nodeAny} to be such a virtual node and shows the final grammar for the semantics of simple expressions in entirety. The previous definition of \texttt{expBin} (as in listing~\ref{lst:grammar-expr-expBin-choiceNode} is unaffected by this change, altough the trees that are validated by the grammars are different. This updated grammar that uses the \texttt{typedef} approach will successfully validate the example binary expression from listing~\ref{lst:ast-expr-binary}.
+
+In addition to the use of \texttt{typedef} the final structural grammar in listing~\ref{lst:grammar-expr-expBin-typedef} now contains a type \texttt{lang.expConst} to express constant, numeric values. And the previously unrestricted \texttt{string} for the \texttt{op} property to the values \texttt{==}, \texttt{+} and \texttt{*} by using an enumeration.
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
@@ -268,11 +288,12 @@ grammar "lang" {
 
   node "expBin" {
     children "lhs" ::= expAny
-    prop     "op"  { string }
+    prop     "op"  string enum { == + * }
     children "rhs" ::= expAny
   }
 }
 \end{minted}
+
 \caption{Final semantic grammar for expressions}
 \label{lst:grammar-expr-expBin-typedef}
 \end{listing}
@@ -343,7 +364,21 @@ Without any further hints, the blockly representation is readable, but not quite
 
 \subsection{Textual Representation}
 
+In the intended usage scenario, the textual representation of a syntax tree can be immediately be derived from the syntactic information in the grammar.
+
 Backend \#3: Some Listings
+
+\subsection{Self Hosting (Meta Grammar)}
+
+The syntax that has been used so far to describe the grammars is a textual representation of the grammar editor that is available within Blatt\-Werkzeug. Technically grammars and block languages are, like the syntax tree, described as \texttt{JSON}-documents. In order to create grammars for new programming languages from inside the tool itself, it is therefore only required to transform some syntax tree to a valid \texttt{JSON} grammar document. The grammar and block language to describe the actual block language and grammar are called \enquote{Meta Grammar} and \enquote{Meta Block Language}. Figure~\ref{fig:screen-editor-expr-grammar} shows how the grammar for the expression language looks like in the builtin editor. As the \texttt{JSON} grammar has almost no syntactic overlap with the textual representation, the compilation step for the meta grammar involves custom code generators.
+
+\begin{figure}
+  \includegraphics[width=0.45\textwidth]{screens/expr-blocks-grammar}
+  \caption{Rendered grammar for expressions}
+  \label{fig:screen-editor-expr-grammar}
+\end{figure}
+
+
 
 \subsection{Fallback Representation}
 
@@ -361,29 +396,92 @@ As this representation is technically a normal blockl language, it is also fully
 
 \section{Programming Language Runtimes}
 
-So far we have discussed how grammars can be used to validate the structure of a syntax tree, to derive a visual editor that can change the structure of the syntax tree and how to derive a textual representation of the syntax tree. But to have an actually complete example for a real world programming language the actual possibility to run the code is still missing.
+So far we have discussed how grammars can be used to validate the structure of a syntax tree, to derive a visual editor that can change the structure of the syntax tree and how to derive a textual representation of the syntax tree. But to have an actually complete example for a real world programming language the actual possibility to run the code is still missing. Providing this kind of runtime for the textual representation of the syntax trees is however always a manual task. In the current state of Blatt\-Werkzeug the following runtimes are provided:
 
-\section{Self Hosting}
+\begin{itemize}
+\item \texttt{SQL} as understood by SQLite. The required database is stored on the server, the frontend sends the desired syntax tree to be executed.
 
-The syntax that has been used so far to describe the grammars is a textual representation of the grammar editor that is available within Blatt\-Werkzeug. It is therefore possible to create grammars for new programming languages from inside the tool itself. The grammar to describe .
+\item \texttt{JavaScript} executed in a WebWorker, so without any access to the \texttt{DOM} and without blocking the browsers only \texttt{JavaScript} context. Basic output via \texttt{console.log} is redirect to a section under the programs block editor.
 
-\begin{figure}
-  \includegraphics[width=0.45\textwidth]{screens/expr-blocks-grammar}
-  \caption{Rendered grammar for expressions}
-  \label{fig:screen-editor-expr-grammar}
-\end{figure}
+\item \texttt{Trucklino} is a domain specific language implemented as a bachelors thesis \cite{popp_konzeption_2019} which can be seen as a variation of the Kara approach\cite{hartmann_kara_2001} about a ladybug (or in Trucklino: a truck) that needs to solve programming puzzles.
 
-\section{Example: XML}
+\item \texttt{JSON} and \texttt{XML} purely as data structures without any immediate application or accompanied schema.
 
-\subsection{Multiple Children}
+\item Mathematical equations and transformations backed by the symbolic math library Nerdamer\footnote{\url{https://nerdamer.com/}}.
+
+\item A subset of the GraphViz language to render graphs\footnote{\url{https://graphviz.org/}}.
+\end{itemize}
+
+Each of these runtimes operate on the assumption that there is a grammar (or in the case of Trucklino: a code generator) to compile a textual representation from any valid syntax tree. The textual representation is then used as the input for the runtime. As shown by the very diverse modes of operations on these few examples (tabular output, console output, graphical output, client side calculation, server side calculation), there is no really unified strategy available to provide a generic approach to such runtimes. Therefore all of these runtimes are custom built with TypeScript, Angular and possibly Ruby.
+
+\section{Example: \texttt{XML} and whitespace handling}
+
+Representing any \texttt{XML} structure consisting of attributes and child elements is very straightforward with the presented syntax trees and grammars. On a fundamental level it only requires one type for the element which may host attributes (key-value pairs) and other elements (see listing~\ref{lst:grammar-xml-structure}). In contrast to the grammar for the expression language, the child groups \texttt{elements} and \texttt{attributes} on \texttt{xml.element} make use of the \texttt{*} operator with the usual meaning of \enquote{any number of items, including none}.
+
+\begin{listing}[H]
+\begin{minted}[]{typescript}
+grammar "xml" {
+  node "element" {
+    prop "name"           string
+    children "elements"   ::= element*
+    children "attributes" ::= attribute*
+  }
+  node "attribute" {
+    prop "name"  string
+    prop "value" string
+  }
+}
+\end{minted}
+\caption{Semantic structure of \texttt{XML}}
+\label{lst:grammar-xml-structure}
+\end{listing}
+
+To properly visually represent \texttt{XML} however, this structural information is not enough. To have a syntactically valid \texttt{XML}-document at least the syntactic pairs of brackets (\texttt{<element>}) and the attributes equality sign and the quoted value (\texttt{key=\"value\"}) need to be specified. The result of this minimal amount of terminal symbols would however be one very long line of \texttt{XML}. This is syntactically valid, but unpleasant to work with. In order to follow the more typical formatting of having indented child elements and the opening and closing \texttt{XML}-elements on distinct lines, we need to specify a formatting structure in the grammar.
+
+Listing~\ref{lst:grammar-xml-syntax} shows a visualization grammar for the previously presented structural grammar. The keyword \texttt{visualize} is used here to indicate that the information for the specified type are not changing the structural semantics of a grammar: Inside a \texttt{visualize} block no \texttt{children} or \texttt{property} statements may be used. Instead it is possible to implicitly define line breaks using the \texttt{container} block. If the orientation is set to \texttt{horizontal}, the block editors and textual representation will not allow any implicit line breaks between these elements. The \texttt{\{\{ property \}\}} syntax (borrowed from frameworks like Angular or Jinja) is used for interpolation: The value of the property on the node in the syntax tree will be used as the value when rendered.
+
+\begin{listing}[H]
+\begin{minted}[]{typescript}
+grammar "xml" {
+  visualize "attribute" {
+    container horizontal {
+      {{name}} (space-before)
+      "="
+      {{value}}
+    }
+  }
+
+  visualize "element" {
+    container vertical {
+      container horizontal {
+        "<"
+        {{name}}
+        {{#each attributes}}
+        ">"
+      }
+      container vertical (indent) {
+        {{#each elements}}
+      }
+      container horizontal {
+        "</"
+        {{name}}
+        ">"
+      }
+    }
+  }
+}
+\end{minted}
+\caption{Syntactic structure of \texttt{XML}}
+\label{lst:grammar-xml-syntax}
+\end{listing}
+
+\section{Example: \texttt{HTML} and child ordering}
+
+Reduction of possible DOM values without sacrificing the semenatic structure.
 
 \subsection{Order Of Children}
 
 Most \texttt{HTML} elements can appear in any order.
-
-\section{Example: HTML}
-
-Reduction of possible DOM values without sacrificing the semenatic structure.
 
 \section{Example: SQL}
 
@@ -398,6 +496,8 @@ Only columns mentioned in the \texttt{FROM} clause may be used in the other clau
 \subsection{Runtime}
 
 \section{Conclusion}
+
+\printbibliography
 
 \end{document}
 
