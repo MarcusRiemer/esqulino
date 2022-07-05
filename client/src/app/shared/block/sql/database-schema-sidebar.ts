@@ -15,7 +15,6 @@ export function mapColumn(t: Table, c: Column): SidebarBlockDescription {
   // hide this convenvention.
   let displayName = c.name;
   if (displayName.startsWith(t.name)) {
-    debugger;
     displayName = displayName.substring(t.name.length);
 
     if (displayName.startsWith("_")) {
