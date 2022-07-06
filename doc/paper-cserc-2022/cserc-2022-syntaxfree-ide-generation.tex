@@ -370,7 +370,7 @@ Backend \#3: Some Listings
 
 \subsection{Self Hosting (Meta Grammar)}
 
-The syntax that has been used so far to describe the grammars is a textual representation of the grammar editor that is available within Blatt\-Werkzeug. Technically grammars and block languages are, like the syntax tree, described as \texttt{JSON}-documents. In order to create grammars for new programming languages from inside the tool itself, it is therefore only required to transform some syntax tree to a valid \texttt{JSON} grammar document. The grammar and block language to describe the actual block language and grammar are called \enquote{Meta Grammar} and \enquote{Meta Block Language}. Figure~\ref{fig:screen-editor-expr-grammar} shows how the grammar for the expression language looks like in the builtin editor. As the \texttt{JSON} grammar has almost no syntactic overlap with the textual representation, the compilation step for the meta grammar involves custom code generators.
+The syntax that has been used so far to describe the grammars is a textual representation of the grammar editor that is available within Blatt\-Werkzeug. Every one of these grammars could have also been shown in the form of a screenshot of the block editor to edit that grammar. Technically grammars and block languages are, like the syntax tree, described as \texttt{JSON}-documents. In order to create grammars for new programming languages from inside the tool itself, it is therefore only required to transform some syntax tree to a valid \texttt{JSON} grammar document. The grammar and block language to describe the actual block language and grammar are called \enquote{Meta Grammar} and \enquote{Meta Block Language}. Figure~\ref{fig:screen-editor-expr-grammar} shows how the grammar for the expression language looks like in the builtin editor. As the \texttt{JSON} grammar has almost no syntactic overlap with the textual representation, the compilation step for the meta grammar involves custom code generators.
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{screens/expr-blocks-grammar}
@@ -416,9 +416,9 @@ Each of these runtimes operate on the assumption that there is a grammar (or in 
 
 \section{Example: \texttt{XML} and whitespace handling}
 
-Representing any \texttt{XML} structure consisting of attributes and child elements is very straightforward with the presented syntax trees and grammars. On a fundamental level it only requires one type \texttt{xml.element} which may host any number of \texttt{xml.attribute} (key-value pairs) and any number of \texttt{xml.element} (see listing~\ref{lst:grammar-xml-structure}). Allowing free-form text as children of \texttt{XML} elements can be done through another node type \texttt{xml.text} which only requires a single property.
+Representing a \texttt{XML} structure consisting of any elements, attributes and child elements is very straightforward with the presented syntax trees and grammars. \enquote{Any} in this case refers to the absence of a schema, that the \texttt{XML} document must conform to. On a fundamental level it only requires a type \texttt{xml.element} which may host any number of \texttt{xml.attribute} (key-value pairs) and any number of \texttt{xml.element} as children (see listing~\ref{lst:grammar-xml-structure}). Allowing free-form text as children of \texttt{XML} elements can be done through another node type \texttt{xml.text} which only requires a single property.
 
-In contrast to the grammar for the expression language, the child groups \texttt{elements} and \texttt{attributes} on \texttt{xml.element} make use of the \texttt{*} operator with the usual meaning of \enquote{any number of items, including none}. This example also shows, that it is possible to have more than one type reference in a child group definition. The \texttt{\&}-operator is borrowed from RELAX NG where it is called the \enquote{interleaving}-operator. It allows children to occur independent of their order, but still respects the cardinality. Without the use of this operator, the resulting grammar would require that any \texttt{xml.element} must occur strictly before any \texttt{xml.text}. For these grammars the use of such interleaving child groups is the norm, sequences are technically possible but typically replaced by multiple named child groups.
+In contrast to the grammar for the expression language, the child groups \texttt{elements} and \texttt{attributes} on \texttt{xml.element} make use of the \texttt{*} operator with the usual meaning of \enquote{any number of items, including none}. This example also shows, that it is possible to have more than one type reference in a child group definition. The \texttt{\&}-operator is borrowed from RELAX NG where it is called the \enquote{interleaving}-operator. It allows children to occur independent of their order, but still respects their cardinality. Without the use of this operator, the resulting grammar would require that any \texttt{xml.element} must occur strictly before any \texttt{xml.text}. For these block grammars the use of such interleaving child groups is the norm: sequences are technically possible but typically replaced by multiple named child groups.
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
@@ -441,14 +441,9 @@ grammar "xml" {
 \label{lst:grammar-xml-structure}
 \end{listing}
 
-To properly visually represent \texttt{XML} however, this structural information is not enough. To have a syntactically valid \texttt{XML}-document at least the syntactic pairs of brackets (\texttt{<element>}) and the attributes equality sign and the quoted value (\texttt{key="value"}) need to be specified. The result of this minimal amount of terminal symbols would however be one very long line of \texttt{XML}. This is syntactically valid, but unpleasant to work with. In order to follow the more typical formatting of having indented child elements and the opening and closing \texttt{XML}-elements on distinct lines, we need to specify a formatting structure in the grammar.
+To properly visually represent \texttt{XML} however, this structural information is not enough. To have a syntactically valid \texttt{XML}-document at least the syntactic pairs of brackets (\texttt{<element>}) and the attributes equality sign and the quoted value (\texttt{key="value"}) need to be specified. The result of this minimal amount of terminal symbols would however be one very long line of \texttt{XML}. This is syntactically valid, but unpleasant to work with in a block editor. In order to follow the more typical formatting of having indented child elements and the opening and closing \texttt{XML}-elements on distinct lines, we need to specify a formatting structure that includes linebreaks in the grammar.
 
-Listing~\ref{lst:grammar-xml-syntax} shows a visualization grammar for the previously presented structural grammar. The keyword \texttt{visualize} is used here to indicate that the information for the specified type are not changing the structural semantics of a grammar: Inside a \texttt{visualize} block no \texttt{children} or \texttt{property} statements may be used. Instead it is possible to implicitly define line breaks using the \texttt{container} block. If the orientation is set to \texttt{horizontal}, the block editors and textual representation will not allow any implicit line breaks between these elements. The \texttt{\{\{ property \}\}} syntax (borrowed from frameworks like Angular or Jinja) is used for interpolation: The value of the property on the node in the syntax tree will be used as the value when rendered. The same listing also demonstrates how certain common visualization aspects are expressed using special annotations. Everything that is denoted inside a pair of parentheses is treated as a special instruction to the block- and the code-generator.
-
-\begin{itemize}
-\item The \texttt{space-before} instruction for \texttt{xml.attribute.name} ensures that there is a space between the \texttt{xml.element.name} and multiple attributes. In this particular instance it could also have been encoded as a literal space terminal symbol \texttt{'~'}, but the generators are able to e.g. combine multiple superflous spaces so expressing this via the \texttt{space-before} instruction is preferred for composeability.
-\item The \texttt{keyword} instruction is used for very basic syntax highlighting in the block editor and disregarded when generating the textual representation.
-\end{itemize}
+Listing~\ref{lst:grammar-xml-syntax} shows a visualization grammar for the previously presented structural grammar. The keyword \texttt{visualize} is used here to indicate that the information for the specified type are not changing the structural semantics of a grammar: Inside a \texttt{visualize} block no \texttt{children} or \texttt{property} statements may be used. Instead it is possible to implicitly define line breaks using the \texttt{container} block. If the orientation is set to \texttt{horizontal}, the block editors and textual representation will not allow any implicit line breaks between these elements. The \texttt{vertical} orientation introduces a line break between all immediate children of the \texttt{container}. The \texttt{\{\{ property \}\}} syntax (borrowed from frameworks like Angular or Jinja) is used for interpolation: The value of the property on the node in the syntax tree will be used as the value when rendered. The same listing also demonstrates how certain common visualization aspects are expressed using special annotations. Everything that is denoted inside a pair of parentheses is treated as a special instruction to the block- and the code-generator.
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
@@ -485,9 +480,24 @@ grammar "xml" {
 \label{lst:grammar-xml-syntax}
 \end{listing}
 
-With this additional syntactic information
+\begin{itemize}
+\item The \texttt{space-before} instruction for \texttt{xml.attribute.name} ensures that there is a space between the \texttt{xml.element.name} and multiple attributes. In this particular instance it could also have been encoded as a literal space terminal symbol \texttt{'~'}, but the generators are able to e.g. combine multiple superflous spaces so expressing this via the \texttt{space-before} instruction is preferred for composeability.
+\item The \texttt{keyword} instruction is used for very basic syntax highlighting in the block editor and disregarded when generating the textual representation.
+\item The \texttt{double-quote} instruction places double quote terminal symbols around the terminal symbol or property it is defined on. Technically this could also be represented through a pair of literal terminal symbols. But having a single instruction that can not be torn apart when things are moved around can be very convenient.
+\end{itemize}
+
+With this additional syntactic information about terminal symbols, linebreaks and quotation marks can't be represented in the block editor or the textual representation. The resulting \texttt{XML} block editor now renders a \texttt{HTML}-like structure as shown in figure~\ref{fig:screen-editor-xml-no-border}. To demonstrate how close the resemblance can be, the tree has been rendered twice. Without block outlines the result almost looks like a \enquote{normal} textual representation. Only the activated property editor on the text \enquote{Really great!} gives a hint that some kind of structural editing is available.
+
+\begin{figure}
+  \includegraphics[width=0.2\textwidth]{screens/xml-blocks-html-with-border}
+  \includegraphics[width=0.2\textwidth]{screens/xml-blocks-html-no-border}
+  \caption{A \texttt{HTML} like structure in the \texttt{XML}-block editor, rendered with and without block outlines.}
+  \label{fig:screen-editor-xml-no-border}
+\end{figure}
 
 \section{Example: \texttt{HTML} and child ordering}
+
+When going from the representation of any schema-free \texttt{XML}-document to \texttt{HTML} the syntax stays almost the same, but the structural requirements change drastically.
 
 Reduction of possible DOM values without sacrificing the semenatic structure.
 
