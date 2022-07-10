@@ -39,11 +39,11 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 \email{fhu@informatik.uni-kiel.de}
 
 \begin{abstract}
-  The prevailing concept when teaching computer science to beginners in school is visual programming, typically in the form of block based languages. Most approaches in this area involve special teaching languages like Scratch. Our approach seamlessly connects the block based language concept to conventional programming languages used in computer science, but for didactical purpose often to a core subset of this language.
+  The prevailing concept when teaching computer science to beginners in school is visual programming, typically in the form of block based languages. Most approaches in this area involve special teaching languages like Scratch. Our approach seamlessly connects the block based language concept to conventional programming languages used in computer science, but for didactical purpose often to a core subset of such a language.
 
-  Generating a block editor is often done for every language individually, which is a large effort. To tackle this, we developed a more traditional and formalized approach: We present a grammar that can be used to define a block based editor interface which uses either our own visual representation or Blockly for any formal language.
+  Generating a block editor for a language is large effort and often done for every language individually. To tackle this, we developed a generalized framework which supports the development of visual editors for arbitrary formal languages. It is based on a grammar describing the formal language and compiles it to a block based editor interface which uses either our own visual representation or Blockly.
 
-  Beside presenting the approach through a series of examples, we also sketch applications of the approach for the languages XML, HTML, SQL and JavaScript. Apart from getting a visual editor, our implementation also allows the connection to a backend in the full conventional language, which  completes the editor with the common semantics of the language.
+  Beside presenting the approach through a series of examples, we also sketch applications of the approach for the languages XML, HTML, SQL and JavaScript. Apart from getting a visual editor, our implementation also allows the connection to a backend in the full conventional language, which completes the editor with the common semantics of the language, so that the language can also be executed in the context for which it was developed.
 \end{abstract}
 
 \begin{teaserfigure}
