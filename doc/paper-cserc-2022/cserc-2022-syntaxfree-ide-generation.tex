@@ -69,13 +69,13 @@ One important aspect is to explicitly plan the transition from block based langu
 
 This paper follows these ideas and presents an approach to rapidly generate block language variations of conventional programming languages based on a grammar representation. Instead of hiding syntax details like parentheses, semicolons, commas, ... these are organically made part of the grammar and the resulting blocks. Therefore learners are continously confronted with the syntax details of their language of choice without having to actually type it. Additionally the resulting program is not meant to be run only in some learning environment. On a technical level the program can be compiled to proper source code in the target language and be run.
 
-To show that the general grammar based approach as well as our specific implementation is not overly specifically tied to our own block editor, we also generate Blockly documents and editors\footnote{\url{https://developers.google.com/blockly}} as well as pretty printable syntax trees for the industry standard \texttt{prettier} program\footnote{\url{https://prettier.io/}}. Apart from the benefit of having multiple backends to avoid overly specific details in what should be a general solution, Blockly and prettier are established tools that work reliable under almost any circumstances and showed quite a few initial flaws during development.
+To show that the general grammar based approach as well as our specific implementation is not overly specifically tied to our own block editor, we also generate Blockly documents and editors\footnote{\url{https://developers.google.com/blockly}} as well as pretty printable syntax trees for the industry standard \texttt{prettier} program\footnote{\url{https://prettier.io/}}. Apart from the benefit of having multiple backends to avoid overly specific details in what should be a general solution, Blockly and prettier are established tools that work reliable under almost any circumstances and by contrasting the results showed quite a few initial flaws in our implementation during development.
 
 \section{Architecture Overview}
 
-At the core our approach is about representing the same syntax tree in two different ways: Either as a block editor that can be used to edit the syntax tree. Or as a valid textual representation in the augmented programming language. For both of these representations and for general validation the valid structure of a tree is defined as a grammar.
+At the core our approach is about representing the same syntax tree in two different ways: Either as a block editor that can be used to edit the syntax tree. Or as a valid textual representation in the augmented programming language. For both of these representations and for general validation the valid structure of a tree is defined in the form of a grammar that defines the semantic structure and provides syntactic details like keywords, brackets and indentation.
 
-Our approach re-defines this common set of core data structures for compilers: Syntax\-trees, grammars \& validators. The main reason for this re-invention of the wheel is the differing focus of existing software: The syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations. Our approach instead focuses exclusively on working with a syntaxtree that lends itself well to be directly presented to the end user. Most importantly, there must not be any node that has no visual or textual representation. Typical compiler tasks that have to do with lexical analysis or parsing are not relevant for our approach. And the other self-evident candidate to build upon, namely Google Blockly, uses a syntax tree representation that includes many positional details that are not of relevance for our approach.
+Our approach re-defines and re-implements the common set of core data structures for compilers: Syntax\-trees, grammars \& validators. The main reason for this re-invention of the wheel is the differing focus of existing software: The syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations. Our approach instead focuses exclusively on working with a syntaxtree that lends itself well to be directly presented to the end user. Most importantly, there must not be any node that has no visual or textual representation. Typical compiler tasks that have to do with lexical analysis or parsing (\texttt{yacc}, \texttt{bison}, \texttt{ANTLR}, \texttt{boost::spirit}) are not relevant for our approach. And the other self-evident candidate to build upon, namely Google Blockly, uses a syntax tree representation that includes many positional details that are not of relevance for our approach and mixes the block definitions (the \enquote{grammar}) with JavaScript and details of code generation.
 
 On a fundamental technical level our implementation is split into a browser-frontend and a \texttt{HTTP}-backend, communication between these layers works via GraphQL. The backend is a Ruby on Rails application that uses PostgreSQL as a database, the frontend is written in TypeScript and uses Angular.
 
@@ -353,7 +353,7 @@ grammar "lang" {
 
 Block languages are a data structure that contain the relevant information on how to represent a syntax tree visually. Technically they are a \texttt{JSON}-document that contains instructions like \enquote{render a terminal symbol} or \enquote{render all sub-trees of a certain child group}.
 
-Every block editor requires a source of block that is commonly called the sidebar. Whenever the user wants to add to the program at hand, he will search the sidebar for the block he desires and drag it to the central canvas.
+Every block editor requires a source of blocks that is commonly called the \enquote{sidebar}. Whenever the user wants to add to the program at hand, he will search the sidebar for the block he desires and drag it to the central canvas. In the following examples the sidebar is automatically populated to provide on block for each type in the grammar, but it is possible to define custom block sidebars as e.g. seen in figure~\ref{fig:sql-runtime}.
 
 \subsection{Builtin Editor}
 
@@ -367,7 +367,7 @@ The builtin editor draws a black border around each block and renders the termin
 
 \subsection{Blockly Editor}
 
-Without any further hints, the blockly representation is readable, but not quite a friendly representation, see figure~\ref{fig:screen-editor-expr-blockly}. This is due to a conceptual mismatch: The proposed grammar defines number of elements in child group on parent. In Blockly each block defines whether follow-up is allowed or not. So without any further information, the blockly representation assumes each child group to host a possibly infinite amount of sub-trees. This is rather unfortunate in the two strictly single node children of \texttt{lang.expBin}.
+Without any further hints, the blockly representation is readable, but not quite a friendly representation, see figure~\ref{fig:screen-editor-expr-blockly}. This is due to a conceptual mismatch: The proposed grammar defines number of elements in child group on parent. In Blockly each block defines whether follow-up is allowed or not. So without any further information, the blockly representation assumes each child group to host a possibly infinite amount of sub-trees. This is rather unfortunate in the two strictly single node children of \texttt{lang.expBin}, which require manual intervention.
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{screens/expr-blocks-blockly}
@@ -377,9 +377,7 @@ Without any further hints, the blockly representation is readable, but not quite
 
 \subsection{Textual Representation}
 
-In the intended usage scenario, the textual representation of a syntax tree can be immediately be derived from the syntactic information in the grammar.
-
-Backend \#3: Some Listings
+With the syntactic information provided by the grammar, the textual representation of a syntax tree can be immediately be derived from the syntactic information in the grammar. Technically we take these two documents as inputs and feed a transformed tree with line information based on the primitives outlined in \cite{wadler_prettier_printer} to prettier.
 
 \subsection{Self Hosting (Meta Grammar)}
 
@@ -390,8 +388,6 @@ The syntax that has been used so far to describe the grammars is a textual repre
   \caption{Rendered grammar for expressions}
   \label{fig:screen-editor-expr-grammar}
 \end{figure}
-
-
 
 \subsection{Fallback Representation}
 
