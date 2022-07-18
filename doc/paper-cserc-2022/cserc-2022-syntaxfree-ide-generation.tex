@@ -56,7 +56,7 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 \begin{teaserfigure}
   \includegraphics[width=\textwidth]{screens/banner.png}
   \caption{Builtin block editor that resembles the syntax of the augmented SQL}
-  \label{fig:banner}
+  \label{fig:sql-runtime}
 \end{teaserfigure}
 
 \maketitle
@@ -65,17 +65,19 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 
 Computer science introduction often uses syntaxfree drag-and-drop programming languages to ease the first steps when learning how to program. This approach has the benefit of eliminating the whole possibility to confront learners with syntax errors. But the actual languages that are being thaugt this way are not relevant in the programming industry. For educators, this is a inconvenient situation: Block languages are proven to be great tools to spark interest in programming. But making the step from block languages to conventional programming languages is still difficult. Additionally, some students view these environments as overly restrictive and \enquote{not real programming}\cite{braune_learning_2020}.
 
-One important aspect is to explicitly plan the transition from block based languages to text based languages. In \cite{fraser_ten_2015} this is called the \enquote{exit strategy} and \cite{alrubaye_comparison_2019} shows promising results when confronting students with block and textual programming simultaneously. This paper therefore follows these ideas and presents an approach to rapidly generate block language variations of conventional programming languages. Instead of hiding syntax details like parentheses, semicolons, commas, ... these are organically made part of the blocks. Therefore learners are continously confronted with the syntax details of their language of choice without having to actually type it. Additionally the resulting program is not meant to be run only in some learning environment. On a technical level the program can be compiled to proper source code in the target language and be run.
+One important aspect is to explicitly plan the transition from block based languages to text based languages. In \cite{fraser_ten_2015} this is called the \enquote{exit strategy} and \cite{alrubaye_comparison_2019} shows promising results when confronting students with block and textual programming simultaneously. The approach of \enquote{frame based editing} proposed by \cite{kolling_frame-based_2015} is another proposal to overcome the gap: Certain structural parts of the source code are draggable, some are read only and certain parts within this structure are textually editable.
+
+This paper follows these ideas and presents an approach to rapidly generate block language variations of conventional programming languages based on a grammar representation. Instead of hiding syntax details like parentheses, semicolons, commas, ... these are organically made part of the grammar and the resulting blocks. Therefore learners are continously confronted with the syntax details of their language of choice without having to actually type it. Additionally the resulting program is not meant to be run only in some learning environment. On a technical level the program can be compiled to proper source code in the target language and be run.
+
+To show that the general grammar based approach as well as our specific implementation is not overly specifically tied to our own block editor, we also generate Blockly documents and editors\footnote{\url{https://developers.google.com/blockly}} as well as pretty printable syntax trees for the industry standard \texttt{prettier} program\footnote{\url{https://prettier.io/}}. Apart from the benefit of having multiple backends to avoid overly specific details in what should be a general solution, Blockly and prettier are established tools that work reliable under almost any circumstances and showed quite a few initial flaws during development.
 
 \section{Architecture Overview}
 
-Our approach defines the common set of core data structures for compilers: Syntax\-trees, grammars \& validators. The main reason for this re-invention of the wheel is the differing focus of existing software: The syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations.
+At the core our approach is about representing the same syntax tree in two different ways: Either as a block editor that can be used to edit the syntax tree. Or as a valid textual representation in the augmented programming language. For both of these representations and for general validation the valid structure of a tree is defined as a grammar.
 
-BlattWerkzeug instead focuses exclusively on working with a syntaxtree that lends itself well to be directly presented to the end user. Most importantly, there must not be any node that has no visual or textual representation. Typical compiler tasks that have to do with lexical analysis or parsing are not relevant for Blatt\-Werkzeug.
+Our approach re-defines this common set of core data structures for compilers: Syntax\-trees, grammars \& validators. The main reason for this re-invention of the wheel is the differing focus of existing software: The syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations. Our approach instead focuses exclusively on working with a syntaxtree that lends itself well to be directly presented to the end user. Most importantly, there must not be any node that has no visual or textual representation. Typical compiler tasks that have to do with lexical analysis or parsing are not relevant for our approach. And the other self-evident candidate to build upon, namely Google Blockly, uses a syntax tree representation that includes many positional details that are not of relevance for our approach.
 
-At the core Blatt\-Werkzeug is about representing the same syntax tree in two different ways: Either as a block editor that can be used to edit the syntax tree. Or as a valid textual representation in the augmented programming language. For both of these representations and for general validation the desired structure is defined as a grammar.
-
-On a technical level Blatt\-Werkzeug is split into a frontend and a backend, communication between these layers works via GraphQL. The backend is a Ruby on Rails application that uses PostgreSQL as a database, the frontend is written in TypeScript and uses Angular.
+On a fundamental technical level our implementation is split into a browser-frontend and a \texttt{HTTP}-backend, communication between these layers works via GraphQL. The backend is a Ruby on Rails application that uses PostgreSQL as a database, the frontend is written in TypeScript and uses Angular.
 
 \section{Abstract Syntax Tree}
 
@@ -622,17 +624,75 @@ function validateColumNames(ast, schema, context) {
 \label{lst:validate-valid-column}
 \end{listing}
 
-\subsection{Validation}
-
-Only columns mentioned in the \texttt{FROM} clause may be used in the other clauses.
+To actually execute the \texttt{SQL} queries, a custom runtime based on \texttt{SQLite} can take any syntax tree that can textually be represented as \texttt{SQL}. The client sends the tree to the server where it is compiled to the textual representation and executed against a \texttt{SQLite} database. Various size and and execution time limits ensure, that hopefully the server is not overwhelmed by humongous cross products. The result is then sen back to the client for display. Figure~\ref{fig:sql-runtime} gives an impression how a slightly more complicated query than permitted by the example grammar in listing~\ref{lst:grammar-sql} is shown to the user.
 
 \section{Example: JavaScript}
 
-\subsection{Problem: Virtual Root}
+Listing~\ref{lst:grammar-javascript} shows a grammar that allows to express very simple JavaScript programs with \texttt{for}-loops and variable declarations. Most of the node types referenced by the \texttt{typedefs} for \texttt{expression} and \texttt{statement} are omitted, previous examples have shown how to do expressions and function calls. The definition of \texttt{js.forLoop} however demonstrates that even the more complicated structures that span multiple lines and require indentation can be expressed in a concise way.
 
-\subsection{Runtime}
+\begin{listing}[H]
+\begin{minted}[]{javascript}
+grammar "js" {
+  node "program" {
+    container vertical {
+      children sequence "body" ("hole") ::= Statement*
+    }
+  }
+  typedef "expression" ::= exprVariable
+                           | constValue
+                           | binaryExpression
+
+  typedef "statement" ::= declare
+                          | call
+                          | forLoop
+                          | increment
+
+  node "forLoop" {
+    container vertical {
+      container horizontal {
+        "for" ("keyword")
+        "("
+        children "declare" ::= declare*
+        ";"
+        children "check" ::= expression
+        ";"
+        children "step" ::= statement*
+        ")"
+        "{"
+      }
+      container vertical ("indent") {
+        children "statements" ::= statement*
+      }
+      "}"
+    }
+  }
+}
+\end{minted}
+\caption{Semantic \& syntactic structure for a \texttt{JavaScript} subset}
+\label{lst:grammar-javascript}
+\end{listing}
+
+There is however one annoyance with the presented grammar: The root node \texttt{js.program} has no visual representation when empty. This is somewhat expected as a 0 byte file is technically also a valid JavaScript program, but as a result of this inherited design the empty program would collapse to a 1x1 pixel in the internal block editor. The same issue is present in \texttt{js.forLoop}: Technically it is perfectly valid to write a JavaScript \texttt{for}-loop that contains no \texttt{declaration} or \texttt{step} statements. For learners this is however at least uncommon. A language designer can therefore decide to make his subset of JavaScript more strict and require \texttt{js.program} to have at least one \texttt{js.statement} or the \texttt{for}-loop to always incorporate the variable declaration and step statement.
+
+When viewed at a distance, the underlying problem of \enquote{How should the block editor show a possibility to drag something into?} is actually not unique to JavaScript at all but was present all the time. In Blockly this problem is solved with the explicit connector representations on the block design. For the internal editor with it's text-like appearance this is however not possible. The system instead borrows the concept of \enquote{holes} from languages like Haskell. Every time a child node is missing with certainty, a \enquote{under construction} like question mark is displayed. Language designers can also mark child group as \enquote{soft holes} that should appear even if the the absence of children is not technically an error. Figure~\ref{fig:screen-js-empty-for} shows the representation of holes for a node of type \texttt{js.forLoop} without children. The striped background turns red if the user attempts to drag a block that would not be valid in the correspdonding location. The same approach can be applied to the empty \texttt{js.program} to give some kind of artificial representation to an edge case.
+
+\begin{figure}
+  \includegraphics[width=0.25\textwidth]{screens/js-empty-for}
+  \caption{Empty \texttt{for} loop with holes}
+  \label{fig:screen-js-empty-for}
+\end{figure}
+
+As JavaScript is supported by every current browser and there is no need to persist any state, the corresponding runtime does not require any server roundtrips. Figure~\ref{fig:screen-js-runtime-loop} shows how a JavaScript program is executed in the current implementation of the runtime. Technically it uses a web worker to ensure that endless loops do not bring the browser to a halt and provides an alternative implementation of \texttt{console.log} in that webworker so that the user sees the actions of his run without opening any developer tools.
+
+\begin{figure}
+  \includegraphics[width=0.45\textwidth]{screens/js-runtime-loop}
+  \caption{JavaScript runtime executing a trivial program}
+  \label{fig:screen-js-runtime-loop}
+\end{figure}
 
 \section{Conclusion}
+
+The example programming languages that have been shown in this paper demonstrate, that the general approach of generating a block based development environment from a formal specification is versatile and fast. In its current state the environment we developed is self-hosting and allows the definition of alternate block languages for every runtime that is already implemented. Currently runtimes are available for \texttt{SQLite}, \texttt{JavaScript}, Regular Expressions, \texttt{GraphViz}, basic math equations based on \texttt{Nerdamer} and a quite complex (but ultimately artificial) \texttt{JavaScript}-variation of the Kara-approach called \texttt{Trucklino}\cite{popp_konzeption_2019}.
 
 \printbibliography
 
