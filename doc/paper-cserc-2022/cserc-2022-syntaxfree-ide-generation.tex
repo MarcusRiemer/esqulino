@@ -1,4 +1,4 @@
-\documentclass[sigconf,natbib=false,review=true]{acmart}
+\documentclass[sigconf,natbib=false,review=true,anonymous]{acmart}
 
 \usepackage[
 datamodel=acmdatamodel,
@@ -14,6 +14,13 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 \usepackage{minted}    % Source code formatting
 \usepackage{csquotes}  % Eases working with quotes
 \usepackage[author={Marcus}]{pdfcomment}
+
+% Hack to avoid red boxes around characters in listings
+% https://tex.stackexchange.com/questions/343494/
+\makeatletter
+\AtBeginEnvironment{minted}{\dontdofcolorbox}
+\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
+\makeatother
 
 % "Constant" to set the scaling of all ASTs at once
 \newcommand\astScale{0.75}
@@ -62,7 +69,7 @@ One important aspect is to explicitly plan the transition from block based langu
 
 \section{Architecture Overview}
 
-Blatt\-Werkzeug defines the common set of core data structures: Syntax\-trees, grammars \& validators. The main reason for this re-invention the wheel is the differing focus of existing software: The syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations.
+Our approach defines the common set of core data structures for compilers: Syntax\-trees, grammars \& validators. The main reason for this re-invention of the wheel is the differing focus of existing software: The syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations.
 
 BlattWerkzeug instead focuses exclusively on working with a syntaxtree that lends itself well to be directly presented to the end user. Most importantly, there must not be any node that has no visual or textual representation. Typical compiler tasks that have to do with lexical analysis or parsing are not relevant for Blatt\-Werkzeug.
 
@@ -499,17 +506,121 @@ With this additional syntactic information about terminal symbols, linebreaks an
   \label{fig:screen-editor-xml-no-border}
 \end{figure}
 
-\section{Example: \texttt{HTML} and child ordering}
+\section{Example: \texttt{HTML}}
 
-When going from the representation of any schema-free \texttt{XML}-document to \texttt{HTML} the syntax stays almost the same, but the structural requirements change drastically.
+When going from the representation of any \texttt{XML}-document to \texttt{HTML5} the syntax stays almost the same. But for a better block editing experience proper support for \texttt{HTML5} \enquote{microsyntaxes} is desirable and fairly straightforward. The commonly used boolean attributes\footnote{\enquote{The presence of a boolean attribute on an element represents the true value, and the absence of the attribute represents the false value. If the attribute is present, its value must either be the empty string or a value that is an ASCII case-insensitive match for the attribute's canonical name, with no leading or trailing whitespace.}\cite[\nopp 2.3.2]{whatwg_html_2022}} can technically be emulated with the \texttt{xml.attribute} presented earlier, e.g. by using \texttt{<input type="check" checked="checked"} for a pre-selected checkbox. But a specific representation via a node type without a \texttt{value} property would provide the more commonly used syntax in these cases, the previous example would be shortened to \texttt{<input type="check" checked}. A similar argument can be made for space or comma separated tokens, commonly occurring with the \texttt{class}-attribute. While simply using a normal text property would be valid (as shown in figure~\ref{fig:screen-editor-xml-no-border}), the editing experience would be improved with each \texttt{class} value being represented as a individual block.
 
-Reduction of possible DOM values without sacrificing the semenatic structure.
+The structural requirements however change drastically: \texttt{HTML5} mandates a strict hierarchy to which all elements must conform, for example a \texttt{<html>}-element must be at the root, \texttt{<head>} and \texttt{<body>} must be immediate children of \texttt{html}. On the one hand these immediate children relationships can be gracefully expressed using distinct node types, listing~\ref{lst:grammar-html-subset-structure} shows a possible subset of such a definition. Note that on the \texttt{html.html} element the order \texttt{head} before \texttt{body} is fixed and that there may only be one \texttt{html.title} as a child of \texttt{html.head}. This way of expressing \texttt{HTML} however has a serious downside for the visualization: Although all elements are structurally identical, they would each require distinct visualization instructions. For this reason the \texttt{visualize} instruction (as introduced in listing~\ref{lst:grammar-xml-syntax} could be enhanced to represent more than a single type.
 
-\subsection{Order Of Children}
+The more tedious mismatch between \texttt{HTML5} and the proposed grammar language is however due to the way that certain common \texttt{HTML} attributes are defined: The attributes \texttt{id} and \texttt{class} for example may appear on anything that is declared a \enquote{HTML element} by the standard\cite[\nopp 2.1.3]{whatwg_html_2022}. In the context of the example in listing~\ref{lst:grammar-html-subset-structure} this would mean that all types (including the technically \enquote{invisible} types \texttt{html}, \texttt{head}, \texttt{title}, ...) must repeatedly define something like \texttt{children "classes" ::= class?} (depending on how the actual structural representation is chosen).
 
-Most \texttt{HTML} elements can appear in any order.
+\begin{listing}[H]
+\begin{minted}[]{typescript}
+grammar "html" {
+  node "html" {
+    children "elements" ::= head? body?
+  }
+
+  node "head" {
+    children "elements" ::= title? & link* & rel*
+  }
+
+  node "body" {
+    children "elements" ::= h1* & h2* & p* & div*
+  }
+}
+\end{minted}
+\caption{Semantic structure for \texttt{HTML} subset}
+\label{lst:grammar-html-subset-structure}
+\end{listing}
+
+Although it is therefore possible to accurately represent an educationally meaningful subset of \texttt{HTML5} with our grammar approach, it requires repetition and is therefore tedious for the language designer to work with. This is partially due to the lack of a way to share structures over multiple node types in the grammar language. An inheritance, mixin or macro like feature could solve this, but as the following examples for \texttt{SQL} and \texttt{JavaScript} will show: This problem is quite unique to markup languages and maybe does not warrant a complication of the currently quite simple grammar core language.
 
 \section{Example: SQL}
+
+Listing~\ref{lst:grammar-sql} shows a grammar that describes the structure of quite simple \texttt{SELECT ... FROM ... GROUP BY} queries that allow function calls and the star operator. The example grammar further mixes semantic and structural information to demonstrate that it is not strictly required to work with two distinct grammar documents as demonstrated previously for \texttt{XML} in listings \ref{lst:grammar-xml-structure} and \ref{lst:grammar-xml-syntax}.
+
+\begin{listing}[H]
+\begin{minted}[]{typescript}
+grammar "SQL" {
+  node "sql"."select" {
+    container vertical {
+      container horizontal {
+        "SELECT"
+        children "columns" ::= starOperator? & expr*
+      }
+      children "from"    ::= from
+      children "groupBy" ::= groupBy?
+    }
+  }
+
+  node "sql"."starOperator" {
+    "*"
+  }
+
+  typedef "sql"."expr" ::= columnName | functionCall
+
+  node "sql"."columnName" {
+    prop "refTableName" string
+    "."
+    prop "columnName"   string
+  }
+
+  node "sql"."functionCall" {
+    prop "name" string
+    "("
+    children "arguments" (between: ",") ::= expr*
+    ")"
+  }
+
+  node "sql"."from" {
+    container horizontal {
+      "FROM"
+      children "tables" (between: ",") ::= tableIntro+
+    }
+  }
+
+  node "sql"."tableIntro" {
+    prop "name" string
+  }
+
+  node "sql"."groupBy" {
+    container horizontal {
+      "GROUP BY"
+      children "expr" (between: ",") ::= expr+
+    }
+  }
+}
+\end{minted}
+\caption{Semantic \& syntactic structure for a \texttt{SQL} subset}
+\label{lst:grammar-sql}
+\end{listing}
+
+The root node \texttt{sql.select} defines the basic visual structure: Each component (\texttt{sql.select}, \texttt{sql.from}, \texttt{sql.groupBy}) shall be displayed on it's own line. Additionally all of these components contain the correspdonding \texttt{SQL} keyword as terminal symbols. The types \texttt{sql.functionCall}, \texttt{sql.from} and \texttt{sql.groupBy} also demonstrate, that the \texttt{children} instruction allows to specify a terminal symbol to be used between child elements.
+
+But to actually validate the correctness of an \texttt{SQL} query the information in this grammar is not sufficient: It does not restrict the names of tables or columns. This information about the \texttt{SQL} schema could in theory be encoded into grammar as well, but practically it is not feasible to define a new dialect of \texttt{SQL} for every database. To analyze an \texttt{SQL} syntax tree in the context of a schema a custom Typescript validation function can be provided. Under the hood the structural validation based on the grammar uses the exact same validation mechanisms as those available for the custom per language validation. For \texttt{SQL} the currently implemented validator can ensure that every column reference exists in the schema, that every column reference somehow appears in the \texttt{FROM} component, that no column or table name is duplicated, that every function name is valid and that every function is called with the correct number of arguments.
+
+An example for the validation of column names can be seen in listing~\ref{lst:validate-valid-column}. If it turns out that the \texttt{ast} contains a reference to a column that is not defined in the \texttt{schema}, an \texttt{UNKNOWN\_COLUMN} error is added to the given validation context. The type \texttt{NodeDescription} for the variable \texttt{c} in \texttt{allColumns.forEach} is the same as shown in the definition of the syntax tree data structure in listing~\ref{lst:typescript-ast}. The property names \texttt{refTableName} and \texttt{columnName} are the same as defined in the grammar in listing~\ref{lst:grammar-sql}.
+
+\begin{listing}[H]
+\begin{minted}[]{typescript}
+function validateColumNames(ast, schema, context) {
+  const allColumns = ast.getNodesOfType({
+    languageName: "sql",
+    typeName: "columnName",
+  });
+  allColumns.forEach((c: NodeDescription) => {
+    const refTable = c.properties["refTableName"];
+    const columnName = c.properties["columnName"];
+    if (!schema.hasColumn(refTable, columnName)) {
+      context.addError("UNKNOWN_COLUMN", c);
+    }
+  });
+}
+\end{minted}
+\caption{Validating column names against a \texttt{SQL} schema}
+\label{lst:validate-valid-column}
+\end{listing}
 
 \subsection{Validation}
 
