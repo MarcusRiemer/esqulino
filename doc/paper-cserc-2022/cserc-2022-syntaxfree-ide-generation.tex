@@ -671,7 +671,7 @@ When viewed at a distance, the underlying problem of \enquote{How should the blo
   \label{fig:screen-js-empty-for}
 \end{figure}
 
-As JavaScript is supported by every current browser and there is no need to persist any state, the corresponding runtime does not require any server roundtrips. Figure~\ref{fig:screen-js-runtime-loop} shows how a JavaScript program is executed in the current implementation of the runtime. Technically it uses a web worker to ensure that endless loops do not bring the browser to a halt and provides an alternative implementation of \texttt{console.log} in that webworker so that the user sees the actions of his run without opening any developer tools.
+As JavaScript is supported by every current browser and there is no need to persist any state, the corresponding runtime does not require any server roundtrips. Figure~\ref{fig:screen-js-runtime-loop} shows how a JavaScript program is executed in the current implementation of the runtime. Technically it uses a web worker to ensure that endless loops do not bring the browser to a halt and provides an alternative implementation of \texttt{console.log} in that webworker so that the user sees the actions of his run without opening any developer tools. An alternative runtime called \enquote{Trucklino} was implemented as part of a bachelors thesis\cite{popp_konzeption_2019} and is shown in figure~\ref{fig:js-runtime-trucklino}: It provides a Kara-like\cite{hartmann_kara_2001} environment to solve puzzles with JavaScript.
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{screens/js-runtime-loop}
