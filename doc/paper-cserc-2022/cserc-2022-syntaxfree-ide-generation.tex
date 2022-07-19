@@ -199,7 +199,7 @@ In contrast to grammars in general compiler construction, the grammar described 
 \item Syntax errors equate to missing nodes and can be communicated very clearly. Semantic analysis does not need to rely on heuristics on how the tree could change if the \enquote{blanks} were filled in.
 \end{enumerate}
 
-In comparision to traditional grammars, this shifts the way one has to reason about the validation rules inside of BlattWerkzeug: There is no need to worry about the syntactic aspects of a certain language, the grammar that is required doesn’t need to know anything about keywords or separating characters. Its sole job is to describe the structure and the semantics of trees that are valid in that specific language. If keywords are included in the grammar, this is solemly for the purpose of blocks that resemble the underlying programming language or for code generation. The actual grammar validation does not use these keywords at all.
+In comparision to traditional grammars, this shifts the way one has to reason about the validation when following our approach: There is no need to worry about the syntactic aspects of a certain language, the grammar that is required doesn’t need to know anything about keywords or separating characters. Its sole job is to describe the structure and the semantics of trees that are valid in that specific language. If keywords are included in the grammar, this is solemly for the purpose of blocks that resemble the underlying programming language or for code generation. The actual grammar validation does not use these keywords at all.
 
 \subsection{Expression Semantics}
 
@@ -379,7 +379,7 @@ With the syntactic information provided by the grammar, the textual representati
 
 \subsection{Self Hosting (Meta Grammar)}
 
-The syntax that has been used so far to describe the grammars is a textual representation of the grammar editor that is available within Blatt\-Werkzeug. Every one of these grammars could have also been shown in the form of a screenshot of the block editor to edit that grammar. Technically grammars and block languages are, like the syntax tree, described as \texttt{JSON}-documents. In order to create grammars for new programming languages from inside the tool itself, it is therefore only required to transform some syntax tree to a valid \texttt{JSON} grammar document. The grammar and block language to describe the actual block language and grammar are called \enquote{Meta Grammar} and \enquote{Meta Block Language}. Figure~\ref{fig:screen-editor-expr-grammar} shows how the grammar for the expression language looks like in the builtin editor. As the \texttt{JSON} grammar has almost no syntactic overlap with the textual representation, the compilation step for the meta grammar involves custom code generators.
+The syntax that has been used so far to describe the grammars is a textual representation of the grammar editor that is available within our implementation as a block editor. Every one of these grammars could have also been shown in the form of a screenshot of the block editor to edit that grammar. Technically grammars and block languages are, like the syntax tree, described as \texttt{JSON}-documents. In order to create grammars for new programming languages from inside the tool itself, it is therefore only required to transform some syntax tree to a valid \texttt{JSON} grammar document. The grammar and block language to describe the actual block language and grammar are called \enquote{Meta Grammar} and \enquote{Meta Block Language}. Figure~\ref{fig:screen-editor-expr-grammar} shows how the grammar for the expression language looks like in the builtin editor. As the \texttt{JSON} grammar has almost no syntactic overlap with the textual representation, the compilation step for the meta grammar involves custom code generators.
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{screens/expr-blocks-grammar}
@@ -401,7 +401,7 @@ As this representation is technically a normal block language, it is also fully 
 
 \section{Programming Language Runtimes}
 
-So far we have discussed how grammars can be used to validate the structure of a syntax tree, to derive a visual editor that can change the structure of the syntax tree and how to derive a textual representation of the syntax tree. But to have an actually complete example for a real world programming language the actual possibility to run the code is still missing. Providing this kind of runtime for the textual representation of the syntax trees is however always a manual task. In the current state of Blatt\-Werkzeug the following runtimes are provided:
+So far we have discussed how grammars can be used to validate the structure of a syntax tree, to derive a visual editor that can change the structure of the syntax tree and how to derive a textual representation of the syntax tree. But to have an actually complete example for a real world programming language the actual possibility to run the code is still missing. Providing this kind of runtime for the textual representation of the syntax trees is however always a manual task. In the current state of our implementation the following runtimes are provided:
 
 \begin{itemize}
 \item \texttt{SQL} as understood by SQLite. The required database is stored on the server, the frontend sends the desired syntax tree to be executed.
