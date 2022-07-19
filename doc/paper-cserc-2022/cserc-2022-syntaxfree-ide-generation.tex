@@ -22,6 +22,10 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 \def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
 \makeatother
 
+% Create a new environment for breaking code listings across pages.
+% https://tex.stackexchange.com/questions/368864/
+\newenvironment{longlisting}{\captionsetup{type=listing} \vspace{1.5em}}{\vspace{1.5em}}
+
 % "Constant" to set the scaling of all ASTs at once
 \newcommand\astScale{0.75}
 
@@ -54,8 +58,8 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 \end{abstract}
 
 \begin{teaserfigure}
-  \includegraphics[width=\textwidth]{screens/banner.png}
-  \caption{Builtin block editor that resembles the syntax of the augmented SQL}
+  \centering\includegraphics[width=\textwidth]{screens/js-runtime-trucklino.png}
+  \caption{Builtin block editor with puzzle solving runtime that resembles the syntax of the augmented JavaScript}
   \label{fig:sql-runtime}
 \end{teaserfigure}
 
@@ -216,9 +220,8 @@ In order to also allow references to variables, we add a second valid type of no
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
+// node null as before
 grammar "lang" {
-  // node null as before
-
   node "expVar" {
     prop "name" string
   }
@@ -232,9 +235,8 @@ With the types \texttt{lang.null} and \texttt{lang.expVar} defined, we now have 
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
+// node null and expVar as before
 grammar "lang" {
-  // node null and expVar as before
-
   node "expBin" {
     children "lhs" ::= expNull | expVar
     prop     "op"  string
@@ -252,13 +254,11 @@ In a typical grammar we would introduce a new node type like \texttt{lang.expAny
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
+// node null and expVar as before
 grammar "lang" {
-  // node null and expVar as before
-
   node "expAny" {
     children "exp" ::= expBin | expNull | expVar
   }
-
   node "expBin" {
     children "lhs" ::= expAny
     prop     "op"  string
@@ -287,18 +287,16 @@ In addition to the use of \texttt{typedef} the final structural grammar in listi
 grammar "lang" {
   node "null" {
   }
-
   node "expVar" {
     prop "name" { string }
   }
-
   node "expConst" {
     prop "value" { number }
   }
-
-  typedef "expAny" ::= expBin | expNull
-                         | expVar | expConst
-
+  typedef "expAny" ::= expBin
+                       | expNull
+                       | expVar
+                       | expConst
   node "expBin" {
     children "lhs" ::= expAny
     prop     "op"  string enum { == + * }
@@ -331,11 +329,9 @@ For conventional programming languages, these terminal symbols are not only used
 \begin{minted}[]{typescript}
 grammar "lang" {
   // expAny, expConst and expVar as before
-
   node "expNull" {
     "null"
   }
-
   node "expBin" {
     "("
     children "lhs" ::= expAny
@@ -396,8 +392,8 @@ When confronted with defect block language definitions, the block editor can res
 As this representation is technically a normal block language, it is also fully editable. Everything that is underlined may be clicked and changed. The blocks also may be dragged and new blocks can be added from the sidebar.
 
 \begin{figure}
-  \includegraphics[width=0.3\textwidth]{screens/expr-blocks-fallback}
-  \caption{Internal fallback representation for expressions}
+  \includegraphics[width=0.30\textwidth]{screens/expr-blocks-fallback}
+  \caption{Internal fallback representation for expressions, the tree shown is the same as in figure~\ref{fig:screen-editor-expr-internal}}
   \label{fig:screen-editor-expr-fallback}
 \end{figure}
 
@@ -416,7 +412,7 @@ So far we have discussed how grammars can be used to validate the structure of a
 
 \item Mathematical equations and transformations backed by the symbolic math library Nerdamer\footnote{\url{https://nerdamer.com/}}.
 
-\item A subset of the GraphViz language to render graphs\footnote{\url{https://graphviz.org/}}.
+\item A subset of the GraphViz\footnote{\url{https://graphviz.org/}} language to render graphs.
 \end{itemize}
 
 Each of these runtimes operate on the assumption that there is a grammar (or in the case of Trucklino: a code generator) to compile a textual representation from any valid syntax tree. The textual representation is then used as the input for the runtime. As shown by the very diverse modes of operations on these few examples (tabular output, console output, graphical output, client side calculation, server side calculation), there is no really unified strategy available to provide a generic approach to such runtimes. Therefore all of these runtimes are custom built with TypeScript, Angular and possibly Ruby.
@@ -462,7 +458,6 @@ grammar "xml" {
       {{value}} ("double-quote")
     }
   }
-
   visualize "element" {
     container vertical {
       container horizontal {
@@ -504,7 +499,7 @@ With this additional syntactic information about terminal symbols, linebreaks an
 
 \section{Example: \texttt{HTML}}
 
-When going from the representation of any \texttt{XML}-document to \texttt{HTML5} the syntax stays almost the same. But for a better block editing experience proper support for \texttt{HTML5} \enquote{microsyntaxes} is desirable and fairly straightforward. The commonly used boolean attributes\footnote{\enquote{The presence of a boolean attribute on an element represents the true value, and the absence of the attribute represents the false value. If the attribute is present, its value must either be the empty string or a value that is an ASCII case-insensitive match for the attribute's canonical name, with no leading or trailing whitespace.}\cite[\nopp 2.3.2]{whatwg_html_2022}} can technically be emulated with the \texttt{xml.attribute} presented earlier, e.g. by using \texttt{<input type="check" checked="checked"} for a pre-selected checkbox. But a specific representation via a node type without a \texttt{value} property would provide the more commonly used syntax in these cases, the previous example would be shortened to \texttt{<input type="check" checked}. A similar argument can be made for space or comma separated tokens, commonly occurring with the \texttt{class}-attribute. While simply using a normal text property would be valid (as shown in figure~\ref{fig:screen-editor-xml-no-border}), the editing experience would be improved with each \texttt{class} value being represented as an individual block.
+When going from the representation of any \texttt{XML}-document to \texttt{HTML5} the syntax stays almost the same. But for a better block editing experience proper support for \texttt{HTML5} \enquote{microsyntaxes} is desirable and fairly straightforward. The commonly used boolean attributes can technically be emulated with the \texttt{xml.attribute} presented earlier, e.g. by using \texttt{<input type="check" checked="checked"} for a pre-selected checkbox. But a specific representation via a node type without a \texttt{value} property would provide the more commonly used syntax in these cases, the previous example would be shortened to \texttt{<input type="check" checked}. A similar argument can be made for space or comma separated tokens, commonly occurring with the \texttt{class}-attribute. While simply using a normal text property would be valid (as shown in figure~\ref{fig:screen-editor-xml-no-border}), the editing experience would be improved with each \texttt{class} value being represented as an individual block.
 
 The structural requirements however change drastically: \texttt{HTML5} mandates a strict hierarchy to which all elements must conform, for example a \texttt{<html>}-element must be at the root, \texttt{<head>} and \texttt{<body>} must be immediate children of \texttt{html}. On the one hand these immediate children relationships can be gracefully expressed using distinct node types, listing~\ref{lst:grammar-html-subset-structure} shows a possible subset of such a definition. But on the other hand we will see, that this requires an unfortunate amount of redundancy for the structurally identical definitions.
 
@@ -518,11 +513,9 @@ grammar "html" {
   node "html" {
     children "elements" ::= head? body?
   }
-
   node "head" {
     children "elements" ::= title? & link* & rel*
   }
-
   node "body" {
     children "elements" ::= h1* & h2* & p* & div*
   }
@@ -538,7 +531,7 @@ Although it is therefore possible to accurately represent an educationally meani
 
 Listing~\ref{lst:grammar-sql} shows a grammar that describes the structure of quite simple \texttt{SELECT ... FROM ... GROUP BY} queries that allow function calls and the star operator. The example grammar further mixes semantic and structural information to demonstrate that it is not strictly required to work with two distinct grammar documents as demonstrated previously for \texttt{XML} in listings \ref{lst:grammar-xml-structure} and \ref{lst:grammar-xml-syntax}.
 
-\begin{listing}[H]
+\begin{longlisting}
 \begin{minted}[]{typescript}
 grammar "SQL" {
   node "sql"."select" {
@@ -551,37 +544,32 @@ grammar "SQL" {
       children "groupBy" ::= groupBy?
     }
   }
-
   node "sql"."starOperator" {
     "*"
   }
-
   typedef "sql"."expr" ::= columnName | functionCall
+
 
   node "sql"."columnName" {
     prop "refTableName" string
     "."
     prop "columnName"   string
   }
-
   node "sql"."functionCall" {
     prop "name" string
     "("
     children "arguments" (between: ",") ::= expr*
     ")"
   }
-
   node "sql"."from" {
     container horizontal {
       "FROM"
       children "tables" (between: ",") ::= tableIntro+
     }
   }
-
   node "sql"."tableIntro" {
     prop "name" string
   }
-
   node "sql"."groupBy" {
     container horizontal {
       "GROUP BY"
@@ -592,7 +580,7 @@ grammar "SQL" {
 \end{minted}
 \caption{Semantic \& syntactic structure for a \texttt{SQL} subset}
 \label{lst:grammar-sql}
-\end{listing}
+\end{longlisting}
 
 The root node \texttt{sql.select} defines the basic visual structure: Each component (\texttt{sql.select}, \texttt{sql.from}, \texttt{sql.groupBy}) shall be displayed on it's own line. Additionally all of these components contain the correspdonding \texttt{SQL} keyword as terminal symbols. The types \texttt{sql.functionCall}, \texttt{sql.from} and \texttt{sql.groupBy} also demonstrate, that the \texttt{children} instruction allows to specify a terminal symbol to be used between child elements.
 
@@ -620,13 +608,19 @@ function validateColumNames(ast, schema, context) {
 \label{lst:validate-valid-column}
 \end{listing}
 
+\begin{figure}
+  \includegraphics[width=0.45\textwidth]{screens/sql-runtime-param.png}
+  \caption{Builtin block editor that resembles the syntax of the augmented SQL}
+  \label{fig:sql-runtime}
+\end{figure}
+
 To actually execute the \texttt{SQL} queries, a custom runtime based on \texttt{SQLite} can take any syntax tree that can textually be represented as \texttt{SQL}. The client sends the tree to the server where it is compiled to the textual representation and executed against a \texttt{SQLite} database. Various size and and execution time limits ensure, that hopefully the server is not overwhelmed by humongous cross products. The result is then sent back to the client for display. Figure~\ref{fig:sql-runtime} gives an impression how a slightly more complicated query than permitted by the example grammar in listing~\ref{lst:grammar-sql} is shown to the user.
 
 \section{Example: JavaScript}
 
 Listing~\ref{lst:grammar-javascript} shows a grammar that allows expressing very simple JavaScript programs with \texttt{for}-loops and variable declarations. Most of the node types referenced by the \texttt{typedefs} for \texttt{expression} and \texttt{statement} are omitted, previous examples have shown how to do expressions and function calls. The definition of \texttt{js.forLoop} however demonstrates that even the more complicated structures that span multiple lines and require indentation can be expressed in a concise way.
 
-\begin{listing}[H]
+\begin{longlisting}
 \begin{minted}[]{javascript}
 grammar "js" {
   node "program" {
@@ -642,7 +636,6 @@ grammar "js" {
                           | call
                           | forLoop
                           | increment
-
   node "forLoop" {
     container vertical {
       container horizontal {
@@ -666,7 +659,7 @@ grammar "js" {
 \end{minted}
 \caption{Semantic \& syntactic structure for a \texttt{JavaScript} subset}
 \label{lst:grammar-javascript}
-\end{listing}
+\end{longlisting}
 
 There is however one annoyance with the presented grammar: The root node \texttt{js.program} has no visual representation when empty. This is somewhat expected as a 0 byte file is technically also a valid JavaScript program, but as a result of this inherited design the empty program would collapse to a 1x1 pixel in the internal block editor. The same issue is present in \texttt{js.forLoop}: Technically it is perfectly valid to write a JavaScript \texttt{for}-loop that contains no \texttt{declaration} or \texttt{step} statements. For learners this is however at least uncommon. A language designer can therefore decide to make his subset of JavaScript more strict and require \texttt{js.program} to have at least one \texttt{js.statement} or the \texttt{for}-loop to always incorporate the variable declaration and step statement.
 
