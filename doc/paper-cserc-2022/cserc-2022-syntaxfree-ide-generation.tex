@@ -116,13 +116,13 @@ A single node in the syntaxtree has at least a \texttt{type} that consists of tw
 
 Nodes may define so called \texttt{properties} which hold atomic values in the form of texts or integers, but never in the form of child nodes. Each of these properties needs to have a name that is unique in the scope of the current node.
 
-The \texttt{children} of nodes have to be organized in so called \enquote{child groups}. Each of these groups has a name and contains any number of sub-trees in order. Naming the child groups enables the grammars to specify complex sub trees without relying on the ordering of these nodes. The resulting structure has a strong resemblance to an \texttt{XML}-tree, but instead of grouping all children in one of exactly two named scopes (elements and attributes), they are organised into any number of named sub trees.
+The \texttt{children} of nodes have to be organized in so called \enquote{child groups}. Each of these groups has a name and contains any number of sub-trees in order. Naming the child groups enables the grammars to specify complex sub trees without relying on the ordering of these nodes. The resulting structure has a strong resemblance to an \texttt{XML} tree, but instead of grouping all children in one of exactly two named scopes (elements and attributes), they are organised into any number of named sub trees.
 
 The examples presented in the sections~\ref{sec:ast-example-if} and \ref{sec:ast-example-expr} demonstrate how common programming language concepts like expressions and an \texttt{if} statement could be represented using this specific syntax tree structure with named child groups. The corresponding grammars to validate syntax trees and to generate the corresponding block editors will be introduced from section~\ref{sec:expression-grammar} onward.
 
 \subsection{AST Example: Binary Expression}
 \label{sec:ast-example-expr}
-The tree in Listing~\ref{lst:ast-expr-binary} is shown in two equivalent representations: the \texttt{JSON}-datastructure conforming to Listing~\ref{lst:typescript-ast} and a graphical tree. It is a possible representation of the expression \texttt{numRattles == null} as it is commonly found in many languages. It consists of three nodes: The root node is of type \texttt{lang.expBin}, the dot (\enquote{\texttt{.}}) is used as a separator between the \texttt{language} and the \texttt{name} of a node. The childgroup with the name \texttt{lhs} (\enquote{left hand side}) contains a node of type \texttt{lang.expVar} which is meant to refer to an existing variable on the left hand side of the expression. The property \texttt{name} is set to \texttt{numRattles}.
+The tree in Listing~\ref{lst:ast-expr-binary} is shown in two equivalent representations: the \texttt{JSON} data structure conforming to Listing~\ref{lst:typescript-ast} and as graphical tree in Figure~\ref{fig:ast-expr-binary}. It is a possible representation of the expression \texttt{numRattles == null} as it is commonly found in many languages. It consists of three nodes: The root node is of type \texttt{lang.expBin}, the dot (\enquote{\texttt{.}}) is used as a separator between the \texttt{language} and the \texttt{name} of a node. The childgroup with the name \texttt{lhs} (\enquote{left hand side}) contains a node of type \texttt{lang.expVar} which is meant to refer to an existing variable on the left hand side of the expression. The property \texttt{name} is set to \texttt{numRattles}.
 
 \begin{listing}[H]
 \begin{minted}{typescript}
@@ -200,11 +200,11 @@ But the actual benefit of only working with syntax trees and not requiring a par
 Syntaxtrees may define arbitrary tree structures, but for practical reasons only trees conforming to a certain set of known properties and children are of relevance. We therefore say that a certain tree may be \enquote{valid} in the context of a certain grammar. The example in Listing~\ref{lst:ast-expr-binary} implicitly relied on a few limitations:
 
 \begin{enumerate}
-\item \texttt{lang.null} never has children or properties.
+\item \label{itm:lang-exp-null} \texttt{lang.null} never has children or properties.
 
-\item \texttt{lang.expVar} never has children, but it must have a property called \texttt{name} which denotes the name of the variable the expression refers to.
+\item \label{itm:lang-exp-var} \texttt{lang.expVar} never has children, but it must have a property called \texttt{name} which denotes the name of the variable the expression refers to.
 
-\item \texttt{lang.expBin} has two child groups named \texttt{lhs} and \texttt{rhs} which stand for the two sides of the equation. These child groups may themselves contain a single \texttt{null}, \texttt{expVar} or \texttt{expBin}. The property \texttt{op} will treat the value \texttt{eq} as meaning \enquote{equality} and possibly allows other values such as \texttt{leq} or \texttt{gt}.
+\item \label{itm:lang-exp-bin} \texttt{lang.expBin} has two child groups named \texttt{lhs} and \texttt{rhs} which stand for the two sides of the equation. These child groups may themselves contain a single \texttt{null}, \texttt{expVar} or \texttt{expBin}. The property \texttt{op} will treat the value \texttt{eq} as meaning \enquote{equality} and possibly allows other values such as \texttt{leq} or \texttt{gt}.
 \end{enumerate}
 
 Imposing such structural requirements by restricting the allowed or required properties and child groups is done with a grammar. The underlying validation concept is losely based on \texttt{XML} Schema and RelaxNG, the syntax of the latter is also used as the inspiration to describe the grammars in a user friendly textual representation.
@@ -213,7 +213,7 @@ In contrast to grammars in general compiler construction, the grammar described 
 
 \begin{enumerate}
 \item There is no whitespace and seperation characters are never required. What matters is only the structure of the tree: the type of the node in question determines which properties and child groups exist and what values are permitted.
-\item Syntax errors equate to missing nodes and can be communicated very clearly. Semantic analysis does not need to rely on heuristics on how the tree could change if the \enquote{blanks} were filled in.
+\item Most errors equate to missing nodes and can be communicated very clearly. Semantic analysis does not need to rely on heuristics on how the tree could change if the \enquote{blanks} were filled in.
 \end{enumerate}
 
 In comparision to traditional grammars, this shifts the way one has to reason about the validation when following our approach: There is no need to worry about the syntactic aspects of a certain language, the grammar that is required doesn’t need to know anything about keywords or separating characters. Its sole job is to describe the structure and the semantics of trees that are valid in that specific language. If keywords are included in the grammar, this is solemly for the purpose of blocks that resemble the underlying programming language or for code generation. The actual grammar validation does not use these keywords at all.
@@ -246,7 +246,7 @@ grammar "lang" {
 \label{lst:grammar-expr-expVar}
 \end{listing}
 
-With the types \texttt{lang.null} and \texttt{lang.expVar} defined, we now have two leaf nodes for our expression language. In order for a type to act as a parent, as \texttt{lang.expBin} must, we need to define the names and the valid types for the child groups. Listing~\ref{lst:grammar-expr-expBin-verbose} declares such a type that defines the child groups \texttt{lhs} and \texttt{rhs} to either take a \texttt{expNull} or an \texttt{expVar}. With this grammar we may now generate checks for comparisions like \texttt{a + 1}, \texttt{a >= a} or \texttt{null == null}.
+With the types \texttt{lang.null} and \texttt{lang.expVar} defined, we now have two leaf nodes for our expression language. In order for a type to act as a parent, as \texttt{lang.expBin} must, we need to define the names and the valid types for the child groups. Listing~\ref{lst:grammar-expr-expBin-verbose} declares such a type that defines the child groups \texttt{lhs} and \texttt{rhs} to either take a \texttt{expNull} or an \texttt{expVar}. With this grammar we may now generate checks for expressions like \texttt{a + 1}, \texttt{a >= PI} or \texttt{a == null}.
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
@@ -268,7 +268,7 @@ Unfortunately there is already some duplication in the definitions of the child 
 In a typical grammar we would introduce a new node type like \texttt{lang.expAny} which would consist of a single child group that lists all permitted values. Listing~\ref{lst:grammar-expr-expBin-choiceNode} shows the relevant excerpt of the grammar and Figure~\ref{fig:ast-choice-node} demonstrates how a valid tree for this grammar could look like: The immediate children of \texttt{lang.expBin} are no longer the actual nodes with semantic meaning, but the artifical choice nodes of type \texttt{lang.expAny}.
 
 \begin{listing}[H]
-\begin{minted}[]{typescript}
+\begin{minted}[highlightlines={3-5,7,9}]{typescript}
 // node null and expVar as before
 grammar "lang" {
   node "expAny" {
@@ -291,14 +291,14 @@ grammar "lang" {
   \label{fig:ast-choice-node}
 \end{figure}
 
-The tree for such a grammar would however contain nodes of type \texttt{expAny} that do not have any kind of possible representation for the end user: As there is no possible textual representation for such a node, it would appear as a completely empty block that can only host another block. The examples syntax trees in Figure~\ref{fig:ast-choice-node} and Listing~\ref{lst:ast-expr-binary} would both be compiled to the exact same textual representation \texttt{numRattles == null}.
+The tree for such a grammar would however contain nodes of type \texttt{expAny} that do not have any kind of possible representation for the end user: As there is no possible textual representation for such a node, it would appear as a completely empty block that can only host another block. The examples syntax trees in Figure~\ref{fig:ast-choice-node} and Figure~\ref{fig:ast-expr-binary} would both be compiled to the exact same textual representation \texttt{numRattles == null}.
 
 To avoid these nodes without visual or textual representation any kind of recurring choice between multiple node types is treated differently from the conventional approach in these grammars: We introduce a pure virtual node type that is referrable by name in the grammar, but may never appear in an actual syntax tree. The textual grammar representation uses the keyword \texttt{typedef} to introduce such a type and it is effectively only used to allow a set of permitted types for a single type. The following Listing~\ref{lst:grammar-expr-expBin-typedef} changes the definition of \texttt{nodeAny} to be such a virtual node and shows the final grammar for the semantics of simple expressions in entirety. The previous definition of \texttt{expBin} (as in Listing~\ref{lst:grammar-expr-expBin-choiceNode}) is unaffected by this change, altough the trees that are validated by the grammars are different. This updated grammar that uses the \texttt{typedef} approach will successfully validate the example binary expression from Listing~\ref{lst:ast-expr-binary}.
 
 In addition to the use of \texttt{typedef} the final structural grammar in Listing~\ref{lst:grammar-expr-expBin-typedef} now contains a type \texttt{lang.expConst} to express constant, numeric values. And the previously unrestricted \texttt{string} for the \texttt{op} property is now restricted to the values \texttt{==}, \texttt{+} and \texttt{*} by using an enumeration.
 
 \begin{listing}
-\begin{minted}[]{typescript}
+\begin{minted}[highlightlines={5-8,11}]{typescript}
 grammar "lang" {
   node "null"     { }
   node "expVar"   { prop "name"  { string } }
@@ -329,10 +329,10 @@ grammar "lang" {
 
 Although the syntax trees that are validated by the final semantic grammar for the expression language (Listing~\ref{lst:grammar-expr-expBin-typedef}) are unambiguous in tree form, their default textual representation is possibly not. Figure~\ref{fig:ast-nested-ambiguous} shows a tree that in a depth first evaluation would effectively calculate $A+B$ first and then multiply the result with $2$. Or in proper textual form: The intended order of operation is $2 * (A+B)$. The actual textual representation however would evaluate to $2 * A + B$.
 
-This demonstrates, that even for the simple expression language we require some basic form of extra terminal symbols, namely the parenthesis in the textual representation. Without such additional syntax the structural information that is part of the tree can't be represented in the textual representation. For this basic example we can mix the semantic structural definition with the syntactic information about terminal symbols in the same grammar by simply adding the parentheses in double quotation marks (listing \ref{lst:grammar-expr-expBin-syntax}). On top of that the \texttt{lang.expNull} node had absolutly no textual representation so far.
+This demonstrates, that even for the simple expression language we require some basic form of extra terminal symbols, namely the parenthesis in the textual representation. Without such additional syntax the structural information that is part of the tree can't be represented in the textual representation. For this basic example we can mix the semantic structural definition with the syntactic information about terminal symbols in the same grammar by simply adding the parentheses in double quotation marks (listing \ref{lst:grammar-expr-expBin-syntax}). On top of that the \texttt{lang.expNull} node had absolutly no textual representation so far and is now represented by the keyword \texttt{null}.
 
 \begin{listing}[H]
-\begin{minted}[]{typescript}
+\begin{minted}[highlightlines={3,5,9}]{typescript}
 grammar "lang" {
   // expAny, expConst and expVar as before
   node "expNull" { "null" }
@@ -391,13 +391,13 @@ The syntax that has been used so far to describe the grammars is a textual repre
 
 \subsection{Fallback Representation}
 
-When confronted with defect block language definitions, the block editor can resort to a fallback that is generated on the fly based on the grammar. This representation is a mixture of \texttt{JSON} and grammar notation which should be immediatly obvious to people that are familiar with the syntax tree representation. It uses the terms \enquote{node}, \enquote{prop} and \enquote{children} to visualize the data in the tree. Figure~\ref{fig:screen-editor-expr-fallback} shows the fallback representation of the four nodes of the example syntax tree that has been visualized in the two previous screenshots of the editor.
+When confronted with defect block language definitions, the block editor can resort to a fallback that is generated on the fly based on the grammar. This representation is a mixture of \texttt{JSON} and grammar notation which should be immediatly obvious to people that are familiar with the syntax tree representation. It uses the terms \enquote{node}, \enquote{prop} and \enquote{children} to visualize the data in the tree. Figure~\ref{fig:screen-editor-expr-fallback} shows the fallback representation for a subset of the nodes of the example syntax tree that has been visualized in the two previous screenshots of the editor.
 
 As this representation is technically a normal block language, it is also fully editable. Everything that is underlined may be clicked and changed. The blocks also may be dragged and new blocks can be added from the sidebar.
 
 \begin{figure}
   \includegraphics[width=0.30\textwidth]{screens/expr-blocks-fallback}
-  \caption{Internal fallback representation for expressions, the tree shown a subset of Figure~\ref{fig:screen-editor-expr-internal}}
+  \caption{Internal fallback representation for expressions, the tree shown a is subset of Figure~\ref{fig:screen-editor-expr-internal}}
   \label{fig:screen-editor-expr-fallback}
 \end{figure}
 
@@ -413,7 +413,9 @@ So far we have discussed how grammars can be used to validate the structure of a
 
 \item \texttt{JavaScript} executed in a WebWorker, so without any access to the \texttt{DOM} and without blocking the browsers only \texttt{JavaScript} context. Basic output via \texttt{console.log} is redirect to a section under the programs block editor.
 
-\item \texttt{Trucklino} is a domain specific language implemented as a bachelors thesis \cite{popp_konzeption_2019} which can be seen as a variation of the Kara approach\cite{hartmann_kara_2001} about a ladybug (or in Trucklino: a truck) that needs to solve programming puzzles.
+\item Regular expressions as understood by JavaScript.
+
+\item \texttt{Trucklino} is a domain specific language based on \texttt{Java\-Script} and implemented as a bachelors thesis \cite{popp_konzeption_2019} which can be seen as a variation of the Kara approach\cite{hartmann_kara_2001} about a ladybug (here: a truck) that solves programming puzzles.
 
 \item \texttt{JSON} and \texttt{XML} purely as data structures without any immediate application or accompanied schema.
 
@@ -431,7 +433,7 @@ Representing an \texttt{XML} structure consisting of any elements, attributes an
 In contrast to the grammar for the expression language, the child groups \texttt{elements} and \texttt{attributes} on \texttt{xml.element} make use of the \texttt{*} operator with the usual meaning of \enquote{any number of items, including none}. This example also shows, that it is possible to have more than one type reference in a child group definition. The \texttt{\&}-operator is borrowed from RELAX NG where it is called the \enquote{interleaving}-operator. It allows children to occur independent of their order, but still respects their cardinality. Without the use of this operator, the resulting grammar would require that any \texttt{xml.element} must occur strictly before any \texttt{xml.text}. For these block grammars the use of such interleaving child groups is the norm: sequences are technically possible but typically replaced by multiple named child groups.
 
 \begin{listing}[H]
-\begin{minted}[]{typescript}
+\begin{minted}[highlightlines={4}]{typescript}
 grammar "xml" {
   node "element" {
     prop "name"           string
@@ -508,7 +510,7 @@ With this additional syntactic information about terminal symbols, linebreaks an
 
 \section{Example: \texttt{HTML}}
 
-When going from the representation of any \texttt{XML}-document to \texttt{HTML5} the syntax stays almost the same. But for a better block editing experience proper support for \texttt{HTML5} \enquote{microsyntaxes} is desirable and fairly straightforward. The commonly used boolean attributes can technically be emulated with the \texttt{xml.attribute} presented earlier, e.g. by using \texttt{<input type="check" checked="checked"} for a pre-selected checkbox. But a specific representation via a node type without a \texttt{value} property would provide the more commonly used syntax in these cases, the previous example would be shortened to \texttt{<input type="check" checked}. A similar argument can be made for space or comma separated tokens, commonly occurring with the \texttt{class}-attribute. While simply using a normal text property would be valid (as shown in Figure~\ref{fig:screen-editor-xml-no-border}), the editing experience would be improved with each \texttt{class} value being represented as an individual block.
+When going from the representation of any \texttt{XML}-document to \texttt{HTML5} the syntax stays almost the same. But for a better block editing experience proper support for \texttt{HTML5} \enquote{microsyntaxes} is desirable and fairly straightforward. The commonly used boolean attributes can technically be emulated with the \texttt{xml.attribute} presented earlier, e.g. by using \texttt{<input type="check" checked="checked">} for a pre-selected checkbox. But a specific representation via a node type without a \texttt{value} property would provide the more commonly used syntax in these cases, the previous example would be shortened to \texttt{<input type="check" checked>}. A similar argument can be made for space or comma separated tokens, commonly occurring with the \texttt{class}-attribute. While simply using a normal text property would be valid (as shown in Figure~\ref{fig:screen-editor-xml-no-border}), the editing experience would be improved with each \texttt{class} value being represented as an individual block.
 
 The structural requirements however change drastically: \texttt{HTML5} mandates a strict hierarchy to which all elements must conform, for example a \texttt{<html>}-element must be at the root, \texttt{<head>} and \texttt{<body>} must be immediate children of \texttt{html}. On the one hand these immediate children relationships can be gracefully expressed using distinct node types, Listing~\ref{lst:grammar-html-subset-structure} shows a possible subset of such a definition. But on the other hand we will see, that this requires an unfortunate amount of redundancy for the structurally identical definitions.
 
@@ -617,7 +619,7 @@ function validateColumNames(ast, schema, context) {
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{screens/sql-runtime-param.png}
-  \caption{Builtin block editor that resembles the syntax of the augmented SQL and runtime environment that allows to parametrize the query and shows the result}
+  \caption{Builtin \texttt{SQL} block editor and runtime environment that allows to parametrize the query and shows the result}
   \label{fig:sql-runtime}
 \end{figure}
 
@@ -688,10 +690,11 @@ As JavaScript is supported by every current browser and there is no need to pers
 
 \section{Conclusion}
 
+In its current state the developed environment is self-hosting and allows the definition of block editors via the described grammar specification. As these generated block editors are used to augment real programming languages, the edited programs require a fitting programming language environment to be run in. Currently these runtimes are available for \texttt{SQLite}, \texttt{Java\-Script}, Regular Expressions, \texttt{Graph\-Viz}, symbolic math equations based on Nerdamer\footnote{\url{https://nerdamer.com/}} and a quite complex (but ultimately artificial) \texttt{Java\-Script}-variation of the Kara-approach called \texttt{Trucklino}\cite{popp_konzeption_2019}, which is also shown in Figure~\ref{fig:js-runtime-trucklino}.
+
 The example programming languages that have been shown in this paper demonstrate, that the general approach of generating a block based development environment from a formal specification is versatile and fast. Once a specification for a conventional programming language has been developed, it can be targeted by multiple block language approaches that may put emphasis on different aspects. Therefore the changing educational requirements leading to different relevant subsets of languages can be met by creating a new grammar with the builtin grammar editor.
 
-So in its current state the developed environment is self-hosting and allows the definition of alternate block languages for every given specification. Currently runtimes are available for \texttt{SQLite}, \texttt{JavaScript}, Regular Expressions, \texttt{GraphViz}, basic math equations based on \texttt{Nerdamer} and a quite complex (but ultimately artificial) \texttt{JavaScript}-variation of the Kara-approach called \texttt{Trucklino}\cite{popp_konzeption_2019}, which is also shown in Figure~\ref{fig:js-runtime-trucklino}.
-\todo{Future Work}
+For the future we need to team up with teachers in initial programming education and figure out whether to refine the presented textual block editor or the quality of the generated Blockly editors. Ultimately the goal of our approach is to provide a tool that learners actually want to leave because they perceive block editors as clunky when compared to text editors.
 \printbibliography
 
 \end{document}
