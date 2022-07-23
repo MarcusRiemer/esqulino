@@ -3,7 +3,9 @@
 \usepackage[
 datamodel=acmdatamodel,
 backend=biber,
-%style=acmnumeric, % use style=acmauthoryear for publications that require it
+natbib=false,
+sorting=none,
+style=acmnumeric, % use style=acmauthoryear for publications that require it
 ]{biblatex}
 
 \addbibresource{CSERC22.bib}
@@ -12,7 +14,7 @@ backend=biber,
 %\addbibresource{CSERC22.bib}
 
 \usepackage{minted}    % Source code formatting
-%\usepackage{csquotes}  % Eases working with quotes
+\usepackage{csquotes}  % Eases working with quotes
 \usepackage[author={Marcus}]{pdfcomment}
 
 % Hack to avoid red boxes around characters in listings
@@ -27,7 +29,7 @@ backend=biber,
 \newenvironment{longlisting}{\captionsetup{type=listing} \vspace{1.5em}}{\vspace{1.5em}}
 
 % "Constant" to set the scaling of all ASTs at once
-\newcommand\astScale{0.75}
+\newcommand\astScale{0.7}
 \newcommand\todo[1]{{\bfseries ToDo: #1}}
 \begin{document}
 
@@ -48,6 +50,8 @@ backend=biber,
   \country{Germany}
 }
 \email{fhu@informatik.uni-kiel.de}
+
+\keywords{computer science education, language specification, block editor}
 
 \begin{abstract}
   The prevailing concept when teaching computer science to beginners in school is visual programming, typically in the form of block based languages. Most approaches in this area involve special teaching languages like Scratch. Our approach seamlessly connects the block based language concept to conventional programming languages used in computer science, but for didactical purpose often to a core subset of such a language.
@@ -77,12 +81,11 @@ As a block language grammar augments an existing programming language, there is 
 
 To show that the general grammar based approach as well as our specific implementation is not overly specifically tied to our own block editor, we also generate Blockly documents and editors\footnote{\url{https://developers.google.com/blockly}} as well as pretty printable syntax trees for the industry standard \texttt{prettier} program\footnote{\url{https://prettier.io/}}. Apart from the benefit of having multiple backends to avoid overly specific details in what should be a general solution, Blockly and prettier are established tools that work reliable under almost any circumstances and by contrasting their results to our own we found quite a few flaws in our implementation during development.
 
-\todo{Hier kommt in der Regel noch ein "The paper is organized as follows: in Section~2 we give an overview of the architecture of our system.... Kannst du aber ggf. auch weglassen, wenn andere Papiere der Konferenz das auch nicht haben.}
+% \todo{Hier kommt in der Regel noch ein "The paper is organized as follows: in Section~2 we give an overview of the architecture of our system.... Kannst du aber ggf. auch weglassen, wenn andere Papiere der Konferenz das auch nicht haben.}
 \section{Architecture Overview}
 
-%At the core our approach is about representing the same syntax tree in two different ways: 
-At the core our approach represents one syntax describtion in two different ways: 
-Either as a block editor that can be used to edit the syntax tree. Or as a valid textual representation in the augmented programming language. Both of these representations and the validation are derived from a single source: a grammar. Apart from checking whether a certain syntax tree has the correct structure, the grammar provides syntactic details like keywords, brackets and indentation.
+%At the core our approach is about representing the same syntax tree in two different ways:
+At the core our approach represents one syntax description in two different ways: Either as a block editor that can be used to edit the syntax tree. Or as a valid textual representation in the augmented programming language. Both of these representations and the validation are derived from a single source: a grammar. Apart from checking whether a certain syntax tree has the correct structure, the grammar provides syntactic details like keywords, brackets and indentation.
 
 Our approach re-defines and re-implements the common set of core data structures for compilers: syntax\-trees, grammars \& validators. The main reason for this re-invention of the wheel is the differing focus of existing software: the syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations. Our approach instead focuses exclusively on working with a syntaxtree that lends itself well to being directly presented to the end user. Most importantly, for a proper block editor there must not be any node that has no visual or textual representation. As these kind of intermediate nodes are not an issue for traditional compiler construction, there is a fundamental mismatch in the structure of these representations. On top of that typical compiler tasks that have to do with lexical analysis or parsing (\texttt{yacc}, \texttt{bison}, \texttt{ANTLR}, \texttt{boost::spirit}) are not relevant for our approach. The other self-evident candidate to build upon, namely Google Blockly, uses a syntax tree representation that includes many positional details that are not of relevance for our approach and mixes the block definitions (the \enquote{grammar}) with JavaScript and details of code generation.
 
@@ -90,7 +93,7 @@ On a fundamental technical level our implementation is split into a browser-fron
 
 \section{Abstract Syntax Tree}
 
-The syntax tree itself is purely a \texttt{JSON} data structure that follows the TypeScript definition in Listing~\ref{lst:typescript-ast} and has no concept of being \textit{valid} or \textit{invalid} on its own (this is the task of validators). It also has no idea how it should be represented in its block form (this is the task of block languages) or textual representation (this is the task of code generators).
+The abstract syntax tree (AST) itself is purely a \texttt{JSON} data structure that follows the TypeScript definition in Listing~\ref{lst:typescript-ast} and has no concept of being \textit{valid} or \textit{invalid} on its own. Validations are based on grammars which are described from Section~\ref{sec:expression-grammar} onwards. The tree also has no concept on how it should be represented in either its block form, this is the task of block languages, or textual representation, this is the task of code generators which.
 
 \begin{listing}[H]
 \begin{minted}{typescript}
@@ -109,20 +112,17 @@ export interface NodeDescription {
 \label{lst:typescript-ast}
 \end{listing}
 
-A single node in the syntaxtree has at least a \textbf{type} that consists of two strings: A local name and a language. This type is the premier way for different tools to decide how the node in question should be treated. The language is essentially a namespace that allows the use of identical names in different contexts. This is useful when describing identical concepts like imperative loops or semantic markup for \enquote{heading} in different languages.
+A single node in the syntaxtree has at least a \texttt{type} that consists of two strings: A local \texttt{name} and a \texttt{language}. This type is the premier way for different tools to decide how the node in question should be treated. The language is essentially a namespace that allows the use of identical names in different contexts. This is useful when describing identical concepts like imperative loops or semantic markup for \enquote{heading} in different languages.
 
-Nodes may define so called \textbf{properties} which hold atomic values in the form of texts or integers, but never in the form of child nodes. Each of these properties needs to have a name that is unique in the scope of the current node.
+Nodes may define so called \texttt{properties} which hold atomic values in the form of texts or integers, but never in the form of child nodes. Each of these properties needs to have a name that is unique in the scope of the current node.
 
-The children of nodes have to be organized in so called \textbf{child groups}. Each of these groups has a name and contains any number of sub-trees in order. Naming the child groups enables the grammars to specify complex sub trees without relying on the ordering of these nodes. The resulting structure has a strong resemblance to an \texttt{XML}-tree, but instead of grouping all children in one of exactly two named scopes (elements and attributes), they are organised into any number of named sub trees.
+The \texttt{children} of nodes have to be organized in so called \enquote{child groups}. Each of these groups has a name and contains any number of sub-trees in order. Naming the child groups enables the grammars to specify complex sub trees without relying on the ordering of these nodes. The resulting structure has a strong resemblance to an \texttt{XML}-tree, but instead of grouping all children in one of exactly two named scopes (elements and attributes), they are organised into any number of named sub trees.
 
-\subsection{Example: Binary Expression}
-\todo{Hier geht das viel zu schnell ab und du tauchst in deine Welt ein. Habe ersucht das etwas abzufedern mitd em ersten Satz, aber ist  noch nicht rund. Ich dachte auch, dass ein Beispiel für eine Grammatik kommt, aber das ist ja eher ein Beispiel für ein Wort. Das passt dadurch nicht richtig zu dem vorherigen Kapitel. Der Start mit the tree... is unklar. Sonst Kapitel vielleicht besser "A Binary Expression" nennen.
+The examples presented in the sections~\ref{sec:ast-example-if} and \ref{sec:ast-example-expr} demonstrate how common programming language concepts like expressions and an \texttt{if} statement could be represented using this specific syntax tree structure with named child groups. The corresponding grammars to validate syntax trees and to generate the corresponding block editors will be introduced from section~\ref{sec:expression-grammar} onward.
 
-Es könnte vielleicht auch sinnvoll sein, davor noch einen einleitenden Abschnitt zu machen, in dem du sagst, was jetzt in den nächsten Kapiteln kommen wird. Du willst scheinbar deine GRammatik modellieren. Wäre vermutlich einfacher, wenn du sie einfach erstmal vorstellen würdest und danach dann die Features begründen würdest.}
-As a first example language we model simple arithmetric expression, containing binary operators, like the comparison \texttt{numRattles == null}.
-
-The tree in Listing~\ref{lst:ast-expr-binary} is shown in two equivalent representations: \texttt{JSON} and a rendered tree. It is a possible representation of the expression \texttt{numRattles == null} for any language that allows to\todo{Hier geht das viel zu schnell ab und du tauchst in deine Welt ein. Habe ersucht das etwas abzufedern mitd em ersten Satz, aber ist  noch nicht rund. Ich dachte auch, dass ein Beispiel für eine Grammatik kommt, aber das ist ja eher ein Beispiel für ein Wort. Das passt dadurch nicht richtig zu dem vorherigen Kapitel.}
-As a first example language we model simple arithmetric expression, containing binary operators, like the comparison \texttt{numRattles == null}. compare a \texttt{null} value against a variable. It consists of three nodes: The root node is of type \texttt{lang.expBin}, the dot (\enquote{\texttt{.}}) is used as a separator between the \texttt{language} and the \texttt{name} of a node. The childgroup with the name \texttt{lhs} (\enquote{left hand side}) contains a node of type \texttt{lang.expVar} which is meant to refer to an existing variable on the left hand side of the expression. The property \texttt{name} is set to \texttt{numRattles}.
+\subsection{AST Example: Binary Expression}
+\label{sec:ast-example-expr}
+The tree in Listing~\ref{lst:ast-expr-binary} is shown in two equivalent representations: the \texttt{JSON}-datastructure conforming to Listing~\ref{lst:typescript-ast} and a graphical tree. It is a possible representation of the expression \texttt{numRattles == null} as it is commonly found in many languages. It consists of three nodes: The root node is of type \texttt{lang.expBin}, the dot (\enquote{\texttt{.}}) is used as a separator between the \texttt{language} and the \texttt{name} of a node. The childgroup with the name \texttt{lhs} (\enquote{left hand side}) contains a node of type \texttt{lang.expVar} which is meant to refer to an existing variable on the left hand side of the expression. The property \texttt{name} is set to \texttt{numRattles}.
 
 \begin{listing}[H]
 \begin{minted}{typescript}
@@ -144,20 +144,32 @@ As a first example language we model simple arithmetric expression, containing b
   }
 }
 \end{minted}
-\includegraphics[scale=\astScale]{../manual/generated/ast-example-expr-binary}
-\caption{AST for expression \texttt{null}}
+\caption{AST for expression \texttt{numRattles == null}}
 \label{lst:ast-expr-binary}
 \end{listing}
 
-\subsection{Example: \texttt{if}-Statement}
+\begin{figure}
+  \includegraphics[scale=\astScale]{../manual/generated/ast-example-expr-binary}
+  \caption{Graphical representation of tree in Listing~\ref{lst:ast-expr-binary}}
+  \label{fig:ast-expr-binary}
+\end{figure}
+
+
+\subsection{AST Example: \texttt{if}-Statement}
+\label{sec:ast-example-if}
+
+\begin{figure*}
+  \includegraphics[scale=\astScale]{../manual/generated/ast-example-if}
+  \caption{\texttt{if}-Statement with predicate}
+  \label{fig:if-stmt-pred}
+\end{figure*}
 
 The following example provides further reasons for named child groups and shows how the non-existant parsing-step can be used for more precise error messages.
 
 An \texttt{if} statement can be described in terms of its structure and the underlying semantics: It uses a predicate to distinguish whether execution should continue on a positive branch or a negative branch. Details about the name of the keyword itself (probably if \texttt{if}, maybe a \texttt{then}, maybe with parentheses around the predicate?) or the syntax of blocks (\texttt{\{\}}, \texttt{begin} ... \texttt{end}, indentation, ..?) are irrelevant for the semantics.
 
-Listing~\ref{lst:if-stmt-pred} shows two sample programs: One with a correct \texttt{if}-Statement that uses a \texttt{then} is shown on the left. And one program with an incorrect \texttt{if}-Statement that accidentaly omits the \texttt{then} and the correspdonding expression is shown on the right. The correspdonding syntaxtree for the correct variation is shown in Figure~\ref{fig:if-stmt-pred}. The expression \texttt{a > b} is in the \texttt{pred} child group, the call to \texttt{writeln} is in the \texttt{positive} child group and the call to \texttt{err} is in the \texttt{negative} child group. From the perspective of the syntaxtree, each of these child groups has a distinct meaning that is also conveyed as part of the name. Even without hand-crafted error messages an error like \enquote{\enquote{lang.if} has empty childgroup \enquote{predicate}} would quite nicely convey the problem with a missing expression for the predicate. Without named childgroups, e.g. in an \texttt{XML} like tree structure, the semantics of the sub trees would be defined by the order they appear and a name would not by available.
 
-But the actual benefit of only working with syntax trees and not requiring a parsing step goes deeper than having nicer error messages for free. The incorrect \texttt{if}-statement that omits the expression and the \texttt{then} in Listing~\ref{lst:if-stmt-pred} uses indentation to convey the intent of the author: The \texttt{writeln} statement is offset in the same way as the \texttt{err} statement. But a parser that stumbles over this code would, at least without extra logic, be mislead by the \texttt{writeln} statement reading exactly like an expression. The most probable error message would read something along the lines of \enquote{Invalid predicate: expression writeln('foo') is not of type boolean} and \enquote{Missing keyword then}. In contrast the syntax tree can't make such a miss-attribution by accident because it relies on named child groups, not on the order of the sub-trees.
+Listing~\ref{lst:if-stmt-pred} shows two sample programs: One with a correct \texttt{if}-Statement that uses a \texttt{then} is shown on the left. And one program with an incorrect \texttt{if}-Statement that accidentaly omits the \texttt{then} and the correspdonding expression is shown on the right. The correspdonding syntaxtree for the correct variation is shown in Figure~\ref{fig:if-stmt-pred}. The expression \texttt{a > b} is in the \texttt{pred} child group, the call to \texttt{writeln} is in the \texttt{positive} child group and the call to \texttt{err} is in the \texttt{negative} child group. From the perspective of the syntaxtree, each of these child groups has a distinct meaning that is also conveyed as part of the name. Even without hand-crafted error messages an error like \enquote{\enquote{lang.if} has empty childgroup \enquote{predicate}} would quite nicely convey the problem with a missing expression for the predicate. Without named childgroups, e.g. in an \texttt{XML} like tree structure, the semantics of the sub trees would be defined by the order they appear and a name would not by available.
 
 \begin{listing}[H]
 \begin{minipage}{.20\textwidth}
@@ -180,13 +192,10 @@ else
 \label{lst:if-stmt-pred}
 \end{listing}
 
-\begin{figure*}
-  \includegraphics[scale=\astScale]{../manual/generated/ast-example-if}
-  \caption{\texttt{if}-Statement with predicate}
-  \label{fig:if-stmt-pred}
-\end{figure*}
+But the actual benefit of only working with syntax trees and not requiring a parsing step goes deeper than having nicer error messages for free. The incorrect \texttt{if}-statement that omits the expression and the \texttt{then} in Listing~\ref{lst:if-stmt-pred} uses indentation to convey the intent of the author: The \texttt{writeln} statement is offset in the same way as the \texttt{err} statement. But a parser that stumbles over this code would, at least without extra logic, be mislead by the \texttt{writeln} statement reading exactly like an expression. The most probable error message would read something along the lines of \enquote{Invalid predicate: expression writeln('foo') is not of type boolean} and \enquote{Missing keyword then}. In contrast the syntax tree can't make such a miss-attribution by accident because it relies on named child groups, not on the order of the sub-trees.
 
 \section{Expression Grammar}
+\label{sec:expression-grammar}
 
 Syntaxtrees may define arbitrary tree structures, but for practical reasons only trees conforming to a certain set of known properties and children are of relevance. We therefore say that a certain tree may be \enquote{valid} in the context of a certain grammar. The example in Listing~\ref{lst:ast-expr-binary} implicitly relied on a few limitations:
 
@@ -209,18 +218,15 @@ In contrast to grammars in general compiler construction, the grammar described 
 
 In comparision to traditional grammars, this shifts the way one has to reason about the validation when following our approach: There is no need to worry about the syntactic aspects of a certain language, the grammar that is required doesn’t need to know anything about keywords or separating characters. Its sole job is to describe the structure and the semantics of trees that are valid in that specific language. If keywords are included in the grammar, this is solemly for the purpose of blocks that resemble the underlying programming language or for code generation. The actual grammar validation does not use these keywords at all.
 
-\subsection{Expression Semantics}
-\todo{Das gefällt mir irgendwie viel besser, als die vorherigen Kapitel. Hier ist klar, was du machen willst. Schöner wäre es aus meiner Sicht, wenn man das von oben in dieses Kapitel integriert und dann hier diese Aspekte anspricht. Dein Naming beim if-then-else und die Fehlersahce würde hier doch auch gut eingebaut werden können.}
+\subsection{Expression Structure}
+% \todo{Das gefällt mir irgendwie viel besser, als die vorherigen Kapitel. Hier ist klar, was du machen willst. Schöner wäre es aus meiner Sicht, wenn man das von oben in dieses Kapitel integriert und dann hier diese Aspekte anspricht. Dein Naming beim if-then-else und die Fehlersahce würde hier doch auch gut eingebaut werden können.}
 
-In this example we will construct a grammar to validate structures like the expression in Listing~\ref{lst:ast-expr-binary}.
-
-This grammar in Listing~\ref{lst:grammar-expr-null} defines a language named \texttt{lang} which allows a single node with the name \texttt{null} to be present in the syntax tree. This node may not have any children or properties, so the only valid syntaxtree would consist of a single node.
+In this example we will step by step construct a grammar to validate structures like the expression in Listing~\ref{lst:ast-expr-binary}. The grammar in Listing~\ref{lst:grammar-expr-null} defines a language named \texttt{lang} which allows a single node with the name \texttt{null} to be present in the syntax tree. This node may not have any children or properties, so the only valid syntaxtree would consist of a single node.
 
 \begin{listing}[H]
 \begin{minted}{typescript}
 grammar "lang" {
-  node "null" {
-  }
+  node "null" { }
 }
 \end{minted}
 \caption{Grammar for expression \texttt{null}}
@@ -233,9 +239,7 @@ In order to also allow references to variables, we add a second valid type of no
 \begin{minted}[]{typescript}
 // node null as before
 grammar "lang" {
-  node "expVar" {
-    prop "name" string
-  }
+  node "expVar" { prop "name" string }
 }
 \end{minted}
 \caption{Grammar for expression \texttt{expVar}}
@@ -293,18 +297,12 @@ To avoid these nodes without visual or textual representation any kind of recurr
 
 In addition to the use of \texttt{typedef} the final structural grammar in Listing~\ref{lst:grammar-expr-expBin-typedef} now contains a type \texttt{lang.expConst} to express constant, numeric values. And the previously unrestricted \texttt{string} for the \texttt{op} property is now restricted to the values \texttt{==}, \texttt{+} and \texttt{*} by using an enumeration.
 
-\todo{Ich wäre hier vorsichtig mit dem Begriff semantic (Bildunterschrift). Da ist ja nix semantisches drin.}
-\begin{listing}[H]
+\begin{listing}
 \begin{minted}[]{typescript}
 grammar "lang" {
-  node "null" {
-  }
-  node "expVar" {
-    prop "name" { string }
-  }
-  node "expConst" {
-    prop "value" { number }
-  }
+  node "null"     { }
+  node "expVar"   { prop "name"  { string } }
+  node "expConst" { prop "value" { number } }
   typedef "expAny" ::= expBin
                        | expNull
                        | expVar
@@ -317,13 +315,11 @@ grammar "lang" {
 }
 \end{minted}
 
-\caption{Final semantic grammar for expressions}
+\caption{Final structural grammar for expressions}
 \label{lst:grammar-expr-expBin-typedef}
 \end{listing}
 
 \subsection{Example: Expression Syntax}
-
-Although the syntax trees that are validated by the final semantic grammar for the expression language (Listing~\ref{lst:grammar-expr-expBin-typedef}) are unambiguous in tree form, their default textual representation is possibly not. Figure~\ref{fig:ast-nested-ambiguous} shows a tree that in a depth first evaluation would effectively calculate $A+B$ first and then multiply the result with $2$. Or in textual form: The intended order of operation is $2 * (A+B)$. The textual form however would evaluate to $2 * A + B$.
 
 \begin{figure}
   \includegraphics[scale=\astScale]{../manual/generated/ast-example-expr-binary-nested}
@@ -331,19 +327,15 @@ Although the syntax trees that are validated by the final semantic grammar for t
   \label{fig:ast-nested-ambiguous}
 \end{figure}
 
+Although the syntax trees that are validated by the final semantic grammar for the expression language (Listing~\ref{lst:grammar-expr-expBin-typedef}) are unambiguous in tree form, their default textual representation is possibly not. Figure~\ref{fig:ast-nested-ambiguous} shows a tree that in a depth first evaluation would effectively calculate $A+B$ first and then multiply the result with $2$. Or in proper textual form: The intended order of operation is $2 * (A+B)$. The actual textual representation however would evaluate to $2 * A + B$.
+
 This demonstrates, that even for the simple expression language we require some basic form of extra terminal symbols, namely the parenthesis in the textual representation. Without such additional syntax the structural information that is part of the tree can't be represented in the textual representation. For this basic example we can mix the semantic structural definition with the syntactic information about terminal symbols in the same grammar by simply adding the parentheses in double quotation marks (listing \ref{lst:grammar-expr-expBin-syntax}). On top of that the \texttt{lang.expNull} node had absolutly no textual representation so far.
-
-These terminal symbols are absolutly irrelevant for the validation process: As the syntax tree never contains any terminal symbols, they can't be validated. But the generated block language and the pretty printer will incorporate these tokens when generating the output. Therefore the grammar that includes the terminal symbol will compile the tree in Figure~\ref{fig:ast-nested-ambiguous} to $(2 * (A + B))$.
-
-For conventional programming languages, these terminal symbols are not only used for parentheses but also for keywords (\texttt{if}, \texttt{for}, \texttt{while}, \texttt{SELECT}, \texttt{FROM} ...) and other syntactic information like semicolons, commas, ...
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
 grammar "lang" {
   // expAny, expConst and expVar as before
-  node "expNull" {
-    "null"
-  }
+  node "expNull" { "null" }
   node "expBin" {
     "("
     children "lhs" ::= expAny
@@ -357,17 +349,21 @@ grammar "lang" {
 \label{lst:grammar-expr-expBin-syntax}
 \end{listing}
 
-\section{Expression Block Language}
+These terminal symbols are absolutly irrelevant for the validation process: As the syntax tree never contains any terminal symbols, they can't be validated. But the generated block language and the pretty printer will incorporate these tokens when generating the output. Therefore the grammar that includes the terminal symbol will compile the tree in Figure~\ref{fig:ast-nested-ambiguous} to $(2 * (A + B))$.
 
-Block languages are a data structure that contain the relevant information on how to represent a syntax tree visually. Technically they are a \texttt{JSON}-document that contains instructions like \enquote{render a terminal symbol} or \enquote{render all sub-trees of a certain child group}.
+For conventional programming languages, these terminal symbols are not only used for parentheses but also for keywords (\texttt{if}, \texttt{for}, \texttt{while}, \texttt{SELECT}, \texttt{FROM} ...) and other syntactic information like semicolons, commas, ...
 
-Every block editor requires a source of blocks that is commonly called the \enquote{sidebar}. Whenever the user wants to add to the program at hand, he will search the sidebar for the block he desires and drag it to the central canvas. In the following examples the sidebar is automatically populated to provide one block for each type in the grammar, but it is possible to define custom block sidebars as e.g. seen in Figure~\ref{fig:sql-runtime}.
+\section{Syntax Tree Representation}
+
+The representation for both block editors (builtin and Blockly) is based on an intermediate description that contains the relevant information on how to represent a syntax tree visually. Technically they are a grammar derived description that contains instructions like \enquote{render a terminal symbol} or \enquote{render all sub-trees of a certain child group}.
+
+Every block editor requires a source of blocks that is commonly called the \enquote{sidebar}. Whenever the user wants to add to the program at hand, he will search the sidebar for the block he requires and drag it to the central canvas. In the following examples the sidebar is automatically populated to provide one block for each type in the grammar, but it is possible to define custom block sidebars as e.g. seen in Figure~\ref{fig:js-runtime-trucklino}.
 
 \subsection{Builtin Editor}
 
-The builtin editor draws a black border around each block and renders the terminal symbols and the properties of the tree as closely as possible to the textual representation, see Figure~\ref{fig:screen-editor-expr-internal} for the rendered representation of the syntax tree in Figure~\ref{fig:ast-nested-ambiguous}. The underlined operators \texttt{*} and \texttt{+} can be clicked to open a drop down to select possible operators from the enum.
+The builtin editor draws a border to visualize each type as a block and renders the terminal symbols and the properties of the tree as closely as possible to the textual representation, see Figure~\ref{fig:screen-editor-expr-internal} for the rendered representation of the syntax tree in Figure~\ref{fig:ast-nested-ambiguous}. The underlined operators \texttt{*} and \texttt{+} can be clicked to open a drop down to select possible operators from the enum.
 
-\begin{figure}
+\begin{figure}[H]
   \includegraphics[width=0.45\textwidth]{screens/expr-blocks-internal}
   \caption{Builtin editor for expressions}
   \label{fig:screen-editor-expr-internal}
@@ -377,19 +373,15 @@ The builtin editor draws a black border around each block and renders the termin
 
 Without any further hints, the blockly representation is readable, but not quite a friendly representation, see Figure~\ref{fig:screen-editor-expr-blockly}. This is due to a conceptual mismatch: The proposed grammar defines number of elements in child group on parent. In Blockly each block defines whether follow-up is allowed or not. So without any further information, the blockly representation assumes each child group to host a possibly infinite amount of sub-trees. This is rather unfortunate in the two strictly single node children of \texttt{lang.expBin}, which require manual intervention.
 
-\begin{figure}
+\begin{figure}[H]
   \includegraphics[width=0.45\textwidth]{screens/expr-blocks-blockly}
   \caption{Blockly editor for expressions}
   \label{fig:screen-editor-expr-blockly}
 \end{figure}
 
-\subsection{Textual Representation}
-
-With the syntactic information provided by the grammar, the textual representation of a syntax tree can immediately be derived. The grammar contains the structure of the textual representation and the syntax tree essentially fills the blanks that are left in the form of property values and children. Effectively the syntax tree dictates which type in the grammar should be looked up and provides the data requested by the lookup. The grammar information on how to represent a node (line breaks, terminal symbols, property values, children, ...) is filled with information from the syntaxtree, transformed into the primitives outlined in \cite{wadler_prettier_printer} and then fed to prettier to create a properly indented string representation.
-
 \subsection{Self Hosting (Meta Grammar)}
 
-The syntax that has been used so far to describe the grammars is a textual representation of the grammar editor that is available within our implementation as a block editor. Every one of these grammars could have also been shown in the form of a screenshot of the block editor to edit that grammar. Technically grammars and block languages are, like the syntax tree, described as \texttt{JSON}-documents. In order to create grammars for new programming languages from inside the tool itself, it is therefore only required to transform some syntax tree to a valid \texttt{JSON} grammar document. The grammar and block language to describe the actual block language and grammar are called \enquote{Meta Grammar} and \enquote{Meta Block Language}. Figure~\ref{fig:screen-editor-expr-grammar} shows how the grammar for the expression language looks like in the builtin editor. As the \texttt{JSON} grammar has almost no syntactic overlap with the textual representation, the compilation step for the meta grammar involves custom code generators.
+The syntax that has been used so far to describe the grammars is a textual representation of the grammar editor that is available within our implementation as a block editor. Every one of these grammars could have also been shown in the form of a screenshot of the block editor to edit that grammar. Technically grammars and block languages are, like the syntax tree, described as \texttt{JSON} documents. In order to create grammars for new programming languages from inside the tool itself, it is therefore only required to transform some syntax tree to a valid \texttt{JSON} grammar document. The grammar and block language to describe the actual block language and grammar are called \enquote{Meta Grammar} and \enquote{Meta Block Language}. Figure~\ref{fig:screen-editor-expr-grammar} shows how the grammar for the expression language looks like in the builtin editor. As the \texttt{JSON} grammar has almost no syntactic overlap with the textual representation, the compilation step for the meta grammar involves custom code generators.
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{screens/expr-blocks-grammar}
@@ -405,12 +397,15 @@ As this representation is technically a normal block language, it is also fully 
 
 \begin{figure}
   \includegraphics[width=0.30\textwidth]{screens/expr-blocks-fallback}
-  \caption{Internal fallback representation for expressions, the tree shown is the same as in Figure~\ref{fig:screen-editor-expr-internal}}
+  \caption{Internal fallback representation for expressions, the tree shown a subset of Figure~\ref{fig:screen-editor-expr-internal}}
   \label{fig:screen-editor-expr-fallback}
 \end{figure}
 
-\section{Programming Language Runtimes}
-\todo{runtimes finde ich einen sehr merkwürdigen Begriff. Nutzt man eher für Laufzeiten. Ich würde Applications, Examples or Instances als Begriff vorschlagen.}
+\subsection{Textual Representation}
+
+With the syntactic information provided by the grammar, the textual representation of a syntax tree can immediately be derived. The grammar contains the structure of the textual representation and the syntax tree essentially fills the blanks that are left in the form of property values and children. Effectively the syntax tree dictates which type in the grammar should be looked up and provides the data requested by the lookup. The grammar information on how to represent a node (line breaks, terminal symbols, property values, children, ...) is filled with information from the syntaxtree, transformed into the primitives outlined in \cite{wadler_prettier_printer} and then fed to prettier to create a properly indented string representation.
+
+\section{Language Runtime Environments}
 So far we have discussed how grammars can be used to validate the structure of a syntax tree, to derive a visual editor that can change the structure of the syntax tree and how to derive a textual representation of the syntax tree. But to have an actually complete example for a real world programming language the actual possibility to run the code is still missing. Providing this kind of runtime for the textual representation of the syntax trees is however always a manual task. In the current state of our implementation the following runtimes are provided:
 
 \begin{itemize}
@@ -456,11 +451,18 @@ grammar "xml" {
 \label{lst:grammar-xml-structure}
 \end{listing}
 
-To properly visually represent \texttt{XML} however, this structural information is not enough. To have a syntactically valid \texttt{XML}-document at least the syntactic pairs of brackets (\texttt{<element>}) and the attributes equality sign and the quoted value (\texttt{key="value"}) need to be specified. The result of this minimal amount of terminal symbols would however be one very long line of \texttt{XML}. This is syntactically valid, but unpleasant to work with in a block editor. In order to follow the more typical formatting of having indented child elements and the opening and closing \texttt{XML}-elements on distinct lines, we need to specify a formatting structure that includes linebreaks in the grammar.
+To properly visually represent \texttt{XML} however, this structural information is not enough. To have a syntactically valid \texttt{XML} document at least the syntactic pairs of brackets (\texttt{<element>}) and the attributes equality sign and the quoted value (\texttt{key="value"}) need to be specified. The result of this minimal amount of terminal symbols would however be one very long line of \texttt{XML}. This is syntactically valid, but unpleasant to work with in a block editor. In order to follow the more typical formatting of having indented child elements and the opening and closing \texttt{XML}-elements on distinct lines, we need to specify a formatting structure that includes linebreaks in the grammar.
 
-Listing~\ref{lst:grammar-xml-syntax} shows a visualization grammar for the previously presented structural grammar. The keyword \texttt{visualize} is used here to indicate that the information for the specified type are not changing the structural semantics of a grammar: Inside a \texttt{visualize} block no \texttt{children} or \texttt{property} statements may be used. Instead it is possible to implicitly define line breaks using the \texttt{container} block. If the orientation is set to \texttt{horizontal}, the block editors and textual representation will not allow any implicit line breaks between these elements. The \texttt{vertical} orientation introduces a line break between all immediate children of the \texttt{container}. The \texttt{\{\{ property \}\}} syntax (borrowed from frameworks like Angular or Jinja) is used for interpolation: The value of the property on the node in the syntax tree will be used as the value when rendered. The same listing also demonstrates how certain common visualization aspects are expressed using special annotations. Everything that is denoted inside a pair of parentheses is treated as a special instruction to the block- and the code-generator.
+Listing~\ref{lst:grammar-xml-syntax} shows a visualization grammar for the previously presented structural grammar. The keyword \texttt{visualize} is used here to indicate that the information for the specified type are not changing the structural semantics of a grammar: Inside a \texttt{visualize} block no \texttt{children} or \texttt{property} statements may be used. Instead it is possible to implicitly define line breaks using the \texttt{container} block. If the orientation is set to \texttt{horizontal}, the block editors and textual representation will not allow any implicit line breaks between these elements. The \texttt{vertical} orientation introduces a line break between all immediate children of the \texttt{container}. The \texttt{\{\{ property \}\}} syntax (borrowed from frameworks like Angular or Jinja) is used for interpolation: The value of the property on the node in the syntax tree will be used as the value when rendered.
 
-\begin{listing}[H]
+The same listing also demonstrates how certain common visualization aspects are expressed using special annotations. Everything that is denoted inside a pair of parentheses is treated as a special instruction to the block- and the code-generator:
+\begin{itemize}
+\item The \texttt{space-before} instruction for \texttt{xml.attribute.name} ensures that there is a space between the \texttt{xml.element.name} and multiple attributes. In this particular instance it could also have been encoded as a literal space terminal symbol \texttt{'~'}, but the generators are able to e.g. combine multiple superflous spaces so expressing this via the \texttt{space-before} instruction is preferred for composeability.
+\item The \texttt{keyword} instruction is used for very basic syntax highlighting in the block editor and disregarded when generating the textual representation.
+\item The \texttt{double-quote} instruction places double quote terminal symbols around the terminal symbol or property it is defined on. Technically this could also be represented through a pair of literal terminal symbols. But having a single instruction that can not be torn apart when things are moved around can be very convenient.
+\end{itemize}
+
+\begin{longlisting}
 \begin{minted}[]{typescript}
 grammar "xml" {
   visualize "attribute" {
@@ -492,13 +494,8 @@ grammar "xml" {
 \end{minted}
 \caption{Syntactic structure of \texttt{XML}}
 \label{lst:grammar-xml-syntax}
-\end{listing}
+\end{longlisting}
 
-\begin{itemize}
-\item The \texttt{space-before} instruction for \texttt{xml.attribute.name} ensures that there is a space between the \texttt{xml.element.name} and multiple attributes. In this particular instance it could also have been encoded as a literal space terminal symbol \texttt{'~'}, but the generators are able to e.g. combine multiple superflous spaces so expressing this via the \texttt{space-before} instruction is preferred for composeability.
-\item The \texttt{keyword} instruction is used for very basic syntax highlighting in the block editor and disregarded when generating the textual representation.
-\item The \texttt{double-quote} instruction places double quote terminal symbols around the terminal symbol or property it is defined on. Technically this could also be represented through a pair of literal terminal symbols. But having a single instruction that can not be torn apart when things are moved around can be very convenient.
-\end{itemize}
 
 With this additional syntactic information about terminal symbols, linebreaks and quotation marks \texttt{XML} can be represented in the block editor or the textual representation. The resulting \texttt{XML} block editor now renders a \texttt{HTML}-like structure as shown in Figure~\ref{fig:screen-editor-xml-no-border}. To demonstrate how close the resemblance can be, the tree has been rendered twice. Without block outlines the result almost looks like a \enquote{normal} textual representation. Only the activated property editor on the text \enquote{Really great!} gives a hint that some kind of structural editing is available.
 
@@ -620,7 +617,7 @@ function validateColumNames(ast, schema, context) {
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{screens/sql-runtime-param.png}
-  \caption{Builtin block editor that resembles the syntax of the augmented SQL}
+  \caption{Builtin block editor that resembles the syntax of the augmented SQL and runtime environment that allows to parametrize the query and shows the result}
   \label{fig:sql-runtime}
 \end{figure}
 
@@ -675,7 +672,7 @@ There is however one annoyance with the presented grammar: The root node \texttt
 
 When viewed at a distance, the underlying problem of \enquote{How should the block editor show possibilities to drop something at a certain location?} is actually not unique to JavaScript at all but was present all the time. In Blockly this problem is solved with the explicit connector representations on the block design. For the internal editor with it's text-like appearance this is however not possible. The system instead borrows the concept of \enquote{holes} from languages like Haskell. Every time a child node is missing with certainty, an \enquote{under construction} like question mark is displayed. Language designers can also mark child group as \enquote{soft holes} that should appear even if the the absence of children is not technically an error. Figure~\ref{fig:screen-js-empty-for} shows the representation of holes for a node of type \texttt{js.forLoop} without children. The striped background turns red if the user attempts to drag a block that would not be valid in the correspdonding location. The same approach can be applied to the empty \texttt{js.program} to give some kind of artificial representation to an edge case.
 
-\begin{figure}
+\begin{figure}[H]
   \includegraphics[width=0.25\textwidth]{screens/js-empty-for}
   \caption{Empty \texttt{for} loop with holes}
   \label{fig:screen-js-empty-for}
