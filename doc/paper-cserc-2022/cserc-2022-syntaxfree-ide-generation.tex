@@ -93,7 +93,7 @@ On a fundamental technical level our implementation is split into a browser-fron
 
 \section{Abstract Syntax Tree}
 
-The abstract syntax tree (AST) itself is purely a \texttt{JSON} data structure that follows the TypeScript definition in Listing~\ref{lst:typescript-ast} and has no concept of being \textit{valid} or \textit{invalid} on its own. Validations are based on grammars which are described from Section~\ref{sec:expression-grammar} onwards. The tree also has no concept on how it should be represented in either its block form, this is the task of block languages, or textual representation, this is the task of code generators which.
+The abstract syntax tree (AST) itself is purely a \texttt{JSON} data structure that follows the TypeScript definition in Listing~\ref{lst:typescript-ast} and has no concept of being \textit{valid} or \textit{invalid} on its own. Validations are based on grammars which are described from Section~\ref{sec:expression-grammar} onwards. The tree also has no concept on how it should be represented in either its block form, this is the task of block languages, or textual representation, this is the task of code generators which are usually generated from the grammar.
 
 \begin{listing}[H]
 \begin{minted}{typescript}
@@ -112,11 +112,11 @@ export interface NodeDescription {
 \label{lst:typescript-ast}
 \end{listing}
 
-A single node in the syntaxtree has at least a \texttt{type} that consists of two strings: A local \texttt{name} and a \texttt{language}. This type is the premier way for different tools to decide how the node in question should be treated. The language is essentially a namespace that allows the use of identical names in different contexts. This is useful when describing identical concepts like imperative loops or semantic markup for \enquote{heading} in different languages.
+A single node in the syntaxtree always has at least a \texttt{type} that consists of two strings: A local \texttt{name} and a \texttt{language}. This type is the premier way for different tools to decide how the node in question should be treated. The language is essentially a namespace that allows the use of identical names in different contexts. This is useful when describing identical concepts like imperative loops or semantic markup for \enquote{heading} in different languages.
 
 Nodes may define so called \texttt{properties} which hold atomic values in the form of texts or integers, but never in the form of child nodes. Each of these properties needs to have a name that is unique in the scope of the current node.
 
-The \texttt{children} of nodes have to be organized in so called \enquote{child groups}. Each of these groups has a name and contains any number of sub-trees in order. Naming the child groups enables the grammars to specify complex sub trees without relying on the ordering of these nodes. The resulting structure has a strong resemblance to an \texttt{XML} tree, but instead of grouping all children in one of exactly two named scopes (elements and attributes), they are organised into any number of named sub trees.
+The \texttt{children} of nodes have to be organized in so called \enquote{child groups}. Each of these groups has a name and contains any number of sub-trees in order. Naming the child groups enables the grammars to specify complex sub-trees without relying on the ordering of these nodes. The resulting structure has a strong resemblance to an \texttt{XML} tree, but instead of grouping all children in one of exactly two named scopes (elements and attributes), they are organised into any number of named sub-trees.
 
 The examples presented in the sections~\ref{sec:ast-example-if} and \ref{sec:ast-example-expr} demonstrate how common programming language concepts like expressions and an \texttt{if} statement could be represented using this specific syntax tree structure with named child groups. The corresponding grammars to validate syntax trees and to generate the corresponding block editors will be introduced from section~\ref{sec:expression-grammar} onward.
 
@@ -166,7 +166,7 @@ The tree in Listing~\ref{lst:ast-expr-binary} is shown in two equivalent represe
 
 The following example provides further reasons for named child groups and shows how the non-existant parsing-step can be used for more precise error messages.
 
-An \texttt{if} statement can be described in terms of its structure and the underlying semantics: It uses a predicate to distinguish whether execution should continue on a positive branch or a negative branch. Details about the name of the keyword itself (probably if \texttt{if}, maybe a \texttt{then}, maybe with parentheses around the predicate?) or the syntax of blocks (\texttt{\{\}}, \texttt{begin} ... \texttt{end}, indentation, ..?) are irrelevant for the semantics.
+An \texttt{if} statement can be described in terms of its structure and the underlying semantics: It uses a predicate to distinguish whether execution should continue on a positive branch or a negative branch. Details about the name of the keyword itself (probably \texttt{if}, maybe a \texttt{then}, maybe with parentheses around the predicate?) or the syntax of blocks (\texttt{\{\}}, \texttt{begin} ... \texttt{end}, indentation, ..?) are irrelevant for the semantics.
 
 
 Listing~\ref{lst:if-stmt-pred} shows two sample programs: One with a correct \texttt{if}-Statement that uses a \texttt{then} is shown on the left. And one program with an incorrect \texttt{if}-Statement that accidentaly omits the \texttt{then} and the correspdonding expression is shown on the right. The correspdonding syntaxtree for the correct variation is shown in Figure~\ref{fig:if-stmt-pred}. The expression \texttt{a > b} is in the \texttt{pred} child group, the call to \texttt{writeln} is in the \texttt{positive} child group and the call to \texttt{err} is in the \texttt{negative} child group. From the perspective of the syntaxtree, each of these child groups has a distinct meaning that is also conveyed as part of the name. Even without hand-crafted error messages an error like \enquote{\enquote{lang.if} has empty childgroup \enquote{predicate}} would quite nicely convey the problem with a missing expression for the predicate. Without named childgroups, e.g. in an \texttt{XML} like tree structure, the semantics of the sub trees would be defined by the order they appear and a name would not by available.
@@ -197,7 +197,7 @@ But the actual benefit of only working with syntax trees and not requiring a par
 \section{Expression Grammar}
 \label{sec:expression-grammar}
 
-Syntaxtrees may define arbitrary tree structures, but for practical reasons only trees conforming to a certain set of known properties and children are of relevance. We therefore say that a certain tree may be \enquote{valid} in the context of a certain grammar. The example in Listing~\ref{lst:ast-expr-binary} implicitly relied on a few limitations:
+Syntaxtrees can have arbitrary tree structures, but for practical reasons only trees conforming to a certain set of known properties and children are of relevance. We therefore say that a certain tree may be \enquote{valid} in the context of a certain grammar. The example in Listing~\ref{lst:ast-expr-binary} implicitly relied on a few limitations:
 
 \begin{enumerate}
 \item \label{itm:lang-exp-null} \texttt{lang.null} never has children or properties.
@@ -233,7 +233,7 @@ grammar "lang" {
 \label{lst:grammar-expr-null}
 \end{listing}
 
-In order to also allow references to variables, we add a second valid type of node called \texttt{expVar} (Listing~\ref{lst:grammar-expr-expVar}). Nodes of this type must have the property \texttt{name} being present, but at the given state we do not make any practical restriction on what this name could look like. To really avoid syntax errors, names may not contain any syntax elements. In this context mathematical operators or brackets shouldn't be allowed. For a practical definition the valid value should be restricted using enumerations or regular expressions, but for the sake of brevity we will not deal with this in every example.
+In order to also allow references to variables, we add a second valid type of node called \texttt{expVar} (Listing~\ref{lst:grammar-expr-expVar}). For this type of node the property \texttt{name} must be present, but at this moment we do not make any restriction on what this name could look like. To avoid syntax errors in practical usage, names may not contain any syntax elements. In this context this means mathematical operators or brackets shouldn't be allowed. For actual usage the valid value therefore should be restricted using enumerations or regular expressions, but for the sake of brevity we will not deal with this in every example.
 
 \begin{listing}[H]
 \begin{minted}[]{typescript}
@@ -694,7 +694,7 @@ In its current state the developed environment is self-hosting and allows the de
 
 The example programming languages that have been shown in this paper demonstrate, that the general approach of generating a block based development environment from a formal specification is versatile and fast. Once a specification for a conventional programming language has been developed, it can be targeted by multiple block language approaches that may put emphasis on different aspects. Therefore the changing educational requirements leading to different relevant subsets of languages can be met by creating a new grammar with the builtin grammar editor.
 
-For the future we need to team up with teachers in initial programming education and figure out whether to refine the presented textual block editor or the quality of the generated Blockly editors. Ultimately the goal of our approach is to provide a tool that learners actually want to leave because they perceive block editors as clunky when compared to text editors.
+For the future we need to team up with teachers in initial programming education and figure out whether to refine the presented textual block editor or the quality of the generated Blockly editors. Ultimately the goal of our approach is to provide a tool that learners actually \textbf{want} to leave because they perceive block editors as annoying when compared to text editors.
 \printbibliography
 
 \end{document}
