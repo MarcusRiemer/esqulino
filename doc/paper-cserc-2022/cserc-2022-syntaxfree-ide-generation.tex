@@ -1,4 +1,4 @@
-\documentclass[sigconf,natbib=false,review=true,anonymous]{acmart}
+\documentclass[sigconf,natbib=false]{acmart}
 
 \usepackage[
 datamodel=acmdatamodel,
@@ -9,9 +9,6 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 ]{biblatex}
 
 \addbibresource{CSERC22.bib}
-
-%\usepackage[style=ACM-Reference-Format,backend=bibtex,sorting=none]{biblatex}
-%\addbibresource{CSERC22.bib}
 
 \usepackage{minted}    % Source code formatting
 \usepackage{csquotes}  % Eases working with quotes
@@ -94,7 +91,7 @@ On a fundamental technical level our implementation is split into a browser-fron
 \section{Abstract Syntax Tree}
 \label{sec:abstract-syntax-tree}
 
-The abstract syntax tree (AST) itself is purely a \texttt{JSON} data structure that follows the TypeScript definition in Listing~\ref{lst:typescript-ast} and has no concept of being \textit{valid} or \textit{invalid} on its own. Validations are based on grammars which are described from Section~\ref{sec:expression-grammar} onwards. The tree also has no concept on how it should be represented in either its block form, this is the task of block languages, or textual representation, this is the task of code generators which are usually generated from the grammar.
+The abstract syntax tree (AST) itself is purely a \texttt{JSON} data structure that follows the TypeScript definition in Listing~\ref{lst:typescript-ast} and has no concept of being \textit{valid} or \textit{invalid} on its own. Validations are based on grammars which are described from Section~\ref{sec:expression-grammar} onwards. The tree also has no concept on how it should be represented in either its block form, this is the task of block languages, or textual representation, this is the task of code generators both of which are usually generated from the grammar.
 
 \begin{listing}[H]
 \begin{minted}{typescript}
@@ -150,7 +147,7 @@ The tree in Listing~\ref{lst:ast-expr-binary} is shown in two equivalent represe
 \end{listing}
 
 \begin{figure}
-  \includegraphics[scale=\astScale]{../manual/generated/ast-example-expr-binary}
+  \includegraphics[scale=\astScale]{ast/example-expr-binary}
   \caption{Graphical representation of tree in Listing~\ref{lst:ast-expr-binary}}
   \label{fig:ast-expr-binary}
 \end{figure}
@@ -160,7 +157,7 @@ The tree in Listing~\ref{lst:ast-expr-binary} is shown in two equivalent represe
 \label{sec:ast-example-if}
 
 \begin{figure*}
-  \includegraphics[scale=\astScale]{../manual/generated/ast-example-if}
+  \includegraphics[scale=\astScale]{ast/example-if}
   \caption{\texttt{if}-Statement with predicate}
   \label{fig:if-stmt-pred}
 \end{figure*}
@@ -287,7 +284,7 @@ grammar "lang" {
 \end{listing}
 
 \begin{figure}
-  \includegraphics[scale=\astScale]{../manual/generated/ast-example-expr-binary-artificial}
+  \includegraphics[scale=\astScale]{ast/example-expr-binary-artificial}
   \caption{Expression tree with artificial choice nodes}
   \label{fig:ast-choice-node}
 \end{figure}
@@ -323,7 +320,7 @@ grammar "lang" {
 \subsection{Example: Expression Syntax}
 
 \begin{figure}
-  \includegraphics[scale=\astScale]{../manual/generated/ast-example-expr-binary-nested}
+  \includegraphics[scale=\astScale]{ast/example-expr-binary-nested}
   \caption{Expression with addition before multiplication}
   \label{fig:ast-nested-ambiguous}
 \end{figure}
@@ -673,7 +670,7 @@ grammar "js" {
 
 There is however one annoyance with the presented grammar: The root node \texttt{js.program} has no visual representation when empty. This is somewhat expected as a 0 byte file is technically also a valid JavaScript program, but as a result of this inherited design the empty program would collapse to a 1x1 pixel in the internal block editor. The same issue is present in \texttt{js.forLoop}: Technically it is perfectly valid to write a JavaScript \texttt{for}-loop that contains no \texttt{declaration} or \texttt{step} statements. A language designer can therefore decide to make his subset of JavaScript more strict and require \texttt{js.program} to have at least one \texttt{js.statement} or the \texttt{for}-loop to always incorporate the variable declaration and step statement.
 
-When viewed at a distance, the underlying problem of \enquote{How should the block editor show possibilities to drop something at a certain location?} is actually not unique to JavaScript at all but was present all the time. In Blockly this problem is solved with the explicit connector representations on the block design. For the internal editor with it's text-like appearance this is however not possible. The system instead borrows the concept of \enquote{holes} from languages like Haskell. Every time a child node is missing with certainty, an \enquote{under construction} like question mark is displayed. Language designers can also mark child group as \enquote{soft holes} that should appear even if the the absence of children is not technically an error. Figure~\ref{fig:screen-js-empty-for} shows the representation of holes for a node of type \texttt{js.forLoop} without children. The striped background turns red if the user attempts to drag a block that would not be valid in the correspdonding location and the same approach can be applied to the empty \texttt{js.program}.
+The underlying problem of \enquote{How should the block editor show possibilities to drop something at a certain location?} is not unique to JavaScript but was present in all shown examples. In Blockly this problem is solved with the explicit connector representations on the block design, but for an editor with text-like appearance this is not possible. The system instead borrows the concept of \enquote{holes} from languages like Haskell. Every time a child node is missing with certainty, an \enquote{under construction} like question mark is displayed. Language designers can also mark child group as \enquote{soft holes} that should appear even if the the absence of children is not technically an error. Figure~\ref{fig:screen-js-empty-for} shows the representation of holes for a node of type \texttt{js.forLoop} without children.
 
 \begin{figure}[H]
   \includegraphics[width=0.22\textwidth]{screens/js-empty-for}
@@ -691,13 +688,13 @@ As JavaScript is supported by every current browser and there is no need to pers
 
 \section{Conclusion}
 
-The presented syntaxtree with the named child groups in conjunction with the presented grammar is versatile enough to augment any textual programming language by providing different types of block editors as well as a textual representation of the edited programming language. Representing a syntax tree through a grammar where each node type is turned into a block has shown to be an approach that fits our custom block editor as well as Google Blockly. The block editor specific grammar features like child groups, interleaving child nodes and virtual nodes may not be relevant for conventional compiler construction, but are important features when designing an editor that requires convenient ways to modify a syntax tree via dragging and dropping blocks.
+We presented a new approach to rapidly generate block language editors based on a grammar that is specifically designed for block based visualization and modification of source code. The syntaxtree with the named child groups in conjunction with the grammar is versatile enough to augment any textual programming language by providing different types of block editors as well as a textual representation of the edited programming language. Representing a syntax tree through a grammar where each node type is turned into a block has shown to be an approach that fits our custom block editor as well as Google Blockly. The block editor specific grammar features like child groups, interleaving child nodes and virtual nodes may not be relevant for conventional compiler construction, but are important features when designing an editor that requires convenient ways to modify a syntax tree via dragging and dropping blocks.
 
-Our developed environment is self-hosting and allows the definition of block editors via the described grammar specification. As these generated block editors are used to augment real programming languages, the edited programs require a fitting programming language environment to be run in. Currently these runtimes are available for \texttt{SQLite}, \texttt{Java\-Script}, Regular Expressions, \texttt{Graph\-Viz}, symbolic math equations based on Nerdamer and a quite complex (but ultimately artificial) \texttt{Java\-Script}-variation of the Kara-approach called \texttt{Trucklino}\cite{popp_konzeption_2019}, which is shown in Figure~\ref{fig:js-runtime-trucklino}.
+The environment we developed is self-hosting and allows the definition of block editors via the described grammar specification. As these generated block editors are used to augment real programming languages, the edited programs require a fitting programming language environment to be run in. Currently these runtimes are available for \texttt{SQLite}, \texttt{Java\-Script}, Regular Expressions, \texttt{Graph\-Viz}, symbolic math equations based on Nerdamer and a quite complex (but ultimately artificial) \texttt{Java\-Script}-variation of the Kara-approach called \texttt{Trucklino}\cite{popp_konzeption_2019}, which is shown in Figure~\ref{fig:js-runtime-trucklino}.
 
-The example programming languages that have been sketched in this paper demonstrate, that the general approach of generating a block based development environment from the grammar specification is also fast in terms of development time. Once a runtime for a conventional programming language has been developed, it can be targeted by multiple block language approaches that may put emphasis on different aspects. Therefore changing educational requirements leading to different relevant subsets of languages can be met by creating a new grammar.
+The presented programming languages sketched in this paper demonstrate, that the general approach of generating a block based development environment from the grammar specification is also fast in terms of development time. Once a runtime for a conventional programming language has been developed, it can be targeted by multiple block language approaches that may put emphasis on different aspects. Therefore changing educational requirements leading to different relevant subsets of languages can be met by creating a new grammar.
 
-To properly plan further development  we need to team up with teachers in initial programming education and figure out whether to refine the presented textual block editor or the quality of the generated Blockly editors. Ultimately the goal of our approach is to provide a tool that learners actually \textbf{want} to leave because they perceive block editors as annoying when compared to text editors.
+To properly plan further development  we need to team up with teachers in initial programming education and figure out whether to refine the presented textual block editor or the quality of the generated Blockly editors. Ultimately our goal is to provide a tool that learners actually \textbf{want} to leave because they perceive block editors as constricting when compared to text editors.
 \printbibliography
 
 \end{document}

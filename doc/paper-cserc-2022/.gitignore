@@ -1,10 +1,15 @@
 auto
 _minted*
 
+cserc-2022-syntaxfree-ide-generation*.pdf
+
 *.aux
 *.log
 *.out
-*.pdf
 *.dot
 *.upa
 *.upb
+*.bbl
+*.bcf
+*.blg
+*.run.xml
