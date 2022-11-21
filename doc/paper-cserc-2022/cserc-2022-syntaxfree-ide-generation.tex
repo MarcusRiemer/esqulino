@@ -10,16 +10,14 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 
 \addbibresource{CSERC22.bib}
 
-\usepackage{minted}    % Source code formatting
-\usepackage{csquotes}  % Eases working with quotes
-\usepackage[author={Marcus}]{pdfcomment}
+\usepackage{listings}
+\lstset{
+  basicstyle = \ttfamily,
+  basewidth  = {.5em,0.5em},
+  captionpos = b
+}
 
-% Hack to avoid red boxes around characters in listings
-% https://tex.stackexchange.com/questions/343494/
-\makeatletter
-\AtBeginEnvironment{minted}{\dontdofcolorbox}
-\def\dontdofcolorbox{\renewcommand\fcolorbox[4][]{##4}}
-\makeatother
+\newcommand{\enquote}[1]{``#1''}
 
 % Create a new environment for breaking code listings across pages.
 % https://tex.stackexchange.com/questions/368864/
@@ -62,7 +60,7 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 \end{abstract}
 
 \begin{teaserfigure}
-  \centering\includegraphics[width=\textwidth]{screens/js-runtime-trucklino.png}
+  \centering\includegraphics[width=0.95\textwidth]{screens/js-runtime-trucklino.png}
   \caption{Builtin block editor with puzzle solving runtime that resembles the syntax of the augmented JavaScript}
   \label{fig:js-runtime-trucklino}
 \end{teaserfigure}
@@ -96,8 +94,7 @@ On a fundamental technical level our implementation is split into a browser-fron
 
 The abstract syntax tree (AST) itself is purely a \texttt{JSON} data structure that follows the TypeScript definition in Listing~\ref{lst:typescript-ast} and has no concept of being \textit{valid} or \textit{invalid} on its own. Validations are based on grammars which are described from Section~\ref{sec:expression-grammar} onwards. The tree also has no concept on how it should be represented in either its block form, this is the task of block languages, or textual representation, this is the task of code generators both of which are usually generated from the grammar.
 
-\begin{listing}[H]
-\begin{minted}{typescript}
+\begin{lstlisting}[caption={TypeScript definition of AST}, label=lst:typescript-ast]
 export interface NodeDescription {
   name: string
   language: string
@@ -108,10 +105,7 @@ export interface NodeDescription {
     [propertyName: string]: string;
   }
 }
-\end{minted}
-\caption{TypeScript definition of AST}
-\label{lst:typescript-ast}
-\end{listing}
+\end{lstlisting}
 
 A single node in the syntaxtree always has at least a \texttt{type} that consists of two strings: A local \texttt{name} and a \texttt{language}. This type is the premier way for different tools to decide how the node in question should be treated. The language is essentially a namespace that allows the use of identical names in different contexts. This is useful when describing identical concepts like imperative loops or semantic markup for \enquote{heading} in different languages.
 
@@ -125,8 +119,7 @@ The examples presented in the sections~\ref{sec:ast-example-if} and \ref{sec:ast
 \label{sec:ast-example-expr}
 The tree in Listing~\ref{lst:ast-expr-binary} is shown in two equivalent representations: the \texttt{JSON} data structure conforming to Listing~\ref{lst:typescript-ast} and as graphical tree in Figure~\ref{fig:ast-expr-binary}. It is a possible representation of the expression \texttt{numRattles == null} as it is commonly found in many languages. It consists of three nodes: The root node is of type \texttt{lang.expBin}, the dot (\enquote{\texttt{.}}) is used as a separator between the \texttt{language} and the \texttt{name} of a node. The childgroup with the name \texttt{lhs} (\enquote{left hand side}) contains a node of type \texttt{lang.expVar} which is meant to refer to an existing variable on the left hand side of the expression. The property \texttt{name} is set to \texttt{numRattles}.
 
-\begin{listing}[H]
-\begin{minted}{typescript}
+\begin{lstlisting}[caption={AST for expression \texttt{numRattles == null}}, label=lst:ast-expr-binary]
 {
   "language": "lang",
   "name": "expBin",
@@ -144,10 +137,7 @@ The tree in Listing~\ref{lst:ast-expr-binary} is shown in two equivalent represe
     ]
   }
 }
-\end{minted}
-\caption{AST for expression \texttt{numRattles == null}}
-\label{lst:ast-expr-binary}
-\end{listing}
+\end{lstlisting}
 
 \begin{figure}
   \includegraphics[scale=\astScale]{ast/example-expr-binary}
@@ -172,26 +162,26 @@ An \texttt{if} statement can be described in terms of its structure and the unde
 
 Listing~\ref{lst:if-stmt-pred} shows two sample programs: One with a correct \texttt{if}-Statement that uses a \texttt{then} is shown on the left. And one program with an incorrect \texttt{if}-Statement that accidentaly omits the \texttt{then} and the correspdonding expression is shown on the right. The correspdonding syntaxtree for the correct variation is shown in Figure~\ref{fig:if-stmt-pred}. The expression \texttt{a > b} is in the \texttt{pred} child group, the call to \texttt{writeln} is in the \texttt{positive} child group and the call to \texttt{err} is in the \texttt{negative} child group. From the perspective of the syntaxtree, each of these child groups has a distinct meaning that is also conveyed as part of the name. Even without hand-crafted error messages an error like \enquote{\enquote{lang.if} has empty childgroup \enquote{predicate}} would quite nicely convey the problem with a missing expression for the predicate. Without named childgroups, e.g. in an \texttt{XML} like tree structure, the semantics of the sub trees would be defined by the order they appear and a name would not by available.
 
-\begin{listing}[H]
+\begin{figure}[H]
 \begin{minipage}{.20\textwidth}
-\begin{minted}{pascal}
+\begin{lstlisting}
 if (a > b) then
   writeln('foo')
 else
   err(2, 'bar')
-\end{minted}
+\end{lstlisting}
 \end{minipage}
 \begin{minipage}{.20\textwidth}
-\begin{minted}{pascal}
-if
+\begin{lstlisting}
+if (a > b)
   writeln('foo')
 else
   err(2, 'bar')
-\end{minted}
+\end{lstlisting}
 \end{minipage}
 \caption{\texttt{if}-Statement with and without predicate}
 \label{lst:if-stmt-pred}
-\end{listing}
+\end{figure}
 
 But the actual benefit of only working with syntax trees and not requiring a parsing step goes deeper than having nicer error messages for free. The incorrect \texttt{if}-statement that omits the expression and the \texttt{then} in Listing~\ref{lst:if-stmt-pred} uses indentation to convey the intent of the author: The \texttt{writeln} statement is offset in the same way as the \texttt{err} statement. But a parser that stumbles over this code would, at least without extra logic, be mislead by the \texttt{writeln} statement reading exactly like an expression. The most probable error message would read something along the lines of \enquote{Invalid predicate: expression writeln('foo') is not of type boolean} and \enquote{Missing keyword then}. In contrast the syntax tree can't make such a miss-attribution by accident because it relies on named child groups, not on the order of the sub-trees.
 
@@ -224,33 +214,24 @@ In comparision to traditional grammars, this shifts the way one has to reason ab
 
 In this example we will step by step construct a grammar to validate structures like the expression in Listing~\ref{lst:ast-expr-binary}. The grammar in Listing~\ref{lst:grammar-expr-null} defines a language named \texttt{lang} which allows a single node with the name \texttt{null} to be present in the syntax tree. This node may not have any children or properties, so the only valid syntaxtree would consist of a single node.
 
-\begin{listing}[H]
-\begin{minted}{typescript}
+\begin{lstlisting}[caption={Grammar for expression \texttt{null}}, label=lst:grammar-expr-null]
 grammar "lang" {
   node "null" { }
 }
-\end{minted}
-\caption{Grammar for expression \texttt{null}}
-\label{lst:grammar-expr-null}
-\end{listing}
+\end{lstlisting}
 
 In order to also allow references to variables, we add a second valid type of node called \texttt{expVar} (Listing~\ref{lst:grammar-expr-expVar}). For this type of node the property \texttt{name} must be present, but at this moment we do not make any restriction on what this name could look like. To avoid syntax errors in practical usage, names may not contain any syntax elements. In this context this means mathematical operators or brackets shouldn't be allowed. For actual usage the valid value therefore should be restricted using enumerations or regular expressions, but for the sake of brevity we will not deal with this in every example.
 
-\begin{listing}[H]
-\begin{minted}[]{typescript}
+\begin{lstlisting}[float,floatplacement=H,caption={Grammar for expression \texttt{expVar}}, label=lst:grammar-expr-expVar]
 // node null as before
 grammar "lang" {
   node "expVar" { prop "name" string }
 }
-\end{minted}
-\caption{Grammar for expression \texttt{expVar}}
-\label{lst:grammar-expr-expVar}
-\end{listing}
+\end{lstlisting}
 
 With the types \texttt{lang.null} and \texttt{lang.expVar} defined, we now have two leaf nodes for our expression language. In order for a type to act as a parent, as \texttt{lang.expBin} must, we need to define the names and the valid types for the child groups. Listing~\ref{lst:grammar-expr-expBin-verbose} declares such a type that defines the child groups \texttt{lhs} and \texttt{rhs} to either take a \texttt{expNull} or an \texttt{expVar}. With this grammar we may now generate checks for expressions like \texttt{a + 1}, \texttt{a >= PI} or \texttt{a == null}.
 
-\begin{listing}[H]
-\begin{minted}[]{typescript}
+\begin{lstlisting}[caption={Grammar for expression \texttt{expBin}}, label=lst:grammar-expr-expBin-verbose]
 // node null and expVar as before
 grammar "lang" {
   node "expBin" {
@@ -259,17 +240,14 @@ grammar "lang" {
     children "rhs" ::= expNull | expVar
   }
 }
-\end{minted}
-\caption{Grammar for expression \texttt{expBin}}
-\label{lst:grammar-expr-expBin-verbose}
-\end{listing}
+\end{lstlisting}
 
 Unfortunately there is already some duplication in the definitions of the child groups \texttt{lhs} and \texttt{rhs}: Both should always allow the exact same types. And on top of that it is not possible to nest expressions, because \texttt{lang.expBin} is not an allowed child for either of the sides.
 
 In a typical grammar we would introduce a new node type like \texttt{lang.expAny} which would consist of a single child group that lists all permitted values. Listing~\ref{lst:grammar-expr-expBin-choiceNode} shows the relevant excerpt of the grammar and Figure~\ref{fig:ast-choice-node} demonstrates how a valid tree for this grammar could look like: The immediate children of \texttt{lang.expBin} are no longer the actual nodes with semantic meaning, but the artifical choice nodes of type \texttt{lang.expAny}.
 
-\begin{listing}[H]
-\begin{minted}[highlightlines={3-5,7,9}]{typescript}
+
+\begin{lstlisting}[caption={Grammar for expression \texttt{expBin} with choice node}, label=lst:grammar-expr-expBin-choiceNode]
 // node null and expVar as before
 grammar "lang" {
   node "expAny" {
@@ -281,10 +259,7 @@ grammar "lang" {
     children "rhs" ::= expAny
   }
 }
-\end{minted}
-\caption{Grammar for expression \texttt{expBin} with choice node}
-\label{lst:grammar-expr-expBin-choiceNode}
-\end{listing}
+\end{lstlisting}
 
 \begin{figure}
   \includegraphics[scale=\astScale]{ast/example-expr-binary-artificial}
@@ -298,8 +273,7 @@ To avoid these nodes without visual or textual representation any kind of recurr
 
 In addition to the use of \texttt{typedef} the final structural grammar in Listing~\ref{lst:grammar-expr-expBin-typedef} now contains a type \texttt{lang.expConst} to express constant, numeric values. And the previously unrestricted \texttt{string} for the \texttt{op} property is now restricted to the values \texttt{==}, \texttt{+} and \texttt{*} by using an enumeration.
 
-\begin{listing}
-\begin{minted}[highlightlines={5-8,11}]{typescript}
+\begin{lstlisting}[caption={Final structural grammar for expressions}, label=lst:grammar-expr-expBin-typedef]
 grammar "lang" {
   node "null"     { }
   node "expVar"   { prop "name"  { string } }
@@ -314,11 +288,7 @@ grammar "lang" {
     children "rhs" ::= expAny
   }
 }
-\end{minted}
-
-\caption{Final structural grammar for expressions}
-\label{lst:grammar-expr-expBin-typedef}
-\end{listing}
+\end{lstlisting}
 
 \subsection{Example: Expression Syntax}
 
@@ -332,8 +302,7 @@ Although the syntax trees that are validated by the final semantic grammar for t
 
 This demonstrates, that even for the simple expression language we require some basic form of extra terminal symbols, namely the parenthesis in the textual representation. Without such additional syntax the structural information that is part of the tree can't be represented in the textual representation. For this basic example we can mix the semantic structural definition with the syntactic information about terminal symbols in the same grammar by simply adding the parentheses in double quotation marks (listing \ref{lst:grammar-expr-expBin-syntax}). On top of that the \texttt{lang.expNull} node had absolutly no textual representation so far and is now represented by the keyword \texttt{null}.
 
-\begin{listing}[H]
-\begin{minted}[highlightlines={3,5,9}]{typescript}
+\begin{lstlisting}[caption={Final syntactic grammar for expression \texttt{expBin}}, label=lst:grammar-expr-expBin-syntax]
 grammar "lang" {
   // expAny, expConst and expVar as before
   node "expNull" { "null" }
@@ -345,10 +314,7 @@ grammar "lang" {
     ")"
   }
 }
-\end{minted}
-\caption{Final syntactic grammar for expression \texttt{expBin}}
-\label{lst:grammar-expr-expBin-syntax}
-\end{listing}
+\end{lstlisting}
 
 These terminal symbols are absolutly irrelevant for the validation process: As the syntax tree never contains any terminal symbols, they can't be validated. But the generated block language and the pretty printer will incorporate these tokens when generating the output. Therefore the grammar that includes the terminal symbol will compile the tree in Figure~\ref{fig:ast-nested-ambiguous} to $(2 * (A + B))$.
 
@@ -412,7 +378,7 @@ So far we have discussed how grammars can be used to validate the structure of a
 \begin{itemize}
 \item \texttt{SQL} as understood by SQLite. The required database is stored on the server, the frontend sends the desired syntax tree to be executed.
 
-\item \texttt{JavaScript} executed in a WebWorker, so without any access to the \texttt{DOM} and without blocking the browsers only \texttt{JavaScript} context. Basic output via \texttt{console.log} is redirect to a section under the programs block editor.
+\item \texttt{JavaScript} executed in a WebWorker, so without access to the \texttt{DOM} and without blocking the browsers \texttt{JavaScript} context. Basic output via \texttt{console.log} is redirect to a section under the programs block editor.
 
 \item Regular expressions as understood by JavaScript.
 
@@ -433,8 +399,7 @@ Representing an \texttt{XML} structure consisting of any elements, attributes an
 
 In contrast to the grammar for the expression language, the child groups \texttt{elements} and \texttt{attributes} on \texttt{xml.element} make use of the \texttt{*} operator with the usual meaning of \enquote{any number of items, including none}. This example also shows, that it is possible to have more than one type reference in a child group definition. The \texttt{\&}-operator is borrowed from RELAX NG where it is called the \enquote{interleaving}-operator. It allows children to occur independent of their order, but still respects their cardinality. Without the use of this operator, the resulting grammar would require that any \texttt{xml.element} must occur strictly before any \texttt{xml.text}. For these block grammars the use of such interleaving child groups is the norm: sequences are technically possible but typically replaced by multiple named child groups.
 
-\begin{listing}[H]
-\begin{minted}[highlightlines={4}]{typescript}
+\begin{lstlisting}[float, caption={Semantic structure of \texttt{XML}}, label=lst:grammar-xml-structure]
 grammar "xml" {
   node "element" {
     prop "name"           string
@@ -449,10 +414,7 @@ grammar "xml" {
     prop "value" string
   }
 }
-\end{minted}
-\caption{Semantic structure of \texttt{XML}}
-\label{lst:grammar-xml-structure}
-\end{listing}
+\end{lstlisting}
 
 To properly visually represent \texttt{XML} however, this structural information is not enough. To have a syntactically valid \texttt{XML} document at least the syntactic pairs of brackets (\texttt{<element>}) and the attributes equality sign and the quoted value (\texttt{key="value"}) need to be specified. The result of this minimal amount of terminal symbols would however be one very long line of \texttt{XML}. This is syntactically valid, but unpleasant to work with in a block editor. In order to follow the more typical formatting of having indented child elements and the opening and closing \texttt{XML}-elements on distinct lines, we need to specify a formatting structure that includes linebreaks in the grammar.
 
@@ -465,8 +427,7 @@ The same listing also demonstrates how certain common visualization aspects are 
 \item The \texttt{double-quote} instruction places double quote terminal symbols around the terminal symbol or property it is defined on. Technically this could also be represented through a pair of literal terminal symbols. But having a single instruction that can not be torn apart when things are moved around can be very convenient.
 \end{itemize}
 
-\begin{longlisting}
-\begin{minted}[]{typescript}
+\begin{lstlisting}[float,caption={Syntactic structure of \texttt{XML}}, label=lst:grammar-xml-syntax]
 grammar "xml" {
   visualize "attribute" {
     container horizontal {
@@ -494,10 +455,7 @@ grammar "xml" {
     }
   }
 }
-\end{minted}
-\caption{Syntactic structure of \texttt{XML}}
-\label{lst:grammar-xml-syntax}
-\end{longlisting}
+\end{lstlisting}
 
 
 With this additional syntactic information about terminal symbols, linebreaks and quotation marks \texttt{XML} can be represented in the block editor or the textual representation. The resulting \texttt{XML} block editor now renders a \texttt{HTML}-like structure as shown in Figure~\ref{fig:screen-editor-xml-no-border}. To demonstrate how close the resemblance can be, the tree has been rendered twice. Without block outlines the result almost looks like a \enquote{normal} textual representation. Only the activated property editor on the text \enquote{Really great!} gives a hint that some kind of structural editing is available.
@@ -519,8 +477,7 @@ Also note that on the \texttt{html.html} element the order \texttt{head} before 
 
 The more tedious mismatch between \texttt{HTML5} and the proposed grammar language is however due to the way that certain common \texttt{HTML} attributes are defined: The attributes \texttt{id} and \texttt{class} for example may appear on anything that is declared an \enquote{HTML element} by the standard. In the context of the example in Listing~\ref{lst:grammar-html-subset-structure} this would mean that all types (including the technically \enquote{invisible} types \texttt{html}, \texttt{head}, \texttt{title}, ...) must repeatedly define something like \texttt{children "classes" ::= class?} (depending on how the actual structural representation is chosen).
 
-\begin{listing}[H]
-\begin{minted}[]{typescript}
+\begin{lstlisting}[float,caption={Semantic structure for \texttt{HTML} subset}, label=lst:grammar-html-subset-structure]
 grammar "html" {
   node "html" {
     children "elements" ::= head? body?
@@ -532,10 +489,7 @@ grammar "html" {
     children "elements" ::= h1* & h2* & p* & div*
   }
 }
-\end{minted}
-\caption{Semantic structure for \texttt{HTML} subset}
-\label{lst:grammar-html-subset-structure}
-\end{listing}
+\end{lstlisting}
 
 Although it is therefore possible to accurately represent an educationally meaningful subset of \texttt{HTML5} with our grammar approach, it requires repetition and is therefore tedious for the language designer to work with. This is partially due to the lack of a way to share structures over multiple node types in the grammar language. An inheritance, mixin or macro like feature could solve this, but as the following examples for \texttt{SQL} and \texttt{JavaScript} will show: This problem is quite unique to markup languages and maybe does not warrant a complication of the currently quite simple grammar core language.
 
@@ -543,8 +497,7 @@ Although it is therefore possible to accurately represent an educationally meani
 
 Listing~\ref{lst:grammar-sql} shows a grammar that describes the structure of quite simple \texttt{SELECT ... FROM ... GROUP BY} queries that allow function calls and the star operator. The example grammar further mixes semantic and structural information to demonstrate that it is not strictly required to work with two distinct grammar documents as demonstrated previously for \texttt{XML} in listings \ref{lst:grammar-xml-structure} and \ref{lst:grammar-xml-syntax}.
 
-\begin{longlisting}
-\begin{minted}[]{typescript}
+\begin{lstlisting}[float,caption={Structure and syntax details for an \texttt{SQL} subset}, label=lst:grammar-sql]
 grammar "SQL" {
   node "sql"."select" {
     container vertical {
@@ -587,10 +540,7 @@ grammar "SQL" {
     }
   }
 }
-\end{minted}
-\caption{Structure and syntax details for an \texttt{SQL} subset}
-\label{lst:grammar-sql}
-\end{longlisting}
+\end{lstlisting}
 
 The root node \texttt{sql.select} defines the basic visual structure: Each component (\texttt{sql.select}, \texttt{sql.from}, \texttt{sql.groupBy}) shall be displayed on it's own line. Additionally all of these components contain the correspdonding \texttt{SQL} keyword as terminal symbols. The types \texttt{sql.functionCall}, \texttt{sql.from} and \texttt{sql.groupBy} also demonstrate, that the \texttt{children} instruction allows to specify a terminal symbol to be used between child elements.
 
@@ -598,8 +548,7 @@ But to actually validate the correctness of an \texttt{SQL} query the informatio
 
 An example for the validation of column names can be seen in Listing~\ref{lst:validate-valid-column}. If it turns out that the \texttt{ast} contains a reference to a column that is not defined in the \texttt{schema}, an \texttt{UNKNOWN\_COLUMN} error is added to the given validation context. The type \texttt{NodeDescription} for the variable \texttt{c} in \texttt{allColumns.forEach} is the same as shown in the definition of the syntax tree data structure in Listing~\ref{lst:typescript-ast}. The property names \texttt{refTableName} and \texttt{columnName} are the same as defined in the grammar in Listing~\ref{lst:grammar-sql}.
 
-\begin{listing}[H]
-\begin{minted}[]{typescript}
+\begin{lstlisting}[float,caption={Validating column names against a \texttt{SQL} schema}, label=lst:validate-valid-column]
 function validateColumNames(ast, schema, context) {
   const allColumns = ast.getNodesOfType({
     languageName: "sql",
@@ -613,10 +562,7 @@ function validateColumNames(ast, schema, context) {
     }
   });
 }
-\end{minted}
-\caption{Validating column names against a \texttt{SQL} schema}
-\label{lst:validate-valid-column}
-\end{listing}
+\end{lstlisting}
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{screens/sql-runtime-param.png}
@@ -630,8 +576,7 @@ To actually execute the \texttt{SQL} queries, a custom runtime based on \texttt{
 
 Listing~\ref{lst:grammar-javascript} shows a grammar that allows expressing very simple JavaScript programs with \texttt{for}-loops and variable declarations. Most of the node types referenced by the \texttt{typedefs} for \texttt{expression} and \texttt{statement} are omitted, previous examples have shown how to do expressions and function calls. The definition of \texttt{js.forLoop} however demonstrates that even the more complicated structures that span multiple lines and require indentation can be expressed in a concise way.
 
-\begin{longlisting}
-\begin{minted}[]{javascript}
+\begin{lstlisting}[float,caption={Semantic \& syntactic structure for a \texttt{JavaScript} subset}, label=lst:grammar-javascript]
 grammar "js" {
   node "program" {
     container vertical {
@@ -666,10 +611,7 @@ grammar "js" {
     }
   }
 }
-\end{minted}
-\caption{Semantic \& syntactic structure for a \texttt{JavaScript} subset}
-\label{lst:grammar-javascript}
-\end{longlisting}
+\end{lstlisting}
 
 There is however one annoyance with the presented grammar: The root node \texttt{js.program} has no visual representation when empty. This is somewhat expected as a 0 byte file is technically also a valid JavaScript program, but as a result of this inherited design the empty program would collapse to a 1x1 pixel in the internal block editor. The same issue is present in \texttt{js.forLoop}: Technically it is perfectly valid to write a JavaScript \texttt{for}-loop that contains no \texttt{declaration} or \texttt{step} statements. A language designer can therefore decide to make his subset of JavaScript more strict and require \texttt{js.program} to have at least one \texttt{js.statement} or the \texttt{for}-loop to always incorporate the variable declaration and step statement.
 
