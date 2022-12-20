@@ -2,6 +2,7 @@ auto
 _minted*
 
 cserc-2022-syntaxfree-ide-generation*.pdf
+cserc-2022-syntaxfree-ide-generation*.zip
 
 *.aux
 *.log
@@ -12,4 +13,8 @@ cserc-2022-syntaxfree-ide-generation*.pdf
 *.bbl
 *.bcf
 *.blg
+*.xdv
+*.xcp
+*.fls
+*.fdb_latexmk
 *.run.xml

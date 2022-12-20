@@ -1,14 +1,7 @@
 \documentclass[sigconf,natbib=false]{acmart}
 
-\usepackage[
-datamodel=acmdatamodel,
-backend=biber,
-natbib=false,
-sorting=none,
-style=acmnumeric, % use style=acmauthoryear for publications that require it
-]{biblatex}
-
-\addbibresource{CSERC22.bib}
+\usepackage{natbib}
+\bibliographystyle{ACM-Reference-Format}
 
 \usepackage{listings}
 \lstset{
@@ -18,10 +11,6 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 }
 
 \newcommand{\enquote}[1]{``#1''}
-
-% Create a new environment for breaking code listings across pages.
-% https://tex.stackexchange.com/questions/368864/
-\newenvironment{longlisting}{\captionsetup{type=listing} \vspace{1.5em}}{\vspace{1.5em}}
 
 % "Constant" to set the scaling of all ASTs at once
 \newcommand\astScale{0.7}
@@ -82,9 +71,9 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 \keywords{language specification, block editor}
 
 \begin{abstract}
-  The prevailing concept when teaching computer science to beginners in school is visual programming, typically in the form of block based languages. Most approaches in this area involve special teaching languages like Scratch. Our approach seamlessly connects the block based language concept to conventional programming languages used in computer science, but for didactical purpose often to a core subset of such a language.
+  The prevailing concept when teaching computer science to beginners in school is visual programming, typically in the form of block based languages. Most approaches in this area involve special teaching languages like Scratch. Our approach connects the block based language concept seamlessly to conventional programming languages used in computer science, but for didactical purpose often to a core subset of such a language.
 
-  Generating a block editor for a language is large effort and often done for every language individually. To tackle this, we developed a generalized framework which supports the development of visual editors for arbitrary formal languages. It is based on a grammar describing the formal language and compiles it to a block based editor interface which uses either our own visual representation or Blockly.
+  Generating a block editor for a language is a large effort and often done for every language individually. To tackle this, we developed a generalized framework which supports the development of visual editors for arbitrary formal languages. It is based on a grammar describing the formal language and compiles it to a block based editor interface which uses either our own visual representation or Google Blockly.
 
   Beside presenting the approach through a series of examples, we also sketch applications of the approach for the languages XML, HTML, SQL and JavaScript. Apart from getting a visual editor, our implementation also allows the connection to a backend in the full conventional language, which completes the editor with the common semantics of the language, so that the language can also be executed in the context for which it was developed.
 \end{abstract}
@@ -99,11 +88,11 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 
 \section{Introduction}
 
-Computer science introduction often uses syntaxfree drag-and-drop programming languages to ease the first steps when learning how to program. This approach has the benefit of entirely eliminating the possibility of confronting learners with syntax errors. But the actual languages that are being taught this way are not relevant in the programming industry. For educators, this is an inconvenient situation: Block languages are proven to be great tools to spark interest in programming. But making the step from block languages to conventional programming languages is still difficult. Additionally, some students view these environments as overly restrictive and \enquote{not real programming}\cite{braune_learning_2020}.
+Computer science introduction often uses syntaxfree drag-and-drop programming languages to ease the first steps when learning how to program. This approach has the benefit of entirely eliminating the possibility of confronting learners with syntax errors. But the actual languages that are being taught this way are not relevant in the programming industry. For educators, this is an inconvenient situation: Block languages are proven to be great tools to spark interest in programming. But making the step from block languages to conventional programming languages is still difficult. Additionally, some students view these environments as overly restrictive and \enquote{not real programming} as shown by \cite{braune_learning_2020}.
 
 One important aspect is to explicitly plan the transition from block based languages to text based languages. In \cite{fraser_ten_2015} this is called the \enquote{exit strategy} and \cite{alrubaye_comparison_2019} shows promising results when confronting students with block and textual programming simultaneously. The approach of \enquote{frame based editing} proposed by \cite{kolling_frame-based_2015} is another proposal to overcome this gap: Certain structural parts of the source code are draggable, some are read only and certain parts within this structure are textually editable.
 
-This paper follows these ideas and presents an approach to rapidly generate block language variations of conventional programming languages based on a grammar representation. Instead of hiding syntax details like parentheses, semicolons, commas, ... these are organically made part of the grammar and the resulting blocks. Therefore learners are continously confronted with the syntax details of their language of choice without having to actually type it. Additionally the resulting program is not meant to be run only in some learning environment. On a technical level the program can be compiled to proper source code in the target language and could be run in a \enquote{real} environment outside of the learning context.
+This paper follows these ideas and presents an approach to ra-pidly generate block language variations of conventional programming languages based on a grammar representation. Instead of hiding syntax details like parentheses, semicolons, commas, ... these are organically made part of the grammar and the resulting blocks. Therefore learners are continously confronted with the syntax details of their language of choice without having to actually type it. Additionally the resulting program is not meant to be run only in some learning environment. On a technical level the program can be compiled to proper source code in the target language and could be run in a \enquote{real} environment outside of the learning context.
 
 As a block language grammar augments an existing programming language, there is no need for a block language designer to define the semantics of the language he is describing in the grammar. If an educator requires a special variation of e.g. \texttt{SQL} that is limited to \texttt{SELECT}, \texttt{FROM} and \texttt{GROUP BY} or a subset of \texttt{JavaScript} that doesn't allow mutable variables, we want to put him into the position of being able to create his or her variation.
 
@@ -115,7 +104,7 @@ To show that the general grammar based approach as well as our specific implemen
 %At the core our approach is about representing the same syntax tree in two different ways:
 At the core our approach represents one syntax description in two different ways: Either as a block editor that can be used to edit the syntax tree. Or as a valid textual representation in the augmented programming language. Both of these representations and the validation are derived from a single source: a grammar. Apart from checking whether a certain syntax tree has the correct structure, the grammar provides syntactic details like keywords, brackets and indentation.
 
-Our approach re-defines and re-implements the common set of core data structures for compilers: syntax\-trees, grammars \& validators. The main reason for this re-invention of the wheel is the differing focus of existing software: the syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations. Our approach instead focuses exclusively on working with a syntaxtree that lends itself well to being directly presented to the end user. Most importantly, for a proper block editor there must not be any node that has no visual or textual representation. As these kind of intermediate nodes are not an issue for traditional compiler construction, there is a fundamental mismatch in the structure of these representations. On top of that typical compiler tasks that have to do with lexical analysis or parsing (\texttt{yacc}, \texttt{bison}, \texttt{ANTLR}, \texttt{boost::spirit}) are not relevant for our approach. The other self-evident candidate to build upon, namely Google Blockly, uses a syntax tree representation that includes many positional details that are not of relevance for our approach and mixes the block definitions (the \enquote{grammar}) with JavaScript and details of code generation.
+Our approach re-defines and re-implements the common set of core data structures for compilers: syntax\-trees, grammars \& validators. The main reason for this re-invention of the wheel is the differing focus of existing software: the syntaxtrees of conventional compilers (like \texttt{gcc}, \texttt{llvm}, \texttt{javac}, …) are focused on speed and correctness, and not a friendly representation for drag \& drop mutations. Our approach instead focuses exclusively on working with a syntaxtree that lends itself well to being directly presented to the end user. Most importantly, for a proper block editor there must not be any node that has no visual or textual representation. As these kind of intermediate nodes are not an issue for traditional compiler construction, there is a fundamental mismatch in the structure of these representations. On top of that typical compiler tasks that have to do with lexical analysis or parsing (\texttt{yacc}, \texttt{bison}, \texttt{ANTLR}, \texttt{boost::spirit}) are not relevant for our approach. The other self-evident candidate to build upon, namely Google Blockly, uses a syntax tree representation that includes many positional details that are not relevant for our approach and mixes the block definitions (the \enquote{grammar}) with JavaScript and details of code generation.
 
 On a fundamental technical level our implementation is split into a browser-frontend and a \texttt{HTTP}-backend, communication between these layers works via GraphQL. The backend is a Ruby on Rails application that uses PostgreSQL as a database, the frontend is written in TypeScript and uses Angular.
 
@@ -162,9 +151,7 @@ The tree in Listing~\ref{lst:ast-expr-binary} is shown in two equivalent represe
         "properties": { "name": "numRattles" }
       }
     ],
-    "rhs": [
-      { "language": "lang", "name": "null" }
-    ]
+    "rhs": [ { "language": "lang", "name": "null" } ]
   }
 }
 \end{lstlisting}
@@ -192,26 +179,15 @@ An \texttt{if} statement can be described in terms of its structure and the unde
 
 Listing~\ref{lst:if-stmt-pred} shows two sample programs: One with a correct \texttt{if}-Statement that uses a \texttt{then} is shown on the left. And one program with an incorrect \texttt{if}-Statement that accidentaly omits the \texttt{then} and the correspdonding expression is shown on the right. The correspdonding syntaxtree for the correct variation is shown in Figure~\ref{fig:if-stmt-pred}. The expression \texttt{a > b} is in the \texttt{pred} child group, the call to \texttt{writeln} is in the \texttt{positive} child group and the call to \texttt{err} is in the \texttt{negative} child group. From the perspective of the syntaxtree, each of these child groups has a distinct meaning that is also conveyed as part of the name. Even without hand-crafted error messages an error like \enquote{\enquote{lang.if} has empty childgroup \enquote{predicate}} would quite nicely convey the problem with a missing expression for the predicate. Without named childgroups, e.g. in an \texttt{XML} like tree structure, the semantics of the sub trees would be defined by the order they appear and a name would not by available.
 
-\begin{figure}[H]
-\begin{minipage}{.20\textwidth}
-\begin{lstlisting}
-if (a > b) then
-  writeln('foo')
-else
-  err(2, 'bar')
+% Faked two column layout for listings
+% I gave up to properly define a correct listing environment
+% that could use minipages ...
+\begin{lstlisting}[caption={\texttt{if}-Statement with and without predicate}, label=lst:if-stmt-pred]
+     if (a > b) then         if
+       writeln('foo')          writeln('foo')
+     else                    else
+       err(2, 'bar')           err(2, 'bar')
 \end{lstlisting}
-\end{minipage}
-\begin{minipage}{.20\textwidth}
-\begin{lstlisting}
-if (a > b)
-  writeln('foo')
-else
-  err(2, 'bar')
-\end{lstlisting}
-\end{minipage}
-\caption{\texttt{if}-Statement with and without predicate}
-\label{lst:if-stmt-pred}
-\end{figure}
 
 But the actual benefit of only working with syntax trees and not requiring a parsing step goes deeper than having nicer error messages for free. The incorrect \texttt{if}-statement that omits the expression and the \texttt{then} in Listing~\ref{lst:if-stmt-pred} uses indentation to convey the intent of the author: The \texttt{writeln} statement is offset in the same way as the \texttt{err} statement. But a parser that stumbles over this code would, at least without extra logic, be mislead by the \texttt{writeln} statement reading exactly like an expression. The most probable error message would read something along the lines of \enquote{Invalid predicate: expression writeln('foo') is not of type boolean} and \enquote{Missing keyword then}. In contrast the syntax tree can't make such a miss-attribution by accident because it relies on named child groups, not on the order of the sub-trees.
 
@@ -412,7 +388,7 @@ So far we have discussed how grammars can be used to validate the structure of a
 
 \item Regular expressions as understood by JavaScript.
 
-\item \texttt{Trucklino} is a domain specific language based on \texttt{Java\-Script} and implemented as a bachelors thesis \cite{popp_konzeption_2019} which can be seen as a variation of the Kara approach\cite{hartmann_kara_2001} about a ladybug (here: a truck) that solves programming puzzles.
+\item \texttt{Trucklino} is a domain specific language based on \texttt{Java\-Script} and implemented as a bachelors thesis \cite{popp_konzeption_2019} which can be seen as a variation of the Kara approach by \cite{hartmann_kara_2001} about a ladybug (here: a truck) that solves programming puzzles.
 
 \item \texttt{JSON} and \texttt{XML} purely as data structures without any immediate application or accompanied schema.
 
@@ -653,7 +629,7 @@ The underlying problem of \enquote{How should the block editor show possibilitie
   \label{fig:screen-js-empty-for}
 \end{figure}
 
-As JavaScript is supported by every current browser and there is no need to persist any state, the corresponding runtime does not require any server roundtrips. Figure~\ref{fig:screen-js-runtime-loop} shows how a JavaScript program is executed in the current implementation of the runtime. Technically it uses a web worker to ensure that endless loops do not bring the browser to a halt and provides an alternative implementation of \texttt{console.log} in that webworker so that the user sees the actions of his run without opening any developer tools. An alternative runtime called \enquote{Trucklino} was implemented as part of a bachelors thesis\cite{popp_konzeption_2019} and is shown in Figure~\ref{fig:js-runtime-trucklino}: It provides a Kara-like\cite{hartmann_kara_2001} environment to solve puzzles with JavaScript.
+As JavaScript is supported by every current browser and there is no need to persist any state, the corresponding runtime does not require any server roundtrips. Figure~\ref{fig:screen-js-runtime-loop} shows how a JavaScript program is executed in the current implementation of the runtime. Technically it uses a web worker to ensure that endless loops do not bring the browser to a halt and provides an alternative implementation of \texttt{console.log} in that webworker so that the user sees the actions of his run without opening any developer tools. An alternative runtime called \enquote{Trucklino} was implemented as part of a bachelors thesis\cite{popp_konzeption_2019} and is shown in Figure~\ref{fig:js-runtime-trucklino}: It provides a Kara-like environment as described by \cite{hartmann_kara_2001} to solve puzzles with JavaScript.
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{screens/js-runtime-loop}
@@ -665,12 +641,13 @@ As JavaScript is supported by every current browser and there is no need to pers
 
 We presented a new approach to rapidly generate block language editors based on a grammar that is specifically designed for block based visualization and modification of source code. The syntaxtree with the named child groups in conjunction with the grammar is versatile enough to augment any textual programming language by providing different types of block editors as well as a textual representation of the edited programming language. Representing a syntax tree through a grammar where each node type is turned into a block has shown to be an approach that fits our custom block editor as well as Google Blockly. The block editor specific grammar features like child groups, interleaving child nodes and virtual nodes may not be relevant for conventional compiler construction, but are important features when designing an editor that requires convenient ways to modify a syntax tree via dragging and dropping blocks.
 
-The environment we developed is self-hosting and allows the definition of block editors via the described grammar specification. As these generated block editors are used to augment real programming languages, the edited programs require a fitting programming language environment to be run in. Currently these runtimes are available for \texttt{SQLite}, \texttt{Java\-Script}, Regular Expressions, \texttt{Graph\-Viz}, symbolic math equations based on Nerdamer and a quite complex (but ultimately artificial) \texttt{Java\-Script}-variation of the Kara-approach called \texttt{Trucklino}\cite{popp_konzeption_2019}, which is shown in Figure~\ref{fig:js-runtime-trucklino}.
+The environment we developed is self-hosting and allows the definition of block editors via the described grammar specification. As these generated block editors are used to augment real programming languages, the edited programs require a fitting programming language environment to be run in. Currently these runtimes are available for \texttt{SQLite}, \texttt{Java\-Script}, Regular Expressions, \texttt{Graph\-Viz}, symbolic math equations based on Nerdamer and a quite complex (but ultimately artificial) \texttt{Java\-Script}-variation of the Kara-approach called \texttt{Trucklino} by \cite{popp_konzeption_2019}, which is shown in Figure~\ref{fig:js-runtime-trucklino}.
 
 The presented programming languages sketched in this paper demonstrate, that the general approach of generating a block based development environment from the grammar specification is also fast in terms of development time. Once a runtime for a conventional programming language has been developed, it can be targeted by multiple block language approaches that may put emphasis on different aspects. Therefore changing educational requirements leading to different relevant subsets of languages can be met by creating a new grammar.
 
 To properly plan further development  we need to team up with teachers in initial programming education and figure out whether to refine the presented textual block editor or the quality of the generated Blockly editors. Ultimately our goal is to provide a tool that learners actually \textbf{want} to leave because they perceive block editors as constricting when compared to text editors.
-\printbibliography
+
+\bibliography{CSERC22.bib}
 
 \end{document}
 
