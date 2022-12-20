@@ -27,7 +27,13 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 \newcommand\astScale{0.7}
 \newcommand\todo[1]{{\bfseries ToDo: #1}}
 
-\acmConference[CSERC]{Computer Science Education Research Conference}{2022}{Online}
+\copyrightyear{2022}
+\acmYear{2022}
+\setcopyright{acmlicensed}\acmConference[CSERC '22]{The 11th Computer Science Education Research Conference}{November 21, 2022}{Leiden, Netherlands}
+\acmBooktitle{The 11th Computer Science Education Research Conference (CSERC '22), November 21, 2022, Leiden, Netherlands}
+\acmPrice{15.00}
+\acmDOI{10.1145/3569173.3569174}
+\acmISBN{978-1-4503-9747-6/22/11}
 
 \begin{document}
 
@@ -49,7 +55,31 @@ style=acmnumeric, % use style=acmauthoryear for publications that require it
 }
 \email{fhu@informatik.uni-kiel.de}
 
-\keywords{computer science education, language specification, block editor}
+\begin{CCSXML}
+<ccs2012>
+   <concept>
+       <concept_id>10003456.10003457.10003527.10003531.10003533</concept_id>
+       <concept_desc>Social and professional topics~Computer science education</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10010405.10010489.10010491</concept_id>
+       <concept_desc>Applied computing~Interactive learning environments</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10011007.10011006.10011041.10011046</concept_id>
+       <concept_desc>Software and its engineering~Translator writing systems and compiler generators</concept_desc>
+       <concept_significance>300</concept_significance>
+       </concept>
+ </ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Social and professional topics~Computer science education}
+\ccsdesc[300]{Applied computing~Interactive learning environments}
+\ccsdesc[300]{Software and its engineering~Translator writing systems and compiler generators}
+
+\keywords{language specification, block editor}
 
 \begin{abstract}
   The prevailing concept when teaching computer science to beginners in school is visual programming, typically in the form of block based languages. Most approaches in this area involve special teaching languages like Scratch. Our approach seamlessly connects the block based language concept to conventional programming languages used in computer science, but for didactical purpose often to a core subset of such a language.
