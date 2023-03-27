@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
 
 import { LanguageService, ServerApiService } from "../../shared";
 import { ResourceReferencesService } from "../../shared/resource-references.service";
@@ -12,6 +13,7 @@ describe("CreateOverviewComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [ApolloTestingModule],
       providers: [
         ProjectService,
         ResourceReferencesService,
