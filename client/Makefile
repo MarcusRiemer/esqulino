@@ -50,10 +50,10 @@ dist: client-compile cli-compile universal-compile
 ##################################
 
 client-compile : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --localize $(NG_LOCALIZE) --outputPath="dist/browser" $(NG_PROD) $(DIST_FLAGS)
+	$(NG_BIN) build --aot --localize $(NG_LOCALIZE) --output-path="dist/browser" $(NG_PROD) $(DIST_FLAGS)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --localize $(NG_LOCALIZE) --outputPath="dist/browser" $(DEV_FLAGS)
+	$(NG_BIN) build --aot --localize $(NG_LOCALIZE) --output-path="dist/browser" $(DEV_FLAGS)
 
 ##################################
 # Commandline Client
