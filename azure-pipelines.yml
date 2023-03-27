@@ -128,7 +128,7 @@ jobs:
 
   - task: UseRubyVersion@0
     inputs:
-      versionSpec: '~ 3.1'
+      versionSpec: '~ 3.2'
 
   - script: gem install bundler
     displayName: 'gem install bundler'
