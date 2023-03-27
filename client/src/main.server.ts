@@ -4,4 +4,4 @@
 import "@angular/localize/init";
 export { AppServerModule } from "./app/app.server.module";
 
-export { renderModule, renderModuleFactory } from "@angular/platform-server";
+export { renderModuleFactory } from "@angular/platform-server";

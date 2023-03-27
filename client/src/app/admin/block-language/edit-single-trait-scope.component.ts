@@ -6,7 +6,7 @@ import {
   OnInit,
 } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
-import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent } from "@angular/material/legacy-autocomplete";
 
 import { first, map, pluck, tap } from "rxjs/operators";
 import { FullGrammarGQL } from "../../../generated/graphql";
