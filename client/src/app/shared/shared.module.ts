@@ -77,6 +77,7 @@ import { ChangeDetectionLogDirective } from "./change-detection-log.directive";
 import { UrlFriendlyIdPipe } from "./url-friendly-id.pipe";
 import { AffectedResourcesDialogComponent } from "./affected-resources-dialog.component";
 import { DisplayResourcePipe } from "./display-resource.pipe";
+import { ApolloModule } from "apollo-angular";
 
 const materialModules = [
   MatToolbarModule,
@@ -113,6 +114,7 @@ const materialModules = [
  */
 @NgModule({
   imports: [
+    ApolloModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
