@@ -12,8 +12,6 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 import { ReactiveFormsModule } from "@angular/forms";
 
-import { AceEditorModule } from "ng2-ace-editor";
-
 import { SharedAppModule } from "../shared/shared.module";
 import { EditorModule } from "../editor/editor.module";
 import { CodeEditorModule } from "../editor/code/code.module";
@@ -64,7 +62,6 @@ const materialModules = [
 
 @NgModule({
   imports: [
-    AceEditorModule,
     CommonModule,
     SharedAppModule,
     EditorModule,
