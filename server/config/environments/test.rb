@@ -6,6 +6,14 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Ususally running under "localdomain"
+  config.hosts << "localhost.localdomain"
+  config.hosts << "www.example.com"
+
+  ["en"].each do |lang|
+    config.hosts << "#{lang}.localhost.localdomain"
+  end
+
   config.cache_classes = false
 
   # Do not eager load code on boot. This avoids loading your whole application
