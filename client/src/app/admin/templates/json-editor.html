@@ -26,10 +26,10 @@
     </div>
   </div>
 </div>
-<ace-editor
-  [text]="jsonString"
-  (textChanged)="onTextChanged($event)"
+<textarea
+  [ngModel]="jsonString"
+  (ngModel)="onTextChanged($event)"
   class="full-height"
   theme="sqlserver"
   mode="json"
-></ace-editor>
+></textarea>

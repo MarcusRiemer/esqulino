@@ -43,7 +43,7 @@ clean : msg-pre-clean
 	rm -rf dist
 	rm -f src/environments/version.ts
 
-dist: client-compile cli-compile universal-compile
+dist: client-compile cli-compile
 
 ##################################
 # Webclient
@@ -72,18 +72,6 @@ cli-run: dist/cli/main.cli.js
 
 cli-ping: cli-compile
 	echo '{ "type": "ping" }' | $(NODE_BIN) dist/cli/main.cli.js
-
-##################################
-# Universal Rendering Server
-##################################
-
-universal-compile:
-	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
-	$(NG_BIN) run blattwerkzeug-client:server $(DIST_FLAGS)
-
-universal-run: universal-compile
-	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
-	$(NG_BIN) run blattwerkzeug-client:serve-ssr
 
 ##################################
 # Testing
