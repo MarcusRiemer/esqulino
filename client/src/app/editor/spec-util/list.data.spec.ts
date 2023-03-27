@@ -38,7 +38,9 @@ export function provideListResponse<T>(
 
     const order = options.order;
     if (order) {
-      reqUrl += `orderDirection=${order.direction}&orderField=${order.field}`;
+      reqUrl += `orderDirection=${order.direction}&orderField=${String(
+        order.field
+      )}`;
     }
 
     const pagination = options.pagination;

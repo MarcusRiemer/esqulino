@@ -12,7 +12,10 @@ import {
 } from "@angular/core";
 import { LegacyPageEvent as PageEvent } from "@angular/material/legacy-paginator";
 import { SortDirection, MatSort } from "@angular/material/sort";
-import { MatLegacyTable as MatTable, MatLegacyColumnDef as MatColumnDef } from "@angular/material/legacy-table";
+import {
+  MatLegacyTable as MatTable,
+  MatLegacyColumnDef as MatColumnDef,
+} from "@angular/material/legacy-table";
 
 import { BehaviorSubject, Observable, Subscription } from "rxjs";
 

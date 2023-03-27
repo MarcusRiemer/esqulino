@@ -1,6 +1,9 @@
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { MatLegacyDialogModule as MatDialogModule } from "@angular/material/legacy-dialog";
-import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarModule as MatSnackBarModule } from "@angular/material/legacy-snack-bar";
+import {
+  MatLegacySnackBar as MatSnackBar,
+  MatLegacySnackBarModule as MatSnackBarModule,
+} from "@angular/material/legacy-snack-bar";
 import { TestBed } from "@angular/core/testing";
 import {
   HttpClientTestingModule,
