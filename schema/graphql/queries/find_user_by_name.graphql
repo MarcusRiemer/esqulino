@@ -1,0 +1,22 @@
+query FindUserByName($filterName: String){
+  users (input : {
+    order :{
+      orderField: displayName,
+      orderDirection: desc
+    }
+    filter :{
+      displayName: $filterName
+    }
+  }) {
+    nodes {
+      id
+      displayName
+      email
+    }   
+    totalCount
+    pageInfo {
+      hasNextPage
+      
+    }
+  }
+}

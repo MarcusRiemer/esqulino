@@ -912,6 +912,7 @@ export type Query = {
   blockLanguage: BlockLanguage;
   blockLanguages: BlockLanguageConnection;
   codeResources: CodeResourceConnection;
+  findUserByName: UserConnection;
   grammar: Grammar;
   grammars: GrammarConnection;
   loginProviders: Array<LoginProvider>;
@@ -942,6 +943,14 @@ export type QueryCodeResourcesArgs = {
   first?: Maybe<Scalars["Int"]>;
   last?: Maybe<Scalars["Int"]>;
   input?: Maybe<CodeResourceInputType>;
+};
+
+export type QueryFindUserByNameArgs = {
+  after?: Maybe<Scalars["String"]>;
+  before?: Maybe<Scalars["String"]>;
+  first?: Maybe<Scalars["Int"]>;
+  last?: Maybe<Scalars["Int"]>;
+  name: Scalars["String"];
 };
 
 export type QueryGrammarArgs = {
@@ -1747,6 +1756,26 @@ export type DestroyProjectMutation = { __typename?: "Mutation" } & {
       "errors"
     >
   >;
+};
+
+export type FindUserByNameQueryVariables = Exact<{
+  filterName?: Maybe<Scalars["String"]>;
+}>;
+
+export type FindUserByNameQuery = { __typename?: "Query" } & {
+  users: { __typename?: "UserConnection" } & Pick<
+    UserConnection,
+    "totalCount"
+  > & {
+      nodes?: Maybe<
+        Array<
+          Maybe<
+            { __typename?: "User" } & Pick<User, "id" | "displayName" | "email">
+          >
+        >
+      >;
+      pageInfo: { __typename?: "PageInfo" } & Pick<PageInfo, "hasNextPage">;
+    };
 };
 
 export type FrontpageListNewsQueryVariables = Exact<{
@@ -3208,6 +3237,40 @@ export class DestroyProjectGQL extends Apollo.Mutation<
   DestroyProjectMutationVariables
 > {
   document = DestroyProjectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const FindUserByNameDocument = gql`
+  query FindUserByName($filterName: String) {
+    users(
+      input: {
+        order: { orderField: displayName, orderDirection: desc }
+        filter: { displayName: $filterName }
+      }
+    ) {
+      nodes {
+        id
+        displayName
+        email
+      }
+      totalCount
+      pageInfo {
+        hasNextPage
+      }
+    }
+  }
+`;
+
+@Injectable({
+  providedIn: "root",
+})
+export class FindUserByNameGQL extends Apollo.Query<
+  FindUserByNameQuery,
+  FindUserByNameQueryVariables
+> {
+  document = FindUserByNameDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

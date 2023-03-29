@@ -62,13 +62,7 @@
       <form class="form-group row">
         <h4 class="col-sm-12">Wechsel Eigentümer</h4>
         <div class="col-sm-6">
-          <input
-            name="new-owner-id"
-            type="text"
-            [(ngModel)]="changeOwnerId"
-            class="form-control"
-            placeholder="User-ID des neuen Eigentümers"
-          />
+          <app-search-user [(memberId)]="changeOwnerId"></app-search-user>
         </div>
         <button
           name="change-owner"
@@ -80,17 +74,12 @@
         </button>
       </form>
     </may-perform>
+
     <may-perform [payload]="addMemberPermission$ | async">
       <form class="form-group row">
         <h4 class="col-sm-12">Hinzufügen neuer Mitglieder</h4>
         <div class="col-sm-4">
-          <input
-            [(ngModel)]="addMemberId"
-            type="text"
-            class="form-control"
-            name="add-member-id"
-            placeholder="User-ID des neuen Mitgliedes"
-          />
+          <app-search-user [(memberId)]="addMemberId"></app-search-user>
         </div>
         <div class="col-sm-2">
           <select

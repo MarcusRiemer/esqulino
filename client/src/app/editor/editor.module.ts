@@ -32,11 +32,12 @@ import { EditorDebugMenuComponent } from "./debug-menu.component";
 import { SettingsComponent } from "./project-settings/settings.component";
 import { MembersComponent } from "./project-settings/members.component";
 
+import { SearchUserComponent } from "./project-settings/search-user/search-user-component";
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-
     SharedAppModule,
 
     ImageEditorModule.forRoot(),
@@ -55,6 +56,7 @@ import { MembersComponent } from "./project-settings/members.component";
     TrashComponent,
     SourceIconComponent,
     MembersComponent,
+    SearchUserComponent,
   ],
   providers: [
     TrashService,

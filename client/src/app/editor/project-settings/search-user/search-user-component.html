@@ -1,0 +1,29 @@
+<div class="input_wrapper">
+  <input
+    list="users"
+    name="project_members"
+    type="text"
+    class="form-control"
+    name="search-user"
+    placeholder="User-ID des neuen Mitgliedes"
+    #user_input
+    (input)="handleUserInput(user_input.value)"
+    [ngClass]="{
+    'is-valid': hasValidId$ | async 
+  }"
+  />
+  <span
+    *ngIf="filterUsersLoading$ | async"
+    class="spinner-border spinner-border-sm float-end"
+    role="status"
+  >
+    <span class="visually-hidden">Loading...</span>
+  </span>
+
+  <datalist *ngIf="filteredUsers$ | async as filteredUsers" id="users">
+    <option
+      *ngFor="let user of filteredUsers"
+      value="{{user['displayName'] }}"
+    ></option>
+  </datalist>
+</div>
