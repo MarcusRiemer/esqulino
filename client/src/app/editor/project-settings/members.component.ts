@@ -1,6 +1,6 @@
 import { UniqueSelectionDispatcher } from "@angular/cdk/collections";
 import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
-import { MatTableDataSource } from "@angular/material/table";
+import { MatLegacyTableDataSource as MatTableDataSource } from "@angular/material/legacy-table";
 import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
 import { filter, first, map, pluck, switchMap } from "rxjs/operators";

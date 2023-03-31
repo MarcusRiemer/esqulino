@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Title } from "@angular/platform-browser";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 
 import { BehaviorSubject } from "rxjs";
 import { switchMap, map, filter, pluck, mergeMap } from "rxjs/operators";

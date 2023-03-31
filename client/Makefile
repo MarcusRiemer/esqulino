@@ -43,17 +43,17 @@ clean : msg-pre-clean
 	rm -rf dist
 	rm -f src/environments/version.ts
 
-dist: client-compile cli-compile universal-compile
+dist: client-compile cli-compile
 
 ##################################
 # Webclient
 ##################################
 
 client-compile : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --localize $(NG_LOCALIZE) --outputPath="dist/browser" $(NG_PROD) $(DIST_FLAGS)
+	$(NG_BIN) build --aot --localize $(NG_LOCALIZE) --output-path="dist/browser" $(NG_PROD) $(DIST_FLAGS)
 
 client-compile-dev : msg-pre-build src/environments/version.ts
-	$(NG_BIN) build --aot --localize $(NG_LOCALIZE) --outputPath="dist/browser" $(DEV_FLAGS)
+	$(NG_BIN) build --aot --localize $(NG_LOCALIZE) --output-path="dist/browser" $(DEV_FLAGS)
 
 ##################################
 # Commandline Client
@@ -72,18 +72,6 @@ cli-run: dist/cli/main.cli.js
 
 cli-ping: cli-compile
 	echo '{ "type": "ping" }' | $(NODE_BIN) dist/cli/main.cli.js
-
-##################################
-# Universal Rendering Server
-##################################
-
-universal-compile:
-	-@$(TPUT_BIN) setaf 2; echo "## Client : Compiling (Universal Build) ..."; $(TPUT_BIN) sgr0
-	$(NG_BIN) run blattwerkzeug-client:server $(DIST_FLAGS)
-
-universal-run: universal-compile
-	-@$(TPUT_BIN) setaf 2; echo "## Client : Running Universal Server ..."; $(TPUT_BIN) sgr0
-	$(NG_BIN) run blattwerkzeug-client:serve-ssr
 
 ##################################
 # Testing

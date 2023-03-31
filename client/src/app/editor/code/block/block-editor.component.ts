@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ComponentPortal } from "@angular/cdk/portal";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 
 import { Observable } from "rxjs";
 import { map, switchMap, first, combineLatest, take } from "rxjs/operators";

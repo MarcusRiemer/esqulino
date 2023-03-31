@@ -1,10 +1,10 @@
 import { PortalModule } from "@angular/cdk/portal";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
-import { MatPaginatorModule } from "@angular/material/paginator";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatLegacyPaginatorModule as MatPaginatorModule } from "@angular/material/legacy-paginator";
+import { MatLegacySnackBarModule as MatSnackBarModule } from "@angular/material/legacy-snack-bar";
 import { MatSortModule } from "@angular/material/sort";
-import { MatTableModule } from "@angular/material/table";
+import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { ApolloTestingModule } from "apollo-angular/testing";
 

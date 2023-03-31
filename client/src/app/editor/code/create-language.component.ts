@@ -1,5 +1,9 @@
 import { Component } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+  UntypedFormControl,
+  UntypedFormGroup,
+  Validators,
+} from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -21,22 +25,22 @@ export class CreateLanguageComponent {
   readonly minLengthDisplayName = 2;
   readonly minLengthTechnicalName = 1;
 
-  creationInput = new FormGroup({
-    newLanguageDisplayName: new FormControl("", {
+  creationInput = new UntypedFormGroup({
+    newLanguageDisplayName: new UntypedFormControl("", {
       validators: [
         Validators.required,
         Validators.minLength(this.minLengthDisplayName),
       ],
     }),
-    newLanguageTechnicalName: new FormControl("", {
+    newLanguageTechnicalName: new UntypedFormControl("", {
       validators: [Validators.minLength(this.minLengthTechnicalName)],
     }),
-    runtimeLanguage: new FormControl("generic", {
+    runtimeLanguage: new UntypedFormControl("generic", {
       validators: [Validators.required],
       updateOn: "blur",
     }),
-    createMetaBlockLanguage: new FormControl(true),
-    createStructureAndSyntaxGrammar: new FormControl(false),
+    createMetaBlockLanguage: new UntypedFormControl(true),
+    createStructureAndSyntaxGrammar: new UntypedFormControl(false),
   });
 
   inProgress = false;

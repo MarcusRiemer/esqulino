@@ -7,7 +7,7 @@ import {
   AdminListProjectsQuery,
   AdminListProjectsQueryVariables,
 } from "../../../generated/graphql";
-import { MatPaginator } from "@angular/material/paginator";
+import { MatLegacyPaginator as MatPaginator } from "@angular/material/legacy-paginator";
 
 type DataKey = Exclude<keyof AdminListProjectsQuery, "__typename">;
 

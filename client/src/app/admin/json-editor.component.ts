@@ -8,12 +8,6 @@ import {
   SimpleChanges,
 } from "@angular/core";
 
-// Pre-load relevant ace themes and modes
-import "brace/theme/sqlserver";
-import "brace/mode/json";
-
-import "brace/ext/searchbox";
-
 /**
  * Allows more or less comfortable editing of JSON data
  */

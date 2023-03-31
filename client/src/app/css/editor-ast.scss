@@ -82,7 +82,7 @@ editor-block-host {
                 right: 0px;
             }
 
-            /* Drop before this block */
+            // Drop before this block
             .begin-drop, .begin-drop-zone {
                 top: 0px;
                 height: $relative-drop-hint-size;
@@ -97,7 +97,7 @@ editor-block-host {
                 );
             }
 
-            /* Drop after this block */
+            // Drop after this block
             .end-drop, .end-drop-zone {
                 bottom: 0px;
                 height: $relative-drop-hint-size;
@@ -113,7 +113,7 @@ editor-block-host {
             }
         }
 
-        /* Horizontal (left to right) indicators */
+        // Horizontal (left to right) indicators
         &.horizontal > {
 
             .begin-drop, .end-drop, .begin-drop-zone, .end-drop-zone {
@@ -122,7 +122,7 @@ editor-block-host {
                 bottom: 0px;
             }
 
-            /* Drop before this block */
+            // Drop before this block
             .begin-drop, .begin-drop-zone {
                 left: 0px;
                 width: $relative-drop-hint-size;
@@ -137,7 +137,7 @@ editor-block-host {
                 );
             }
 
-            /* Drop after this block */
+            // Drop after this block
             .end-drop, .end-drop-zone {
                 right: 0px;
                 width: $relative-drop-hint-size;

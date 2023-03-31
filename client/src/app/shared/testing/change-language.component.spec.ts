@@ -2,8 +2,8 @@ import { LOCALE_ID } from "@angular/core";
 import { RouterTestingModule } from "@angular/router/testing";
 import { TestBed } from "@angular/core/testing";
 
-import { MatButtonModule } from "@angular/material/button";
-import { MatMenuModule } from "@angular/material/menu";
+import { MatLegacyButtonModule as MatButtonModule } from "@angular/material/legacy-button";
+import { MatLegacyMenuModule as MatMenuModule } from "@angular/material/legacy-menu";
 
 import { ChangeLanguageComponent } from "../change-language.component";
 import { JavascriptRequiredComponent } from "../javascript-required.component";

@@ -8,7 +8,7 @@ import {
   DestroyGrammarGQL,
 } from "../../../generated/graphql";
 import { GraphQLQueryComponent } from "../../shared/table/paginator-table-graphql.component";
-import { MatPaginator } from "@angular/material/paginator";
+import { MatLegacyPaginator as MatPaginator } from "@angular/material/legacy-paginator";
 
 type DataKey = Exclude<keyof AdminListGrammarsQuery, "__typename">;
 type ListItem = AdminListGrammarsQuery[DataKey]["nodes"][0];

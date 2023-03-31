@@ -1,69 +1,11 @@
 version: "3"
 
 services:
-  base:
-    image: marcusriemer/blockwerkzeug:base
-    build:
-      dockerfile: docker/Dockerfile.base
-      context: .
-
-  test:
-    image: marcusriemer/blockwerkzeug:test
-    build:
-      dockerfile: docker/Dockerfile.test
-      context: .
-    volumes:
-      - .:/srv/esqulino
-      - data-files-volume:/srv/project-data
-    environment:
-      - USER_UID=1000
-      - USER_GID=1000
-      - TPUT_BIN=true
-      - DATABASE_HOST=db
-      - NG_PROD=
-      - DATA_DIR=/srv/project-data
-    entrypoint: ./docker/entrypoint-test.sh
-    depends_on:
-      - db
-
-  client:
-    image: marcusriemer/blockwerkzeug:client-dev
-    build:
-      dockerfile: docker/Dockerfile.development.client
-      context: .
-    volumes:
-      - .:/srv/esqulino
-    entrypoint: ./docker/entrypoint-development-client.sh
-    environment:
-      - USER_UID=1000
-      - USER_GID=1000
-      - TPUT_BIN=true
-
-  server:
-    image: marcusriemer/blockwerkzeug:server-dev
-    build:
-      dockerfile: docker/Dockerfile.development.server
-      context: .
-    ports:
-      - 9292:9292
-    volumes:
-      - .:/srv/esqulino
-      - data-files-volume:/srv/project-data
-    entrypoint: ./docker/entrypoint-development-server.sh
-    environment:
-      - USER_UID=1000
-      - USER_GID=1000
-      - TPUT_BIN=true
-      - DATABASE_HOST=db
-      - DATA_DIR=/srv/project-data
-      - RAILS_ENV=development
-    depends_on:
-      - db
-
   db:
     image: postgres:latest
+    ports:
+      - 5432:5432
     environment:
-      - POSTGRES_DB=esqulino_test
       - POSTGRES_USER=esqulino
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:

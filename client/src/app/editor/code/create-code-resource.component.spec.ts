@@ -7,7 +7,7 @@ import {
 } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatLegacySnackBar as MatSnackBar } from "@angular/material/legacy-snack-bar";
 import { Overlay } from "@angular/cdk/overlay";
 
 import {

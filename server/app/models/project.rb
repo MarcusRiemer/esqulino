@@ -78,7 +78,7 @@ class Project < ApplicationRecord
   # Create the required folders in the projects data storage folder
   after_create do
     Rails.logger.info "Creating project data directory at #{data_directory_path}"
-    raise EsqulinoError.new("Project directory already exist: #{data_directory_path}") if File.exist? data_directory_path
+    raise EsqulinoError::Message.new("Project directory already exist: #{data_directory_path}") if File.exist? data_directory_path
 
     Dir.mkdir data_directory_path
     Dir.mkdir File.join(data_directory_path, "databases/")
@@ -158,7 +158,7 @@ class Project < ApplicationRecord
     return user.eql? self.user
   end
 
-  # Return the role of the user. 
+  # Return the role of the user.
   # If he is not a member return nil
   def member_role(user)
     if(owner?(user))

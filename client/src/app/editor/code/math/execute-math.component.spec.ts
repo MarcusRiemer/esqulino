@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
 import { LanguageService } from "../../../shared";
 import { ResourceReferencesService } from "../../../shared/resource-references.service";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
@@ -12,6 +13,7 @@ describe("ExecuteMathComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [ApolloTestingModule],
       declarations: [ExecuteMathComponent],
       providers: [
         CurrentCodeResourceService,

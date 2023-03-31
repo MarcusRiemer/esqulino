@@ -5,8 +5,8 @@ import {
   SimpleChanges,
   OnInit,
 } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { UntypedFormControl } from "@angular/forms";
+import { MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent } from "@angular/material/legacy-autocomplete";
 
 import { first, map, pluck, tap } from "rxjs/operators";
 import { FullGrammarGQL } from "../../../generated/graphql";
@@ -58,13 +58,13 @@ export class EditSingleTraitScopeComponent implements OnInit, OnChanges {
   @Input() scope: ScopeTraitAdd;
 
   // The form control for a trait name that could be added
-  formControlTraitName = new FormControl();
+  formControlTraitName = new UntypedFormControl();
 
   // The form control for an attribute that could be targeted
-  formControlAttribute = new FormControl();
+  formControlAttribute = new UntypedFormControl();
 
   // The form control for a block that could be added
-  formControlBlock = new FormControl();
+  formControlBlock = new UntypedFormControl();
 
   // These attributes are currently targeted
   attributeTargetList: TargetAttribute[] = [];

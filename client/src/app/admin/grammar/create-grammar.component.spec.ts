@@ -2,8 +2,8 @@ import { FormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { TestBed } from "@angular/core/testing";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { MatTableModule } from "@angular/material/table";
+import { MatLegacySnackBarModule as MatSnackBarModule } from "@angular/material/legacy-snack-bar";
+import { MatLegacyTableModule as MatTableModule } from "@angular/material/legacy-table";
 import { PortalModule } from "@angular/cdk/portal";
 
 import { LanguageService, ToolbarService } from "../../shared";

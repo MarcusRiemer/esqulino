@@ -61,7 +61,6 @@
               ]
             },
             "scripts": [],
-            "showCircularDependencies": true,
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
@@ -161,7 +160,6 @@
       }
     }
   },
-  "defaultProject": "blattwerkzeug-client",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

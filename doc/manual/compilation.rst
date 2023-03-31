@@ -13,34 +13,14 @@ There are loads of fancy task-runners out there, but a "normal" interface to all
 Environment Dependencies
 ========================
 
-At its core the server is a "typical" Ruby on Rails application which relies on the following software. The given versions are a known konfiguration, more recent versions will probably work as well.
+At its core the server is a "typical" Ruby on Rails application with a "typical" Angular client, but it relies on additional software. The given versions are a known konfiguration, more recent versions will probably work as well.
 
-* Ruby >= 2.7.0
-* Postgres >= 10 (Requires ``jsonb``, ``hstore`` and ``NOTIFY`` support)
+* Ruby & nodejs as defined by `.tool-versions` in the root of the repository
+* Postgres as defined by `docker-compose.yml` in the root of the repository. Generally required is ``jsonb``, ``hstore`` and ``NOTIFY`` support.
 * ImageMagick 7.0.8 (Version 6 should work as well)
 * FileMagick 5.32
 * GraphViz 2.40.1
 * SQLite >= 3.15.0 (with Perl compatible regular expressions)
-
-Compiling the client requires the following dependencies (`taken from here <https://github.com/angular/angular-cli/blob/master/package.json>`_):
-
-* NodeJS >= 10.9.0
-* npm >= 6.0.0
-
-Alternatively you may use Docker to run the server and compile the client.
-
-Ubuntu Packages
----------------
-
-Execute this command to install the dependencies in a single step (works with Ubuntu 18.04)::
-
-   sudo apt install ruby ruby-bundler ruby-dev postgresql-10 libpq-dev \
-     imagemagick libmagickcore-dev libmagickwand-dev \
-     magic libmagic-dev graphviz sqlite libsqlite3-dev sqlite3-pcre \
-     nodejs npm
-
-The versions of ``nodejs`` and ``npm`` on Ubuntu are sometimes badly outdated. In that case you probably want to use the `binary distributions by NodeSource <https://github.com/nodesource/distributions/blob/master/README.md#debinstall>`_.
-
 
 SQLite and PCRE
 ---------------

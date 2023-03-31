@@ -45,29 +45,6 @@ jobs:
     workingDirectory: client
     displayName: 'make client-compile'
 
-- job: client_compile_universal
-  displayName: Client (Universal)
-
-  steps:
-  - task: Cache@2
-    inputs:
-      key: '"v1" | "node_modules" | "$(Agent.OS)" | client/package-lock.json'
-      path: 'client/node_modules'
-      cacheHitVar: 'CACHE_RESTORED'
-    displayName: Cache for node_modules
-
-  - task: Npm@1
-    displayName: 'Install Dependencies'
-    inputs:
-      command: ci
-      workingDir: client
-      verbose: false
-    condition: ne(variables.CACHE_RESTORED, 'true')
-
-  - bash: 'make src/environments/version.ts universal-compile'
-    workingDirectory: client
-    displayName: 'make universal-compile'
-
 - job: client_test
   displayName: Client (Tests)
 
