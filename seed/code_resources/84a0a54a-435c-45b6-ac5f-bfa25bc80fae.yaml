@@ -1,0 +1,35 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: f0995735-1861-40ae-ab2a-bcd265d07982
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Initial: Endri:regex'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 84a0a54a-435c-45b6-ac5f-bfa25bc80fae
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "constant", "children": {"next": [{"name": "optional",
+    "children": {"$childGroup": [{"name": "constant", "children": {"next": []}, "language":
+    "regex", "properties": {"name": "b"}}]}, "language": "regex"}, {"name": "constant",
+    "children": {"next": []}, "language": "regex", "properties": {"name": "c"}}]},
+    "language": "regex", "properties": {"name": "a"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-03 09:27:03.654557000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-03 09:44:24.614188000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 3351a412-ca88-49b0-9bdd-b0b7ade65d9d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

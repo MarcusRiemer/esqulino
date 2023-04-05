@@ -1,0 +1,40 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: f0995735-1861-40ae-ab2a-bcd265d07982
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: ranges in sets
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 7c340e6c-25b1-42f2-b174-453648ec1426
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "sequence", "children": {"values": [], "setsOfValues":
+    [{"name": "set", "children": {"ranges": [], "constants": [{"name": "constant",
+    "language": "regex", "properties": {"value": "012345"}}]}, "language": "regex"},
+    {"name": "set", "children": {"ranges": [{"name": "range", "children": {"lastElement":
+    [{"name": "constant", "language": "regex", "properties": {"value": "z"}}], "firstElement":
+    [{"name": "constant", "language": "regex", "properties": {"value": "a"}}]}, "language":
+    "regex"}], "constants": []}, "language": "regex"}], "quantifiedValues": [{"name":
+    "atMostOneQuantor", "children": {"element": [{"name": "constant", "language":
+    "regex", "properties": {"value": "9"}}]}, "language": "regex"}]}, "language":
+    "regex"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-04 14:31:15.039324000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-04 14:54:48.810105000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 3351a412-ca88-49b0-9bdd-b0b7ade65d9d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2
