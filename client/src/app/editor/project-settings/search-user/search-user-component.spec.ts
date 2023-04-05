@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";
 
 import { SearchUserComponent } from "./search-user-component";
 
@@ -8,6 +9,7 @@ describe("SearchUserComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [ApolloTestingModule],
       declarations: [SearchUserComponent],
     }).compileComponents();
 

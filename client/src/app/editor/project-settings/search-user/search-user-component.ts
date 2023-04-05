@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { isNetworkRequestInFlight } from "@apollo/client/core/networkStatus";
-import { BehaviorSubject, Subscription, combineLatest, of, timer } from "rxjs";
+import { BehaviorSubject, Subscription, combineLatest, timer } from "rxjs";
 import { debounce, distinctUntilChanged, filter, map } from "rxjs/operators";
 import { FindUserByNameGQL } from "src/generated/graphql";
 
@@ -40,8 +40,6 @@ export class SearchUserComponent {
     })
   );
 
-  //readonly filterUsersLoading$ = of(true);
-
   readonly lastValidId$ = combineLatest([
     this.searchInput$,
     this.filteredUsers$,
@@ -61,12 +59,16 @@ export class SearchUserComponent {
 
   constructor(private getFilteredUsers: FindUserByNameGQL) {
     this._subscriptions.push(
+      // Required to ensure that the chosen member ID is emitted independently
+      // from any template logic.
       this.lastValidId$.subscribe((id) => {
         this.memberId = id;
         this.memberIdChange.emit(this.memberId);
       })
     );
     this._subscriptions.push(
+      // Proper loading indication only works when refetching an
+      // existing query
       this._searchInput$.subscribe((input) => {
         this._queryObject.refetch({ filterName: `%${input}%` });
       })
