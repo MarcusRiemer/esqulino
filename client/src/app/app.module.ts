@@ -99,7 +99,7 @@ if (environment.sentry && environment.sentry.active) {
               fields: {
                 blockLanguage: (_, { toReference, variables }) => {
                   if (variables?.id) {
-                    console.debug("blockLanguage: toReference", variables);
+                    //console.debug("blockLanguage: toReference", variables);
                     return toReference({
                       __typename: "BlockLanguage",
                       id: variables.id,
@@ -115,10 +115,9 @@ if (environment.sentry && environment.sentry.active) {
           // Don't send the query string over the wire
           includeQuery: false,
           // Put name of operation in URL to ease debugging
+          //removed the variables to avoid query string size going beyond 10*1024 Problem.
           uri: ({ operationName, variables }) =>
-            `/api/graphql/${operationName}?${urlParamsFromObject(
-              variables["input"] ?? variables
-            )}`,
+            `/api/graphql/${operationName}`,
         }),
         defaultOptions: {
           mutate: {
