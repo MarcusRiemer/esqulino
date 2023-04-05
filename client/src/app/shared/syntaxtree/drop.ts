@@ -269,6 +269,7 @@ export function smartDropLocation(
       runAlgorithm("allowAnyParent");
     }
 
+    toReturn.sort((a, b) => b.location.length - a.location.length);
     return toReturn;
   } else {
     // No tree? Then there is only a single possibility.
