@@ -1,0 +1,54 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Regex with Invisible Sequence
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 302ad4ec-bc4d-4e0b-88ba-421b546fe4e7
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-21 11:50:57.227849000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-21 12:21:36.268929000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 71f35596-1d75-4b02-968c-789eb8254347
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"regex-invis": {"expr": {"type": "oneOf", "oneOf": [{"typeName":
+    "terminal", "languageName": "regex-invis"}, {"typeName": "sequence", "languageName":
+    "regex-invis"}, {"typeName": "optional", "languageName": "regex-invis"}]}, "optional":
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"type":
+    "terminal", "symbol": "("}, {"name": "children", "type": "sequence", "nodeTypes":
+    [{"occurs": "+", "nodeType": {"typeName": "expr", "languageName": "regex-invis"}}]},
+    {"type": "terminal", "symbol": ")"}, {"type": "terminal", "symbol": "?"}, {"name":
+    "rest", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": {"typeName":
+    "expr", "languageName": "regex-invis"}}]}], "orientation": "horizontal"}]}, "sequence":
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
+    "children", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType": {"typeName":
+    "expr", "languageName": "regex-invis"}}]}], "orientation": "horizontal"}]}, "terminal":
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"base":
+    "string", "name": "value", "type": "property"}, {"name": "rest", "type": "sequence",
+    "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "expr", "languageName":
+    "regex-invis"}}]}], "orientation": "horizontal"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "expr", "languageName": "regex-invis"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
+new_record: false
+active_record_yaml_version: 2

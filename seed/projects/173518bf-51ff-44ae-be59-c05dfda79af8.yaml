@@ -1,0 +1,33 @@
+--- !ruby/object:Project
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: '"de"=>"Regex Invisible Nodes"'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 173518bf-51ff-44ae-be59-c05dfda79af8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: public
+  value_before_type_cast: false
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: preview
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: index_page_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-21 11:48:13.318924000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-21 11:48:13.318924000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_database_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: user_id
+  value_before_type_cast: 00000000-0000-0000-0000-000000000002
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: description
+  value_before_type_cast: ''
+new_record: false
+active_record_yaml_version: 2

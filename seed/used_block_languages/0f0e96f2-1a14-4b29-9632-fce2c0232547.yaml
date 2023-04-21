@@ -1,0 +1,13 @@
+--- !ruby/object:ProjectUsesBlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 173518bf-51ff-44ae-be59-c05dfda79af8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 0f0e96f2-1a14-4b29-9632-fce2c0232547
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 651b02eb-dc97-423b-8d03-8e241f42f107
+new_record: false
+active_record_yaml_version: 2

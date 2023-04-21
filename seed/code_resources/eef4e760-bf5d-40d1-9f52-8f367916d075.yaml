@@ -1,0 +1,34 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 173518bf-51ff-44ae-be59-c05dfda79af8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: ABC 3 Deep
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: eef4e760-bf5d-40d1-9f52-8f367916d075
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "terminal", "children": {"rest": [{"name": "terminal",
+    "children": {"rest": [{"name": "terminal", "children": {"rest": []}, "language":
+    "regex-invis", "properties": {"value": "C"}}]}, "language": "regex-invis", "properties":
+    {"value": "B"}}]}, "language": "regex-invis", "properties": {"value": "A"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-21 12:19:08.096018000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-21 12:19:52.740131000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 651b02eb-dc97-423b-8d03-8e241f42f107
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2
