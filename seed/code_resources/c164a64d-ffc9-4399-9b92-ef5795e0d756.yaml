@@ -12,112 +12,111 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: ast
   value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
-    "language": "MetaGrammar", "properties": {"typeName": "sequence", "languageName":
+    "language": "MetaGrammar", "properties": {"typeName": "expression", "languageName":
     "regex"}}], "nodes": [{"name": "typedef", "children": {"references": [{"name":
     "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "customQuantor",
     "languageName": "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties":
-    {"typeName": "anyQuantor", "languageName": "regex"}}, {"name": "nodeRefOne", "language":
-    "MetaGrammar", "properties": {"typeName": "atMostOneQuantor", "languageName":
-    "regex"}}, {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
-    "atLeastOneQuantor", "languageName": "regex"}}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "quantor", "languageName": "regex"}}, {"name": "typedef", "children":
-    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
-    {"typeName": "constant", "languageName": "regex"}}, {"name": "nodeRefOne", "language":
-    "MetaGrammar", "properties": {"typeName": "set", "languageName": "regex"}}]},
-    "language": "MetaGrammar", "properties": {"typeName": "elemPattern", "languageName":
-    "regex"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "property",
-    "language": "MetaGrammar", "properties": {"base": "string", "name": "value"}}]},
-    "language": "MetaGrammar", "properties": {"typeName": "constant", "languageName":
-    "regex"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "container",
-    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
-    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "elemPattern",
-    "languageName": "regex"}}]}, "language": "MetaGrammar", "properties": {"base":
-    "sequence", "name": "element"}}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "?"}}], "orientation": [{"name": "orientation", "language":
-    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]},
-    "language": "MetaGrammar", "properties": {"typeName": "atMostOneQuantor", "languageName":
-    "regex"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "container",
-    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
-    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "elemPattern",
-    "languageName": "regex"}}]}, "language": "MetaGrammar", "properties": {"base":
-    "sequence", "name": "element"}}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "+"}}], "orientation": [{"name": "orientation", "language":
-    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]},
-    "language": "MetaGrammar", "properties": {"typeName": "atLeastOneQuantor", "languageName":
-    "regex"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "container",
-    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
-    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "elemPattern",
-    "languageName": "regex"}}]}, "language": "MetaGrammar", "properties": {"base":
-    "sequence", "name": "element"}}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "*"}}], "orientation": [{"name": "orientation", "language":
-    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]},
-    "language": "MetaGrammar", "properties": {"typeName": "anyQuantor", "languageName":
-    "regex"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "container",
-    "children": {"attributes": [{"name": "children", "children": {"references": [{"name":
-    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "elemPattern",
-    "languageName": "regex"}}]}, "language": "MetaGrammar", "properties": {"base":
-    "sequence", "name": "element"}}, {"name": "terminal", "language": "MetaGrammar",
-    "properties": {"symbol": "{"}}, {"name": "property", "language": "MetaGrammar",
-    "properties": {"base": "integer", "name": "min"}}, {"name": "terminal", "language":
-    "MetaGrammar", "properties": {"symbol": ","}}, {"name": "property", "language":
-    "MetaGrammar", "properties": {"base": "integer", "name": "max"}}, {"name": "terminal",
-    "language": "MetaGrammar", "properties": {"symbol": "}"}}], "orientation": [{"name":
-    "orientation", "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]},
-    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName":
-    "customQuantor", "languageName": "regex"}}, {"name": "concreteNode", "children":
+    {"typeName": "generalQuantor", "languageName": "regex"}}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "quantor", "languageName": "regex"}}, {"name": "typedef",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "constant", "languageName": "regex"}}, {"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "set", "languageName": "regex"}},
+    {"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "group",
+    "languageName": "regex"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "elemPattern", "languageName": "regex"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "value"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "constant", "languageName": "regex"}}, {"name": "concreteNode", "children":
     {"attributes": [{"name": "container", "children": {"attributes": [{"name": "children",
     "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "constant", "languageName": "regex"}}]}, "language":
-    "MetaGrammar", "properties": {"base": "sequence", "name": "firstElement"}}, {"name":
-    "terminal", "language": "MetaGrammar", "properties": {"symbol": "-"}}, {"name":
-    "children", "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
-    "properties": {"typeName": "constant", "languageName": "regex"}}]}, "language":
-    "MetaGrammar", "properties": {"base": "sequence", "name": "lastElement"}}], "orientation":
-    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
-    "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "range", "languageName": "regex"}}, {"name": "concreteNode", "children":
-    {"attributes": [{"name": "container", "children": {"tags": [], "attributes": [{"name":
-    "terminal", "language": "MetaGrammar", "properties": {"symbol": "["}}, {"name":
-    "children", "children": {"references": [{"name": "nodeRefCardinality", "children":
+    "properties": {"typeName": "elemPattern", "languageName": "regex"}}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "element"}}, {"name":
+    "property", "children": {"restrictions": [{"name": "restrictionEnum", "children":
+    {"values": [{"name": "restrictionEnumValue", "language": "MetaGrammar", "properties":
+    {"value": "+"}}, {"name": "restrictionEnumValue", "language": "MetaGrammar", "properties":
+    {"value": "*"}}, {"name": "restrictionEnumValue", "language": "MetaGrammar", "properties":
+    {"value": "?"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "symbol"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName": "generalQuantor",
+    "languageName": "regex"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "container", "children": {"attributes": [{"name": "children", "children":
     {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
-    {"typeName": "range", "languageName": "regex"}}], "cardinality": [{"name": "knownCardinality",
-    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
-    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base": "allowed",
-    "name": "ranges"}}, {"name": "children", "children": {"references": [{"name":
-    "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne", "language":
-    "MetaGrammar", "properties": {"typeName": "constant", "languageName": "regex"}}],
-    "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
-    {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
-    "properties": {"base": "allowed", "name": "constants"}}, {"name": "terminal",
-    "language": "MetaGrammar", "properties": {"symbol": "]"}}], "orientation": [{"name":
-    "orientation", "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]},
-    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName":
-    "set", "languageName": "regex"}}, {"name": "concreteNode", "children": {"attributes":
-    [{"name": "container", "children": {"tags": [{"name": "tag", "language": "MetaGrammar",
-    "properties": {"name": "double-quote"}}], "attributes": [{"name": "children",
-    "children": {"references": [{"name": "nodeRefCardinality", "children": {"references":
-    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
-    "set", "languageName": "regex"}}], "cardinality": [{"name": "knownCardinality",
-    "language": "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language":
-    "MetaGrammar"}, {"name": "nodeRefCardinality", "children": {"references": [{"name":
-    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "quantor",
-    "languageName": "regex"}}], "cardinality": [{"name": "knownCardinality", "language":
-    "MetaGrammar", "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"},
-    {"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
+    {"typeName": "elemPattern", "languageName": "regex"}}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "element"}}, {"name": "terminal", "language":
+    "MetaGrammar", "properties": {"symbol": "{"}}, {"name": "property", "language":
+    "MetaGrammar", "properties": {"base": "integer", "name": "min"}}, {"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": ","}}, {"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "integer", "name": "max"}},
+    {"name": "terminal", "language": "MetaGrammar", "properties": {"symbol": "}"}}],
+    "orientation": [{"name": "orientation", "language": "MetaGrammar", "properties":
+    {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"typeName": "customQuantor", "languageName": "regex"}}, {"name":
+    "concreteNode", "children": {"attributes": [{"name": "container", "children":
+    {"attributes": [{"name": "children", "children": {"references": [{"name": "nodeRefOne",
     "language": "MetaGrammar", "properties": {"typeName": "constant", "languageName":
+    "regex"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
+    "firstElement"}}, {"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "-"}}, {"name": "children", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "constant", "languageName":
+    "regex"}}]}, "language": "MetaGrammar", "properties": {"base": "sequence", "name":
+    "lastElement"}}], "orientation": [{"name": "orientation", "language": "MetaGrammar",
+    "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"typeName": "range", "languageName":
+    "regex"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "container",
+    "children": {"tags": [], "attributes": [{"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "["}}, {"name": "children", "children": {"references":
+    [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "range", "languageName":
     "regex"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
     "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language":
-    "MetaGrammar", "properties": {"base": "allowed", "name": "values"}}], "orientation":
-    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
-    "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
-    {"typeName": "sequence", "languageName": "regex"}}]}, "language": "MetaGrammar",
-    "properties": {"name": "regex"}}'
+    "MetaGrammar", "properties": {"base": "allowed", "name": "ranges"}}, {"name":
+    "children", "children": {"references": [{"name": "nodeRefCardinality", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "constant", "languageName": "regex"}}], "cardinality": [{"name":
+    "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality": "*"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base":
+    "allowed", "name": "constants"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "]"}}], "orientation": [{"name": "orientation", "language":
+    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"typeName": "set", "languageName": "regex"}},
+    {"name": "concreteNode", "children": {"attributes": [{"name": "container", "children":
+    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "("}}, {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "quantor", "languageName": "regex"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}, {"name": "nodeRefCardinality", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "elemPattern", "languageName": "regex"}}], "cardinality": [{"name":
+    "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality": "*"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base":
+    "allowed", "name": "elements"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": ")"}}], "orientation": [{"name": "orientation", "language":
+    "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language": "MetaGrammar"}]},
+    "language": "MetaGrammar", "properties": {"typeName": "group", "languageName":
+    "regex"}}, {"name": "concreteNode", "children": {"attributes": [{"name": "container",
+    "children": {"tags": [{"name": "tag", "language": "MetaGrammar", "properties":
+    {"name": "double-quote"}}], "attributes": [{"name": "children", "children": {"references":
+    [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "quantor", "languageName":
+    "regex"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
+    "properties": {"cardinality": "*"}}]}, "language": "MetaGrammar"}, {"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "elemPattern", "languageName": "regex"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "allowed", "name": "elements"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName": "expression",
+    "languageName": "regex"}}]}, "language": "MetaGrammar", "properties": {"name":
+    "regex"}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2023-04-03 09:27:00.910329000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2023-04-05 09:36:27.368589000 Z
+  value_before_type_cast: 2023-04-05 12:11:52.443133000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
@@ -139,15 +138,7 @@ concise_attributes:
               },
               {
                 "languageName": "regex",
-                "typeName": "anyQuantor"
-              },
-              {
-                "languageName": "regex",
-                "typeName": "atMostOneQuantor"
-              },
-              {
-                "languageName": "regex",
-                "typeName": "atLeastOneQuantor"
+                "typeName": "generalQuantor"
               }
             ]
           },
@@ -161,6 +152,10 @@ concise_attributes:
               {
                 "languageName": "regex",
                 "typeName": "set"
+              },
+              {
+                "languageName": "regex",
+                "typeName": "group"
               }
             ]
           },
@@ -174,7 +169,7 @@ concise_attributes:
               }
             ]
           },
-          "atMostOneQuantor": {
+          "generalQuantor": {
             "type": "concrete",
             "attributes": [
               {
@@ -192,58 +187,19 @@ concise_attributes:
                     ]
                   },
                   {
-                    "type": "terminal",
-                    "symbol": "?"
-                  }
-                ]
-              }
-            ]
-          },
-          "atLeastOneQuantor": {
-            "type": "concrete",
-            "attributes": [
-              {
-                "type": "container",
-                "orientation": "horizontal",
-                "children": [
-                  {
-                    "type": "sequence",
-                    "name": "element",
-                    "nodeTypes": [
+                    "type": "property",
+                    "base": "string",
+                    "name": "symbol",
+                    "restrictions": [
                       {
-                        "languageName": "regex",
-                        "typeName": "elemPattern"
+                        "type": "enum",
+                        "value": [
+                          "+",
+                          "*",
+                          "?"
+                        ]
                       }
                     ]
-                  },
-                  {
-                    "type": "terminal",
-                    "symbol": "+"
-                  }
-                ]
-              }
-            ]
-          },
-          "anyQuantor": {
-            "type": "concrete",
-            "attributes": [
-              {
-                "type": "container",
-                "orientation": "horizontal",
-                "children": [
-                  {
-                    "type": "sequence",
-                    "name": "element",
-                    "nodeTypes": [
-                      {
-                        "languageName": "regex",
-                        "typeName": "elemPattern"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "terminal",
-                    "symbol": "*"
                   }
                 ]
               }
@@ -372,7 +328,7 @@ concise_attributes:
               }
             ]
           },
-          "sequence": {
+          "group": {
             "type": "concrete",
             "attributes": [
               {
@@ -380,16 +336,13 @@ concise_attributes:
                 "orientation": "horizontal",
                 "children": [
                   {
+                    "type": "terminal",
+                    "symbol": "("
+                  },
+                  {
                     "type": "allowed",
-                    "name": "values",
+                    "name": "elements",
                     "nodeTypes": [
-                      {
-                        "nodeType": {
-                          "languageName": "regex",
-                          "typeName": "set"
-                        },
-                        "occurs": "*"
-                      },
                       {
                         "nodeType": {
                           "languageName": "regex",
@@ -400,7 +353,42 @@ concise_attributes:
                       {
                         "nodeType": {
                           "languageName": "regex",
-                          "typeName": "constant"
+                          "typeName": "elemPattern"
+                        },
+                        "occurs": "*"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": ")"
+                  }
+                ]
+              }
+            ]
+          },
+          "expression": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "allowed",
+                    "name": "elements",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "regex",
+                          "typeName": "quantor"
+                        },
+                        "occurs": "*"
+                      },
+                      {
+                        "nodeType": {
+                          "languageName": "regex",
+                          "typeName": "elemPattern"
                         },
                         "occurs": "*"
                       }
@@ -420,7 +408,7 @@ concise_attributes:
       "foreignVisualisations": {},
       "root": {
         "languageName": "regex",
-        "typeName": "sequence"
+        "typeName": "expression"
       }
     }
 new_record: false
