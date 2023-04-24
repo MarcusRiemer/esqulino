@@ -82,5 +82,7 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root_css_classes
   value_before_type_cast: "{activate-block-outline,activate-keyword}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: level
 new_record: false
 active_record_yaml_version: 2

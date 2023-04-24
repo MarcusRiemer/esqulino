@@ -1,0 +1,19 @@
+--- !ruby/object:User
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 35f68271-4eac-4490-b0cb-ac872ef2f36a
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: display_name
+  value_before_type_cast: endri
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-24 09:52:56.324766000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-24 09:52:56.324766000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: email
+  value_before_type_cast: test
+new_record: false
+active_record_yaml_version: 2

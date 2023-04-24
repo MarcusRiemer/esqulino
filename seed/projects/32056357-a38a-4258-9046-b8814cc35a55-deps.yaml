@@ -3,10 +3,10 @@
   - db2a87a8-f632-46aa-960c-c60e1bb261da
   - !ruby/class 'Seed::ProjectUsesBlockLanguageSeed'
 - - "../seed/code_resources"
-  - c2d342c0-da83-4541-a634-b6aa358a8763
+  - 98787a86-c084-43a4-988d-366a2f65b579
   - &1 !ruby/class 'Seed::CodeResourceSeed'
 - - "../seed/code_resources"
-  - 98787a86-c084-43a4-988d-366a2f65b579
+  - c2d342c0-da83-4541-a634-b6aa358a8763
   - *1
 - - "../seed/databases"
   - ca22b86c-b1a6-4420-a91a-c222110bb0e1

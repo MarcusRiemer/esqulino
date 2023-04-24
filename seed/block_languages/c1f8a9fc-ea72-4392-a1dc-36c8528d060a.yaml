@@ -53,5 +53,7 @@ concise_attributes:
   value_before_type_cast: "{activate-block-outline,activate-keyword}"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: generated_from_id
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: level
 new_record: false
 active_record_yaml_version: 2

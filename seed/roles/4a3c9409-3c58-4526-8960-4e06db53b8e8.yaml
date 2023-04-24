@@ -1,0 +1,16 @@
+--- !ruby/object:Role
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: validated
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 4a3c9409-3c58-4526-8960-4e06db53b8e8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-24 09:52:56.332389000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-24 09:52:56.332389000 Z
+new_record: false
+active_record_yaml_version: 2
