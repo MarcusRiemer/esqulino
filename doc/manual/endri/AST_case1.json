@@ -1,0 +1,41 @@
+{
+    "name": "optional",
+    "language": "regex-1",
+    "children": {
+      "seq": [
+        {
+          "name": "sequence",
+          "language": "regex-1",
+          "properties": {
+            "value": "a"
+          },
+          "children": {
+            "rest": []
+          }
+        }
+      ],
+      "rest": [
+        {
+          "name": "sequence",
+          "language": "regex-1",
+          "properties": {
+            "value": "b"
+          },
+          "children": {
+            "rest": [
+              {
+                "name": "sequence",
+                "language": "regex-1",
+                "properties": {
+                  "value": "c"
+                },
+                "children": {
+                  "rest": []
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+}

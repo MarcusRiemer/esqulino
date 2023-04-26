@@ -1,0 +1,32 @@
+{
+  "name": "terminal",
+  "language": "regex-invis",
+  "properties": {
+    "value": "A"
+  },
+  "children": {
+    "rest": [
+      {
+        "name": "terminal",
+        "language": "regex-invis",
+        "properties": {
+          "value": "B"
+        },
+        "children": {
+          "rest": [
+            {
+              "name": "terminal",
+              "language": "regex-invis",
+              "properties": {
+                "value": "C"
+              },
+              "children": {
+                "rest": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

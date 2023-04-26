@@ -8,6 +8,12 @@
 - - "../seed/used_block_languages"
   - 0f0e96f2-1a14-4b29-9632-fce2c0232547
   - *1
+- - "../seed/used_block_languages"
+  - cab8e009-a34b-40c4-8dcf-387f81f68991
+  - *1
+- - "../seed/used_block_languages"
+  - cdf5f3ae-e9bf-4305-acb0-ee620ab3b36b
+  - *1
 - - "../seed/code_resources"
   - fd12a740-0e5c-4c5b-97f4-9afaf5dce6d0
   - &2 !ruby/class 'Seed::CodeResourceSeed'
@@ -25,4 +31,25 @@
   - *2
 - - "../seed/code_resources"
   - 786d27ed-2d8e-4b34-8751-e1e610cdd402
+  - *2
+- - "../seed/code_resources"
+  - 73c99f6b-58ac-4083-b129-f640d99700ca
+  - *2
+- - "../seed/code_resources"
+  - 846b9164-01e9-41f7-b9b9-5afcfdc1135b
+  - *2
+- - "../seed/code_resources"
+  - a52ddf5e-f15b-4867-b741-86b0ed9c0407
+  - *2
+- - "../seed/code_resources"
+  - ba02490e-5fa0-4c32-8b17-6678bfb38fcd
+  - *2
+- - "../seed/code_resources"
+  - dbac6d9d-75bd-4d3f-b563-ca80e2414cf8
+  - *2
+- - "../seed/code_resources"
+  - e46a1852-1175-4c83-8b51-ea742b96d508
+  - *2
+- - "../seed/code_resources"
+  - d6b6ef7b-aee8-4bdf-88e5-c59851744a80
   - *2

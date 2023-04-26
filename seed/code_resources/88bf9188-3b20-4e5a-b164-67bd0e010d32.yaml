@@ -1,0 +1,29 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: eaac822e-e8bd-4d91-b1a9-daae62f926c1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Nested_Regexes
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 88bf9188-3b20-4e5a-b164-67bd0e010d32
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-25 08:18:53.455654000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-25 08:18:53.455654000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+new_record: false
+active_record_yaml_version: 2

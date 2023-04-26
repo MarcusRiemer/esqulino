@@ -1,0 +1,36 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 173518bf-51ff-44ae-be59-c05dfda79af8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: ABC-Nested
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 846b9164-01e9-41f7-b9b9-5afcfdc1135b
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "optional", "children": {"seq": [{"name": "sequence",
+    "children": {"$childGroup": [{"name": "sequence", "children": {"$childGroup":
+    [{"name": "sequence", "children": {"$childGroup": []}, "language": "regex-1",
+    "properties": {"value": "c"}}]}, "language": "regex-1", "properties": {"value":
+    "b"}}]}, "language": "regex-1", "properties": {"value": "a"}}], "rest": []}, "language":
+    "regex-1"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-25 09:39:41.577283000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-25 09:49:31.735058000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: b9255bbd-f421-42aa-a863-ccab44f39362
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2
