@@ -1,0 +1,57 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 173518bf-51ff-44ae-be59-c05dfda79af8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Approach-3 - Cases
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 361bfe29-de88-46a2-932a-38bf431c092e
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "invis-container", "children": {"elements": [{"name":
+    "invis-container", "children": {"elements": [{"name": "optional", "children":
+    {"quantified": [{"name": "singleton", "language": "grammar-with-invis-endri",
+    "properties": {"value": "a"}}]}, "language": "grammar-with-invis-endri"}, {"name":
+    "singleton", "language": "grammar-with-invis-endri", "properties": {"value": "b"}},
+    {"name": "singleton", "language": "grammar-with-invis-endri", "properties": {"value":
+    "c"}}]}, "language": "grammar-with-invis-endri"}, {"name": "singleton", "language":
+    "grammar-with-invis-endri", "properties": {"value": "|"}}, {"name": "invis-container",
+    "children": {"elements": [{"name": "optional", "children": {"quantified": [{"name":
+    "singleton", "language": "grammar-with-invis-endri", "properties": {"value": "a"}},
+    {"name": "singleton", "language": "grammar-with-invis-endri", "properties": {"value":
+    "b"}}]}, "language": "grammar-with-invis-endri"}, {"name": "singleton", "language":
+    "grammar-with-invis-endri", "properties": {"value": "c"}}]}, "language": "grammar-with-invis-endri"},
+    {"name": "singleton", "language": "grammar-with-invis-endri", "properties": {"value":
+    "|"}}, {"name": "invis-container", "children": {"elements": [{"name": "singleton",
+    "language": "grammar-with-invis-endri", "properties": {"value": "a"}}, {"name":
+    "optional", "children": {"quantified": [{"name": "singleton", "language": "grammar-with-invis-endri",
+    "properties": {"value": "b"}}, {"name": "singleton", "language": "grammar-with-invis-endri",
+    "properties": {"value": "c"}}]}, "language": "grammar-with-invis-endri"}]}, "language":
+    "grammar-with-invis-endri"}, {"name": "singleton", "language": "grammar-with-invis-endri",
+    "properties": {"value": "|"}}, {"name": "invis-container", "children": {"elements":
+    [{"name": "optional", "children": {"quantified": [{"name": "singleton", "language":
+    "grammar-with-invis-endri", "properties": {"value": "a"}}, {"name": "singleton",
+    "language": "grammar-with-invis-endri", "properties": {"value": "b"}}, {"name":
+    "singleton", "language": "grammar-with-invis-endri", "properties": {"value": "c"}}]},
+    "language": "grammar-with-invis-endri"}]}, "language": "grammar-with-invis-endri"}]},
+    "language": "grammar-with-invis-endri"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-28 09:39:49.928690000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-28 10:13:31.508540000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 0b242bdd-27f1-4a4a-8663-c80c3fad2f33
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

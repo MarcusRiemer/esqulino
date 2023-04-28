@@ -1,0 +1,52 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Approach III
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 346c7917-8c83-4905-a256-d0b4f6aa4d4b
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-28 09:31:07.155420000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-28 10:11:31.993360000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 3234528f-edcf-43cf-9e22-83b264667357
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"grammar-with-invis-endri": {"optional": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"type": "terminal", "symbol":
+    "("}, {"name": "quantified", "type": "sequence", "nodeTypes": [{"occurs": "*",
+    "nodeType": {"typeName": "singleton", "languageName": "grammar-with-invis-endri"}}]},
+    {"type": "terminal", "symbol": ")"}, {"type": "terminal", "symbol": "?"}], "orientation":
+    "horizontal"}]}, "patterns": {"type": "oneOf", "oneOf": [{"typeName": "singleton",
+    "languageName": "grammar-with-invis-endri"}, {"typeName": "optional", "languageName":
+    "grammar-with-invis-endri"}]}, "singleton": {"type": "concrete", "attributes":
+    [{"base": "string", "name": "value", "type": "property"}]}, "invis-container":
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
+    "elements", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName":
+    "invis-container", "languageName": "grammar-with-invis-endri"}}, {"occurs": "*",
+    "nodeType": {"typeName": "patterns", "languageName": "grammar-with-invis-endri"}}]}],
+    "orientation": "horizontal"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "invis-container", "languageName": "grammar-with-invis-endri"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
+new_record: false
+active_record_yaml_version: 2
