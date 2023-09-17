@@ -1,0 +1,119 @@
+% LLNCS macro package for Springer Computer Science proceedings;
+% Version 2.21 of 2022/01/12
+%
+\documentclass[runningheads]{llncs}
+%
+\usepackage[utf8]{inputenc}
+% T1 fonts will be used to generate the final print and online PDFs,
+% so please use T1 fonts in your manuscript whenever possible.
+% Other font encondings may result in incorrect characters.
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+% Used for displaying a sample figure. If possible, figure files should
+% be included in EPS format.
+%
+% If you use the hyperref package, please uncomment the following two lines
+% to display URLs in blue roman font according to Springer's eBook style:
+%\usepackage{color}
+%\renewcommand\UrlFont{\color{blue}\rmfamily}
+%
+
+\usepackage{listings}
+\lstset{
+  basicstyle = \ttfamily,
+  basewidth  = {.5em,0.5em},
+  captionpos = b
+}
+
+\newcommand{\enquote}[1]{``#1''}
+
+\begin{document}
+%
+\title{A grammar centric approach to generate drag \& drop subsets of programming languages\thanks{Supported by AKRA Hamburg}}
+%
+%\titlerunning{Abbreviated paper title}
+% If the paper title is too long for the running head, you can set
+% an abbreviated paper title here
+%
+\author{Marcus Riemer\inst{1, 2} \and
+Frank Huch\inst{1}}
+%
+\authorrunning{F. Author et al.}
+% First names are abbreviated in the running head.
+% If there are more than two authors, 'et al.' is used.
+%
+\institute{
+  Christian-Albrechts-Universität, Kiel, Germany \and
+  AKRA GmbH, Hamburg, Germany, \email{marcus.riemer@akra.de}\\}
+%
+\maketitle              % typeset the header of the contribution
+%
+\begin{abstract}
+We present a way to use two of the most typical tools of compiler construction, namely grammars and (syntax) trees, as the foundation to build a generator that can create drag \& drop editors for programming or markup languages. Instead of text files, the generated editors (either a custom editor or based on Blockly) operate on syntax trees and use special grammars to ensure the resulting tree is well formed. If the grammar additionally defines the syntax of the language through terminal symbols, the syntax tree can immediately be presented as a properly formatted text document as well. The grammar we developed is conceptually based on XML Schema validation and is used to validate trees where each node corresponds to a block that is draggable in the user interface. This visual use case brings the important requirement of never confronting the user with a block that has no representation. To aid in this requirement, the grammar can define artificial nodes which do not appear in the tree but only aid in validation. Exploring design patterns to build intuitive editors, possibly involving the use of parser-parser combinators, are our current area of research.
+\end{abstract}
+
+\section{A Tour of the Generated User Interface}
+
+The abstract syntax tree (AST) itself is purely a \texttt{JSON} data structure and has no concept of being \textit{valid} or \textit{invalid} on its own. The tree also has no concept on how it should be represented in either its block form, this is the task of block languages, or textual representation, this is the task of code generators both of which are usually generated from a grammar. To give an impression of the generated output, we will take a look at the expression \texttt{(2 * (A + B))}, a notation as it would be valid in almost any programming language. This expression is shown in three equivalent representations:
+
+\begin{description}
+\item[Tree] \hfill \\ This representation shows how nodes have a name that consists of two parts, how properties are attached and that node are categorized into named subgroups. The name of the node has a namespace (in this example always \texttt{lang}) and a type name (in this example either \texttt{expBin}, \texttt{expConst} or \texttt{expVar}). Properties are described through key value pairs and in this example denote the operation for a binary expression, the value of a constant or the name of a variable. And last but not least children are organized into named subgroups which in the example are used for children of binary expressions and are called \texttt{lhs} (\textit{left hand side}) or \texttt{rhs} (\textit{right hand side}).
+
+  \item[Blattwerkzeug editor with visual and textual representation] \hfill \\ We have built an editor that follows the visual representation of textual programming as closely as possible. The screenshot shows the five draggable nodes in the upper left, the compiled result on the lower left and possible blocks to use on the right hand side.
+  \item[Blockly editor with visual representation] \hfill \\ As an alternative to our own backend, we can also generate definitions for Google Blockly. These have a slightly more convoluted visual representation, as the children are stacked vertically instead of horizontally by default.
+\end{description}
+
+\begin{figure}[p]
+  \includegraphics[width=0.8\textwidth]{ast/example-expr-binary-nested}
+  \caption{Graphical representation of tree}
+  \label{fig:ast-expr-binary}
+\end{figure}
+
+\begin{figure}[p]
+  \includegraphics[width=0.8\textwidth]{screens/expr-blocks-internal}
+  \caption{Builtin BlattWerkzeug editor for expressions}
+  \label{fig:screen-editor-expr-internal}
+\end{figure}
+
+\begin{figure}[p]
+  \includegraphics[width=0.8\textwidth]{screens/expr-blocks-blockly}
+  \caption{Blockly editor for expressions}
+  \label{fig:screen-editor-expr-blockly}
+\end{figure}
+
+\section{Grammar Details}
+
+The two user interfaces and the textual representation have been derived from the same grammar. In practice BlattWerkzeug is self-hosting, so the grammar has been developed using the integrated drag \& drop editor, but what follows is the textual representation of the grammar:
+
+\begin{lstlisting}[caption={Syntactic grammar for expression \texttt{expBin}}, label=lst:grammar-expr-expBin-syntax]
+grammar "lang" {
+  node "expNull"  { "null" }
+  node "expVar"   { prop "name"  { string } }
+  node "expConst" { prop "value" { number } }
+  typedef "expAny" ::= expBin | expNull | expVar | expConst
+  node "expBin" {
+    "("
+    children sequence "lhs" ::= expAny
+    prop     "op"  string enum { == + * }
+    children sequence "rhs" ::= expAny
+    ")"
+  }
+}
+\end{lstlisting}
+
+\subsection{\texttt{node} for draggable blocks}
+
+Each \texttt{node} definition denotes a type that may be dragged \& dropped inside the editor. The order in which components of such a node are given, is also the order in which they will be visualized in either block or text form. Any values denoted directly in quotations marks, like the \texttt{''null''} for \texttt{expNull}, are terminal symbols. These are not used for validation, but for representation. Properties are denoted using the \texttt{prop} keyword and define a name and a value type.
+
+\subsection{\texttt{typedef} for choices}
+
+\subsection{Design Pattern: Lists over Trees}
+
+\subsection{Research: Parser-Parser combinators for helpful transforms}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
