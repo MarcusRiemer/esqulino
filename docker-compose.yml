@@ -1,8 +1,10 @@
 version: "3"
 
 services:
+# The postgresql database
   db:
-    image: postgres:latest
+    container_name: esqulino_db
+    image: postgres:15-bullseye
     ports:
       - 5432:5432
     environment:
@@ -11,15 +13,28 @@ services:
     volumes:
       - data-postgres-volume:/var/lib/postgresql/data
 
-  accounts:
-    image: jboss/keycloak
-    ports:
-      - 8080:8080
-    environment:
-      - KEYCLOAK_USER=${KEYCLOAK_USER}
-      - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
+# Keycloak  
+  # accounts:
+  #   image: jboss/keycloak
+  #   ports:
+  #     - 8080:8080
+  #   environment:
+  #     - KEYCLOAK_USER=${KEYCLOAK_USER}
+  #     - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD} 
 #      - DB_VENDOR=postgres
 #      - DB_ADDR=db
+
+# The rails server
+  server: 
+    container_name: esqulino_server
+    image: blattwerkzeug_rails
+    ports: 
+      - 9292:3000
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=esqulino_db
+
 
 volumes:
   data-files-volume:

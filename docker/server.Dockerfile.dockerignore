@@ -1,0 +1,12 @@
+# Ignore the following when building the Rails image
+
+server/.*
+server/log/
+server/storage/
+server/test/
+server/spec/
+server/tmp/
+
+server/Makefile
+server/start_server.sh
+# README.md 
