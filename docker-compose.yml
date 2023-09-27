@@ -27,14 +27,20 @@ services:
 # The rails server
   server: 
     container_name: esqulino_server
-    image: blattwerkzeug_rails
+    build:
+      context: .
+      dockerfile: ./docker/server.Dockerfile
+    image: esqulino_rails_server
     ports: 
       - 9292:3000
     depends_on:
       - db
     environment:
-      - DATABASE_HOST=esqulino_db
-
+      - DATABASE_HOST=esqulino_db      
+#    volumes:
+#      - data-files-volume: 
+#      - schema-files-volume: 
+    
 
 volumes:
   data-files-volume:
