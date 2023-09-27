@@ -9,10 +9,10 @@
   - 4dc3a6b3-1381-4664-9fbd-1e488bffae35
   - *1
 - - "../seed/code_resources"
-  - 985fb7cb-027c-4002-bcea-d74513309476
+  - 020570e8-c10c-4213-af00-537fe0c1a860
   - &2 !ruby/class 'Seed::CodeResourceSeed'
 - - "../seed/code_resources"
-  - 020570e8-c10c-4213-af00-537fe0c1a860
+  - 985fb7cb-027c-4002-bcea-d74513309476
   - *2
 - - "../seed/code_resources"
   - b95e498b-6a59-4dbd-b000-43177acefab9

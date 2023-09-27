@@ -1,9 +1,0 @@
-FROM node:18.17-bookworm
-RUN apt update 
-RUN npm install -g @angular/cli
-COPY schema /blattwerkzeug/schema
-COPY client /blattwerkzeug/client/
-WORKDIR /blattwerkzeug/client
-RUN npm install
-WORKDIR /blattwerkzeug/client/src
-CMD ["ng serve"]

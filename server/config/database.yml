@@ -5,6 +5,7 @@ default: &default
   username: <%= ENV['DATABASE_USER'] || 'esqulino' %>
   password: <%= ENV['DATABASE_PASS'] || '' %>
   encoding: unicode
+  port: 5432
 
 development:
   <<: *default
