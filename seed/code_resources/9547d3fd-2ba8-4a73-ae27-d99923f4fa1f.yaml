@@ -1,0 +1,44 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: f0995735-1861-40ae-ab2a-bcd265d07982
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Sets
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 9547d3fd-2ba8-4a73-ae27-d99923f4fa1f
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "invis-container", "children": {"elements": [{"name":
+    "string", "language": "regex", "properties": {"value": "hello"}}, {"name": "set",
+    "children": {"elements": [{"name": "range", "children": {"lastElement": [{"name":
+    "char", "language": "regex", "properties": {"value": "Z"}}], "firstElement": [{"name":
+    "char", "language": "regex", "properties": {"value": "a"}}]}, "language": "regex"}],
+    "setNegation": [{"name": "setNegation", "language": "regex"}]}, "language": "regex"},
+    {"name": "set", "children": {"elements": [{"name": "char", "language": "regex",
+    "properties": {"value": "fun"}}, {"name": "range", "children": {"lastElement":
+    [{"name": "char", "language": "regex", "properties": {"value": "4"}}], "firstElement":
+    [{"name": "char", "language": "regex", "properties": {"value": "1"}}]}, "language":
+    "regex"}], "setNegation": []}, "language": "regex"}, {"name": "generalQuantifier",
+    "children": {"element": [{"name": "set", "children": {"elements": [{"name": "shorthands",
+    "language": "regex", "properties": {"value": "\\d"}}]}, "language": "regex"}]},
+    "language": "regex", "properties": {"max": "5", "min": "0"}}]}, "language": "regex"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-10-11 14:24:40.939656000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-10-12 12:56:48.966667000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 3351a412-ca88-49b0-9bdd-b0b7ade65d9d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

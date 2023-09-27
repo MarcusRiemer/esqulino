@@ -1,0 +1,99 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Endri:regex
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 35621449-5cca-459b-b342-b83e5823e917
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-03 09:27:01.318931000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-10-13 07:49:21.826236000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: c164a64d-ffc9-4399-9b92-ef5795e0d756
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"regex": {"set": {"type": "concrete", "attributes": [{"type":
+    "container", "children": [{"type": "terminal", "symbol": "["}, {"name": "setNegation",
+    "type": "sequence", "nodeTypes": [{"occurs": "?", "nodeType": {"typeName": "setNegation",
+    "languageName": "regex"}}]}, {"name": "elements", "type": "allowed", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "shorthands", "languageName": "regex"}},
+    {"occurs": "*", "nodeType": {"typeName": "const", "languageName": "regex"}}, {"occurs":
+    "*", "nodeType": {"typeName": "range", "languageName": "regex"}}]}, {"type": "terminal",
+    "symbol": "]"}], "orientation": "horizontal"}]}, "char": {"type": "concrete",
+    "attributes": [{"base": "string", "name": "value", "type": "property"}]}, "const":
+    {"type": "oneOf", "oneOf": [{"typeName": "string", "languageName": "regex"}, {"typeName":
+    "char", "languageName": "regex"}]}, "group": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"type": "terminal", "symbol": "("}, {"name":
+    "elements", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName":
+    "alternation", "languageName": "regex"}}, {"occurs": "*", "nodeType": {"typeName":
+    "quantifier", "languageName": "regex"}}, {"occurs": "*", "nodeType": {"typeName":
+    "elemPattern", "languageName": "regex"}}]}, {"type": "terminal", "symbol": ")"}],
+    "orientation": "horizontal"}]}, "range": {"type": "concrete", "attributes": [{"type":
+    "container", "children": [{"name": "firstElement", "type": "sequence", "nodeTypes":
+    [{"typeName": "char", "languageName": "regex"}]}, {"type": "terminal", "symbol":
+    "-"}, {"name": "lastElement", "type": "sequence", "nodeTypes": [{"typeName": "char",
+    "languageName": "regex"}]}], "orientation": "horizontal"}]}, "string": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "value", "type": "property"}]},
+    "metaChar": {"type": "concrete", "attributes": [{"base": "string", "name": "value",
+    "type": "property", "restrictions": [{"type": "enum", "value": [".", "$", "^"]}]}]},
+    "rootElem": {"type": "oneOf", "oneOf": [{"typeName": "alternation", "languageName":
+    "regex"}, {"typeName": "quantifier", "languageName": "regex"}, {"typeName": "invis-container",
+    "languageName": "regex"}, {"typeName": "elemPattern", "languageName": "regex"}]},
+    "quantifier": {"type": "oneOf", "oneOf": [{"typeName": "generalQuantifier", "languageName":
+    "regex"}, {"typeName": "builtInQuantifier", "languageName": "regex"}]}, "shorthands":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "value", "type":
+    "property", "restrictions": [{"type": "enum", "value": ["\\n", "\\s", "\\d"]}]}]},
+    "alternation": {"type": "oneOf", "oneOf": [{"typeName": "nAryAlernation", "languageName":
+    "regex"}, {"typeName": "BinaryAlternation", "languageName": "regex"}]}, "elemPattern":
+    {"type": "oneOf", "oneOf": [{"typeName": "shorthands", "languageName": "regex"},
+    {"typeName": "set", "languageName": "regex"}, {"typeName": "const", "languageName":
+    "regex"}, {"typeName": "metaChar", "languageName": "regex"}, {"typeName": "group",
+    "languageName": "regex"}]}, "setNegation": {"type": "concrete", "attributes":
+    [{"type": "terminal", "symbol": "^"}]}, "nAryAlernation": {"type": "concrete",
+    "attributes": [{"type": "container", "children": [{"name": "alternatives", "type":
+    "sequence", "nodeTypes": [{"occurs": "+", "nodeType": {"typeName": "invis-container",
+    "languageName": "regex"}}]}], "orientation": "horizontal"}]}, "invis-container":
+    {"type": "concrete", "attributes": [{"tags": ["double-quote"], "type": "container",
+    "children": [{"name": "elements", "type": "allowed", "nodeTypes": [{"occurs":
+    "*", "nodeType": {"typeName": "alternation", "languageName": "regex"}}, {"occurs":
+    "*", "nodeType": {"typeName": "quantifier", "languageName": "regex"}}, {"occurs":
+    "*", "nodeType": {"typeName": "elemPattern", "languageName": "regex"}}]}], "orientation":
+    "horizontal"}]}, "BinaryAlternation": {"type": "concrete", "attributes": [{"type":
+    "container", "children": [{"name": "left", "type": "sequence", "nodeTypes": [{"typeName":
+    "invis-container", "languageName": "regex"}]}, {"type": "terminal", "symbol":
+    "|"}, {"name": "right", "type": "sequence", "nodeTypes": [{"typeName": "invis-container",
+    "languageName": "regex"}]}], "orientation": "horizontal"}]}, "builtInQuantifier":
+    {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
+    "element", "type": "sequence", "nodeTypes": [{"typeName": "elemPattern", "languageName":
+    "regex"}]}, {"base": "string", "name": "symbol", "type": "property", "restrictions":
+    [{"type": "enum", "value": ["+", "*", "?"]}]}], "orientation": "horizontal"}]},
+    "generalQuantifier": {"type": "concrete", "attributes": [{"type": "container",
+    "children": [{"name": "element", "type": "sequence", "nodeTypes": [{"typeName":
+    "elemPattern", "languageName": "regex"}]}, {"type": "terminal", "symbol": "{"},
+    {"base": "integer", "name": "min", "type": "property"}, {"type": "terminal", "symbol":
+    ","}, {"base": "integer", "name": "max", "type": "property"}, {"type": "terminal",
+    "symbol": "}"}], "orientation": "horizontal"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "rootElem", "languageName": "regex"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
+new_record: false
+active_record_yaml_version: 2
