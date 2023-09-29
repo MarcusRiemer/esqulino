@@ -13,16 +13,16 @@ services:
     volumes:
       - data-postgres-volume:/var/lib/postgresql/data
 
-# Keycloak  
-  # accounts:
-  #   image: jboss/keycloak
-  #   ports:
-  #     - 8080:8080
-  #   environment:
-  #     - KEYCLOAK_USER=${KEYCLOAK_USER}
-  #     - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD} 
-#      - DB_VENDOR=postgres
-#      - DB_ADDR=db
+# # Keycloak  
+#   accounts:
+#     image: jboss/keycloak
+#     ports:
+#       - 8080:8080
+#     environment:
+#       - KEYCLOAK_USER=${KEYCLOAK_USER}
+#       - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD} 
+#       - DB_VENDOR=postgres
+#       - DB_ADDR=db
 
 # The rails server
   server: 
@@ -32,11 +32,11 @@ services:
       dockerfile: ./docker/server.Dockerfile
     image: esqulino_rails_server
     ports: 
-      - 9292:3000
+      - 9292:9292
     depends_on:
       - db
     environment:
-      - DATABASE_HOST=esqulino_db      
+      - DATABASE_HOST=db      
 #    volumes:
 #      - data-files-volume: 
 #      - schema-files-volume: 

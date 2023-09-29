@@ -1,0 +1,9 @@
+# Ignore the following when building the Angular client's image
+
+client/.*
+client/log/
+client/docs
+client/node_modules
+
+client/Makefile
+# README.md 
