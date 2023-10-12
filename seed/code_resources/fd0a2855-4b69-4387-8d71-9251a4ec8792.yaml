@@ -1,0 +1,44 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: f0995735-1861-40ae-ab2a-bcd265d07982
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: general_quantifiers
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: fd0a2855-4b69-4387-8d71-9251a4ec8792
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "invis-container", "children": {"elements": [{"name":
+    "generalQuantifier", "children": {"element": [{"name": "group", "children": {"elements":
+    [{"name": "BinaryAlternation", "children": {"left": [{"name": "invis-container",
+    "children": {"elements": [{"name": "string", "language": "regex", "properties":
+    {"value": "abc"}}]}, "language": "regex"}], "right": [{"name": "invis-container",
+    "children": {"elements": [{"name": "string", "language": "regex", "properties":
+    {"value": "def"}}]}, "language": "regex"}]}, "language": "regex"}]}, "language":
+    "regex"}]}, "language": "regex", "properties": {"max": "1", "min": "0"}}, {"name":
+    "generalQuantifier", "children": {"element": [{"name": "group", "children": {"elements":
+    [{"name": "string", "language": "regex", "properties": {"value": "foo"}}]}, "language":
+    "regex"}]}, "language": "regex", "properties": {"max": "7", "min": "4"}}, {"name":
+    "generalQuantifier", "children": {"element": [{"name": "char", "language": "regex",
+    "properties": {"value": "x"}}]}, "language": "regex", "properties": {"max": "10",
+    "min": "1"}}]}, "language": "regex"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-10-11 09:03:13.011588000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-10-12 09:41:35.331647000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 3351a412-ca88-49b0-9bdd-b0b7ade65d9d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

@@ -3,7 +3,6 @@ version: "3"
 services:
 # The postgresql database
   db:
-    container_name: esqulino_db
     image: postgres:15-bullseye
     ports:
       - 5432:5432
@@ -26,7 +25,6 @@ services:
 
 # The rails server
   server: 
-    container_name: esqulino_server
     build:
       context: .
       dockerfile: ./docker/server.Dockerfile
@@ -40,7 +38,6 @@ services:
 #    volumes:
 #      - data-files-volume: 
 #      - schema-files-volume: 
-    
 
 volumes:
   data-files-volume:

@@ -20,12 +20,12 @@ concise_attributes:
   value_before_type_cast: 2023-04-03 07:56:48.201213000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2023-04-24 11:27:00.119207000 Z
+  value_before_type_cast: 2023-10-11 15:01:34.985799000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_database_id
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: user_id
-  value_before_type_cast: 35f68271-4eac-4490-b0cb-ac872ef2f36a
+  value_before_type_cast: 00000000-0000-0000-0000-000000000002
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: description
   value_before_type_cast: ''

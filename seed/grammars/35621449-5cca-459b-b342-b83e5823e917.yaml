@@ -13,7 +13,7 @@ concise_attributes:
   value_before_type_cast: 2023-04-03 09:27:01.318931000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2023-04-05 09:36:29.557976000 Z
+  value_before_type_cast: 2023-10-12 10:25:22.500233000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: programming_language_id
   value_before_type_cast: meta-grammar
@@ -23,48 +23,78 @@ concise_attributes:
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: types
   value_before_type_cast: '{"regex": {"set": {"type": "concrete", "attributes": [{"type":
-    "container", "children": [{"type": "terminal", "symbol": "["}, {"name": "ranges",
-    "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "range",
-    "languageName": "regex"}}]}, {"name": "constants", "type": "allowed", "nodeTypes":
-    [{"occurs": "*", "nodeType": {"typeName": "constant", "languageName": "regex"}}]},
-    {"type": "terminal", "symbol": "]"}], "orientation": "horizontal"}]}, "range":
+    "container", "children": [{"type": "terminal", "symbol": "["}, {"name": "setNegation",
+    "type": "sequence", "nodeTypes": [{"occurs": "?", "nodeType": {"typeName": "setNegation",
+    "languageName": "regex"}}]}, {"name": "elements", "type": "allowed", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "shorthands", "languageName": "regex"}},
+    {"occurs": "*", "nodeType": {"typeName": "const", "languageName": "regex"}}, {"occurs":
+    "*", "nodeType": {"typeName": "range", "languageName": "regex"}}]}, {"type": "terminal",
+    "symbol": "]"}], "orientation": "horizontal"}]}, "char": {"type": "concrete",
+    "attributes": [{"base": "string", "name": "value", "type": "property"}]}, "const":
+    {"type": "oneOf", "oneOf": [{"typeName": "string", "languageName": "regex"}, {"typeName":
+    "char", "languageName": "regex"}]}, "group": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"type": "terminal", "symbol": "("}, {"name":
+    "elements", "type": "allowed", "nodeTypes": [{"occurs": "*", "nodeType": {"typeName":
+    "alternation", "languageName": "regex"}}, {"occurs": "*", "nodeType": {"typeName":
+    "quantifier", "languageName": "regex"}}, {"occurs": "*", "nodeType": {"typeName":
+    "elemPattern", "languageName": "regex"}}]}, {"type": "terminal", "symbol": ")"}],
+    "orientation": "horizontal"}]}, "range": {"type": "concrete", "attributes": [{"type":
+    "container", "children": [{"name": "firstElement", "type": "sequence", "nodeTypes":
+    [{"typeName": "char", "languageName": "regex"}]}, {"type": "terminal", "symbol":
+    "-"}, {"name": "lastElement", "type": "sequence", "nodeTypes": [{"typeName": "char",
+    "languageName": "regex"}]}], "orientation": "horizontal"}]}, "string": {"type":
+    "concrete", "attributes": [{"base": "string", "name": "value", "type": "property"}]},
+    "metaChar": {"type": "concrete", "attributes": [{"base": "string", "name": "value",
+    "type": "property", "restrictions": [{"type": "enum", "value": [".", "$", "^"]}]}]},
+    "rootElem": {"type": "oneOf", "oneOf": [{"typeName": "alternation", "languageName":
+    "regex"}, {"typeName": "quantifier", "languageName": "regex"}, {"typeName": "invis-container",
+    "languageName": "regex"}, {"typeName": "elemPattern", "languageName": "regex"}]},
+    "notFromSet": {"type": "concrete", "attributes": [{"type": "container", "children":
+    [{"type": "terminal", "symbol": "[^"}, {"name": "elements", "type": "allowed",
+    "nodeTypes": [{"occurs": "*", "nodeType": {"typeName": "shorthands", "languageName":
+    "regex"}}, {"occurs": "*", "nodeType": {"typeName": "const", "languageName": "regex"}},
+    {"occurs": "*", "nodeType": {"typeName": "range", "languageName": "regex"}}]},
+    {"type": "terminal", "symbol": "]"}], "orientation": "horizontal"}]}, "quantifier":
+    {"type": "oneOf", "oneOf": [{"typeName": "generalQuantifier", "languageName":
+    "regex"}, {"typeName": "builtInQuantifier", "languageName": "regex"}]}, "shorthands":
+    {"type": "concrete", "attributes": [{"base": "string", "name": "value", "type":
+    "property", "restrictions": [{"type": "enum", "value": ["\\n", "\\s", "\\d"]}]}]},
+    "alternation": {"type": "oneOf", "oneOf": [{"typeName": "nAryAlernation", "languageName":
+    "regex"}, {"typeName": "BinaryAlternation", "languageName": "regex"}]}, "elemPattern":
+    {"type": "oneOf", "oneOf": [{"typeName": "shorthands", "languageName": "regex"},
+    {"typeName": "notFromSet", "languageName": "regex"}, {"typeName": "set", "languageName":
+    "regex"}, {"typeName": "const", "languageName": "regex"}, {"typeName": "metaChar",
+    "languageName": "regex"}, {"typeName": "group", "languageName": "regex"}]}, "setNegation":
+    {"type": "concrete", "attributes": [{"type": "terminal", "symbol": "^"}]}, "nAryAlernation":
     {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
-    "firstElement", "type": "sequence", "nodeTypes": [{"typeName": "constant", "languageName":
-    "regex"}]}, {"type": "terminal", "symbol": "-"}, {"name": "lastElement", "type":
-    "sequence", "nodeTypes": [{"typeName": "constant", "languageName": "regex"}]}],
-    "orientation": "horizontal"}]}, "quantor": {"type": "oneOf", "oneOf": [{"typeName":
-    "customQuantor", "languageName": "regex"}, {"typeName": "anyQuantor", "languageName":
-    "regex"}, {"typeName": "atMostOneQuantor", "languageName": "regex"}, {"typeName":
-    "atLeastOneQuantor", "languageName": "regex"}]}, "constant": {"type": "concrete",
-    "attributes": [{"base": "string", "name": "value", "type": "property"}]}, "sequence":
-    {"type": "concrete", "attributes": [{"tags": ["double-quote"], "type": "container",
-    "children": [{"name": "values", "type": "allowed", "nodeTypes": [{"occurs": "*",
-    "nodeType": {"typeName": "set", "languageName": "regex"}}, {"occurs": "*", "nodeType":
-    {"typeName": "quantor", "languageName": "regex"}}, {"occurs": "*", "nodeType":
-    {"typeName": "constant", "languageName": "regex"}}]}], "orientation": "horizontal"}]},
-    "anyQuantor": {"type": "concrete", "attributes": [{"type": "container", "children":
-    [{"name": "element", "type": "sequence", "nodeTypes": [{"typeName": "elemPattern",
-    "languageName": "regex"}]}, {"type": "terminal", "symbol": "*"}], "orientation":
-    "horizontal"}]}, "elemPattern": {"type": "oneOf", "oneOf": [{"typeName": "constant",
-    "languageName": "regex"}, {"typeName": "set", "languageName": "regex"}]}, "customQuantor":
-    {"type": "concrete", "attributes": [{"type": "container", "children": [{"name":
-    "element", "type": "sequence", "nodeTypes": [{"typeName": "elemPattern", "languageName":
-    "regex"}]}, {"type": "terminal", "symbol": "{"}, {"base": "integer", "name": "min",
-    "type": "property"}, {"type": "terminal", "symbol": ","}, {"base": "integer",
-    "name": "max", "type": "property"}, {"type": "terminal", "symbol": "}"}], "orientation":
-    "horizontal"}]}, "atMostOneQuantor": {"type": "concrete", "attributes": [{"type":
-    "container", "children": [{"name": "element", "type": "sequence", "nodeTypes":
+    "alternatives", "type": "sequence", "nodeTypes": [{"occurs": "+", "nodeType":
+    {"typeName": "invis-container", "languageName": "regex"}}]}], "orientation": "horizontal"}]},
+    "invis-container": {"type": "concrete", "attributes": [{"tags": ["double-quote"],
+    "type": "container", "children": [{"name": "elements", "type": "allowed", "nodeTypes":
+    [{"occurs": "*", "nodeType": {"typeName": "alternation", "languageName": "regex"}},
+    {"occurs": "*", "nodeType": {"typeName": "quantifier", "languageName": "regex"}},
+    {"occurs": "*", "nodeType": {"typeName": "elemPattern", "languageName": "regex"}}]}],
+    "orientation": "horizontal"}]}, "BinaryAlternation": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "left", "type": "sequence", "nodeTypes":
+    [{"typeName": "invis-container", "languageName": "regex"}]}, {"type": "terminal",
+    "symbol": "|"}, {"name": "right", "type": "sequence", "nodeTypes": [{"typeName":
+    "invis-container", "languageName": "regex"}]}], "orientation": "horizontal"}]},
+    "builtInQuantifier": {"type": "concrete", "attributes": [{"type": "container",
+    "children": [{"name": "element", "type": "sequence", "nodeTypes": [{"typeName":
+    "elemPattern", "languageName": "regex"}]}, {"base": "string", "name": "symbol",
+    "type": "property", "restrictions": [{"type": "enum", "value": ["+", "*", "?"]}]}],
+    "orientation": "horizontal"}]}, "generalQuantifier": {"type": "concrete", "attributes":
+    [{"type": "container", "children": [{"name": "element", "type": "sequence", "nodeTypes":
     [{"typeName": "elemPattern", "languageName": "regex"}]}, {"type": "terminal",
-    "symbol": "?"}], "orientation": "horizontal"}]}, "atLeastOneQuantor": {"type":
-    "concrete", "attributes": [{"type": "container", "children": [{"name": "element",
-    "type": "sequence", "nodeTypes": [{"typeName": "elemPattern", "languageName":
-    "regex"}]}, {"type": "terminal", "symbol": "+"}], "orientation": "horizontal"}]}}}'
+    "symbol": "{"}, {"base": "integer", "name": "min", "type": "property"}, {"type":
+    "terminal", "symbol": ","}, {"base": "integer", "name": "max", "type": "property"},
+    {"type": "terminal", "symbol": "}"}], "orientation": "horizontal"}]}}}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: foreign_types
   value_before_type_cast: "{}"
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: root
-  value_before_type_cast: '{"typeName": "sequence", "languageName": "regex"}'
+  value_before_type_cast: '{"typeName": "rootElem", "languageName": "regex"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: visualisations
   value_before_type_cast: "{}"

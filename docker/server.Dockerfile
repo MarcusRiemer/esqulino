@@ -1,5 +1,5 @@
 ######## BUILDING THE ANGULAR CLIENT ##########
-# NOTE: This image requires at least 4GB of memory, or the build will fail.
+# NOTE: This image requires at least 5GB of memory, or the build will fail.
 
 # Install from the base nodejs image 
 FROM node:18-bullseye AS angular_client
@@ -56,9 +56,15 @@ WORKDIR /blattwerkzeug/rails_app
 RUN gem install bundler
 
 # Copy extra folders that are needed by the application. 
-# TODO: It is probably better to add these folders with and external volume. Need to clarify with Marcus. 
 COPY schema/ schema
-COPY data/ data
+
+# TODO: Add these files with an external volume
+COPY data/ data 
+
+
+############# Seed folder copy into image ###################
+
+
 
 # Copy the source Gemfiles of your application on the new image: 
 WORKDIR /blattwerkzeug/rails_app/server
@@ -77,5 +83,8 @@ COPY --from=angular_client /blattwerkzeug/client/dist ../client/dist
 EXPOSE 9292
 
 # Define the Environment variables: 
+
+######## Load Seed data for the regex project ################
+
+
 CMD ["rails","server", "-b", "0.0.0.0", "-p", "9292"] 
-# CMD ["rails","server", "-b", "0.0.0.0"] 

@@ -10,7 +10,8 @@ common: &common-settings
   ide_service:
     exec:
       node_binary: <%= ENV['NODE_BIN'] || '/usr/bin/node' %>
-      program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/main.cli.js' %>
+      program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/bundle.cli.js' %>
+      #program: <%= ENV['CLI_PROGRAM'] || '../client/dist/cli/main.cli.js' %>
       mode: one_shot
 
   seed:
