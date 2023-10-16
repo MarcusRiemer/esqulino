@@ -16,7 +16,7 @@ concise_attributes:
   value_before_type_cast: 2023-04-03 09:27:02.782244000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2023-10-12 10:25:22.512037000 Z
+  value_before_type_cast: 2023-10-13 07:49:21.836150000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: default_programming_language_id
   value_before_type_cast: generic
@@ -97,42 +97,33 @@ concise_attributes:
     {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
     "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
     "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"children": [{"text": "[^", "style": {"display": "inline-flex"}, "blockType":
+    {"children": [{"text": "(", "style": {"display": "inline-flex"}, "blockType":
     "constant"}, {"blockType": "iterator", "childGroupName": "elements", "emptyDropTarget":
-    false}, {"text": "]", "style": {"display": "inline-flex"}, "blockType": "constant"}],
+    false}, {"text": ")", "style": {"display": "inline-flex"}, "blockType": "constant"}],
     "blockType": "container", "orientation": "horizontal"}], "blockType": "block",
-    "dropTarget": {}}], "describedType": {"typeName": "notFromSet", "languageName":
-    "regex"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
-    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
-    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "(", "style":
-    {"display": "inline-flex"}, "blockType": "constant"}, {"blockType": "iterator",
-    "childGroupName": "elements", "emptyDropTarget": false}, {"text": ")", "style":
-    {"display": "inline-flex"}, "blockType": "constant"}], "blockType": "container",
-    "orientation": "horizontal"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "group", "languageName": "regex"}}, {"visual": [{"children": [{"style":
-    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
-    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"children": [{"blockType": "iterator", "childGroupName": "elements", "emptyDropTarget":
-    false}], "blockType": "container", "cssClasses": ["double-quote"], "orientation":
-    "horizontal"}], "blockType": "block", "dropTarget": {}}], "describedType": {"typeName":
-    "invis-container", "languageName": "regex"}}, {"visual": [{"children": [{"style":
-    {"color": "white", "border": "2px solid red", "cursor": "default", "paddingLeft":
-    "1ch", "paddingRight": "1ch", "border-radius": "500px", "background-color": "red"},
-    "blockType": "error", "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]},
-    {"children": [{"blockType": "iterator", "childGroupName": "left", "emptyDropTarget":
-    false}, {"text": "|", "style": {"display": "inline-flex"}, "blockType": "constant"},
-    {"blockType": "iterator", "childGroupName": "right", "emptyDropTarget": false}],
-    "blockType": "container", "orientation": "horizontal"}], "blockType": "block",
-    "dropTarget": {}}], "describedType": {"typeName": "BinaryAlternation", "languageName":
-    "regex"}}, {"visual": [{"children": [{"style": {"color": "white", "border": "2px
-    solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch",
-    "border-radius": "500px", "background-color": "red"}, "blockType": "error", "excludedErrors":
-    ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType": "iterator",
-    "childGroupName": "alternatives", "emptyDropTarget": false}], "blockType": "container",
-    "orientation": "horizontal"}], "blockType": "block", "dropTarget": {}}], "describedType":
-    {"typeName": "nAryAlernation", "languageName": "regex"}}]'
+    "dropTarget": {}}], "describedType": {"typeName": "group", "languageName": "regex"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType": "iterator", "childGroupName":
+    "elements", "emptyDropTarget": false}], "blockType": "container", "cssClasses":
+    ["double-quote"], "orientation": "horizontal"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "invis-container", "languageName": "regex"}},
+    {"visual": [{"children": [{"style": {"color": "white", "border": "2px solid red",
+    "cursor": "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius":
+    "500px", "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType": "iterator", "childGroupName":
+    "left", "emptyDropTarget": false}, {"text": "|", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"blockType": "iterator", "childGroupName": "right",
+    "emptyDropTarget": false}], "blockType": "container", "orientation": "horizontal"}],
+    "blockType": "block", "dropTarget": {}}], "describedType": {"typeName": "BinaryAlternation",
+    "languageName": "regex"}}, {"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"blockType":
+    "iterator", "childGroupName": "alternatives", "emptyDropTarget": false}], "blockType":
+    "container", "orientation": "horizontal"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "nAryAlernation", "languageName": "regex"}}]'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: editor_components
   value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "validator"},

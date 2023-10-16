@@ -28,7 +28,10 @@ services:
     build:
       context: .
       dockerfile: ./docker/server.Dockerfile
-    image: esqulino_rails_server
+      platforms: 
+#        - "linux/amd64"
+        - "linux/arm64"
+    image: akradocker/blattwerkzeug:latest
     ports: 
       - 9292:9292
     depends_on:

@@ -62,8 +62,8 @@ COPY schema/ schema
 COPY data/ data 
 
 
-############# Seed folder copy into image ###################
-
+# Copy the seed folder, allowing to populate the database with the necessary seed data. 
+COPY seed/ /blattwerkzeug/rails_app/seed
 
 
 # Copy the source Gemfiles of your application on the new image: 
@@ -84,7 +84,12 @@ EXPOSE 9292
 
 # Define the Environment variables: 
 
-######## Load Seed data for the regex project ################
+# Entrypoint script for seeding the database and starting the rails server. 
+COPY docker/server-development-entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
+# Load Seed data for the regex project 
 
-CMD ["rails","server", "-b", "0.0.0.0", "-p", "9292"] 
+# Start the rails server
+#CMD ["rails", "server", "-b", "0.0.0.0", "-p", "9292"] 

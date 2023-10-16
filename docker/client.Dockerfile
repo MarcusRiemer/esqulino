@@ -1,8 +1,8 @@
 ######## BUILDING THE ANGULAR CLIENT ##########
-# NOTE: This image requires at least 4GB of memory, or the build will fail.
+# NOTE: This image requires at least 5GB of memory, or the build will fail.
 
 # Install from the base nodejs image 
-FROM node:18-bullseye AS esqulino_angular_client
+FROM node:18-bullseye AS angular_client
 
 # Install updates
 RUN apt update 
@@ -24,6 +24,4 @@ RUN npm install
 # Change the working directory and start the angular application
 WORKDIR /blattwerkzeug/client/
 
-EXPOSE 4200
-
-RUN ["npx", "ng", "serve"]
+RUN ["npx", "ng", "build"]

@@ -22,17 +22,17 @@ concise_attributes:
     {"value": "efgh"}}]}, "language": "regex"}]}, "language": "regex", "properties":
     {"max": "4", "min": "2"}}]}, "language": "regex"}]}, "language": "regex"}]}, "language":
     "regex"}]}, "language": "regex", "properties": {"symbol": "+"}}, {"name": "group",
-    "children": {"elements": [{"name": "notFromSet", "children": {"elements": []},
-    "language": "regex"}, {"name": "string", "language": "regex", "properties": {"value":
-    "fun"}}, {"name": "set", "children": {"elements": []}, "language": "regex"}, {"name":
-    "metaChar", "language": "regex", "properties": {"value": "$"}}]}, "language":
-    "regex"}]}, "language": "regex"}'
+    "children": {"elements": [{"name": "set", "children": {"elements": [{"name": "string",
+    "language": "regex", "properties": {"value": "fun"}}], "setNegation": [{"name":
+    "setNegation", "language": "regex"}]}, "language": "regex"}, {"name": "metaChar",
+    "language": "regex", "properties": {"value": "$"}}]}, "language": "regex"}]},
+    "language": "regex"}'
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: created_at
   value_before_type_cast: 2023-10-11 14:40:01.978133000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: updated_at
-  value_before_type_cast: 2023-10-12 09:42:55.668692000 Z
+  value_before_type_cast: 2023-10-13 07:48:40.479095000 Z
 - !ruby/object:ActiveModel::Attribute::FromDatabase
   name: block_language_id
   value_before_type_cast: 3351a412-ca88-49b0-9bdd-b0b7ade65d9d
