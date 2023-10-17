@@ -83,6 +83,7 @@ COPY --from=angular_client /blattwerkzeug/client/dist ../client/dist
 EXPOSE 9292
 
 # Define the Environment variables: 
+ARG RAILS_ENV=development
 
 # Entrypoint script for seeding the database and starting the rails server. 
 COPY docker/server-development-entrypoint.sh /entrypoint.sh
