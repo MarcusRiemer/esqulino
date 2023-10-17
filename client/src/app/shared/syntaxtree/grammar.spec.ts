@@ -963,7 +963,7 @@ describe("Grammar Validation", () => {
 
   it('Invalid single nested "sequence": Two items', () => {
     const v = new Validator([langSingleNestedSequenceConstraint]);
-
+    debugger;
     const astDesc: AST.NodeDescription = {
       language: "single-nested-sequence-constraint",
       name: "root",
