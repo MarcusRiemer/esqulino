@@ -1,0 +1,35 @@
+{
+    "name": "optional",
+    "language": "regex-1",
+    "children": {
+      "quantified": [
+        {
+          "name": "char",
+          "language": "regex-1",
+          "properties": {
+            "value": "a"
+          },
+          "children": {
+            "rest": [
+              {
+                "name": "char",
+                "language": "regex-1",
+                "properties": {
+                  "value": "b"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "rest": [
+        {
+          "name": "char",
+          "language": "regex-1",
+          "properties": {
+            "value": "c"
+          }
+        }
+      ]
+    }
+  }

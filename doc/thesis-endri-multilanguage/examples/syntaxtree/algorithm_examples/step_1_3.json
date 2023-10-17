@@ -1,0 +1,22 @@
+{
+    "name": "container",
+    "language": "regex",
+    "children": {
+      "elements": [
+        {
+          "name": "char",
+          "language": "regex",
+          "properties": {
+            "value": "ab"
+          }
+        }, 
+        {
+            "name": "char",
+            "language": "regex",
+            "properties": {
+            "value": "cde"
+            }
+        }
+      ]
+    }
+}

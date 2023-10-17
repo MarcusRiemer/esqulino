@@ -1,0 +1,44 @@
+{
+    "name": "container",
+    "language": "regex",
+    "children": {
+      "elements": [
+        {
+          "name": "char",
+          "language": "regex",
+          "properties": {
+            "value": "a"
+          }
+        },
+        {
+          "name": "optional",
+          "language": "regex",
+          "children": {
+            "elements": [
+              {
+                "name": "char",
+                "language": "regex",
+                "properties": {
+                  "value": "bb"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "char",
+          "language": "regex",
+          "properties": {
+            "value": "cc"
+          }
+        },
+        {
+          "name": "string",
+          "language": "regex",
+          "properties": {
+            "value": "hello"
+          }
+        }
+      ]
+    }
+  }

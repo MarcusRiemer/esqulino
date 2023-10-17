@@ -1,0 +1,37 @@
+{
+    "name": "container",
+    "language": "regex-2",
+    "children": {
+      "elements": [
+          {
+            "name": "optional",
+            "language": "regex-2",
+            "children": {
+              "quantified": [
+                {
+                    "name": "char",
+                    "language": "regex-2",
+                    "properties": {
+                      "value": "a"
+                    }
+                },
+                {
+                    "name": "char",
+                    "language": "regex-2",
+                    "properties": {
+                      "value": "b"
+                    }
+                }
+              ]
+            }
+          },
+          {
+            "name": "char",
+            "language": "regex-2",
+            "properties": {
+              "value": "c"
+            }
+          }
+      ]
+    }
+  }

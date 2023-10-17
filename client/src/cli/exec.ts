@@ -111,7 +111,7 @@ type Command =
   | EmitBlockLanguageSettingsCommand;
 
 // Knows all URLs that are available to the API
-const serverApi = new ServerApi("http://localhost:9292/api");
+const serverApi = new ServerApi("http://127.0.0.1:9292/api");
 
 /**
  * Retrieves a single grammar by name

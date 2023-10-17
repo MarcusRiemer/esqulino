@@ -1,0 +1,11 @@
+digraph SyntaxTree {
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  node [fontsize=10 fontname="Verdana" shape=Mrecord];
+  edge [fontsize=10 fontname="Verdana"];
+  r [label="{regex.container}"];
+  subgraph cluster_r_elements {
+    label="elements";
+    r_elements_0 [label="{{regex.char}|{value|ab}}"];
+  }
+  r -> r_elements_0;
+}

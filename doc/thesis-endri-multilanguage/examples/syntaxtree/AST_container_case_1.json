@@ -1,0 +1,36 @@
+{
+    "name": "container",
+    "language": "regex-2",
+    "children": {
+      "elements": [
+          {
+            "name": "char",
+            "language": "regex-2",
+            "properties": {
+              "value": "a"
+            }
+          },
+          {
+            "name": "char",
+            "language": "regex-2",
+            "properties": {
+              "value": "b"
+            }
+          },
+          {
+            "name": "char",
+            "language": "regex-2",
+            "properties": {
+              "value": "c"
+            }
+          }, 
+          {
+            "name": "char",
+            "language": "regex-2",
+            "properties": {
+              "value": "d"
+            }
+          }
+      ]
+    }
+  }

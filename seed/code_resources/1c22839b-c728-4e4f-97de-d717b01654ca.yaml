@@ -1,0 +1,39 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: f0995735-1861-40ae-ab2a-bcd265d07982
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: temporaryForTesting
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 1c22839b-c728-4e4f-97de-d717b01654ca
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "invis-container", "children": {"elements": [{"name":
+    "builtInQuantifier", "children": {"elements": [{"name": "string", "language":
+    "regex", "properties": {"value": "abcd"}}]}, "language": "regex", "properties":
+    {"symbol": "+"}}, {"name": "set", "children": {"elements": [{"name": "char", "language":
+    "regex", "properties": {"value": "t"}}, {"name": "range", "children": {"lastElement":
+    [{"name": "char", "language": "regex", "properties": {"value": "4"}}], "firstElement":
+    [{"name": "char", "language": "regex", "properties": {"value": "3"}}]}, "language":
+    "regex"}], "setNegation": [{"name": "setNegation", "language": "regex"}]}, "language":
+    "regex"}]}, "language": "regex"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-10-26 14:19:16.360137000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-11-03 12:41:30.584059000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 3351a412-ca88-49b0-9bdd-b0b7ade65d9d
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

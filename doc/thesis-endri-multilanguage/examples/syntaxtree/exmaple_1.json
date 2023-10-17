@@ -1,0 +1,81 @@
+{
+  "name": "container",
+  "language": "regex",
+  "children": {
+    "elements": [
+      {
+        "name": "char",
+        "language": "regex",
+        "properties": {
+          "value": "a"
+        }
+      },
+      {
+        "name": "alternation",
+        "language": "regex",
+        "children": {
+          "alternatives": [
+            {
+              "name": "container",
+              "language": "regex",
+              "children": {
+                "elements": [
+                  {
+                    "name": "char",
+                    "language": "regex",
+                    "properties": {
+                      "value": "b"
+                    }
+                  },
+                  {
+                    "name": "char",
+                    "language": "regex",
+                    "properties": {
+                      "value": "b"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "container",
+              "language": "regex",
+              "children": {
+                "elements": [
+                  {
+                    "name": "char",
+                    "language": "regex",
+                    "properties": {
+                      "value": "c"
+                    }
+                  },
+                  {
+                    "name": "char",
+                    "language": "regex",
+                    "properties": {
+                      "value": "c"
+                    }
+                  },
+                  {
+                    "name": "char",
+                    "language": "regex",
+                    "properties": {
+                      "value": "c"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "char",
+        "language": "regex",
+        "properties": {
+          "value": "de"
+        }
+      }
+    ]
+  }
+}

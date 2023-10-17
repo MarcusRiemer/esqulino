@@ -1,0 +1,14 @@
+grammar "regex" {
+  node "regex"."root" {
+    children allowed "expressions" ::= expr+
+  }
+  node "regex"."expr" {
+    children choice "singleExpression" ::= constant | alternative
+  }
+  node "regex"."constant" {
+    prop "value" { string }
+  }
+  node "regex"."alternative" {
+    children allowed "expressions" ::= expr+
+  }
+}

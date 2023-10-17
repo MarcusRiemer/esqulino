@@ -1,0 +1,20 @@
+digraph SyntaxTree {
+  graph [fontsize=10 fontname="Verdana" bgcolor="transparent"];
+  node [fontsize=10 fontname="Verdana" shape=Mrecord];
+  edge [fontsize=10 fontname="Verdana"];
+  r [label="{regex-2.container}"];
+  subgraph cluster_r_elements {
+    label="elements";
+    r_elements_1 [label="{{regex-2.char}|{value|c}}"];
+    r_elements_0 [label="{regex-2.optional}"];
+    subgraph cluster_r_elements_0_quantified {
+      label="quantified";
+      r_elements_0_quantified_1 [label="{{regex-2.char}|{value|b}}"];
+      r_elements_0_quantified_0 [label="{{regex-2.char}|{value|a}}"];
+    }
+    r_elements_0 -> r_elements_0_quantified_0;
+    r_elements_0 -> r_elements_0_quantified_1;
+  }
+  r -> r_elements_0;
+  r -> r_elements_1;
+}

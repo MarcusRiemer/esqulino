@@ -703,7 +703,6 @@ describe("Grammar Validation", () => {
 
   it("Optional property missing", () => {
     const v = new Validator([langOptionalProperty]);
-
     const astDesc: AST.NodeDescription = {
       language: "optionalProperty",
       name: "root",
