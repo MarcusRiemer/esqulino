@@ -52,8 +52,12 @@ type MatchingTransform = {
 };
 
 const dummyMatched : NodeDescription = {
-  name: "", 
-  language: "",
+    language: "regex-test", 
+    name: "char", 
+    properties: 
+    {
+        value: "abcd",
+    }
 };
 
 /* Defining the Patterns and their respective transformations */
