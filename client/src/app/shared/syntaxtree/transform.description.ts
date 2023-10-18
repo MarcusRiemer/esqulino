@@ -45,50 +45,16 @@ export interface Matching {
   transform: MatchingTransform,
 }
 
-
 type MatchingTransform = {
   type: "replace",
-  matched: MatchedPattern,
-  transformation: NodeDescription, //TODO: how to most generally defined a holed transformation
+  matched: NodeDescription,
+  transformation: Function, //TODO: how to most generally defined a transformation with holes
 };
 
-
-const dummyNode : NodeDescription = {
+const dummyMatched : NodeDescription = {
   name: "", 
   language: "",
-}
-
-// This is basically a wrapper of NodeDescription. I was not sure how to calculate 
-// the values from within the const definition, that is why I tried this way. 
-// Sadly it doesn't work like this either. 
-// Could I give my transform a new type that allows for callable functions for 
-// defining attributes on the fly after a match has been found? 
-
-class MatchedPattern {
-  private m_NodeDescription : NodeDescription; 
-  constructor(matchedNodeDesc: NodeDescription) {
-    this.m_NodeDescription = matchedNodeDesc; 
-  }
-
-  public getLanguage() {
-    return this.m_NodeDescription.language;
-  };
-
-  public getNodeName() {
-    return this.m_NodeDescription.name; 
-  };
-
-  public getChildren () {
-    return this.m_NodeDescription.children;
-  }; 
-
-  public getProperties () {
-    return this.m_NodeDescription.properties;
-  }; 
-}
-
-const dummyMatched = new MatchedPattern(dummyNode); 
-
+};
 
 /* Defining the Patterns and their respective transformations */
 
@@ -108,15 +74,16 @@ const multiValuedCharMatching : Matching = {
   transform : {
     type: "replace",
     matched : dummyMatched,
-    transformation:  {
-      language: (matched: MatchedPattern) => {return matched.getLanguage();},
-      name: "invis-container", 
-      children: {
-          nodes: (matched:MatchedPattern) => {
-            let multivaluedChars = matched.getProperties()["value"];
+    transformation:  (matched: NodeDescription) => {
+      return {
+        language: matched.language,
+        name: "invis-container", 
+        children: {
+          nodes: Function.apply(() => {
+            let multivaluedChars = matched.properties["value"];
             let result : NodeDescription[] = multivaluedChars.split("").map((char : string) => {
               return {
-                language : matched.getLanguage(), 
+                language : matched.language, 
                 name : "char", 
                 properties: 
                 {
@@ -125,10 +92,11 @@ const multiValuedCharMatching : Matching = {
               };
            });
            return result;
-          }
+          }),
       }
     }
   }
+}
 }
 
 // console.log(s.language); // Given an error.
