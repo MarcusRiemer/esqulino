@@ -359,7 +359,8 @@ const langSingleNestedSequenceConstraint = mkSingleLanguageGrammar(
         },
       ],
     },
-    a: { type: "concrete",
+    a: {
+      type: "concrete",
       attributes: [
         {
           name: "nodes",
@@ -733,7 +734,7 @@ describe("Grammar Validation", () => {
 
   it("Optional property missing", () => {
     const v = new Validator([langOptionalProperty]);
-    debugger; 
+    debugger;
     const astDesc: AST.NodeDescription = {
       language: "optionalProperty",
       name: "root",
@@ -940,7 +941,6 @@ describe("Grammar Validation", () => {
     expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.SuperflousChild]);
   });
 
-  
   it('Invalid single "sequence": Unexpected item', () => {
     const v = new Validator([langSingleSequenceConstraint]);
 
@@ -960,7 +960,6 @@ describe("Grammar Validation", () => {
     ]);
   });
 
-
   it('Invalid single nested "sequence": Two items', () => {
     const v = new Validator([langSingleNestedSequenceConstraint]);
     debugger;
@@ -969,12 +968,14 @@ describe("Grammar Validation", () => {
       name: "root",
       children: {
         nodes: [
-          { language: "single-nested-sequence-constraint", name: "a" ,
+          {
+            language: "single-nested-sequence-constraint",
+            name: "a",
             children: {
-              "nodes": [
+              nodes: [
                 { language: "single-nested-sequence-constraint", name: "b" },
-                { language: "single-nested-sequence-constraint", name: "b" } 
-              ]
+                { language: "single-nested-sequence-constraint", name: "b" },
+              ],
             },
           },
         ],
