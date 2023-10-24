@@ -1,7 +1,7 @@
 import * as AST from "./syntaxtree";
 import { apply } from "./transform";
 
-const patterns: string[] = [];
+const patterns: string[] = []; // Just a placeholder for now
 
 describe("Multivalued character nodes are seperated into multiple single valued character nodes", () => {
   it('"abcd" should be split into " a | b | c | d "', () => {
@@ -85,27 +85,13 @@ describe("Root quantifier nodes should be wrapped with an invis-container node",
       },
     };
 
-    const inputDesc: AST.NodeDescription = {
-      language: "regex",
-      name: "root",
-      children: {
-        nodes: [starQuantifierDesc],
-      },
-    };
+    const inputDesc: AST.NodeDescription = starQuantifierDesc;
 
     const resultDesc: AST.NodeDescription = {
+      name: "invis-container",
       language: "regex",
-      name: "root",
       children: {
-        nodes: [
-          {
-            name: "invis-container",
-            language: "regex",
-            children: {
-              elements: [starQuantifierDesc],
-            },
-          },
-        ],
+        elements: [starQuantifierDesc],
       },
     };
 
@@ -133,27 +119,13 @@ describe("Root element pattern nodes should be autowrapped with an invis-contain
       },
     };
 
-    const inputDesc: AST.NodeDescription = {
-      language: "regex",
-      name: "root",
-      children: {
-        nodes: [stringNodeDesc],
-      },
-    };
+    const inputDesc: AST.NodeDescription = stringNodeDesc;
 
     const resultDesc: AST.NodeDescription = {
+      name: "invis-container",
       language: "regex",
-      name: "root",
       children: {
-        nodes: [
-          {
-            name: "invis-container",
-            language: "regex",
-            children: {
-              elements: [stringNodeDesc],
-            },
-          },
-        ],
+        elements: [stringNodeDesc],
       },
     };
 
@@ -164,41 +136,51 @@ describe("Root element pattern nodes should be autowrapped with an invis-contain
 });
 
 describe("Root alternation nodes should be be autowrapped with an invis-container node", () => {
-  /* it ("Autowrapping of single root alternation pattern nodes with an invis-container node", () => {
-    // Cases for alternations 
-        // Binary Alternation 
-        // N-ary Alternation
+  it("Autowrapping of single root alternation pattern nodes with an invis-container node", () => {
+    const alternationDesc: AST.NodeDescription = {
+      name: "alternation",
+      language: "regex",
+      children: {
+        alternatives: [
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "a",
+            },
+          },
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "b",
+            },
+          },
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "c",
+            },
+          },
+        ],
+      },
+    };
 
-    const binaryAltDesc : AST.NodeDescription = {
-
-    }
-
-    const inputDesc: AST.NodeDescription = {
-        language: "regex", 
-        name: "root", 
-        children: {
-            nodes: [
-                
-            ]
-        }
-    }
+    const inputDesc: AST.NodeDescription = alternationDesc;
 
     const resultDesc: AST.NodeDescription = {
-        language: "regex", 
-        name: "root", 
-        children: {
-            nodes: [
-                
-            ]
-        }
-    }
+      language: "regex",
+      name: "invis-node",
+      children: {
+        nodes: [alternationDesc],
+      },
+    };
 
-
-    const inp = new AST.SyntaxTree(inputDesc); 
-    const res = new AST.SyntaxTree(resultDesc); 
-    expect(res).toEqual(apply(inp, patterns)); 
-
-});  */
+    const inp = new AST.SyntaxTree(inputDesc);
+    const res = new AST.SyntaxTree(resultDesc);
+    expect(res).toEqual(apply(inp, patterns));
+  });
 });
 
 describe("Removal of undesirable invis-container nodes", () => {
@@ -309,3 +291,236 @@ describe("Removal of undesirable invis-container nodes", () => {
     expect(res).toEqual(apply(inp, patterns));
   });
 });
+
+// TODO:
+
+describe("Autogrouping sequences of elements or multivalued strings within quantifiers", () => {});
+
+// TODO:
+
+describe("Autogrouping sequences of elements or multivalued strings within alternation", () => {});
+
+// TODO:
+
+describe("Automerging of nested alternation", () => {
+  it("Unwrapping a nested Alternation, with the alternatives copied onto the parent", () => {
+    const innerAlternationDesc = {
+      name: "alternation",
+      language: "regex",
+      children: {
+        alternatives: [
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "1",
+            },
+          },
+          {
+            name: "string",
+            language: "regex",
+            properties: {
+              value: "2",
+            },
+          },
+        ],
+      },
+    };
+
+    const inputDesc = {
+      name: "alternation",
+      language: "regex",
+      children: {
+        alternatives: [
+          {
+            name: "string",
+            language: "regex",
+            properties: {
+              value: "abc",
+            },
+          },
+          {
+            name: "group",
+            language: "regex",
+            children: {
+              elements: [innerAlternationDesc],
+            },
+          },
+          {
+            name: "string",
+            language: "regex",
+            properties: {
+              value: "def",
+            },
+          },
+        ],
+      },
+    };
+
+    const resultDesc = {
+      name: "alternation",
+      language: "regex",
+      children: {
+        alternatives: [
+          {
+            name: "string",
+            language: "regex",
+            properties: {
+              value: "abc",
+            },
+          },
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "1",
+            },
+          },
+          {
+            name: "string",
+            language: "regex",
+            properties: {
+              value: "2",
+            },
+          },
+          {
+            name: "string",
+            language: "regex",
+            properties: {
+              value: "def",
+            },
+          },
+        ],
+      },
+    };
+
+    const inp = new AST.SyntaxTree(inputDesc);
+    const res = new AST.SyntaxTree(resultDesc);
+    expect(res).toEqual(apply(inp, patterns));
+  });
+});
+
+describe("Autosplitting alternation elements that contains the '|' separator character", () => {
+  it("Autosplitting a string on the '|' separator", () => {
+    const inputDesc = {
+      name: "alternation",
+      language: "regex",
+      children: {
+        alternatives: [
+          {
+            name: "string",
+            language: "regex",
+            properties: {
+              value: "abc|def",
+            },
+          },
+        ],
+      },
+    };
+
+    const resultDesc = {
+      name: "alternation",
+      language: "regex",
+      children: {
+        alternatives: [
+          {
+            name: "string",
+            language: "regex",
+            properties: {
+              value: "abc",
+            },
+          },
+          {
+            name: "string",
+            language: "regex",
+            properties: {
+              value: "def",
+            },
+          },
+        ],
+      },
+    };
+
+    const inp = new AST.SyntaxTree(inputDesc);
+    const res = new AST.SyntaxTree(resultDesc);
+    expect(res).toEqual(apply(inp, patterns));
+  });
+
+  it("Autosplitting a childGroup of chars on the '|' separator", () => {
+    const separatorChar = {
+      name: "char",
+      language: "regex",
+      properties: {
+        value: "|",
+      },
+    };
+
+    const inputDesc = {
+      name: "alternation",
+      language: "regex",
+      children: {
+        alternatives: [
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "a",
+            },
+          },
+          separatorChar,
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "b",
+            },
+          },
+          separatorChar,
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "c",
+            },
+          },
+        ],
+      },
+    };
+
+    const resultDesc = {
+      name: "alternation",
+      language: "regex",
+      children: {
+        alternatives: [
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "a",
+            },
+          },
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "b",
+            },
+          },
+          {
+            name: "char",
+            language: "regex",
+            properties: {
+              value: "c",
+            },
+          },
+        ],
+      },
+    };
+
+    const inp = new AST.SyntaxTree(inputDesc);
+    const res = new AST.SyntaxTree(resultDesc);
+    expect(res).toEqual(apply(inp, patterns));
+  });
+});
+
+// TODO: Groups remove the need for invis-containers within them in certain cases. Should I account for that?

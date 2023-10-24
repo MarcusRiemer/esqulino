@@ -1,4 +1,5 @@
 import { SyntaxTree } from "./syntaxtree";
+import { Selector } from "./transform.description";
 
 /**
  *  Takes a syntax tree and a list of patterns as inputs and applies the transformations described by the patterns onto the given inout syntax tree.
@@ -9,3 +10,11 @@ import { SyntaxTree } from "./syntaxtree";
 export function apply(inp: SyntaxTree, patterns): SyntaxTree {
   return inp;
 }
+
+/**
+ * Takes a syntax tree and a selector and give back a list of Matches.
+ * @param inp Represents the input syntax tree that is to be searched through
+ * @param selector Represents to selector that should be matched against
+ */
+
+export function findMatches(inp: SyntaxTree, selector: Selector) {}
