@@ -1,6 +1,7 @@
 import { NodeDescription } from "./syntaxtree.description";
 
 /* General Selectors */
+// TODO: An ordered property might be a good idea, to allow matching priority to be defined by the user.
 
 export type SelectorType = {
   kind: "type"; // "type" here refers to the nodeType that the selector is targeting.

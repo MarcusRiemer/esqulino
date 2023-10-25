@@ -40,6 +40,8 @@ export const SelectorMultiValuedChars: T.Selector = {
   selectors: [SelectorRegexChar, SelectorLongProperty],
 };
 
+/* ------- Transformation Patterns ---------  */
+
 export const TransformPatternSplitMultiValuedChar: T.TransformPatternSplitOnProperty =
   {
     kind: "split-prop",
