@@ -39,16 +39,22 @@ export type SelectorAny = {
   selectors: Selector[];
 };
 
+/* Other Selectors */
 // The regexPattern can be used behind the scenes to transform the other properties
 // of this selector into a regex and match against it. This also gives the option to
 // the user to define a regexPattern directly to match against.
-export type SelectorProperty = {
-  kind: "property";
+export type SelectorPropertySimple = {
+  kind: "property-simple";
   name: string;
-  regexPattern?: string;
   propertyContainsValue?: string;
   propertyValueMinLength?: number;
   propertyValueMaxLength?: number;
+};
+
+export type SelectorPropertyRegex = {
+  kind: "property-regex";
+  name: string;
+  regexPattern: string;
 };
 
 export type Selector =
@@ -57,7 +63,8 @@ export type Selector =
   | SelectorImmediateChild
   | SelectorAll
   | SelectorAny
-  | SelectorProperty;
+  | SelectorPropertySimple
+  | SelectorPropertyRegex;
 
 /* TODO: Is this selector really needed? Why not just match against language? 
 
@@ -67,6 +74,13 @@ export type SelectorMatchLanguage =  {
 } */
 
 /* Transformations Interface */
+
+/* Allows to delete a node and move all its children as children of the same parent node */
+export type TransformPatternUnwrap = {
+  kind: "unwrap";
+  position: "start" | "end"; // Position where the children of the unwrapped node should appear on the children list of the parent
+  oldProperties: "copy" | "ignore";
+};
 
 /* Allows to replace a node (and possibly its entire subtree) with another subtree,
 defined by the newNode */
@@ -78,27 +92,20 @@ export type TransformPatternReplace = {
   oldProperties: "copy" | "ignore";
 };
 
-/* Allows to delete a node and move all its children as children of the same parent node */
-export type TransformPatternUnwrap = {
-  kind: "unwrap";
-  position: "start" | "end" | number; // Position where the children of the unwrapped node should appear on the children list of the parent
-  oldProperties: "copy" | "ignore";
-};
-
 /* Allows to merge two nodes of the same type under one single node of the same type,
  with options for selecting children and properties from both or adding new properties */
 export type TransformPatternMergeTwo = {
   kind: "merge";
-  oldProperties?: "copy-both" | "copy-left" | "copy-right" | "ignore";
-  oldChildren?: "copy-both" | "copy-left" | "copy-right" | "ignore";
-  newProperties?: [{ propertyName: string }];
+  oldProperties: "copy-both" | "copy-left" | "copy-right" | "ignore";
+  oldChildren: "copy-both" | "copy-left" | "copy-right" | "ignore";
+  // newProperties?: [{ propertyName: string }]; // TODO: This might be a bad idea.
 };
 
 /* Allows to split a node into multiple nodes depending on the splitting 
 pattern of a single property, defined by propertyName and delimiter */
 export type TransformPatternSplitOnProperty = {
-  kind: "split-prop";
-  newNode: "copy-type" | { language: string; name: string };
+  kind: "split-property";
+  newNodes: "copy-type" | { language: string; name: string };
   wraperNode?: NodeDescription;
   propertyName: string;
   delimiter?: string; // The delimiter to split the string value of the property on. When not defined, the "" is assumed, which splits a string on a per character basis
@@ -107,21 +114,22 @@ export type TransformPatternSplitOnProperty = {
   oldChildren: "copy" | "ignore";
 };
 
+// TODO: Not sure if this is needed | To be implemented later
+
 /* Allows to split a node into multiple nodes depending on the children it has.
 The delimiter defines a child node to match against, similar to the TransformPatternSplitOnProperty */
-export type TransformPatternSplitOnChildren = {
+/* export type TransformPatternSplitOnChildren = {
   kind: "split-children";
-  newNode: "copy-type" | { Language: string; name: string };
+  newNode: "copy-type" | { language: string; name: string };
   wrapperNode?: NodeDescription;
   childGroupName?: string;
   delimiter?: { language: string; name: string } | NodeDescription; // TODO: Maybe a Selector is better here? When not defined, a per child basis split is assumed.
   deleteDelimiter?: boolean;
   oldProperties: "copy" | "ignore";
-};
+}; */
 
 export type TransformPattern =
   | TransformPatternReplace
   | TransformPatternUnwrap
   | TransformPatternMergeTwo
-  | TransformPatternSplitOnProperty
-  | TransformPatternSplitOnChildren;
+  | TransformPatternSplitOnProperty;

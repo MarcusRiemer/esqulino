@@ -1,6 +1,13 @@
 import { NodeLocation, SyntaxNode, SyntaxTree } from "./syntaxtree";
 import { Selector } from "./transform.description";
 
+/**
+ * Tests whether a given node matches against a given selector.
+ * @param node The node to match.
+ * @param selector The selector to match against.
+ * @returns true if the matching is successful, false otherwise.
+ */
+
 function doesNodeMatchSelector(node: SyntaxNode, selector: Selector): boolean {
   let to_return = true;
   switch (selector.kind) {
@@ -54,52 +61,57 @@ function doesNodeMatchSelector(node: SyntaxNode, selector: Selector): boolean {
         }
         return false; // no child matches the child selector
       } else return false; // parent doesn't match the parent selector
-    case "property":
-      if (!node.hasProperties) return false;
+    case "property-simple":
       // nothing to match against
-      else if (!node.properties[selector.name]) return false;
+      if (!node.hasProperties) return false;
       // node having no property with given name means no match
+      // This is needed to avoid matching against "undefined" accidentally.
+      else if (!node.properties[selector.name]) return false;
       else {
-        if (selector.regexPattern === undefined) {
-          // if regexPattern is defined from the user, it overrides the other flags
-          if (selector.propertyValueMinLength !== undefined) {
-            // check min length constraint
-            to_return =
-              to_return &&
-              node.properties[selector.name].length >=
-                selector.propertyValueMinLength;
-          }
-          if (selector.propertyValueMaxLength !== undefined) {
-            // check max length constraint
-            to_return =
-              to_return &&
-              node.properties[selector.name].length <=
-                selector.propertyValueMaxLength;
-          }
-          if (selector.propertyContainsValue !== undefined) {
-            // check if the given string is included in the property value
-            to_return =
-              to_return &&
-              node.properties[selector.name].includes(
-                selector.propertyContainsValue
-              );
-          }
-        } else {
-          // regex pattern matching test
-          let regex = new RegExp(selector.regexPattern);
-          to_return = to_return && regex.test(node.properties[selector.name]);
-        }
-      }
-      return to_return;
+        let minLength =
+          selector.propertyValueMinLength !== undefined
+            ? selector.propertyValueMinLength
+            : 0;
 
+        // Length pattern
+        let regexLengthPattern = "^.{" + minLength + ",";
+        if (selector.propertyValueMaxLength)
+          regexLengthPattern += selector.propertyValueMaxLength;
+        regexLengthPattern += "}$";
+        let lengthRegex = new RegExp(regexLengthPattern);
+
+        // Contains pattern
+        let containsRegexPattern =
+          selector.propertyContainsValue !== undefined
+            ? "^.*" + selector.propertyContainsValue + ".*$"
+            : ".*";
+        let containsRegex = new RegExp(containsRegexPattern);
+        return (
+          lengthRegex.test(node.properties[selector.name]) &&
+          containsRegex.test(node.properties[selector.name])
+        );
+      }
+    case "property-regex":
+      // nothing to match against
+      if (!node.hasProperties) return false;
+      // node having no property with given name means no match
+      else if (!node.properties[selector.name]) return false;
+      else {
+        // regex pattern matching test
+        let regex = new RegExp(selector.regexPattern);
+        return regex.test(node.properties[selector.name]);
+      }
     default:
       return false;
   }
 }
 
 /**
- * Takes a syntax tree's root and a selector and give back a list of Matches.
+ * Takes a syntax tree's root and a selector and gives back a list of matches.
  * Matching is done using a DFS algorithm for visiting all nodes of the trees.
+ * The resulting matchings appear on a postfix order. This would allow for transforming
+ * the children nodes in such a way, that the node locations found by the findMatches
+ * functions do not lose relevence after the first transformation.
  * @param inp Represents the input syntax tree that is to be searched through
  * @param selector Represents to selector that should be matched against
  * @return a list of locations for the nodes that matched.

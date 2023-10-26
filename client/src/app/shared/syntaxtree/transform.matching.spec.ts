@@ -1,8 +1,7 @@
 import { NodeLocation, SyntaxNode, SyntaxTree } from "./syntaxtree";
 import { Selector } from "./transform.description";
 import { findMatches } from "./transform.matching";
-import * as RegexTemplates from "./transform.templates";
-import { resolveChildOccurs } from "./grammar-util";
+import * as RegexTemplates from "./transform.templates.regex";
 
 describe("Finding matchings of selectors on trees", () => {
   describe("Matching against the type selector", () => {
@@ -440,7 +439,7 @@ describe("Finding matchings of selectors on trees", () => {
     });
   });
 
-  it("Matching immediate char node child of an alternation with an immediate-child selector", () => {
+  it("Matching immediate char node, child of an alternation with an immediate-child selector", () => {
     const testInput = new SyntaxTree({
       name: "invis-container",
       language: "regex",
@@ -522,7 +521,7 @@ describe("Finding matchings of selectors on trees", () => {
   });
 
   describe("Matching against the property Selector", () => {
-    it("Matching against a minlength property Selector", () => {
+    it("Matching against a minlength simple property Selector", () => {
       const testInput = new SyntaxTree({
         name: "invis-container",
         language: "regex",
@@ -594,7 +593,7 @@ describe("Finding matchings of selectors on trees", () => {
       });
 
       const testSelector: Selector = {
-        kind: "property",
+        kind: "property-simple",
         name: "value",
         propertyValueMinLength: 3,
       };
@@ -612,7 +611,7 @@ describe("Finding matchings of selectors on trees", () => {
       expect(matches).toEqual(result);
     });
 
-    it("Matching against a maxLength property Selector", () => {
+    it("Matching against a maxLength simple property Selector", () => {
       const testInput = new SyntaxTree({
         name: "invis-container",
         language: "regex",
@@ -684,7 +683,7 @@ describe("Finding matchings of selectors on trees", () => {
       });
 
       const testSelector: Selector = {
-        kind: "property",
+        kind: "property-simple",
         name: "value",
         propertyValueMaxLength: 2,
       };
@@ -709,7 +708,7 @@ describe("Finding matchings of selectors on trees", () => {
       expect(matches).toEqual(result);
     });
 
-    it("Matching against both a minLength and a maxLength property Selector", () => {
+    it("Matching against both a minLength and a maxLength simple property Selector", () => {
       const testInput = new SyntaxTree({
         name: "invis-container",
         language: "regex",
@@ -781,7 +780,7 @@ describe("Finding matchings of selectors on trees", () => {
       });
 
       const testSelector: Selector = {
-        kind: "property",
+        kind: "property-simple",
         name: "value",
         propertyValueMinLength: 2,
         propertyValueMaxLength: 2,
@@ -794,7 +793,7 @@ describe("Finding matchings of selectors on trees", () => {
       expect(matches).toEqual(result);
     });
 
-    it("Matching against a containsValue property Selector", () => {
+    it("Matching against a containsValue simple property Selector", () => {
       const testInput = new SyntaxTree({
         name: "invis-container",
         language: "regex",
@@ -866,7 +865,7 @@ describe("Finding matchings of selectors on trees", () => {
       });
 
       const testSelector: Selector = {
-        kind: "property",
+        kind: "property-simple",
         name: "value",
         propertyContainsValue: "oo",
       };
@@ -950,7 +949,7 @@ describe("Finding matchings of selectors on trees", () => {
       });
 
       const testSelector: Selector = {
-        kind: "property",
+        kind: "property-regex",
         name: "value",
         regexPattern: "(d|o)+",
       };

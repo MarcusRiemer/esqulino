@@ -30,7 +30,7 @@ export const SelectorRegexString: T.Selector = {
 };
 
 export const SelectorLongProperty: T.Selector = {
-  kind: "property",
+  kind: "property-simple",
   name: "value",
   propertyValueMinLength: 2,
 };
@@ -44,8 +44,8 @@ export const SelectorMultiValuedChars: T.Selector = {
 
 export const TransformPatternSplitMultiValuedChar: T.TransformPatternSplitOnProperty =
   {
-    kind: "split-prop",
-    newNode: "copy-type",
+    kind: "split-property",
+    newNodes: "copy-type",
     wraperNode: { language: "regex", name: "invis-container" },
     propertyName: "value",
     delimiter: "", // The delimiter to split the string value of the property on. When not defined, the "" is assumed, which splits a string on a per character basis
