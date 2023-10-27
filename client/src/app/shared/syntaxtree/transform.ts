@@ -15,7 +15,7 @@ import {
 
 /**
  * Takes the parent of a matched syntax node and transform it or its
- * subtree according to the parameters defined for the unwrapp pattern.
+ * subtree according to the parameters defined for the unwrap pattern.
  *
  * @param parentNode
  * @param matchedNodeLoc
@@ -58,7 +58,8 @@ export function appendPropertiesToNodeDescription(
 export function appendChildGroupsToNodeDescription(
   nodeDesc: NodeDescription,
   children: { [childrenCategory: string]: NodeDescription[] },
-  position: "start" | "end"
+  position: "in-place" | "start" | "end",
+  inplaceInsertPosition: number
 ): NodeDescription {
   // Nothing to do
   if (children === undefined) return nodeDesc;
@@ -72,7 +73,20 @@ export function appendChildGroupsToNodeDescription(
       if (nodeDesc.children[category] !== undefined) {
         if (position === "end")
           nodeDesc.children[category].push(...children[category]);
-        else nodeDesc.children[category].unshift(...children[category]);
+        else if (position === "start")
+          nodeDesc.children[category].unshift(...children[category]);
+        else if (position === "in-place") {
+          if (inplaceInsertPosition === undefined) inplaceInsertPosition = 0;
+          let temp = nodeDesc.children[category].splice(
+            0,
+            inplaceInsertPosition
+          );
+          temp.push(...children[category]);
+          temp.push(
+            ...nodeDesc.children[category].splice(inplaceInsertPosition)
+          );
+          nodeDesc.children[category] = temp;
+        }
       } else {
         // The category does not already exist on the parent node.
         nodeDesc.children[category] = children[category];
@@ -88,7 +102,7 @@ export function unwrapTransformation(
   matchedNodeLoc: NodeLocation,
   unwrapPattern: TransformPatternUnwrap
 ): NodeDescription {
-  let insertPosition =
+  let insertPositionTag =
     unwrapPattern.position === undefined ? "start" : unwrapPattern.position;
   let subTree = new SyntaxTree(parentNode.toModel());
   const matchedNode = subTree.locate(matchedNodeLoc);
@@ -99,7 +113,8 @@ export function unwrapTransformation(
   let newParentNodeDesc = appendChildGroupsToNodeDescription(
     tempSubTree.toModel(),
     matchedNode.toModel().children,
-    insertPosition
+    insertPositionTag,
+    matchedNodeLoc[0][1]
   );
 
   // Appending the old properties of the original node, if specified

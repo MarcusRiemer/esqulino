@@ -7,6 +7,7 @@ export type SelectorType = {
   kind: "type"; // "type" here refers to the nodeType that the selector is targeting.
   language?: string; // Making the language optional allows for general selectors to be used on many different languages
   name?: string; // Making the name optional allows for the any selector, when no name is defined.
+  notName?: string; // Making the name optional allows for the any selector, when no name is defined.
   hasChildGroup?: string; // Allows filtering only the defined nodetype based on whether it contains a childgroup or not
 };
 
@@ -76,10 +77,19 @@ export type SelectorMatchLanguage =  {
 /* Transformations Interface */
 
 /* Allows to delete a node and move all its children as children of the same parent node */
+// NOTE: position: "in-place" is only applicable to the cases where the parent and the
+// child share childgroups of the same name. Otherwise it defaults to start.
 export type TransformPatternUnwrap = {
   kind: "unwrap";
-  position: "start" | "end"; // Position where the children of the unwrapped node should appear on the children list of the parent
+  position: "in-place" | "start" | "end"; // Position where the children of the unwrapped node should appear on the children list of the parent
   oldProperties: "copy" | "overwrite" | "ignore"; // TODO: Maybe better to replace with append | overwrite | ignore ?
+};
+
+/* Allows to wrap a node as a child of a new Node. */
+export type TransformPatternWrapWith = {
+  kind: "wrap";
+  newNode: NodeDescription;
+  oldChildrenCopyOntoGroup?: string;
 };
 
 /* Allows to replace a node (and possibly its entire subtree) with another subtree,
@@ -129,7 +139,13 @@ The delimiter defines a child node to match against, similar to the TransformPat
 }; */
 
 export type TransformPattern =
-  | TransformPatternReplace
   | TransformPatternUnwrap
+  | TransformPatternWrapWith
+  | TransformPatternReplace
   | TransformPatternMergeTwo
   | TransformPatternSplitOnProperty;
+
+export type TransformRule = {
+  selector: Selector;
+  transformPattern: TransformPattern;
+};

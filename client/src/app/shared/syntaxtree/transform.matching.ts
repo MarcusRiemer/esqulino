@@ -21,6 +21,11 @@ function doesNodeMatchSelector(node: SyntaxNode, selector: Selector): boolean {
         // check the names match
         to_return = to_return && node.qualifiedName.typeName === selector.name;
       }
+      if (selector.notName) {
+        // check the names match
+        to_return =
+          to_return && node.qualifiedName.typeName !== selector.notName;
+      }
       if (selector.language) {
         // check the languages match
         to_return =

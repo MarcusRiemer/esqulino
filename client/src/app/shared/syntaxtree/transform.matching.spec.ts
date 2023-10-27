@@ -1,9 +1,10 @@
 import { NodeLocation, SyntaxNode, SyntaxTree } from "./syntaxtree";
 import { Selector } from "./transform.description";
 import { findMatches } from "./transform.matching";
-import * as RegexTemplates from "./transform.templates.regex";
+import * as RegexTemplates from "./transform.rules.regex";
 
 describe("Finding matchings of selectors on trees", () => {
+  // TODO: Add a test case for the notName of the "type" Selector
   describe("Matching against the type selector", () => {
     it("Matching a root char node", () => {
       const testInput = new SyntaxTree({
@@ -11,7 +12,11 @@ describe("Finding matchings of selectors on trees", () => {
         language: "regex",
       });
 
-      const testSelector = RegexTemplates.SelectorRegexChar;
+      const testSelector: Selector = {
+        kind: "type",
+        language: "regex",
+        name: "char",
+      };
       const matches = findMatches(testInput.rootNode, testSelector);
 
       const result: NodeLocation[] = [[]];
@@ -68,7 +73,11 @@ describe("Finding matchings of selectors on trees", () => {
         },
       });
 
-      const testSelector = RegexTemplates.SelectorRegexChar;
+      const testSelector: Selector = {
+        kind: "type",
+        language: "regex",
+        name: "char",
+      };
       const result: NodeLocation[] = [
         [
           ["elements", 0],
@@ -143,7 +152,11 @@ describe("Finding matchings of selectors on trees", () => {
         },
       });
 
-      const testSelector = RegexTemplates.SelectorRegexString;
+      const testSelector: Selector = {
+        kind: "type",
+        language: "regex",
+        name: "string",
+      };
       const result: NodeLocation[] = [
         [
           ["elements", 0],
@@ -214,8 +227,16 @@ describe("Finding matchings of selectors on trees", () => {
       const testSelector: Selector = {
         kind: "any",
         selectors: [
-          RegexTemplates.SelectorRegexChar,
-          RegexTemplates.SelectorRegexString,
+          {
+            kind: "type",
+            language: "regex",
+            name: "char",
+          },
+          {
+            kind: "type",
+            language: "regex",
+            name: "string",
+          },
         ],
       };
 
@@ -358,7 +379,21 @@ describe("Finding matchings of selectors on trees", () => {
       });
 
       // An all selector that matches char nodes with property length > 1
-      const testSelector: Selector = RegexTemplates.SelectorMultiValuedChars;
+      const testSelector: Selector = {
+        kind: "all",
+        selectors: [
+          {
+            kind: "type",
+            language: "regex",
+            name: "char",
+          },
+          {
+            kind: "property-simple",
+            name: "value",
+            propertyValueMinLength: 2,
+          },
+        ],
+      };
 
       const result: NodeLocation[] = [
         [
@@ -510,7 +545,11 @@ describe("Finding matchings of selectors on trees", () => {
         kind: "type",
         name: "alternation",
       },
-      child: RegexTemplates.SelectorRegexChar,
+      child: {
+        kind: "type",
+        language: "regex",
+        name: "char",
+      },
     };
     const matches = findMatches(testInput.rootNode, testSelector);
 

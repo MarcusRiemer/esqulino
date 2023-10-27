@@ -106,7 +106,8 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
       appendChildGroupsToNodeDescription(
         noChildrenNodeDesc,
         nodeDescWithChildren.children,
-        "start"
+        "start",
+        0
       );
     //debugger;
     expect(res).toEqual(transformation);
@@ -210,13 +211,14 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
       appendChildGroupsToNodeDescription(
         noChildrenNodeDesc,
         nodeDescWithChildren.children,
-        "start"
+        "start",
+        0
       );
-    debugger;
+    //debugger;
     expect(res).toEqual(transformation);
   });
 
-  it("Unwrapp transformation on a parent with no other children", () => {
+  it("unwrap transformation on a parent with no other children", () => {
     const childrenDesc = {
       elements: [
         {
@@ -293,7 +295,7 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
       [["elements", 0]],
       transformPattern
     );
-    debugger;
+    //debugger;
     expect(res).toEqual(transformation);
   });
 
@@ -301,7 +303,7 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
   // parent node at the end on childgroups that already exist on the parent node
   // as well as adding new childgroups for the case where the parent node does not
   // already have the existing childgroup.
-  it("Unwrapp transformation on a parent with existing children", () => {
+  it("unwrap transformation on a parent with existing children", () => {
     const nodeToBeUnwrappedDesc: AST.NodeDescription = {
       name: "set",
       language: "regex",
@@ -462,11 +464,11 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
       [["elements", 1]],
       transformPattern
     );
-    // debugger;
+    // //debugger;
     expect(res).toEqual(transformation);
   });
 
-  it("Unwrapp transformation on a parent with no properties", () => {
+  it("unwrap transformation on a parent with no properties", () => {
     const childrenDesc = {
       elements: [
         {
@@ -549,7 +551,7 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
       [["elements", 0]],
       transformPattern
     );
-    debugger;
+    //debugger;
     expect(res).toEqual(transformation);
   });
 
@@ -557,7 +559,7 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
   // properties of the parent node that already exist on the parent node
   // as well as adding new properties for the case where the parent node does not
   // already have the property in question.
-  it("Unwrapp transformation on a parent with existing properties with copy", () => {
+  it("unwrap transformation on a parent with existing properties with copy", () => {
     const childrenDesc = {
       elements: [
         {
@@ -668,11 +670,11 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
       [["testingChildren", 0]],
       transformPattern
     );
-    debugger;
+    //debugger;
     expect(res).toEqual(transformation);
   });
 
-  it("Unwrapp transformation on a parent with existing properties with overwrite", () => {
+  it("unwrap transformation on a parent with existing properties with overwrite", () => {
     const childrenDesc = {
       elements: [
         {
@@ -783,7 +785,7 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
       [["testingChildren", 0]],
       transformPattern
     );
-    debugger;
+    //debugger;
     expect(res).toEqual(transformation);
   });
 });
@@ -1310,4 +1312,6 @@ describe("Expected user input transformations", () => {
   });
 
   // TODO: Groups remove the need for invis-containers within them in certain cases. Should I account for that?
+
+  describe("Autounwrapping of invis-containers withing a group node", () => {});
 });
