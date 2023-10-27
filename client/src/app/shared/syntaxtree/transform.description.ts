@@ -79,7 +79,7 @@ export type SelectorMatchLanguage =  {
 export type TransformPatternUnwrap = {
   kind: "unwrap";
   position: "start" | "end"; // Position where the children of the unwrapped node should appear on the children list of the parent
-  oldProperties: "copy" | "ignore";
+  oldProperties: "copy" | "overwrite" | "ignore"; // TODO: Maybe better to replace with append | overwrite | ignore ?
 };
 
 /* Allows to replace a node (and possibly its entire subtree) with another subtree,
@@ -88,8 +88,8 @@ export type TransformPatternReplace = {
   kind: "replace";
   newNode: NodeDescription;
   oldChildren: "copy" | "ignore";
-  oldChildrenCopyOntoGroup?: string; // Can be a childgroup existent on the newNode or if not defined, the old one is copied.
-  oldProperties: "copy" | "ignore";
+  oldChildrenCopyOntoGroup?: string; // Can be a be used to copy all children to a specific group under the new node
+  oldProperties: "copy" | "overwrite" | "ignore";
 };
 
 /* Allows to merge two nodes of the same type under one single node of the same type,
@@ -110,8 +110,8 @@ export type TransformPatternSplitOnProperty = {
   propertyName: string;
   delimiter?: string; // The delimiter to split the string value of the property on. When not defined, the "" is assumed, which splits a string on a per character basis
   deleteDelimiter?: boolean;
-  otherProperties: "copy" | "ignore";
   oldChildren: "copy" | "ignore";
+  otherProperties: "copy" | "overwrite" | "ignore";
 };
 
 // TODO: Not sure if this is needed | To be implemented later

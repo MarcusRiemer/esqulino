@@ -25,28 +25,60 @@ import {
  * which matchings have become outdated after the transformation.
  */
 
+export function appendPropertiesToNodeDescription(
+  nodeDesc: NodeDescription,
+  properties: { [propertyName: string]: string },
+  flag: "copy" | "overwrite" | "ignore"
+) {
+  // Nothing to do.
+  if (properties === undefined) return nodeDesc;
+  // No properties present
+  if (nodeDesc.properties === undefined) nodeDesc.properties = properties;
+  else {
+    // Appending when there exist properties already
+    for (let propertyName of Object.keys(properties)) {
+      // parentNode has this property.
+      // Append or overwrite all existent properties depending on the flag
+      if (nodeDesc.properties[propertyName] !== undefined) {
+        if (flag === "copy")
+          nodeDesc.properties[propertyName] += properties[propertyName];
+        else if (flag === "overwrite")
+          nodeDesc.properties[propertyName] = properties[propertyName];
+      } else {
+        // The category does not already exist on the parent node.
+        if (flag !== "ignore")
+          nodeDesc.properties[propertyName] = properties[propertyName];
+      }
+    }
+  }
+
+  return nodeDesc;
+}
+
 export function appendChildGroupsToNodeDescription(
   nodeDesc: NodeDescription,
   children: { [childrenCategory: string]: NodeDescription[] },
   position: "start" | "end"
 ): NodeDescription {
+  // Nothing to do
+  if (children === undefined) return nodeDesc;
   // No children present
-  if (nodeDesc.children === undefined)  nodeDesc.children = children;
+  if (nodeDesc.children === undefined) nodeDesc.children = children;
   else {
-    // TODO: Appending when there exist children already
-    for(let category of Object.keys(children)) {
-      // parentNode has this category. 
+    // Appending when there exist children already
+    for (let category of Object.keys(children)) {
+      // parentNode has this category.
       // Insert (or append) all children from category in the given position.
-        if(nodeDesc.children[category] !== undefined) {
-          if(position === "end") nodeDesc.children[category].push(...children[category])
-          else nodeDesc.children[category].unshift(...children[category]);
-        } 
-        else {
-      // The category does not already exist on the parent node.
-          nodeDesc.children[category] = children[category]
-        }
+      if (nodeDesc.children[category] !== undefined) {
+        if (position === "end")
+          nodeDesc.children[category].push(...children[category]);
+        else nodeDesc.children[category].unshift(...children[category]);
+      } else {
+        // The category does not already exist on the parent node.
+        nodeDesc.children[category] = children[category];
       }
     }
+  }
 
   return nodeDesc;
 }
@@ -56,18 +88,32 @@ export function unwrapTransformation(
   matchedNodeLoc: NodeLocation,
   unwrapPattern: TransformPatternUnwrap
 ): NodeDescription {
-  let insertPosition = unwrapPattern.position === undefined ? "start" : unwrapPattern.position;
+  let insertPosition =
+    unwrapPattern.position === undefined ? "start" : unwrapPattern.position;
   let subTree = new SyntaxTree(parentNode.toModel());
   const matchedNode = subTree.locate(matchedNodeLoc);
   // Removing the matched SyntaxNode:
   let tempSubTree = subTree.deleteNode(matchedNodeLoc);
 
   // Appending the orphaned children to the parentNode
-  const newParentNodeDesc = appendChildGroupsToNodeDescription(
+  let newParentNodeDesc = appendChildGroupsToNodeDescription(
     tempSubTree.toModel(),
     matchedNode.toModel().children,
     insertPosition
   );
+
+  // Appending the old properties of the original node, if specified
+  if (
+    unwrapPattern.oldProperties !== undefined &&
+    unwrapPattern.oldProperties !== "ignore"
+  ) {
+    newParentNodeDesc = appendPropertiesToNodeDescription(
+      newParentNodeDesc,
+      matchedNode.toModel().properties,
+      unwrapPattern.oldProperties
+    );
+  }
+
   return newParentNodeDesc;
 }
 
@@ -95,7 +141,7 @@ export function applyPatternOnLocation(
         // used to identify the matched node
         let newParentNodeDesc = unwrapTransformation(
           oldParentNode,
-          [loc.pop()],
+          [loc.pop()], // This makes the loation relative to the parentNode
           tPattern
         );
 
@@ -103,9 +149,8 @@ export function applyPatternOnLocation(
           oldParentNode.location,
           newParentNodeDesc
         );
-        // TODO: Validate that the newParentNodeDesc is still grammatically valid
+        // TODO: Validate that the newParentNodeDesc is still grammatically valid or delegate this task to the caller funciton.
         return finalTree.toModel();
-        //After validation:
       }
   }
 }
