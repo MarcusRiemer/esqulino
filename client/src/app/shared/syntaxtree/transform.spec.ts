@@ -5,10 +5,15 @@ import {
   replaceTemplates,
   wrapTransformation,
   replaceTransformation,
+  mergeTwoTransformation,
 } from "./transform";
-import { TransformPattern } from "./transform.description";
+import {
+  TransformPattern,
+  TransformPatternMergeTwo,
+  TransformRule,
+} from "./transform.description";
 
-const templates: string[] = []; // Just a placeholder for now
+const templates: TransformRule[] = []; // Just a placeholder for now
 
 fdescribe("Tests for the intermediate steps of the replaceTemplates function", () => {
   it("Append given children to an NodeDescription with undefined children", () => {
@@ -467,7 +472,7 @@ fdescribe("Tests for the intermediate steps of the replaceTemplates function", (
         [["elements", 1]],
         transformPattern
       );
-      // //debugger;
+      //debugger;
       expect(res).toEqual(transformation);
     });
 
@@ -1110,7 +1115,7 @@ fdescribe("Tests for the intermediate steps of the replaceTemplates function", (
         transformPattern
       );
 
-      debugger;
+      //debugger;
       expect(res).toEqual(transformation);
     });
 
@@ -1194,7 +1199,7 @@ fdescribe("Tests for the intermediate steps of the replaceTemplates function", (
         transformPattern
       );
 
-      debugger;
+      //debugger;
       expect(res).toEqual(transformation);
     });
 
@@ -1429,11 +1434,501 @@ fdescribe("Tests for the intermediate steps of the replaceTemplates function", (
         transformPattern
       );
 
-      debugger;
+      //debugger;
       expect(res).toEqual(transformation);
     });
 
     // TODO: Testing the same things as above but with preserving properties. Note that there are already test cases for handling properties in the unwrap Transformation.
+  });
+
+  describe("Tests for mergeTwoTransformation function", () => {
+    it("Merge two quantifiers into one, ignoring all children. Properties are ignored.", () => {
+      const leftNodeDesc = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "+",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
+            },
+          ],
+        },
+      };
+
+      const rightNodeDesc = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "*",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
+            },
+          ],
+        },
+      };
+
+      const parentDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [leftNodeDesc, rightNodeDesc],
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [
+            {
+              name: "builtInQuantifier",
+              language: "regex",
+            },
+          ],
+        },
+      };
+
+      const transformPattern: TransformPatternMergeTwo = {
+        kind: "merge",
+        oldChildren: "ignore",
+        oldProperties: "ignore",
+      };
+
+      let transformation: AST.NodeDescription = mergeTwoTransformation(
+        new AST.SyntaxTree(parentDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Merge two quantifiers into one, ignoring only right children. Properties are ignored.", () => {
+      const leftNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "+",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
+            },
+          ],
+        },
+      };
+
+      const rightNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "*",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
+            },
+          ],
+        },
+      };
+
+      const parentDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [leftNodeDesc, rightNodeDesc],
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [
+            {
+              name: "builtInQuantifier",
+              language: "regex",
+              children: leftNodeDesc.children,
+            },
+          ],
+        },
+      };
+
+      const transformPattern: TransformPatternMergeTwo = {
+        kind: "merge",
+        oldChildren: "copy-left",
+        oldProperties: "ignore",
+      };
+
+      let transformation: AST.NodeDescription = mergeTwoTransformation(
+        new AST.SyntaxTree(parentDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Merge two quantifiers into one, ignoring only left children. Properties are ignored.", () => {
+      const leftNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "+",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
+            },
+          ],
+        },
+      };
+
+      const rightNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "*",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
+            },
+          ],
+        },
+      };
+
+      const parentDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [leftNodeDesc, rightNodeDesc],
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [
+            {
+              name: "builtInQuantifier",
+              language: "regex",
+              children: rightNodeDesc.children,
+            },
+          ],
+        },
+      };
+
+      const transformPattern: TransformPatternMergeTwo = {
+        kind: "merge",
+        oldChildren: "copy-right",
+        oldProperties: "ignore",
+      };
+
+      let transformation: AST.NodeDescription = mergeTwoTransformation(
+        new AST.SyntaxTree(parentDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Merge two quantifiers into one, copying children from both nodes. Properties are ignored.", () => {
+      const leftNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "+",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
+            },
+          ],
+        },
+      };
+
+      const rightNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "*",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "b",
+              },
+            },
+          ],
+        },
+      };
+
+      const parentDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [leftNodeDesc, rightNodeDesc],
+        },
+      };
+
+      let mergedChildrenArray = [];
+      mergedChildrenArray.push(
+        ...leftNodeDesc.children["elements"],
+        ...rightNodeDesc.children["elements"]
+      );
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [
+            {
+              name: "builtInQuantifier",
+              language: "regex",
+              children: {
+                elements: mergedChildrenArray,
+              },
+            },
+          ],
+        },
+      };
+
+      const transformPattern: TransformPatternMergeTwo = {
+        kind: "merge",
+        oldChildren: "copy-both",
+        oldProperties: "ignore",
+      };
+
+      let transformation: AST.NodeDescription = mergeTwoTransformation(
+        new AST.SyntaxTree(parentDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Merge two quantifiers into one, copying children from both nodes. Only left properties are copied.", () => {
+      const leftNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "*",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
+            },
+          ],
+        },
+      };
+
+      const rightNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "+",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "b",
+              },
+            },
+          ],
+        },
+      };
+
+      const parentDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [leftNodeDesc, rightNodeDesc],
+        },
+      };
+
+      let mergedChildrenArray = [];
+      mergedChildrenArray.push(
+        ...leftNodeDesc.children["elements"],
+        ...rightNodeDesc.children["elements"]
+      );
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [
+            {
+              name: "builtInQuantifier",
+              language: "regex",
+              children: {
+                elements: mergedChildrenArray,
+              },
+              properties: {
+                symbol: "*",
+              },
+            },
+          ],
+        },
+      };
+
+      const transformPattern: TransformPatternMergeTwo = {
+        kind: "merge",
+        oldChildren: "copy-both",
+        oldProperties: "copy-left",
+      };
+
+      let transformation: AST.NodeDescription = mergeTwoTransformation(
+        new AST.SyntaxTree(parentDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Merge two quantifiers into one, copying children from both nodes. Only right properties are copied.", () => {
+      const leftNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "+",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
+            },
+          ],
+        },
+      };
+
+      const rightNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "*",
+        },
+        children: {
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "b",
+              },
+            },
+          ],
+        },
+      };
+
+      const parentDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [leftNodeDesc, rightNodeDesc],
+        },
+      };
+
+      let mergedChildrenArray = [];
+      mergedChildrenArray.push(
+        ...leftNodeDesc.children["elements"],
+        ...rightNodeDesc.children["elements"]
+      );
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [
+            {
+              name: "builtInQuantifier",
+              language: "regex",
+              children: {
+                elements: mergedChildrenArray,
+              },
+            },
+          ],
+        },
+      };
+
+      const transformPattern: TransformPatternMergeTwo = {
+        kind: "merge",
+        oldChildren: "copy-both",
+        oldProperties: "copy-right",
+      };
+
+      let transformation: AST.NodeDescription = mergeTwoTransformation(
+        new AST.SyntaxTree(parentDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
   });
 });
 

@@ -1,3 +1,4 @@
+import { merge } from "rxjs";
 import { arrayEqual } from "../util";
 import { NodeChildren, locationEquals } from "./syntaxtree";
 import {
@@ -12,6 +13,8 @@ import {
   TransformPatternUnwrap,
   TransformPatternWrapWith,
   TransformPatternReplace,
+  TransformPatternMergeTwo,
+  TransformRule,
 } from "./transform.description";
 ("./transform.description");
 
@@ -88,6 +91,18 @@ export function appendChildGroupsToNodeDescription(
   return nodeDesc;
 }
 
+/**
+ * Takes a parentNode and the location of a child node and a wrap pattern defined by the user.
+ * Transforms the tree by unwrapping the child node and appending the children and the properties
+ * of it to the parentNode, if specified by the user.
+ * When the target node where the orphaned children are to be appended under does not have the
+ * required childGroups and the unwrapPattern.position === "in-place", the behaviour becomes
+ * undefined. In this case an Exception might be thrown or the resulting transformation might be invalid.
+ * @param matchedNodeLoc  The location of the node matched where the transformation should happen.
+ * @param unwrapPattern The pattern defined by the user for this transformation.
+ * @returns The nodeDescription of the subtree after the transformation.
+ */
+
 export function unwrapTransformation(
   parentNode: SyntaxNode,
   matchedNodeLoc: NodeLocation,
@@ -129,9 +144,9 @@ export function unwrapTransformation(
  * created by wrapping the child node with a node defined by the user in the wrapPattern,
  * adding the child node under the childGroup defined by the user.
  * @param parentNode The parent of the node to be wrapped.
- * @param matchedNodeLoc
- * @param wrapPattern
- * @returns
+ * @param matchedNodeLoc  The location of the node matched where the transformation should happen.
+ * @param wrapPattern The pattern defined by the user for this transformation.
+ * @returns The nodeDescription of the subtree after the transformation.
  */
 
 export function wrapTransformation(
@@ -158,11 +173,25 @@ export function wrapTransformation(
   return subTree.toModel();
 }
 
+/**
+ * Takes a parentNode and the location of a child node and a replace pattern defined by the user.
+ * Transforms the tree by replacing the matched child node on the parent with a new node,
+ * created by appending the children of child node onto the new replacing Node as well as the
+ * properties if specified by the user.
+ * adding the child node under the childGroup defined by the user.
+ * @param parentNode The parent of the node to be wrapped.
+ * @param matchedNodeLoc  The location of the node matched where the transformation should happen.
+ * @param wrapPattern The pattern defined by the user for this transformation.
+ * @returns The nodeDescription of the subtree after the transformation.
+ */
+
 export function replaceTransformation(
   parentNode: SyntaxNode,
   matchedNodeLoc: NodeLocation,
   replacePattern: TransformPatternReplace
 ): NodeDescription {
+  //TODO: Either do nothing if no replacement pattern is defined or allow the just delete the matched node if that is the case.
+  if (replacePattern.newNode === undefined) return parentNode.toModel();
   let newNodeDesc = replacePattern.newNode; // TODO: is undefined check here necessary?
   let subTree = new SyntaxTree(parentNode.toModel());
   let oldNode = subTree.locate(matchedNodeLoc).toModel();
@@ -213,6 +242,88 @@ export function replaceTransformation(
 }
 
 /**
+ * Takes a parentNode and the location of a child node and a mergePattern defined by the user.
+ * It assumes that the node to the immediate sibling node to the right of the child node exists and
+ * is of the same type as the child node. This check must be made from the caller function.
+ * @param parentNode  The parent of the node to be wrapped.
+ * @param matchedNodeLoc  The location of the node matched where the transformation should happen.
+ * @param mergePattern The pattern defined by the user for this transformation.
+ * @returns The nodeDescription of the subtree after the transformation.
+ */
+
+export function mergeTwoTransformation(
+  parentNode: SyntaxNode,
+  matchedLeftNodeLoc: NodeLocation,
+  mergePattern: TransformPatternMergeTwo
+): NodeDescription {
+  let subTree = new SyntaxTree(parentNode.toModel());
+  const leftNodeDesc = subTree.locate(matchedLeftNodeLoc).toModel();
+  let newMergedNode: NodeDescription = subTree
+    .locate(matchedLeftNodeLoc)
+    .toModel();
+  let matchedRightNodeLoc: NodeLocation = [
+    [matchedLeftNodeLoc[0][0], matchedLeftNodeLoc[0][1] + 1],
+  ];
+  const rightNodeDesc = subTree.locate(matchedRightNodeLoc).toModel();
+
+  // Handle the children:
+  switch (mergePattern.oldChildren) {
+    case "copy-both": {
+      newMergedNode = appendChildGroupsToNodeDescription(
+        newMergedNode,
+        rightNodeDesc.children,
+        "end",
+        -1
+      );
+      break;
+    }
+    case "copy-left":
+      break;
+    case "copy-right": {
+      newMergedNode.children = rightNodeDesc.children;
+      break;
+    }
+    case "ignore": {
+      newMergedNode.children = {};
+      break;
+    }
+    default: {
+      // TODO: Throw Exception.
+      break;
+    }
+  }
+
+  // Handle the properties:
+  switch (mergePattern.oldProperties) {
+    case "copy-both": {
+      newMergedNode = appendPropertiesToNodeDescription(
+        newMergedNode,
+        rightNodeDesc.properties,
+        "copy"
+      );
+      break;
+    }
+    case "copy-left":
+      break;
+    case "copy-right": {
+      newMergedNode.properties = rightNodeDesc.properties;
+    }
+    case "ignore": {
+      newMergedNode.properties = {};
+      break;
+    }
+    default: {
+      //TODO: Throw Exception
+      break;
+    }
+  }
+
+  subTree = subTree.deleteNode(matchedRightNodeLoc);
+  subTree = subTree.replaceNode(matchedLeftNodeLoc, newMergedNode);
+  return subTree.toModel();
+}
+
+/**
  * Takes the parent of a matched syntax node and transform it or its
  * subtree according to the parameters defined for the unwrap pattern.
  *
@@ -242,7 +353,7 @@ export function applyTransformPatternOnLocation(
         // used to identify the matched node
         let newParentNodeDesc = unwrapTransformation(
           oldParentNode,
-          [loc.pop()], // This makes the loation relative to the parentNode
+          [loc[-1]], // This makes the loation relative to the parentNode
           tPattern
         );
 
@@ -259,7 +370,7 @@ export function applyTransformPatternOnLocation(
         let oldParentNode = tree.locate(loc).nodeParent;
         let newParentNodeDesc = wrapTransformation(
           oldParentNode,
-          [loc.pop()],
+          [loc[-1]],
           tPattern
         );
         let finalTree = tree.replaceNode(
@@ -275,7 +386,7 @@ export function applyTransformPatternOnLocation(
         let oldParentNode = tree.locate(loc).nodeParent;
         let newParentNodeDesc = replaceTransformation(
           oldParentNode,
-          [loc.pop()],
+          [loc[-1]],
           tPattern
         );
         let finalTree = tree.replaceNode(
@@ -287,6 +398,20 @@ export function applyTransformPatternOnLocation(
       }
       break;
     case "merge":
+      {
+        let oldParentNode = tree.locate(loc).nodeParent;
+        let newParentNodeDesc = mergeTwoTransformation(
+          oldParentNode,
+          [loc[-1]],
+          tPattern
+        );
+        let finalTree = tree.replaceNode(
+          oldParentNode.location,
+          newParentNodeDesc
+        );
+        // TODO: Validate that the newParentNodeDesc is still grammatically valid or delegate this task to the caller funciton.
+        return finalTree.toModel();
+      }
       break;
     case "split-property":
       break;
@@ -303,7 +428,24 @@ export function applyTransformPatternOnLocation(
  */
 export function replaceTemplates(
   inp: SyntaxTree,
-  patterns: string[]
+  rules: TransformRule[]
 ): SyntaxTree {
   return inp;
+  // During every iteration, keep a flag that shows whether a modification was made to the tree or not.
+  // If no modification was made and the end of the matching's array is reached or the array is empty
+  // (depending on the replacePattern) finish this iteration and continue with the next transform rule.
+
+  // After a transform rule modifies the tree, start again from the beginning.
+
+  //For the case where merge is given as the TransformPattern
+  // Start with the first match of the selector.
+  // Check that the next element is an immediate sibling.
+  // If so, merge the two.
+  // Substract one from the index of every sibling Node address.
+  // Else
+  // Check that the next element is on the same level.
+  // If the next element is not on the same level
+  // If above then delete this address.
+  // If below continue merging without deleting this location.
+  // If the end of the array is reached, start again from the beginning until the arrays is empty.
 }
