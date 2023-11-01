@@ -10,6 +10,7 @@ import { Selector } from "./transform.description";
 
 function doesNodeMatchSelector(node: SyntaxNode, selector: Selector): boolean {
   let to_return = true;
+  //TODO: NotSelector implementation
   switch (selector.kind) {
     case "root":
       if (node.nodeParent === undefined) return true;

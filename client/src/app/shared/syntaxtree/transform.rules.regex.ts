@@ -14,6 +14,7 @@ const SelectorRoot: T.Selector = {
   kind: "root",
 };
 
+//TODO: Change to use the new NotSelector
 const SelectorNotInvisContainer: T.Selector = {
   kind: "type",
   language: LANGUAGE,
@@ -88,7 +89,7 @@ const TransformPatternAutoWrapRootWithInvisContainer: T.TransformPatternWrapWith
   {
     kind: "wrap",
     newNode: { name: "invis-container", language: LANGUAGE },
-    oldChildrenCopyOntoGroup: "elements",
+    appendOntoGroup: "elements",
   };
 
 const TransformPatternUnwrapNestedContainers: T.TransformPatternUnwrap = {
@@ -152,4 +153,4 @@ export const regexTranformRules: T.TransformRule[] = [
   },
 ];
 
-export const RegexFormatingRules: T.TransformRule[] = [];
+export const RegexFormattingRules: T.TransformRule[] = [];

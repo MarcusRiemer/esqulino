@@ -3,12 +3,14 @@ import {
   appendChildGroupsToNodeDescription,
   unwrapTransformation,
   replaceTemplates,
+  wrapTransformation,
+  replaceTransformation,
 } from "./transform";
 import { TransformPattern } from "./transform.description";
 
 const templates: string[] = []; // Just a placeholder for now
 
-describe("Tests for the intermediate steps of the replaceTemplates function", () => {
+fdescribe("Tests for the intermediate steps of the replaceTemplates function", () => {
   it("Append given children to an NodeDescription with undefined children", () => {
     const noChildrenNodeDesc: AST.NodeDescription = {
       name: "char",
@@ -218,383 +220,757 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
     expect(res).toEqual(transformation);
   });
 
-  it("unwrap transformation on a parent with no other children", () => {
-    const childrenDesc = {
-      elements: [
-        {
-          name: "set",
-          language: "regex",
-          children: {
-            setNegation: [],
-            elements: [
-              {
-                name: "range",
-                language: "regex",
-                children: {
-                  firstElement: [
-                    {
-                      name: "char",
-                      language: "regex",
-                      properties: {
-                        value: "1",
-                      },
-                    },
-                  ],
-                  lastElement: [
-                    {
-                      name: "char",
-                      language: "regex",
-                      properties: {
-                        value: "3",
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        },
-        {
-          name: "string",
-          language: "regex",
-          properties: {
-            value: "abc",
-          },
-        },
-      ],
-    };
-
-    const innerInvisContainer: AST.NodeDescription = {
-      name: "invis-container",
-      language: "regex",
-      children: childrenDesc,
-    };
-
-    const parentNodeDesc: AST.NodeDescription = {
-      name: "invis-container",
-      language: "regex",
-      children: {
-        elements: [innerInvisContainer],
-      },
-    };
-
-    const res: AST.NodeDescription = {
-      name: "invis-container",
-      language: "regex",
-      children: childrenDesc,
-    };
-
-    const transformPattern: TransformPattern = {
-      kind: "unwrap",
-      position: "start",
-      oldProperties: "copy",
-    };
-
-    const transformation: AST.NodeDescription = unwrapTransformation(
-      new AST.SyntaxTree(parentNodeDesc).rootNode,
-      [["elements", 0]],
-      transformPattern
-    );
-    //debugger;
-    expect(res).toEqual(transformation);
-  });
-
-  // The result should have the children from the unwrapped node appended to the
-  // parent node at the end on childgroups that already exist on the parent node
-  // as well as adding new childgroups for the case where the parent node does not
-  // already have the existing childgroup.
-  it("unwrap transformation on a parent with existing children", () => {
-    const nodeToBeUnwrappedDesc: AST.NodeDescription = {
-      name: "set",
-      language: "regex",
-      children: {
-        setNegation: [
-          {
-            name: "setNegation",
-            language: "regex",
-          },
-        ],
+  describe("Tests for the unwrapTransformation function", () => {
+    it("unwrap transformation on a parent with no other children", () => {
+      const childrenDesc = {
         elements: [
           {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "child",
-            },
-          },
-          {
-            name: "range",
+            name: "set",
             language: "regex",
             children: {
-              firstElement: [
+              setNegation: [],
+              elements: [
                 {
-                  name: "char",
+                  name: "range",
                   language: "regex",
-                  properties: {
-                    value: "1",
+                  children: {
+                    firstElement: [
+                      {
+                        name: "char",
+                        language: "regex",
+                        properties: {
+                          value: "1",
+                        },
+                      },
+                    ],
+                    lastElement: [
+                      {
+                        name: "char",
+                        language: "regex",
+                        properties: {
+                          value: "3",
+                        },
+                      },
+                    ],
                   },
                 },
               ],
-              lastElement: [
-                {
-                  name: "char",
-                  language: "regex",
-                  properties: {
-                    value: "",
-                  },
-                },
-              ],
-            },
-          },
-        ],
-        testChildGroup: [
-          {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "1",
             },
           },
           {
-            name: "char",
+            name: "string",
             language: "regex",
             properties: {
-              value: "2",
+              value: "abc",
             },
           },
         ],
-      },
-    };
+      };
 
-    const inp: AST.NodeDescription = {
-      name: "set",
-      language: "regex",
-      children: {
-        setNegation: [],
+      const innerInvisContainer: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: childrenDesc,
+      };
+
+      const parentNodeDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [innerInvisContainer],
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: childrenDesc,
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "unwrap",
+        position: "start",
+        oldProperties: "copy",
+      };
+
+      const transformation: AST.NodeDescription = unwrapTransformation(
+        new AST.SyntaxTree(parentNodeDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    // The result should have the children from the unwrapped node appended to the
+    // parent node at the end on childgroups that already exist on the parent node
+    // as well as adding new childgroups for the case where the parent node does not
+    // already have the existing childgroup.
+    it("unwrap transformation on a parent with existing children", () => {
+      const nodeToBeUnwrappedDesc: AST.NodeDescription = {
+        name: "set",
+        language: "regex",
+        children: {
+          setNegation: [
+            {
+              name: "setNegation",
+              language: "regex",
+            },
+          ],
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "child",
+              },
+            },
+            {
+              name: "range",
+              language: "regex",
+              children: {
+                firstElement: [
+                  {
+                    name: "char",
+                    language: "regex",
+                    properties: {
+                      value: "1",
+                    },
+                  },
+                ],
+                lastElement: [
+                  {
+                    name: "char",
+                    language: "regex",
+                    properties: {
+                      value: "",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          testChildGroup: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "1",
+              },
+            },
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "2",
+              },
+            },
+          ],
+        },
+      };
+
+      const inp: AST.NodeDescription = {
+        name: "set",
+        language: "regex",
+        children: {
+          setNegation: [],
+          elements: [
+            {
+              name: "string",
+              language: "regex",
+              properties: {
+                value: "parent",
+              },
+            },
+            nodeToBeUnwrappedDesc,
+          ],
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "set",
+        language: "regex",
+        children: {
+          setNegation: [
+            {
+              name: "setNegation",
+              language: "regex",
+            },
+          ],
+          elements: [
+            {
+              name: "string",
+              language: "regex",
+              properties: {
+                value: "parent",
+              },
+            },
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "child",
+              },
+            },
+            {
+              name: "range",
+              language: "regex",
+              children: {
+                firstElement: [
+                  {
+                    name: "char",
+                    language: "regex",
+                    properties: {
+                      value: "1",
+                    },
+                  },
+                ],
+                lastElement: [
+                  {
+                    name: "char",
+                    language: "regex",
+                    properties: {
+                      value: "",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          testChildGroup: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "1",
+              },
+            },
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "2",
+              },
+            },
+          ],
+        },
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "unwrap",
+        position: "end",
+        oldProperties: "ignore",
+      };
+
+      const transformation: AST.NodeDescription = unwrapTransformation(
+        new AST.SyntaxTree(inp).rootNode,
+        [["elements", 1]],
+        transformPattern
+      );
+      // //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("unwrap transformation on a parent with no properties", () => {
+      const childrenDesc = {
         elements: [
           {
             name: "string",
             language: "regex",
             properties: {
-              value: "parent",
+              value: "foo",
             },
           },
-          nodeToBeUnwrappedDesc,
-        ],
-      },
-    };
-
-    const res: AST.NodeDescription = {
-      name: "set",
-      language: "regex",
-      children: {
-        setNegation: [
           {
-            name: "setNegation",
+            name: "set",
             language: "regex",
+            children: {
+              setNegation: [],
+              elements: [
+                {
+                  name: "range",
+                  language: "regex",
+                  children: {
+                    firstElement: [
+                      {
+                        name: "char",
+                        language: "regex",
+                        properties: {
+                          value: "a",
+                        },
+                      },
+                    ],
+                    lastElement: [
+                      {
+                        name: "char",
+                        language: "regex",
+                        properties: {
+                          value: "z",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
           },
         ],
+      };
+
+      const nodeToBeUnwrappedDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "+",
+        },
+        children: childrenDesc,
+      };
+
+      const parentNodeDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [nodeToBeUnwrappedDesc],
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: childrenDesc,
+        properties: {
+          symbol: "+",
+        },
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "unwrap",
+        position: "start",
+        oldProperties: "copy",
+      };
+
+      const transformation: AST.NodeDescription = unwrapTransformation(
+        new AST.SyntaxTree(parentNodeDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    // The result should have the properties from the unwrapped node appended to the
+    // properties of the parent node that already exist on the parent node
+    // as well as adding new properties for the case where the parent node does not
+    // already have the property in question.
+    it("unwrap transformation on a parent with existing properties with copy", () => {
+      const childrenDesc = {
         elements: [
+          {
+            name: "set",
+            language: "regex",
+            children: {
+              setNegation: [],
+              elements: [
+                {
+                  name: "range",
+                  language: "regex",
+                  children: {
+                    firstElement: [
+                      {
+                        name: "char",
+                        language: "regex",
+                        properties: {
+                          value: "1",
+                        },
+                      },
+                    ],
+                    lastElement: [
+                      {
+                        name: "char",
+                        language: "regex",
+                        properties: {
+                          value: "3",
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
           {
             name: "string",
             language: "regex",
             properties: {
-              value: "parent",
+              value: "abc",
             },
           },
-          {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "child",
+        ],
+      };
+
+      const parentNodeDesc: AST.NodeDescription = {
+        name: "string",
+        language: "regex",
+        properties: {
+          value: "",
+        },
+        children: {
+          testingChildren: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
             },
-          },
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "b",
+              },
+            },
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "c",
+              },
+            },
+          ],
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "string",
+        language: "regex",
+        properties: {
+          value: "abc",
+        },
+        children: {
+          testingChildren: [],
+        },
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "unwrap",
+        position: "end",
+        oldProperties: "copy",
+      };
+
+      let transformation: AST.NodeDescription = unwrapTransformation(
+        new AST.SyntaxTree(parentNodeDesc).rootNode,
+        [["testingChildren", 0]],
+        transformPattern
+      );
+      transformation = unwrapTransformation(
+        new AST.SyntaxTree(transformation).rootNode,
+        [["testingChildren", 0]],
+        transformPattern
+      );
+      transformation = unwrapTransformation(
+        new AST.SyntaxTree(transformation).rootNode,
+        [["testingChildren", 0]],
+        transformPattern
+      );
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("unwrap transformation on a parent with existing properties with overwrite", () => {
+      const childrenDesc = {
+        elements: [
           {
-            name: "range",
+            name: "set",
             language: "regex",
             children: {
-              firstElement: [
+              setNegation: [],
+              elements: [
                 {
-                  name: "char",
+                  name: "range",
                   language: "regex",
-                  properties: {
-                    value: "1",
+                  children: {
+                    firstElement: [
+                      {
+                        name: "char",
+                        language: "regex",
+                        properties: {
+                          value: "1",
+                        },
+                      },
+                    ],
+                    lastElement: [
+                      {
+                        name: "char",
+                        language: "regex",
+                        properties: {
+                          value: "3",
+                        },
+                      },
+                    ],
                   },
                 },
               ],
-              lastElement: [
-                {
-                  name: "char",
-                  language: "regex",
-                  properties: {
-                    value: "",
+            },
+          },
+          {
+            name: "string",
+            language: "regex",
+            properties: {
+              value: "abc",
+            },
+          },
+        ],
+      };
+
+      const parentNodeDesc: AST.NodeDescription = {
+        name: "string",
+        language: "regex",
+        properties: {
+          value: "",
+        },
+        children: {
+          testingChildren: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
+            },
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "b",
+              },
+            },
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "c",
+              },
+            },
+          ],
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "string",
+        language: "regex",
+        properties: {
+          value: "c",
+        },
+        children: {
+          testingChildren: [],
+        },
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "unwrap",
+        position: "end",
+        oldProperties: "overwrite",
+      };
+
+      let transformation: AST.NodeDescription = unwrapTransformation(
+        new AST.SyntaxTree(parentNodeDesc).rootNode,
+        [["testingChildren", 0]],
+        transformPattern
+      );
+      transformation = unwrapTransformation(
+        new AST.SyntaxTree(transformation).rootNode,
+        [["testingChildren", 0]],
+        transformPattern
+      );
+      transformation = unwrapTransformation(
+        new AST.SyntaxTree(transformation).rootNode,
+        [["testingChildren", 0]],
+        transformPattern
+      );
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+  });
+
+  describe("Tests for the wrapTransformation function", () => {
+    it("wrap transformation on a root node", () => {
+      const oldDesc: AST.NodeDescription = {
+        name: "set",
+        language: "regex",
+        children: {
+          setNegation: [],
+          elements: [
+            {
+              name: "range",
+              language: "regex",
+              children: {
+                firstElement: [
+                  {
+                    name: "char",
+                    language: "regex",
+                    properties: {
+                      value: "1",
+                    },
                   },
-                },
-              ],
+                ],
+                lastElement: [
+                  {
+                    name: "char",
+                    language: "regex",
+                    properties: {
+                      value: "5",
+                    },
+                  },
+                ],
+              },
             },
-          },
-        ],
-        testChildGroup: [
-          {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "1",
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "a",
+              },
             },
-          },
-          {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "2",
-            },
-          },
-        ],
-      },
-    };
+          ],
+        },
+      };
 
-    const transformPattern: TransformPattern = {
-      kind: "unwrap",
-      position: "end",
-      oldProperties: "ignore",
-    };
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [oldDesc],
+        },
+      };
 
-    const transformation: AST.NodeDescription = unwrapTransformation(
-      new AST.SyntaxTree(inp).rootNode,
-      [["elements", 1]],
-      transformPattern
-    );
-    // //debugger;
-    expect(res).toEqual(transformation);
+      const wrapperNodeDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "wrap",
+        newNode: wrapperNodeDesc,
+        appendOntoGroup: "elements",
+      };
+
+      let transformation: AST.NodeDescription = wrapTransformation(
+        new AST.SyntaxTree(oldDesc).rootNode,
+        [],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    // A set of elements is wrapped with a star quantifier
+    it("wrap transformation on a non-root node", () => {
+      const setDesc: AST.NodeDescription = {
+        name: "set",
+        language: "regex",
+        children: {
+          setNegation: [
+            {
+              name: "setNegation",
+              language: "regex",
+            },
+          ],
+          elements: [
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "f",
+              },
+            },
+            {
+              name: "char",
+              language: "regex",
+              properties: {
+                value: "o",
+              },
+            },
+          ],
+        },
+      };
+
+      const oldDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [
+            setDesc,
+            {
+              name: "string",
+              language: "regex",
+              properties: {
+                value: "test",
+              },
+            },
+          ],
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: [
+            {
+              name: "builtInQuantifier",
+              language: "regex",
+              properties: {
+                symbol: "*",
+              },
+              children: {
+                elements: [setDesc],
+              },
+            },
+            {
+              name: "string",
+              language: "regex",
+              properties: {
+                value: "test",
+              },
+            },
+          ],
+        },
+      };
+
+      const wrapperNodeDesc: AST.NodeDescription = {
+        name: "builtInQuantifier",
+        language: "regex",
+        properties: {
+          symbol: "*",
+        },
+        children: {
+          elements: [],
+        },
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "wrap",
+        newNode: wrapperNodeDesc,
+        appendOntoGroup: "elements",
+      };
+
+      let transformation: AST.NodeDescription = wrapTransformation(
+        new AST.SyntaxTree(oldDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
   });
 
-  it("unwrap transformation on a parent with no properties", () => {
-    const childrenDesc = {
-      elements: [
-        {
-          name: "string",
-          language: "regex",
-          properties: {
-            value: "foo",
-          },
-        },
-        {
-          name: "set",
-          language: "regex",
-          children: {
-            setNegation: [],
-            elements: [
-              {
-                name: "range",
-                language: "regex",
-                children: {
-                  firstElement: [
-                    {
-                      name: "char",
-                      language: "regex",
-                      properties: {
-                        value: "a",
-                      },
-                    },
-                  ],
-                  lastElement: [
-                    {
-                      name: "char",
-                      language: "regex",
-                      properties: {
-                        value: "z",
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        },
-      ],
-    };
-
-    const nodeToBeUnwrappedDesc: AST.NodeDescription = {
-      name: "builtInQuantifier",
-      language: "regex",
-      properties: {
-        symbol: "+",
-      },
-      children: childrenDesc,
-    };
-
-    const parentNodeDesc: AST.NodeDescription = {
-      name: "invis-container",
-      language: "regex",
-      children: {
-        elements: [nodeToBeUnwrappedDesc],
-      },
-    };
-
-    const res: AST.NodeDescription = {
-      name: "invis-container",
-      language: "regex",
-      children: childrenDesc,
-      properties: {
-        symbol: "+",
-      },
-    };
-
-    const transformPattern: TransformPattern = {
-      kind: "unwrap",
-      position: "start",
-      oldProperties: "copy",
-    };
-
-    const transformation: AST.NodeDescription = unwrapTransformation(
-      new AST.SyntaxTree(parentNodeDesc).rootNode,
-      [["elements", 0]],
-      transformPattern
-    );
-    //debugger;
-    expect(res).toEqual(transformation);
-  });
-
-  // The result should have the properties from the unwrapped node appended to the
-  // properties of the parent node that already exist on the parent node
-  // as well as adding new properties for the case where the parent node does not
-  // already have the property in question.
-  it("unwrap transformation on a parent with existing properties with copy", () => {
-    const childrenDesc = {
-      elements: [
-        {
-          name: "set",
-          language: "regex",
-          children: {
-            setNegation: [],
-            elements: [
-              {
-                name: "range",
-                language: "regex",
-                children: {
-                  firstElement: [
-                    {
-                      name: "char",
-                      language: "regex",
-                      properties: {
-                        value: "1",
-                      },
-                    },
-                  ],
-                  lastElement: [
-                    {
-                      name: "char",
-                      language: "regex",
-                      properties: {
-                        value: "3",
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        },
+  describe("Tests for the replaceTransformation function", () => {
+    // The result should have the same childgroups as the old node, with the childgroups from the new Node description added to it.
+    it("replace transformation on a root node with childgroups preserved, ignoring properties. The new Node has no children groups defined", () => {
+      const childrenDesc = [
         {
           name: "string",
           language: "regex",
@@ -602,114 +978,62 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
             value: "abc",
           },
         },
-      ],
-    };
-
-    const parentNodeDesc: AST.NodeDescription = {
-      name: "string",
-      language: "regex",
-      properties: {
-        value: "",
-      },
-      children: {
-        testingChildren: [
-          {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "a",
-            },
-          },
-          {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "b",
-            },
-          },
-          {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "c",
-            },
-          },
-        ],
-      },
-    };
-
-    const res: AST.NodeDescription = {
-      name: "string",
-      language: "regex",
-      properties: {
-        value: "abc",
-      },
-      children: {
-        testingChildren: [],
-      },
-    };
-
-    const transformPattern: TransformPattern = {
-      kind: "unwrap",
-      position: "end",
-      oldProperties: "copy",
-    };
-
-    let transformation: AST.NodeDescription = unwrapTransformation(
-      new AST.SyntaxTree(parentNodeDesc).rootNode,
-      [["testingChildren", 0]],
-      transformPattern
-    );
-    transformation = unwrapTransformation(
-      new AST.SyntaxTree(transformation).rootNode,
-      [["testingChildren", 0]],
-      transformPattern
-    );
-    transformation = unwrapTransformation(
-      new AST.SyntaxTree(transformation).rootNode,
-      [["testingChildren", 0]],
-      transformPattern
-    );
-    //debugger;
-    expect(res).toEqual(transformation);
-  });
-
-  it("unwrap transformation on a parent with existing properties with overwrite", () => {
-    const childrenDesc = {
-      elements: [
         {
-          name: "set",
+          name: "string",
           language: "regex",
-          children: {
-            setNegation: [],
-            elements: [
-              {
-                name: "range",
-                language: "regex",
-                children: {
-                  firstElement: [
-                    {
-                      name: "char",
-                      language: "regex",
-                      properties: {
-                        value: "1",
-                      },
-                    },
-                  ],
-                  lastElement: [
-                    {
-                      name: "char",
-                      language: "regex",
-                      properties: {
-                        value: "3",
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
+          properties: {
+            value: "def",
           },
         },
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "12345",
+          },
+        },
+      ];
+
+      const oldDesc: AST.NodeDescription = {
+        name: "alternation",
+        language: "regex",
+        children: {
+          alternatives: childrenDesc,
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          alternatives: childrenDesc,
+        },
+      };
+
+      const replaceNodeDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "replace",
+        newNode: replaceNodeDesc,
+        oldChildren: "copy",
+        oldProperties: "ignore",
+      };
+
+      let transformation: AST.NodeDescription = replaceTransformation(
+        new AST.SyntaxTree(oldDesc).rootNode,
+        [],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("replace transformation on a root node with childgroups preserved, ignoring properties. The new Node has children groups defined, whose names are not shared with the old Node", () => {
+      const childrenDesc1 = [
         {
           name: "string",
           language: "regex",
@@ -717,80 +1041,403 @@ describe("Tests for the intermediate steps of the replaceTemplates function", ()
             value: "abc",
           },
         },
-      ],
-    };
+      ];
 
-    const parentNodeDesc: AST.NodeDescription = {
-      name: "string",
-      language: "regex",
-      properties: {
-        value: "",
-      },
-      children: {
-        testingChildren: [
-          {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "a",
-            },
+      const childrenDesc2 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "def",
           },
-          {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "b",
-            },
+        },
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "zzz",
           },
-          {
-            name: "char",
-            language: "regex",
-            properties: {
-              value: "c",
-            },
+        },
+      ];
+
+      const childrenDesc3 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "12345",
           },
-        ],
-      },
-    };
+        },
+      ];
 
-    const res: AST.NodeDescription = {
-      name: "string",
-      language: "regex",
-      properties: {
-        value: "c",
-      },
-      children: {
-        testingChildren: [],
-      },
-    };
+      const oldDesc: AST.NodeDescription = {
+        name: "alternation",
+        language: "regex",
+        children: {
+          alternatives1: childrenDesc1,
+          alternatives2: childrenDesc2,
+        },
+      };
 
-    const transformPattern: TransformPattern = {
-      kind: "unwrap",
-      position: "end",
-      oldProperties: "overwrite",
-    };
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: childrenDesc3,
+          alternatives1: childrenDesc1,
+          alternatives2: childrenDesc2,
+        },
+      };
 
-    let transformation: AST.NodeDescription = unwrapTransformation(
-      new AST.SyntaxTree(parentNodeDesc).rootNode,
-      [["testingChildren", 0]],
-      transformPattern
-    );
-    transformation = unwrapTransformation(
-      new AST.SyntaxTree(transformation).rootNode,
-      [["testingChildren", 0]],
-      transformPattern
-    );
-    transformation = unwrapTransformation(
-      new AST.SyntaxTree(transformation).rootNode,
-      [["testingChildren", 0]],
-      transformPattern
-    );
-    //debugger;
-    expect(res).toEqual(transformation);
+      const replaceNodeDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: childrenDesc3,
+        },
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "replace",
+        newNode: replaceNodeDesc,
+        oldChildren: "copy",
+        oldProperties: "ignore",
+      };
+
+      let transformation: AST.NodeDescription = replaceTransformation(
+        new AST.SyntaxTree(oldDesc).rootNode,
+        [],
+        transformPattern
+      );
+
+      debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("replace transformation on a root node with childgroups preserved, ignoring properties. The new Node has children groups defined, whose names are shared with the old Node", () => {
+      const childrenDesc1 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "abc",
+          },
+        },
+      ];
+
+      const childrenDesc2 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "def",
+          },
+        },
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "zzz",
+          },
+        },
+      ];
+
+      const childrenDesc3 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "12345",
+          },
+        },
+      ];
+
+      const oldDesc: AST.NodeDescription = {
+        name: "alternation",
+        language: "regex",
+        children: {
+          elements: childrenDesc1,
+          alternatives: childrenDesc2,
+        },
+      };
+
+      const mergedChildrenDesc = [];
+      mergedChildrenDesc.push(...childrenDesc3, ...childrenDesc1);
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: mergedChildrenDesc,
+          alternatives: childrenDesc2,
+        },
+      };
+
+      const replaceNodeDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: childrenDesc3,
+        },
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "replace",
+        newNode: replaceNodeDesc,
+        oldChildren: "copy",
+        oldProperties: "ignore",
+      };
+
+      let transformation: AST.NodeDescription = replaceTransformation(
+        new AST.SyntaxTree(oldDesc).rootNode,
+        [],
+        transformPattern
+      );
+
+      debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    // The result should have the same children as the old node, appended under the childgroup defined by the new Node description.
+    it("replace transformation on a root node with a specified childgroup, ignoring properties. The old Node has only one childgroup defined. The new Node has no children groups defined.", () => {
+      const childrenDesc = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "abc",
+          },
+        },
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "def",
+          },
+        },
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "12345",
+          },
+        },
+      ];
+
+      const oldDesc: AST.NodeDescription = {
+        name: "alternation",
+        language: "regex",
+        children: {
+          alternatives: childrenDesc,
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: childrenDesc,
+        },
+      };
+
+      const replaceNodeDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "replace",
+        newNode: replaceNodeDesc,
+        oldChildren: "copy",
+        oldProperties: "ignore",
+        oldChildrenAppendOntoGroup: "elements",
+      };
+
+      let transformation: AST.NodeDescription = replaceTransformation(
+        new AST.SyntaxTree(oldDesc).rootNode,
+        [],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("replace transformation on a root node with a specified childgroup, ignoring properties. The old Node has three childgroups defined. The new Node has no children groups defined.", () => {
+      const childrenDesc1 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "abc",
+          },
+        },
+      ];
+
+      const childrenDesc2 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "def",
+          },
+        },
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "zzz",
+          },
+        },
+      ];
+
+      const childrenDesc3 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "12345",
+          },
+        },
+      ];
+
+      const mergedChildren = [];
+      mergedChildren.push(...childrenDesc1, ...childrenDesc2, ...childrenDesc3);
+
+      const oldDesc: AST.NodeDescription = {
+        name: "alternation",
+        language: "regex",
+        children: {
+          alternatives1: childrenDesc1,
+          alternatives2: childrenDesc2,
+          alternatives3: childrenDesc3,
+        },
+      };
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: mergedChildren,
+        },
+      };
+
+      const replaceNodeDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "replace",
+        newNode: replaceNodeDesc,
+        oldChildren: "copy",
+        oldProperties: "ignore",
+        oldChildrenAppendOntoGroup: "elements",
+      };
+
+      let transformation: AST.NodeDescription = replaceTransformation(
+        new AST.SyntaxTree(oldDesc).rootNode,
+        [],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("replace transformation on a root node with a specifed childgroup, ignoring properties. The new Node has children groups defined, whose names are shared with the old Node", () => {
+      const childrenDesc1 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "abc",
+          },
+        },
+      ];
+
+      const childrenDesc2 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "def",
+          },
+        },
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "zzz",
+          },
+        },
+      ];
+
+      const childrenDesc3 = [
+        {
+          name: "string",
+          language: "regex",
+          properties: {
+            value: "12345",
+          },
+        },
+      ];
+
+      const oldDesc: AST.NodeDescription = {
+        name: "alternation",
+        language: "regex",
+        children: {
+          elements: childrenDesc1,
+          alternatives: childrenDesc2,
+        },
+      };
+
+      const mergedChildrenDesc = [];
+      mergedChildrenDesc.push(
+        ...childrenDesc3,
+        ...childrenDesc1,
+        ...childrenDesc2
+      );
+
+      const res: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: mergedChildrenDesc,
+        },
+      };
+
+      const replaceNodeDesc: AST.NodeDescription = {
+        name: "invis-container",
+        language: "regex",
+        children: {
+          elements: childrenDesc3,
+        },
+      };
+
+      const transformPattern: TransformPattern = {
+        kind: "replace",
+        newNode: replaceNodeDesc,
+        oldChildren: "copy",
+        oldProperties: "ignore",
+        oldChildrenAppendOntoGroup: "elements",
+      };
+
+      let transformation: AST.NodeDescription = replaceTransformation(
+        new AST.SyntaxTree(oldDesc).rootNode,
+        [],
+        transformPattern
+      );
+
+      debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    // TODO: Testing the same things as above but with preserving properties. Note that there are already test cases for handling properties in the unwrap Transformation.
   });
 });
 
-describe("Expected user input transformations", () => {
+fdescribe("Expected user input transformations", () => {
   describe("Multivalued character nodes are seperated into multiple single valued character nodes", () => {
     it('"abcd" should be split into " a | b | c | d "', () => {
       /**

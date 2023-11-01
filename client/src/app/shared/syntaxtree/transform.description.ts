@@ -7,12 +7,18 @@ export type SelectorType = {
   kind: "type"; // "type" here refers to the nodeType that the selector is targeting.
   language?: string; // Making the language optional allows for general selectors to be used on many different languages
   name?: string; // Making the name optional allows for the any selector, when no name is defined.
-  notName?: string; // Making the name optional allows for the any selector, when no name is defined.
+  notName?: string; // TODO: Remove the implementation of this property
   hasChildGroup?: string; // Allows filtering only the defined nodetype based on whether it contains a childgroup or not
 };
 
 export type SelectorRoot = {
   kind: "root";
+};
+
+// TODO: Implementation
+export type SelectorNot = {
+  kind: "negate";
+  selector: Selector;
 };
 
 /* Combined Selectors */
@@ -83,13 +89,15 @@ export type TransformPatternUnwrap = {
   kind: "unwrap";
   position: "in-place" | "start" | "end"; // Position where the children of the unwrapped node should appear on the children list of the parent
   oldProperties: "copy" | "overwrite" | "ignore"; // TODO: Maybe better to replace with append | overwrite | ignore ?
+  // NOTE: If we disallow unwrapping for nodes of different types, this might be an irrelevant property.
+  //oldChildrenCopyOntoGroup?: string; // Allows for copying all children in the defined childgroup of the parent node.
 };
 
 /* Allows to wrap a node as a child of a new Node. */
 export type TransformPatternWrapWith = {
   kind: "wrap";
   newNode: NodeDescription;
-  oldChildrenCopyOntoGroup?: string;
+  appendOntoGroup: string;
 };
 
 /* Allows to replace a node (and possibly its entire subtree) with another subtree,
@@ -98,8 +106,8 @@ export type TransformPatternReplace = {
   kind: "replace";
   newNode: NodeDescription;
   oldChildren: "copy" | "ignore";
-  oldChildrenCopyOntoGroup?: string; // Can be a be used to copy all children to a specific group under the new node
   oldProperties: "copy" | "overwrite" | "ignore";
+  oldChildrenAppendOntoGroup?: string; // Can be a be used to copy all children to a specific group under the new node
 };
 
 /* Allows to merge two nodes of the same type under one single node of the same type,

@@ -3,7 +3,7 @@ import { Selector } from "./transform.description";
 import { findMatches } from "./transform.matching";
 import * as RegexTemplates from "./transform.rules.regex";
 
-describe("Finding matchings of selectors on trees", () => {
+fdescribe("Finding matchings of selectors on trees", () => {
   // TODO: Add a test case for the notName of the "type" Selector
   describe("Matching against the type selector", () => {
     it("Matching a root char node", () => {
