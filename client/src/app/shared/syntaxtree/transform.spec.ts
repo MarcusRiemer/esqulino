@@ -2,20 +2,22 @@ import * as AST from "./syntaxtree";
 import {
   appendChildGroupsToNodeDescription,
   unwrapTransformation,
-  replaceTemplates,
+  applyRules,
   wrapTransformation,
   replaceTransformation,
   mergeTwoTransformation,
+  splitOnPropertyTransformation,
 } from "./transform";
 import {
   TransformPattern,
   TransformPatternMergeTwo,
+  TransformPatternSplitOnProperty,
   TransformRule,
 } from "./transform.description";
 
 const templates: TransformRule[] = []; // Just a placeholder for now
 
-fdescribe("Tests for the intermediate steps of the replaceTemplates function", () => {
+fdescribe("Tests for the intermediate steps of the applyRules function", () => {
   it("Append given children to an NodeDescription with undefined children", () => {
     const noChildrenNodeDesc: AST.NodeDescription = {
       name: "char",
@@ -1930,7 +1932,582 @@ fdescribe("Tests for the intermediate steps of the replaceTemplates function", (
       expect(res).toEqual(transformation);
     });
   });
+
+  describe("Tests for the splitOnPropertyTransformation function", () => {
+    it("No changes when the specified property name does not exist on the selected node. A wrapper node is NOT defined. ", () => {
+      const inpDesc : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            {
+              "name": "char",
+              "language": "regex",
+              "properties": {
+                "value": "abcd"
+              }
+            }
+          ]
+        }
+      };
+
+      const res : AST.NodeDescription = inpDesc;
+      
+      const transformPattern: TransformPatternSplitOnProperty = {
+        kind: "split-property",
+        newNodes: "copy-type", 
+        propertyName: "test", 
+        oldChildren: "ignore", 
+        otherProperties: "ignore",  
+      };
+
+      let transformation: AST.NodeDescription = splitOnPropertyTransformation(
+        new AST.SyntaxTree(inpDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("No changes when the specified property name does not exist on the selected node. A wrapper node is defined.", () => {
+      const innerCharDesc : AST.NodeDescription = {
+        "name": "char",
+        "language": "regex",
+        "properties": {
+          "value": "abcd"
+        }
+      }; 
+      
+      const inpDesc : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            innerCharDesc
+          ]
+        }
+      };
+
+      const res : AST.NodeDescription = inpDesc;
+      
+      const transformPattern: TransformPatternSplitOnProperty = {
+        kind: "split-property",
+        newNodes: "copy-type", 
+        newNodesChildgroup: "splitted",
+        wraperNode: {name: "wrapper", language: "regex"},
+        propertyName: "test", 
+        oldChildren: "ignore", 
+        otherProperties: "ignore",  
+      };
+
+      let transformation: AST.NodeDescription = splitOnPropertyTransformation(
+        new AST.SyntaxTree(inpDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Splitting a char node on the 'value' property with one single value. A wrapper node is NOT defined.  transformPattern.newNodes = 'copy-type'", () => {
+      const inpDesc : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            {
+              "name": "char",
+              "language": "regex",
+              "properties": {
+                "value": "a"
+              }
+            }
+          ]
+        }
+      };
+
+      const res : AST.NodeDescription = inpDesc;
+      
+      const transformPattern: TransformPatternSplitOnProperty = {
+        kind: "split-property",
+        newNodes: "copy-type", 
+        propertyName: "value", 
+        oldChildren: "ignore", 
+        otherProperties: "ignore",  
+      };
+
+      let transformation: AST.NodeDescription = splitOnPropertyTransformation(
+        new AST.SyntaxTree(inpDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Splitting a char node on the 'value' property with one single value. A wrapper node is NOT defined.  transformPattern.newNodes has a user specified type", () => {
+      const inpDesc : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            {
+              "name": "char",
+              "language": "regex",
+              "properties": {
+                "value": "a"
+              }
+            }
+          ]
+        }
+      };
+
+      const newName = "string"; 
+      const newLanguage = "regex-2";
+
+      const res : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            {
+              "name": newName,
+              "language": newLanguage,
+              "properties": {
+                "value": "a"
+              }
+            }
+          ]
+        }
+      };
+      
+      const transformPattern: TransformPatternSplitOnProperty = {
+        kind: "split-property",
+        newNodes: {name: newName, language: newLanguage}, 
+        propertyName: "value", 
+        oldChildren: "ignore", 
+        otherProperties: "ignore",  
+      };
+
+      let transformation: AST.NodeDescription = splitOnPropertyTransformation(
+        new AST.SyntaxTree(inpDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Splitting a char node on the 'value' property with one multiple values. A wrapper node is NOT defined. transformPattern.newNodes = 'copy-type'", () => {
+      const inpDesc : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            {
+              "name": "char",
+              "language": "regex",
+              "properties": {
+                "value": "abcd"
+              }
+            }
+          ]
+        }
+      };
+
+      const res : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            {
+              "name": "char",
+              "language": "regex",
+              "properties": {
+                "value": "a"
+              }
+            },
+            {
+              "name": "char",
+              "language": "regex",
+              "properties": {
+                "value": "b"
+              }
+            },
+            {
+              "name": "char",
+              "language": "regex",
+              "properties": {
+                "value": "c"
+              }
+            },
+            {
+              "name": "char",
+              "language": "regex",
+              "properties": {
+                "value": "d"
+              }
+            }
+          ]
+        }
+      };;
+      
+      const transformPattern: TransformPatternSplitOnProperty = {
+        kind: "split-property",
+        newNodes: "copy-type", 
+        propertyName: "value", 
+        oldChildren: "ignore", 
+        otherProperties: "ignore",  
+      };
+
+      let transformation: AST.NodeDescription = splitOnPropertyTransformation(
+        new AST.SyntaxTree(inpDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Splitting a char node on the 'value' property with one multiple values. A wrapper node is defined. transformPattern.newNodes = 'copy-type'", () => {
+      const inpDesc : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            {
+              "name": "char",
+              "language": "regex",
+              "properties": {
+                "value": "abcd"
+              }
+            }
+          ]
+        }
+      };
+
+      const wrapperNodeName = "wrapper-test"; 
+      const wrapperNodeLanguage = "regex-2"; 
+      const wrapperChildGroupName = "splitted"; 
+
+      const res : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            {
+              name: wrapperNodeName, 
+              language: wrapperNodeLanguage, 
+              children: {
+                splitted: [
+                  {
+                    "name": "char",
+                    "language": "regex",
+                    "properties": {
+                      "value": "a"
+                    }
+                  },
+                  {
+                    "name": "char",
+                    "language": "regex",
+                    "properties": {
+                      "value": "b"
+                    }
+                  },
+                  {
+                    "name": "char",
+                    "language": "regex",
+                    "properties": {
+                      "value": "c"
+                    }
+                  },
+                  {
+                    "name": "char",
+                    "language": "regex",
+                    "properties": {
+                      "value": "d"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      };
+      
+
+
+      const transformPattern: TransformPatternSplitOnProperty = {
+        kind: "split-property",
+        newNodes: "copy-type", 
+        propertyName: "value", 
+        oldChildren: "ignore", 
+        otherProperties: "ignore",  
+        wraperNode: {name: wrapperNodeName, language: wrapperNodeLanguage}, 
+        newNodesChildgroup: wrapperChildGroupName, 
+      };
+
+      let transformation: AST.NodeDescription = splitOnPropertyTransformation(
+        new AST.SyntaxTree(inpDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Splitting a char node on the 'value' property with one multiple values. A wrapper node is defined. transformPattern.newNodes has a user specified type", () => {
+      const inpDesc : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            {
+              "name": "char",
+              "language": "regex",
+              "properties": {
+                "value": "abcd"
+              }
+            }
+          ]
+        }
+      };
+
+      const wrapperNodeName = "wrapper-test"; 
+      const wrapperNodeLanguage = "regex-2"; 
+      const wrapperChildGroupName = "splitted"; 
+
+      const newNodename = "string";
+      const newNodeLanguage = "regex-3";
+
+      const res : AST.NodeDescription = {
+        "name": "invis-container",
+        "language": "regex",
+        "children": {
+          "elements": [
+            {
+              name: wrapperNodeName, 
+              language: wrapperNodeLanguage, 
+              children: {
+                splitted: [
+                  {
+                    "name": newNodename,
+                    "language": newNodeLanguage,
+                    "properties": {
+                      "value": "a"
+                    }
+                  },
+                  {
+                    "name": newNodename,
+                    "language": newNodeLanguage,
+                    "properties": {
+                      "value": "b"
+                    }
+                  },
+                  {
+                    "name": newNodename,
+                    "language": newNodeLanguage,
+                    "properties": {
+                      "value": "c"
+                    }
+                  },
+                  {
+                    "name": newNodename,
+                    "language": newNodeLanguage,
+                    "properties": {
+                      "value": "d"
+                    }
+                  },
+                ]
+              }
+            }
+          ]
+        }
+      };
+      
+
+
+      const transformPattern: TransformPatternSplitOnProperty = {
+        kind: "split-property",
+        newNodes: {name: newNodename, language: newNodeLanguage}, 
+        propertyName: "value", 
+        oldChildren: "ignore", 
+        otherProperties: "ignore",  
+        wraperNode: {name: wrapperNodeName, language: wrapperNodeLanguage}, 
+        newNodesChildgroup: wrapperChildGroupName, 
+      };
+
+      let transformation: AST.NodeDescription = splitOnPropertyTransformation(
+        new AST.SyntaxTree(inpDesc).rootNode,
+        [["elements", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+    it("Splitting a string node on the 'value' property with a specified delimiter, deleting the delimiter. A wrapper node is NOT defined.  transformPattern.newNodes = 'copy-type'", () => {
+      const inpDesc : AST.NodeDescription = {
+        "name": "alternation",
+        "language": "regex",
+        "children": {
+          "alternatives": [
+            {
+              "name": "string",
+              "language": "regex",
+              "properties": {
+                "value": "ab|c|de|f"
+              }
+            }
+          ]
+        }
+      };
+
+      const res : AST.NodeDescription =  {
+        "name": "alternation",
+        "language": "regex",
+        "children": {
+          "alternatives": [
+            {
+              "name": "string",
+              "language": "regex",
+              "properties": {
+                "value": "ab"
+              }
+            }, 
+            {
+              "name": "string",
+              "language": "regex",
+              "properties": {
+                "value": "c"
+              }
+            }, 
+            {
+              "name": "string",
+              "language": "regex",
+              "properties": {
+                "value": "de"
+              }
+            }, 
+            {
+              "name": "string",
+              "language": "regex",
+              "properties": {
+                "value": "f"
+              }
+            }
+          ]
+        }
+      };
+      
+
+
+      const transformPattern: TransformPatternSplitOnProperty = {
+        kind: "split-property",
+        newNodes: "copy-type", 
+        propertyName: "value", 
+        delimiter: "|",
+        //deleteDelimiter: true,
+        oldChildren: "ignore", 
+        otherProperties: "ignore",  
+      };
+
+      let transformation: AST.NodeDescription = splitOnPropertyTransformation(
+        new AST.SyntaxTree(inpDesc).rootNode,
+        [["alternatives", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+
+    it("Splitting a string node on the 'value' property with a specified delimiter, keeping the delimiter. A wrapper node is NOT defined.  transformPattern.newNodes = 'copy-type'", () => {
+      const inpDesc : AST.NodeDescription = {
+        "name": "alternation",
+        "language": "regex",
+        "children": {
+          "alternatives": [
+            {
+              "name": "string",
+              "language": "regex",
+              "properties": {
+                "value": "ab|c|de|f"
+              }
+            }
+          ]
+        }
+      };
+
+      const res : AST.NodeDescription =  {
+        "name": "alternation",
+        "language": "regex",
+        "children": {
+          "alternatives": [
+            {
+              "name": "string",
+              "language": "regex",
+              "properties": {
+                "value": "ab|"
+              }
+            }, 
+            {
+              "name": "string",
+              "language": "regex",
+              "properties": {
+                "value": "c|"
+              }
+            }, 
+            {
+              "name": "string",
+              "language": "regex",
+              "properties": {
+                "value": "de|"
+              }
+            }, 
+            {
+              "name": "string",
+              "language": "regex",
+              "properties": {
+                "value": "f"
+              }
+            }
+          ]
+        }
+      };
+      
+      const transformPattern: TransformPatternSplitOnProperty = {
+        kind: "split-property",
+        newNodes: "copy-type", 
+        propertyName: "value", 
+        delimiter: "|",
+        deleteDelimiter: false,
+        oldChildren: "ignore", 
+        otherProperties: "ignore",  
+      };
+
+      let transformation: AST.NodeDescription = splitOnPropertyTransformation(
+        new AST.SyntaxTree(inpDesc).rootNode,
+        [["alternatives", 0]],
+        transformPattern
+      );
+
+      //debugger;
+      expect(res).toEqual(transformation);
+    });
+
+  });
 });
+  
 
 fdescribe("Expected user input transformations", () => {
   describe("Multivalued character nodes are seperated into multiple single valued character nodes", () => {
@@ -1987,7 +2564,7 @@ fdescribe("Expected user input transformations", () => {
 
       const inp = new AST.SyntaxTree(inputDesc);
       const res = new AST.SyntaxTree(resultDesc);
-      expect(res).toEqual(replaceTemplates(inp, templates));
+      expect(res).toEqual(applyRules(inp, templates));
     });
   });
 
@@ -2027,7 +2604,7 @@ fdescribe("Expected user input transformations", () => {
 
       const inp = new AST.SyntaxTree(inputDesc);
       const res = new AST.SyntaxTree(resultDesc);
-      expect(res).toEqual(replaceTemplates(inp, templates));
+      expect(res).toEqual(applyRules(inp, templates));
     });
   });
 
@@ -2061,7 +2638,7 @@ fdescribe("Expected user input transformations", () => {
 
       const inp = new AST.SyntaxTree(inputDesc);
       const res = new AST.SyntaxTree(resultDesc);
-      expect(res).toEqual(replaceTemplates(inp, templates));
+      expect(res).toEqual(applyRules(inp, templates));
     });
   });
 
@@ -2109,7 +2686,7 @@ fdescribe("Expected user input transformations", () => {
 
       const inp = new AST.SyntaxTree(inputDesc);
       const res = new AST.SyntaxTree(resultDesc);
-      expect(res).toEqual(replaceTemplates(inp, templates));
+      expect(res).toEqual(applyRules(inp, templates));
     });
   });
 
@@ -2157,7 +2734,7 @@ fdescribe("Expected user input transformations", () => {
 
       const inp = new AST.SyntaxTree(inputDesc);
       const res = new AST.SyntaxTree(resultDesc);
-      expect(res).toEqual(replaceTemplates(inp, templates));
+      expect(res).toEqual(applyRules(inp, templates));
     });
 
     it("Merging of two sibling invis-container nodes into one invis-container node that contains all their children", () => {
@@ -2218,7 +2795,7 @@ fdescribe("Expected user input transformations", () => {
 
       const inp = new AST.SyntaxTree(inputDesc);
       const res = new AST.SyntaxTree(resultDesc);
-      expect(res).toEqual(replaceTemplates(inp, templates));
+      expect(res).toEqual(applyRules(inp, templates));
     });
   });
 
@@ -2326,7 +2903,7 @@ fdescribe("Expected user input transformations", () => {
 
       const inp = new AST.SyntaxTree(inputDesc);
       const res = new AST.SyntaxTree(resultDesc);
-      expect(res).toEqual(replaceTemplates(inp, templates));
+      expect(res).toEqual(applyRules(inp, templates));
     });
   });
 
@@ -2373,7 +2950,7 @@ fdescribe("Expected user input transformations", () => {
 
       const inp = new AST.SyntaxTree(inputDesc);
       const res = new AST.SyntaxTree(resultDesc);
-      expect(res).toEqual(replaceTemplates(inp, templates));
+      expect(res).toEqual(applyRules(inp, templates));
     });
 
     it("Autosplitting a childGroup of chars on the '|' separator", () => {
@@ -2449,7 +3026,7 @@ fdescribe("Expected user input transformations", () => {
 
       const inp = new AST.SyntaxTree(inputDesc);
       const res = new AST.SyntaxTree(resultDesc);
-      expect(res).toEqual(replaceTemplates(inp, templates));
+      expect(res).toEqual(applyRules(inp, templates));
     });
   });
 

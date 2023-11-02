@@ -124,12 +124,13 @@ pattern of a single property, defined by propertyName and delimiter */
 export type TransformPatternSplitOnProperty = {
   kind: "split-property";
   newNodes: "copy-type" | { language: string; name: string };
-  wraperNode?: NodeDescription;
   propertyName: string;
   delimiter?: string; // The delimiter to split the string value of the property on. When not defined, the "" is assumed, which splits a string on a per character basis
-  deleteDelimiter?: boolean;
+  deleteDelimiter?: boolean; // When False, the delimiter will be appended to the left of every new child
   oldChildren: "copy" | "ignore";
   otherProperties: "copy" | "overwrite" | "ignore";
+  wraperNode?: NodeDescription; 
+  newNodesChildgroup?: string; // Only defined for a user specified wrapper node, to describe under which childGroup name the new children should be appended to.
 };
 
 // TODO: Not sure if this is needed | To be implemented later

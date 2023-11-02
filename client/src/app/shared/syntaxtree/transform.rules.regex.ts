@@ -78,6 +78,7 @@ const TransformPatternSplitMultiValuedChar: T.TransformPatternSplitOnProperty =
   {
     kind: "split-property",
     newNodes: "copy-type",
+    newNodesChildgroup: "elements",
     wraperNode: { language: LANGUAGE, name: "invis-container" },
     propertyName: "value",
     delimiter: "", // The delimiter to split the string value of the property on. When not defined, the "" is assumed, which splits a string on a per character basis

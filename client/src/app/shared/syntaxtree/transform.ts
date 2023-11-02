@@ -1,11 +1,10 @@
-import { merge } from "rxjs";
-import { arrayEqual } from "../util";
-import { NodeChildren, locationEquals } from "./syntaxtree";
 import {
   NodeDescription,
   NodeLocation,
   SyntaxNode,
   SyntaxTree,
+  NodeChildren, 
+  locationEquals
 } from "./syntaxtree";
 import {
   TransformPattern,
@@ -15,6 +14,7 @@ import {
   TransformPatternReplace,
   TransformPatternMergeTwo,
   TransformRule,
+  TransformPatternSplitOnProperty,
 } from "./transform.description";
 ("./transform.description");
 
@@ -52,7 +52,7 @@ export function appendChildGroupsToNodeDescription(
   nodeDesc: NodeDescription,
   children: { [childrenCategory: string]: NodeDescription[] },
   position: "in-place" | "start" | "end",
-  inplaceInsertPosition: number
+  inplaceInsertPosition?: number
 ): NodeDescription {
   // Nothing to do
   if (children === undefined) return nodeDesc;
@@ -223,8 +223,7 @@ export function replaceTransformation(
       newNodeDesc = appendChildGroupsToNodeDescription(
         newNodeDesc,
         oldNode.children,
-        "end",
-        -1
+        "end"
       );
     }
   }
@@ -272,8 +271,7 @@ export function mergeTwoTransformation(
       newMergedNode = appendChildGroupsToNodeDescription(
         newMergedNode,
         rightNodeDesc.children,
-        "end",
-        -1
+        "end"
       );
       break;
     }
@@ -288,6 +286,7 @@ export function mergeTwoTransformation(
       break;
     }
     default: {
+
       // TODO: Throw Exception.
       break;
     }
@@ -323,6 +322,84 @@ export function mergeTwoTransformation(
   return subTree.toModel();
 }
 
+
+/**
+ * 
+ */
+
+export function splitOnPropertyTransformation(
+  parentNode: SyntaxNode,
+  matchedNodeLoc: NodeLocation,
+  splitPropertyPattern: TransformPatternSplitOnProperty
+): NodeDescription {
+  let subTree = new SyntaxTree(parentNode.toModel());
+  const nodeToSplit = subTree.locate(matchedNodeLoc).toModel();
+  let newNodesDesc : NodeDescription = {name : "",  language : "",};
+  let newChildren = {};
+
+  if(nodeToSplit.properties[splitPropertyPattern.propertyName]) {
+    // Defining the node type for the split
+    if(splitPropertyPattern.newNodes === "copy-type") {
+      newNodesDesc.name = nodeToSplit.name; 
+      newNodesDesc.language = nodeToSplit.language; 
+    } else {
+      newNodesDesc.name = splitPropertyPattern.newNodes.name; 
+      newNodesDesc.language = splitPropertyPattern.newNodes.language; 
+    }
+    // Doing the split of the property.
+    const delimiter = splitPropertyPattern.delimiter !== undefined ? splitPropertyPattern.delimiter : ""; 
+    let splitPropResult =  nodeToSplit.properties[splitPropertyPattern.propertyName].split(delimiter);
+    if(splitPropertyPattern.deleteDelimiter === false) {
+      for(let i = 0; i< splitPropResult.length - 1; i++) { // Reappend delimiter up to the last element, excluding the last element
+        splitPropResult[i] = splitPropResult[i] + splitPropertyPattern.delimiter; 
+      }
+    }
+    // Delete the property after the splitting
+    delete nodeToSplit.properties[splitPropertyPattern.propertyName]; 
+
+    // Creating the new children nodes. 
+    let newNodes : NodeDescription[] = [];
+    for(let propValue of splitPropResult) {
+      let temp : NodeDescription = {
+        name: newNodesDesc.name,
+        language: newNodesDesc.language,
+        properties: {}
+      };
+      temp.properties[splitPropertyPattern.propertyName] = propValue;
+
+      // Handle old Children
+      if(splitPropertyPattern.oldChildren === "copy") {
+        temp = appendChildGroupsToNodeDescription(temp, nodeToSplit.children, "end"); 
+      }
+      // Handle old Properties
+      if(splitPropertyPattern.otherProperties !== "ignore") {
+        temp = appendPropertiesToNodeDescription(temp, nodeToSplit.properties, "copy"); 
+      }
+      newNodes.push(temp); 
+    }
+
+    let parentNodeDesc : NodeDescription = parentNode.toModel(); 
+    // Adding the new children Nodes 
+    if(splitPropertyPattern.wraperNode) { // Adding them under a wrapperNode
+      let wrapperNodeDesc = splitPropertyPattern.wraperNode;
+      if(splitPropertyPattern.newNodesChildgroup === undefined) throw new Error("Expected a childgroup name for the wrapper node, but got undefined.");
+      newChildren[splitPropertyPattern.newNodesChildgroup] = newNodes; 
+      wrapperNodeDesc = appendChildGroupsToNodeDescription(wrapperNodeDesc, newChildren, "end");
+      subTree = subTree.replaceNode(matchedNodeLoc, wrapperNodeDesc)
+
+    } else { // Adding them under the parentNode
+      subTree = subTree.deleteNode(matchedNodeLoc); 
+      parentNodeDesc = subTree.toModel(); 
+      newChildren[matchedNodeLoc[0][0]] = newNodes; 
+      parentNodeDesc = appendChildGroupsToNodeDescription(parentNodeDesc, newChildren, "in-place", matchedNodeLoc[0][1]);
+      subTree = new SyntaxTree(parentNodeDesc);
+    }
+  }
+
+  return subTree.toModel();
+    
+}
+
 /**
  * Takes the parent of a matched syntax node and transform it or its
  * subtree according to the parameters defined for the unwrap pattern.
@@ -340,6 +417,19 @@ export function applyTransformPatternOnLocation(
   tPattern: TransformPattern,
   loc: NodeLocation
 ): NodeDescription {
+  /* TODO: 
+  const operation = (calc) => {
+    let oldParentNode = tree.locate(loc).nodeParent;
+    newParentNodeDesc = calc(oldParentNode);
+    let finalTree = tree.replaceNode(
+      oldParentNode.location,
+      newParentNodeDesc
+    );
+    // TODO: Validate that the newParentNodeDesc is still grammatically valid or delegate this task to the caller funciton.
+    return finalTree.toModel();
+    
+  }
+  */
   switch (tPattern.kind) {
     case "unwrap":
       // Check for root
@@ -399,6 +489,15 @@ export function applyTransformPatternOnLocation(
       break;
     case "merge":
       {
+        /* TODO: Rewrite the switch case with a lambda function 
+        operation(() => {
+          mergeTwoTransformation(
+            oldParentNode,
+            [loc[-1]],
+            tPattern
+          );
+        });
+        */
         let oldParentNode = tree.locate(loc).nodeParent;
         let newParentNodeDesc = mergeTwoTransformation(
           oldParentNode,
@@ -414,6 +513,20 @@ export function applyTransformPatternOnLocation(
       }
       break;
     case "split-property":
+      {
+        let oldParentNode = tree.locate(loc).nodeParent;
+        let newParentNodeDesc = splitOnPropertyTransformation(
+          oldParentNode,
+          [loc[-1]],
+          tPattern
+        );
+        let finalTree = tree.replaceNode(
+          oldParentNode.location,
+          newParentNodeDesc
+        );
+        // TODO: Validate that the newParentNodeDesc is still grammatically valid or delegate this task to the caller funciton.
+        return finalTree.toModel();
+      }
       break;
   }
 }
@@ -426,7 +539,7 @@ export function applyTransformPatternOnLocation(
  * @param patterns
  * @returns
  */
-export function replaceTemplates(
+export function applyRules(
   inp: SyntaxTree,
   rules: TransformRule[]
 ): SyntaxTree {
@@ -437,15 +550,15 @@ export function replaceTemplates(
 
   // After a transform rule modifies the tree, start again from the beginning.
 
-  //For the case where merge is given as the TransformPattern
+  // For the case where merge is given as the TransformPattern
   // Start with the first match of the selector.
   // Check that the next element is an immediate sibling.
-  // If so, merge the two.
-  // Substract one from the index of every sibling Node address.
+  // -- If so, merge the two.
+  // -- Substract one from the index of every sibling Node address.
   // Else
-  // Check that the next element is on the same level.
-  // If the next element is not on the same level
-  // If above then delete this address.
-  // If below continue merging without deleting this location.
+  // -- Check that the next element is on the same level.
+  // -- If the next element is not on the same level
+  // ---- If above then delete this address.
+  // ---- If below continue merging without deleting this location.
   // If the end of the array is reached, start again from the beginning until the arrays is empty.
 }
