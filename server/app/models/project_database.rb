@@ -33,7 +33,7 @@ class ProjectDatabase < ApplicationRecord
   # record.
   before_destroy do
     Rails.logger.info "Deleting a SQLite database at #{sqlite_file_path}"
-    File.delete(sqlite_file_path) if File.exists?(sqlite_file_path)
+    File.delete(sqlite_file_path) if File.exist?(sqlite_file_path)
   end
 
   # Retrieves the path to the SQLite file for this database
