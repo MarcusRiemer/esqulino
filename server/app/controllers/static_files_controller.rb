@@ -21,12 +21,12 @@ class StaticFilesController < ApplicationController
       possible_locales = [request_locale, "de", "en", nil]
       local_path = locale_index_path(possible_locales.shift, requested_path)
 
-      while not possible_locales.empty? and  local_path.nil? or not File.exists? local_path
+      while not possible_locales.empty? and  local_path.nil? or not File.exist? local_path
         local_path = locale_index_path(possible_locales.shift, requested_path)
       end
 
       # Still no file found? Thats an error
-      if local_path.nil? or not File.exists? local_path
+      if local_path.nil? or not File.exist? local_path
         raise EsqulinoError::NoCompiledClient.new(local_path)
       end
 
@@ -38,7 +38,7 @@ class StaticFilesController < ApplicationController
   def schema
     schema_name = params[:schema_name]
     schema_file = schema_path(schema_name)
-    if File.exists? schema_file then
+    if File.exist? schema_file then
       send_file schema_file, disposition: 'inline'
     else
       render status: 404, plain: ""
@@ -58,7 +58,7 @@ class StaticFilesController < ApplicationController
 
     # If we don't know that file, assume that the index file
     # was requested
-    if requested_path.empty? or not File.exists? local_path then
+    if requested_path.empty? or not File.exist? local_path then
       local_path = if (request_locale.nil?)
                      basepath.join('index.html')
                    else
