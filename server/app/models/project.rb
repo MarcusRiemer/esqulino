@@ -145,7 +145,7 @@ class Project < ApplicationRecord
 
   # True if the preview image exists
   def preview_image_exists?
-    preview and File.exists? preview_image_path
+    preview and File.exist? preview_image_path
   end
 
   # The folder for databases
