@@ -10,8 +10,8 @@ class ValidLanguagesValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     unwanted_languages = value.keys - LocaleHelper.allowed_languages
 
-    if not unwanted_languages.empty?
-      record.errors.add(attribute, messag: "Unwanted Languages: #{unwanted_languages}")
-    end
+    return if unwanted_languages.empty?
+
+    record.errors.add(attribute, messag: "Unwanted Languages: #{unwanted_languages}")
   end
 end

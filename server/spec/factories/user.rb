@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    sequence (:display_name) { |n| "user #{n}" }
+    sequence(:display_name) { |n| "user #{n}" }
     email {}
 
     trait :validated do
@@ -9,13 +9,13 @@ FactoryBot.define do
 
     trait :guest do
       id { User.guest_id }
-      display_name { "Guest" }
+      display_name { 'Guest' }
       roles { [Role.find_or_create_by(name: 'guest')] }
     end
 
     trait :system do
       id { User.system_id }
-      display_name { "System" }
+      display_name { 'System' }
       roles { [Role.find_or_create_by(name: 'admin')] }
     end
 

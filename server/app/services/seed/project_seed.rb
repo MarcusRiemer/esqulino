@@ -5,19 +5,19 @@ module Seed
     # SEED_DIRECTORY is directory where the data will be stored or loaded
     # IMAGE_DIRECTORY is the image directory for the data storage
     SEED_IDENTIFIER = Project
-    SEED_DIRECTORY = "projects"
-    IMAGE_DIRECTORY = "images"
+    SEED_DIRECTORY = 'projects'
+    IMAGE_DIRECTORY = 'images'
     # PATH_TO_DATA_DIRECTORY = File.join(Rails.application.config.sqlino[:projects_dir], loaded_seed.id)
     # takes an optional arguments dependencies as hash with key as the Model and value as the directory
     def initialize(seed_id)
       super(
         seed_id,
         dependencies: {
-          "project_uses_block_languages" => Seed::ProjectUsesBlockLanguageSeed,
-          "code_resources" => Seed::CodeResourceSeed,
-          "project_sources" => Seed::ProjectSourceSeed,
-          "project_databases" => Seed::ProjectDatabaseSeed,
-          "default_database" => Seed::ProjectDatabaseSeed,
+          'project_uses_block_languages' => Seed::ProjectUsesBlockLanguageSeed,
+          'code_resources' => Seed::CodeResourceSeed,
+          'project_sources' => Seed::ProjectSourceSeed,
+          'project_databases' => Seed::ProjectDatabaseSeed,
+          'default_database' => Seed::ProjectDatabaseSeed
         },
         defer_referential_checks: true
       )
@@ -26,23 +26,23 @@ module Seed
     # define base's abstract class to copy images of the project in project directory with under the project file
     # this method is called after store_seed is called
     def after_store_seed
-      if File.directory? seed.images_directory_path
-        info "Storing images"
-        FileUtils.cp_r(seed.images_directory_path, seed_specific_directory)
-      end
+      return unless File.directory? seed.images_directory_path
+
+      info 'Storing images'
+      FileUtils.cp_r(seed.images_directory_path, seed_specific_directory)
     end
 
     # store image from proejct path into a tmp directory after loading
     def after_load_seed
       seed_images_folder = File.join seed_specific_directory, IMAGE_DIRECTORY
-      if File.directory? (seed_images_folder)
-        info "COPY Images"
+      return unless File.directory?(seed_images_folder)
 
-        # Ensure that the temporary target directory exists
-        tmp_directory = path_to_data_directory + "_tmp"
-        FileUtils.mkdir_p tmp_directory
-        FileUtils.cp_r seed_images_folder, tmp_directory
-      end
+      info 'COPY Images'
+
+      # Ensure that the temporary target directory exists
+      tmp_directory = path_to_data_directory + '_tmp'
+      FileUtils.mkdir_p tmp_directory
+      FileUtils.cp_r seed_images_folder, tmp_directory
     end
 
     # move the tmp directory to the main data directory after loading process is finished
@@ -51,14 +51,12 @@ module Seed
       # if a new folder was created.
       #
       # remove_dir throws if the target path doesn't exist, so we double check
-      if File.directory? path_to_data_directory
-        FileUtils.remove_dir(path_to_data_directory)
-      end
+      FileUtils.remove_dir(path_to_data_directory) if File.directory? path_to_data_directory
 
       # Move temporary folder with updated content into position
-      if File.directory? path_to_data_directory + "_tmp"
-        FileUtils.mv path_to_data_directory + "_tmp", path_to_data_directory # Move tmp folder in place
-      end
+      return unless File.directory? path_to_data_directory + '_tmp'
+
+      FileUtils.mv path_to_data_directory + '_tmp', path_to_data_directory # Move tmp folder in place
     end
 
     # make static method availbale as instance method for this class

@@ -1,35 +1,26 @@
 class Mutations::Projects::RemoveMember < Mutations::BaseMutation
-    argument :project_id, ID, required: true
-    argument :user_id, ID, required: true
+  argument :project_id, ID, required: true
+  argument :user_id, ID, required: true
 
-    field :project, Types::ProjectType, null: true
+  field :project, Types::ProjectType, null: true
 
-    def resolve(project_id:, user_id:)
-      project = Project.find_by_slug_or_id! (project_id)
-      authorize project, :remove_member?
-     
-      user = User.find(user_id)
+  def resolve(project_id:, user_id:)
+    project = Project.find_by_slug_or_id!(project_id)
+    authorize project, :remove_member?
 
-      #A participant can delete himself from the group
-      if(project.member_role(current_user) =="participant" && !(current_user.eql? user))
-        raise Pundit::NotAuthorizedError
-      end
+    user = User.find(user_id)
 
+    # A participant can delete himself from the group
+    raise Pundit::NotAuthorizedError if project.member_role(current_user) == 'participant' && !(current_user.eql? user)
 
-      if(project.owner?(user))
-        raise ArgumentError.new "Can´t delete the the owner"
-      end
+    raise ArgumentError, 'Can´t delete the the owner' if project.owner?(user)
 
-      if(project.is_already_in_project?(user))
-        project.project_members.find_by(user_id: user.id).destroy!
-      end
+    project.project_members.find_by(user_id: user.id).destroy! if project.is_already_in_project?(user)
 
-    return  ({
-      project: project
-    })
-
-    rescue ActiveRecord::RecordNotFound => e
-      return (e)
-    end
+    {
+      project:
+    }
+  rescue ActiveRecord::RecordNotFound => e
+    (e)
   end
-  
+end

@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Mutations::SeedData::StoreProject do
   # These specs rely on
@@ -19,57 +19,57 @@ RSpec.describe Mutations::SeedData::StoreProject do
 
   def execute_args(user:, project_id:)
     {
-      operation_name: "StoreProjectSeed",
+      operation_name: 'StoreProjectSeed',
       variables: {
         projectIds: [project_id]
       },
-      user: user
+      user:
     }
   end
-  context "forbidden for" do
-    it "guest" do
-      expect {
+  context 'forbidden for' do
+    it 'guest' do
+      expect do
         execute_query(**execute_args(user: User.guest, project_id: project.id))
-      }.to raise_error(Pundit::NotAuthorizedError)
+      end.to raise_error(Pundit::NotAuthorizedError)
     end
 
-    it "unrelated registered user" do
-      expect {
+    it 'unrelated registered user' do
+      expect do
         execute_query(**execute_args(user: FactoryBot.create(:user), project_id: project.id))
-      }.to raise_error(Pundit::NotAuthorizedError)
+      end.to raise_error(Pundit::NotAuthorizedError)
     end
 
-    it "owner" do
-      expect {
+    it 'owner' do
+      expect do
         execute_query(**execute_args(user: project.user, project_id: project.id))
-      }.to raise_error(Pundit::NotAuthorizedError)
+      end.to raise_error(Pundit::NotAuthorizedError)
     end
   end
 
-  it "project without resources" do
+  it 'project without resources' do
     res = execute_query(**execute_args(user: user_admin, project_id: project.id))
 
-    data = res.dig("data", "storeProjectSeed")
+    data = res.dig('data', 'storeProjectSeed')
 
     expect(data).to include({
-                              "affectedIds" => [
-                                [hash_including({"id" => project.id, "type" => "ProjectSeed"})]
+                              'affectedIds' => [
+                                [hash_including({ 'id' => project.id, 'type' => 'ProjectSeed' })]
                               ]
                             })
   end
 
-  it "project without code resource" do
-    code = FactoryBot.create(:code_resource, project: project)
+  it 'project without code resource' do
+    code = FactoryBot.create(:code_resource, project:)
     uses = project.project_uses_block_languages.first
     res = execute_query(**execute_args(user: user_admin, project_id: project.id))
 
-    data = res.dig("data", "storeProjectSeed")
+    data = res.dig('data', 'storeProjectSeed')
     expect(data).to include({
-                              "affectedIds" => [
+                              'affectedIds' => [
                                 [
-                                  hash_including({"id" => project.id, "type" => "ProjectSeed"}),
-                                  hash_including({"id" => uses.id, "type" => "ProjectUsesBlockLanguageSeed"}),
-                                  hash_including({"id" => code.id, "type" => "CodeResourceSeed"})
+                                  hash_including({ 'id' => project.id, 'type' => 'ProjectSeed' }),
+                                  hash_including({ 'id' => uses.id, 'type' => 'ProjectUsesBlockLanguageSeed' }),
+                                  hash_including({ 'id' => code.id, 'type' => 'CodeResourceSeed' })
                                 ]
                               ]
                             })

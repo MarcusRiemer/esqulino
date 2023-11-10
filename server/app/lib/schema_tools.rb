@@ -11,17 +11,19 @@ module SchemaTools
 
     # Define the regular expressions using ruby
     db.create_function('regexp', 2) do |func, pattern, expression|
-      unless expression.nil?
-        func.result = expression.to_s.match(
-          Regexp.new(pattern.to_s, Regexp::IGNORECASE)
-        ) ? 1 : 0
-      else
-        # Return true if the value is null, let the DB handle this
-        func.result = 1
-      end
+      func.result = if expression.nil?
+                      # Return true if the value is null, let the DB handle this
+                      1
+                    elsif expression.to_s.match(
+                      Regexp.new(pattern.to_s, Regexp::IGNORECASE)
+                    )
+                      1
+                    else
+                      0
+                    end
     end
 
-    return db
+    db
   end
 
   # Describes the schema of a whole database as a handy dictionary
@@ -31,7 +33,7 @@ module SchemaTools
   #   Path to the database or an instance of it
   # @return [Hash] A hash of SchemaTable instances
   def self.database_describe_schema(sqlite_db)
-    db = if sqlite_db.is_a? String then
+    db = if sqlite_db.is_a? String
            SQLite3::Database.new(sqlite_db)
          else
            sqlite_db
@@ -60,9 +62,9 @@ module SchemaTools
 
       # A foreign key may consist of multiple columns, so we group all
       # columns that belong to the same foreign key
-      grouped_foreign_keys = foreign_keys_table.group_by { |fk| fk[0]}
-      grouped_foreign_keys.each do |key, value|
-        foreign_key_comp = SchemaForeignKey.new()
+      grouped_foreign_keys = foreign_keys_table.group_by { |fk| fk[0] }
+      grouped_foreign_keys.each do |_key, value|
+        foreign_key_comp = SchemaForeignKey.new
         # Add all columns that are part of this particular foreign key
         value.each do |fk|
           foreign_key_ref = SchemaForeignKeyRef.new(fk[3], fk[2], fk[4])
@@ -74,7 +76,7 @@ module SchemaTools
       tables << table_schema
     end
 
-    return tables
+    tables
   end
 
   # Visualizes the table in form of a GraphViz description that
@@ -84,12 +86,12 @@ module SchemaTools
 
     # Add nodes for all tables
     tables = schema
-             .select { |table| not table.system?}
+             .select { |table| !table.system? }
              .map do |table|
       columns = table.columns.map do |c|
-        c_type = (table.is_column_fk? c) ? "FK" : c.type
+        c_type = (table.is_column_fk? c) ? 'FK' : c.type
         c_name = c.name
-        c_pk = ""
+        c_pk = ''
 
         if c.primary
           c_name = "<B>#{c_name}</B>"
@@ -112,8 +114,8 @@ module SchemaTools
     schema.each do |table|
       table.foreign_keys.each do |fk|
         fk.references.each do |ref|
-          to_port_suffix   = ref.to_table == table.name ? "name" : "name"
-          from_port_suffix = ref.to_table == table.name ? "name" : "type"
+          to_port_suffix   = ref.to_table == table.name ? 'name' : 'name'
+          from_port_suffix = ref.to_table == table.name ? 'name' : 'type'
 
           node_from = "#{table.name.downcase}:#{ref.from_column}_#{from_port_suffix}"
           node_to   = "#{ref.to_table.downcase}:#{ref.to_column}_#{to_port_suffix}"
@@ -127,7 +129,7 @@ module SchemaTools
     refs = refs.join("\n")
 
     # TODO: Remove dirty hack to set the path!
-    to_return = <<~delim
+    <<~DELIM
       digraph db {
         graph[rankdir=LR, nodesep=0, splines=polyline, imagepath="../client/src", overlap=false];
         edge[dir=both, arrowhead=dot, arrowtail=dot];
@@ -135,8 +137,6 @@ module SchemaTools
         #{tables}
         #{refs}
       }
-    delim
-
-    to_return
+    DELIM
   end
 end

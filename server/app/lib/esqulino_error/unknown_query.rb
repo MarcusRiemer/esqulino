@@ -3,7 +3,7 @@ module EsqulinoError
   class UnknownQuery < Base
     # @param project_id [string] The id of the unknown project
     # @param query_id [string] The id of the unknown query
-    def initialize(project_id, query_id, part = "model")
+    def initialize(project_id, query_id, part = 'model')
       super "Unknown query (#{part}) \"#{query_id}\" in project \"#{project_id}\"", 404
     end
   end

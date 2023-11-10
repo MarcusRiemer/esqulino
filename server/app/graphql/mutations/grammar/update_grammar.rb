@@ -9,25 +9,19 @@ class Mutations::Grammar::UpdateGrammar < Mutations::Grammar::Grammar
   argument :generated_from_id, ID, required: false
 
   def resolve(**args)
-    begin
-      grammar = Grammar.find(args[:id])
-      grammar.assign_attributes args
+    grammar = Grammar.find(args[:id])
+    grammar.assign_attributes args
 
-      # Possibly update the code resource that this grammar is based on
-      if args.key? "generated_from_id"
-        grammar.generated_from_id = params.fetch("generated_from_id", nil)
-      end
+    # Possibly update the code resource that this grammar is based on
+    grammar.generated_from_id = params.fetch('generated_from_id', nil) if args.key? 'generated_from_id'
 
-      # Possibly update the root node
-      if args.key? "root"
-        grammar.root = params.fetch("root", nil)
-      end
-      save_grammar(grammar)
-    rescue ActiveRecord::RecordNotFound
-      {
-        news: nil,
-        errors: ["Couldn't find Grammar with 'id'=#{args[:id]}"]
-      }
-    end
+    # Possibly update the root node
+    grammar.root = params.fetch('root', nil) if args.key? 'root'
+    save_grammar(grammar)
+  rescue ActiveRecord::RecordNotFound
+    {
+      news: nil,
+      errors: ["Couldn't find Grammar with 'id'=#{args[:id]}"]
+    }
   end
 end

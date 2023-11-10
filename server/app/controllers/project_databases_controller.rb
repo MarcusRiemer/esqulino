@@ -9,7 +9,7 @@ class ProjectDatabasesController < ApplicationController
   def visual_schema
     # Build the GraphViz description of the database
     db_path = current_database.sqlite_file_path
-    db_graphviz = SchemaTools::database_graphviz_schema(db_path)
+    db_graphviz = SchemaTools.database_graphviz_schema(db_path)
 
     # The default renderer currently is svg:cairo, but
     # the user may override it.
@@ -34,23 +34,23 @@ class ProjectDatabasesController < ApplicationController
       send_data db_graphviz, type: 'text'
     else
       # Invoke graphviz to actually render something
-      db_img, err, status = Open3.capture3('dot', "-T#{format}", :stdin_data => db_graphviz)
+      db_img, err, status = Open3.capture3('dot', "-T#{format}", stdin_data: db_graphviz)
 
       # Was the rendering successful?
-      if status.exitstatus != 0
-        halt 500, { 'Content-Type' => 'text/plain' }, err
-      else
+      if status.exitstatus == 0
         # We need some special work for SVG images
         content_type = if format.start_with? 'svg'
                          # Set matching MIME-type and replace relative paths
                          db_img.gsub! 'vendor/icons/', '/vendor/icons/'
-                         "image/svg+xml"
+                         'image/svg+xml'
                        else
                          # Other images only require a matching MIME-type
                          "image/#{format}"
                        end
 
         send_data db_img, type: content_type, disposition: data_disposition, filename: data_filename
+      else
+        halt 500, { 'Content-Type' => 'text/plain' }, err
       end
     end
   end
@@ -63,37 +63,33 @@ class ProjectDatabasesController < ApplicationController
     # to the uploaded file
     uploaded = params['database']
 
-    if uploaded and uploaded.size > 0 then
+    if uploaded and uploaded.size > 0
       # There might not be a current database, therefore it has to be created
-      if not current_database then
-        create_new_default_database!
-      end
+      create_new_default_database! unless current_database
 
       # The path of the currently loaded database
       db_path = current_database.sqlite_file_path
 
       # Overwrite the previously stored database
-      File.open(db_path, 'wb') do |file|
-        file.write(uploaded.read)
-      end
+      File.binwrite(db_path, uploaded.read)
 
       # The JSON representation of the schema is stored in the databases and
       # requires an explicit refresh after external changes.
       current_database.refresh_schema!
 
       # Tell the client about the new schema
-      render :json => { :schema => current_database.schema }
+      render json: { schema: current_database.schema }
     else
-      render :status => 400,
-             :json => { :errors => [{ :status => 400, :title => "Given database is 0 byte large" }] }
+      render status: 400,
+             json: { errors: [{ status: 400, title: 'Given database is 0 byte large' }] }
     end
   end
 
   # Downloads the requested database
   def database_download
     send_file current_database.sqlite_file_path,
-              type: "application/x-sqlite3",
-              disposition: "attachment",
+              type: 'application/x-sqlite3',
+              disposition: 'attachment',
               filename: "#{current_database.project.name}-#{current_database.name}.sqlite"
   end
 
@@ -101,12 +97,12 @@ class ProjectDatabasesController < ApplicationController
   def table_create
     authorize current_project, :update?
 
-    table_description = ensure_request("TableDescription", request.body.read, underscore_keys: false)
+    table_description = ensure_request('TableDescription', request.body.read, underscore_keys: false)
 
     # Grab the database and modify it
-    if (current_database.nil?) then
+    if current_database.nil?
       # TODO: Actually throw an error, databases should be added seperatly
-      current_project.create_default_database(name: "default", project_id: current_project.id)
+      current_project.create_default_database(name: 'default', project_id: current_project.id)
       current_project.save!
     end
     current_database.table_create table_description
@@ -119,14 +115,14 @@ class ProjectDatabasesController < ApplicationController
 
     # Grab parameters
     table_name = params['tablename']
-    alter_schema_request = ensure_request("AlterSchemaRequestDescription", request.body.read, underscore_keys: false)
+    alter_schema_request = ensure_request('AlterSchemaRequestDescription', request.body.read, underscore_keys: false)
 
     # Alter the database
     current_database.table_alter table_name, alter_schema_request['commands']
     current_database.save!
 
     # And tell the client about the new schema
-    render :json => { :schema => current_database.schema }
+    render json: { schema: current_database.schema }
   end
 
   # Bulk insertion of larger amounts of data
@@ -134,7 +130,7 @@ class ProjectDatabasesController < ApplicationController
     authorize current_project, :update?
 
     table_name = params['tablename']
-    tabular_data = ensure_request("RequestTabularInsertDescription", request.body.read)
+    tabular_data = ensure_request('RequestTabularInsertDescription', request.body.read)
 
     result = current_database.table_bulk_insert(
       table_name,
@@ -142,10 +138,10 @@ class ProjectDatabasesController < ApplicationController
       tabular_data['data']
     )
 
-    render status: 200, :json => {
-             :numInsertedRows => result['changes'],
-             :numTotalRows => current_database.table_row_count(table_name)
-           }
+    render status: 200, json: {
+      numInsertedRows: result['changes'],
+      numTotalRows: current_database.table_row_count(table_name)
+    }
   end
 
   # Drops a single table of the given database.
@@ -163,12 +159,12 @@ class ProjectDatabasesController < ApplicationController
     from = params['from'].to_i
     tablename = params['tablename']
 
-    render :json => current_database.table_row_data(tablename, from, amount)
+    render json: current_database.table_row_data(tablename, from, amount)
   end
 
   # Retrieves the actual data for a number of rows in a certain table
   def table_row_count
-    render :json => current_database.table_row_count(params['tablename'])
+    render json: current_database.table_row_count(params['tablename'])
   end
 
   # Access to the current database
@@ -181,7 +177,7 @@ class ProjectDatabasesController < ApplicationController
 
   # Creates a new default database
   def create_new_default_database!
-    db = current_project.create_default_database(name: "default", project_id: current_project.id)
+    db = current_project.create_default_database(name: 'default', project_id: current_project.id)
     db.save!
     current_project.save!
   end

@@ -9,6 +9,6 @@ class Mutations::User::PromoteAdmin < Mutations::BaseMutation
 
     User.make_user_admin!(user_id)
 
-    return { user: user }
+    { user: }
   end
 end

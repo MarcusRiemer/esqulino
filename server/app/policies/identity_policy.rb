@@ -11,6 +11,6 @@ class IdentityPolicy < ApplicationPolicy
   end
 
   def show?
-    not user.guest?
+    !user.guest?
   end
 end

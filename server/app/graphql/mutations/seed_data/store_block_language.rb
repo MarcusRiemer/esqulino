@@ -7,7 +7,7 @@ class Mutations::SeedData::StoreBlockLanguage < Mutations::BaseMutation
 
   def resolve(block_languages:)
     block_languages.each do |id|
-      b = BlockLanguage.find_by!(id: id)
+      b = BlockLanguage.find_by!(id:)
       authorize b, :store_seed?
     end
 
@@ -24,7 +24,7 @@ class Mutations::SeedData::StoreBlockLanguage < Mutations::BaseMutation
       end
     end
 
-    return {
+    {
       affected_ids: affected_result,
       errors: []
     }

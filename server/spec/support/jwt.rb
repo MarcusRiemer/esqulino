@@ -6,14 +6,14 @@ def set_access_token(user)
                                              })
 end
 
-def set_access_token_with_invalid_user()
+def set_access_token_with_invalid_user
   cookies['ACCESS_TOKEN'] = JwtHelper.encode({
-                                               user_id: "invalid"
+                                               user_id: 'invalid'
                                              })
 end
 
-def set_expired_access_token()
+def set_expired_access_token
   cookies['ACCESS_TOKEN'] = JwtHelper.encode({
-                                               user_id: "irrelevant"
+                                               user_id: 'irrelevant'
                                              }, 1.seconds.before)
 end

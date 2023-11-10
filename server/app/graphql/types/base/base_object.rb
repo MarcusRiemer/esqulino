@@ -6,7 +6,7 @@ module Types
     MAX_PAGE_SIZE = 100
 
     def normalize_keys(object)
-      object.as_json.transform_keys { |key| key.underscore.to_s}
+      object.as_json.transform_keys { |key| key.underscore.to_s }
     end
   end
 end

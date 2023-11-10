@@ -22,9 +22,9 @@ class UserController < ApplicationController
   private
 
   def may_perform_params
-    permited = params.permit([:list => [:resourceId, :resourceType, :policyAction]])
+    permited = params.permit([list: %i[resourceId resourceType policyAction]])
     permited[:list].map { |e| e.transform_keys! { |k| k.underscore } }
-    return permited
+    permited
   end
 
   def api_array_response(to_response)

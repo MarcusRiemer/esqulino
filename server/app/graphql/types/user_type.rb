@@ -16,7 +16,7 @@ class Types::UserType < Types::Base::BaseObject
   class OrderFieldEnum < Types::Base::BaseEnum
     graphql_name 'UserOrderFieldEnum'
     value 'id'
-    value 'displayName', value: "display_name"
+    value 'displayName', value: 'display_name'
     value 'email'
   end
 

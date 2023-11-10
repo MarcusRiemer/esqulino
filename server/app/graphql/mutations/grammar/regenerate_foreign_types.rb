@@ -9,7 +9,7 @@ class Mutations::Grammar::RegenerateForeignTypes < Mutations::BaseMutation
     grammar.save!
 
     {
-      grammar: grammar
+      grammar:
     }
   end
 end

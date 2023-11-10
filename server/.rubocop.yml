@@ -1,5 +1,20 @@
 AllCops:
-  NewCops: enable
+  NewCops: disable
+  Include:
+    - '**/*.rb'
+    - Rakefile
+    - config.ru
+    - lib/**/*.rake
+    - config/routes.rb
+    - '**/Gemfile'
+  Exclude:
+    - bin/**/*
+    - config/**/*
+    - db/**/*
+    - app/graphql/**/*
+  TargetRubyVersion: 3.2
+  SuggestExtensions: false
+
 
 Layout/LineLength:
   Enabled: false

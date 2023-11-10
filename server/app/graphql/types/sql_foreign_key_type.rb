@@ -5,15 +5,15 @@ module Types
     field :from_column, String, null: false
 
     def to_table
-      object["toTable"]
+      object['toTable']
     end
 
     def to_column
-      object["toColumn"]
+      object['toColumn']
     end
 
     def from_column
-      object["fromColumn"]
+      object['fromColumn']
     end
   end
 

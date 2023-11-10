@@ -13,8 +13,8 @@ class LogEntry < ApplicationRecord
   # @param type [string] A broad type for the event
   # @param data [Hash] A free from hash to store
   # @param user [User] The user who caused the event
-  def self.log!(event_type, data: Hash.new(), user: nil)
-    entry = LogEntry.new(event_type: event_type, data: data, user: user)
+  def self.log!(event_type, data: {}, user: nil)
+    entry = LogEntry.new(event_type:, data:, user:)
     entry.save!
   end
 end

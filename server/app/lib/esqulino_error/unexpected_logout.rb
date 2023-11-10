@@ -15,10 +15,10 @@ module EsqulinoError
       @inner_exception = inner_exception
     end
 
-    def json_data()
+    def json_data
       {
-        "innerException": @inner_exception.inspect,
-        "newUser": User.guest.information.transform_keys { |k| k.to_s.camelize(:lower) }
+        innerException: @inner_exception.inspect,
+        newUser: User.guest.information.transform_keys { |k| k.to_s.camelize(:lower) }
       }
     end
   end

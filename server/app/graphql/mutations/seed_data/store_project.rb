@@ -24,7 +24,7 @@ class Mutations::SeedData::StoreProject < Mutations::BaseMutation
       end
     end
 
-    return {
+    {
       affected_ids: affected_result,
       errors: []
     }

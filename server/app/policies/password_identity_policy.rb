@@ -7,6 +7,6 @@ class PasswordIdentityPolicy < ApplicationPolicy
   end
 
   def change_password?
-    not user.eql?(User.guest) and user.has_confirmed_password_identity?
+    !user.eql?(User.guest) and user.has_confirmed_password_identity?
   end
 end

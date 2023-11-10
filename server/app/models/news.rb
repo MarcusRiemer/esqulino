@@ -14,11 +14,11 @@ class News < ApplicationRecord
   # Retrieve a certain news in a single language
   #
   # @param language [String] A valid language that is hopefully stored with the news
-  scope :scope_single_language, ->(language) {
-    raise EsqulinoError::Base.new("Invalid language: #{language}") unless LocaleHelper.allowed_languages.include? language
+  scope :scope_single_language, lambda { |language|
+    raise EsqulinoError::Base, "Invalid language: #{language}" unless LocaleHelper.allowed_languages.include? language
 
     where("title->? != '' AND text->? != ''", language, language)
-      .where("published_from <= ?", Date.today)
+      .where('published_from <= ?', Date.today)
       .limit(10)
       .select('id, published_from, created_at, updated_at')
       .select("slice(title, ARRAY['#{language}']) as title")
@@ -27,21 +27,21 @@ class News < ApplicationRecord
   }
 
   def rendered_text_full
-    self.impl_rendered_text(text_length: :full)
+    impl_rendered_text(text_length: :full)
   end
 
   def rendered_text_short
-    self.impl_rendered_text(text_length: :short)
+    impl_rendered_text(text_length: :short)
   end
 
   # Checks if the logged in user is the owner of this news
   def owner?(user)
-    return user.eql? self.user
+    user.eql? self.user
   end
 
   def readable_identification
     _, printed_title = title.first
-    return "\"#{printed_title}\" (#{id})"
+    "\"#{printed_title}\" (#{id})"
   end
 
   private
@@ -50,30 +50,26 @@ class News < ApplicationRecord
   #
   # @param text_length [:full | :short] choose between short/full text
   # @return [Hash<String, String>] Rendered content in asked languages
-  def impl_rendered_text(text_length: )
-    raise EsqulinoMessageError.new("Invalid text_length") unless [:short, :full].include? text_length
+  def impl_rendered_text(text_length:)
+    raise EsqulinoMessageError, 'Invalid text_length' unless %i[short full].include? text_length
 
-    rendered_hash = self.text
+    rendered_hash = text
 
     markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
     rendered_hash.each do |key, value|
       if text_length == :short
         pos = value.index('<!-- SNIP -->')
-        if (pos)
-          value = value.slice(0, pos)
-        end
+        value = value.slice(0, pos) if pos
       end
       rendered_hash[key] = markdown.render(value)
     end
-    return rendered_hash
+    rendered_hash
   end
 
   # Asserts that the given languages are part of the text
   def assert_languages(languages)
-    if (!languages.all? { |entry| self.text.key? entry })
-      raise EsqulinoError::Base.new("A language in your array wasn't found")
-    end
+    return if languages.all? { |entry| text.key? entry }
+
+    raise EsqulinoError::Base, "A language in your array wasn't found"
   end
-
-
 end

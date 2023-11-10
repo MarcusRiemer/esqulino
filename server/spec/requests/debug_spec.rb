@@ -5,6 +5,6 @@ RSpec.describe DebugController, type: :request do
     get '/api/raise-error'
 
     expect(response).to have_http_status(500)
-    expect(response.media_type).to eq("application/json")
+    expect(response.media_type).to eq('application/json')
   end
 end

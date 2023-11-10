@@ -57,7 +57,7 @@ module Types
       argument :input, Types::CodeResourceType::InputType, required: false
     end
     def code_resources(input: {})
-      Resolvers::CodeResourceResolver::new(context: @context, **input).scope
+      Resolvers::CodeResourceResolver.new(context: @context, **input).scope
     end
 
     # Endpoint for news
@@ -65,7 +65,7 @@ module Types
       argument :input, Types::NewsType::InputType, required: false
     end
     def news(input: {})
-      Resolvers::NewsResolver::new(context: @context, **input).scope
+      Resolvers::NewsResolver.new(context: @context, **input).scope
     end
 
     # Endpoint for Users
@@ -73,14 +73,14 @@ module Types
       argument :input, Types::UserType::InputType, required: false
     end
     def users(input: {})
-      Resolvers::UsersResolver::new(context: @context, **input).scope
+      Resolvers::UsersResolver.new(context: @context, **input).scope
     end
 
     # Endpoint for authorisation requests
     field :may_perform, Types::MayPerformType, null: false do
       argument :input, Types::MayPerformType::InputType, required: true
     end
-    def may_perform(input: )
+    def may_perform(input:)
       Resolvers::MayPerform.check(@context, input)
     end
 
@@ -91,13 +91,13 @@ module Types
     def related_block_languages(grammarId:)
       BlockLanguage.scope_list
                    .where(grammar_id: grammarId)
-                   .map { |b| b.to_list_api_response(options: { include_list_calculations: false })}
+                   .map { |b| b.to_list_api_response(options: { include_list_calculations: false }) }
     end
 
     field :login_providers, [Types::LoginProviderType], null: false
     def login_providers
       Identity::Identity.all_client_information
-        .map { |i| i.transform_keys { |k| k.to_s.camelize(:lower) } }
+                        .map { |i| i.transform_keys { |k| k.to_s.camelize(:lower) } }
     end
   end
 end

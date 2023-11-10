@@ -6,7 +6,7 @@ class GrammarsController < ApplicationController
   # Find a single grammar
   def show
     needle = id_params[:id]
-    grammar = if (BlattwerkzeugUtil::string_is_uuid? needle) then
+    grammar = if BlattwerkzeugUtil.string_is_uuid? needle
                 Grammar.find(needle)
               else
                 Grammar.find_by! slug: needle

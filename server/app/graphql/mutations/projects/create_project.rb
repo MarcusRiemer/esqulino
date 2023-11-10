@@ -18,16 +18,16 @@ class Mutations::Projects::CreateProject < Mutations::Projects::Projects
                     end
 
     project = Project.new(
-      name: name,
-      slug: slug,
+      name:,
+      slug:,
       user_id: owner_user_id
     )
 
     if project.save
-      ProjectMailer.with(project: project).created_admin.deliver_later
+      ProjectMailer.with(project:).created_admin.deliver_later
       {
         errors: [],
-        id: project.id,
+        id: project.id
       }
     else
       {

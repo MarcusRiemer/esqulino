@@ -1,7 +1,7 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Resolvers::RelatedModelsVisitor do
-  it "Only scalars" do
+  it 'Only scalars' do
     query_string = <<-EOQ
       query AdminListGrammars {
         grammars {
@@ -17,7 +17,7 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     expect(includes).to eq({})
   end
 
-  it "One level" do
+  it 'One level' do
     query_string = <<-EOQ
       query AdminListGrammars {
         grammars {
@@ -32,10 +32,10 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     EOQ
 
     includes = Resolvers::RelatedModelsVisitor.calculate query_string, Grammar
-    expect(includes).to eq({ "generated_from" => {} })
+    expect(includes).to eq({ 'generated_from' => {} })
   end
 
-  it "One level, but twice" do
+  it 'One level, but twice' do
     query_string = <<-EOQ
       query AdminListGrammars {
         grammars {
@@ -56,10 +56,10 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     EOQ
 
     includes = Resolvers::RelatedModelsVisitor.calculate query_string, Grammar
-    expect(includes).to eq({ "generated_from" => {}, "code_resources" => {} })
+    expect(includes).to eq({ 'generated_from' => {}, 'code_resources' => {} })
   end
 
-  it "One level, invalid association" do
+  it 'One level, invalid association' do
     query_string = <<-EOQ
       query AdminListGrammars {
         grammars {
@@ -76,7 +76,7 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     expect { Resolvers::RelatedModelsVisitor.calculate query_string, Grammar }.to raise_error(RuntimeError)
   end
 
-    it "One level, intermediate 'nodes'" do
+  it "One level, intermediate 'nodes'" do
     query_string = <<-EOQ
       query AdminListGrammars {
         grammars {
@@ -94,10 +94,10 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     EOQ
 
     includes = Resolvers::RelatedModelsVisitor.calculate query_string, Grammar
-    expect(includes).to eq({ "code_resources" => {} })
+    expect(includes).to eq({ 'code_resources' => {} })
   end
 
-  it "Two levels nested, surrounded by scalars" do
+  it 'Two levels nested, surrounded by scalars' do
     query_string = <<-EOQ
       query AdminListGrammars {
         grammars {
@@ -118,10 +118,10 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     EOQ
 
     includes = Resolvers::RelatedModelsVisitor.calculate query_string, Grammar
-    expect(includes).to eq({ "generated_from" => { "project" => {} } })
+    expect(includes).to eq({ 'generated_from' => { 'project' => {} } })
   end
 
-  it "Two levels, invalid nested association" do
+  it 'Two levels, invalid nested association' do
     query_string = <<-EOQ
       query AdminListGrammars {
         grammars {
@@ -141,7 +141,7 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     expect { Resolvers::RelatedModelsVisitor.calculate query_string, Grammar }.to raise_error(RuntimeError)
   end
 
-  it "Sub-selecting a non-Rails relationship" do
+  it 'Sub-selecting a non-Rails relationship' do
     query_string = <<-EOQ
       query Foo {
         projects {
@@ -156,10 +156,10 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     EOQ
 
     includes = Resolvers::RelatedModelsVisitor.calculate query_string, Project
-    expect(includes).to eq({ })
+    expect(includes).to eq({})
   end
 
-  it "Deep Sub-selecting a non-Rails relationship" do
+  it 'Deep Sub-selecting a non-Rails relationship' do
     query_string = <<-EOQ
       query Foo {
         projects {
@@ -177,10 +177,10 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     EOQ
 
     includes = Resolvers::RelatedModelsVisitor.calculate query_string, Project
-    expect(includes).to eq({ })
+    expect(includes).to eq({})
   end
 
-  it "Deep Sub-selecting a non-Rails relationship in a nested relationship" do
+  it 'Deep Sub-selecting a non-Rails relationship in a nested relationship' do
     query_string = <<-EOQ
       query FullProject($id: ID!) {
         projects(input: {filter: {id: $id}}) {
@@ -217,6 +217,6 @@ RSpec.describe Resolvers::RelatedModelsVisitor do
     EOQ
 
     includes = Resolvers::RelatedModelsVisitor.calculate query_string, Project
-    expect(includes).to eq({ "default_database" => {} })
+    expect(includes).to eq({ 'default_database' => {} })
   end
 end

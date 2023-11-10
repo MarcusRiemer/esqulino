@@ -18,17 +18,15 @@ class Mutations::BlockLanguage::BlockLanguage < Mutations::BaseMutation
   end
 
   def destroy_block_language(block_language)
-    begin
-      block_language.destroy!
-      {
-        blockLanguage: nil,
-        errors: []
-      }
-    rescue ActiveRecord::InvalidForeignKey
-      {
-        blockLanguage: nil,
-        errors: ['EXISTING_REFERENCES']
-      }
-    end
+    block_language.destroy!
+    {
+      blockLanguage: nil,
+      errors: []
+    }
+  rescue ActiveRecord::InvalidForeignKey
+    {
+      blockLanguage: nil,
+      errors: ['EXISTING_REFERENCES']
+    }
   end
 end

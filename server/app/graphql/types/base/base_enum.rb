@@ -1,6 +1,5 @@
 module Types
   class Types::Base::BaseEnum < GraphQL::Schema::Enum
-
     class LanguageEnum < Types::Base::BaseEnum
       graphql_name 'LanguageEnum'
       # Available Languages

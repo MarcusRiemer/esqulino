@@ -13,22 +13,18 @@ class StaticFilesController < ApplicationController
   # file that is asked for is not known
   def index
     requested_path = URI.parse(request.original_url).path[1..-1]
-    if requested_path.start_with? 'api' then
+    if requested_path.start_with? 'api'
       # API paths are never static pages
-      render :plain => 'API endpoint triggered by fallback controller', :status => 503
+      render plain: 'API endpoint triggered by fallback controller', status: 503
     else
       # Try to use the request locale first, but try others just in case
-      possible_locales = [request_locale, "de", "en", nil]
+      possible_locales = [request_locale, 'de', 'en', nil]
       local_path = locale_index_path(possible_locales.shift, requested_path)
 
-      while not possible_locales.empty? and  local_path.nil? or not File.exist? local_path
-        local_path = locale_index_path(possible_locales.shift, requested_path)
-      end
+      local_path = locale_index_path(possible_locales.shift, requested_path) while (!possible_locales.empty? and local_path.nil?) or !File.exist? local_path
 
       # Still no file found? Thats an error
-      if local_path.nil? or not File.exist? local_path
-        raise EsqulinoError::NoCompiledClient.new(local_path)
-      end
+      raise EsqulinoError::NoCompiledClient, local_path if local_path.nil? or !File.exist? local_path
 
       send_file local_path, disposition: 'inline'
     end
@@ -38,19 +34,20 @@ class StaticFilesController < ApplicationController
   def schema
     schema_name = params[:schema_name]
     schema_file = schema_path(schema_name)
-    if File.exist? schema_file then
+    if File.exist? schema_file
       send_file schema_file, disposition: 'inline'
     else
-      render status: 404, plain: ""
+      render status: 404, plain: ''
     end
   end
 
   private
-  def locale_index_path request_locale, requested_path
+
+  def locale_index_path(request_locale, requested_path)
     # Assume that the URL immediatly denotes a file we know
     basepath = Rails.configuration.sqlino[:client_dir]
 
-    local_path = if (request_locale.nil?)
+    local_path = if request_locale.nil?
                    basepath.join(requested_path)
                  else
                    basepath.join(request_locale, requested_path)
@@ -58,14 +55,14 @@ class StaticFilesController < ApplicationController
 
     # If we don't know that file, assume that the index file
     # was requested
-    if requested_path.empty? or not File.exist? local_path then
-      local_path = if (request_locale.nil?)
+    if requested_path.empty? or !File.exist? local_path
+      local_path = if request_locale.nil?
                      basepath.join('index.html')
                    else
                      basepath.join(request_locale, 'index.html')
                    end
     end
 
-    return local_path
+    local_path
   end
 end

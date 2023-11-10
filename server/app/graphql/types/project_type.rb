@@ -42,7 +42,7 @@ class Types::ProjectType < Types::Base::BaseObject
     # Order Fields
     value 'name'
     value 'slug'
-    value 'createdAt', value: "created_at"
+    value 'createdAt', value: 'created_at'
   end
 
   class OrderType < Types::Base::BaseInputObject
@@ -53,8 +53,8 @@ class Types::ProjectType < Types::Base::BaseObject
 
   class MultilingualColumnsEnum < Types::Base::BaseEnum
     graphql_name 'ProjectMultilingualColumnsEnum'
-    value "name"
-    value "description"
+    value 'name'
+    value 'description'
   end
 
   class FilterFieldType < Types::Base::BaseInputObject

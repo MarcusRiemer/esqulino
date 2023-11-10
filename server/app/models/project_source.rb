@@ -8,6 +8,6 @@ class ProjectSource < ApplicationRecord
 
   # The kind is currently not encoded in the db
   def kind
-    "data"
+    'data'
   end
 end

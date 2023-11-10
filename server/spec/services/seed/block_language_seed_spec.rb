@@ -1,6 +1,6 @@
-require "rails_helper"
-require "securerandom" # To make up unique slugs on the fly
-require "fileutils"    # To ease file comparision
+require 'rails_helper'
+require 'securerandom' # To make up unique slugs on the fly
+require 'fileutils'    # To ease file comparision
 
 RSpec.describe Seed::BlockLanguageSeed do
   let(:seed_data_dir) { Rails.configuration.sqlino[:seed][:data_dir] }
@@ -10,34 +10,34 @@ RSpec.describe Seed::BlockLanguageSeed do
   let(:subject) { described_class.new(payload) }
 
   before(:each) do
-    FileUtils.rm_rf(seed_data_dir, :secure => true)
+    FileUtils.rm_rf(seed_data_dir, secure: true)
   end
 
-  describe "block language seed" do
-    context "when payload is grammar object"
+  describe 'block language seed' do
+    context 'when payload is grammar object'
     let(:payload) { block_language }
-    it "returns object" do
+    it 'returns object' do
       expect(subject.seed).to be_a BlockLanguage
     end
 
-    context "when payload is grammar id" do
+    context 'when payload is grammar id' do
       let(:payload) { block_language.id }
 
-      it "returns object" do
+      it 'returns object' do
         expect(subject.seed).to be_a BlockLanguage
       end
     end
 
-    context "when payload is project slug" do
+    context 'when payload is project slug' do
       let(:payload) { block_language.slug }
 
-      it "returns project" do
+      it 'returns project' do
         expect(subject.seed).to be_a BlockLanguage
       end
     end
 
-    context "store, destorys and loads" do
-      it "an empty block language (CREATE)" do
+    context 'store, destorys and loads' do
+      it 'an empty block language (CREATE)' do
         bOrig = FactoryBot.create(:block_language)
 
         Seed::BlockLanguageSeed.new(bOrig).start_store
@@ -49,7 +49,7 @@ RSpec.describe Seed::BlockLanguageSeed do
         expect(identifying_attributes(bOrig)).to eq identifying_attributes(bLoadData)
       end
 
-      it "an empty block language by id (CREATE)" do
+      it 'an empty block language by id (CREATE)' do
         bOrig = FactoryBot.create(:block_language)
 
         Seed::BlockLanguageSeed.new(bOrig.id).start_store
@@ -61,8 +61,8 @@ RSpec.describe Seed::BlockLanguageSeed do
         expect(identifying_attributes(bOrig)).to eq identifying_attributes(bLoadData)
       end
 
-      it "an empty block language by slug (CREATE)" do
-        pOrig = FactoryBot.create(:block_language, slug: "test123")
+      it 'an empty block language by slug (CREATE)' do
+        pOrig = FactoryBot.create(:block_language, slug: 'test123')
 
         Seed::BlockLanguageSeed.new(pOrig.id).start_store
 
@@ -73,21 +73,21 @@ RSpec.describe Seed::BlockLanguageSeed do
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
       end
 
-      it "throws if project cant be found by slug" do
+      it 'throws if project cant be found by slug' do
         expect do
-          Seed::BlockLanguageSeed.new("nonexistant").start_load
+          Seed::BlockLanguageSeed.new('nonexistant').start_load
         end.to raise_exception RuntimeError
       end
     end
 
-    context "stores and reloads " do
-      it "an empty block language (CREATE)" do
+    context 'stores and reloads ' do
+      it 'an empty block language (CREATE)' do
         bOrig = FactoryBot.create(:block_language)
 
         Seed::BlockLanguageSeed.new(bOrig).start_store
 
         # Making a change after storing
-        bOrig.update_column("name", "changed")
+        bOrig.update_column('name', 'changed')
 
         gLoad = Seed::BlockLanguageSeed.new(bOrig.id).start_load
         gLoadData = BlockLanguage.find_by(id: bOrig.id)
@@ -99,6 +99,6 @@ RSpec.describe Seed::BlockLanguageSeed do
   end
 
   def identifying_attributes(model)
-    model.attributes.except("created_at", "updated_at")
+    model.attributes.except('created_at', 'updated_at')
   end
 end

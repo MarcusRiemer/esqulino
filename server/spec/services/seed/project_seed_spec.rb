@@ -1,43 +1,43 @@
-require "rails_helper"
-require "securerandom" # To make up unique slugs on the fly
-require "fileutils"    # To ease file comparision
+require 'rails_helper'
+require 'securerandom' # To make up unique slugs on the fly
+require 'fileutils'    # To ease file comparision
 
 RSpec.describe Seed::ProjectSeed do
   let(:seed_data_dir) { Rails.configuration.sqlino[:seed][:data_dir] }
-  let(:project) { FactoryBot.create(:project, name: { "en" => "Test Project" }) }
+  let(:project) { FactoryBot.create(:project, name: { 'en' => 'Test Project' }) }
   let(:payload) { project }
 
   let!(:subject) { described_class.new(payload) }
 
   before(:each) do
-    FileUtils.rm_rf(seed_data_dir, :secure => true)
+    FileUtils.rm_rf(seed_data_dir, secure: true)
   end
 
-  describe "project seed" do
-    context "when payload is project object"
+  describe 'project seed' do
+    context 'when payload is project object'
     let(:payload) { project }
-    it "returns object" do
+    it 'returns object' do
       expect(subject.seed).to be_a Project
     end
 
-    context "when payload is project id" do
+    context 'when payload is project id' do
       let(:payload) { project.id }
 
-      it "returns object" do
+      it 'returns object' do
         expect(subject.seed).to be_a Project
       end
     end
 
-    context "when payload is project slug" do
+    context 'when payload is project slug' do
       let(:payload) { project.slug }
 
-      it "returns project" do
+      it 'returns project' do
         expect(subject.seed).to be_a Project
       end
     end
 
-    context "store, destorys and loads" do
-      it "an empty project (CREATE)" do
+    context 'store, destorys and loads' do
+      it 'an empty project (CREATE)' do
         pOrig = FactoryBot.create(:project)
         Seed::ProjectSeed.new(pOrig).start_store
 
@@ -49,7 +49,7 @@ RSpec.describe Seed::ProjectSeed do
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
       end
 
-      it "an empty project by id (CREATE)" do
+      it 'an empty project by id (CREATE)' do
         pOrig = FactoryBot.create(:project)
         Seed::ProjectSeed.new(pOrig.id).start_store
 
@@ -60,7 +60,7 @@ RSpec.describe Seed::ProjectSeed do
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
       end
 
-      it "an empty project by filepath (CREATE)" do
+      it 'an empty project by filepath (CREATE)' do
         pOrig = FactoryBot.create(:project)
 
         Seed::ProjectSeed.new(pOrig.id).start_store
@@ -74,8 +74,8 @@ RSpec.describe Seed::ProjectSeed do
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
       end
 
-      it "an empty project by slug (CREATE)" do
-        pOrig = FactoryBot.create(:project, slug: "test123")
+      it 'an empty project by slug (CREATE)' do
+        pOrig = FactoryBot.create(:project, slug: 'test123')
 
         Seed::ProjectSeed.new(pOrig.id).start_store
 
@@ -87,7 +87,7 @@ RSpec.describe Seed::ProjectSeed do
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
       end
 
-      it "(via slug) an empty project (CREATE)" do
+      it '(via slug) an empty project (CREATE)' do
         # This is trickier then it should be: Because the database
         # is wiped between different runs the testcases happily create
         # projects that have clashing slugs. These clashing slugs are then
@@ -95,7 +95,7 @@ RSpec.describe Seed::ProjectSeed do
         # something via slug returns a different instance.
         #
         # We avoid this by using unique slugs in exactly these tests.
-        pOrig = FactoryBot.create(:project, slug: "a" + SecureRandom.hex)
+        pOrig = FactoryBot.create(:project, slug: 'a' + SecureRandom.hex)
 
         Seed::ProjectSeed.new(pOrig).start_store
 
@@ -106,7 +106,7 @@ RSpec.describe Seed::ProjectSeed do
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
       end
 
-      it "a project with a single code resource (CREATE)" do
+      it 'a project with a single code resource (CREATE)' do
         pOrig = FactoryBot.create(:project)
         cOrig = FactoryBot.create(:code_resource, project: pOrig)
 
@@ -123,7 +123,7 @@ RSpec.describe Seed::ProjectSeed do
         expect(identifying_attributes(cOrig)).to eq identifying_attributes(cLoad)
       end
 
-      it "a project with a single project source (CREATE)" do
+      it 'a project with a single project source (CREATE)' do
         pOrig = FactoryBot.create(:project)
         sOrig = FactoryBot.create(:project_source, project: pOrig)
 
@@ -140,7 +140,7 @@ RSpec.describe Seed::ProjectSeed do
         expect(identifying_attributes(sOrig)).to eq identifying_attributes(sLoad)
       end
 
-      it "a project with a single database (CREATE)" do
+      it 'a project with a single database (CREATE)' do
         pOrig = FactoryBot.create(:project)
         dOrig = FactoryBot.create(:project_database, :table_key_value, project: pOrig)
 
@@ -167,12 +167,12 @@ RSpec.describe Seed::ProjectSeed do
       end
     end
 
-    context "stores and reloads" do
-      it "an empty project (UPDATE)" do
+    context 'stores and reloads' do
+      it 'an empty project (UPDATE)' do
         pOrig = FactoryBot.create(:project)
         Seed::ProjectSeed.new(pOrig).start_store
         # Making a change after storing
-        pOrig.update_column("name", { "de" => "changed" })
+        pOrig.update_column('name', { 'de' => 'changed' })
 
         pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)
@@ -181,14 +181,14 @@ RSpec.describe Seed::ProjectSeed do
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
       end
 
-      it "a project with a single project source (CREATE)" do
+      it 'a project with a single project source (CREATE)' do
         pOrig = FactoryBot.create(:project)
         sOrig = FactoryBot.create(:project_source, project: pOrig)
 
         Seed::ProjectSeed.new(pOrig).start_store
 
         # Making a change after storing
-        sOrig.update_column("title", "changed")
+        sOrig.update_column('title', 'changed')
 
         pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)
@@ -199,7 +199,7 @@ RSpec.describe Seed::ProjectSeed do
         expect(identifying_attributes(sOrig)).to eq identifying_attributes(sLoad)
       end
 
-      it "a project with a single database (UPDATE)" do
+      it 'a project with a single database (UPDATE)' do
         pOrig = FactoryBot.create(:project)
         dOrig = FactoryBot.create(:project_database, :table_key_value, project: pOrig)
 
@@ -209,10 +209,10 @@ RSpec.describe Seed::ProjectSeed do
         seed_db_file = File.join Seed::ProjectDatabaseSeed.load_directory, "#{dOrig.id}.sqlite"
         # Modify the actual database
         dOrig.table_bulk_insert(
-          "key_value",
-          ["key", "value"],
+          'key_value',
+          %w[key value],
           [
-            ["10", "zehn"],
+            %w[10 zehn]
           ]
         )
 
@@ -220,7 +220,7 @@ RSpec.describe Seed::ProjectSeed do
         expect(FileUtils.compare_file(seed_db_file, data_db_file)).to be false
 
         # Modify the model
-        dOrig.name = "changed"
+        dOrig.name = 'changed'
         dOrig.save!
 
         pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
@@ -237,14 +237,14 @@ RSpec.describe Seed::ProjectSeed do
       end
     end
 
-    context "with errors" do
-      it "throws if project cant be found by slug" do
+    context 'with errors' do
+      it 'throws if project cant be found by slug' do
         expect do
-          Seed::ProjectSeed.new("nonexistant").start_load
+          Seed::ProjectSeed.new('nonexistant').start_load
         end.to raise_exception RuntimeError
       end
 
-      it "fails to load a project with a code resource with an unavailable block language" do
+      it 'fails to load a project with a code resource with an unavailable block language' do
         pOrig = FactoryBot.create(:project)
         cOrig = FactoryBot.create(:code_resource, project: pOrig)
         bOrig = cOrig.block_language
@@ -268,18 +268,18 @@ RSpec.describe Seed::ProjectSeed do
     end
   end
 
-  describe "store" do
-    context "project files" do
+  describe 'store' do
+    context 'project files' do
       let(:payload) { project }
-      it "stores the project in the seed directory" do
+      it 'stores the project in the seed directory' do
         subject.start_store
         Dir.chdir(Seed::Base::BASE_SEED_DIRECTORY)
-        expect(Dir.children("projects")).not_to be_empty
+        expect(Dir.children('projects')).not_to be_empty
       end
     end
   end
 
   def identifying_attributes(model)
-    model.attributes.except("created_at", "updated_at")
+    model.attributes.except('created_at', 'updated_at')
   end
 end

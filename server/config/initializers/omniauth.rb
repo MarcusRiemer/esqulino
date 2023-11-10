@@ -2,7 +2,7 @@ OmniAuth.config.logger = Rails.logger
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   config = Rails.application.config_for :sqlino
-  domain = config["editor_domain"]
+  domain = config['editor_domain']
 
   # See which providers are configure, fall back to password
   auth_providers = Set.new(config.fetch(:auth_provider))
@@ -12,13 +12,11 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     config.path_prefix = '/api/auth'
   end
 
-  if auth_providers.include? "Identity::Developer"
-    provider :developer, :fields => [:name, :email], :uid_field => :email
-  end
+  provider :developer, fields: %i[name email], uid_field: :email if auth_providers.include? 'Identity::Developer'
 
-  if auth_providers.include? "Identity::Keycloak"
+  if auth_providers.include? 'Identity::Keycloak'
     provider :keycloak_openid,
-             "blattwerkzeug-omniauth",
+             'blattwerkzeug-omniauth',
              nil, # No secret required
              client_options: {
                site: config[:auth_provider_keys][:keycloak_site],

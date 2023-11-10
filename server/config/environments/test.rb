@@ -7,10 +7,10 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Ususally running under "localdomain"
-  config.hosts << "localhost.localdomain"
-  config.hosts << "www.example.com"
+  config.hosts << 'localhost.localdomain'
+  config.hosts << 'www.example.com'
 
-  ["en"].each do |lang|
+  ['en'].each do |lang|
     config.hosts << "#{lang}.localhost.localdomain"
   end
 

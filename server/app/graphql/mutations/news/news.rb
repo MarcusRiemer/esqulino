@@ -10,19 +10,19 @@ class Mutations::News::News < Mutations::BaseMutation
   def save_news(news)
     if news.save
       {
-        news: news,
+        news:,
         errors: []
       }
     else
       {
         news: nil,
         errors: news.errors.full_messages.map do |err|
-          ({
-             type: "railsValidation",
-             data: {
-               msg: err,
-             }
-           })
+          {
+            type: 'railsValidation',
+            data: {
+              msg: err
+            }
+          }
         end
       }
     end

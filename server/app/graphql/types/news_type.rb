@@ -14,7 +14,7 @@ module Types
 
     # if published_from is nil in database it will be converted to "UNPUBLISHED"
     def published_from
-      object["published_from"].nil? ? "UNSET" : object["published_from"]
+      object['published_from'].nil? ? 'UNSET' : object['published_from']
     end
 
     class OrderFieldEnum < Types::Base::BaseEnum
@@ -34,8 +34,8 @@ module Types
 
     class MultilingualColumnsEnum < Types::Base::BaseEnum
       graphql_name 'NewsMultilingualColumnsEnum'
-      value "title"
-      value "text"
+      value 'title'
+      value 'text'
     end
 
     class FilterFieldType < Types::Base::BaseInputObject

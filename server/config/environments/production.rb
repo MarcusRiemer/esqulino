@@ -50,10 +50,10 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: ENV["SMTP_HOST"],
-    port: ENV.fetch("SMTP_PORT", 587),
-    user_name: ENV["SMTP_USER"],
-    password: ENV["SMTP_PASS"],
+    address: ENV.fetch('SMTP_HOST', nil),
+    port: ENV.fetch('SMTP_PORT', 587),
+    user_name: ENV.fetch('SMTP_USER', nil),
+    password: ENV.fetch('SMTP_PASS', nil),
     enable_starttls_auto: true
   }
 
@@ -74,13 +74,13 @@ Rails.application.configure do
   # config.active_support.deprecation = :notify
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)

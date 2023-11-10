@@ -1,5 +1,4 @@
 module CurrentUserHelper
-
   # Each request is expected to provide two JWT tokens which can be used to
   # identify the user who is making that request.
   #
@@ -28,14 +27,9 @@ module CurrentUserHelper
   # @return [User]
   #   A valid user (which may be the guest user)
   def validate_user_from_tokens(
-        browser_access_token:,
-        browser_refresh_token:
-      )
-    if (browser_access_token.nil? and browser_refresh_token.nil?)
-      return User.guest
-    else
-
-    end
+    browser_access_token:,
+    browser_refresh_token:
+  )
+    User.guest if browser_access_token.nil? and browser_refresh_token.nil?
   end
-
 end

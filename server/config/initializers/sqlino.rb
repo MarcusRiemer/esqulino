@@ -15,34 +15,30 @@ Rails.application.config.after_initialize do
   projects_dir = Rails.application.config.sqlino[:projects_dir]
 
   # Ensure that there is a data directory available
-  if not File.directory? projects_dir
-    abort("Startup Error: Projects directory at \"#{projects_dir}\" must exist and be writeable")
-  end
+  abort("Startup Error: Projects directory at \"#{projects_dir}\" must exist and be writeable") unless File.directory? projects_dir
 end
 
 # Setting up the IDE service
 Rails.application.config.after_initialize do
-  Rails.logger.info "Configuring IDE Service ..."
+  Rails.logger.info 'Configuring IDE Service ...'
   IdeService.instantiate
 
   IdeService::LogSubscriber.attach_to :ide_service
 
-  wait_for_cli = ENV.fetch("WAIT_IDE_SERVICE", false).to_s.downcase == "true"
+  wait_for_cli = ENV.fetch('WAIT_IDE_SERVICE', false).to_s.downcase == 'true'
 
   if wait_for_cli
-    Rails.logger.info "IDE service configured, testing availability ..."
+    Rails.logger.info 'IDE service configured, testing availability ...'
     begin
       IdeService.instance.wait_cli_program_exists!
 
-      if not IdeService.instance.ping!
-        abort("Startup Error: IDE service did not respond")
-      end
+      abort('Startup Error: IDE service did not respond') unless IdeService.instance.ping!
     rescue IdeServiceError => e
       puts "##### Exception of type #{e.class.name} #####"
       puts e.message
-      abort("Startup Exception: See above")
+      abort('Startup Exception: See above')
     end
   else
-    Rails.logger.info "IDE service configured, Skipping availability test ..."
+    Rails.logger.info 'IDE service configured, Skipping availability test ...'
   end
 end

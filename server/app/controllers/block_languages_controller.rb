@@ -3,7 +3,7 @@ class BlockLanguagesController < ApplicationController
   # Find a single block language by ID or by slug
   def show
     needle = id_params[:id]
-    block_lang = if BlattwerkzeugUtil::string_is_uuid? needle then
+    block_lang = if BlattwerkzeugUtil.string_is_uuid? needle
                    BlockLanguage.find needle
                  else
                    BlockLanguage.find_by! slug: needle
@@ -22,7 +22,7 @@ class BlockLanguagesController < ApplicationController
   # These parameters are "normal" table attributes
   def basic_params
     params
-      .permit([:name, :slug, :defaultProgrammingLanguageId, :family, :grammarId])
+      .permit(%i[name slug defaultProgrammingLanguageId family grammarId])
       .transform_keys { |k| k.underscore }
   end
 

@@ -1,6 +1,6 @@
 class Mutations::CodeResource::Create < Mutations::BaseMutation
   def self.default_graphql_name
-    "CodeResourceCreate"
+    'CodeResourceCreate'
   end
 
   argument :name, String, required: true
@@ -11,7 +11,7 @@ class Mutations::CodeResource::Create < Mutations::BaseMutation
   field :code_resource, Types::CodeResourceType, null: false
 
   def resolve(**args)
-    return {
+    {
       code_resource: CodeResource.create!(args)
     }
   end

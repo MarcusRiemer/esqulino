@@ -33,9 +33,9 @@ class CreateCodeResourceReferences < ActiveRecord::Migration[6.0]
 
     # Adding a reference twice is not allowed
     add_index :code_resource_references,
-              [:origin_id, :target_id],
-              :unique => true,
-              :name => 'code_resource_references_unique'
+              %i[origin_id target_id],
+              unique: true,
+              name: 'code_resource_references_unique'
 
     create_table :grammar_references, id: :uuid, default: 'gen_random_uuid()' do |t|
       t.references :origin,
@@ -55,8 +55,8 @@ class CreateCodeResourceReferences < ActiveRecord::Migration[6.0]
 
     # Adding a reference twice is not allowed
     add_index :grammar_references,
-              [:origin_id, :target_id],
-              :unique => true,
-              :name => 'grammar_references_unique'
+              %i[origin_id target_id],
+              unique: true,
+              name: 'grammar_references_unique'
   end
 end

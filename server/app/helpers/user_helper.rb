@@ -5,7 +5,7 @@ module UserHelper
   # access to the request object is not
   # possible within the model.
   def user_information
-    return (get_private_claim() || current_user.information)
+    (get_private_claim || current_user.information)
   end
 
   # A user is logged in if a HTTP-request contains a cookie with a value that is a valid jwt.
@@ -16,16 +16,16 @@ module UserHelper
   #   made. In the case of login or logout operations this is not helpful.
   def current_user(attempt_refresh = true)
     # @current_user may only be nil if this method was never called before
-    if (not @current_user) then
+    unless @current_user
       access_token = current_access_token(attempt_refresh)
-      if (access_token) then
-        @current_user = User.find(current_access_token[:user_id].to_s)
-      else
-        @current_user = User.guest
-      end
+      @current_user = if access_token
+                        User.find(current_access_token[:user_id].to_s)
+                      else
+                        User.guest
+                      end
     end
 
-    return @current_user
+    @current_user
   end
 
   # Is used for logging out a user
@@ -35,15 +35,13 @@ module UserHelper
 
   # A user is logged in if he is not the guest user
   def signed_in?
-    return (not current_user.eql? User.guest)
+    (!current_user.eql? User.guest)
   end
 
   def ensure_is_logged_in(&block)
-    if (signed_in?)
-      block.call
-    else
-      raise EsqulinoError::Base.new("Not logged in", 401)
-    end
+    raise EsqulinoError::Base.new('Not logged in', 401) unless signed_in?
+
+    block.call
   end
 
   # Sets the relevant tokens a user needs to identify himself.
@@ -66,7 +64,7 @@ module UserHelper
 
   # Sets the current user to the guest user and deletes the jwt
   def sign_out!
-    self.clear_current_user
-    clear_secure_cookies()
+    clear_current_user
+    clear_secure_cookies
   end
 end

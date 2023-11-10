@@ -12,8 +12,8 @@ class AddPrimaryKeyToProjectUsesBlockLanguage < ActiveRecord::Migration[5.1]
 
     # Adding languages twice is not allowed
     add_index :project_uses_block_languages,
-              [:project_id, :block_language_id],
-              :unique => true,
-              :name => 'block_languages_projects_unique'
+              %i[project_id block_language_id],
+              unique: true,
+              name: 'block_languages_projects_unique'
   end
 end

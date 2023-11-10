@@ -1,9 +1,9 @@
 module Validators
   class SettableDate
     def self.validate!(str_value)
-      unless str_value == "UNSET" || is_date?(str_value)
-        raise GraphQL::ExecutionError, "Invalid value \"#{str_value}\" for custom scalar type SettableDate"
-      end
+      return if str_value == 'UNSET' || is_date?(str_value)
+
+      raise GraphQL::ExecutionError, "Invalid value \"#{str_value}\" for custom scalar type SettableDate"
     end
 
     def self.is_date?(val)

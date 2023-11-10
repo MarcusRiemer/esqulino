@@ -1,15 +1,15 @@
-require_relative "boot"
+require_relative 'boot'
 
-require "rails"
+require 'rails'
 # Pick the frameworks you want:
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_view/railtie"
-require "action_cable/engine"
-require "sprockets/railtie"
+require 'active_model/railtie'
+require 'active_job/railtie'
+require 'active_record/railtie'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
+require 'action_view/railtie'
+require 'action_cable/engine'
+require 'sprockets/railtie'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -29,13 +29,13 @@ module Server
     config.api_only = true
 
     # Cookie options according to configured domains
-    editor_domain = Rails.application.config_for(:sqlino)["editor_domain"]
+    editor_domain = Rails.application.config_for(:sqlino)['editor_domain']
     # Without `http` scheme parser wont extract host
-    cookie_domain = URI("http://" + editor_domain).host
-    cookie_tld_length = cookie_domain.count(".")
+    cookie_domain = URI('http://' + editor_domain).host
+    cookie_tld_length = cookie_domain.count('.')
     cookie_config = {
       key: '_blattwerkzeug_rails',
-      domain: "." + cookie_domain, # Prepend "." to ensure that cookie is also valid for subdomains
+      domain: '.' + cookie_domain, # Prepend "." to ensure that cookie is also valid for subdomains
       tld_length: cookie_tld_length
     }
 

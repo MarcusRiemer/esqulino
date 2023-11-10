@@ -1,7 +1,7 @@
 guard :rspec,
-      cmd: "bundle exec rspec",
+      cmd: 'bundle exec rspec',
       failed_mode: :keep do
-  require "guard/rspec/dsl"
+  require 'guard/rspec/dsl'
   dsl = Guard::RSpec::Dsl.new(self)
 
   # RSpec files
@@ -15,7 +15,7 @@ guard :rspec,
   dsl.watch_spec_files_for(ruby.lib_files)
 
   # Rails files
-  rails = dsl.rails()
+  rails = dsl.rails
   watch(rails.controllers) do |m|
     [
       rspec.spec.call("routing/#{m[1]}_routing"),

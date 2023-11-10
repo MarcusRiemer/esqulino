@@ -1,5 +1,4 @@
 module Mutations
-
   # This is the mutation that all other mutations should derive from.
   # It provides basic means for authentication.
   class BaseMutation < GraphQL::Schema::RelayClassicMutation

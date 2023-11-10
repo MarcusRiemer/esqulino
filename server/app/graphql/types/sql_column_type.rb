@@ -8,11 +8,11 @@ module Types
     field :primary, Boolean, null: false
 
     def not_null
-      object["notNull"]
+      object['notNull']
     end
 
     def dflt_value
-      object["dfltValue"]
+      object['dfltValue']
     end
   end
 end

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
@@ -37,10 +39,10 @@ gem 'omniauth', '1.9.1'
 gem 'omniauth-keycloak'
 
 # Build a simple, robust and scaleable authorization system.
-gem "pundit"
+gem 'pundit'
 
 # Used for HTTP-Requests
-gem "rest-client"
+gem 'rest-client'
 
 # Used to build a strongly-typed API
 gem 'graphql'
@@ -54,7 +56,7 @@ gem 'rails', '~> 7.0'
 
 # Bug in Ruby 3.1.3 Standard Library
 # https://discuss.rubyonrails.org/t/81922
-gem "cgi", "~> 0.3.6"
+gem 'cgi', '~> 0.3.6'
 
 # Connecting to postgres databases
 gem 'pg'
@@ -69,7 +71,7 @@ gem 'bootsnap'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
 
   # Generate code coverage reports
   gem 'simplecov'
@@ -85,14 +87,14 @@ end
 # Use rspec for unit test
 group :development, :test do
   gem 'database_cleaner-active_record'
-  gem 'rspec-rails'
-  gem 'rspec_junit_formatter'
   gem 'guard-rspec', require: false
+  gem 'rspec_junit_formatter'
+  gem 'rspec-rails'
 
   gem 'pry'
   gem 'pry-byebug'
+  gem 'rails-erd'
   gem 'webmock'
-  gem "rails-erd"
 end
 
 group :development do
@@ -104,8 +106,8 @@ group :development do
   gem 'irb', require: false
 
   # Code formatting and stylecheck
-  gem 'rubocop', '~> 0.92.0', require: false
+  gem 'rubocop', '~> 1.57', '>= 1.57.2', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]

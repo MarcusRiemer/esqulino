@@ -1,4 +1,4 @@
- module Types
+module Types
   class Types::BlockLanguageType < Types::Base::BaseObject
     field :id, ID, null: false
     field :name, String, null: false

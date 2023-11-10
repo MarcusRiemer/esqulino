@@ -2,10 +2,10 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Ususally running under "localdomain", but may be using lvh.me for Google
-  config.hosts << "localhost.localdomain"
-  config.hosts << "lvh.me"
+  config.hosts << 'localhost.localdomain'
+  config.hosts << 'lvh.me'
 
-  ["en"].each do |lang|
+  ['en'].each do |lang|
     config.hosts << "#{lang}.localhost.localdomain"
     config.hosts << "#{lang}.lvh.me"
   end
@@ -55,10 +55,10 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: ENV["SMTP_HOST"],
-    port: ENV.fetch("SMTP_PORT", 587),
-    user_name: ENV["SMTP_USER"],
-    password: ENV["SMTP_PASS"],
+    address: ENV.fetch('SMTP_HOST', nil),
+    port: ENV.fetch('SMTP_PORT', 587),
+    user_name: ENV.fetch('SMTP_USER', nil),
+    password: ENV.fetch('SMTP_PASS', nil),
     enable_starttls_auto: true
   }
 
@@ -70,7 +70,7 @@ Rails.application.configure do
 
       resource '*',
                headers: :any,
-               methods: [:get, :post, :put, :patch, :delete, :options, :head]
+               methods: %i[get post put patch delete options head]
     end
   end
 end

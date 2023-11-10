@@ -5,15 +5,12 @@ class Resolvers::BaseQueryBuilder
   include Resolvers::BaseQueryBuilderMethods
 
   def initialize(
-        model_class,
-        context: nil,
-        scope:,
-        filter: nil,
-        order: nil,
-        languages: nil,
-        order_field:,
-        order_dir:
-      )
+    model_class,
+    scope:, order_field:, order_dir:, context: nil,
+    filter: nil,
+    order: nil,
+    languages: nil
+  )
     @model_class = model_class
     @context = context
     @languages = relevant_languages(languages)
@@ -24,10 +21,8 @@ class Resolvers::BaseQueryBuilder
     @scope = apply_order(scope, order)
 
     # TODO: This should happen when loading queries from disk, not for every query
-    if context and context.query
-      @scope = include_related(@scope, context.query.query_string)
-    end
+    return unless context and context.query
+
+    @scope = include_related(@scope, context.query.query_string)
   end
-
-
 end

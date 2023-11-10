@@ -35,7 +35,7 @@
 namespace :db do
   desc 'Dumps the database to backups'
   task dump: :environment do
-    dump_fmt   = ensure_format(ENV['format'])
+    dump_fmt   = ensure_format(ENV.fetch('format', nil))
     dump_sfx   = suffix_for_format(dump_fmt)
     backup_dir = backup_directory(Rails.env, create: true)
     full_path  = nil
@@ -55,11 +55,11 @@ namespace :db do
 
   namespace :dump do
     desc 'Dumps a specific table to backups'
-    task :table, [:table] => :environment do |t, args|
+    task :table, [:table] => :environment do |_t, args|
       table_name = args[:table]
 
       if table_name.present?
-        dump_fmt   = ensure_format(ENV['format'])
+        dump_fmt   = ensure_format(ENV.fetch('format', nil))
         dump_sfx   = suffix_for_format(dump_fmt)
         backup_dir = backup_directory(Rails.env, create: true)
         full_path  = nil
@@ -90,7 +90,7 @@ namespace :db do
   end
 
   desc 'Restores the database from a backup using PATTERN'
-  task :restore, [:pattern] => :environment do |t, args|
+  task :restore, [:pattern] => :environment do |_t, args|
     pattern = args[:pattern]
 
     if pattern.present?
@@ -120,13 +120,13 @@ namespace :db do
           puts "Too many files match the pattern '#{pattern}':"
           puts ' ' + files.join("\n ")
           puts ''
-          puts "Try a more specific pattern"
+          puts 'Try a more specific pattern'
           puts ''
         end
       end
       unless cmd.nil?
-        Rake::Task["db:drop"].invoke
-        Rake::Task["db:create"].invoke
+        Rake::Task['db:drop'].invoke
+        Rake::Task['db:create'].invoke
         puts cmd
         system cmd
         puts ''
@@ -158,7 +158,6 @@ namespace :db do
     when 'p' then 'sql'
     when 't' then 'tar'
     when 'd' then 'dir'
-    else nil
     end
   end
 
@@ -168,14 +167,13 @@ namespace :db do
     when /\.sql$/  then 'p'
     when /\.dir$/  then 'd'
     when /\.tar$/  then 't'
-    else nil
     end
   end
 
   def backup_directory(suffix = nil, create: false)
     backup_dir = File.join(*[Rails.root, 'db/backups', suffix].compact)
 
-    if create and not Dir.exist?(backup_dir)
+    if create and !Dir.exist?(backup_dir)
       puts "Creating #{backup_dir} .."
       FileUtils.mkdir_p(backup_dir)
     end
@@ -184,7 +182,7 @@ namespace :db do
   end
 
   def with_config
-    yield ActiveRecord::Base.connection_config[:host] || "localhost",
+    yield ActiveRecord::Base.connection_config[:host] || 'localhost',
           ActiveRecord::Base.connection_config[:port] || 5432,
           ActiveRecord::Base.connection_config[:database],
           ActiveRecord::Base.connection_config[:username]

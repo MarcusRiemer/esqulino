@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :project do
-    sequence(:name) { |n| { "en" => "Spec Project #{n}" } }
+    sequence(:name) { |n| { 'en' => "Spec Project #{n}" } }
     sequence(:slug) { |n| "project-#{n}" }
-    description { { "en" => "Generated on the fly, used for tests" } }
+    description { { 'en' => 'Generated on the fly, used for tests' } }
     index_page_id { nil }
     # Factoried projects are public because this eases test writing alot
     # Having projects private by default would result in many projects that
@@ -12,7 +12,7 @@ FactoryBot.define do
 
     factory :project_with_default_database do
       after :create do |project|
-        db = project.create_default_database(name: "default", project_id: project.id)
+        db = project.create_default_database(name: 'default', project_id: project.id)
         db.save!
         project.save!
       end

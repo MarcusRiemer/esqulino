@@ -1,5 +1,3 @@
-# coding: utf-8
-
 require 'tempfile'
 
 FactoryBot.define do
@@ -16,52 +14,52 @@ FactoryBot.define do
       after(:create) do |db|
         db.table_create(
           {
-            "name" => "B",
-            "columns" => [
+            'name' => 'B',
+            'columns' => [
               {
-                "name" => "key",
-                "type" => "INTEGER",
-                "index" => 0,
-                "primary" => true,
-                "notNull" => true,
-                "dfltValue" => nil
-              },
+                'name' => 'key',
+                'type' => 'INTEGER',
+                'index' => 0,
+                'primary' => true,
+                'notNull' => true,
+                'dfltValue' => nil
+              }
             ],
-            "foreignKeys" => [],
-            "systemTable" => false
+            'foreignKeys' => [],
+            'systemTable' => false
           }
         )
 
         db.table_create(
           {
-            "name" => "A",
-            "columns" => [
+            'name' => 'A',
+            'columns' => [
               {
-                "name" => "key",
-                "type" => "INTEGER",
-                "index" => 0,
-                "primary" => true,
-                "notNull" => true,
-                "dfltValue" => nil
-              },
+                'name' => 'key',
+                'type' => 'INTEGER',
+                'index' => 0,
+                'primary' => true,
+                'notNull' => true,
+                'dfltValue' => nil
+              }
             ],
-            "foreignKeys" => [
+            'foreignKeys' => [
               {
-                "references" => [
+                'references' => [
                   {
-                    "toTable" => "B",
-                    "toColumn" => "key",
-                    "fromColumn" => "key"
+                    'toTable' => 'B',
+                    'toColumn' => 'key',
+                    'fromColumn' => 'key'
                   }
                 ]
               }
             ],
-            "systemTable" => false
+            'systemTable' => false
           }
         )
 
         db.table_bulk_insert(
-          "B",
+          'B',
           ['key'],
           [
             ['0'],
@@ -69,18 +67,18 @@ FactoryBot.define do
             ['2'],
             ['3'],
             ['4'],
-            ['5'],
+            ['5']
           ]
         )
 
         db.table_bulk_insert(
-          "A",
+          'A',
           ['key'],
           [
             ['0'],
             ['1'],
             ['2'],
-            ['3'],
+            ['3']
           ]
         )
 
@@ -99,44 +97,44 @@ FactoryBot.define do
       after(:create) do |db|
         db.table_create(
           {
-            "name" => "key_value",
-            "columns" => [
+            'name' => 'key_value',
+            'columns' => [
               {
-                "name" => "key",
-                "type" => "INTEGER",
-                "index" => 0,
-                "primary" => true,
-                "notNull" => true,
-                "dfltValue" => nil
+                'name' => 'key',
+                'type' => 'INTEGER',
+                'index' => 0,
+                'primary' => true,
+                'notNull' => true,
+                'dfltValue' => nil
               },
               {
-                "name" => "value",
-                "type" => "TEXT",
-                "index" => 1,
-                "primary" => false,
-                "notNull" => false,
-                "dfltValue" => "value"
+                'name' => 'value',
+                'type' => 'TEXT',
+                'index' => 1,
+                'primary' => false,
+                'notNull' => false,
+                'dfltValue' => 'value'
               }
             ],
-            "foreignKeys" => [],
-            "systemTable" => false
+            'foreignKeys' => [],
+            'systemTable' => false
           }
         )
 
         db.table_bulk_insert(
-          "key_value",
-          ['key', 'value'],
+          'key_value',
+          %w[key value],
           [
-            ['0', 'null'],
-            ['1', 'eins'],
-            ['2', 'zwei'],
-            ['3', 'drei'],
-            ['4', 'vier'],
-            ['5', 'fünf'],
-            ['6', 'secs'],
-            ['7', 'sibn'],
-            ['8', 'acht'],
-            ['9', 'neun'],
+            %w[0 null],
+            %w[1 eins],
+            %w[2 zwei],
+            %w[3 drei],
+            %w[4 vier],
+            %w[5 fünf],
+            %w[6 secs],
+            %w[7 sibn],
+            %w[8 acht],
+            %w[9 neun]
           ]
         )
 
@@ -159,24 +157,24 @@ FactoryBot.define do
       after(:create) do |db, options|
         db.table_create(
           {
-            "name" => "numbers",
-            "columns" => [
+            'name' => 'numbers',
+            'columns' => [
               {
-                "name" => "number",
-                "type" => "INTEGER",
-                "index" => 0,
-                "primary" => true,
-                "notNull" => true,
-                "dfltValue" => nil
-              },
+                'name' => 'number',
+                'type' => 'INTEGER',
+                'index' => 0,
+                'primary' => true,
+                'notNull' => true,
+                'dfltValue' => nil
+              }
             ],
-            "foreignKeys" => [],
-            "systemTable" => false
+            'foreignKeys' => [],
+            'systemTable' => false
           }
         )
 
         db.table_bulk_insert(
-          "numbers",
+          'numbers',
           ['number'],
           (1..options.row_count).map { |i| [i] }
         )

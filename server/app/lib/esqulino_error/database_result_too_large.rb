@@ -5,7 +5,7 @@ module EsqulinoError
     # @param sql [string] The faulty (?) query
     # @param params [Hash] The parameters that were used to run the query
     def initialize(project, sql, params)
-      super("Query result set too large", 400, false)
+      super('Query result set too large', 400, false)
       @project = project
       @sql = sql
       @params = params
@@ -13,9 +13,9 @@ module EsqulinoError
 
     def json_data
       {
-        "project" => @project.id,
-        "sql" => @sql,
-        "params" => @params
+        'project' => @project.id,
+        'sql' => @sql,
+        'params' => @params
       }
     end
   end

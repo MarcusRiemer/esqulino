@@ -12,7 +12,7 @@ module EsqulinoError
     # @param code [integer] The HTTP status code
     # @param impl_error [bool] True, if this error shouldn't have been
     #                          shown to the user.
-    def initialize(msg = "Internal Esqulino Error", code = 500, impl_error = false)
+    def initialize(msg = 'Internal Esqulino Error', code = 500, impl_error = false)
       @code = code
       @impl_error = impl_error
       super msg
@@ -20,26 +20,26 @@ module EsqulinoError
 
     # Used to serialize this error in a meaningful representation for clients.
     def to_json(options)
-      self.to_liquid.to_json(options)
+      to_liquid.to_json(options)
     end
 
     # Can be used by specialised classes to provide additional
     # error context.
     #
     # @return [Hash] Additional error information
-    def json_data()
+    def json_data
       {}
     end
 
     # Liquid representation is identical to JSON
     def to_liquid
       {
-        "code" => @code,
-        "message" => self.to_s,
+        'code' => @code,
+        'message' => to_s,
         # The name of the module is an implementation detail that should
         # not be part of the JSON-object that is sent over the wire.
-        "type" => self.class.name.demodulize,
-        "implError" => @impl_error
+        'type' => self.class.name.demodulize,
+        'implError' => @impl_error
       }.merge(json_data)
     end
   end

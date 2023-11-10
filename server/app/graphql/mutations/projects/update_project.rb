@@ -17,7 +17,7 @@ class Mutations::Projects::UpdateProject < Mutations::Projects::Projects
 
     project.save!
 
-    return ({ project: project, errors: [] })
+    { project:, errors: [] }
   rescue Pundit::NotAuthorizedError, ActiveRecord::RecordNotFound => e
     { errors: [e] }
   rescue ActiveRecord::InvalidForeignKey, ActiveRecord::RecordInvalid

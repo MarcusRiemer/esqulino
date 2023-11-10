@@ -6,21 +6,21 @@ RSpec.describe StaticFilesController, type: :request do
       get '/'
 
       expect(response).to have_http_status(200)
-      expect(response.content_type).to eq("text/html")
+      expect(response.content_type).to eq('text/html')
     end
 
     it '/index.html' do
       get '/index.html'
 
       expect(response).to have_http_status(200)
-      expect(response.content_type).to eq "text/html"
+      expect(response.content_type).to eq 'text/html'
     end
 
     it '/about' do
       get '/about'
 
       expect(response).to have_http_status(200)
-      expect(response.content_type).to eq "text/html"
+      expect(response.content_type).to eq 'text/html'
     end
   end
 
@@ -29,14 +29,14 @@ RSpec.describe StaticFilesController, type: :request do
       get '/vendor/logos/blattwerkzeug-caption.svg'
 
       expect(response).to have_http_status(200)
-      expect(response.content_type).to eq "image/svg+xml"
+      expect(response.content_type).to eq 'image/svg+xml'
     end
 
     it '/vendor/logos/cau.png' do
       get '/vendor/logos/cau.png'
 
       expect(response).to have_http_status(200)
-      expect(response.content_type).to eq "image/png"
+      expect(response.content_type).to eq 'image/png'
     end
   end
 
@@ -51,7 +51,7 @@ RSpec.describe StaticFilesController, type: :request do
       get '/api/json_schema/GrammarDocument'
 
       expect(response).to have_http_status(200)
-      expect(response.content_type).to eq "application/json"
+      expect(response.content_type).to eq 'application/json'
     end
   end
 end

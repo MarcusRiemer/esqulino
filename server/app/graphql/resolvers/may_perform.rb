@@ -1,6 +1,5 @@
 # Checks whether a certain action may be performed by a certain user
 class Resolvers::MayPerform
-
   class InvalidResourceTypeError < EsqulinoError::Base
     def initialize(raw_resource_type)
       super("resource_type #{raw_resource_type} is invalid", 400)
@@ -8,7 +7,7 @@ class Resolvers::MayPerform
   end
 
   class InvalidPolicyTypeError < EsqulinoError::Base
-    def initialize(rawresource_type)
+    def initialize(_rawresource_type)
       super("resource_type #{raw_resource_type} has no policy", 500)
     end
   end
@@ -34,13 +33,11 @@ class Resolvers::MayPerform
 
   # The pundit policy that should respond to the policy actions
   def policy_class
-    class_name = @raw_resource_type + "Policy"
+    class_name = @raw_resource_type + 'Policy'
     begin
-      class_instance = class_name.constantize
-
-      return class_instance
+      class_name.constantize
     rescue NameError => e
-      raise InvalidPolicyTypeError.new(class_name)
+      raise InvalidPolicyTypeError, class_name
     end
   end
 
@@ -53,15 +50,13 @@ class Resolvers::MayPerform
 
       # Whatever we have here: It must be some kind of model class
       # that is specific to our application
-      if not(class_instance < ApplicationRecord)
-        raise InvalidResourceTypeError.new(class_name)
-      end
+      raise InvalidResourceTypeError, class_name unless class_instance < ApplicationRecord
 
-      return class_instance
+      class_instance
 
     # Thrown by "constantize" if there is no such class
     rescue NameError => e
-      raise InvalidResourceTypeError.new(class_name)
+      raise InvalidResourceTypeError, class_name
     end
   end
 
@@ -70,13 +65,11 @@ class Resolvers::MayPerform
   # itself is valid, but for whatever reason does not provide
   # the method in question.
   def call_policy_action(policy_instance)
-    action_method_name = (@raw_policy_action + "?").to_sym
+    action_method_name = (@raw_policy_action + '?').to_sym
 
-    if policy_instance.respond_to? action_method_name
-      policy_instance.send action_method_name
-    else
-      raise InvalidPolicyActionError.new(@raw_resource_type, @raw_policy_action)
-    end
+    raise InvalidPolicyActionError.new(@raw_resource_type, @raw_policy_action) unless policy_instance.respond_to? action_method_name
+
+    policy_instance.send action_method_name
   end
 
   # Performs authorization for the arguments that have been provided
@@ -85,7 +78,7 @@ class Resolvers::MayPerform
     resource_instance = resource_class.find_by(id: @resource_id)
     policy_instance = policy_class.new(@current_user, resource_instance)
 
-    return {
+    {
       perform: call_policy_action(policy_instance)
     }
   end

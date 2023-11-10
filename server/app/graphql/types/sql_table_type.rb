@@ -6,11 +6,11 @@ module Types
     field :system_table, Boolean, null: false
 
     def foreign_keys
-      object["foreignKeys"]
+      object['foreignKeys']
     end
 
     def system_table
-      object["systemTable"]
+      object['systemTable']
     end
   end
 end

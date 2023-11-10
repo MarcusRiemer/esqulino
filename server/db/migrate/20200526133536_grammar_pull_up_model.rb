@@ -5,8 +5,8 @@ class GrammarPullUpModel < ActiveRecord::Migration[6.0]
   end
 
   def change
-    add_column :grammars, :types, :jsonb, :default => Hash.new
-    add_column :grammars, :foreign_types, :jsonb, :default => Hash.new
+    add_column :grammars, :types, :jsonb, default: {}
+    add_column :grammars, :foreign_types, :jsonb, default: {}
     add_column :grammars, :root, :jsonb
 
     change_column_null :grammars, :model, true
@@ -14,9 +14,9 @@ class GrammarPullUpModel < ActiveRecord::Migration[6.0]
     reversible do |change|
       change.up do
         Grammar.all.each do |g|
-          g.types = g.model.fetch("types", Hash.new)
-          g.foreign_types = g.model.fetch("foreign_types", Hash.new)
-          g.root = g.model["root"]
+          g.types = g.model.fetch('types', {})
+          g.foreign_types = g.model.fetch('foreign_types', {})
+          g.root = g.model['root']
 
           g.save!
         end

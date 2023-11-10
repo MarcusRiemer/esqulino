@@ -1,17 +1,13 @@
 Rails.application.routes.draw do
-  if Rails.env.development?
-    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/graphiql"
-  end
+  mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/api/graphiql' if Rails.env.development?
   # Second stop: The API for the editor
   scope '/api' do
     # Query names are optionally part of the route to have a better
     # overview in the request debugger
-    post "graphql(/:operation_name)", to: "graphql#execute"
+    post 'graphql(/:operation_name)', to: 'graphql#execute'
 
     # Allow a special unrestricted graphql endpoint for development with GraphiQL
-    if Rails.env.development?
-      post "graphiql", to: "graphql#execute_graphiql"
-    end
+    post 'graphiql', to: 'graphql#execute_graphiql' if Rails.env.development?
 
     scope 'identities' do
       get '/', controller: 'identities', action: :show
@@ -25,9 +21,9 @@ Rails.application.routes.draw do
 
     scope 'auth' do
       delete 'sign_out', controller: 'auth', action: :destroy
-      match ":provider/callback", to: "auth#callback", via: [:get, :post]
-      match 'failure', :to => 'auth#failure', via: [:get, :post]
-      match 'failure_msg', :to => 'auth#failure_msg', via: [:get, :post]
+      match ':provider/callback', to: 'auth#callback', via: %i[get post]
+      match 'failure', to: 'auth#failure', via: %i[get post]
+      match 'failure_msg', to: 'auth#failure_msg', via: %i[get post]
     end
 
     # Everything in the context of projects
@@ -36,7 +32,7 @@ Rails.application.routes.draw do
       scope ':project_id' do
         get 'preview', controller: 'projects', action: :preview_image
 
-        resources :code_resources, only: [:update, :destroy], param: "code_resource_id"
+        resources :code_resources, only: %i[update destroy], param: 'code_resource_id'
         post 'code_resources/:code_resource_id/clone', controller: 'code_resources', action: 'clone'
 
         # Everything that does something with the database content via a query
@@ -108,7 +104,7 @@ Rails.application.routes.draw do
     get 'raise-error', controller: 'debug', action: :raise_error
 
     # Fallback for unknown API endpoints
-    match '*path', via: :all, to: proc { [404, {}, ["Unknown API endpoint"]] }
+    match '*path', via: :all, to: proc { [404, {}, ['Unknown API endpoint']] }
   end
 
   # Third stop:  Serving static files and the index.html on development machines

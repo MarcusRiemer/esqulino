@@ -1,10 +1,8 @@
 class Resolvers::ProjectInstanceMemberResolver < GraphQL::Schema::Resolver
-  def resolve()
+  def resolve
     user = context[:user]
-    if user.guest?
-      return []
-    else
-      return object.project_members
-    end
+    return [] if user.guest?
+
+    object.project_members
   end
 end

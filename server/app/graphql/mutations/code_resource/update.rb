@@ -1,6 +1,6 @@
 class Mutations::CodeResource::Update < Mutations::BaseMutation
   def self.default_graphql_name
-    "CodeResourceUpdate"
+    'CodeResourceUpdate'
   end
 
   argument :id, ID, required: true
@@ -9,11 +9,10 @@ class Mutations::CodeResource::Update < Mutations::BaseMutation
   argument :block_language_id, ID, required: true
   argument :programming_language_id, ID, required: true
 
-
   class UpdateAffectedResourceType < Types::Base::BaseUnion
     possible_types Types::GrammarType, Types::BlockLanguageType
 
-    def self.resolve_type(object, context)
+    def self.resolve_type(object, _context)
       if object.is_a? Grammar
         Types::GrammarType
       elsif object.is_a? BlockLanguage
@@ -28,17 +27,17 @@ class Mutations::CodeResource::Update < Mutations::BaseMutation
   field :affected, [UpdateAffectedResourceType], null: false
 
   def resolve(id:, name:, ast:, block_language_id:, programming_language_id:)
-    resource = CodeResource.find_by!(id: id)
+    resource = CodeResource.find_by!(id:)
     affected = resource.update_this_and_dependants!(
-      name: name,
-      ast: ast,
-      block_language_id: block_language_id,
-      programming_language_id: programming_language_id
+      name:,
+      ast:,
+      block_language_id:,
+      programming_language_id:
     )
 
-    return {
+    {
       code_resource: resource,
-      affected: affected,
+      affected:
     }
   end
 end

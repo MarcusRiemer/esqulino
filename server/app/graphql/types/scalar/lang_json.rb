@@ -1,10 +1,10 @@
 class Types::Scalar::LangJson < Types::Base::BaseScalar
-  def self.coerce_input(value, context)
+  def self.coerce_input(value, _context)
     case value
     when String
       begin
         value = JSON.parse(value)
-      rescue
+      rescue StandardError
         raise GraphQL::ExecutionError.new("#{self.class.name} value is not a parsable JSON Object", extensions: { code: 'INVALID_PARAM' })
       end
     when ActionController::Parameters
@@ -18,7 +18,7 @@ class Types::Scalar::LangJson < Types::Base::BaseScalar
     value
   end
 
-  def self.coerce_result(value, context)
+  def self.coerce_result(value, _context)
     Validators::Languages.validate!(value)
     value
   end

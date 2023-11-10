@@ -3,9 +3,9 @@ module Types
     argument_class Types::Base::BaseArgument
     def initialize(*args, default_value: nil, **kwargs, &block)
       super(*args, **kwargs, &block)
-      if !default_value.nil?
-        extension(DefaultValueExtension, default_value: default_value)
-      end
+      return if default_value.nil?
+
+      extension(DefaultValueExtension, default_value:)
     end
   end
 

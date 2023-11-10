@@ -14,20 +14,18 @@ class AuthController < ApplicationController
 
     # Shortcut to central Omniauth hash, see
     # https://github.com/omniauth/omniauth/wiki/Auth-Hash-Schema
-    auth_hash = request.env.fetch("omniauth.auth")
+    auth_hash = request.env.fetch('omniauth.auth')
 
     # A login via the callback may be from a recurring or from a
     # new user.
     identity = Identity::Identity.search(auth_hash)
-    if (not identity) then
-      identity = Identity::Identity.create_with_auth(auth_hash, current_user)
-    else
-      if signed_in? and current_user.id != identity.user_id
-        raise RuntimeError.new("Error: already linked with a user")
-      end
+    if identity
+      raise 'Error: already linked with a user' if signed_in? and current_user.id != identity.user_id
 
       identity.update_provider_data(auth_hash)
       identity.save!
+    else
+      identity = Identity::Identity.create_with_auth(auth_hash, current_user)
     end
 
     # Set the appropriate cookies
@@ -42,9 +40,7 @@ class AuthController < ApplicationController
     # with the developer identity, but if that is the case we also redirect
     # to the root.
     redirect_url = request.env['omniauth.origin']
-    if not redirect_url or redirect_url.include? "/auth/"
-      redirect_url = "/"
-    end
+    redirect_url = '/' if !redirect_url or redirect_url.include? '/auth/'
     redirect_to redirect_url
   end
 
@@ -56,17 +52,15 @@ class AuthController < ApplicationController
     identity = Identity::Identity.search(auth_hash)
 
     # If a user is logged in, response with linked identities
-    if (current_user)
-      to_response = current_user.all_providers
-    end
+    to_response = current_user.all_providers if current_user
 
-    if (not identity) then
+    if identity
+      error_response('E-mail already registered')
+    else
       identity = Identity::Identity.create_with_auth(auth_hash, current_user)
       # sends an confirmation e-mail
       IdentityMailer.confirm_email(identity, request_locale).deliver unless Rails.env.test?
-      api_response(to_response ? to_response : current_user.information)
-    else
-      error_response("E-mail already registered")
+      api_response(to_response || current_user.information)
     end
   end
 
@@ -86,11 +80,11 @@ class AuthController < ApplicationController
 
   def register_params
     params
-      .permit([:email, :username, :password])
+      .permit(%i[email username password])
   end
 
   def login_params
     params
-      .permit([:email, :password])
+      .permit(%i[email password])
   end
 end

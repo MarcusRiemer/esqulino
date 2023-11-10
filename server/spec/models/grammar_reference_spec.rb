@@ -6,9 +6,9 @@ RSpec.describe GrammarReference, type: :model do
     target = create(:grammar)
 
     reference = create(:grammar_reference,
-                       origin: origin,
-                       target: target,
-                       reference_type: "include_types")
+                       origin:,
+                       target:,
+                       reference_type: 'include_types')
 
     expect(GrammarReference.include_types).to eq([reference])
     expect(GrammarReference.visualize).to eq([])
@@ -19,9 +19,9 @@ RSpec.describe GrammarReference, type: :model do
     target = create(:grammar)
 
     reference = create(:grammar_reference,
-                       origin: origin,
-                       target: target,
-                       reference_type: "visualize")
+                       origin:,
+                       target:,
+                       reference_type: 'visualize')
 
     expect(GrammarReference.include_types).to eq([])
     expect(GrammarReference.visualize).to eq([reference])

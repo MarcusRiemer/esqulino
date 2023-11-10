@@ -1,5 +1,5 @@
 Rails.application.config.after_initialize do
-  sentry_dsn = Rails.configuration.sqlino.dig("sentry", "dsn")
+  sentry_dsn = Rails.configuration.sqlino.dig('sentry', 'dsn')
   if sentry_dsn
     Raven.configure do |config|
       config.dsn = sentry_dsn

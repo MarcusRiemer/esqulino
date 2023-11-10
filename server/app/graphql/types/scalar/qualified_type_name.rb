@@ -4,7 +4,7 @@ class Types::Scalar::QualifiedTypeName < Types::Base::BaseScalar
     when String
       begin
         value = JSON.parse(value)
-      rescue
+      rescue StandardError
         raise GraphQL::ExecutionError.new("#{self.class.name} value is not a parsable JSON Object", extensions: { code: 'INVALID_PARAM' })
       end
     when ActionController::Parameters

@@ -1,20 +1,20 @@
 module Seed
-  require_dependency "seed/programming_language_seed"
+  require_dependency 'seed/programming_language_seed'
 
   class GrammarSeed < Base
     # configuration
     # SEED_IDENTIFER is the class to stored or loaded
     # SEED_DIRECTORY is directory where the data will be stored or loaded
     SEED_IDENTIFIER = Grammar
-    SEED_DIRECTORY = "grammars"
+    SEED_DIRECTORY = 'grammars'
 
     def initialize(seed_id)
       super(
         seed_id,
         dependencies: {
-          "programming_language" => ProgrammingLanguageSeed,
-          "targeted_grammars" => GrammarSeed,
-          "grammar_reference_origins" => GrammarReferenceSeed,
+          'programming_language' => ProgrammingLanguageSeed,
+          'targeted_grammars' => GrammarSeed,
+          'grammar_reference_origins' => GrammarReferenceSeed
         },
         defer_referential_checks: true
       )
