@@ -34,6 +34,20 @@ unit-test-job:   # This job runs in the test stage.
     - sleep 60
     - echo "Code coverage is 90%"
 
+test_rubocop:
+  stage: test
+  image: ruby:3.2.2
+  interruptible: true
+  before_script:
+    - cd server
+    - gem update --system
+    - apt-get update
+    - apt-get install libmagic-dev
+    - make install-deps
+  script:
+    - bundle exec rubocop
+    - echo "executed rubocop"
+
 lint-test-job:   # This job also runs in the test stage.
   stage: test    # It can run at the same time as unit-test-job (in parallel).
   script:
