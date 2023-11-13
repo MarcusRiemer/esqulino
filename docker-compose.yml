@@ -28,9 +28,9 @@ services:
     build:
       context: .
       dockerfile: ./docker/server.Dockerfile
-      platforms: 
+#      platforms: 
 #        - "linux/amd64"
-        - "linux/arm64"
+#        - "linux/arm64"
     image: akradocker/blattwerkzeug:latest
     ports: 
       - 9292:9292
@@ -38,8 +38,8 @@ services:
       - db
     environment:
       - DATABASE_HOST=db      
-#    volumes:
-#      - data-files-volume: 
+    volumes:
+      - data-files-volume:/blattwerkzeug/rails_app/data
 #      - schema-files-volume: 
 
 volumes:

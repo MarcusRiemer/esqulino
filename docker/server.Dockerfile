@@ -8,11 +8,9 @@ FROM node:18-bullseye AS angular_client
 RUN apt update 
 
 # Install the angular cli 
-# TODO: Is this really needed? 
 RUN npm install -g @angular/cli
 
 # Copy extra folders that are needed by the application. 
-# TODO: It is probably better be better to add these folders with and external volume. Need to clarify with Marcus.  
 COPY schema /blattwerkzeug/schema
 
 
@@ -49,22 +47,11 @@ RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesourc
 RUN apt update
 RUN apt install nodejs -y
 
-# Start creating the working directories 
+# Create the working directories 
 WORKDIR /blattwerkzeug/rails_app
 
 # The package manager of ruby that is needed to install gem dependencies
 RUN gem install bundler
-
-# Copy extra folders that are needed by the application. 
-COPY schema/ schema
-
-# TODO: Add these files with an external volume
-COPY data/ data 
-
-
-# Copy the seed folder, allowing to populate the database with the necessary seed data. 
-COPY seed/ /blattwerkzeug/rails_app/seed
-
 
 # Copy the source Gemfiles of your application on the new image: 
 WORKDIR /blattwerkzeug/rails_app/server
@@ -76,8 +63,20 @@ RUN bundle install
 # Copy the source code of the application 
 COPY server/ .
 
+# Copy dependency folders
+WORKDIR /blattwerkzeug/rails_app
+
 # Copy the built image of the angular client 
-COPY --from=angular_client /blattwerkzeug/client/dist ../client/dist
+COPY --from=angular_client /blattwerkzeug/client/dist ./client/dist
+
+# Copy extra folders that are needed by the application. 
+COPY schema/ ./schema
+
+# Create the data folder structure for saving data.
+RUN mkdir -p data/dev/projects 
+
+# Copy the seed folder, allowing to populate the database with the necessary seed data. 
+COPY seed/ ./seed
 
 # Define the port mapping
 EXPOSE 9292
@@ -88,8 +87,6 @@ EXPOSE 9292
 COPY docker/server-development-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-
-# Load Seed data for the regex project 
 
 # Start the rails server
 #CMD ["rails", "server", "-b", "0.0.0.0", "-p", "9292"] 
