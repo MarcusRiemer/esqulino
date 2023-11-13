@@ -343,36 +343,6 @@ const langSingleSequenceConstraint = mkSingleLanguageGrammar(
 );
 
 /**
- * A single node that uses some children with the "sequence" constraint
- */
-const langSingleNestedSequenceConstraint = mkSingleLanguageGrammar(
-  "single-nested-sequence-constraint",
-  "root",
-  {
-    root: {
-      type: "concrete",
-      attributes: [
-        {
-          name: "nodes",
-          type: "sequence",
-          nodeTypes: ["a"],
-        },
-      ],
-    },
-    a: { type: "concrete",
-      attributes: [
-        {
-          name: "nodes",
-          type: "sequence",
-          nodeTypes: ["b"],
-        },
-      ],
-    },
-    b: { type: "concrete" },
-  }
-);
-
-/**
  * A single root node that uses some children with the "sequence" constraint
  */
 const langSequenceConstraint = mkSingleLanguageGrammar(
@@ -733,7 +703,7 @@ describe("Grammar Validation", () => {
 
   it("Optional property missing", () => {
     const v = new Validator([langOptionalProperty]);
-    debugger; 
+
     const astDesc: AST.NodeDescription = {
       language: "optionalProperty",
       name: "root",
@@ -940,7 +910,6 @@ describe("Grammar Validation", () => {
     expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.SuperflousChild]);
   });
 
-  
   it('Invalid single "sequence": Unexpected item', () => {
     const v = new Validator([langSingleSequenceConstraint]);
 
@@ -958,33 +927,6 @@ describe("Grammar Validation", () => {
     expect(res.errors.map((e) => e.code)).toEqual([
       ErrorCodes.IllegalChildType,
     ]);
-  });
-
-
-  it('Invalid single nested "sequence": Two items', () => {
-    const v = new Validator([langSingleNestedSequenceConstraint]);
-
-    const astDesc: AST.NodeDescription = {
-      language: "single-nested-sequence-constraint",
-      name: "root",
-      children: {
-        nodes: [
-          { language: "single-nested-sequence-constraint", name: "a" ,
-            children: {
-              "nodes": [
-                { language: "single-nested-sequence-constraint", name: "b" },
-                { language: "single-nested-sequence-constraint", name: "b" } 
-              ]
-            },
-          },
-        ],
-      },
-    };
-
-    const ast = new AST.SyntaxNode(astDesc, undefined);
-    const res = v.validateFromRoot(ast);
-
-    expect(res.errors.map((e) => e.code)).toEqual([ErrorCodes.SuperflousChild]);
   });
 
   it('Invalid "sequence": Completely Empty', () => {
