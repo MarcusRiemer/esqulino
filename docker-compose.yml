@@ -12,6 +12,27 @@ services:
     volumes:
       - data-postgres-volume:/var/lib/postgresql/data
 
+
+# The angular client image, used for testing: 
+  client: 
+    build:
+      context: .
+      dockerfile: ./docker/client.Dockerfile
+#      platforms: 
+#        - "linux/amd64"
+#        - "linux/arm64"
+#    image: 
+    ports: 
+      - 4200:4200
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db      
+#    volumes:
+#      - data-files-volume:/blattwerkzeug/rails_app/data
+#      - schema-files-volume: 
+
+
 # # Keycloak  
 #   accounts:
 #     image: jboss/keycloak
@@ -22,6 +43,7 @@ services:
 #       - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD} 
 #       - DB_VENDOR=postgres
 #       - DB_ADDR=db
+
 
 # The rails server
   server: 
@@ -36,6 +58,7 @@ services:
       - 9292:9292
     depends_on:
       - db
+      - client
     environment:
       - DATABASE_HOST=db      
     volumes:

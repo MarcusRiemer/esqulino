@@ -1,27 +1,19 @@
 ######## BUILDING THE ANGULAR CLIENT ##########
-# NOTE: This image requires at least 5GB of memory, or the build will fail.
+# NOTE: The build may fail if low on memory. 
+# Make sure to allocate enough memory for the container (recommended 4GB).
 
 # Install from the base nodejs image 
-FROM node:18-bullseye AS angular_client
+FROM node:18-bullseye 
 
 # Install updates
 RUN apt update 
 
-# Install the angular cli 
-# TODO: Is this really needed? 
-RUN npm install -g @angular/cli
+RUN mkdir -p /blattwerkzeug/schema
 
-# Copy extra folders that are needed by the application. 
-# TODO: It is probably better be better to add these folders with and external volume. Need to clarify with Marcus.  
-COPY schema /blattwerkzeug/schema
-
-
-# Copy the package dependencies and install them with npm as well as the source files
+# Copy the package dependencies and install them with npm as well as the source files.
+# Note: angular will also be installed as a dependency
 WORKDIR /blattwerkzeug/client/
 COPY client/ ./
 RUN npm install
-
-# Change the working directory and start the angular application
-WORKDIR /blattwerkzeug/client/
 
 RUN ["npx", "ng", "build"]
