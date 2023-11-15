@@ -29,13 +29,13 @@ def query_execute(query_filepath)
 end
 
 def query_content(query_filepath)
-  if not File.exists? query_filepath then
+  if not File.exist? query_filepath then
     throw "#{query_filepath} does not exist"
   end
 
   result_filepath = "#{File.dirname(query_filepath)}/#{File.basename(query_filepath,'.*')}.csv"
 
-  result_cached = File.exists? result_filepath
+  result_cached = File.exist? result_filepath
 
   if result_cached then
     result_cached = File.ctime(query_filepath) < File.ctime(result_filepath)

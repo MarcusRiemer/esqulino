@@ -32,12 +32,12 @@ RSpec.describe WipeProjectsJob, type: :job do
 
     expect(Project.count).to eq(1)
     expect(ProjectDatabase.count).to eq(1)
-    expect(File.exists? db.sqlite_file_path).to be(true)
+    expect(File.exist? db.sqlite_file_path).to be(true)
 
     WipeProjectsJob.new.perform
 
     expect(Project.count).to eq(0)
     expect(ProjectDatabase.count).to eq(0)
-    expect(File.exists? db.sqlite_file_path).to be(false)
+    expect(File.exist? db.sqlite_file_path).to be(false)
   end
 end
