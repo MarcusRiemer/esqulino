@@ -1,29 +1,3 @@
-######## BUILDING THE ANGULAR CLIENT ##########
-# NOTE: This image requires at least 5GB of memory, or the build will fail.
-
-# Install from the base nodejs image 
-FROM node:18-bullseye AS angular_client
-
-# Install updates
-RUN apt update 
-
-# Install the angular cli 
-RUN npm install -g @angular/cli
-
-# Copy extra folders that are needed by the application. 
-COPY schema /blattwerkzeug/schema
-
-
-# Copy the package dependencies and install them with npm as well as the source files
-WORKDIR /blattwerkzeug/client/
-COPY client/ ./
-RUN npm install
-
-# Change the working directory and start the angular application
-WORKDIR /blattwerkzeug/client/
-
-RUN ["npx", "ng", "build"]
-
 ######## BUILDING THE RAILS SERVER ############
 
 # Install the base ruby image
@@ -67,7 +41,7 @@ COPY server/ .
 WORKDIR /blattwerkzeug/rails_app
 
 # Copy the built image of the angular client 
-COPY --from=angular_client /blattwerkzeug/client/dist ./client/dist
+COPY --from=esqulino-client:latest /blattwerkzeug/client/dist ./client/dist
 
 # Copy extra folders that are needed by the application. 
 COPY schema/ ./schema
