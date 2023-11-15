@@ -1,0 +1,172 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 173518bf-51ff-44ae-be59-c05dfda79af8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Grammar: Approach-3'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 3234528f-edcf-43cf-9e22-83b264667357
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "invis-container", "languageName":
+    "grammar-with-invis-endri"}}], "nodes": [{"name": "typedef", "children": {"references":
+    [{"name": "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName":
+    "singleton", "languageName": "grammar-with-invis-endri"}}, {"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "optional", "languageName":
+    "grammar-with-invis-endri"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "patterns", "languageName": "grammar-with-invis-endri"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "container", "children": {"attributes": [{"name":
+    "children", "children": {"references": [{"name": "nodeRefCardinality", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "invis-container", "languageName": "grammar-with-invis-endri"}}],
+    "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
+    {"cardinality": "*"}}]}, "language": "MetaGrammar"}, {"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "patterns", "languageName": "grammar-with-invis-endri"}}],
+    "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
+    {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"base": "allowed", "name": "elements"}}], "orientation": [{"name":
+    "orientation", "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "invis-container", "languageName": "grammar-with-invis-endri"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "property", "language": "MetaGrammar", "properties":
+    {"base": "string", "name": "value"}}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "singleton", "languageName": "grammar-with-invis-endri"}}, {"name":
+    "concreteNode", "children": {"attributes": [{"name": "container", "children":
+    {"attributes": [{"name": "terminal", "language": "MetaGrammar", "properties":
+    {"symbol": "("}}, {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "singleton", "languageName": "grammar-with-invis-endri"}}],
+    "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar", "properties":
+    {"cardinality": "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar",
+    "properties": {"base": "sequence", "name": "quantified"}}, {"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": ")"}}, {"name": "terminal",
+    "language": "MetaGrammar", "properties": {"symbol": "?"}}], "orientation": [{"name":
+    "orientation", "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "optional", "languageName": "grammar-with-invis-endri"}}]}, "language": "MetaGrammar",
+    "properties": {"name": "grammar-with-invis-endri"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-28 09:31:07.051816000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-28 10:11:31.711690000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "grammar-with-invis-endri": {
+          "patterns": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "grammar-with-invis-endri",
+                "typeName": "singleton"
+              },
+              {
+                "languageName": "grammar-with-invis-endri",
+                "typeName": "optional"
+              }
+            ]
+          },
+          "invis-container": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "allowed",
+                    "name": "elements",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "grammar-with-invis-endri",
+                          "typeName": "invis-container"
+                        },
+                        "occurs": "*"
+                      },
+                      {
+                        "nodeType": {
+                          "languageName": "grammar-with-invis-endri",
+                          "typeName": "patterns"
+                        },
+                        "occurs": "*"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "singleton": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "property",
+                "base": "string",
+                "name": "value"
+              }
+            ]
+          },
+          "optional": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "("
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "quantified",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "grammar-with-invis-endri",
+                          "typeName": "singleton"
+                        },
+                        "occurs": "*"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": ")"
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": "?"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "visualisations": {},
+      "foreignVisualisations": {},
+      "root": {
+        "languageName": "grammar-with-invis-endri",
+        "typeName": "invis-container"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2

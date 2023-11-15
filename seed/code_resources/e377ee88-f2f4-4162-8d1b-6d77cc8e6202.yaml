@@ -1,0 +1,35 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 173518bf-51ff-44ae-be59-c05dfda79af8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: ABC Seq
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: e377ee88-f2f4-4162-8d1b-6d77cc8e6202
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "sequence", "children": {"children": [{"name":
+    "terminal", "children": {"rest": []}, "language": "regex-invis", "properties":
+    {"value": "A"}}, {"name": "terminal", "children": {"rest": []}, "language": "regex-invis",
+    "properties": {"value": "B"}}, {"name": "terminal", "children": {"rest": []},
+    "language": "regex-invis", "properties": {"value": "C"}}]}, "language": "regex-invis"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-21 12:21:07.372337000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-21 12:22:15.664025000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: 651b02eb-dc97-423b-8d03-8e241f42f107
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: Generic Language without code generator
+new_record: false
+active_record_yaml_version: 2

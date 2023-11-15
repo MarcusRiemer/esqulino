@@ -1,0 +1,62 @@
+--- !ruby/object:BlockLanguage
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: 73c99f6b-58ac-4083-b129-f640d99700ca
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Approach-1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: b9255bbd-f421-42aa-a863-ccab44f39362
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-25 08:33:43.297850000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-25 11:42:51.549019000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: default_programming_language_id
+  value_before_type_cast: generic
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: grammar_id
+  value_before_type_cast: f3afb850-e77c-48fb-959f-bade083faccd
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: sidebars
+  value_before_type_cast: "[]"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_blocks
+  value_before_type_cast: '[{"visual": [{"children": [{"style": {"color": "white",
+    "border": "2px solid red", "cursor": "default", "paddingLeft": "1ch", "paddingRight":
+    "1ch", "border-radius": "500px", "background-color": "red"}, "blockType": "error",
+    "excludedErrors": ["MISSING_CHILD", "INVALID_MIN_OCCURENCES"]}, {"children": [{"style":
+    {"display": "inline-flex"}, "property": "value", "blockType": "input"}, {"blockType":
+    "iterator", "childGroupName": "rest", "emptyDropTarget": false}], "blockType":
+    "container", "orientation": "horizontal"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "sequence", "languageName": "regex-1"}}, {"visual":
+    [{"children": [{"style": {"color": "white", "border": "2px solid red", "cursor":
+    "default", "paddingLeft": "1ch", "paddingRight": "1ch", "border-radius": "500px",
+    "background-color": "red"}, "blockType": "error", "excludedErrors": ["MISSING_CHILD",
+    "INVALID_MIN_OCCURENCES"]}, {"children": [{"text": "(", "style": {"display": "inline-flex"},
+    "blockType": "constant"}, {"blockType": "iterator", "childGroupName": "seq", "emptyDropTarget":
+    false}, {"text": ")", "style": {"display": "inline-flex"}, "blockType": "constant"},
+    {"text": "?", "style": {"display": "inline-flex"}, "blockType": "constant"}, {"blockType":
+    "iterator", "childGroupName": "rest", "emptyDropTarget": false}], "blockType":
+    "container", "orientation": "horizontal"}], "blockType": "block", "dropTarget":
+    {}}], "describedType": {"typeName": "optional", "languageName": "regex-1"}}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: editor_components
+  value_before_type_cast: '[{"componentType": "block-root"}, {"componentType": "validator"},
+    {"componentType": "generated-code"}]'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: local_generator_instructions
+  value_before_type_cast: '{"type": "manual"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root_css_classes
+  value_before_type_cast: "{activate-block-outline,activate-keyword}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: level
+new_record: false
+active_record_yaml_version: 2

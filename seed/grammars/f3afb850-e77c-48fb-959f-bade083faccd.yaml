@@ -1,0 +1,50 @@
+--- !ruby/object:Grammar
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: slug
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: Approach-1
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: f3afb850-e77c-48fb-959f-bade083faccd
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-25 08:33:43.025597000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-25 11:42:51.544739000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: generated_from_id
+  value_before_type_cast: a52ddf5e-f15b-4867-b741-86b0ed9c0407
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: types
+  value_before_type_cast: '{"regex-1": {"pattern": {"type": "oneOf", "oneOf": [{"typeName":
+    "sequence", "languageName": "regex-1"}, {"typeName": "optional", "languageName":
+    "regex-1"}]}, "optional": {"type": "concrete", "attributes": [{"type": "container",
+    "children": [{"type": "terminal", "symbol": "("}, {"name": "seq", "type": "sequence",
+    "nodeTypes": [{"typeName": "sequence", "languageName": "regex-1"}]}, {"type":
+    "terminal", "symbol": ")"}, {"type": "terminal", "symbol": "?"}, {"name": "rest",
+    "type": "sequence", "nodeTypes": [{"occurs": "?", "nodeType": {"typeName": "sequence",
+    "languageName": "regex-1"}}]}], "orientation": "horizontal"}]}, "sequence": {"type":
+    "concrete", "attributes": [{"type": "container", "children": [{"base": "string",
+    "name": "value", "type": "property"}, {"name": "rest", "type": "sequence", "nodeTypes":
+    [{"occurs": "?", "nodeType": {"typeName": "pattern", "languageName": "regex-1"}}]}],
+    "orientation": "horizontal"}]}}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_types
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: root
+  value_before_type_cast: '{"typeName": "pattern", "languageName": "regex-1"}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: visualisations
+  value_before_type_cast: "{}"
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: foreign_visualisations
+  value_before_type_cast: "{}"
+new_record: false
+active_record_yaml_version: 2

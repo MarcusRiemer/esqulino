@@ -1,0 +1,210 @@
+--- !ruby/object:CodeResource
+concise_attributes:
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: project_id
+  value_before_type_cast: 173518bf-51ff-44ae-be59-c05dfda79af8
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: name
+  value_before_type_cast: 'Grammar: Regex with Invisible Sequence'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: id
+  value_before_type_cast: 71f35596-1d75-4b02-968c-789eb8254347
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: ast
+  value_before_type_cast: '{"name": "grammar", "children": {"root": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "expr", "languageName":
+    "regex-invis"}}], "nodes": [{"name": "typedef", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "terminal",
+    "languageName": "regex-invis"}}, {"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "sequence", "languageName": "regex-invis"}}, {"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "optional",
+    "languageName": "regex-invis"}}]}, "language": "MetaGrammar", "properties": {"typeName":
+    "expr", "languageName": "regex-invis"}}, {"name": "concreteNode", "children":
+    {"attributes": [{"name": "container", "children": {"attributes": [{"name": "property",
+    "language": "MetaGrammar", "properties": {"base": "string", "name": "value"}},
+    {"name": "children", "children": {"references": [{"name": "nodeRefCardinality",
+    "children": {"references": [{"name": "nodeRefOne", "language": "MetaGrammar",
+    "properties": {"typeName": "expr", "languageName": "regex-invis"}}], "cardinality":
+    [{"name": "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality":
+    "*"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"base": "sequence", "name": "rest"}}], "orientation": [{"name": "orientation",
+    "language": "MetaGrammar", "properties": {"orientation": "horizontal"}}]}, "language":
+    "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"typeName": "terminal",
+    "languageName": "regex-invis"}}, {"name": "concreteNode", "children": {"attributes":
+    [{"name": "container", "children": {"attributes": [{"name": "children", "children":
+    {"references": [{"name": "nodeRefCardinality", "children": {"references": [{"name":
+    "nodeRefOne", "language": "MetaGrammar", "properties": {"typeName": "expr", "languageName":
+    "regex-invis"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
+    "properties": {"cardinality": "+"}}]}, "language": "MetaGrammar"}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "children"}}], "orientation":
+    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
+    "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "sequence", "languageName": "regex-invis"}}, {"name": "concreteNode",
+    "children": {"attributes": [{"name": "container", "children": {"attributes": [{"name":
+    "terminal", "language": "MetaGrammar", "properties": {"symbol": "("}}, {"name":
+    "children", "children": {"references": [{"name": "nodeRefCardinality", "children":
+    {"references": [{"name": "nodeRefOne", "language": "MetaGrammar", "properties":
+    {"typeName": "expr", "languageName": "regex-invis"}}], "cardinality": [{"name":
+    "knownCardinality", "language": "MetaGrammar", "properties": {"cardinality": "+"}}]},
+    "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties": {"base":
+    "sequence", "name": "children"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": ")"}}, {"name": "terminal", "language": "MetaGrammar",
+    "properties": {"symbol": "?"}}, {"name": "children", "children": {"references":
+    [{"name": "nodeRefCardinality", "children": {"references": [{"name": "nodeRefOne",
+    "language": "MetaGrammar", "properties": {"typeName": "expr", "languageName":
+    "regex-invis"}}], "cardinality": [{"name": "knownCardinality", "language": "MetaGrammar",
+    "properties": {"cardinality": "+"}}]}, "language": "MetaGrammar"}]}, "language":
+    "MetaGrammar", "properties": {"base": "sequence", "name": "rest"}}], "orientation":
+    [{"name": "orientation", "language": "MetaGrammar", "properties": {"orientation":
+    "horizontal"}}]}, "language": "MetaGrammar"}]}, "language": "MetaGrammar", "properties":
+    {"typeName": "optional", "languageName": "regex-invis"}}]}, "language": "MetaGrammar",
+    "properties": {"name": "regex-invis"}}'
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: created_at
+  value_before_type_cast: 2023-04-21 11:50:57.160612000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: updated_at
+  value_before_type_cast: 2023-04-21 12:21:36.096198000 Z
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: block_language_id
+  value_before_type_cast: df3ec59c-20c0-446d-8c84-7580e1c418bf
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: programming_language_id
+  value_before_type_cast: meta-grammar
+- !ruby/object:ActiveModel::Attribute::FromDatabase
+  name: compiled
+  value_before_type_cast: |-
+    {
+      "types": {
+        "regex-invis": {
+          "expr": {
+            "type": "oneOf",
+            "oneOf": [
+              {
+                "languageName": "regex-invis",
+                "typeName": "terminal"
+              },
+              {
+                "languageName": "regex-invis",
+                "typeName": "sequence"
+              },
+              {
+                "languageName": "regex-invis",
+                "typeName": "optional"
+              }
+            ]
+          },
+          "terminal": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "property",
+                    "base": "string",
+                    "name": "value"
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "rest",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "regex-invis",
+                          "typeName": "expr"
+                        },
+                        "occurs": "*"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "sequence": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "sequence",
+                    "name": "children",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "regex-invis",
+                          "typeName": "expr"
+                        },
+                        "occurs": "+"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "optional": {
+            "type": "concrete",
+            "attributes": [
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "children": [
+                  {
+                    "type": "terminal",
+                    "symbol": "("
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "children",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "regex-invis",
+                          "typeName": "expr"
+                        },
+                        "occurs": "+"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": ")"
+                  },
+                  {
+                    "type": "terminal",
+                    "symbol": "?"
+                  },
+                  {
+                    "type": "sequence",
+                    "name": "rest",
+                    "nodeTypes": [
+                      {
+                        "nodeType": {
+                          "languageName": "regex-invis",
+                          "typeName": "expr"
+                        },
+                        "occurs": "+"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "foreignTypes": {},
+      "visualisations": {},
+      "foreignVisualisations": {},
+      "root": {
+        "languageName": "regex-invis",
+        "typeName": "expr"
+      }
+    }
+new_record: false
+active_record_yaml_version: 2
