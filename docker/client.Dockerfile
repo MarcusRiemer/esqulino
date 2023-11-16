@@ -13,7 +13,12 @@ RUN mkdir -p /blattwerkzeug/schema
 # Copy the package dependencies and install them with npm as well as the source files.
 # Note: angular will also be installed as a dependency
 WORKDIR /blattwerkzeug/client/
-COPY client/ ./
+
+COPY client/package.json client/package-lock.json ./
 RUN npm install
 
+# Copy the sorce code. 
+COPY client/ ./
+
+# Build the angular application.
 RUN ["npx", "ng", "build"]
