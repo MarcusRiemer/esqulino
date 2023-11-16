@@ -3,7 +3,7 @@ import { Selector } from "./transform.description";
 import { findMatches } from "./transform.matching";
 import * as RegexTemplates from "./transform.rules.regex";
 
-describe("Finding matchings of selectors on trees", () => {
+fdescribe("Finding matchings of selectors on trees", () => {
   describe("Matching against the not type Selector", () => {
     it("Matching all non char nodes", () => {
       const testInput = new SyntaxTree({
@@ -644,7 +644,7 @@ describe("Finding matchings of selectors on trees", () => {
 
     //debugger;
     // The immediateChild Selector, when matched, gvies back the parent's node location.
-    const result: NodeLocation[] = [[["elements", 1]]];
+    const result: NodeLocation[] = [[["elements", 1], ["alternatives", 1]]];
     expect(matches).toEqual(result);
   });
 

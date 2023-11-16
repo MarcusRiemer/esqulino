@@ -12,6 +12,7 @@ export function doesNodeMatchSelector(
   node: SyntaxNode,
   selector: Selector
 ): boolean {
+  if(node === undefined) return false; // Nothing matches against an empty or undefined Node.
   let to_return = true;
   //TODO: NotSelector implementation
   switch (selector.kind) {
@@ -60,16 +61,7 @@ export function doesNodeMatchSelector(
         return to_return;
       }
     case "immediateChild":
-      if (doesNodeMatchSelector(node, selector.parent)) {
-        // parent matches?
-        for (let categoryName of node.childrenCategoryNames) {
-          // does any child from any category matches the child selector?
-          for (let childNode of node.getChildrenInCategory(categoryName)) {
-            if (doesNodeMatchSelector(childNode, selector.child)) return true;
-          }
-        }
-        return false; // no child matches the child selector
-      } else return false; // parent doesn't match the parent selector
+      return (doesNodeMatchSelector(node, selector.child) && doesNodeMatchSelector(node.nodeParent, selector.parent));
     case "property-simple":
       // nothing to match against
       if (!node.hasProperties) return false;
