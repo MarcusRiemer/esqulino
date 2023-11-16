@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: postgres
+  password: postgres
+  host: postgres
+  pool: 5
+  database: esqulino
+  port: 5432
+
+test:
+  <<: *default
+  database: esqulino_ci
+
+development:
+  <<: *default
+  database: esqulino_dev

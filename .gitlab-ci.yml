@@ -1,0 +1,92 @@
+stages:
+  - build
+  - test
+  - deploy
+
+.services_config: &services_config
+  services:
+    - postgres:15-bullseye
+
+variables:
+  POSTGRES_DB: $database
+  POSTGRES_USER: $username
+  POSTGRES_PASSWORD: $password
+  POSTGRES_HOST_AUTH_METHOD: trust
+  TPUT_BIN: "true"
+
+#  _           _ _     _
+# | |__  _   _(_) | __| |
+# | '_ \| | | | | |/ _` |
+# | |_) | |_| | | | (_| |
+# |_.__/ \__,_|_|_|\__,_|
+#
+build:
+  stage: build
+  image: node:latest
+  script:
+    - cd client
+    - make install-deps
+    - make client-compile
+    - make cli-compile
+    - echo "Compile complete."
+  artifacts:
+    paths:
+      - client/dist/cli/
+    expire_in: 1 hour
+
+#  _            _
+# | |_ ___  ___| |_
+# | __/ _ \/ __| __|
+# | ||  __/\__ \ |_
+#  \__\___||___/\__|
+#
+test_rubocop:
+  stage: test
+  image: ruby:3.2.2
+  interruptible: true
+  before_script:
+    - cd server
+    - gem update --system
+    - apt-get update
+    - apt-get install libmagic-dev
+    - make install-deps
+  script:
+#    - bundle exec rubocop
+    - echo "rubocop job is still skipped due to too many offenses and will be enabled later"
+
+test_rspec:
+  <<: *services_config
+  stage: test
+  image: ruby:3.2.2
+  interruptible: true
+  variables:
+    STACKPROF: 1
+    RAILS_ENV: test
+    CI: "1"
+  before_script:
+    - cd server
+    - gem update --system
+    - apt-get update
+    - apt-get install -y libmagic-dev nodejs graphviz
+    - cp config/database.yml.sample.gitlab_ci config/database.yml
+    - make install-deps
+    - make setup-database-schema
+
+  script:
+    - bundle exec rspec spec
+    - echo "executed rspec"
+
+  dependencies:
+    - build
+
+#      _            _
+#   __| | ___ _ __ | | ___  _   _
+#  / _` |/ _ \ '_ \| |/ _ \| | | |
+# | (_| |  __/ |_) | | (_) | |_| |
+#  \__,_|\___| .__/|_|\___/ \__, |
+#            |_|            |___/
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying application will be added later"
