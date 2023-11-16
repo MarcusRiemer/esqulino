@@ -67,12 +67,10 @@ test_rspec:
     - cd server
     - gem update --system
     - apt-get update
-    - apt-get install libmagic-dev
+    - apt-get install -y libmagic-dev nodejs graphviz
     - cp config/database.yml.sample.gitlab_ci config/database.yml
     - make install-deps
     - make setup-database-schema
-    - apt-get install -y nodejs
-    - apt-get install -y graphviz
 
   script:
     - bundle exec rspec spec
