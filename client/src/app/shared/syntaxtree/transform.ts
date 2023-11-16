@@ -38,10 +38,12 @@ function haveSameParent(
   return toReturn;
 }
 
+/* NOTE: This function does modify the state of its arguments! */
+
 export function appendPropertiesToNodeDescription(
   nodeDesc: NodeDescription,
-  properties: { [propertyName: string]: string },
-  flag: "copy" | "overwrite" | "ignore"
+  properties: Readonly<{ [propertyName: string]: string }>,
+  flag: Readonly< "copy" | "overwrite" | "ignore">
 ) {
   // Nothing to do.
   if (properties === undefined) return nodeDesc;
@@ -68,11 +70,13 @@ export function appendPropertiesToNodeDescription(
   return nodeDesc;
 }
 
+/* NOTE: This function does modify the state of its arguments! */
+
 export function appendChildGroupsToNodeDescription(
   nodeDesc: NodeDescription,
-  children: { [childrenCategory: string]: NodeDescription[] },
-  position: "in-place" | "start" | "end",
-  inplaceInsertPosition?: number
+  children: Readonly<{ [childrenCategory: string]: NodeDescription[] }>,
+  position: Readonly<"in-place" | "start" | "end">,
+  inplaceInsertPosition?: Readonly<number>
 ): NodeDescription {
   // Nothing to do
   if (children === undefined) return nodeDesc;
@@ -126,9 +130,9 @@ export function appendChildGroupsToNodeDescription(
 export function unwrapTransformation(
   parentNode: SyntaxNode,
   matchedNodeLoc: NodeLocation,
-  unwrapPattern: TransformPatternUnwrap
+  unwrapPattern: Readonly<TransformPatternUnwrap>
 ): NodeDescription {
-  let insertPositionTag =
+  const insertPositionTag =
     unwrapPattern.position === undefined ? "start" : unwrapPattern.position;
   let subTree = new SyntaxTree(parentNode.toModel());
   const matchedNode = subTree.locate(matchedNodeLoc);
@@ -172,11 +176,11 @@ export function unwrapTransformation(
 export function wrapTransformation(
   parentNode: SyntaxNode,
   matchedNodeLoc: NodeLocation,
-  wrapPattern: TransformPatternWrapWith
+  wrapPattern: Readonly<TransformPatternWrapWith>
 ): NodeDescription {
   // Create the new Node from the definition given by the user.
-  let newNodeDesc = wrapPattern.newNode; // TODO: is undefined check here necessary?
-  let newChildGroup = wrapPattern.appendOntoGroup; // TODO: is undefined check here necessary?
+  let newNodeDesc = JSON.parse(JSON.stringify(wrapPattern.newNode)); // TODO: is undefined check here necessary?
+  const newChildGroup = wrapPattern.appendOntoGroup; // TODO: is undefined check here necessary?
   let subTree = new SyntaxTree(parentNode.toModel());
   if (!newNodeDesc.children) newNodeDesc.children = {};
   // Append the matched node as a child of the newNodeDesch under the newChildGroup.
@@ -184,7 +188,8 @@ export function wrapTransformation(
     newNodeDesc.children[newChildGroup] = [
       subTree.locate(matchedNodeLoc).toModel(),
     ];
-  else
+  // This else clause allows for newNodeDesc to be defined as already having children. 
+  else // TODO: Don't allow children. 
     newNodeDesc.children[newChildGroup].push(
       subTree.locate(matchedNodeLoc).toModel()
     );
@@ -208,11 +213,11 @@ export function wrapTransformation(
 export function replaceTransformation(
   parentNode: SyntaxNode,
   matchedNodeLoc: NodeLocation,
-  replacePattern: TransformPatternReplace
+  replacePattern: Readonly<TransformPatternReplace>
 ): NodeDescription {
   //TODO: Either do nothing if no replacement pattern is defined or allow the just delete the matched node if that is the case.
   if (replacePattern.newNode === undefined) return parentNode.toModel();
-  let newNodeDesc = replacePattern.newNode; // TODO: is undefined check here necessary?
+  let newNodeDesc = JSON.parse(JSON.stringify(replacePattern.newNode)); // TODO: is undefined check here necessary?
   let subTree = new SyntaxTree(parentNode.toModel());
   let oldNode = subTree.locate(matchedNodeLoc).toModel();
   let newChildren = {};
@@ -221,12 +226,13 @@ export function replaceTransformation(
   if (replacePattern.oldChildren === "copy") {
     if (replacePattern.oldChildrenAppendOntoGroup) {
       // The user wants to append all children of the old node under one single childGroup
-      let newChildGroupName = replacePattern.oldChildrenAppendOntoGroup;
+      const newChildGroupName = replacePattern.oldChildrenAppendOntoGroup;
       newChildren[newChildGroupName] = [];
       if (oldNode.children)
         Object.keys(oldNode.children).forEach((key: string) =>
           newChildren[newChildGroupName].push(...oldNode.children[key])
         );
+      //This check allows for the replacing node to have children of its own defined.
       if (!newNodeDesc.children) newNodeDesc.children = newChildren;
       else if (newNodeDesc.children[newChildGroupName]) {
         // push to the end if the childgroup already exists on the newNode
@@ -273,13 +279,11 @@ export function replaceTransformation(
 export function mergeTwoTransformation(
   parentNode: SyntaxNode,
   matchedLeftNodeLoc: NodeLocation,
-  mergePattern: TransformPatternMergeTwo
+  mergePattern: Readonly<TransformPatternMergeTwo>
 ): NodeDescription {
   let subTree = new SyntaxTree(parentNode.toModel());
   const leftNodeDesc = subTree.locate(matchedLeftNodeLoc).toModel();
-  let newMergedNode: NodeDescription = subTree
-    .locate(matchedLeftNodeLoc)
-    .toModel();
+  let newMergedNode: NodeDescription = JSON.parse(JSON.stringify(leftNodeDesc));
   let matchedRightNodeLoc: NodeLocation = [
     [matchedLeftNodeLoc[0][0], matchedLeftNodeLoc[0][1] + 1],
   ];
@@ -355,7 +359,7 @@ export function mergeTwoTransformation(
 export function splitOnPropertyTransformation(
   parentNode: SyntaxNode,
   matchedNodeLoc: NodeLocation,
-  splitPropertyPattern: TransformPatternSplitOnProperty
+  splitPropertyPattern: Readonly<TransformPatternSplitOnProperty>
 ): NodeDescription {
   let subTree = new SyntaxTree(parentNode.toModel());
   /*
@@ -431,7 +435,7 @@ export function splitOnPropertyTransformation(
     // Adding the new children Nodes
     if (splitPropertyPattern.wraperNode) {
       // Adding them under a wrapperNode
-      let wrapperNodeDesc = splitPropertyPattern.wraperNode;
+      let wrapperNodeDesc = JSON.parse(JSON.stringify(splitPropertyPattern.wraperNode));
       if (splitPropertyPattern.newNodesChildgroup === undefined)
         throw new Error(
           "Expected a childgroup name for the wrapper node, but got undefined."
@@ -475,7 +479,7 @@ export function splitOnPropertyTransformation(
 
 export function applyTransformPatternOnLocation(
   tree: SyntaxTree,
-  tPattern: TransformPattern,
+  tPattern: Readonly<TransformPattern>,
   loc: NodeLocation
 ): NodeDescription {
   // TODO: Is there a reason to return a NodeDescription instead of a SyntaxTree?
@@ -616,7 +620,7 @@ export function applyTransformPatternOnLocation(
  */
 export function applyRules(
   inp: SyntaxTree,
-  rules: TransformRule[]
+  rules: Readonly<TransformRule[]>
 ): SyntaxTree {
   let modifiedFlag: boolean = false;
   let rule_index = 0;
@@ -661,7 +665,7 @@ export function applyRules(
               rules[rule_index].transformPattern,
               nextMatch
             );
-            modifiedFlag =
+            modifiedFlag = modifiedFlag ||
               JSON.stringify(resultTreeDesc) !== JSON.stringify(inputDesc);
             inputDesc = resultTreeDesc;
             if (modifiedFlag) break;
@@ -673,7 +677,7 @@ export function applyRules(
             rules[rule_index].transformPattern,
             nextMatch
           );
-          modifiedFlag =
+          modifiedFlag = modifiedFlag ||
             JSON.stringify(resultTreeDesc) !== JSON.stringify(inputDesc);
           inputDesc = resultTreeDesc;
         }

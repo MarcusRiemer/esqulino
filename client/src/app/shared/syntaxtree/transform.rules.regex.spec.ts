@@ -21,7 +21,16 @@ transformRules.push(regexTranformRules[0]);
 //transformRules.push(regexTranformRules[1]);
 transformRules.push(regexTranformRules[2]);
 transformRules.push(regexTranformRules[3]);
-//transformRules.push(regexTranformRules[4]);
+transformRules.push(regexTranformRules[4]);
+
+const deepFreeze = obj => {
+  Object.keys(obj).forEach(prop => {
+    if (typeof obj[prop] === 'object') deepFreeze(obj[prop]);
+  });
+  return Object.freeze(obj);
+};
+
+const transformRulesFrozen = deepFreeze (transformRules); 
 
 fdescribe("Expected user input transformations", () => {
   describe("Multivalued character nodes are seperated into multiple single valued character nodes", () => {
@@ -77,13 +86,13 @@ fdescribe("Expected user input transformations", () => {
       };
 
       const inp = new AST.SyntaxTree(inputDesc);
-      const resultDesc: AST.NodeDescription = applyRules(
+      const resultDesc_1: AST.NodeDescription = applyRules(
         inp,
-        transformRules
+        transformRulesFrozen
       ).toModel();
 
       debugger;
-      expect(expectedDesc).toEqual(resultDesc);
+      expect(expectedDesc).toEqual(resultDesc_1);
     });
   });
 
@@ -124,7 +133,7 @@ fdescribe("Expected user input transformations", () => {
       const inp = new AST.SyntaxTree(inputDesc);
       const resultDesc: AST.NodeDescription = applyRules(
         inp,
-        transformRules
+        transformRulesFrozen
       ).toModel();
       debugger;
       expect(expectedResultDesc).toEqual(resultDesc);
@@ -162,7 +171,7 @@ fdescribe("Expected user input transformations", () => {
       const inp = new AST.SyntaxTree(inputDesc);
       const resultDesc: AST.NodeDescription = applyRules(
         inp,
-        transformRules
+        transformRulesFrozen
       ).toModel();
       debugger;
       expect(expectedResultDesc).toEqual(resultDesc);
@@ -212,7 +221,7 @@ fdescribe("Expected user input transformations", () => {
       };
 
       const inp = new AST.SyntaxTree(inputDesc);
-      const resultDesc = applyRules(inp, transformRules).toModel();
+      const resultDesc = applyRules(inp, transformRulesFrozen).toModel();
       debugger;
       expect(expectedResultDesc).toEqual(resultDesc);
     });
@@ -261,7 +270,7 @@ fdescribe("Expected user input transformations", () => {
       };
 
       const inp = new AST.SyntaxTree(inputDesc);
-      const resultDesc = applyRules(inp, transformRules).toModel();
+      const resultDesc = applyRules(inp, transformRulesFrozen).toModel();
       debugger;
       expect(expectedResultDesc).toEqual(resultDesc);
     });
@@ -323,7 +332,7 @@ fdescribe("Expected user input transformations", () => {
       };
 
       const inp = new AST.SyntaxTree(inputDesc);
-      const resultDesc = applyRules(inp, transformRules).toModel();
+      const resultDesc = applyRules(inp, transformRulesFrozen).toModel();
       debugger;
       expect(expectedResultDesc).toEqual(resultDesc);
     });
@@ -432,7 +441,7 @@ fdescribe("Expected user input transformations", () => {
       };
 
       const inp = new AST.SyntaxTree(inputDesc);
-      const resultDesc = applyRules(inp, transformRules).toModel();
+      const resultDesc = applyRules(inp, transformRulesFrozen).toModel();
       debugger;
       expect(expectedResultDesc).toEqual(resultDesc);
     });
@@ -480,7 +489,7 @@ fdescribe("Expected user input transformations", () => {
       };
 
       const inp = new AST.SyntaxTree(inputDesc);
-      const resultDesc = applyRules(inp, transformRules).toModel();
+      const resultDesc = applyRules(inp, transformRulesFrozen).toModel();
       debugger;
       expect(expectedResultDesc).toEqual(resultDesc);
     });
