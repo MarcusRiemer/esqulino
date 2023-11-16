@@ -79,6 +79,35 @@ test_rspec:
   dependencies:
     - build
 
+test_client:
+  stage: test
+  image: node:latest
+  interruptible: true
+  variables:
+    STACKPROF: 1
+    RAILS_ENV: test
+    CI: "1"
+
+  before_script:
+    - apt-get update && apt-get install -y gnupg2
+
+    # Install Chrome
+    - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    - curl -sS -o - https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
+    - apt install -y ./google-chrome-stable_current_amd64.deb
+
+    # Install Firefox
+    - apt-get install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils --assume-yes
+    - wget -nv -O ~/FirefoxSetup.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64"
+    - tar xjf ~/FirefoxSetup.tar.bz2 -C /opt/
+    - ln -s /opt/firefox/firefox /usr/lib/firefox
+    - export PATH=$PATH:/opt/firefox/
+
+    - cd client
+    - make install-deps
+  script:
+    - make test
+
 #      _            _
 #   __| | ___ _ __ | | ___  _   _
 #  / _` |/ _ \ '_ \| |/ _ \| | | |
