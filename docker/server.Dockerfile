@@ -41,7 +41,7 @@ COPY server/ .
 WORKDIR /blattwerkzeug/rails_app
 
 # Copy the built image of the angular client 
-COPY --from=esqulino-client:latest /blattwerkzeug/client/dist ./client/dist
+COPY --from=blattwerkzeug-client:latest /blattwerkzeug/client/dist ./client/dist
 
 # Copy extra folders that are needed by the application. 
 COPY schema/ ./schema

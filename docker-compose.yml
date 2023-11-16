@@ -13,25 +13,12 @@ services:
       - data-postgres-volume:/var/lib/postgresql/data
 
 
-# The angular client image, used for testing: 
+# The angular client image: 
   client: 
+    image: blattwerkzeug-client:latest
     build:
       context: .
-      dockerfile: ./docker/client.Dockerfile
-#      platforms: 
-#        - "linux/amd64"
-#        - "linux/arm64"
-#    image: 
-    ports: 
-      - 4200:4200
-    depends_on:
-      - db
-    environment:
-      - DATABASE_HOST=db      
-#    volumes:
-#      - data-files-volume:/blattwerkzeug/rails_app/data
-#      - schema-files-volume: 
-
+      dockerfile: ./docker/client.Dockerfile   
 
 # # Keycloak  
 #   accounts:
@@ -63,7 +50,6 @@ services:
       - DATABASE_HOST=db      
     volumes:
       - data-files-volume:/blattwerkzeug/rails_app/data
-#      - schema-files-volume: 
 
 volumes:
   data-files-volume:
