@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This project on a whole will have some fairly sophisticated default datasets that
 # need to be updated possibly even more frequently than the actual code. The end-goal
 # of this class is to provide a solution to keep the "stock" projects of BlattWerkzeug

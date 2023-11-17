@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Various files for that no processing is required
 class StaticFilesController < ApplicationController
   # Required to make use of rails templates
@@ -12,7 +14,7 @@ class StaticFilesController < ApplicationController
   # Serves known static files or falls back to the index.html if the
   # file that is asked for is not known
   def index
-    requested_path = URI.parse(request.original_url).path[1..-1]
+    requested_path = URI.parse(request.original_url).path[1..]
     if requested_path.start_with? 'api'
       # API paths are never static pages
       render plain: 'API endpoint triggered by fallback controller', status: 503
@@ -21,10 +23,10 @@ class StaticFilesController < ApplicationController
       possible_locales = [request_locale, 'de', 'en', nil]
       local_path = locale_index_path(possible_locales.shift, requested_path)
 
-      local_path = locale_index_path(possible_locales.shift, requested_path) while !possible_locales.empty? and local_path.nil? or !File.exist? local_path
+      local_path = locale_index_path(possible_locales.shift, requested_path) while !possible_locales.empty? && local_path.nil? || !File.exist?(local_path)
 
       # Still no file found? Thats an error
-      raise EsqulinoError::NoCompiledClient, local_path if local_path.nil? or !File.exist? local_path
+      raise EsqulinoError::NoCompiledClient, local_path if local_path.nil? || !File.exist?(local_path)
 
       send_file local_path, disposition: 'inline'
     end
@@ -55,7 +57,7 @@ class StaticFilesController < ApplicationController
 
     # If we don't know that file, assume that the index file
     # was requested
-    if requested_path.empty? or !File.exist? local_path
+    if requested_path.empty? || !File.exist?(local_path)
       local_path = if request_locale.nil?
                      basepath.join('index.html')
                    else

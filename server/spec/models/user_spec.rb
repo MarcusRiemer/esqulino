@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
@@ -60,7 +62,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'Previously existing role' do
-      r = FactoryBot.create(:role, name: 'spec')
+      FactoryBot.create(:role, name: 'spec')
       u = FactoryBot.create(:user)
       u.add_role 'spec'
 

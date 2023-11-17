@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Grammar, type: :model do
@@ -551,7 +553,7 @@ RSpec.describe Grammar, type: :model do
     it 'replaces an existing includes with a new includes' do
       grammar = FactoryBot.create(:grammar)
       inc_1 = FactoryBot.create(:grammar)
-      ref_1 = grammar.grammar_reference_origins.create(target: inc_1, reference_type: 'include_types')
+      grammar.grammar_reference_origins.create(target: inc_1, reference_type: 'include_types')
 
       expect(grammar.targeted_grammars).to eq [inc_1]
 

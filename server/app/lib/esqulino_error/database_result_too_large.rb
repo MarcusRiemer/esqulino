@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # A query is too big to be executed properly
   class DatabaseResultTooLarge < Base

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserController < ApplicationController
   include UserHelper
   include LocaleHelper
@@ -23,7 +25,7 @@ class UserController < ApplicationController
 
   def may_perform_params
     permited = params.permit([list: %i[resourceId resourceType policyAction]])
-    permited[:list].map { |e| e.transform_keys! { |k| k.underscore } }
+    permited[:list].map { |e| e.transform_keys!(&:underscore) }
     permited
   end
 

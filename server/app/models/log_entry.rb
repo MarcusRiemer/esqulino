@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Keeps track of noteable events that occured. "Noteable" are mainly things that
 # are either security related or destructive.
 #

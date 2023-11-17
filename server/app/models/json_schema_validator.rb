@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Just because you could, that doesn't mean you should: This validator is used to ensure
 # that the JSON docuemnts inside the SQL database adhere to a specific schema.
 class JsonSchemaValidator < ActiveModel::EachValidator

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # The most general error, this base-class is required
   # to distinguish "ordinary" ruby errors from those that are

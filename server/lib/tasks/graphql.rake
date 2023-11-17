@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'graphql/rake_task'
 GraphQL::RakeTask.new(
   load_schema: lambda { |_task|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SchemaTools
   # Describes how a single column of a certain table references
   # another column in (possibly) another table.

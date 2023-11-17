@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # All actions that concern queries that are part of a project
 class ProjectQueriesController < ApplicationController
   include ProjectsHelper

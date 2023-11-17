@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'securerandom' # To make up unique slugs on the fly
 require 'fileutils'    # To ease file comparision
@@ -43,7 +45,7 @@ RSpec.describe Seed::BlockLanguageSeed do
         Seed::BlockLanguageSeed.new(bOrig).start_store
 
         bOrig.destroy!
-        bLoad = Seed::BlockLanguageSeed.new(bOrig.id).start_load
+        Seed::BlockLanguageSeed.new(bOrig.id).start_load
         bLoadData = BlockLanguage.find_by(id: bOrig.id)
 
         expect(identifying_attributes(bOrig)).to eq identifying_attributes(bLoadData)
@@ -55,7 +57,7 @@ RSpec.describe Seed::BlockLanguageSeed do
         Seed::BlockLanguageSeed.new(bOrig.id).start_store
 
         bOrig.destroy!
-        bLoad = Seed::BlockLanguageSeed.new(bOrig.id).start_load
+        Seed::BlockLanguageSeed.new(bOrig.id).start_load
         bLoadData = BlockLanguage.find_by(id: bOrig.id)
 
         expect(identifying_attributes(bOrig)).to eq identifying_attributes(bLoadData)
@@ -67,7 +69,7 @@ RSpec.describe Seed::BlockLanguageSeed do
         Seed::BlockLanguageSeed.new(pOrig.id).start_store
 
         pOrig.destroy!
-        pLoad = Seed::BlockLanguageSeed.new(pOrig.slug).start_load
+        Seed::BlockLanguageSeed.new(pOrig.slug).start_load
         pLoadData = BlockLanguage.find_by(slug: pOrig.slug)
 
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
@@ -89,7 +91,7 @@ RSpec.describe Seed::BlockLanguageSeed do
         # Making a change after storing
         bOrig.update_column('name', 'changed')
 
-        gLoad = Seed::BlockLanguageSeed.new(bOrig.id).start_load
+        Seed::BlockLanguageSeed.new(bOrig.id).start_load
         gLoadData = BlockLanguage.find_by(id: bOrig.id)
         bOrig.reload
 

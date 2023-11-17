@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class IdentityPolicy < ApplicationPolicy
   attr_reader :user, :identity
 

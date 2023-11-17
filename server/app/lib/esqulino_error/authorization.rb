@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Some authentication went wrong
   class Authorization < Base

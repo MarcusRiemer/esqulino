@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'filemagic'
 require 'mini_magick'
 
@@ -39,7 +41,7 @@ module ImageHelper
     res = nil
     begin
       image = MiniMagick::Image.open(path)
-      if width and Integer(width) and (Integer(width) < image.width)
+      if width && Integer(width) && (Integer(width) < image.width)
         width = Integer(width)
 
         image.resize "#{width}x"

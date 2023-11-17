@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Role < ApplicationRecord
   COMMON_NAMES = Set.new(%w[admin guest validated news_editor])
 

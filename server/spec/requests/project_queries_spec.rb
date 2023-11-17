@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ProjectQueriesController, type: :request do
@@ -12,7 +14,7 @@ RSpec.describe ProjectQueriesController, type: :request do
     after(:each) do
       @db.project.update!(default_database: nil) if @db.project && @db.project.default_database_id == @db.id
       @db.destroy!
-      @db.project.destroy! if @db.project
+      @db.project&.destroy!
     end
 
     it 'Arbitrary query with 7 rows' do
@@ -29,7 +31,7 @@ RSpec.describe ProjectQueriesController, type: :request do
 
       json_data = JSON.parse(response.body)
       expect(json_data.fetch('errors', [])).to eq []
-      expect(json_data['columns']).to eq(%w[key value key value].map { |c| 'key_value.' + c })
+      expect(json_data['columns']).to eq(%w[key value key value].map { |c| "key_value.#{c}" })
       expect(json_data['rows'][0]).to eq [3, 'drei', 3, 'drei']
       expect(json_data['totalCount']).to eq 7
     end

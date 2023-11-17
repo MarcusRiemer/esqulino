@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Resolvers::ProjectsResolver do
@@ -204,8 +206,8 @@ RSpec.describe Resolvers::ProjectsResolver do
     res2 = exec_project_id_query(
       languages: ['de']
     )
-    expect(res.map { |p| p.name }).to eq([{ 'en' => 'hello' }, { 'en' => 'hello3' }, { 'en' => 'hello4' }, {}])
-    expect(res2.map { |p| p.name }).to eq([{ 'de' => 'hallo' }, { 'de' => 'hallo2' }, {}, {}])
+    expect(res.map(&:name)).to eq([{ 'en' => 'hello' }, { 'en' => 'hello3' }, { 'en' => 'hello4' }, {}])
+    expect(res2.map(&:name)).to eq([{ 'de' => 'hallo' }, { 'de' => 'hallo2' }, {}, {}])
   end
 
   describe 'Get only languages which are requested in description column' do
@@ -220,12 +222,12 @@ RSpec.describe Resolvers::ProjectsResolver do
       res = exec_project_id_query(
         languages: ['en']
       )
-      expect(res.map { |p| p.description }).to match_array([
-                                                             { 'en' => 'hello' },
-                                                             {},
-                                                             { 'en' => 'hello3' },
-                                                             { 'en' => 'hello4' }
-                                                           ])
+      expect(res.map(&:description)).to match_array([
+                                                      { 'en' => 'hello' },
+                                                      {},
+                                                      { 'en' => 'hello3' },
+                                                      { 'en' => 'hello4' }
+                                                    ])
     end
 
     it 'for de' do
@@ -233,12 +235,12 @@ RSpec.describe Resolvers::ProjectsResolver do
         languages: ['de']
       )
 
-      expect(res2.map { |p| p.description }).to match_array([
-                                                              { 'de' => 'hallo' },
-                                                              { 'de' => 'hallo2' },
-                                                              {},
-                                                              {}
-                                                            ])
+      expect(res2.map(&:description)).to match_array([
+                                                       { 'de' => 'hallo' },
+                                                       { 'de' => 'hallo2' },
+                                                       {},
+                                                       {}
+                                                     ])
     end
   end
 

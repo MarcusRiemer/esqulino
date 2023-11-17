@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GraphqlController < ApplicationController
   include UserHelper
   include LocaleHelper
@@ -16,7 +18,7 @@ class GraphqlController < ApplicationController
     query = get_query(operation_name)
 
     # TODO: proper authorisation instead of relying on the name of the query
-    raise EsqulinoError::Authorization if operation_name and operation_name.start_with? 'Admin' and !current_user.is_admin?
+    raise EsqulinoError::Authorization if operation_name&.start_with?('Admin') && !current_user.is_admin?
 
     context = {
       user: current_user,

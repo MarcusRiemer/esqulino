@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seed
   class ProjectSeed < Base
     # configuration
@@ -40,7 +42,7 @@ module Seed
       info 'COPY Images'
 
       # Ensure that the temporary target directory exists
-      tmp_directory = path_to_data_directory + '_tmp'
+      tmp_directory = "#{path_to_data_directory}_tmp"
       FileUtils.mkdir_p tmp_directory
       FileUtils.cp_r seed_images_folder, tmp_directory
     end
@@ -54,9 +56,9 @@ module Seed
       FileUtils.remove_dir(path_to_data_directory) if File.directory? path_to_data_directory
 
       # Move temporary folder with updated content into position
-      return unless File.directory? path_to_data_directory + '_tmp'
+      return unless File.directory? "#{path_to_data_directory}_tmp"
 
-      FileUtils.mv path_to_data_directory + '_tmp', path_to_data_directory # Move tmp folder in place
+      FileUtils.mv "#{path_to_data_directory}_tmp", path_to_data_directory # Move tmp folder in place
     end
 
     # make static method availbale as instance method for this class

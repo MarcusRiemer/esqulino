@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectMailer < ApplicationMailer
   # A new project was created, the admin should know
   def created_admin

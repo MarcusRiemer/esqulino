@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Mutations::Projects::CreateProject do
@@ -43,7 +45,7 @@ RSpec.describe Mutations::Projects::CreateProject do
 
     mut = described_class.new(**init_args)
 
-    result = mut.resolve(name: { 'en' => 'Test' })
+    mut.resolve(name: { 'en' => 'Test' })
     expect(Project.first.user_id).to eq User.system_id
   end
 end

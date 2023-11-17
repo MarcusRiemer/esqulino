@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This code was published by Alex Peattie at
 # https://alexpeattie.com/blog/stop-forgetting-foreign-key-indexes-in-rails-post-migration-script
 Rake::Task['db:migrate'].enhance do

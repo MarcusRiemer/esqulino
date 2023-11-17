@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Identity
   class Keycloak < Identity
     # Creates a developer identity with the given hash and user

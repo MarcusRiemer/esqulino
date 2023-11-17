@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe CodeResource, type: :model do
@@ -208,7 +210,7 @@ RSpec.describe CodeResource, type: :model do
 
   context 'regenerate_immediate_dependants!' do
     it 'is empty if nothing depends on this' do
-      unrelated = FactoryBot.create(:grammar)
+      FactoryBot.create(:grammar)
       res = FactoryBot.create(:code_resource, :grammar_single_type)
       changed = res.regenerate_immediate_dependants!
 
@@ -235,7 +237,7 @@ RSpec.describe CodeResource, type: :model do
     it "with a single grammar that affects a block language that can't be regenerated" do
       related = FactoryBot.create(:code_resource, :grammar_single_type)
       grammar = FactoryBot.create(:grammar, generated_from: related)
-      block_language = FactoryBot.create(:block_language, grammar:)
+      FactoryBot.create(:block_language, grammar:)
 
       changed = related.regenerate_immediate_dependants!(ide_service: IdeService.guaranteed_instance)
       expect(changed).to match_array [grammar]
@@ -244,8 +246,8 @@ RSpec.describe CodeResource, type: :model do
     it 'with a single grammar that affects two block languages (both not regeneratable)' do
       related = FactoryBot.create(:code_resource, :grammar_single_type)
       grammar = FactoryBot.create(:grammar, generated_from: related)
-      b1 = FactoryBot.create(:block_language, grammar:)
-      b2 = FactoryBot.create(:block_language, grammar:)
+      FactoryBot.create(:block_language, grammar:)
+      FactoryBot.create(:block_language, grammar:)
 
       changed = related.regenerate_immediate_dependants!(ide_service: IdeService.guaranteed_instance)
       expect(changed).to match_array [grammar]
@@ -264,7 +266,7 @@ RSpec.describe CodeResource, type: :model do
     it 'with a single grammar that affects two block languages (mixed)' do
       related = FactoryBot.create(:code_resource, :grammar_single_type)
       grammar = FactoryBot.create(:grammar, generated_from: related)
-      b1 = FactoryBot.create(:block_language, grammar:)
+      FactoryBot.create(:block_language, grammar:)
       b2 = FactoryBot.create(:block_language, :auto_generated_blocks, grammar:)
 
       changed = related.regenerate_immediate_dependants!(ide_service: IdeService.guaranteed_instance)

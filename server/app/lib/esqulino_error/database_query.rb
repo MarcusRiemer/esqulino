@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Something went wrong while executing a query
   class DatabaseQuery < Base

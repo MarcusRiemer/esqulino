@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Handles low level operations on CodeResource, basicly the whole
 # CRUD cycle. More specialised operations for specific types of
 # resouces (pages, queries, ...) can be found in the respective

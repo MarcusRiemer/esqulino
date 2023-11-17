@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Thrown when an image_id is unknown
   class UnknownImage < Base

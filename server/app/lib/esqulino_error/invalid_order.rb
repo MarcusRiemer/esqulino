@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Somebody has requested an order that is not meaningful
   class InvalidOrder < Base
     # @param requested_attribute [string] The attribute to sort according to
     # @param requested_order [string]     The sorting direction
     def initialize(requested_attribute, requested_order)
-      super(msg = 'Invalid sorting order requested', status = 400)
+      super('Invalid sorting order requested', 400)
       @requested_attribute = requested_attribute
       @requested_order = requested_order
     end

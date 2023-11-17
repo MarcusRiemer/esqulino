@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ProjectDatabase, type: :model do
@@ -111,7 +113,7 @@ RSpec.describe ProjectDatabase, type: :model do
     after(:each) do
       @db.project.update!(default_database: nil) if @db.project && @db.project.default_database_id == @db.id
       @db.destroy!
-      @db.project.destroy! if @db.project
+      @db.project&.destroy!
     end
 
     it 'has the correct sqlite_file_path' do
@@ -186,7 +188,7 @@ RSpec.describe ProjectDatabase, type: :model do
     after(:each) do
       @db.project.update!(default_database: nil) if @db.project && @db.project.default_database_id == @db.id
       @db.destroy!
-      @db.project.destroy! if @db.project
+      @db.project&.destroy!
     end
 
     it 'add column' do
@@ -295,7 +297,7 @@ RSpec.describe ProjectDatabase, type: :model do
     after(:each) do
       @db.project.update!(default_database: nil) if @db.project && @db.project.default_database_id == @db.id
       @db.destroy!
-      @db.project.destroy! if @db.project
+      @db.project&.destroy!
     end
 
     it 'remove foreign keys' do
@@ -329,7 +331,7 @@ RSpec.describe ProjectDatabase, type: :model do
     after(:each) do
       @db.project.update!(default_database: nil) if @db.project && @db.project.default_database_id == @db.id
       @db.destroy!
-      @db.project.destroy! if @db.project
+      @db.project&.destroy!
     end
 
     it 'single row' do
@@ -396,7 +398,7 @@ RSpec.describe ProjectDatabase, type: :model do
     it 'unknown table' do
       expect do
         @db.table_bulk_insert(
-          @table_name + '_nonexistant',
+          "#{@table_name}_nonexistant",
           %w[key value],
           [
             %w[1 eins]
@@ -438,7 +440,7 @@ RSpec.describe ProjectDatabase, type: :model do
     after(:each) do
       @db.project.update!(default_database: nil) if @db.project && @db.project.default_database_id == @db.id
       @db.destroy!
-      @db.project.destroy! if @db.project
+      @db.project&.destroy!
     end
 
     it 'Truncates too large result sets' do

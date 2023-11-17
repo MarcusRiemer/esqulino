@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Wipes all projects (and dependant resources) that are currently in the database
 class WipeProjectsJob < ApplicationJob
   queue_as :default

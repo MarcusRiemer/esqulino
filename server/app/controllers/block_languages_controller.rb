@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Manages operations on block languages
 class BlockLanguagesController < ApplicationController
   # Find a single block language by ID or by slug
@@ -23,7 +25,7 @@ class BlockLanguagesController < ApplicationController
   def basic_params
     params
       .permit(%i[name slug defaultProgrammingLanguageId family grammarId])
-      .transform_keys { |k| k.underscore }
+      .transform_keys(&:underscore)
   end
 
   # These parameters need to be put in the json-blob

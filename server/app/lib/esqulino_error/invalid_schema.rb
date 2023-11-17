@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Thrown when a request does not fulfill a certain schema
   class InvalidSchema < Base

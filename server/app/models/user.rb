@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Users are usually real people that have signed up manually. But they may also
 # be technical accounts that exist to specify default permissions.
 #
@@ -70,7 +72,7 @@ class User < ApplicationRecord
   #
   # THIS IS ONLY ALLOWED DURING DEVELOPMENT!
   def self.make_guest_admin!
-    raise EsqulinoError::Base.new("Guests can't be admins outside of development environments", 401) unless Rails.env.development? or Rails.env.test?
+    raise EsqulinoError::Base.new("Guests can't be admins outside of development environments", 401) unless Rails.env.development? || Rails.env.test?
 
     User.guest.add_role(:admin)
   end
@@ -130,7 +132,7 @@ class User < ApplicationRecord
   # for displaying all linked identities and selected primary email
   def all_providers
     {
-      providers: identities.map { |i| i.to_list_api_response },
+      providers: identities.map(&:to_list_api_response),
       primary: email
     }
   end

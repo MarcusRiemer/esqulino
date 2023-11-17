@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Thrown when the table of a database is unknown
   class UnknownDatabaseTable < Base

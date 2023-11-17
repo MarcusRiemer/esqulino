@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'open3'
 
 # Common functionality for all IDE operations, no matter whether
@@ -49,7 +51,7 @@ class BaseIdeService
                                     'grammar' => grammar_description
                                   })
 
-    json_result.transform_keys { |k| k.underscore }
+    json_result.transform_keys(&:underscore)
   end
 
   # Converts the given AST into a "proper" settings for a block language
@@ -66,7 +68,7 @@ class BaseIdeService
                                     'metaBlockLanguage' => block_lang_desc_ast
                                   })
 
-    json_result.transform_keys { |k| k.underscore }
+    json_result.transform_keys(&:underscore)
   end
 
   # Finds out which other resources are referenced by the given
@@ -144,7 +146,7 @@ class BaseIdeService
       raise EsqulinoError::IdeService, "Could not find compiled CLI at \"#{cli_program_path}\"" unless sum_wait_time < max_wait_time
 
       # Yes, possibly print a warning why startup is delayed and then wait
-      puts "Waiting for CLI-program at \"#{cli_program_path}\"" if sum_wait_time == 0
+      puts "Waiting for CLI-program at \"#{cli_program_path}\"" if sum_wait_time.zero?
 
       sleep wait_time
       sum_wait_time += wait_time
@@ -186,7 +188,7 @@ class OneShotExecIdeService < ExecIdeService
     stdout, stderr, res = Open3.capture3(@node_binary, @program, stdin_data: request.to_json)
 
     # Lets hope the process exited fine and had no errors
-    raise EsqulinoError::IdeService, "Received stderr output: #{stderr}, stdout: #{stdout}, request: #{request.to_json}" unless res.exitstatus == 0 and stderr.blank?
+    raise EsqulinoError::IdeService, "Received stderr output: #{stderr}, stdout: #{stdout}, request: #{request.to_json}" unless res.exitstatus.zero? && stderr.blank?
 
     # Response must be a JSON object
     begin
@@ -207,7 +209,7 @@ class MockIdeService < BaseIdeService
   end
 
   def emit_generated_blocks(block_language)
-    return nil unless block_language and block_language.local_generator_instructions
+    return nil unless block_language&.local_generator_instructions
 
     {
       'editor_blocks' => [],
@@ -270,7 +272,7 @@ module IdeService
     if allow_mock && service_config[:mock]
       @@mock_instance
     # Exec mode?
-    elsif exec_config = service_config[:exec]
+    elsif (exec_config = service_config[:exec])
       # Which kind of exec mode?
       case exec_config_mode = exec_config[:mode]
       when 'one_shot' then OneShotExecIdeService.new(config: exec_config)
@@ -283,10 +285,6 @@ module IdeService
   end
 
   class LogSubscriber < ActiveSupport::LogSubscriber
-    def initialize
-      super
-    end
-
     def request(event)
       head = color("  IDE Request (#{event.duration.round(1)}ms)", MAGENTA, true)
       payload = color(event.payload[:request].to_json, YELLOW, true)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JwtHelper
   # Is used for signing the JWT
   def self.secret_key
@@ -225,7 +227,7 @@ module JwtHelper
                           httponly: true,
                           expires:,
                           path: '/api',
-                          domain: '.' + Rails.application.config.cookie_domain
+                          domain: ".#{Rails.application.config.cookie_domain}"
                         })
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Mutations::Projects::RemoveMember do
@@ -30,14 +32,14 @@ RSpec.describe Mutations::Projects::RemoveMember do
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user.id
     )
     expect(ProjectMember.count).to eq 2
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id
     )
@@ -45,7 +47,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     expect(ProjectMember.find_by(user_id: user_admin.id)).to eq nil
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id
     )
@@ -75,14 +77,14 @@ RSpec.describe Mutations::Projects::RemoveMember do
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user.id
     )
     expect(ProjectMember.count).to eq 2
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id
     )
@@ -90,7 +92,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     expect(ProjectMember.find_by(user_id: user_admin.id)).to eq nil
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id
     )
@@ -123,14 +125,14 @@ RSpec.describe Mutations::Projects::RemoveMember do
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
     mut = described_class.new(**init_args(user: current_user_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user.id
     )
     expect(ProjectMember.count).to eq 3
 
     mut = described_class.new(**init_args(user: current_user_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id
     )
@@ -138,7 +140,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     expect(ProjectMember.find_by(user_id: user_admin.id)).to eq nil
 
     mut = described_class.new(**init_args(user: current_user_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id
     )
@@ -171,14 +173,14 @@ RSpec.describe Mutations::Projects::RemoveMember do
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
     mut = described_class.new(**init_args(user: current_user_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user.id
     )
     expect(ProjectMember.count).to eq 3
 
     mut = described_class.new(**init_args(user: current_user_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id
     )
@@ -186,7 +188,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     expect(ProjectMember.find_by(user_id: user_admin.id)).to eq nil
 
     mut = described_class.new(**init_args(user: current_user_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id
     )
@@ -440,7 +442,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     expect(ProjectMember.count).to eq 2
 
     mut = described_class.new(**init_args(user: user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id
     )
@@ -448,7 +450,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     expect(ProjectMember.find_by(user_id: user_admin.id)).to eq nil
 
     mut = described_class.new(**init_args(user: user_participant))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id
     )
@@ -488,7 +490,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     expect(ProjectMember.count).to eq 2
 
     mut = described_class.new(**init_args(user: user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id
     )
@@ -496,7 +498,7 @@ RSpec.describe Mutations::Projects::RemoveMember do
     expect(ProjectMember.find_by(user_id: user_admin.id)).to eq nil
 
     mut = described_class.new(**init_args(user: user_participant))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id
     )

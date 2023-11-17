@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ProjectDatabasesController, type: :request do
@@ -324,7 +326,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
   describe '/api/project/:projectId/db/:dbId/{upload,download}' do
     it 'Rejects missing files' do
       project = FactoryBot.create(:project_with_default_database)
-      db = project.default_database
+      project.default_database
 
       set_access_token(project.user)
       post "#{default_db_api_url project}/upload",
@@ -339,7 +341,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
 
     it 'Rejects empty files' do
       project = FactoryBot.create(:project_with_default_database)
-      db = project.default_database
+      project.default_database
 
       emptyFile = Tempfile.new('empty.sqlite')
 
@@ -373,7 +375,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
            }
 
       expect(response.status).to eq 200
-      json_data = JSON.parse(response.body)
+      JSON.parse(response.body)
 
       # And retrieve it again
       project.reload
@@ -382,7 +384,7 @@ RSpec.describe ProjectDatabasesController, type: :request do
 
       get "#{default_db_api_url project}/download"
       expect(response.status).to eq 200
-      expect(response.body).to eq File.open(dbFile, 'rb') { |f| f.read }
+      expect(response.body).to eq File.open(dbFile, 'rb', &:read)
     end
 
     it 'Accepts valid databases' do
@@ -402,12 +404,12 @@ RSpec.describe ProjectDatabasesController, type: :request do
            }
 
       expect(response.status).to eq 200
-      json_data = JSON.parse(response.body)
+      JSON.parse(response.body)
 
       # And retrieve it again
       get "#{default_db_api_url project}/download"
       expect(response.status).to eq 200
-      expect(response.body).to eq File.open(dbFile, 'rb') { |f| f.read }
+      expect(response.body).to eq File.open(dbFile, 'rb', &:read)
     end
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Validates all projects.
 #
 # @return [Array<ApplicationRecord>] All invalid models
@@ -46,7 +48,7 @@ end
 #
 # @return [Array<ApplicationRecord>] All invalid models
 def select_invalid(records)
-  records.select { |g| !g.validate }
+  records.reject(&:validate)
 end
 
 # Prints all models that have been identified as invalid

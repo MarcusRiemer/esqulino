@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Something during the authentication process has failed in a unpredictable
   # manner. This is usually due to a third party identity provider not

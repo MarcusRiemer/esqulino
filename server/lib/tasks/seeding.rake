@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 
 # SeedManager is only available after the Rails stuff has been loaded

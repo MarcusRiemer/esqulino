@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BlockLanguagePolicy < ApplicationPolicy
   attr_reader :user, :block_language
 

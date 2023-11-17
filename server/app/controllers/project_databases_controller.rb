@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'open3'
 
 class ProjectDatabasesController < ApplicationController
@@ -21,7 +23,7 @@ class ProjectDatabasesController < ApplicationController
     data_filename = nil
 
     # Does the user want to download the file?
-    if params.has_key? 'download'
+    if params.key? 'download'
       file_extension = format.split(':').first
       data_filename = "#{current_project.id}-db-schema-#{current_database.id}.#{file_extension}"
       data_disposition = 'attachment'
@@ -63,7 +65,7 @@ class ProjectDatabasesController < ApplicationController
     # to the uploaded file
     uploaded = params['database']
 
-    if uploaded and uploaded.size > 0
+    if uploaded&.size&.positive?
       # There might not be a current database, therefore it has to be created
       create_new_default_database! unless current_database
 

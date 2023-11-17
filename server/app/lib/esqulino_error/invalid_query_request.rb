@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Thrown when a query that is about to be executed doesn't have all
   # parameters that are required.

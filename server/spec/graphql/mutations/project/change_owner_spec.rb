@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Mutations::Projects::ChangeOwner do
@@ -27,10 +29,10 @@ RSpec.describe Mutations::Projects::ChangeOwner do
     user_participant = create(:user)
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
-    user = create(:user)
+    create(:user)
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: current_user_owner.id
     )
@@ -48,10 +50,10 @@ RSpec.describe Mutations::Projects::ChangeOwner do
     user_participant = create(:user)
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
-    user = create(:user)
+    create(:user)
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: current_user_owner.id
     )
@@ -69,10 +71,10 @@ RSpec.describe Mutations::Projects::ChangeOwner do
     user_participant = create(:user)
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
-    user = create(:user)
+    create(:user)
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id
     )
@@ -91,10 +93,10 @@ RSpec.describe Mutations::Projects::ChangeOwner do
     user_participant = create(:user)
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
-    user = create(:user)
+    create(:user)
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id
     )
@@ -113,10 +115,10 @@ RSpec.describe Mutations::Projects::ChangeOwner do
     user_participant = create(:user)
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
-    user = create(:user)
+    create(:user)
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id
     )
@@ -135,10 +137,10 @@ RSpec.describe Mutations::Projects::ChangeOwner do
     user_participant = create(:user)
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
-    user = create(:user)
+    create(:user)
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id
     )
@@ -160,7 +162,7 @@ RSpec.describe Mutations::Projects::ChangeOwner do
     user = create(:user)
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user.id
     )
@@ -182,7 +184,7 @@ RSpec.describe Mutations::Projects::ChangeOwner do
     user = create(:user)
 
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user.id
     )

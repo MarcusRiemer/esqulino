@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def set_access_token(user)
   cookies['ACCESS_TOKEN'] = JwtHelper.encode({
                                                user_id: user[:id],

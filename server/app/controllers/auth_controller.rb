@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthController < ApplicationController
   include UserHelper
   include LocaleHelper
@@ -22,7 +24,7 @@ class AuthController < ApplicationController
     if !identity
       identity = Identity::Identity.create_with_auth(auth_hash, current_user)
     else
-      raise 'Error: already linked with a user' if signed_in? and current_user.id != identity.user_id
+      raise 'Error: already linked with a user' if signed_in? && (current_user.id != identity.user_id)
 
       identity.update_provider_data(auth_hash)
       identity.save!
@@ -40,7 +42,7 @@ class AuthController < ApplicationController
     # with the developer identity, but if that is the case we also redirect
     # to the root.
     redirect_url = request.env['omniauth.origin']
-    redirect_url = '/' if !redirect_url or redirect_url.include? '/auth/'
+    redirect_url = '/' if !redirect_url || redirect_url.include?('/auth/')
     redirect_to redirect_url
   end
 

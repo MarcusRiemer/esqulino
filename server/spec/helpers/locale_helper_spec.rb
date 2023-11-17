@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe LocaleHelper do
@@ -13,18 +15,18 @@ RSpec.describe LocaleHelper do
       [%w[de fr], [], 'de'],
       [%w[es fr], [], 'es']
 
-    ]
+    ].freeze
 
     CASES.each do |args|
       texts, locales, exp_result = args
 
       # ["de", "en"] to { "de" => "Text de", "en" => "Text en" }
       texts_h = texts.reduce({}) do |h, l|
-        h.update(l => 'Text ' + l)
+        h.update(l => "Text #{l}")
       end
 
       it "#{texts} with #{locales} => #{exp_result}" do
-        expect(LocaleHelper.first_matching_text(texts_h, locales)).to eq(exp_result ? 'Text ' + exp_result : nil)
+        expect(LocaleHelper.first_matching_text(texts_h, locales)).to eq(exp_result ? "Text #{exp_result}" : nil)
       end
     end
   end

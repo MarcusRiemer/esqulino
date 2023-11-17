@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GraphqlController, type: :request do
@@ -65,13 +67,13 @@ RSpec.describe GraphqlController, type: :request do
 
       response_data = execute_query(query: '{projects(input: {languages:[test]}){nodes{name}}}', expect_no_errors: false)
 
-      expect(response_data.has_key?('errors')).to be true
+      expect(response_data.key?('errors')).to be true
     end
     it 'Projects: Added empty languages as input parameter and should return error' do
       FactoryBot.create(:project, name: { en: 'hello-1', de: 'hallo-1' })
 
       response_data = execute_query(query: '{projects(input: {languages:[]}){nodes{name}}}', expect_no_errors: false)
-      expect(response_data.has_key?('errors')).to be true
+      expect(response_data.key?('errors')).to be true
     end
 
     it 'Projects: Added filter as input parameter and expect to return only filtered project' do
@@ -108,7 +110,7 @@ RSpec.describe GraphqlController, type: :request do
       query = '{projects(input: {filter:{test:"hello-1"}}){nodes{name}}}'
       response_data = execute_query(query:, expect_no_errors: false)
 
-      expect(response_data.has_key?('errors')).to be true
+      expect(response_data.key?('errors')).to be true
     end
 
     it 'Projects: Added order as input parameter and expect to return ordered names' do
@@ -128,7 +130,7 @@ RSpec.describe GraphqlController, type: :request do
       query = '{projects(input: {order:{orderField:test,orderDirection:asc}}){nodes{name}}}'
       response_data = execute_query(query:, expect_no_errors: false)
 
-      expect(response_data.has_key?('errors')).to be true
+      expect(response_data.key?('errors')).to be true
     end
 
     it 'Projects: Added not provided orderDirection as input parameter and expect to return error' do
@@ -137,7 +139,7 @@ RSpec.describe GraphqlController, type: :request do
       query = '{projects(input: {order:{orderField:name,orderDirection:test}}){nodes{name}}}'
       response_data = execute_query(query:, expect_no_errors: false)
 
-      expect(response_data.has_key?('errors')).to be true
+      expect(response_data.key?('errors')).to be true
     end
 
     it 'Projects: Added not provided input parameter and expect to return error' do
@@ -146,7 +148,7 @@ RSpec.describe GraphqlController, type: :request do
       query = '{projects(input: {test:test}){nodes{name}}}'
       response_data = execute_query(query:, expect_no_errors: false)
 
-      expect(response_data.has_key?('errors')).to be true
+      expect(response_data.key?('errors')).to be true
     end
 
     it 'Projects: Requesting not provided column and expect to return error' do
@@ -155,7 +157,7 @@ RSpec.describe GraphqlController, type: :request do
       query = '{projects{nodes{test}}}'
       response_data = execute_query(query:, expect_no_errors: false)
 
-      expect(response_data.has_key?('errors')).to be true
+      expect(response_data.key?('errors')).to be true
     end
 
     it 'Projects: Requesting all pagination connection type fields' do
@@ -165,19 +167,19 @@ RSpec.describe GraphqlController, type: :request do
       response_data = execute_query(query:)
       projects_data = response_data['data']['projects']
 
-      expect(response_data.has_key?('errors')).to be false
-      expect(projects_data.has_key?('nodes')).to be true
-      expect(projects_data['nodes'][0].has_key?('name')).to be true
-      expect(projects_data.has_key?('edges')).to be true
-      expect(projects_data['edges'][0].has_key?('cursor')).to be true
-      expect(projects_data['edges'][0].has_key?('node')).to be true
-      expect(projects_data['edges'][0]['node'].has_key?('name')).to be true
-      expect(projects_data.has_key?('pageInfo')).to be true
-      expect(projects_data['pageInfo'].has_key?('endCursor')).to be true
-      expect(projects_data['pageInfo'].has_key?('hasNextPage')).to be true
-      expect(projects_data['pageInfo'].has_key?('hasPreviousPage')).to be true
-      expect(projects_data['pageInfo'].has_key?('startCursor')).to be true
-      expect(projects_data.has_key?('totalCount')).to be true
+      expect(response_data.key?('errors')).to be false
+      expect(projects_data.key?('nodes')).to be true
+      expect(projects_data['nodes'][0].key?('name')).to be true
+      expect(projects_data.key?('edges')).to be true
+      expect(projects_data['edges'][0].key?('cursor')).to be true
+      expect(projects_data['edges'][0].key?('node')).to be true
+      expect(projects_data['edges'][0]['node'].key?('name')).to be true
+      expect(projects_data.key?('pageInfo')).to be true
+      expect(projects_data['pageInfo'].key?('endCursor')).to be true
+      expect(projects_data['pageInfo'].key?('hasNextPage')).to be true
+      expect(projects_data['pageInfo'].key?('hasPreviousPage')).to be true
+      expect(projects_data['pageInfo'].key?('startCursor')).to be true
+      expect(projects_data.key?('totalCount')).to be true
     end
 
     it 'Projects: Requesting all columns of projects model and expect not to return error' do
@@ -186,7 +188,7 @@ RSpec.describe GraphqlController, type: :request do
       query = '{projects{nodes{name blockLanguages{id}codeResources{id}createdAt defaultDatabase{id}description grammars{id}id indexPageId name preview projectSources{id}public slug updatedAt user{id}}}}'
       response_data = execute_query(query:)['data']['projects']
 
-      expect(response_data.has_key?('errors')).to be false
+      expect(response_data.key?('errors')).to be false
     end
 
     it 'Projects: Requesting all multilingual columns and expect to return json with language keys' do

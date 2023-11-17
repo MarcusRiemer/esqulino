@@ -1,8 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'auth controller' do
-  json_headers = { 'CONTENT_TYPE' => 'application/json' }
-
   before(:each) { create(:user, :guest) }
 
   describe 'developer provider with default values' do
@@ -62,7 +62,7 @@ RSpec.describe 'auth controller' do
       end
 
       it 'new user and a new extern identity' do
-        identity = create(:developer_provider, :new)
+        create(:developer_provider, :new)
 
         user_count = User.all.count
         identity_count = Identity::Identity.developer.count
@@ -77,7 +77,7 @@ RSpec.describe 'auth controller' do
       end
 
       it 'valid jwt token, but invalid user_id (association gone wrong?)' do
-        identity = create(:developer_provider, :new)
+        create(:developer_provider, :new)
         set_access_token_with_invalid_user
 
         get '/api/auth/developer/callback'

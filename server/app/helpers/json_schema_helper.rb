@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Provides access to a globally available Validator instance
 module JsonSchemaHelper
   @@json_schema_storage = JsonSchemaStorage.new Rails.configuration.sqlino['schema_dir']
@@ -24,7 +26,7 @@ module JsonSchemaHelper
     # Making sure it validates against the requested schema
     result = json_schema_validate(schema_name, document)
 
-    raise EsqulinoError::InvalidSchema.new(schema_name, result) if result.length > 0
+    raise EsqulinoError::InvalidSchema.new(schema_name, result) if result.length.positive?
 
     document
   end
@@ -40,7 +42,7 @@ module JsonSchemaHelper
 
     ensure_valid_document(schema_name, body)
 
-    return body.transform_keys { |k| k.underscore } if underscore_keys
+    return body.transform_keys(&:underscore) if underscore_keys
 
     # In the case of a request: All keys of the top level document
     # should be in "snake_case" as they might be immediately mapped

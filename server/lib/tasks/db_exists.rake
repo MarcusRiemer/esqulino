@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Taken from: https://stackoverflow.com/questions/17150064/
 
 namespace :db do

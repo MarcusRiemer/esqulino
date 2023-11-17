@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Identity
   # The developer provider is already provided
   # by Omniauth and should NOT!!! be present in the production system

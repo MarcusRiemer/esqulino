@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sqlite3'
 
 module SchemaTools
@@ -86,7 +88,7 @@ module SchemaTools
 
     # Add nodes for all tables
     tables = schema
-             .select { |table| !table.system? }
+             .reject(&:system?)
              .map do |table|
       columns = table.columns.map do |c|
         c_type = (table.is_column_fk? c) ? 'FK' : c.type

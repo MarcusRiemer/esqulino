@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Allows access to projects and its resources in controllers
 module ProjectsHelper
   include ActionController::HttpAuthentication::Basic

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Thrown when a whole database is unknown
   class UnknownDatabase < Base

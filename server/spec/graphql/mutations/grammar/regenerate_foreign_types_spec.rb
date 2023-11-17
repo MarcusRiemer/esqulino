@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 lang_single_type = {
@@ -26,7 +28,7 @@ RSpec.describe Mutations::Grammar::RegenerateForeignTypes do
   it 'grammar without reference' do
     g = FactoryBot.create(:grammar)
     mut = Mutations::Grammar::RegenerateForeignTypes.new(**init_args)
-    res = mut.resolve(id: g.id)
+    mut.resolve(id: g.id)
 
     expect(g.foreign_types).to eq({})
   end

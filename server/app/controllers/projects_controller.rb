@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # All operations that occur on a project level.
 class ProjectsController < ApplicationController
   include ProjectsHelper
@@ -25,7 +27,7 @@ class ProjectsController < ApplicationController
     current_project.update project_used_block_languages_params # Used block languages
 
     render json: current_project.to_project_api_response
-  rescue Pundit::NotAuthorizedError => e
+  rescue Pundit::NotAuthorizedError
     error_response('You need the permission')
   end
 
@@ -43,7 +45,7 @@ class ProjectsController < ApplicationController
   # These attributes are mandatory when a project is created
   def project_creation_params
     to_return = params.permit(:slug, name: {})
-                      .transform_keys { |k| k.underscore }
+                      .transform_keys(&:underscore)
 
     to_return['user'] = current_user
 
@@ -53,7 +55,7 @@ class ProjectsController < ApplicationController
   # These attributes may be changed once a project has been created
   def project_update_params
     params.permit(:indexPageId, :preview, name: {}, description: {})
-          .transform_keys { |k| k.underscore }
+          .transform_keys(&:underscore)
   end
 
   # The references to block languages that are part of this project.
@@ -63,8 +65,8 @@ class ProjectsController < ApplicationController
     return {} unless used_block_languages
 
     attributes = used_block_languages
-                 .map { |used| used.transform_keys! { |k| k.underscore } }
-                 .each { |used| used.permit! }
+                 .map { |used| used.transform_keys!(&:underscore) }
+                 .each(&:permit!)
 
     ActionController::Parameters
       .new({ 'project_uses_block_languages_attributes' => attributes })

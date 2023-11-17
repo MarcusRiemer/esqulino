@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Links projects and block languages, possibly contains configuration
 # parameters for the used block language.
 class ProjectUsesBlockLanguage < ApplicationRecord

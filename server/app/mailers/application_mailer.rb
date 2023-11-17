@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationMailer < ActionMailer::Base
   default from: Rails.configuration.sqlino[:mail][:default_sender]
   layout 'mailer'

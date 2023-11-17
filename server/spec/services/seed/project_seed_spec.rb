@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'securerandom' # To make up unique slugs on the fly
 require 'fileutils'    # To ease file comparision
@@ -42,7 +44,7 @@ RSpec.describe Seed::ProjectSeed do
         Seed::ProjectSeed.new(pOrig).start_store
 
         pOrig.destroy!
-        pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
+        Seed::ProjectSeed.new(pOrig.id).start_load
 
         pLoadData = Project.find_by(id: pOrig.id)
 
@@ -54,7 +56,7 @@ RSpec.describe Seed::ProjectSeed do
         Seed::ProjectSeed.new(pOrig.id).start_store
 
         pOrig.destroy!
-        pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
+        Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)
 
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
@@ -68,7 +70,7 @@ RSpec.describe Seed::ProjectSeed do
         seed_file = "#{pOrig.id}.yaml"
         pOrig.destroy!
 
-        pLoad = Seed::ProjectSeed.new(seed_file).start_load
+        Seed::ProjectSeed.new(seed_file).start_load
         pLoadData = Project.find_by(id: pOrig.id)
 
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
@@ -81,7 +83,7 @@ RSpec.describe Seed::ProjectSeed do
 
         pOrig.destroy!
 
-        pLoad = Seed::ProjectSeed.new(pOrig.slug).start_load
+        Seed::ProjectSeed.new(pOrig.slug).start_load
         pLoadData = Project.find_by(id: pOrig.id)
 
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
@@ -95,12 +97,12 @@ RSpec.describe Seed::ProjectSeed do
         # something via slug returns a different instance.
         #
         # We avoid this by using unique slugs in exactly these tests.
-        pOrig = FactoryBot.create(:project, slug: 'a' + SecureRandom.hex)
+        pOrig = FactoryBot.create(:project, slug: "a#{SecureRandom.hex}")
 
         Seed::ProjectSeed.new(pOrig).start_store
 
         pOrig.destroy!
-        pLoad = Seed::ProjectSeed.new(pOrig.slug).start_load
+        Seed::ProjectSeed.new(pOrig.slug).start_load
         pLoadData = Project.find_by(id: pOrig.id)
 
         expect(identifying_attributes(pOrig)).to eq identifying_attributes(pLoadData)
@@ -115,7 +117,7 @@ RSpec.describe Seed::ProjectSeed do
         cOrig.destroy!
         pOrig.destroy!
 
-        pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
+        Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)
         cLoad = pLoadData.code_resources[0]
 
@@ -132,7 +134,7 @@ RSpec.describe Seed::ProjectSeed do
         sOrig.destroy!
         pOrig.destroy!
 
-        pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
+        Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)
         sLoad = pLoadData.project_sources[0]
 
@@ -151,7 +153,7 @@ RSpec.describe Seed::ProjectSeed do
           pOrig.destroy!
         end
 
-        pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
+        Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)
         dLoad = pLoadData.project_databases[0]
         pOrig.reload
@@ -174,7 +176,7 @@ RSpec.describe Seed::ProjectSeed do
         # Making a change after storing
         pOrig.update_column('name', { 'de' => 'changed' })
 
-        pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
+        Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)
         pOrig.reload
 
@@ -190,7 +192,7 @@ RSpec.describe Seed::ProjectSeed do
         # Making a change after storing
         sOrig.update_column('title', 'changed')
 
-        pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
+        Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)
         sLoad = pLoadData.project_sources[0]
         sOrig.reload
@@ -223,7 +225,7 @@ RSpec.describe Seed::ProjectSeed do
         dOrig.name = 'changed'
         dOrig.save!
 
-        pLoad = Seed::ProjectSeed.new(pOrig.id).start_load
+        Seed::ProjectSeed.new(pOrig.id).start_load
         pLoadData = Project.find_by(id: pOrig.id)
         dLoad = pLoadData.project_databases[0]
         pOrig.reload

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seed
   class ProjectDatabaseSeed < Base
     # configuration
@@ -21,7 +23,7 @@ module Seed
       seed_file = File.join seed_directory, "#{seed.id}.yaml"
       sqlite_seed_file = Pathname(seed_file).sub_ext('.sqlite')
 
-      tmp_directory = Seed::ProjectSeed.path_to_data_directory(seed.project_id) + '_tmp'
+      tmp_directory = "#{Seed::ProjectSeed.path_to_data_directory(seed.project_id)}_tmp"
       database_target_folder = File.join tmp_directory, SEED_DIRECTORY
 
       FileUtils.mkdir_p database_target_folder

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :code_resource, class: CodeResource do
     name { 'Spec Code Resource' }
@@ -11,7 +13,7 @@ FactoryBot.define do
     after(:build) do |code_resource|
       project = code_resource.project
       block_language = code_resource.block_language
-      project.block_languages << block_language if project and block_language and !project.block_languages.include? block_language
+      project.block_languages << block_language if project && block_language && !project.block_languages.include?(block_language)
     end
 
     trait :meta_grammar do

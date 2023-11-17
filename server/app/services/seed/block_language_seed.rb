@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seed
   require_dependency 'seed/grammar_seed'
 

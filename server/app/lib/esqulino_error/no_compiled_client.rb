@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # The server can't do anything if it can't serve a compiled version of
   # the client.
@@ -5,7 +7,7 @@ module EsqulinoError
     # @param index_html_path [string] The path the index.html of the client
     #                                 should reside.
     def initialize(index_html_path)
-      super(msg = 'Could not find compiled version of the client')
+      super('Could not find compiled version of the client')
       @index_html_path = index_html_path
     end
 

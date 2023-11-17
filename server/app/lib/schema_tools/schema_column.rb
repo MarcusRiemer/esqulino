@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SchemaTools
   # Describes a single column of a SQLite Table
   class SchemaColumn

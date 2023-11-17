@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Manages operations on grammars
 class GrammarsController < ApplicationController
   include UserHelper
@@ -20,7 +22,7 @@ class GrammarsController < ApplicationController
     authorize grammar
     render json: grammar
       .code_resources
-      .map { |c| c.to_full_api_response }
+      .map(&:to_full_api_response)
   end
 
   private

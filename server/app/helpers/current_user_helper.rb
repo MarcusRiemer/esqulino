@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CurrentUserHelper
   # Each request is expected to provide two JWT tokens which can be used to
   # identify the user who is making that request.
@@ -30,6 +32,6 @@ module CurrentUserHelper
     browser_access_token:,
     browser_refresh_token:
   )
-    User.guest if browser_access_token.nil? and browser_refresh_token.nil?
+    User.guest if browser_access_token.nil? && browser_refresh_token.nil?
   end
 end

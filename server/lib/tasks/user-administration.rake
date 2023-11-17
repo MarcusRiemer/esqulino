@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Actual definitions of rake tasks for user administration
 namespace :blattwerkzeug do
   namespace :dev do

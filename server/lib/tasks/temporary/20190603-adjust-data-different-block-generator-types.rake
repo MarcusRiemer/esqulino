@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 # Update the model of a single block language to include the
 # "manual" type.
 def migrate_single(b)
-  if b.model and b.model['localGeneratorInstructions']
+  if b.model && b.model['localGeneratorInstructions']
     b.model['localGeneratorInstructions']['type'] = 'manual'
     b.save!
 
-    puts 'Migrated: ' + b.readable_identification
+    puts "Migrated: #{b.readable_identification}"
   else
-    puts 'Skipped : ' + b.readable_identification
+    puts "Skipped : #{b.readable_identification}"
   end
 end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Project do
@@ -22,8 +24,8 @@ RSpec.describe Project do
     end
 
     it 'stores two projects with empty slugs' do
-      p1 = FactoryBot.create(:project, slug: nil)
-      p2 = FactoryBot.create(:project, slug: nil)
+      FactoryBot.create(:project, slug: nil)
+      FactoryBot.create(:project, slug: nil)
 
       expect(Project.all.count).to eq 2
       expect(Project.where(slug: nil).count).to be 2
@@ -33,7 +35,7 @@ RSpec.describe Project do
   context 'find_by_slug_or_id!' do
     it 'existing slug' do
       p1 = FactoryBot.create(:project, slug: 'test')
-      p2 = FactoryBot.create(:project, slug: 'test2')
+      FactoryBot.create(:project, slug: 'test2')
       p = Project.find_by_slug_or_id! p1.slug
 
       expect(p1.id).to eq(p.id)
@@ -41,7 +43,7 @@ RSpec.describe Project do
 
     it 'existing slug' do
       p1 = FactoryBot.create(:project, slug: 'test')
-      p2 = FactoryBot.create(:project, slug: 'test2')
+      FactoryBot.create(:project, slug: 'test2')
       p = Project.find_by_slug_or_id! p1.id
 
       expect(p1.id).to eq(p.id)

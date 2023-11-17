@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ValidLanguagesValidator < ActiveModel::EachValidator
   # Grab helper to get to know valid languages
   include LocaleHelper

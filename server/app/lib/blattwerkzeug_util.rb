@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlattwerkzeugUtil
   # @return True if the given string is a valid UUID
   def self.string_is_uuid?(str)

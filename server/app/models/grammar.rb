@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Basic building block of any language.
 class Grammar < ApplicationRecord
   # In progress: Pulling out model type and old "extends" system
@@ -109,7 +111,7 @@ class Grammar < ApplicationRecord
     # Ruby snake_case conventions.
     regenerated_attributes = grammar_document
                              .slice('types', 'visualisations', 'root')
-                             .transform_keys { |k| k.underscore }
+                             .transform_keys(&:underscore)
 
     regenerated_relationships = document_included_grammars grammar_document
 
@@ -164,13 +166,13 @@ class Grammar < ApplicationRecord
     # Required for two error conditions
     counts = "include_types: #{include_types.length}, visualize: #{visualize_types.length}"
 
-    if include_types.length > 0 && visualize_types.length > 0
+    if include_types.length.positive? && visualize_types.length.positive?
       raise EsqulinoError::Base, "Inclusion and visualization may currently not be mixed (#{counts})"
     elsif include_types.length == 1
       self.foreign_types = include_types[0].target.all_types
     elsif visualize_types.length == 1
       self.foreign_types = visualize_types[0].target.all_types
-    elsif include_types.length > 1 || visualize_types.length > 0
+    elsif include_types.length > 1 || visualize_types.length.positive?
       raise EsqulinoError::Base, "Referencing more than one other grammar not currently supported (#{counts})"
     end
   end
@@ -247,8 +249,8 @@ class Grammar < ApplicationRecord
   def references_changed?(new_references)
     return true if new_references.any? { |ref| !ref.persisted? }
 
-    curr_ids = targeted_grammars.map { |r| r.id }.to_set
-    new_ids = new_references.map { |r| r.id }.to_set
+    curr_ids = targeted_grammars.map(&:id).to_set
+    new_ids = new_references.map(&:id).to_set
     !(curr_ids ^ new_ids).empty?
   end
 end

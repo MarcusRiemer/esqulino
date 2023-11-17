@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe ProjectsController, type: :request do
@@ -63,7 +65,7 @@ RSpec.describe ProjectsController, type: :request do
     describe 'valid request' do
       it 'creates a project' do
         set_access_token(user)
-        data = send_query(
+        send_query(
           query_name: 'CreateProject',
           variables: { 'name' => { 'en' => 'Some project' }, 'slug' => 'test' }
         )
@@ -249,7 +251,7 @@ RSpec.describe ProjectsController, type: :request do
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
-        json_data = JSON.parse(response.body)
+        JSON.parse(response.body)
 
         # Ensure the database hasn't actually changed
         updated = Project.find_by(slug: project.slug)

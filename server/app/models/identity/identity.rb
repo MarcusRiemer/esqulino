@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Identity
   # Represents a sign in option
   class Identity < ActiveRecord::Base
@@ -50,7 +52,7 @@ module Identity
       raise EsqulinoError::Base, 'E-mail already taken' if identity.email && User.has_someone_email?(identity.email) && !user.email.eql?(identity.email)
 
       # If the user has no primary e-mail
-      user.email = identity.email if !user.email and identity.confirmed?
+      user.email = identity.email if !user.email && identity.confirmed?
 
       raise EsqulinoError::Base, user.errors.full_messages[0] if user.invalid?
 

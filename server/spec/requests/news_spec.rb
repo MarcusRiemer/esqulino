@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 include GraphqlQueryHelper
 
@@ -401,7 +403,7 @@ RSpec.describe 'GraphQL News Endpoint', type: :request do
     end
 
     it 'creating a news without a date' do
-      json_data = send_query(
+      send_query(
         query_name: 'CreateNews',
         variables: {
           title: { de: 'Titel' },

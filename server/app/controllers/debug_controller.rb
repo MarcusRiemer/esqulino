@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Various debugging utilities
 class DebugController < ApplicationController
   def raise_error

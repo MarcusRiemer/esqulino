@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
@@ -43,12 +45,12 @@ class ApplicationRecord < ActiveRecord::Base
 
     # Even if the columns exist, there may be no data
     printed_slug = '<no slug>'
-    printed_slug = slug if has_slug and !slug.nil?
+    printed_slug = slug if has_slug && !slug.nil?
 
     printed_name = '<no name>'
-    printed_name = name.inspect if has_name and !name.nil?
+    printed_name = name.inspect if has_name && !name.nil?
 
-    if has_name and has_slug
+    if has_name && has_slug
       "#{printed_name} (#{printed_slug}, #{id})"
     elsif has_name
       "#{printed_name} (#{id})"

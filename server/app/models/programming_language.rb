@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Programming languages currently need to be implemented in the client, as they
 # contain "active" code to validate and emit the syntaxtrees. Therefore the model
 # is quite empty for the moment.

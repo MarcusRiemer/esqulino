@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 
 # This is a database that is part of a certain project. In the current state
@@ -52,7 +54,7 @@ class ProjectDatabase < ApplicationRecord
 
   # Retrieves the schema for a specific table
   def table_schema(table_name)
-    schema.find { |table| table['name'] == table_name } unless schema.nil?
+    schema&.find { |table| table['name'] == table_name }
   end
 
   # Creates a new table in the schema of this database

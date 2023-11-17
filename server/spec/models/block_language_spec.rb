@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe BlockLanguage do
@@ -22,7 +24,7 @@ RSpec.describe BlockLanguage do
     end
 
     it 'rejects duplicate slugs' do
-      res_1 = FactoryBot.create(:block_language, slug: 'dup')
+      FactoryBot.create(:block_language, slug: 'dup')
       res_2 = FactoryBot.build(:block_language, slug: 'dup')
 
       res_2.validate
@@ -44,7 +46,7 @@ RSpec.describe BlockLanguage do
 
   context 'scope_list' do
     it 'For manual block language' do
-      b = FactoryBot.create(:block_language, id: SecureRandom.uuid)
+      FactoryBot.create(:block_language, id: SecureRandom.uuid)
       scoped_b = BlockLanguage.scope_list.first
 
       expect(scoped_b['generated']).to equal false

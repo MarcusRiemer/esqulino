@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectImagesController < ApplicationController
   include ProjectsHelper
   include JsonSchemaHelper
@@ -6,7 +8,7 @@ class ProjectImagesController < ApplicationController
   # Uploads a new image
   def create
     ensure_write_access do
-      if creation_params['image-name'].nil? or creation_params['image-file'].nil?
+      if creation_params['image-name'].nil? || creation_params['image-file'].nil?
         render status: 400
       else
         metadata = Image.metadata_create(creation_params['image-name'], params['author-name'], params['author-url'], params['licence-name'], params['licence-url'])
@@ -19,7 +21,7 @@ class ProjectImagesController < ApplicationController
 
   def file_update
     ensure_write_access do
-      if params['image-file'].nil? or params['image-file'].tempfile.nil? or params['image_id'].nil?
+      if params['image-file'].nil? || params['image-file'].tempfile.nil? || params['image_id'].nil?
         render status: 400
       else
         image = Image.new(current_project, params['image_id'])

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :blattwerkzeug do
   namespace :migrate do
     task grammar_verbose_typename: :environment do

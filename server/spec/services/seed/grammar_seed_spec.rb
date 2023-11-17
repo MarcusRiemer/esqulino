@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'securerandom' # To make up unique slugs on the fly
 require 'fileutils'    # To ease file comparision
@@ -44,7 +46,7 @@ RSpec.describe Seed::GrammarSeed do
 
         g_orig.destroy!
 
-        g_load = Seed::GrammarSeed.new(g_orig.id).start_load
+        Seed::GrammarSeed.new(g_orig.id).start_load
         g_load_data = Grammar.find_by(id: g_orig.id)
 
         expect(identifying_attributes(g_orig)).to eq identifying_attributes(g_load_data)
@@ -57,7 +59,7 @@ RSpec.describe Seed::GrammarSeed do
 
         g_orig.destroy!
 
-        g_load = Seed::GrammarSeed.new(g_orig.slug).start_load
+        Seed::GrammarSeed.new(g_orig.slug).start_load
         g_load_data = Grammar.find_by(id: g_orig.id)
 
         expect(identifying_attributes(g_orig)).to eq identifying_attributes(g_load_data)
@@ -73,7 +75,7 @@ RSpec.describe Seed::GrammarSeed do
         # Making a change after storing
         g_orig.update_column('name', 'changed')
 
-        g_load = Seed::GrammarSeed.new(g_orig.id).start_load
+        Seed::GrammarSeed.new(g_orig.id).start_load
         g_load_data = Grammar.find_by(id: g_orig.id)
         g_orig.reload
 

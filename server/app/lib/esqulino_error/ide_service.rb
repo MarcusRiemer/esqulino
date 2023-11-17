@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Something went wrong inside the IDE service or in the communication
   # with it

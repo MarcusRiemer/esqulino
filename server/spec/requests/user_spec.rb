@@ -1,8 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'user controller' do
-  json_headers = { 'CONTENT_TYPE' => 'application/json' }
-
   before(:each) { create(:user, :guest) }
 
   describe 'getting user description' do

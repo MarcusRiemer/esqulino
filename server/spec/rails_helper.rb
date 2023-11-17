@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'factory_bot'
 require 'database_cleaner/active_record'
@@ -148,7 +150,7 @@ module GraphqlSpecHelper
 
     data.each do |key, value|
       if key === 'errors'
-        expect(value).to eq([]), 'Path: Root' + path.join('.')
+        expect(value).to eq([]), "Path: Root#{path.join('.')}"
       else
         recurse_no_error(value, path + [key])
       end

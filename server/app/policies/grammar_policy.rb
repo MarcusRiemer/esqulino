@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GrammarPolicy < ApplicationPolicy
   attr_reader :user, :grammar
 

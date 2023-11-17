@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Mutations::Projects::ChangeMemberRole do
@@ -29,7 +31,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Same role as admin
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id,
       is_admin: true
@@ -39,7 +41,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Other role as admin
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id,
       is_admin: false
@@ -49,7 +51,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Same role as participant
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id,
       is_admin: false
@@ -59,7 +61,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Other role as participant
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id,
       is_admin: true
@@ -102,7 +104,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Same role as admin
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id,
       is_admin: true
@@ -112,7 +114,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Other role as admin
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id,
       is_admin: false
@@ -122,7 +124,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Same role as participant
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id,
       is_admin: false
@@ -132,7 +134,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Other role as participant
     mut = described_class.new(**init_args(user: current_user_owner))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id,
       is_admin: true
@@ -178,7 +180,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Same role as admin
     mut = described_class.new(**init_args(user: current_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id,
       is_admin: true
@@ -188,7 +190,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Other role as admin
     mut = described_class.new(**init_args(user: current_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id,
       is_admin: false
@@ -198,7 +200,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Same role as participant
     mut = described_class.new(**init_args(user: current_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id,
       is_admin: false
@@ -208,7 +210,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Other role as participant
     mut = described_class.new(**init_args(user: current_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id,
       is_admin: true
@@ -254,7 +256,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Same role as admin
     mut = described_class.new(**init_args(user: current_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id,
       is_admin: true
@@ -264,7 +266,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Other role as admin
     mut = described_class.new(**init_args(user: current_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id,
       is_admin: false
@@ -274,7 +276,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Same role as participant
     mut = described_class.new(**init_args(user: current_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id,
       is_admin: false
@@ -284,7 +286,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
 
     # Other role as participant
     mut = described_class.new(**init_args(user: current_user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_participant.id,
       is_admin: true
@@ -579,7 +581,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
     project.project_members.create(user_id: user_participant.id, membership_type: 'participant')
 
     mut = described_class.new(**init_args(user: user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id,
       is_admin: true
@@ -588,7 +590,7 @@ RSpec.describe Mutations::Projects::ChangeMemberRole do
     expect(Project.first.project_members.find_by(user_id: user_admin.id).membership_type).to eq 'admin'
 
     mut = described_class.new(**init_args(user: user_admin))
-    res = mut.resolve(
+    mut.resolve(
       project_id: project.id,
       user_id: user_admin.id,
       is_admin: false

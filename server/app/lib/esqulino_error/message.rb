@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EsqulinoError
   # Some errors are not strictly for the API and may be seen by
   # "normal" end users. These errors should inherit from this

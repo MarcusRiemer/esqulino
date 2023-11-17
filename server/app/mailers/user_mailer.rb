@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserMailer < ApplicationMailer
   @@base_url = Rails.configuration.sqlino['editor_domain']
 

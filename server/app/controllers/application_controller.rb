@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Base controller with common functionality that may be required
 # in every controller.
 class ApplicationController < ActionController::API

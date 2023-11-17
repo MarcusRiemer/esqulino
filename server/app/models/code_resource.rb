@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 # A source code snippet in any language that can be expressed by using
 # a compatible JSON-syntaxtree.
 #
 # There are more specific types of resources (at the moment: pages and
 # queries) that are subclasses of this general resource and provide
 # specific additional functionality.
+require 'English'
 class CodeResource < ApplicationRecord
   # Each resource belongs to a single project ...
   belongs_to :project
@@ -38,7 +41,7 @@ class CodeResource < ApplicationRecord
   # If the project does not reference the block language that this resource
   # is referencing the reference is not allowed.
   validate do
-    errors.add(:block_language, 'not allowed by project') if (block_language and project) and !project.block_languages.include? block_language
+    errors.add(:block_language, 'not allowed by project') if (block_language && project) && !project.block_languages.include?(block_language)
   end
 
   # List CodeResources that are using a specific programing language
@@ -104,7 +107,7 @@ class CodeResource < ApplicationRecord
       update_code_resource_references!(ide_service: IdeService.guaranteed_instance)
     rescue EsqulinoError::Base => e
       # Log message and stacktrace but do not abort
-      Rails.logger.error [e.message, *e.backtrace].join($/)
+      Rails.logger.error [e.message, *e.backtrace].join($INPUT_RECORD_SEPARATOR)
       Raven.capture_exception e
     end
   end
@@ -127,7 +130,7 @@ class CodeResource < ApplicationRecord
       if has_changed
         # Do updates on dependant resources
         affected = regenerate_immediate_dependants!
-        affected.each { |a| a.save! }
+        affected.each(&:save!)
 
         affected
       else
@@ -169,7 +172,7 @@ class CodeResource < ApplicationRecord
                      .pluck(:id)
     if ast_referenced_code_resource_ids.length != referenced_ids.length
       unknown_ids = ast_referenced_code_resource_ids - referenced_ids
-      throw EsqulinoError::Base.new('Unknown resource references: ' + unknown_ids.join(', '))
+      throw EsqulinoError::Base.new("Unknown resource references: #{unknown_ids.join(', ')}")
     end
 
     updated_references = referenced_ids.map do |id|

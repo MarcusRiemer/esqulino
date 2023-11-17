@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SchemaTools
   class SchemaForeignKey
     include ActiveModel::Serializers::JSON

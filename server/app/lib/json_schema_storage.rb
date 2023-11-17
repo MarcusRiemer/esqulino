@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 
 # Validates JSON requests and responses against pre-loaded
@@ -12,14 +14,14 @@ class JsonSchemaStorage
     @schemas = {}
     @schema_dir = File.realdirpath(schema_dir)
 
-    Dir.glob(@schema_dir + '/*.json').each do |schema_file|
+    Dir.glob("#{@schema_dir}/*.json").each do |schema_file|
       schema_name = File.basename(schema_file, '.json')
 
       # Some files share the .json extension but are not a schema
       next if %w[Makefile package].include? schema_name
 
       schema_content = File.read(schema_file)
-      schema = JSON.load(schema_content, quirks_mode: true)
+      schema = JSON.parse(schema_content, quirks_mode: true)
 
       @schemas[schema_name] = schema
     end
@@ -38,6 +40,6 @@ class JsonSchemaStorage
 
   # @return [string] Path for a schema with the given name
   def schema_path(name)
-    File.join(@schema_dir, name + '.json')
+    File.join(@schema_dir, "#{name}.json")
   end
 end

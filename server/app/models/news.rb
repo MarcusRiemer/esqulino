@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A news with a title and some text. May be published on a certain
 # date and is multilingual.
 class News < ApplicationRecord
@@ -55,7 +57,7 @@ class News < ApplicationRecord
 
     rendered_hash = text
 
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, extensions = {})
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, {})
     rendered_hash.each do |key, value|
       if text_length == :short
         pos = value.index('<!-- SNIP -->')

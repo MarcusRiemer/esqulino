@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :block_language, class: BlockLanguage do
     name { 'Spec Block Language' }

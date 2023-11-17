@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GraphqlQueryStorage
   attr_reader :queries
 
@@ -9,7 +11,7 @@ class GraphqlQueryStorage
     @query_dir = File.realdirpath(query_dir)
 
     # All files that promise to be queries
-    query_files = Dir.glob(@query_dir + '/*.graphql').to_set
+    query_files = Dir.glob("#{@query_dir}/*.graphql").to_set
 
     query_files.each do |query_file|
       query_name = File.basename(query_file, '.graphql')
@@ -19,7 +21,7 @@ class GraphqlQueryStorage
     end
 
     # Warn about files that don't seem to be queries
-    all_files = Dir.glob(@query_dir + '/*').to_set
+    all_files = Dir.glob("#{@query_dir}/*").to_set
     unknown_files = all_files - query_files
 
     return if unknown_files.empty?
@@ -44,6 +46,6 @@ class GraphqlQueryStorage
 
   # @return [string] Path for a query with the given name
   def query_path(name)
-    File.join(@query_dir, name + '.json')
+    File.join(@query_dir, "#{name}.json")
   end
 end

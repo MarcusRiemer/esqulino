@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Provides access to a globally available Validator instance
 module GraphqlQueryHelper
   include UserHelper
@@ -50,6 +52,6 @@ module GraphqlQueryHelper
 
     # Add a trailing newline, this eases the specs because
     # we can work with heredocs to compare the result
-    visitor.result.to_query_string + "\n"
+    "#{visitor.result.to_query_string}\n"
   end
 end

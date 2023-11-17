@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A project is a group of resources that logically belong together.
 # Currently every project is assumed to be somewhat web-centric
 # (using databases and HTML), but this is not set in stone.

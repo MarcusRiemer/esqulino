@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module HashTools
   # Creates the union of all hashes that were given. Nil values are
   # treated as an empty hash.

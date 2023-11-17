@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A user defined view on a programming language that uses blocks. These block models
 # closely rely on the grammars of their corresponding programming language.
 class BlockLanguage < ApplicationRecord

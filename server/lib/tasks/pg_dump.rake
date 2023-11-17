@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Original source: https://gist.github.com/hopsoft/56ba6f55fe48ad7f8b90
 # Merged with: https://gist.github.com/kofronpi/37130f5ed670465b1fe2d170f754f8c6
 #
@@ -84,7 +86,7 @@ namespace :db do
   desc 'Show the existing database backups'
   task dumps: :environment do
     backup_dir = backup_directory
-    puts "#{backup_dir}"
+    puts backup_dir
     d = backup_dir[Rails.root.to_s.size, backup_dir.size]
     exec "/usr/bin/find .#{d} -type f -exec ls -alt {} \\+"
   end
@@ -118,7 +120,7 @@ namespace :db do
           end
         else
           puts "Too many files match the pattern '#{pattern}':"
-          puts ' ' + files.join("\n ")
+          puts " #{files.join("\n ")}"
           puts ''
           puts 'Try a more specific pattern'
           puts ''
@@ -173,7 +175,7 @@ namespace :db do
   def backup_directory(suffix = nil, create: false)
     backup_dir = File.join(*[Rails.root, 'db/backups', suffix].compact)
 
-    if create and !Dir.exist?(backup_dir)
+    if create && !Dir.exist?(backup_dir)
       puts "Creating #{backup_dir} .."
       FileUtils.mkdir_p(backup_dir)
     end

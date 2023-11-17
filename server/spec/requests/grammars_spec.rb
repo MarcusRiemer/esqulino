@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe GrammarsController, type: :request do
@@ -191,7 +193,7 @@ RSpec.describe GrammarsController, type: :request do
     end
 
     it 'Attempts to creates a new, invalid grammar (programming_language missing)' do
-      prog_lang = FactoryBot.create(:programming_language)
+      FactoryBot.create(:programming_language)
       json_data = send_query(
         query_name: 'CreateGrammar',
         variables: { 'slug' => 'spec', 'name' => 'Spec Grammar' },
@@ -372,7 +374,7 @@ RSpec.describe GrammarsController, type: :request do
       block_language = FactoryBot.create(:block_language)
       grammar = block_language.grammar
 
-      res_1 = FactoryBot.create(:code_resource)
+      FactoryBot.create(:code_resource)
 
       get "/api/grammars/#{grammar.id}/code_resources_gallery",
           headers: json_headers
@@ -416,7 +418,7 @@ RSpec.describe GrammarsController, type: :request do
     it 'Ignores unrelated block languages' do
       original = FactoryBot.create(:grammar)
       related = FactoryBot.create(:block_language, grammar: original)
-      unrelated = FactoryBot.create(:block_language)
+      FactoryBot.create(:block_language)
 
       send_query(query_name: 'AdminRelatedBlockLanguages', variables: { 'grammarId' => original.id })
 

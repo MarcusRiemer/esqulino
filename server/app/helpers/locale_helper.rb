@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Utility methods to pick the correct locale
 module LocaleHelper
   # The languages that BlattWerkzeug supports

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Seed
   class Base
     # Global indentation level for log output
@@ -49,12 +51,12 @@ module Seed
     def seed
       return nil if File.extname(seed_id.to_s).present?
 
-      @seed_data ||= seed_id.is_a?(seed_class) ? seed_id : find_seed(seed_id)
+      @seed ||= seed_id.is_a?(seed_class) ? seed_id : find_seed(seed_id)
     end
 
     # returns seed model object after loading
     def loaded_seed
-      @loaded_seed_data ||= seed_class.find_by!(id: load_id)
+      @loaded_seed ||= seed_class.find_by!(id: load_id)
     end
 
     # When loading a seed, it's usualy the case that the provided seed_id is a yaml file
@@ -241,9 +243,9 @@ module Seed
     def seed_instance
       raise "Could not find project with slug or ID \"#{load_id}\"" unless File.exist? seed_file_path
 
-      yaml_safe_classes = ::Seed.constants
-                                .select { |c| ::Seed.const_get(c).is_a? Class }
-                                .map { |c| ::Seed.const_get(c) }
+      ::Seed.constants
+            .select { |c| ::Seed.const_get(c).is_a? Class }
+            .map { |c| ::Seed.const_get(c) }
 
       YAML.unsafe_load_file(seed_file_path)
     end
@@ -270,7 +272,7 @@ module Seed
 
       deps = YAML.unsafe_load_file(deps)
       deps
-        .select { |_, seed_id| !loaded.include? seed_id }
+        .reject { |_, seed_id| loaded.include? seed_id }
         .each { |_, seed_id, seed| seed.new(seed_id).start_load(loaded) }
     end
 

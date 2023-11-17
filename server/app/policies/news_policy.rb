@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NewsPolicy < ApplicationPolicy
   attr_reader :user, :news
 
