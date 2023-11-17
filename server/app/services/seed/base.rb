@@ -22,10 +22,10 @@ module Seed
     # @param defer_referential_checks boolean, is false by default unleass any seed class provides other value
     # based on seed models foreign key constraints
     def initialize(
-          seed_id,
-          dependencies: {},
-          defer_referential_checks: false
-        )
+      seed_id,
+      dependencies: {},
+      defer_referential_checks: false
+    )
       @seed_id = seed_id
       @dependencies = dependencies
       @defer_referential_checks = defer_referential_checks
@@ -36,12 +36,12 @@ module Seed
     #
     # @param msg [string] The
     def info(msg = nil)
-      puts ("#{('  ' * @@indent)}[#{seed_class}] #{msg}") unless msg.nil? || !INFO_OUTPUT
-      if block_given?
-        @@indent += 1
-        yield
-        @@indent -= 1
-      end
+      puts("#{'  ' * @@indent}[#{seed_class}] #{msg}") unless msg.nil? || !INFO_OUTPUT
+      return unless block_given?
+
+      @@indent += 1
+      yield
+      @@indent -= 1
     end
 
     # returns seed as Object of the model if one is not provided
@@ -61,7 +61,7 @@ module Seed
     # returns the seed_id as load_seed_id extracted form the yaml file
     # otherwise return nil
     def load_seed_id
-      return File.basename(seed_id, ".*") if File.extname(seed_id.to_s).present? && File.extname(seed_id.to_s) == ".yaml"
+      return File.basename(seed_id, '.*') if File.extname(seed_id.to_s).present? && File.extname(seed_id.to_s) == '.yaml'
       return seed_id unless seed_id.is_a?(seed_class)
 
       nil
@@ -70,12 +70,12 @@ module Seed
     # load_id can be UUID(id) or slug
     # if load_seed_id is neither a UUID nor a slug `find_load_seed_id` simply returns the provided seed_id during construction
     def load_id
-      if load_seed_id
-        if BlattwerkzeugUtil::string_is_uuid? load_seed_id.to_s
-          load_seed_id.to_s
-        else
-          find_load_seed_id(load_seed_id.to_s)
-        end
+      return unless load_seed_id
+
+      if BlattwerkzeugUtil.string_is_uuid? load_seed_id.to_s
+        load_seed_id.to_s
+      else
+        find_load_seed_id(load_seed_id.to_s)
       end
     end
 
@@ -86,9 +86,7 @@ module Seed
       query = seed_class.where(id: slug_or_id)
 
       # Some models have a "slug" column
-      if (seed_class.column_names.include? "slug")
-        query = query.or(seed_class.where(slug: slug_or_id))
-      end
+      query = query.or(seed_class.where(slug: slug_or_id)) if seed_class.column_names.include? 'slug'
 
       query.first!
     end
@@ -140,7 +138,7 @@ module Seed
     # it's required to break circular dependecy in the recursion process
     # calls store_seed and the after_store_seed which is seed specific case if something else needed to be stored after seed is stored
     def store(processed)
-      if not processed.include? [seed_directory, seed.id, self.class]
+      unless processed.include? [seed_directory, seed.id, self.class]
         info "Storing #{seed.readable_identification}" do
           store_seed
           after_store_seed
@@ -149,7 +147,7 @@ module Seed
         end
       end
 
-      return processed
+      processed
     end
 
     # calls the dependent model on parent using send and serialize it
@@ -168,9 +166,7 @@ module Seed
         # The attribute may or may not be a list-y kind of thing
         # We wrap single items in a list because it is easier to
         # work with a uniform interface.
-        if not to_serialize.respond_to?(:each)
-          to_serialize = [to_serialize]
-        end
+        to_serialize = [to_serialize] unless to_serialize.respond_to?(:each)
 
         # Turn the dependencies into seed class instances
         # and store them
@@ -182,18 +178,18 @@ module Seed
       end
 
       # After all things have been stored: write the deps file
-      if not immediate_dependencies.empty?
-        File.open(project_dependent_file(seed_directory, seed.id), "w") do |file|
-          YAML::dump(immediate_dependencies.to_a, file)
-        end
+      return if immediate_dependencies.empty?
+
+      File.open(project_dependent_file(seed_directory, seed.id), 'w') do |file|
+        YAML.dump(immediate_dependencies.to_a, file)
       end
     end
 
     # dump data into a yaml file in the seed direcotry
     def store_seed
       FileUtils.mkdir_p seed_directory
-      File.open(seed_file_path, "w") do |file|
-        YAML::dump(seed, file)
+      File.open(seed_file_path, 'w') do |file|
+        YAML.dump(seed, file)
       end
     end
 
@@ -206,7 +202,7 @@ module Seed
     # @param loaded [Set<String>] IDs that have been loaded already
     def start_load(loaded = Set.new)
       # Ensure we are not loading something multiple times
-      if not loaded.include? seed_id
+      unless loaded.include? seed_id
         loaded << seed_id # Treat this instance as loaded to avoid circular dependencies
 
         info "Loading #{seed_instance.readable_identification}" do
@@ -234,9 +230,7 @@ module Seed
       end
     rescue ActiveRecord::RecordInvalid => e
       # Reading the stdout-dump is really tedious, so we drop to pry instead
-      if Rails.env.development?
-        binding.pry
-      end
+      binding.pry if Rails.env.development?
 
       # Re-raise the original exception
       raise
@@ -247,9 +241,9 @@ module Seed
     def seed_instance
       raise "Could not find project with slug or ID \"#{load_id}\"" unless File.exist? seed_file_path
 
-      yaml_safe_classes= ::Seed.constants
-                           .select {|c| ::Seed.const_get(c).is_a? Class }
-                           .map {|c| ::Seed.const_get(c) }
+      yaml_safe_classes = ::Seed.constants
+                                .select { |c| ::Seed.const_get(c).is_a? Class }
+                                .map { |c| ::Seed.const_get(c) }
 
       YAML.unsafe_load_file(seed_file_path)
     end
@@ -259,7 +253,7 @@ module Seed
     # save the instance if theere is a change
     # runs the `after_load_seed` hook when upsert is done
     def upsert_seed_data
-      raise RuntimeError.new "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_class.name}" if seed_instance.class != seed_class
+      raise "Mismatched types, instance: #{seed_instance.class.name}, instance_type: #{seed_class.name}" if seed_instance.class != seed_class
 
       db_instance = seed_class.find_or_initialize_by(id: load_id)
       db_instance.assign_attributes(seed_instance.attributes)
@@ -276,15 +270,15 @@ module Seed
 
       deps = YAML.unsafe_load_file(deps)
       deps
-        .select do |_, seed_id| not loaded.include? seed_id end
-        .each do |_, seed_id, seed| seed.new(seed_id).start_load(loaded) end
+        .select { |_, seed_id| !loaded.include? seed_id }
+        .each { |_, seed_id, seed| seed.new(seed_id).start_load(loaded) }
     end
 
     # class method to load files started outside of instance scope or from global scope
     # skips dependecy files(-deps.yaml) which is handled by load_dependencies
     # calls a new instance of the seed class with start_load for all the available loadable files
     def self.load_all
-      Dir.glob(File.join load_directory, "*.yaml").each do |f|
+      Dir.glob(File.join(load_directory, '*.yaml')).each do |f|
         next if f =~ /deps/
 
         new(File.basename(f)).start_load
@@ -302,14 +296,12 @@ module Seed
     # upon iterating through all the files in correspoinding seed directory it finds a match and returns
     # returns early before iteration process if seed_file_data YAML dump or seed does not contain any slug attribute
     def find_load_seed_id(load_seed_id)
-      Dir.glob(File.join seed_directory, "*.yaml").each do |f|
+      Dir.glob(File.join(seed_directory, '*.yaml')).each do |f|
         next if f =~ /deps/
 
         seed_file_data = YAML.unsafe_load_file(f)
         return load_seed_id unless seed_file_data.has_attribute?(:slug)
-        if seed_file_data.slug == load_seed_id
-          return seed_file_data.id
-        end
+        return seed_file_data.id if seed_file_data.slug == load_seed_id
       end
 
       raise "Could not find item with ID \"#{load_seed_id}\" in serialized seed data"
@@ -318,11 +310,9 @@ module Seed
     # Takes a block and yield `disable_referential_integrity` if `defer_referential_checks` is true
     # otherwise just yields the block. This allows certain seed configurations to temporarily disable
     # consistency checks (which is sometimes required for circular dependencies).
-    def run_within_correct_transaction
+    def run_within_correct_transaction(&block)
       if @defer_referential_checks
-        ActiveRecord::Base.connection.disable_referential_integrity do
-          yield
-        end
+        ActiveRecord::Base.connection.disable_referential_integrity(&block)
       else
         yield
       end

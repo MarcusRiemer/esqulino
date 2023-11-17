@@ -2,7 +2,7 @@
 class WipeProjectsJob < ApplicationJob
   queue_as :default
 
-  def perform(*args)
+  def perform(*_args)
     # There is a circular dependency between "Project" and "Project Database" so
     # we need to temporarily disable referential integrity
     ActiveRecord::Base.connection.disable_referential_integrity do

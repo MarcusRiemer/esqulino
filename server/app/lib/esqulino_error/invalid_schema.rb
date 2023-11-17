@@ -15,7 +15,7 @@ module EsqulinoError
     # @return [Hash] The errors as reported by the JSON-schema-validator
     def json_data
       {
-        "errors" => @errors.map { |r| r.except("root_schema") }
+        'errors' => @errors.map { |r| r.except('root_schema') }
       }
     end
   end

@@ -25,9 +25,9 @@ module SchemaTools
     # described in Typescript.
     def to_json(options)
       {
-        :index => @index, :name => @name, :type => @type,
-        :notNull => @not_null, :dfltValue => @dflt_value,
-        :primary => @primary
+        index: @index, name: @name, type: @type,
+        notNull: @not_null, dfltValue: @dflt_value,
+        primary: @primary
       }.to_json(options)
     end
   end

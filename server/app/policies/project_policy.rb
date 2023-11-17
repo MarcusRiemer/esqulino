@@ -30,28 +30,27 @@ class ProjectPolicy < ApplicationPolicy
   end
 
   def add_member?
-    permitted_roles = ["admin", "owner"]
+    permitted_roles = %w[admin owner]
     user_role = project.member_role(user)
 
-    return user.has_role?(:admin) || project.user_have_role(user,permitted_roles) || project.public && user_role=="participant"
+    user.has_role?(:admin) || project.user_have_role(user, permitted_roles) || project.public && user_role == 'participant'
   end
 
   def change_member_role?
-    permitted_roles = ["admin", "owner"]
+    permitted_roles = %w[admin owner]
 
-    return project.user_have_role(user,permitted_roles)
+    project.user_have_role(user, permitted_roles)
   end
 
-
   def remove_member?
-    permitted_roles = ["admin", "owner", "participant"]
+    permitted_roles = %w[admin owner participant]
 
-    return project.user_have_role(user,permitted_roles)
+    project.user_have_role(user, permitted_roles)
   end
 
   def change_owner?
-    permitted_roles = ["owner"]
+    permitted_roles = ['owner']
 
-    return project.user_have_role(user,permitted_roles)
+    project.user_have_role(user, permitted_roles)
   end
 end

@@ -1,17 +1,17 @@
 FactoryBot.define do
   factory :news do
-    title {
+    title do
       {
-        'de' => "Schlagzeile",
-        'en' => "Headline"
+        'de' => 'Schlagzeile',
+        'en' => 'Headline'
       }
-    }
-    text {
+    end
+    text do
       {
-        'de' => "Das ist ein Test",
-        'en' => "This is a test"
+        'de' => 'Das ist ein Test',
+        'en' => 'This is a test'
       }
-    }
+    end
     published_from { Date.new(2019, 4, 10) }
     association :user
   end

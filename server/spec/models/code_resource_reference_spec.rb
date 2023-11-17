@@ -6,8 +6,8 @@ RSpec.describe CodeResourceReference, type: :model do
     target = create(:code_resource)
 
     reference = create(:code_resource_reference,
-                       origin: origin,
-                       target: target)
+                       origin:,
+                       target:)
 
     expect(origin.targeted_code_resources).to match_array [target]
   end

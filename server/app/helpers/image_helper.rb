@@ -10,15 +10,15 @@ module ImageHelper
     type = FileMagic.new(FileMagic::MAGIC_MIME).file(path)
 
     # do not attempt to resize svg
-    if type == "image/svg+xml; charset=us-ascii"
-      send_file path, type: type, disposition: 'inline'
+    if type == 'image/svg+xml; charset=us-ascii'
+      send_file path, type:, disposition: 'inline'
     # attempt to resize other formats
     else
       image = shrink_image_from_file_or_nil(path, type, params['width'])
       if image
         send_data image.to_blob, type: image.mime_type, disposition: 'inline'
       else
-        send_file path, type: type, disposition: 'inline'
+        send_file path, type:, disposition: 'inline'
       end
     end
 
@@ -35,7 +35,7 @@ module ImageHelper
   #
   # return Resized Image or nil
   #
-  def shrink_image_from_file_or_nil(path, type, width)
+  def shrink_image_from_file_or_nil(path, _type, width)
     res = nil
     begin
       image = MiniMagick::Image.open(path)

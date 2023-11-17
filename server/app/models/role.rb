@@ -1,9 +1,7 @@
 class Role < ApplicationRecord
-  COMMON_NAMES = Set.new(["admin", "guest", "validated", "news_editor"])
+  COMMON_NAMES = Set.new(%w[admin guest validated news_editor])
 
-  if Rails.env.test?
-    COMMON_NAMES.merge(["spec", "test"])
-  end
+  COMMON_NAMES.merge(%w[spec test]) if Rails.env.test?
 
   validates :name,
             uniqueness: true,

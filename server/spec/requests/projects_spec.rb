@@ -8,24 +8,24 @@ RSpec.describe ProjectsController, type: :request do
       p = create(:project)
 
       data = send_query(
-        query_name: "FullProject",
-        variables: { "id" => p.id }
+        query_name: 'FullProject',
+        variables: { 'id' => p.id }
       )
 
-      node = data["data"]["project"];
-      expect(node["id"]).to eq p.id
+      node = data['data']['project']
+      expect(node['id']).to eq p.id
     end
 
     it 'finds a project by slug' do
-      p = create(:project, slug: "uniq")
+      p = create(:project, slug: 'uniq')
 
       data = send_query(
-        query_name: "FullProject",
-        variables: { "id" => p.slug }
+        query_name: 'FullProject',
+        variables: { 'id' => p.slug }
       )
 
-      node = data["data"]["project"];
-      expect(node["id"]).to eq p.id
+      node = data['data']['project']
+      expect(node['id']).to eq p.id
     end
 
     it 'project with database schema (no foreign keys)' do
@@ -34,12 +34,12 @@ RSpec.describe ProjectsController, type: :request do
       p = db.project
 
       data = send_query(
-        query_name: "FullProject",
-        variables: { "id" => p.id }
+        query_name: 'FullProject',
+        variables: { 'id' => p.id }
       )
 
-      node = data["data"]["project"];
-      expect(node["id"]).to eq p.id
+      node = data['data']['project']
+      expect(node['id']).to eq p.id
     end
 
     it 'project with database schema (with foreign keys)' do
@@ -48,12 +48,12 @@ RSpec.describe ProjectsController, type: :request do
       p = db.project
 
       data = send_query(
-        query_name: "FullProject",
-        variables: { "id" => p.id }
+        query_name: 'FullProject',
+        variables: { 'id' => p.id }
       )
 
-      node = data["data"]["project"];
-      expect(node["id"]).to eq p.id
+      node = data['data']['project']
+      expect(node['id']).to eq p.id
     end
   end
 
@@ -64,13 +64,13 @@ RSpec.describe ProjectsController, type: :request do
       it 'creates a project' do
         set_access_token(user)
         data = send_query(
-          query_name: "CreateProject",
-          variables: { "name" => { "en" => "Some project" }, "slug" => "test" }
+          query_name: 'CreateProject',
+          variables: { 'name' => { 'en' => 'Some project' }, 'slug' => 'test' }
         )
 
-        created_project = Project.find_by(slug: "test")
-        expect(created_project.name).to eq({ "en" => "Some project" })
-        expect(created_project.slug).to eq "test"
+        created_project = Project.find_by(slug: 'test')
+        expect(created_project.name).to eq({ 'en' => 'Some project' })
+        expect(created_project.slug).to eq 'test'
         expect(File.directory?(created_project.data_directory_path)).to eq true
 
         expect(created_project.public).to eq false
@@ -79,13 +79,12 @@ RSpec.describe ProjectsController, type: :request do
       it 'missing the slug' do
         set_access_token(user)
         json_body = send_query(
-          query_name: "CreateProject",
-          variables: { "name" => { "en" => "Some project" }, "slug" => "test" },
-          expect_no_errors: false,
-
+          query_name: 'CreateProject',
+          variables: { 'name' => { 'en' => 'Some project' }, 'slug' => 'test' },
+          expect_no_errors: false
         )
 
-        expect(json_body["data"]["createProject"].fetch("errors", [])).to eq []
+        expect(json_body['data']['createProject'].fetch('errors', [])).to eq []
 
         expect(Project.all.length).to eq 1
       end
@@ -95,12 +94,12 @@ RSpec.describe ProjectsController, type: :request do
       it 'missing a name' do
         set_access_token(user)
         json_body = send_query(
-          query_name: "CreateProject",
-          variables: { "slug" => "test" },
-          expect_no_errors: false,
+          query_name: 'CreateProject',
+          variables: { 'slug' => 'test' },
+          expect_no_errors: false
         )
 
-        expect(json_body.fetch("errors", []).length).to eq 1
+        expect(json_body.fetch('errors', []).length).to eq 1
 
         expect(Project.all.length).to eq 0
       end
@@ -108,27 +107,26 @@ RSpec.describe ProjectsController, type: :request do
   end
 
   describe 'GraphQL UpdateProject' do
-    let(:project) { create(:project, name: { "en" => "Some project" }, slug: 'test') }
-    let(:update_params) {
+    let(:project) { create(:project, name: { 'en' => 'Some project' }, slug: 'test') }
+    let(:update_params) do
       {
-        "id" => project.id,
-        "name" => { "en" => "Hallo Test" },
-        "description" => { "en" => "This is a test project" }
+        'id' => project.id,
+        'name' => { 'en' => 'Hallo Test' },
+        'description' => { 'en' => 'This is a test project' }
       }
-    }
+    end
 
     it 'denies unauthenticated requests' do
       json_body = send_query(
-        query_name: "UpdateProject",
+        query_name: 'UpdateProject',
         variables: update_params,
-        expect_no_errors: false,
+        expect_no_errors: false
       )
 
-      expect(json_body.fetch("errors", []).length).to eq 1
+      expect(json_body.fetch('errors', []).length).to eq 1
 
       project.reload
-      expect(project.name).to eq({ "en" => "Some project" })
-
+      expect(project.name).to eq({ 'en' => 'Some project' })
     end
 
     describe 'valid request' do
@@ -136,15 +134,15 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'updates name and description' do
         send_query(
-          query_name: "UpdateProject",
+          query_name: 'UpdateProject',
           variables: update_params
         )
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
-        expect(response.media_type).to eq "application/json"
+        expect(response.media_type).to eq 'application/json'
         json_body = JSON.parse(response.body)
-        expect(json_body.fetch("errors", [])).to eq []
+        expect(json_body.fetch('errors', [])).to eq []
 
         # Ensure the database has actually changed
         updated = Project.find_by(slug: project.slug)
@@ -154,98 +152,98 @@ RSpec.describe ProjectsController, type: :request do
 
       it 'updates only the name' do
         send_query(
-          query_name: "UpdateProject",
+          query_name: 'UpdateProject',
           variables: {
-            "id" => project.id,
-            "name" => { "en" => "Only" }
+            'id' => project.id,
+            'name' => { 'en' => 'Only' }
           }
         )
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
-        expect(response.media_type).to eq "application/json"
+        expect(response.media_type).to eq 'application/json'
         json_body = JSON.parse(response.body)
-        expect(json_body.fetch("errors", [])).to eq []
+        expect(json_body.fetch('errors', [])).to eq []
 
         # Ensure the database has actually changed
         updated = Project.find_by(slug: project.slug)
-        expect(updated.name).to eq({ "en" => "Only" })
+        expect(updated.name).to eq({ 'en' => 'Only' })
         expect(updated.description).to eq project.description
       end
 
       it 'update with empty name' do
-        pending("What exactly does an empty LangJson field mean for an update?")
+        pending('What exactly does an empty LangJson field mean for an update?')
 
         send_query(
-          query_name: "UpdateProject",
+          query_name: 'UpdateProject',
           variables: {
-            "id" => project.id,
-            "name" => {}
+            'id' => project.id,
+            'name' => {}
           }
         )
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
-        expect(response.media_type).to eq "application/json"
+        expect(response.media_type).to eq 'application/json'
         json_body = JSON.parse(response.body)
-        expect(json_body.fetch("errors", [])).to eq []
+        expect(json_body.fetch('errors', [])).to eq []
 
         # Should the project remain unchanged or should the name now be empty?
         updated = Project.find_by(slug: project.slug)
-        expect(updated.name).to eq({ "en" => "Only" })
+        expect(updated.name).to eq({ 'en' => 'Only' })
         expect(updated.description).to eq project.description
       end
 
       it 'updates the name in two languages' do
         send_query(
-          query_name: "UpdateProject",
+          query_name: 'UpdateProject',
           variables: {
-            "id" => project.id,
-            "name" => { "en" => "Only", "de" => "Einzig" }
+            'id' => project.id,
+            'name' => { 'en' => 'Only', 'de' => 'Einzig' }
           }
         )
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
-        expect(response.media_type).to eq "application/json"
+        expect(response.media_type).to eq 'application/json'
         json_body = JSON.parse(response.body)
-        expect(json_body.fetch("errors", [])).to eq []
+        expect(json_body.fetch('errors', [])).to eq []
 
         # Ensure the database has actually changed
         updated = Project.find_by(slug: project.slug)
-        expect(updated.name).to eq({ "en" => "Only", "de" => "Einzig" })
+        expect(updated.name).to eq({ 'en' => 'Only', 'de' => 'Einzig' })
         expect(updated.description).to eq project.description
       end
 
       it 'updates only the description' do
         send_query(
-          query_name: "UpdateProject",
+          query_name: 'UpdateProject',
           variables: {
-            "id" => project.id,
-            "description" => { "en" => "Only" }
+            'id' => project.id,
+            'description' => { 'en' => 'Only' }
           }
         )
 
         # Ensure the response is well formed
         expect(response).to have_http_status(200)
-        expect(response.media_type).to eq "application/json"
+        expect(response.media_type).to eq 'application/json'
         json_body = JSON.parse(response.body)
-        expect(json_body.fetch("errors", [])).to eq []
+        expect(json_body.fetch('errors', [])).to eq []
 
         # Ensure the database has actually changed
         updated = Project.find_by(slug: project.slug)
         expect(updated.name).to eq project.name
-        expect(updated.description).to eq({ "en" => "Only" })
+        expect(updated.description).to eq({ 'en' => 'Only' })
       end
 
       it 'filters unknown attributes' do
         send_query(
-          query_name: "UpdateProject",
+          query_name: 'UpdateProject',
           variables: {
-            "id" => project.id,
-            "name" => { "en" => "Only" },
-            "description" => { "en" => "Only" },
-            "will_never_exist" => { "en" => "Only" }
+            'id' => project.id,
+            'name' => { 'en' => 'Only' },
+            'description' => { 'en' => 'Only' },
+            'will_never_exist' => { 'en' => 'Only' }
           }
         )
 
@@ -255,15 +253,15 @@ RSpec.describe ProjectsController, type: :request do
 
         # Ensure the database hasn't actually changed
         updated = Project.find_by(slug: project.slug)
-        expect(updated.name).to eq ({ "en" => "Only" })
-        expect(updated.description).to eq ({ "en" => "Only" })
+        expect(updated.name).to eq({ 'en' => 'Only' })
+        expect(updated.description).to eq({ 'en' => 'Only' })
       end
     end
   end
 
-  describe "GraphQL Project BlockLanguage Mutations" do
+  describe 'GraphQL Project BlockLanguage Mutations' do
     let(:user) { create(:user) }
-    let(:project) { create(:project, user: user) }
+    let(:project) { create(:project, user:) }
 
     before(:each) { set_access_token(project.user) }
 
@@ -276,7 +274,7 @@ RSpec.describe ProjectsController, type: :request do
       new_block_language = FactoryBot.create(:block_language)
 
       send_query(
-        query_name: "ProjectAddUsedBlockLanguage",
+        query_name: 'ProjectAddUsedBlockLanguage',
         variables: {
           projectId: project.id,
           blockLanguageId: new_block_language.id
@@ -284,15 +282,15 @@ RSpec.describe ProjectsController, type: :request do
       )
 
       expect(response.status).to eq(200)
-      expect(response.media_type).to eq "application/json"
+      expect(response.media_type).to eq 'application/json'
 
       json_body = JSON.parse(response.body)
-      expect(json_body["errors"]).to eq nil
+      expect(json_body['errors']).to eq nil
 
       # Ensure the database has actually changed
       project.reload
       expect(project.project_uses_block_languages.size).to eq 2
-      expect(project.block_languages.include? new_block_language).to be true
+      expect(project.block_languages.include?(new_block_language)).to be true
     end
 
     it 'removes used block languages' do
@@ -300,17 +298,17 @@ RSpec.describe ProjectsController, type: :request do
       used = project.project_uses_block_languages.create(block_language: b)
 
       send_query(
-        query_name: "ProjectRemoveUsedBlockLanguage",
+        query_name: 'ProjectRemoveUsedBlockLanguage',
         variables: {
           usedBlockLanguageId: used.id
         }
       )
 
       expect(response.status).to eq(200)
-      expect(response.media_type).to eq "application/json"
+      expect(response.media_type).to eq 'application/json'
 
       json_body = JSON.parse(response.body)
-      expect(json_body["errors"]).to eq nil
+      expect(json_body['errors']).to eq nil
 
       # Ensure the database has actually changed
       project.reload
@@ -321,7 +319,7 @@ RSpec.describe ProjectsController, type: :request do
 
   describe 'GraphQL FrontpageListProjects' do
     it 'lists nothing if nothing is there' do
-      send_query(query_name: "FrontpageListProjects")
+      send_query(query_name: 'FrontpageListProjects')
 
       expect(response).to have_http_status(200)
       parsed = JSON.parse(response.body)
@@ -331,7 +329,7 @@ RSpec.describe ProjectsController, type: :request do
     it 'lists a single public project' do
       FactoryBot.create(:project, :public)
 
-      send_query(query_name: "FrontpageListProjects")
+      send_query(query_name: 'FrontpageListProjects')
 
       expect(response).to have_http_status(200)
 
@@ -344,7 +342,7 @@ RSpec.describe ProjectsController, type: :request do
       FactoryBot.create(:project, :private)
       FactoryBot.create(:project, :public)
 
-      send_query(query_name: "FrontpageListProjects")
+      send_query(query_name: 'FrontpageListProjects')
 
       expect(response).to have_http_status(200)
       parsed = JSON.parse(response.body)
@@ -355,7 +353,7 @@ RSpec.describe ProjectsController, type: :request do
   describe 'GraphQL AdminListProjects' do
     it 'guest user: not permitted' do
       send_query(
-        query_name: "AdminListProjects",
+        query_name: 'AdminListProjects',
         exp_http_status: 401
       )
     end
@@ -365,20 +363,20 @@ RSpec.describe ProjectsController, type: :request do
       set_access_token(user)
 
       send_query(
-        query_name: "AdminListProjects",
+        query_name: 'AdminListProjects',
         exp_http_status: 401
       )
     end
 
     it 'admin user: permitted' do
-      FactoryBot.create(:project, :public, name: { "de" => 'cccc' }, slug: 'cccc')
-      FactoryBot.create(:project, :public, name: { "de" => 'aaaa' }, slug: 'aaaa')
-      FactoryBot.create(:project, :public, name: { "de" => 'bbbb' }, slug: 'bbbb')
+      FactoryBot.create(:project, :public, name: { 'de' => 'cccc' }, slug: 'cccc')
+      FactoryBot.create(:project, :public, name: { 'de' => 'aaaa' }, slug: 'aaaa')
+      FactoryBot.create(:project, :public, name: { 'de' => 'bbbb' }, slug: 'bbbb')
 
       user = create(:user, :admin)
       set_access_token(user)
 
-      send_query(query_name: "AdminListProjects")
+      send_query(query_name: 'AdminListProjects')
 
       expect(response).to have_http_status(200)
       parsed = JSON.parse(response.body)
@@ -391,15 +389,15 @@ RSpec.describe ProjectsController, type: :request do
       p = create(:project)
 
       send_query(
-        query_name: "DestroyProject",
-        variables: { "id" => p.id },
-        expect_no_errors: false,
+        query_name: 'DestroyProject',
+        variables: { 'id' => p.id },
+        expect_no_errors: false
       )
 
       expect(response).to have_http_status(200)
 
       json_body = JSON.parse(response.body)
-      expect(json_body["data"]["destroyProject"]["errors"].length).to eq 1
+      expect(json_body['data']['destroyProject']['errors'].length).to eq 1
 
       # Must still exist
       expect(Project.exists?(p.id)).to be true
@@ -407,14 +405,14 @@ RSpec.describe ProjectsController, type: :request do
 
     it 'nonexistant' do
       send_query(
-        query_name: "DestroyProject",
-        variables: { "id" => "11ceddb1-951b-40dc-bf60-fcfbcdaddc65" },
-        expect_no_errors: false,
+        query_name: 'DestroyProject',
+        variables: { 'id' => '11ceddb1-951b-40dc-bf60-fcfbcdaddc65' },
+        expect_no_errors: false
       )
 
       expect(response).to have_http_status(200)
       json_body = JSON.parse(response.body)
-      expect(json_body["data"]["destroyProject"]["errors"].length).to eq 1
+      expect(json_body['data']['destroyProject']['errors'].length).to eq 1
     end
 
     it 'an empty project' do
@@ -422,14 +420,14 @@ RSpec.describe ProjectsController, type: :request do
       set_access_token(to_delete.user)
 
       send_query(
-        query_name: "DestroyProject",
-        variables: { "id" => to_delete.id }
+        query_name: 'DestroyProject',
+        variables: { 'id' => to_delete.id }
       )
 
       expect(response).to have_http_status(200)
 
       json_body = JSON.parse(response.body)
-      expect(json_body["data"]["destroyProject"].fetch("errors", [])).to eq []
+      expect(json_body['data']['destroyProject'].fetch('errors', [])).to eq []
 
       # Mustn't exist anymore
       expect(Project.exists?(to_delete.id)).to be false

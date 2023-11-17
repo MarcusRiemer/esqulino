@@ -1,700 +1,700 @@
 FactoryBot.define do
   factory :grammar do
-    name { "Spec Grammar" }
-    sequence (:slug) { |n| "grammar-#{n}" }
+    name { 'Spec Grammar' }
+    sequence(:slug) { |n| "grammar-#{n}" }
     association :programming_language
-    types { Hash.new }
-    foreign_types { Hash.new }
+    types { {} }
+    foreign_types { {} }
 
     # A grammar that has a single type that is the root
     trait :model_single_type do
-      types {
+      types do
         {
-          "spec" => {
-            "root" => {
-              "type" => "concrete",
-              "attributes" => []
+          'spec' => {
+            'root' => {
+              'type' => 'concrete',
+              'attributes' => []
             }
           }
         }
-      }
-      root {
+      end
+      root do
         {
-          "languageName" => "spec",
-          "typeName" => "root"
+          'languageName' => 'spec',
+          'typeName' => 'root'
         }
-      }
+      end
     end
 
     # A grammar that is generated from a code resource
     trait :generated_model_single_type do
-      association :generated_from, factory: [:code_resource, :grammar_single_type]
+      association :generated_from, factory: %i[code_resource grammar_single_type]
     end
 
     # A copied version of the MetaGrammar, kept in sync manually
     trait :model_meta do
-      root {
+      root do
         {
-          languageName: "MetaGrammar",
-          typeName: "grammar"
+          languageName: 'MetaGrammar',
+          typeName: 'grammar'
         }
-      }
-      types {
+      end
+      types do
         {
-          "MetaGrammar" => {
-            "node" => {
-              "type" => "oneOf",
-              "oneOf" => [
-                "concreteNode",
-                "typedef"
+          'MetaGrammar' => {
+            'node' => {
+              'type' => 'oneOf',
+              'oneOf' => %w[
+                concreteNode
+                typedef
               ]
             },
-            "comment" => {
-              "type" => "concrete",
-              "attributes" => [
+            'comment' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "tags" => [
-                    "comment"
+                  'tags' => [
+                    'comment'
                   ],
-                  "type" => "container",
-                  "children" => [
+                  'type' => 'container',
+                  'children' => [
                     {
-                      "tags" => [
-                        "space-after"
+                      'tags' => [
+                        'space-after'
                       ],
-                      "type" => "terminal",
-                      "symbol" => "//"
+                      'type' => 'terminal',
+                      'symbol' => '//'
                     },
                     {
-                      "base" => "string",
-                      "name" => "text",
-                      "type" => "property"
+                      'base' => 'string',
+                      'name' => 'text',
+                      'type' => 'property'
                     }
                   ],
-                  "orientation" => "horizontal"
+                  'orientation' => 'horizontal'
                 }
               ]
             },
-            "grammar" => {
-              "type" => "concrete",
-              "attributes" => [
+            'grammar' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "type" => "container",
-                  "children" => [
+                  'type' => 'container',
+                  'children' => [
                     {
-                      "type" => "container",
-                      "children" => [
+                      'type' => 'container',
+                      'children' => [
                         {
-                          "tags" => [
-                            "space-after",
-                            "keyword"
+                          'tags' => %w[
+                            space-after
+                            keyword
                           ],
-                          "type" => "terminal",
-                          "symbol" => "grammar"
+                          'type' => 'terminal',
+                          'symbol' => 'grammar'
                         },
                         {
-                          "base" => "string",
-                          "name" => "name",
-                          "tags" => [
-                            "double-quote",
-                            "space-after"
+                          'base' => 'string',
+                          'name' => 'name',
+                          'tags' => %w[
+                            double-quote
+                            space-after
                           ],
-                          "type" => "property"
+                          'type' => 'property'
                         },
                         {
-                          "name" => "includes",
-                          "type" => "sequence",
-                          "nodeTypes" => [
+                          'name' => 'includes',
+                          'type' => 'sequence',
+                          'nodeTypes' => [
                             {
-                              "occurs" => "?",
-                              "nodeType" => "grammarIncludes"
+                              'occurs' => '?',
+                              'nodeType' => 'grammarIncludes'
                             }
                           ]
                         },
                         {
-                          "type" => "terminal",
-                          "symbol" => "{"
+                          'type' => 'terminal',
+                          'symbol' => '{'
                         }
                       ],
-                      "orientation" => "horizontal"
+                      'orientation' => 'horizontal'
                     },
                     {
-                      "tags" => [
-                        "indent"
+                      'tags' => [
+                        'indent'
                       ],
-                      "type" => "container",
-                      "children" => [
+                      'type' => 'container',
+                      'children' => [
                         {
-                          "type" => "container",
-                          "children" => [
+                          'type' => 'container',
+                          'children' => [
                             {
-                              "tags" => [
-                                "space-after",
-                                "keyword"
+                              'tags' => %w[
+                                space-after
+                                keyword
                               ],
-                              "type" => "terminal",
-                              "symbol" => "root"
+                              'type' => 'terminal',
+                              'symbol' => 'root'
                             },
                             {
-                              "tags" => [
-                                "space-after"
+                              'tags' => [
+                                'space-after'
                               ],
-                              "type" => "terminal",
-                              "symbol" => "="
+                              'type' => 'terminal',
+                              'symbol' => '='
                             },
                             {
-                              "name" => "root",
-                              "type" => "sequence",
-                              "nodeTypes" => [
-                                "nodeRef"
+                              'name' => 'root',
+                              'type' => 'sequence',
+                              'nodeTypes' => [
+                                'nodeRef'
                               ]
                             }
                           ],
-                          "orientation" => "horizontal"
+                          'orientation' => 'horizontal'
                         },
                         {
-                          "name" => "nodes",
-                          "type" => "allowed",
-                          "nodeTypes" => [
+                          'name' => 'nodes',
+                          'type' => 'allowed',
+                          'nodeTypes' => [
                             {
-                              "occurs" => "+",
-                              "nodeType" => "node"
+                              'occurs' => '+',
+                              'nodeType' => 'node'
                             },
                             {
-                              "occurs" => "*",
-                              "nodeType" => "comment"
+                              'occurs' => '*',
+                              'nodeType' => 'comment'
                             }
                           ]
                         }
                       ],
-                      "orientation" => "vertical"
+                      'orientation' => 'vertical'
                     },
                     {
-                      "type" => "terminal",
-                      "symbol" => "}"
+                      'type' => 'terminal',
+                      'symbol' => '}'
                     }
                   ],
-                  "orientation" => "vertical"
+                  'orientation' => 'vertical'
                 }
               ]
             },
-            "nodeRef" => {
-              "type" => "oneOf",
-              "oneOf" => [
-                "nodeRefOne",
-                "nodeRefCardinality"
+            'nodeRef' => {
+              'type' => 'oneOf',
+              'oneOf' => %w[
+                nodeRefOne
+                nodeRefCardinality
               ]
             },
-            "typedef" => {
-              "type" => "concrete",
-              "attributes" => [
+            'typedef' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "type" => "container",
-                  "children" => [
+                  'type' => 'container',
+                  'children' => [
                     {
-                      "tags" => [
-                        "space-after",
-                        "keyword"
+                      'tags' => %w[
+                        space-after
+                        keyword
                       ],
-                      "type" => "terminal",
-                      "symbol" => "typedef"
+                      'type' => 'terminal',
+                      'symbol' => 'typedef'
                     },
                     {
-                      "base" => "string",
-                      "name" => "languageName",
-                      "tags" => [
-                        "double-quote"
+                      'base' => 'string',
+                      'name' => 'languageName',
+                      'tags' => [
+                        'double-quote'
                       ],
-                      "type" => "property"
+                      'type' => 'property'
                     },
                     {
-                      "type" => "terminal",
-                      "symbol" => "."
+                      'type' => 'terminal',
+                      'symbol' => '.'
                     },
                     {
-                      "base" => "string",
-                      "name" => "typeName",
-                      "tags" => [
-                        "double-quote",
-                        "space-after"
+                      'base' => 'string',
+                      'name' => 'typeName',
+                      'tags' => %w[
+                        double-quote
+                        space-after
                       ],
-                      "type" => "property"
+                      'type' => 'property'
                     },
                     {
-                      "tags" => [
-                        "space-after"
+                      'tags' => [
+                        'space-after'
                       ],
-                      "type" => "terminal",
-                      "symbol" => " =>:="
+                      'type' => 'terminal',
+                      'symbol' => ' =>:='
                     },
                     {
-                      "tags" => [
-                        "allow-wrap"
+                      'tags' => [
+                        'allow-wrap'
                       ],
-                      "type" => "container",
-                      "children" => [
+                      'type' => 'container',
+                      'children' => [
                         {
-                          "name" => "references",
-                          "type" => "sequence",
-                          "between" => {
-                            "tags" => [
-                              "space-around"
+                          'name' => 'references',
+                          'type' => 'sequence',
+                          'between' => {
+                            'tags' => [
+                              'space-around'
                             ],
-                            "type" => "terminal",
-                            "symbol" => "|"
+                            'type' => 'terminal',
+                            'symbol' => '|'
                           },
-                          "nodeTypes" => [
+                          'nodeTypes' => [
                             {
-                              "occurs" => "*",
-                              "nodeType" => "nodeRef"
+                              'occurs' => '*',
+                              'nodeType' => 'nodeRef'
                             }
                           ]
                         }
                       ],
-                      "orientation" => "horizontal"
+                      'orientation' => 'horizontal'
                     }
                   ],
-                  "orientation" => "horizontal"
+                  'orientation' => 'horizontal'
                 }
               ]
             },
-            "children" => {
-              "type" => "concrete",
-              "attributes" => [
+            'children' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "type" => "container",
-                  "children" => [
+                  'type' => 'container',
+                  'children' => [
                     {
-                      "tags" => [
-                        "space-after",
-                        "keyword"
+                      'tags' => %w[
+                        space-after
+                        keyword
                       ],
-                      "type" => "terminal",
-                      "symbol" => "children"
+                      'type' => 'terminal',
+                      'symbol' => 'children'
                     },
                     {
-                      "base" => "string",
-                      "name" => "base",
-                      "tags" => [
-                        "space-after"
+                      'base' => 'string',
+                      'name' => 'base',
+                      'tags' => [
+                        'space-after'
                       ],
-                      "type" => "property",
-                      "restrictions" => [
+                      'type' => 'property',
+                      'restrictions' => [
                         {
-                          "type" => "enum",
-                          "value" => [
-                            "sequence",
-                            "allowed"
+                          'type' => 'enum',
+                          'value' => %w[
+                            sequence
+                            allowed
                           ]
                         }
                       ]
                     },
                     {
-                      "base" => "string",
-                      "name" => "name",
-                      "tags" => [
-                        "space-after"
+                      'base' => 'string',
+                      'name' => 'name',
+                      'tags' => [
+                        'space-after'
                       ],
-                      "type" => "property"
+                      'type' => 'property'
                     },
                     {
-                      "tags" => [
-                        "space-after"
+                      'tags' => [
+                        'space-after'
                       ],
-                      "type" => "terminal",
-                      "symbol" => " =>:="
+                      'type' => 'terminal',
+                      'symbol' => ' =>:='
                     },
                     {
-                      "name" => "references",
-                      "type" => "sequence",
-                      "nodeTypes" => [
+                      'name' => 'references',
+                      'type' => 'sequence',
+                      'nodeTypes' => [
                         {
-                          "occurs" => "*",
-                          "nodeType" => "nodeRef"
+                          'occurs' => '*',
+                          'nodeType' => 'nodeRef'
                         }
                       ]
                     }
                   ],
-                  "orientation" => "horizontal"
+                  'orientation' => 'horizontal'
                 }
               ]
             },
-            "property" => {
-              "type" => "concrete",
-              "attributes" => [
+            'property' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "type" => "container",
-                  "children" => [
+                  'type' => 'container',
+                  'children' => [
                     {
-                      "tags" => [
-                        "space-after",
-                        "keyword"
+                      'tags' => %w[
+                        space-after
+                        keyword
                       ],
-                      "type" => "terminal",
-                      "symbol" => "prop"
+                      'type' => 'terminal',
+                      'symbol' => 'prop'
                     },
                     {
-                      "base" => "string",
-                      "name" => "name",
-                      "tags" => [
-                        "double-quote",
-                        "space-after"
+                      'base' => 'string',
+                      'name' => 'name',
+                      'tags' => %w[
+                        double-quote
+                        space-after
                       ],
-                      "type" => "property"
+                      'type' => 'property'
                     },
                     {
-                      "base" => "string",
-                      "name" => "base",
-                      "type" => "property",
-                      "restrictions" => [
+                      'base' => 'string',
+                      'name' => 'base',
+                      'type' => 'property',
+                      'restrictions' => [
                         {
-                          "type" => "enum",
-                          "value" => [
-                            "integer",
-                            "string",
-                            "boolean"
+                          'type' => 'enum',
+                          'value' => %w[
+                            integer
+                            string
+                            boolean
                           ]
                         }
                       ]
                     }
                   ],
-                  "orientation" => "horizontal"
+                  'orientation' => 'horizontal'
                 }
               ]
             },
-            "terminal" => {
-              "type" => "concrete",
-              "attributes" => [
+            'terminal' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "base" => "string",
-                  "name" => "symbol",
-                  "tags" => [
-                    "double-quote"
+                  'base' => 'string',
+                  'name' => 'symbol',
+                  'tags' => [
+                    'double-quote'
                   ],
-                  "type" => "property"
+                  'type' => 'property'
                 }
               ]
             },
-            "attribute" => {
-              "type" => "oneOf",
-              "oneOf" => [
-                "terminal",
-                "property",
-                "children",
-                "container"
+            'attribute' => {
+              'type' => 'oneOf',
+              'oneOf' => %w[
+                terminal
+                property
+                children
+                container
               ]
             },
-            "container" => {
-              "type" => "concrete",
-              "attributes" => [
+            'container' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "type" => "container",
-                  "children" => [
+                  'type' => 'container',
+                  'children' => [
                     {
-                      "type" => "container",
-                      "children" => [
+                      'type' => 'container',
+                      'children' => [
                         {
-                          "tags" => [
-                            "space-after",
-                            "keyword"
+                          'tags' => %w[
+                            space-after
+                            keyword
                           ],
-                          "type" => "terminal",
-                          "symbol" => "container"
+                          'type' => 'terminal',
+                          'symbol' => 'container'
                         },
                         {
-                          "name" => "orientation",
-                          "tags" => [
-                            "space-after"
+                          'name' => 'orientation',
+                          'tags' => [
+                            'space-after'
                           ],
-                          "type" => "sequence",
-                          "nodeTypes" => [
+                          'type' => 'sequence',
+                          'nodeTypes' => [
                             {
-                              "occurs" => "1",
-                              "nodeType" => "orientation"
+                              'occurs' => '1',
+                              'nodeType' => 'orientation'
                             }
                           ]
                         },
                         {
-                          "type" => "terminal",
-                          "symbol" => "{"
+                          'type' => 'terminal',
+                          'symbol' => '{'
                         }
                       ],
-                      "orientation" => "horizontal"
+                      'orientation' => 'horizontal'
                     },
                     {
-                      "tags" => [
-                        "indent"
+                      'tags' => [
+                        'indent'
                       ],
-                      "type" => "container",
-                      "children" => [
+                      'type' => 'container',
+                      'children' => [
                         {
-                          "name" => "attributes",
-                          "type" => "allowed",
-                          "nodeTypes" => [
+                          'name' => 'attributes',
+                          'type' => 'allowed',
+                          'nodeTypes' => [
                             {
-                              "occurs" => "*",
-                              "nodeType" => "attribute"
+                              'occurs' => '*',
+                              'nodeType' => 'attribute'
                             },
                             {
-                              "occurs" => "*",
-                              "nodeType" => "comment"
+                              'occurs' => '*',
+                              'nodeType' => 'comment'
                             }
                           ]
                         }
                       ],
-                      "orientation" => "vertical"
+                      'orientation' => 'vertical'
                     },
                     {
-                      "type" => "terminal",
-                      "symbol" => "}"
+                      'type' => 'terminal',
+                      'symbol' => '}'
                     }
                   ],
-                  "orientation" => "vertical"
+                  'orientation' => 'vertical'
                 }
               ]
             },
-            "grammarRef" => {
-              "type" => "concrete",
-              "attributes" => [
+            'grammarRef' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "base" => "string",
-                  "name" => "grammarId",
-                  "type" => "property"
+                  'base' => 'string',
+                  'name' => 'grammarId',
+                  'type' => 'property'
                 }
               ]
             },
-            "nodeRefOne" => {
-              "type" => "concrete",
-              "attributes" => [
+            'nodeRefOne' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "type" => "container",
-                  "children" => [
+                  'type' => 'container',
+                  'children' => [
                     {
-                      "base" => "string",
-                      "name" => "languageName",
-                      "type" => "property"
+                      'base' => 'string',
+                      'name' => 'languageName',
+                      'type' => 'property'
                     },
                     {
-                      "type" => "terminal",
-                      "symbol" => "."
+                      'type' => 'terminal',
+                      'symbol' => '.'
                     },
                     {
-                      "base" => "string",
-                      "name" => "typeName",
-                      "type" => "property"
+                      'base' => 'string',
+                      'name' => 'typeName',
+                      'type' => 'property'
                     }
                   ],
-                  "orientation" => "horizontal"
+                  'orientation' => 'horizontal'
                 }
               ]
             },
-            "cardinality" => {
-              "type" => "oneOf",
-              "oneOf" => [
-                "knownCardinality"
+            'cardinality' => {
+              'type' => 'oneOf',
+              'oneOf' => [
+                'knownCardinality'
               ]
             },
-            "orientation" => {
-              "type" => "concrete",
-              "attributes" => [
+            'orientation' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "base" => "string",
-                  "name" => "orientation",
-                  "type" => "property",
-                  "restrictions" => [
+                  'base' => 'string',
+                  'name' => 'orientation',
+                  'type' => 'property',
+                  'restrictions' => [
                     {
-                      "type" => "enum",
-                      "value" => [
-                        "horizontal",
-                        "vertical"
+                      'type' => 'enum',
+                      'value' => %w[
+                        horizontal
+                        vertical
                       ]
                     }
                   ]
                 }
               ]
             },
-            "concreteNode" => {
-              "type" => "concrete",
-              "attributes" => [
+            'concreteNode' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "type" => "container",
-                  "children" => [
+                  'type' => 'container',
+                  'children' => [
                     {
-                      "type" => "container",
-                      "children" => [
+                      'type' => 'container',
+                      'children' => [
                         {
-                          "tags" => [
-                            "space-after",
-                            "keyword"
+                          'tags' => %w[
+                            space-after
+                            keyword
                           ],
-                          "type" => "terminal",
-                          "symbol" => "node"
+                          'type' => 'terminal',
+                          'symbol' => 'node'
                         },
                         {
-                          "base" => "string",
-                          "name" => "languageName",
-                          "tags" => [
-                            "double-quote"
+                          'base' => 'string',
+                          'name' => 'languageName',
+                          'tags' => [
+                            'double-quote'
                           ],
-                          "type" => "property"
+                          'type' => 'property'
                         },
                         {
-                          "type" => "terminal",
-                          "symbol" => "."
+                          'type' => 'terminal',
+                          'symbol' => '.'
                         },
                         {
-                          "base" => "string",
-                          "name" => "typeName",
-                          "tags" => [
-                            "double-quote",
-                            "space-after"
+                          'base' => 'string',
+                          'name' => 'typeName',
+                          'tags' => %w[
+                            double-quote
+                            space-after
                           ],
-                          "type" => "property"
+                          'type' => 'property'
                         },
                         {
-                          "type" => "terminal",
-                          "symbol" => "{"
+                          'type' => 'terminal',
+                          'symbol' => '{'
                         }
                       ],
-                      "orientation" => "horizontal"
+                      'orientation' => 'horizontal'
                     },
                     {
-                      "tags" => [
-                        "indent"
+                      'tags' => [
+                        'indent'
                       ],
-                      "type" => "container",
-                      "children" => [
+                      'type' => 'container',
+                      'children' => [
                         {
-                          "name" => "attributes",
-                          "type" => "allowed",
-                          "nodeTypes" => [
+                          'name' => 'attributes',
+                          'type' => 'allowed',
+                          'nodeTypes' => [
                             {
-                              "occurs" => "*",
-                              "nodeType" => "attribute"
+                              'occurs' => '*',
+                              'nodeType' => 'attribute'
                             },
                             {
-                              "occurs" => "*",
-                              "nodeType" => "comment"
+                              'occurs' => '*',
+                              'nodeType' => 'comment'
                             }
                           ]
                         }
                       ],
-                      "orientation" => "vertical"
+                      'orientation' => 'vertical'
                     },
                     {
-                      "type" => "terminal",
-                      "symbol" => "}"
+                      'type' => 'terminal',
+                      'symbol' => '}'
                     }
                   ],
-                  "orientation" => "vertical"
+                  'orientation' => 'vertical'
                 }
               ]
             },
-            "grammarIncludes" => {
-              "type" => "concrete",
-              "attributes" => [
+            'grammarIncludes' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "tags" => [
-                    "space-after",
-                    "keyword"
+                  'tags' => %w[
+                    space-after
+                    keyword
                   ],
-                  "type" => "terminal",
-                  "symbol" => "includes"
+                  'type' => 'terminal',
+                  'symbol' => 'includes'
                 },
                 {
-                  "name" => "includes",
-                  "type" => "sequence",
-                  "nodeTypes" => [
+                  'name' => 'includes',
+                  'type' => 'sequence',
+                  'nodeTypes' => [
                     {
-                      "occurs" => "1",
-                      "nodeType" => "grammarRef"
+                      'occurs' => '1',
+                      'nodeType' => 'grammarRef'
                     }
                   ]
                 }
               ]
             },
-            "knownCardinality" => {
-              "type" => "concrete",
-              "attributes" => [
+            'knownCardinality' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "base" => "string",
-                  "name" => "cardinality",
-                  "type" => "property",
-                  "restrictions" => [
+                  'base' => 'string',
+                  'name' => 'cardinality',
+                  'type' => 'property',
+                  'restrictions' => [
                     {
-                      "type" => "enum",
-                      "value" => [
-                        "*",
-                        "?",
-                        "+"
+                      'type' => 'enum',
+                      'value' => [
+                        '*',
+                        '?',
+                        '+'
                       ]
                     }
                   ]
                 }
               ]
             },
-            "nodeRefCardinality" => {
-              "type" => "concrete",
-              "attributes" => [
+            'nodeRefCardinality' => {
+              'type' => 'concrete',
+              'attributes' => [
                 {
-                  "type" => "container",
-                  "children" => [
+                  'type' => 'container',
+                  'children' => [
                     {
-                      "name" => "references",
-                      "type" => "sequence",
-                      "nodeTypes" => [
+                      'name' => 'references',
+                      'type' => 'sequence',
+                      'nodeTypes' => [
                         {
-                          "occurs" => "1",
-                          "nodeType" => "nodeRef"
+                          'occurs' => '1',
+                          'nodeType' => 'nodeRef'
                         }
                       ]
                     },
                     {
-                      "name" => "cardinality",
-                      "type" => "sequence",
-                      "nodeTypes" => [
+                      'name' => 'cardinality',
+                      'type' => 'sequence',
+                      'nodeTypes' => [
                         {
-                          "occurs" => "1",
-                          "nodeType" => "cardinality"
+                          'occurs' => '1',
+                          'nodeType' => 'cardinality'
                         }
                       ]
                     }
                   ],
-                  "orientation" => "horizontal"
+                  'orientation' => 'horizontal'
                 }
               ]
             }
           }
         }
-      }
+      end
     end
 
     # A toy grammar for code resource references
     trait :model_spec_code_resource_references do
-      types {
+      types do
         {
           l: {
             r: {
-              type: "concrete",
+              type: 'concrete',
               attributes: [
                 {
-                  type: "property",
-                  base: "codeResourceReference",
-                  name: "ref1",
+                  type: 'property',
+                  base: 'codeResourceReference',
+                  name: 'ref1'
                 },
                 {
-                  type: "property",
-                  base: "codeResourceReference",
-                  name: "ref2",
-                  isOptional: true,
+                  type: 'property',
+                  base: 'codeResourceReference',
+                  name: 'ref2',
+                  isOptional: true
                 },
                 {
-                  type: "sequence",
-                  name: "c",
+                  type: 'sequence',
+                  name: 'c',
                   nodeTypes: [
                     {
-                      nodeType: "r",
-                      occurs: "*",
+                      nodeType: 'r',
+                      occurs: '*'
                     }
                   ]
                 }
@@ -702,10 +702,10 @@ FactoryBot.define do
             }
           }
         }
-      }
-      root {
-        { languageName: "l", typeName: "r" }
-      }
+      end
+      root do
+        { languageName: 'l', typeName: 'r' }
+      end
     end
   end
 end

@@ -18,16 +18,14 @@ class CodeResourcesController < ApplicationController
     cloned = original.dup
     cloned.save!
 
-    render :json => cloned.to_full_api_response, :status => 200
+    render json: cloned.to_full_api_response, status: 200
   end
 
   def destroy
-    begin
-      CodeResource.destroy(params[:code_resource_id])
-      render :status => 204
-    rescue ActiveRecord::InvalidForeignKey
-      c = CodeResource.find(params[:code_resource_id])
-      raise EsqulinoError::CodeResourceReferenced.new(c)
-    end
+    CodeResource.destroy(params[:code_resource_id])
+    render status: 204
+  rescue ActiveRecord::InvalidForeignKey
+    c = CodeResource.find(params[:code_resource_id])
+    raise EsqulinoError::CodeResourceReferenced, c
   end
 end

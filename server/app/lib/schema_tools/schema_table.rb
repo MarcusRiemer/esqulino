@@ -25,7 +25,7 @@ module SchemaTools
     # @param idx [Integer] The index of the column
     # @return [SchemaColumn]
     def [](idx)
-      return @columns[idx]
+      @columns[idx]
     end
 
     # @return [Boolean] True, if the table is a system table
@@ -61,10 +61,10 @@ module SchemaTools
     # described in Typescript.
     def to_json(options)
       {
-        :name => @name,
-        :columns => @columns,
-        :foreignKeys => @foreign_keys,
-        :systemTable => system?
+        name: @name,
+        columns: @columns,
+        foreignKeys: @foreign_keys,
+        systemTable: system?
       }.to_json(options)
     end
   end

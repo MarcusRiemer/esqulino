@@ -20,9 +20,9 @@ module SchemaTools
     # described in Typescript.
     def to_json(options)
       {
-        :from_column => @from_column,
-        :to_table => @to_table,
-        :to_column => @to_column
+        from_column: @from_column,
+        to_table: @to_table,
+        to_column: @to_column
       }.to_json(options)
     end
   end

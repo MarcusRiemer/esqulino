@@ -15,9 +15,9 @@ module EsqulinoError
 
     def json_data
       {
-        "project" => @project.id,
-        "sql" => @sql,
-        "params" => @params
+        'project' => @project.id,
+        'sql' => @sql,
+        'params' => @params
       }
     end
   end

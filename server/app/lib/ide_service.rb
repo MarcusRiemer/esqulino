@@ -17,60 +17,56 @@ class BaseIdeService
   #   The string representation of the syntaxtree. If the given tree
   #   is nil, the returned object is also nil.
   def emit_code(tree_description, language_id)
-    if (tree_description)
-      execute_request({
-                        "type" => "emitCode",
-                        "ast" => tree_description,
-                        "languageId" => language_id
-                      })
-    else
-      nil
-    end
+    return unless tree_description
+
+    execute_request({
+                      'type' => 'emitCode',
+                      'ast' => tree_description,
+                      'languageId' => language_id
+                    })
   end
 
   # Emits the block visualization instructions for the given block
   # language.
   def emit_generated_blocks(block_language)
     generator_description = block_language.local_generator_instructions
-    if (generator_description)
-      # Ensure for all documents that wee are not passing in any garbage
-      ensure_valid_document(
-        "BlockLanguageGeneratorDocument",
-        generator_description
-      )
-      grammar_description = ensure_valid_document(
-        "GrammarDocument",
-        block_language.grammar.document.transform_keys { |k| k.camelize(:lower) }
-      )
+    return unless generator_description
 
-      # All documents seem fine, lets execute the request
-      json_result = execute_request({
-                                      "type" => "emitGeneratedBlocks",
-                                      "generator" => generator_description,
-                                      "grammar" => grammar_description
-                                    })
+    # Ensure for all documents that wee are not passing in any garbage
+    ensure_valid_document(
+      'BlockLanguageGeneratorDocument',
+      generator_description
+    )
+    grammar_description = ensure_valid_document(
+      'GrammarDocument',
+      block_language.grammar.document.transform_keys { |k| k.camelize(:lower) }
+    )
 
-      return json_result.transform_keys { |k| k.underscore }
-    else
-      nil
-    end
+    # All documents seem fine, lets execute the request
+    json_result = execute_request({
+                                    'type' => 'emitGeneratedBlocks',
+                                    'generator' => generator_description,
+                                    'grammar' => grammar_description
+                                  })
+
+    json_result.transform_keys { |k| k.underscore }
   end
 
   # Converts the given AST into a "proper" settings for a block language
   # (the settings are every aspect of the language without the blocks).
   def emit_block_lang_settings(block_lang_desc_ast)
     ensure_valid_document(
-      "NodeDescription",
+      'NodeDescription',
       block_lang_desc_ast
     )
 
     # All documents seem fine, lets execute the request
     json_result = execute_request({
-                                    "type" => "emitBlockLanguageSettings",
-                                    "metaBlockLanguage" => block_lang_desc_ast
+                                    'type' => 'emitBlockLanguageSettings',
+                                    'metaBlockLanguage' => block_lang_desc_ast
                                   })
 
-    return json_result.transform_keys { |k| k.underscore }
+    json_result.transform_keys { |k| k.underscore }
   end
 
   # Finds out which other resources are referenced by the given
@@ -85,15 +81,15 @@ class BaseIdeService
                        .document
                        .transform_keys { |k| k.camelize(:lower) }
     execute_request({
-                      "type" => search_type,
-                      "ast" => code_resource.ast,
-                      "grammar" => grammar_document
+                      'type' => search_type,
+                      'ast' => code_resource.ast,
+                      'grammar' => grammar_document
                     })
   end
 
   # Checks whether the IDE-service is available
   def ping!
-    execute_request({ "type" => "ping" }) == "pong"
+    execute_request({ 'type' => 'ping' }) == 'pong'
   end
 
   # Communicates the given request to the IDE service.
@@ -103,8 +99,8 @@ class BaseIdeService
   #  "type" property.
   # @return Depends on the type of the request
   def execute_request(request)
-    ActiveSupport::Notifications.instrument('request.ide_service', request: request) do
-      self.execute_request_impl(request)
+    ActiveSupport::Notifications.instrument('request.ide_service', request:) do
+      execute_request_impl(request)
     end
   end
 
@@ -115,13 +111,13 @@ class BaseIdeService
   #  A request object for the CLI, must at least specify the
   #  "type" property.
   # @return Depends on the type of the request
-  def execute_request_impl(request)
-    raise "execute_request not implemented"
+  def execute_request_impl(_request)
+    raise 'execute_request not implemented'
   end
 
   # The path to the cli program
   def cli_program_path
-    raise "cli_program_path not implemented"
+    raise 'cli_program_path not implemented'
   end
 
   # Checks whether the given program actually exists
@@ -131,9 +127,9 @@ class BaseIdeService
 
   # Ensures the node runtime has something meaningful to start
   def assert_cli_program_exists!
-    if not cli_program_exists?
-      raise EsqulinoError::IdeService, "Could not find compiled CLI at \"#{@program}\""
-    end
+    return if cli_program_exists?
+
+    raise EsqulinoError::IdeService, "Could not find compiled CLI at \"#{@program}\""
   end
 
   # Waits until the cli program is available
@@ -143,19 +139,16 @@ class BaseIdeService
     max_wait_time = 30 * wait_time
 
     # Wait until the program magically appears
-    while not cli_program_exists?
+    until cli_program_exists?
       # Are we patient enough to continue waiting
-      if sum_wait_time < max_wait_time
-        # Yes, possibly print a warning why startup is delayed and then wait
-        if sum_wait_time == 0
-          puts "Waiting for CLI-program at \"#{cli_program_path}\""
-        end
+      raise EsqulinoError::IdeService, "Could not find compiled CLI at \"#{cli_program_path}\"" unless sum_wait_time < max_wait_time
 
-        sleep wait_time
-        sum_wait_time += wait_time
-      else
-        raise EsqulinoError::IdeService, "Could not find compiled CLI at \"#{cli_program_path}\""
-      end
+      # Yes, possibly print a warning why startup is delayed and then wait
+      puts "Waiting for CLI-program at \"#{cli_program_path}\"" if sum_wait_time == 0
+
+      sleep wait_time
+      sum_wait_time += wait_time
+
     end
 
     # Now the program must exist
@@ -190,20 +183,19 @@ class OneShotExecIdeService < ExecIdeService
   def execute_request_impl(request)
     assert_cli_program_exists!
 
-    stdout, stderr, res = Open3.capture3(@node_binary, @program, :stdin_data => request.to_json)
+    stdout, stderr, res = Open3.capture3(@node_binary, @program, stdin_data: request.to_json)
 
     # Lets hope the process exited fine and had no errors
-    if res.exitstatus == 0 and stderr.blank? then
-      # Response must be a JSON object
-      begin
-        JSON.parse stdout
-      rescue JSON::ParserError
-        raise EsqulinoError::IdeService, "Bad JSON: \"#{stdout}\""
-      end
-    else
-      # Nope, thats a defect
-      raise EsqulinoError::IdeService, "Received stderr output: #{stderr}, stdout: #{stdout}, request: #{request.to_json}"
+    raise EsqulinoError::IdeService, "Received stderr output: #{stderr}, stdout: #{stdout}, request: #{request.to_json}" unless res.exitstatus == 0 and stderr.blank?
+
+    # Response must be a JSON object
+    begin
+      JSON.parse stdout
+    rescue JSON::ParserError
+      raise EsqulinoError::IdeService, "Bad JSON: \"#{stdout}\""
     end
+
+    # Nope, thats a defect
   end
 end
 
@@ -215,16 +207,14 @@ class MockIdeService < BaseIdeService
   end
 
   def emit_generated_blocks(block_language)
-    if block_language and block_language.local_generator_instructions
-      return ({
-        "editor_blocks" => [],
-        "editor_components" => [],
-        "sidebars" => [],
-        "root_css_classes" => []
-      })
-    else
-      return nil
-    end
+    return nil unless block_language and block_language.local_generator_instructions
+
+    {
+      'editor_blocks' => [],
+      'editor_components' => [],
+      'sidebars' => [],
+      'root_css_classes' => []
+    }
   end
 
   # Mocking implementation can't fail
@@ -249,7 +239,7 @@ module IdeService
 
   # The configuration that is currently in use
   def self.live_config
-    Rails.configuration.sqlino.fetch(:ide_service, Hash.new)
+    Rails.configuration.sqlino.fetch(:ide_service, {})
   end
 
   # Retrieves an instance that may be mocked. Use this if the result
@@ -278,17 +268,17 @@ module IdeService
     # design to "override" the default configuration when running tests, but
     # its quite an ugly hack.
     if allow_mock && service_config[:mock]
-      return @@mock_instance
+      @@mock_instance
     # Exec mode?
-    elsif exec_config = service_config[:exec] then
+    elsif exec_config = service_config[:exec]
       # Which kind of exec mode?
       case exec_config_mode = exec_config[:mode]
-      when "one_shot" then return OneShotExecIdeService.new(config: exec_config)
+      when 'one_shot' then OneShotExecIdeService.new(config: exec_config)
       else raise EsqulinoError::IdeService, "Unkown IDE exec mode \"#{exec_config_mode}\""
       end
     # No known mode
     else
-      raise EsqulinoError::IdeService, "Unkown general IDE-service configuration"
+      raise EsqulinoError::IdeService, 'Unkown general IDE-service configuration'
     end
   end
 

@@ -13,6 +13,6 @@ class GrammarReference < ApplicationRecord
     visualize: 1
   }
 
-  belongs_to :origin, :class_name => "Grammar"
-  belongs_to :target, :class_name => "Grammar"
+  belongs_to :origin, class_name: 'Grammar'
+  belongs_to :target, class_name: 'Grammar'
 end

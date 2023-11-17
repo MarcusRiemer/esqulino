@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe "identities controller" do
-  json_headers = { "CONTENT_TYPE" => "application/json" }
+RSpec.describe 'identities controller' do
+  json_headers = { 'CONTENT_TYPE' => 'application/json' }
 
   before(:each) { create(:user, :guest) }
 
-  describe "listing response" do
-    it "own identities" do
+  describe 'listing response' do
+    it 'own identities' do
       # Developer identity
       identity = create(:developer_provider, :existing)
 
@@ -15,19 +15,19 @@ RSpec.describe "identities controller" do
 
       set_access_token(identity.user)
 
-      get "/api/identities"
+      get '/api/identities'
       json_response = JSON.parse(response.body)
-      provider_list = json_response["providers"].map { |k| k["type"] }
+      provider_list = json_response['providers'].map { |k| k['type'] }
 
-      aggregate_failures "response validation" do
-        expect(json_response).to validate_against "ServerProviderDescription"
-        expect(json_response["primary"]).to eq(identity.user.email)
-        expect(provider_list.include? "Identity::Developer").to be_truthy
+      aggregate_failures 'response validation' do
+        expect(json_response).to validate_against 'ServerProviderDescription'
+        expect(json_response['primary']).to eq(identity.user.email)
+        expect(provider_list.include?('Identity::Developer')).to be_truthy
       end
     end
 
-    it "all providers" do
-      send_query(query_name: "LoginProviders")
+    it 'all providers' do
+      send_query(query_name: 'LoginProviders')
 
       json_data = JSON.parse(response.body)['data']['loginProviders']
       expect(json_data.length).to eq 1

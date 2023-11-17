@@ -16,6 +16,6 @@ class ApplicationMailer < ActionMailer::Base
 
   # The locale that is used to send the mail
   def locale
-    "en"
+    'en'
   end
 end

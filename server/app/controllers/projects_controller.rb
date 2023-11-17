@@ -9,7 +9,7 @@ class ProjectsController < ApplicationController
   # *everything* that is required to render it properly.
   def show
     needle = params[:project_id]
-    project = if (BlattwerkzeugUtil::string_is_uuid? needle) then
+    project = if BlattwerkzeugUtil.string_is_uuid? needle
                 Project.full.find(needle)
               else
                 Project.full.find_by! slug: needle
@@ -19,24 +19,22 @@ class ProjectsController < ApplicationController
 
   # Update an existing project.
   def update
-    begin
-      authorize current_project
+    authorize current_project
 
-      current_project.update project_update_params # Simple properties
-      current_project.update project_used_block_languages_params # Used block languages
+    current_project.update project_update_params # Simple properties
+    current_project.update project_used_block_languages_params # Used block languages
 
-      render json: current_project.to_project_api_response
-    rescue Pundit::NotAuthorizedError => e
-      error_response("You need the permission")
-    end
+    render json: current_project.to_project_api_response
+  rescue Pundit::NotAuthorizedError => e
+    error_response('You need the permission')
   end
 
   # The preview image for a specific project
   def preview_image
-    if current_project.preview_image_exists? then
+    if current_project.preview_image_exists?
       send_file current_project.preview_image_path, disposition: 'inline'
     else
-      render plain: "Project has no preview image", status: :not_found
+      render plain: 'Project has no preview image', status: :not_found
     end
   end
 
@@ -47,9 +45,9 @@ class ProjectsController < ApplicationController
     to_return = params.permit(:slug, name: {})
                       .transform_keys { |k| k.underscore }
 
-    to_return["user"] = current_user
+    to_return['user'] = current_user
 
-    return (to_return)
+    to_return
   end
 
   # These attributes may be changed once a project has been created
@@ -62,17 +60,14 @@ class ProjectsController < ApplicationController
   # All of these references may be updated.
   def project_used_block_languages_params
     used_block_languages = params[:projectUsesBlockLanguages]
-    if used_block_languages then
-      attributes = used_block_languages
-                   .map { |used| used.transform_keys! { |k| k.underscore } }
-                   .each { |used| used.permit! }
+    return {} unless used_block_languages
 
-      to_return = ActionController::Parameters
-                  .new({ "project_uses_block_languages_attributes" => attributes })
-                  .permit!
-      return (to_return)
-    else
-      return ({})
-    end
+    attributes = used_block_languages
+                 .map { |used| used.transform_keys! { |k| k.underscore } }
+                 .each { |used| used.permit! }
+
+    ActionController::Parameters
+      .new({ 'project_uses_block_languages_attributes' => attributes })
+      .permit!
   end
 end

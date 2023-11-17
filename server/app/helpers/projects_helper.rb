@@ -13,8 +13,8 @@ module ProjectsHelper
     success = false
 
     # Was a password provided?
-    if self.has_basic_credentials? request
-      user, pass = self.user_name_and_password request
+    if has_basic_credentials? request
+      user, pass = user_name_and_password request
 
       # Does it allow access?
       if current_project.verify_write_access user, pass
@@ -23,12 +23,12 @@ module ProjectsHelper
       end
     end
 
-    if not success
+    unless success
       # Ask the user for a password
       auth_realm = Rails.configuration.sqlino['name']
-      self.request_http_basic_authentication auth_realm
+      request_http_basic_authentication auth_realm
     end
 
-    return success
+    success
   end
 end

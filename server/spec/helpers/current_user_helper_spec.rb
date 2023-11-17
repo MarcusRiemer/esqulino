@@ -1,7 +1,6 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe CurrentUserHelper, type: :helper do
-
   # The helper expects to find the guest user
   before(:each) { create(:user, :guest) }
 

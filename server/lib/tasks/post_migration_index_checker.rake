@@ -14,7 +14,5 @@ Rake::Task['db:migrate'].enhance do
 
   unindexed_foreign_keys = (all_foreign_keys - indexed_columns)
 
-  if unindexed_foreign_keys.any?
-    warn "WARNING: The following foreign key columns don't have an index, which can hurt performance: #{unindexed_foreign_keys.join(', ')}"
-  end
+  warn "WARNING: The following foreign key columns don't have an index, which can hurt performance: #{unindexed_foreign_keys.join(', ')}" if unindexed_foreign_keys.any?
 end

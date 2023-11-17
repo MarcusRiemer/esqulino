@@ -6,13 +6,13 @@ class ApplicationController < ActionController::API
   include JwtHelper # This pulls very many things only to handle the unexpected logout ...
 
   # Hand out 404 errors as fallbacks if Active Record doesn't find something
-  rescue_from ActiveRecord::RecordNotFound, :with => :handle_record_not_found
+  rescue_from ActiveRecord::RecordNotFound, with: :handle_record_not_found
 
   # Hand out 403 errors if something is forbidden
-  rescue_from Pundit::NotAuthorizedError, :with => :handle_authorization_exception
+  rescue_from Pundit::NotAuthorizedError, with: :handle_authorization_exception
 
   # Fall handling of all errors that are specifc to our parts of the code
-  rescue_from EsqulinoError::Base, :with => :handle_internal_exception
+  rescue_from EsqulinoError::Base, with: :handle_internal_exception
 
   protected
 
@@ -27,7 +27,7 @@ class ApplicationController < ActionController::API
       .transform_keys { |k| k.to_s.camelize(:lower) }, status: :ok
   end
 
-  def error_response(err = "something went wrong", code = 401)
+  def error_response(err = 'something went wrong', code = 401)
     raise EsqulinoError::Base.new(err, code)
   end
 
@@ -36,7 +36,7 @@ class ApplicationController < ActionController::API
     render status: 404, plain: exception.message
   end
 
-  def handle_authorization_exception(exception)
+  def handle_authorization_exception(_exception)
     render status: 403
   end
 
@@ -46,19 +46,17 @@ class ApplicationController < ActionController::API
 
     # Controllers may signal some kind of authentication problem by throwing
     # an exception. If unhandled this must log out the user.
-    if exception.is_a? EsqulinoError::UnexpectedLogout
-      clear_secure_cookies
-    end
+    clear_secure_cookies if exception.is_a? EsqulinoError::UnexpectedLogout
 
     # Handle errors that might be seen by users with a slightly nicer
     # representation than pure JSON.
-    if exception.is_a? EsqulinoError::Message then
+    if exception.is_a? EsqulinoError::Message
       @exception = exception
       @admin_mail = Rails.configuration.sqlino[:mail][:admin]
 
       render status: @exception.code,
-             template: "static_files/message_error",
-             layout: "application_error",
+             template: 'static_files/message_error',
+             layout: 'application_error',
              formats: [:html]
     else
       # Simply react to internal errors by presenting them in a JSON representation

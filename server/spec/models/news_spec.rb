@@ -1,5 +1,3 @@
-# coding: utf-8
-
 require 'rails_helper'
 
 RSpec.describe News, type: :model do
@@ -9,17 +7,17 @@ RSpec.describe News, type: :model do
   end
 
   it 'invalid language in title' do
-    news = build(:news, title: { "nope" => "t" })
+    news = build(:news, title: { 'nope' => 't' })
 
     news.validate
-    expect(news.errors["title"].length).to eq 1
+    expect(news.errors['title'].length).to eq 1
   end
 
   it 'invalid language in text' do
-    news = build(:news, text: { "nope" => "t" })
+    news = build(:news, text: { 'nope' => 't' })
 
     news.validate
-    expect(news.errors["text"].length).to eq 1
+    expect(news.errors['text'].length).to eq 1
   end
 
   it 'creating 2 news' do
@@ -39,7 +37,7 @@ RSpec.describe News, type: :model do
   end
 
   it 'select invalid language' do
-    expect {News.scope_single_language('abc')}.to raise_exception(EsqulinoError::Base)
+    expect { News.scope_single_language('abc') }.to raise_exception(EsqulinoError::Base)
   end
 
   it 'select only current languages (en) ' do
@@ -61,32 +59,32 @@ RSpec.describe News, type: :model do
   end
 
   it 'renders the text' do
-    orig = build(:news, text: { "de" => "# Überschrift", "en" => "#Headline" })
+    orig = build(:news, text: { 'de' => '# Überschrift', 'en' => '#Headline' })
 
-    expect(orig.rendered_text_full).to eq({ "de" => "<h1>Überschrift</h1>\n", "en" => "<h1>Headline</h1>\n" })
-    expect(orig.rendered_text_short).to eq({ "de" => "<h1>Überschrift</h1>\n", "en" => "<h1>Headline</h1>\n" })
+    expect(orig.rendered_text_full).to eq({ 'de' => "<h1>Überschrift</h1>\n", 'en' => "<h1>Headline</h1>\n" })
+    expect(orig.rendered_text_short).to eq({ 'de' => "<h1>Überschrift</h1>\n", 'en' => "<h1>Headline</h1>\n" })
   end
 
   it 'renders the text (start)' do
-    orig = build(:news, text: { "de" => "<!-- SNIP --> # Überschrift", "en" => "#Headline" })
+    orig = build(:news, text: { 'de' => '<!-- SNIP --> # Überschrift', 'en' => '#Headline' })
     expect(orig.rendered_text_short)
-      .to eq({ "de" => "", "en" => "<h1>Headline</h1>\n" })
+      .to eq({ 'de' => '', 'en' => "<h1>Headline</h1>\n" })
   end
 
   it 'renders the text (mid)' do
     orig = build(:news, text: {
-                   "de" => "# Überschrift <!-- SNIP --> Test",
-                   "en" => "#Headline <!-- SNIP --> Test"
+                   'de' => '# Überschrift <!-- SNIP --> Test',
+                   'en' => '#Headline <!-- SNIP --> Test'
                  })
 
     expect(orig.rendered_text_short)
-      .to eq({ "de" => "<h1>Überschrift</h1>\n", "en" => "<h1>Headline</h1>\n" })
+      .to eq({ 'de' => "<h1>Überschrift</h1>\n", 'en' => "<h1>Headline</h1>\n" })
   end
 
   it 'renders the text (end)' do
-    orig = build(:news, text: { "de" => "# Überschrift Test <!-- SNIP -->", "en" => "#Headline Test <!-- SNIP -->" })
+    orig = build(:news, text: { 'de' => '# Überschrift Test <!-- SNIP -->', 'en' => '#Headline Test <!-- SNIP -->' })
 
     expect(orig.rendered_text_short)
-      .to eq({ "de" => "<h1>Überschrift Test</h1>\n", "en" => "<h1>Headline Test</h1>\n" })
+      .to eq({ 'de' => "<h1>Überschrift Test</h1>\n", 'en' => "<h1>Headline Test</h1>\n" })
   end
 end

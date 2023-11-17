@@ -8,7 +8,7 @@ module SchemaTools
       { 'references' => nil }
     end
 
-    def initialize()
+    def initialize
       @references = []
     end
 
@@ -28,7 +28,7 @@ module SchemaTools
     # described in Typescript.
     def to_json(options)
       {
-        :references => @references
+        references: @references
       }.to_json(options)
     end
   end

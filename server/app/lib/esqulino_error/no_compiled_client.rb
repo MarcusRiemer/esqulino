@@ -5,12 +5,12 @@ module EsqulinoError
     # @param index_html_path [string] The path the index.html of the client
     #                                 should reside.
     def initialize(index_html_path)
-      super(msg = "Could not find compiled version of the client")
+      super(msg = 'Could not find compiled version of the client')
       @index_html_path = index_html_path
     end
 
-    def json_data()
-      { "indexHtmlPath" => @index_html_path }
+    def json_data
+      { 'indexHtmlPath' => @index_html_path }
     end
   end
 end

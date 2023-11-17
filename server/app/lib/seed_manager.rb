@@ -209,7 +209,6 @@ class SeedManager
     end
 
     yield
-
   ensure
     callbacks_to_skip.each do |h|
       h[:model_class].set_callback(h[:name], h[:moment], h[:method])
@@ -223,8 +222,8 @@ class SeedManager
 
   # We probably don't want to output during testing, so this is configurable
   def puts(*args)
-    if Rails.configuration.sqlino["seed"]["output"]
-      super(args)
-    end
+    return unless Rails.configuration.sqlino['seed']['output']
+
+    super(args)
   end
 end

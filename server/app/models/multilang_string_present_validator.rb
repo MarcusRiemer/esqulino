@@ -6,8 +6,8 @@ class MultilangStringPresentValidator < ActiveModel::EachValidator
   # @param value The value of the tested attribute
   def validate_each(record, attribute, value)
     # Only check on values that exist
-    if value and value.length == 0
-        record.errors.add(attribute, message: "No language present at all")
-    end
+    return unless value and value.length == 0
+
+    record.errors.add(attribute, message: 'No language present at all')
   end
 end

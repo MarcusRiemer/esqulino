@@ -23,11 +23,11 @@ class CodeResource < ApplicationRecord
   # A code resource may reference other code resources (this `includes` other)
   has_many :code_resource_reference_origins,
            class_name: 'CodeResourceReference',
-           foreign_key: "origin_id",
+           foreign_key: 'origin_id',
            dependent: :destroy
 
   # All code resources that are targeted by this code resource
-  has_many :targeted_code_resources, through: :code_resource_reference_origins, source: "target"
+  has_many :targeted_code_resources, through: :code_resource_reference_origins, source: 'target'
 
   # Name may not be empty
   validates :name, presence: true
@@ -38,15 +38,13 @@ class CodeResource < ApplicationRecord
   # If the project does not reference the block language that this resource
   # is referencing the reference is not allowed.
   validate do
-    if (self.block_language and self.project) and not self.project.block_languages.include? self.block_language then
-      errors.add(:block_language, "not allowed by project")
-    end
+    errors.add(:block_language, 'not allowed by project') if (block_language and project) and !project.block_languages.include? block_language
   end
 
   # List CodeResources that are using a specific programing language
   scope :list_by_programming_language, lambda { |programming_language_id|
     select(:id, :name)
-      .where(programming_language_id: programming_language_id)
+      .where(programming_language_id:)
   }
 
   # Okay, this is tricky: We somehow need to keep the compiled version
@@ -86,9 +84,9 @@ class CodeResource < ApplicationRecord
   before_save :before_save_compile
 
   def before_save_compile
-    if self.ast_changed?
-      self.compiled = emit_ast!
-    end
+    return unless ast_changed?
+
+    self.compiled = emit_ast!
   end
 
   # Aaaaand this is the second time we are between a rock and a hard place:
@@ -100,14 +98,14 @@ class CodeResource < ApplicationRecord
   after_save :after_save_update_references
 
   def after_save_update_references
-    if self.saved_change_to_attribute? :ast
-      begin
-        self.update_code_resource_references!(ide_service: IdeService.guaranteed_instance)
-      rescue EsqulinoError::Base => ex
-        # Log message and stacktrace but do not abort
-        Rails.logger.error [ex.message, *ex.backtrace].join($/)
-        Raven.capture_exception ex
-      end
+    return unless saved_change_to_attribute? :ast
+
+    begin
+      update_code_resource_references!(ide_service: IdeService.guaranteed_instance)
+    rescue EsqulinoError::Base => e
+      # Log message and stacktrace but do not abort
+      Rails.logger.error [e.message, *e.backtrace].join($/)
+      Raven.capture_exception e
     end
   end
 
@@ -150,28 +148,28 @@ class CodeResource < ApplicationRecord
   # @raise [IdeServiceError] If anything goes wrong during compilation.
   def emit_ast!(ide_service = IdeService.instance, programming_language_id: nil)
     programming_language_id ||= self.programming_language_id
-    ide_service.emit_code(self.ast, programming_language_id)
+    ide_service.emit_code(ast, programming_language_id)
   end
 
   # Checks the current state of the AST and synchronizes this state to the
   # referenced code resources.
   def update_code_resource_references!(ide_service: IdeService.instance)
-    if not persisted?
+    unless persisted?
       raise EsqulinoError::Base.new(
-        "Code Resource must be persisted when updating references",
+        'Code Resource must be persisted when updating references',
         500, true
       )
     end
 
-    ast_referenced_code_resource_ids = ide_service.referenced_resource_ids(self, "referencedCodeResources")
+    ast_referenced_code_resource_ids = ide_service.referenced_resource_ids(self, 'referencedCodeResources')
 
     # Ensure that every referenced resource does indeed exist
     referenced_ids = CodeResource
                      .where(id: ast_referenced_code_resource_ids)
                      .pluck(:id)
-    if (ast_referenced_code_resource_ids.length != referenced_ids.length)
+    if ast_referenced_code_resource_ids.length != referenced_ids.length
       unknown_ids = ast_referenced_code_resource_ids - referenced_ids
-      throw EsqulinoError::Base.new("Unknown resource references: " + unknown_ids.join(", "))
+      throw EsqulinoError::Base.new('Unknown resource references: ' + unknown_ids.join(', '))
     end
 
     updated_references = referenced_ids.map do |id|
@@ -188,7 +186,7 @@ class CodeResource < ApplicationRecord
   # is of interest when e.g. saving this resource, as it may require updates
   # to these objects.
   def immediate_dependants
-    self.generated_grammars + self.generated_block_languages
+    generated_grammars + generated_block_languages
   end
 
   # Regenerates other resources that depend on this code resource.
@@ -197,16 +195,16 @@ class CodeResource < ApplicationRecord
   def regenerate_immediate_dependants!(ide_service: IdeService.instance)
     changed_dependants = []
 
-    self.immediate_dependants.each do |i|
+    immediate_dependants.each do |i|
       changed_for_i = i.regenerate_from_code_resource!(ide_service)
       changed_dependants.concat changed_for_i
     end
 
-    return changed_dependants
+    changed_dependants
   end
 
   # Computes a hash that may be sent back to the client
   def to_full_api_response
-    to_json_api_response.slice("name", "id", "ast", "createdAt", "updatedAt", "blockLanguageId", "programmingLanguageId")
+    to_json_api_response.slice('name', 'id', 'ast', 'createdAt', 'updatedAt', 'blockLanguageId', 'programmingLanguageId')
   end
 end

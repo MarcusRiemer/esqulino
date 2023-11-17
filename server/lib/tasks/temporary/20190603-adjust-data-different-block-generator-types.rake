@@ -2,12 +2,12 @@
 # "manual" type.
 def migrate_single(b)
   if b.model and b.model['localGeneratorInstructions']
-    b.model['localGeneratorInstructions']['type'] = "manual"
+    b.model['localGeneratorInstructions']['type'] = 'manual'
     b.save!
 
-    puts "Migrated: " + b.readable_identification
+    puts 'Migrated: ' + b.readable_identification
   else
-    puts "Skipped : " + b.readable_identification
+    puts 'Skipped : ' + b.readable_identification
   end
 end
 

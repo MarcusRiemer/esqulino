@@ -14,8 +14,8 @@ module EsqulinoError
 
     def json_data
       {
-        "availableParameters" => @available_params,
-        "requiredParameters" => @required_params
+        'availableParameters' => @available_params,
+        'requiredParameters' => @required_params
       }
     end
   end

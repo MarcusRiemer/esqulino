@@ -1,13 +1,12 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Resolvers::BlockLanguageResolver do
-  it "can be instantiated" do
+  it 'can be instantiated' do
     res = described_class.new
     expect(res).not_to be_nil
   end
 
-
-  it "lists all available block languages" do
+  it 'lists all available block languages' do
     FactoryBot.create(:block_language)
     FactoryBot.create(:block_language)
     FactoryBot.create(:block_language)
@@ -15,7 +14,7 @@ RSpec.describe Resolvers::BlockLanguageResolver do
     expect(described_class.connection.length).to eq 3
   end
 
-  it "returns the relevant single language" do
+  it 'returns the relevant single language' do
     b = FactoryBot.create(:block_language)
     FactoryBot.create(:block_language)
     FactoryBot.create(:block_language)

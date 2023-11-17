@@ -7,19 +7,19 @@ class BlockLanguage < ApplicationRecord
   # ID of the meta grammar block language
   def self.meta_grammar_id
     Rails.application.config_for(:sqlino)
-      .fetch(:seed)
-      .fetch(:meta)
-      .fetch(:block_language)
-      .fetch(:grammar)
+         .fetch(:seed)
+         .fetch(:meta)
+         .fetch(:block_language)
+         .fetch(:grammar)
   end
 
   # ID of the meta block language block language
   def self.meta_block_language_id
     Rails.application.config_for(:sqlino)
-      .fetch(:seed)
-      .fetch(:meta)
-      .fetch(:block_language)
-      .fetch(:block_language)
+         .fetch(:seed)
+         .fetch(:meta)
+         .fetch(:block_language)
+         .fetch(:block_language)
   end
 
   # Every language must have a name and a family assigned
@@ -37,7 +37,7 @@ class BlockLanguage < ApplicationRecord
 
   # The programming language that should be chosen as a default when
   # creating code resources.
-  belongs_to :default_programming_language, :class_name => "ProgrammingLanguage"
+  belongs_to :default_programming_language, class_name: 'ProgrammingLanguage'
 
   # The types of grammar may be based on a meta block language code resource
   belongs_to :generated_from, class_name: 'CodeResource', optional: true
@@ -51,7 +51,7 @@ class BlockLanguage < ApplicationRecord
   # A block language with only the information that is relevant when listing it.
   # Adds the following calculated fields:
   #   generated: Indicates whether this language can be generated automatically
-  scope :scope_list, -> {
+  scope :scope_list, lambda {
     select(:id, :slug, :name, :default_programming_language_id,
            :grammar_id, :created_at, :updated_at,
            "(block_languages.model->'localGeneratorInstructions') IS NOT NULL AS generated")
@@ -60,7 +60,7 @@ class BlockLanguage < ApplicationRecord
   # The parts of this model that together validate against BlockLanguageDocument
   def document
     attributes
-      .slice("editor_blocks", "editor_components", "sidebars", "root_css_classes", "local_generator_instructions")
+      .slice('editor_blocks', 'editor_components', 'sidebars', 'root_css_classes', 'local_generator_instructions')
       .compact
       .transform_keys { |k| k.camelize(:lower) }
   end
@@ -74,18 +74,16 @@ class BlockLanguage < ApplicationRecord
   # @raise [IdeServiceError] If anything goes wrong during generation.
   def emit_generated_blocks!(ide_service = IdeService.instance)
     regenerated = ide_service.emit_generated_blocks(self)
-    if regenerated
-      model_attributes = regenerated.slice(
-        "sidebars",
-        "editor_blocks",
-        "editor_components",
-      )
+    return nil unless regenerated
 
-      self.assign_attributes model_attributes
-      return model_attributes
-    else
-      return nil
-    end
+    model_attributes = regenerated.slice(
+      'sidebars',
+      'editor_blocks',
+      'editor_components'
+    )
+
+    assign_attributes model_attributes
+    model_attributes
   end
 
   # Takes the current state of the backing grammar and regenerates
@@ -96,7 +94,7 @@ class BlockLanguage < ApplicationRecord
   #
   # @raise [IdeServiceError] If anything goes wrong during generation.
   def regenerate_from_grammar!(ide_service = IdeService.instance)
-    not emit_generated_blocks!(ide_service).nil?
+    !emit_generated_blocks!(ide_service).nil?
   end
 
   # Takes the current state of the code resource that contains backing
@@ -109,34 +107,30 @@ class BlockLanguage < ApplicationRecord
   #
   # @return [BlockLanguage[]] Every model that has been changed by regenenaration
   def regenerate_from_code_resource!(ide_service = IdeService.instance)
-    if generated_from
-      generated_settings = ide_service.emit_block_lang_settings(generated_from.ast)
+    return [] unless generated_from
 
-      self.assign_attributes generated_settings
+    generated_settings = ide_service.emit_block_lang_settings(generated_from.ast)
 
-      return [self]
-    else
-      return []
-    end
+    assign_attributes generated_settings
+
+    [self]
   end
 
   # Computes a hash that may be sent back to the client if it requires
   # full access to the block language. This usually happens when the
   # client is working with the editor.
   def to_full_api_response
-    self.to_json_api_response
+    to_json_api_response
   end
 
   # Computes a hash that may be sent back to the client if only superficial
   # information is required. This usually happens when the client attempts
   # to list available block languages.
   def to_list_api_response(options: {})
-    response = self.to_json_api_response
-                   .except("editorBlocks", "sidebars", "editorComponents", "rootCssClasses", "localGeneratorInstructions")
-    if options.fetch(:include_list_calculations, false)
-      return response
-    else
-      return response.except("generated")
-    end
+    response = to_json_api_response
+               .except('editorBlocks', 'sidebars', 'editorComponents', 'rootCssClasses', 'localGeneratorInstructions')
+    return response if options.fetch(:include_list_calculations, false)
+
+    response.except('generated')
   end
 end

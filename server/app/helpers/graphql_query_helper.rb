@@ -50,6 +50,6 @@ module GraphqlQueryHelper
 
     # Add a trailing newline, this eases the specs because
     # we can work with heredocs to compare the result
-    return visitor.result.to_query_string + "\n"
+    visitor.result.to_query_string + "\n"
   end
 end

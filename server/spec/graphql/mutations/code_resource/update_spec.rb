@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe Mutations::CodeResource::Update do
   # These specs rely on
@@ -8,45 +8,43 @@ RSpec.describe Mutations::CodeResource::Update do
   end
 
   def execute_args(code_resource, user: nil)
-    if user.nil?
-      user = code_resource.project.user
-    end
+    user = code_resource.project.user if user.nil?
 
     attributes = code_resource.attributes.slice(
-      "id", "name", "ast", "block_language_id", "programming_language_id"
+      'id', 'name', 'ast', 'block_language_id', 'programming_language_id'
     ).transform_keys { |k| k.camelize(:lower) }
 
     {
-      operation_name: "UpdateCodeResource",
+      operation_name: 'UpdateCodeResource',
       variables: attributes,
-      user: user
+      user:
     }
   end
 
-  it "changes the name" do
-    resource = FactoryBot.create(:code_resource, name: "Initial")
-    resource.name = "Changed"
+  it 'changes the name' do
+    resource = FactoryBot.create(:code_resource, name: 'Initial')
+    resource.name = 'Changed'
 
     res = execute_query(**execute_args(resource))
-    data = res.dig("data", "updateCodeResource", "codeResource")
-    affected = res.dig("data", "updateCodeResource", "affected")
+    data = res.dig('data', 'updateCodeResource', 'codeResource')
+    affected = res.dig('data', 'updateCodeResource', 'affected')
 
     aggregate_failures do
       resource.reload
-      expect(resource.name).to eq "Changed"
-      expect(data['name']).to eq "Changed"
+      expect(resource.name).to eq 'Changed'
+      expect(data['name']).to eq 'Changed'
       expect(affected).to eq []
     end
   end
 
-  it "changes the programming language" do
+  it 'changes the programming language' do
     new_lang = FactoryBot.create(:programming_language)
-    resource = FactoryBot.create(:code_resource, name: "Initial")
+    resource = FactoryBot.create(:code_resource, name: 'Initial')
     resource.programming_language = new_lang
 
     res = execute_query(**execute_args(resource))
-    data = res.dig("data", "updateCodeResource", "codeResource")
-    affected = res.dig("data", "updateCodeResource", "affected")
+    data = res.dig('data', 'updateCodeResource', 'codeResource')
+    affected = res.dig('data', 'updateCodeResource', 'affected')
 
     aggregate_failures do
       resource.reload
@@ -56,13 +54,13 @@ RSpec.describe Mutations::CodeResource::Update do
     end
   end
 
-  it "removes an existing AST" do
+  it 'removes an existing AST' do
     resource = FactoryBot.create(:code_resource, :grammar_single_type)
     resource.ast = nil
 
     res = execute_query(**execute_args(resource))
-    data = res.dig("data", "updateCodeResource", "codeResource")
-    affected = res.dig("data", "updateCodeResource", "affected")
+    data = res.dig('data', 'updateCodeResource', 'codeResource')
+    affected = res.dig('data', 'updateCodeResource', 'affected')
 
     aggregate_failures do
       resource.reload
@@ -72,14 +70,14 @@ RSpec.describe Mutations::CodeResource::Update do
     end
   end
 
-  it "sets a new AST" do
-    new_ast = { "language" => "l", "name" => "r" }
+  it 'sets a new AST' do
+    new_ast = { 'language' => 'l', 'name' => 'r' }
     resource = FactoryBot.create(:code_resource, :grammar_single_type)
     resource.ast = new_ast
 
     res = execute_query(**execute_args(resource))
-    data = res.dig("data", "updateCodeResource", "codeResource")
-    affected = res.dig("data", "updateCodeResource", "affected")
+    data = res.dig('data', 'updateCodeResource', 'codeResource')
+    affected = res.dig('data', 'updateCodeResource', 'affected')
 
     aggregate_failures do
       resource.reload
@@ -89,40 +87,40 @@ RSpec.describe Mutations::CodeResource::Update do
     end
   end
 
-  it "updates a related grammar" do
+  it 'updates a related grammar' do
     related = FactoryBot.create(:code_resource, :grammar_single_type)
     grammar = FactoryBot.create(:grammar, generated_from: related)
 
-    related.name = "Changed"
+    related.name = 'Changed'
 
     res = execute_query(**execute_args(related))
-    data = res.dig("data", "updateCodeResource", "codeResource")
-    affected = res.dig("data", "updateCodeResource", "affected")
+    data = res.dig('data', 'updateCodeResource', 'codeResource')
+    affected = res.dig('data', 'updateCodeResource', 'affected')
 
     aggregate_failures do
       related.reload
-      expect(related.name).to eq "Changed"
-      expect(data['name']).to eq "Changed"
-      expect(affected.pluck "id").to eq [grammar.id]
+      expect(related.name).to eq 'Changed'
+      expect(data['name']).to eq 'Changed'
+      expect(affected.pluck('id')).to eq [grammar.id]
     end
   end
 
-  it "updates a related grammar with its block language" do
+  it 'updates a related grammar with its block language' do
     related = FactoryBot.create(:code_resource, :grammar_single_type)
     grammar = FactoryBot.create(:grammar, generated_from: related)
-    block_lang = FactoryBot.create(:block_language, :auto_generated_blocks, grammar: grammar)
+    block_lang = FactoryBot.create(:block_language, :auto_generated_blocks, grammar:)
 
-    related.name = "Changed"
+    related.name = 'Changed'
 
     res = execute_query(**execute_args(related))
-    data = res.dig("data", "updateCodeResource", "codeResource")
-    affected = res.dig("data", "updateCodeResource", "affected")
+    data = res.dig('data', 'updateCodeResource', 'codeResource')
+    affected = res.dig('data', 'updateCodeResource', 'affected')
 
     aggregate_failures do
       related.reload
-      expect(related.name).to eq "Changed"
-      expect(data['name']).to eq "Changed"
-      expect(affected.pluck "id").to eq [grammar.id, block_lang.id]
+      expect(related.name).to eq 'Changed'
+      expect(data['name']).to eq 'Changed'
+      expect(affected.pluck('id')).to eq [grammar.id, block_lang.id]
     end
   end
 end

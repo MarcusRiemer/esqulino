@@ -18,16 +18,14 @@ class ApplicationRecord < ActiveRecord::Base
   # @return [Hash] All attributes of this model as the client expects it.
   def to_json_api_response(compact: true)
     # Build a hash of all properties
-    to_return = self.serializable_hash
+    to_return = serializable_hash
 
     # Possibly remove empty values
     to_return = to_return.compact if compact
 
     # Update the created_at and updated_at fields
-    ["created_at", "updated_at"].each do |k|
-      if to_return.key?(k)
-        to_return[k] = to_return[k].to_s
-      end
+    %w[created_at updated_at].each do |k|
+      to_return[k] = to_return[k].to_s if to_return.key?(k)
     end
 
     # All keys should be in "camelCase"
@@ -40,29 +38,25 @@ class ApplicationRecord < ActiveRecord::Base
   #
   # @return [string] A human friendly representation of the ID
   def readable_identification
-    has_slug = self.has_attribute? :slug
-    has_name = self.has_attribute? :name
+    has_slug = has_attribute? :slug
+    has_name = has_attribute? :name
 
     # Even if the columns exist, there may be no data
-    printed_slug = "<no slug>"
-    if (has_slug and not slug.nil?)
-      printed_slug = slug
-    end
+    printed_slug = '<no slug>'
+    printed_slug = slug if has_slug and !slug.nil?
 
-    printed_name = "<no name>"
-    if (has_name and not name.nil?)
-      printed_name = name.inspect
-    end
+    printed_name = '<no name>'
+    printed_name = name.inspect if has_name and !name.nil?
 
-    if (has_name and has_slug)
-      return "#{printed_name} (#{printed_slug}, #{id})"
-    elsif (has_name)
-      return "#{printed_name} (#{id})"
-    elsif (has_slug)
-      return "\"#{printed_slug}\" (#{id})"
+    if has_name and has_slug
+      "#{printed_name} (#{printed_slug}, #{id})"
+    elsif has_name
+      "#{printed_name} (#{id})"
+    elsif has_slug
+      "\"#{printed_slug}\" (#{id})"
     else
       # Nothing available but the ID
-      return self.id
+      id
     end
   end
 

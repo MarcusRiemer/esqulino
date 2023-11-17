@@ -1,8 +1,8 @@
-require "rails_helper"
+require 'rails_helper'
 
 RSpec.describe GraphqlQueryHelper, type: :helper do
-  describe "query_insert_typename" do
-    it "query with nodes" do
+  describe 'query_insert_typename' do
+    it 'query with nodes' do
       query_in = <<~GQL
         query AdminEditBlockLanguage($id: ID!) {
           blockLanguages(input: {filter: {id: $id}}) {
@@ -29,10 +29,10 @@ RSpec.describe GraphqlQueryHelper, type: :helper do
         }
       GQL
 
-      expect(query_exp).to eq(query_insert_typename query_in)
+      expect(query_exp).to eq(query_insert_typename(query_in))
     end
 
-    it "query existing typename" do
+    it 'query existing typename' do
       query_in = <<~GQL
         query AdminEditBlockLanguage($id: ID!) {
           blockLanguages(input: {filter: {id: $id}}) {
@@ -60,10 +60,10 @@ RSpec.describe GraphqlQueryHelper, type: :helper do
         }
       GQL
 
-      expect(query_exp).to eq(query_insert_typename query_in)
+      expect(query_exp).to eq(query_insert_typename(query_in))
     end
 
-    it "query with nodes and nested relationships" do
+    it 'query with nodes and nested relationships' do
       query_in = <<~GQL
         query AdminEditBlockLanguage($id: ID!) {
           blockLanguages(input: {filter: {id: $id}}) {
@@ -97,10 +97,10 @@ RSpec.describe GraphqlQueryHelper, type: :helper do
         }
       GQL
 
-      expect(query_exp).to eq(query_insert_typename query_in)
+      expect(query_exp).to eq(query_insert_typename(query_in))
     end
 
-    it "mutation" do
+    it 'mutation' do
       query_in = <<~GQL
         mutation CreateNews(
             $title: LangJson!,
@@ -135,7 +135,7 @@ RSpec.describe GraphqlQueryHelper, type: :helper do
         }
       GQL
 
-      expect(query_exp).to eq(query_insert_typename query_in)
+      expect(query_exp).to eq(query_insert_typename(query_in))
     end
   end
 end

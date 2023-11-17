@@ -8,7 +8,7 @@ RSpec.describe BlockLanguagesController, type: :request do
     before(:each) { set_access_token(user) }
 
     it 'lists nothing if nothing is there' do
-      send_query(query_name: "AdminListBlockLanguages")
+      send_query(query_name: 'AdminListBlockLanguages')
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)['data']['blockLanguages']['nodes'].length).to eq 0
@@ -17,7 +17,7 @@ RSpec.describe BlockLanguagesController, type: :request do
 
     it 'lists a single block language' do
       FactoryBot.create(:block_language)
-      send_query(query_name: "AdminListBlockLanguages")
+      send_query(query_name: 'AdminListBlockLanguages')
       expect(response).to have_http_status(200)
 
       json_data = JSON.parse(response.body)['data']['blockLanguages']
@@ -32,18 +32,18 @@ RSpec.describe BlockLanguagesController, type: :request do
       FactoryBot.create(:block_language)
       FactoryBot.create(:block_language)
       FactoryBot.create(:block_language)
-      send_query(query_name: "AdminListBlockLanguages", variables: { first: 1 })
+      send_query(query_name: 'AdminListBlockLanguages', variables: { first: 1 })
 
       expect(JSON.parse(response.body)['data']['blockLanguages']['nodes'].length).to eq 1
       expect(JSON.parse(response.body)['data']['blockLanguages']['totalCount']).to eq 3
 
-      send_query(query_name: "AdminListBlockLanguages", variables: { first: 2 })
+      send_query(query_name: 'AdminListBlockLanguages', variables: { first: 2 })
       expect(JSON.parse(response.body)['data']['blockLanguages']['nodes'].length).to eq 2
 
-      send_query(query_name: "AdminListBlockLanguages", variables: { first: 3 })
+      send_query(query_name: 'AdminListBlockLanguages', variables: { first: 3 })
       expect(JSON.parse(response.body)['data']['blockLanguages']['nodes'].length).to eq 3
 
-      send_query(query_name: "AdminListBlockLanguages", variables: { first: 4 })
+      send_query(query_name: 'AdminListBlockLanguages', variables: { first: 4 })
       expect(JSON.parse(response.body)['data']['blockLanguages']['nodes'].length).to eq 3
     end
 
@@ -56,30 +56,29 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       it 'nonexistant column' do
         json_data = send_query(
-          query_name: "AdminListBlockLanguages",
-          variables: { input: { order: { orderField: "nonexistant" } } },
-          expect_no_errors: false,
+          query_name: 'AdminListBlockLanguages',
+          variables: { input: { order: { orderField: 'nonexistant' } } },
+          expect_no_errors: false
         )
 
         expect(json_data['errors'].length).not_to eq []
-
       end
 
       it 'slug' do
         json = send_query(
-          query_name: "AdminListBlockLanguages",
-          variables: { input: { order: { orderField: "slug" } } }
+          query_name: 'AdminListBlockLanguages',
+          variables: { input: { order: { orderField: 'slug' } } }
         )
         json_data = json['data']['blockLanguages']['nodes']
 
-        expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
+        expect(json_data.map { |p| p['slug'] }).to eq %w[aaaa bbbb cccc]
       end
 
       it 'slug invalid direction' do
         send_query(
-          query_name: "AdminListBlockLanguages",
-          variables: { input: { order: { orderDirection: "north" } } },
-          expect_no_errors: false,
+          query_name: 'AdminListBlockLanguages',
+          variables: { input: { order: { orderDirection: 'north' } } },
+          expect_no_errors: false
         )
 
         expect(JSON.parse(response.body)['errors'].length).not_to eq []
@@ -87,33 +86,33 @@ RSpec.describe BlockLanguagesController, type: :request do
 
       it 'slug desc' do
         send_query(
-          query_name: "AdminListBlockLanguages",
-          variables: { input: { order: { orderField: "slug", orderDirection: "desc" } } }
+          query_name: 'AdminListBlockLanguages',
+          variables: { input: { order: { orderField: 'slug', orderDirection: 'desc' } } }
         )
         json_data = JSON.parse(response.body)['data']['blockLanguages']['nodes']
 
-        expect(json_data.pluck "slug").to eq ['cccc', 'bbbb', 'aaaa']
+        expect(json_data.pluck('slug')).to eq %w[cccc bbbb aaaa]
       end
 
       it 'slug asc' do
-        send_query(query_name: "AdminListBlockLanguages", variables: { input: { order: { orderField: "slug", orderDirection: "asc" } } })
+        send_query(query_name: 'AdminListBlockLanguages', variables: { input: { order: { orderField: 'slug', orderDirection: 'asc' } } })
         json_data = JSON.parse(response.body)['data']['blockLanguages']['nodes']
 
-        expect(json_data.map { |p| p['slug'] }).to eq ['aaaa', 'bbbb', 'cccc']
+        expect(json_data.map { |p| p['slug'] }).to eq %w[aaaa bbbb cccc]
       end
 
       it 'name desc' do
-        send_query(query_name: "AdminListBlockLanguages", variables: { input: { order: { orderField: "name", orderDirection: "desc" } } })
+        send_query(query_name: 'AdminListBlockLanguages', variables: { input: { order: { orderField: 'name', orderDirection: 'desc' } } })
         json_data = JSON.parse(response.body)['data']['blockLanguages']['nodes']
 
-        expect(json_data.map { |p| p['name'] }).to eq ['cccc', 'bbbb', 'aaaa']
+        expect(json_data.map { |p| p['name'] }).to eq %w[cccc bbbb aaaa]
       end
 
       it 'name asc' do
-        send_query(query_name: "AdminListBlockLanguages", variables: { input: { order: { orderField: "name", orderDirection: "asc" } } })
+        send_query(query_name: 'AdminListBlockLanguages', variables: { input: { order: { orderField: 'name', orderDirection: 'asc' } } })
         json_data = JSON.parse(response.body)['data']['blockLanguages']['nodes']
 
-        expect(json_data.map { |p| p['name'] }).to eq ['aaaa', 'bbbb', 'cccc']
+        expect(json_data.map { |p| p['name'] }).to eq %w[aaaa bbbb cccc]
       end
     end
   end
@@ -124,22 +123,22 @@ RSpec.describe BlockLanguagesController, type: :request do
 
     it 'finds a single block language by ID' do
       b = FactoryBot.create(:block_language)
-      send_query(query_name: "FullBlockLanguage", variables: { id: b.id })
+      send_query(query_name: 'FullBlockLanguage', variables: { id: b.id })
 
       expect(response).to have_http_status(200)
 
       json_data = JSON.parse(response.body)
       block_lang_node = json_data['data']['blockLanguage']
 
-      expect(block_lang_node["id"]).to eq b.id
+      expect(block_lang_node['id']).to eq b.id
     end
 
     it 'non existing languages' do
-      send_query(query_name: "FullBlockLanguage", variables: { id: "0" }, expect_no_errors: false)
+      send_query(query_name: 'FullBlockLanguage', variables: { id: '0' }, expect_no_errors: false)
 
       expect(response).to have_http_status(200)
       json_data = JSON.parse(response.body)
-      expect(json_data["errors"]).not_to eq []
+      expect(json_data['errors']).not_to eq []
     end
   end
 
@@ -147,20 +146,20 @@ RSpec.describe BlockLanguagesController, type: :request do
     it 'Creates a new, empty block language' do
       g = FactoryBot.create(:grammar)
       params = {
-        "name" => "Spec Lang",
-        "sidebars" => [],
-        "editorComponents" => [],
-        "editorBlocks" => [],
-        "grammarId" => g.id,
-        "defaultProgrammingLanguageId" => g.programming_language_id
+        'name' => 'Spec Lang',
+        'sidebars' => [],
+        'editorComponents' => [],
+        'editorBlocks' => [],
+        'grammarId' => g.id,
+        'defaultProgrammingLanguageId' => g.programming_language_id
       }
-      send_query(query_name: "CreateBlockLanguage", variables: params)
+      send_query(query_name: 'CreateBlockLanguage', variables: params)
 
-      expect(response.media_type).to eq "application/json"
+      expect(response.media_type).to eq 'application/json'
 
-      json_data = JSON.parse(response.body)["data"]["createBlockLanguage"]
+      json_data = JSON.parse(response.body)['data']['createBlockLanguage']
       expect(json_data.fetch('errors', [])).to eq []
-      expect(json_data["id"]).not_to eq nil
+      expect(json_data['id']).not_to eq nil
       # can not be validated against BlockLanguageDescription, because graphql mutation fixed the overfetching problem.
       # The client only needs the id and errors as return
       # expect(json_data).to validate_against "BlockLanguageDescription"
@@ -171,47 +170,47 @@ RSpec.describe BlockLanguagesController, type: :request do
     it 'Creates a new block language with model properties' do
       g = FactoryBot.create(:grammar)
       block_lang_model = {
-        "name" => "Spec Lang",
-        "sidebars" => [
+        'name' => 'Spec Lang',
+        'sidebars' => [
           {
-            "type" => "fixedBlocks",
-            "caption" => "Spec Blocks",
-            "categories" => [
+            'type' => 'fixedBlocks',
+            'caption' => 'Spec Blocks',
+            'categories' => [
               {
-                "categoryCaption" => "first",
-                "blocks" => [
+                'categoryCaption' => 'first',
+                'blocks' => [
                   {
-                    "defaultNode" => {
-                      "language" => "spec",
-                      "name" => "block"
+                    'defaultNode' => {
+                      'language' => 'spec',
+                      'name' => 'block'
                     },
-                    "displayName" => "Block #1",
+                    'displayName' => 'Block #1'
                   }
                 ]
               }
             ]
           }
         ],
-        "editorComponents" => [],
-        "editorBlocks" => [
+        'editorComponents' => [],
+        'editorBlocks' => [
           {
-            "describedType" => {
-              "languageName" => "spec",
-              "typeName" => "block"
+            'describedType' => {
+              'languageName' => 'spec',
+              'typeName' => 'block'
             },
-            "visual" => []
+            'visual' => []
           }
         ],
-        "rootCssClasses" => ["a", "b"],
-        "grammarId" => g.id,
-        "defaultProgrammingLanguageId" => g.programming_language_id
+        'rootCssClasses' => %w[a b],
+        'grammarId' => g.id,
+        'defaultProgrammingLanguageId' => g.programming_language_id
       }
 
-      send_query(query_name: "CreateBlockLanguage", variables: block_lang_model)
+      send_query(query_name: 'CreateBlockLanguage', variables: block_lang_model)
 
-      expect(response.media_type).to eq "application/json"
+      expect(response.media_type).to eq 'application/json'
 
-      json_data = JSON.parse(response.body)["data"]["createBlockLanguage"]
+      json_data = JSON.parse(response.body)['data']['createBlockLanguage']
       expect(json_data.fetch('errors', [])).to eq []
       expect(response.status).to eq(200)
 
@@ -229,42 +228,42 @@ RSpec.describe BlockLanguagesController, type: :request do
     it 'Updating basic properties' do
       orig_block_lang = FactoryBot.create(:block_language)
       upda_block_lang = {
-        "id" => orig_block_lang.id,
-        "name" => "Upda",
-        "sidebars" => [
+        'id' => orig_block_lang.id,
+        'name' => 'Upda',
+        'sidebars' => [
           {
-            "type" => "fixedBlocks",
-            "caption" => "Spec Blocks",
-            "categories" => [
+            'type' => 'fixedBlocks',
+            'caption' => 'Spec Blocks',
+            'categories' => [
               {
-                "categoryCaption" => "first",
-                "blocks" => [
+                'categoryCaption' => 'first',
+                'blocks' => [
                   {
-                    "defaultNode" => {
-                      "language" => "spec",
-                      "name" => "block"
+                    'defaultNode' => {
+                      'language' => 'spec',
+                      'name' => 'block'
                     },
-                    "displayName" => "Block #1",
+                    'displayName' => 'Block #1'
                   }
                 ]
               }
             ]
           }
         ],
-        "editorComponents" => [],
-        "editorBlocks" => [
+        'editorComponents' => [],
+        'editorBlocks' => [
           {
-            "describedType" => {
-              "languageName" => "spec",
-              "typeName" => "block"
+            'describedType' => {
+              'languageName' => 'spec',
+              'typeName' => 'block'
             },
-            "visual" => []
+            'visual' => []
           }
         ]
       }
-      send_query(query_name: "UpdateBlockLanguage", variables: upda_block_lang)
+      send_query(query_name: 'UpdateBlockLanguage', variables: upda_block_lang)
 
-      if (not response.body.blank?) then
+      unless response.body.blank?
         json_data = JSON.parse(response.body)
         expect(json_data.fetch('errors', [])).to eq []
       end
@@ -286,7 +285,7 @@ RSpec.describe BlockLanguagesController, type: :request do
     it 'removes unreferenced language' do
       b = FactoryBot.create(:block_language)
 
-      send_query(query_name: "DestroyBlockLanguage", variables: { id: b.id })
+      send_query(query_name: 'DestroyBlockLanguage', variables: { id: b.id })
 
       expect(response.status).to eq(200)
 
@@ -298,18 +297,18 @@ RSpec.describe BlockLanguagesController, type: :request do
       FactoryBot.create(:code_resource, block_language: b)
 
       send_query(
-        query_name: "DestroyBlockLanguage",
+        query_name: 'DestroyBlockLanguage',
         variables: { id: b.id },
-        expect_no_errors: false,
+        expect_no_errors: false
       )
 
       expect(response.status).to eq(200)
-      json_data = JSON.parse(response.body)["data"]["destroyBlockLanguage"]
+      json_data = JSON.parse(response.body)['data']['destroyBlockLanguage']
 
       expect(json_data.fetch('errors', []).length).to eq 1
-      expect(json_data['errors'][0]).to eq "EXISTING_REFERENCES"
+      expect(json_data['errors'][0]).to eq 'EXISTING_REFERENCES'
 
-      send_query(query_name: "AdminListBlockLanguages")
+      send_query(query_name: 'AdminListBlockLanguages')
 
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)['data']['blockLanguages']['nodes'].length).to eq 1

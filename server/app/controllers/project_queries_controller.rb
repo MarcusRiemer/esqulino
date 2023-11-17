@@ -11,7 +11,7 @@ class ProjectQueriesController < ApplicationController
   # Allows the execution of arbitrary SQL, which might be a little
   # dangerous ;)
   def run_arbitrary
-    request_data = ensure_request("ArbitraryQueryRequestDescription", request.body.read)
+    request_data = ensure_request('ArbitraryQueryRequestDescription', request.body.read)
 
     project = Project.find_by!(slug: params['project_id'])
     database_id = nil # params['database_id']
@@ -28,7 +28,7 @@ class ProjectQueriesController < ApplicationController
 
   # Running a query that has already been stored on the server
   def run_stored
-    query_params = ensure_request("QueryParamsDescription", request.body.read)
+    query_params = ensure_request('QueryParamsDescription', request.body.read)
 
     result = current_query.execute(query_params)
     render json: result
@@ -36,17 +36,17 @@ class ProjectQueriesController < ApplicationController
 
   # Simulates the execution of an INSERT SQL query
   def run_simulated_insert
-    request_data = ensure_request("ArbitraryQueryRequestDescription", request.body.read)
+    request_data = ensure_request('ArbitraryQueryRequestDescription', request.body.read)
 
-    result = self.current_project.simulate_insert_sql(request_data['sql'], request_data['params'])
+    result = current_project.simulate_insert_sql(request_data['sql'], request_data['params'])
     render json: result
   end
 
   # Simulates the execution of a DELETE SQL query
   def run_simulated_delete
-    request_data = ensure_request("ArbitraryQueryRequestDescription", request.body.read)
+    request_data = ensure_request('ArbitraryQueryRequestDescription', request.body.read)
 
-    result = self.current_project.simulate_delete_sql(request_data['sql'], request_data['params'])
+    result = current_project.simulate_delete_sql(request_data['sql'], request_data['params'])
     render json: result
   end
 end

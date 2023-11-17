@@ -49,33 +49,27 @@ class Image
   end
 
   def file_show
-    if self.exists? then
-      path
-    else
-      raise EsqulinoError::UnknownImage.new(@project.id, @image_id)
-    end
+    raise EsqulinoError::UnknownImage.new(@project.id, @image_id) unless exists?
+
+    path
   end
 
   def file_update!(file)
-    if self.exists? then
-      FileUtils.mv(file, path)
-    else
-      raise EsqulinoError::UnknownImage.new(project_id, @image_id)
-    end
+    raise EsqulinoError::UnknownImage.new(project_id, @image_id) unless exists?
+
+    FileUtils.mv(file, path)
   end
 
   def file_destroy!
-    if self.exists? then
-      # Remove the image from the "database"
-      metadata = JSON.parse(File.read(image_json))
-      metadata.except!(@image_id)
-      File.write(image_json, (JSON.dump(metadata)))
+    raise EsqulinoError::UnknownImage.new(@project_id, @image_id) unless exists?
 
-      # Delete the file for the image
-      File.delete(path)
-    else
-      raise EsqulinoError::UnknownImage.new(@project_id, @image_id)
-    end
+    # Remove the image from the "database"
+    metadata = JSON.parse(File.read(image_json))
+    metadata.except!(@image_id)
+    File.write(image_json, JSON.dump(metadata))
+
+    # Delete the file for the image
+    File.delete(path)
   end
 
   def metadata_set!(metadata)
@@ -84,12 +78,11 @@ class Image
 
   def self.metadata_get_from_file(project)
     to_return = []
-    if File.file?(self.image_json(project))
-    then
-      JSON.parse(File.read(self.image_json(project))).each do |k, v|
+    if File.file?(image_json(project))
+      JSON.parse(File.read(image_json(project))).each do |k, v|
         v['id'] = k
-        v['name'] = v['image-name'];
-        v.delete 'image-name';
+        v['name'] = v['image-name']
+        v.delete 'image-name'
         to_return.append(v)
       end
     end
@@ -97,11 +90,9 @@ class Image
   end
 
   def metadata_load!
-    begin
-      @metadata = File.file?(image_json) ? JSON.parse(File.read(image_json)).fetch(@image_id) : Hash.new
-    rescue KeyError
-      raise EsqulinoError::UnknownImage.new(project.id, @image_id)
-    end
+    @metadata = File.file?(image_json) ? JSON.parse(File.read(image_json)).fetch(@image_id) : {}
+  rescue KeyError
+    raise EsqulinoError::UnknownImage.new(project.id, @image_id)
   end
 
   def metadata_show
@@ -109,8 +100,8 @@ class Image
     res = @metadata
 
     res['id'] = @image_id
-    res['name'] = res['image-name'];
-    res.except!('image-name');
+    res['name'] = res['image-name']
+    res.except!('image-name')
 
     res
   end
@@ -121,11 +112,11 @@ class Image
   end
 
   def metadata_save
-    if !@metadata.nil?
-      metadata_list = File.file?(image_json) ? JSON.parse(File.read(image_json)) : Hash.new
-      metadata_list[@image_id] = @metadata
-      File.write(image_json, JSON.dump(metadata_list))
-    end
+    return if @metadata.nil?
+
+    metadata_list = File.file?(image_json) ? JSON.parse(File.read(image_json)) : {}
+    metadata_list[@image_id] = @metadata
+    File.write(image_json, JSON.dump(metadata_list))
   end
 
   def self.uuid_to_filename(project, uuid)
@@ -135,9 +126,7 @@ class Image
 
   def self.file_new!(file, project, metadata)
     uuid = SecureRandom.uuid
-    while File.file?(self.uuid_to_filename(project, uuid))
-      uuid = SecureRandom.uuid
-    end
+    uuid = SecureRandom.uuid while File.file?(uuid_to_filename(project, uuid))
 
     img = Image.new(project, uuid)
     img.metadata_set!(metadata)
@@ -152,13 +141,13 @@ class Image
   end
 
   def self.metadata_create(image_name, author_name, author_url, licence_name, licence_url)
-    metadata = Hash.new()
+    metadata = {}
 
-    metadata["image-name"] = image_name
-    metadata["author-name"] = author_name
-    metadata["author-url"] = author_url
-    metadata["licence-name"] = licence_name
-    metadata["licence-url"] = licence_url
+    metadata['image-name'] = image_name
+    metadata['author-name'] = author_name
+    metadata['author-url'] = author_url
+    metadata['licence-name'] = licence_name
+    metadata['licence-url'] = licence_url
 
     metadata
   end
