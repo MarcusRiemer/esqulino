@@ -91,7 +91,7 @@ module SchemaTools
              .reject(&:system?)
              .map do |table|
       columns = table.columns.map do |c|
-        c_type = (table.is_column_fk? c) ? 'FK' : c.type
+        c_type = table.is_column_fk? c ? 'FK' : c.type
         c_name = c.name
         c_pk = ''
 

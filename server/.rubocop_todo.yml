@@ -249,11 +249,3 @@ Style/OptionalBooleanParameter:
 Style/StringConcatenation:
   Exclude:
     - 'app/models/project_database.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, AllowSafeAssignment.
-# SupportedStyles: require_parentheses, require_no_parentheses, require_parentheses_when_complex
-Style/TernaryParentheses:
-  Exclude:
-    - 'app/lib/schema_tools.rb'
