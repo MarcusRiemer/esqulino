@@ -51,7 +51,7 @@ test_rubocop:
     - apt-get install libmagic-dev
     - make install-deps
   script:
-#    - bundle exec rubocop
+    - bundle exec rubocop
     - echo "rubocop job is still skipped due to too many offenses and will be enabled later"
 
 test_rspec:

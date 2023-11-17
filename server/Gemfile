@@ -104,7 +104,7 @@ group :development do
   gem 'irb', require: false
 
   # Code formatting and stylecheck
-  gem 'rubocop', '~> 0.92.0', require: false
+  gem 'rubocop', '~> 1.57.2', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
