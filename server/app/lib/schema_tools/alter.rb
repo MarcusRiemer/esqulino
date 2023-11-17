@@ -9,7 +9,7 @@ module SchemaTools
       sqlite_file_path = project_database.sqlite_file_path
 
       # Just in case: Making a copy of the whole database
-      FileUtils.cp(sqlite_file_path, sqlite_file_path + '.bak')
+      FileUtils.cp(sqlite_file_path, "#{sqlite_file_path}.bak")
 
       table = SchemaTools.database_describe_schema(sqlite_file_path)
                          .select { |table| table.name == table_name }.first
@@ -51,9 +51,9 @@ module SchemaTools
             changeTableName(table, cmd['newName'])
           end
         end
-      rescue StandardError => e
+      rescue StandardError
         # Something went wrong, move the backup back
-        FileUtils.mv(sqlite_file_path + '.bak', sqlite_file_path)
+        FileUtils.mv("#{sqlite_file_path}.bak", sqlite_file_path)
 
         raise
         # raise EsqulinoError.new("Internal error altering the database")
@@ -89,7 +89,7 @@ module SchemaTools
     end
 
     def self.ensure_consistency!(db)
-      raise EsqulinoError, 'Database inconsistent' if db.foreign_key_check.size > 0
+      raise EsqulinoError, 'Database inconsistent' if db.foreign_key_check.size.positive?
     end
 
     def self.internal_rename_table(sqlite_file_path, from_tableName, to_tableName)
@@ -104,8 +104,8 @@ module SchemaTools
 
     # Function to convert the column hash to two strings
     def self.create_column_strings(colHash)
-      colFrom = String.new
-      colTo = String.new
+      colFrom = ''
+      colTo = ''
       colHash.each_with_index do |(key, value), index|
         colFrom.concat(key)
         colTo.concat(value)
@@ -155,7 +155,7 @@ module SchemaTools
         primKeys.concat(pk['name'])
         primKeys.concat(', ') if all_primaryKeys.last != pk
       end
-      createStatement = String.new(", PRIMARY KEY(#{primKeys})")
+      String.new(", PRIMARY KEY(#{primKeys})")
     end
 
     # Function to create a the foreign key constraint part of a CREATE TABLE statement
@@ -179,7 +179,7 @@ module SchemaTools
       fk_ref_columns = ''
 
       fk_references.each_with_index do |ref, i|
-        if i > 0
+        if i.positive?
           fk_columns.concat(', ')
           fk_ref_columns.concat(', ')
         end
@@ -199,34 +199,24 @@ module SchemaTools
     def self.column_to_create_statement(schema_column)
       createStatement = String.new(schema_column['name'])
       createStatement.concat(' ')
-      if schema_column['type'] == 'TEXT'
-        createStatement.concat(schema_column['type'])
-        createStatement.concat(' ')
-      elsif schema_column['type'] == 'BOOLEAN'
-        createStatement.concat(schema_column['type'])
-        createStatement.concat(' ')
+      createStatement.concat(schema_column['type'])
+      createStatement.concat(' ')
+      case schema_column['type']
+      when 'TEXT'
+      when 'BOOLEAN'
         createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column['name']})]: Value is not of type boolean' CHECK (#{schema_column['name']} == 1 OR #{schema_column['name']} == 0 OR #{schema_column['name']} IS NULL) ")
-      elsif schema_column['type'] == 'INTEGER'
-        createStatement.concat(schema_column['type'])
-        createStatement.concat(' ')
+      when 'INTEGER'
         createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column['name']})]: Value is not of type integer' CHECK (#{schema_column['name']} REGEXP '^([+-]?[0-9]+$|)') ")
-      elsif schema_column['type'] == 'FLOAT'
-        createStatement.concat(schema_column['type'])
-        createStatement.concat(' ')
+      when 'FLOAT'
         createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column['name']})]: Value is not of type float' CHECK (#{schema_column['name']} regexp '^[+-]?([0-9]*\.[0-9]+$|[0-9]+$)') ")
-      elsif schema_column['type'] == 'URL'
-        createStatement.concat(schema_column['type'])
-        createStatement.concat(' ')
+      when 'URL'
         createStatement.concat("CONSTRAINT 'ERROR[Column(#{schema_column['name']})]: Value is not of type url' CHECK (#{schema_column['name']} REGEXP '#\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^[:punct:]\s]|/)))#iS') ")
-      else
-        createStatement.concat(schema_column['type'])
-        createStatement.concat(' ')
       end
 
       createStatement.concat('NOT NULL ') if schema_column['notNull'] || schema_column['not_null'] || schema_column['primary']
 
       dflt_value = schema_column['dfltValue'] || schema_column['dflt_value']
-      createStatement.concat("DEFAULT #{dflt_value}") if dflt_value and !dflt_value.empty?
+      createStatement.concat("DEFAULT #{dflt_value}") if dflt_value && !dflt_value.empty?
       createStatement
     end
 
@@ -254,9 +244,9 @@ module SchemaTools
     def self.deleteColumn(table, colHash, columnIndex)
       colHash.delete(table.columns.find { |col| col.index == columnIndex }.name)
       table.foreign_keys.each do |fk|
-        fk.references.select! { |ref| ref.from_column != table.columns.find { |col| col.index == columnIndex }.name }
+        fk.references.reject! { |ref| ref.from_column == table.columns.find { |col| col.index == columnIndex }.name }
       end
-      table.foreign_keys.select! { |fk| fk.references.size != 0 }
+      table.foreign_keys.reject! { |fk| fk.references.empty? }
       table.columns.delete(table.columns.find { |col| col.index == columnIndex })
     end
 
