@@ -82,10 +82,7 @@ group :development, :test do
 
   # Used for manually testing graphql queries
   gem 'graphiql-rails'
-end
 
-# Use rspec for unit test
-group :development, :test do
   gem 'database_cleaner-active_record'
   gem 'guard-rspec', require: false
   gem 'rspec_junit_formatter'
