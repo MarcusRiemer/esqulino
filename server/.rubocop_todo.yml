@@ -24,11 +24,6 @@ Lint/Debugger:
     - 'app/services/seed/base.rb'
     - 'lib/tasks/20190712-grammar-verbose-typename.rake'
 
-# Offense count: 1
-Lint/IneffectiveAccessModifier:
-  Exclude:
-    - 'app/lib/seed_manager.rb'
-
 # Offense count: 7
 # Configuration parameters: AllowedParentClasses.
 Lint/MissingSuper:

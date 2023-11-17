@@ -186,6 +186,11 @@ class SeedManager
     Seed::ProgrammingLanguageSeed.load_all
   end
 
+  # Singleton instance of the SeedManager
+  def self.instance
+    @@instance ||= SeedManager.new
+  end
+
   private
 
   # While some callbacks are extremely relevant for the "normal" operation
@@ -215,11 +220,6 @@ class SeedManager
     callbacks_to_skip.each do |h|
       h[:model_class].set_callback(h[:name], h[:moment], h[:method])
     end
-  end
-
-  # Singleton instance of the SeedManager
-  def self.instance
-    @@instance ||= SeedManager.new
   end
 
   # We probably don't want to output during testing, so this is configurable
