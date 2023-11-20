@@ -1,4 +1,0 @@
-FROM marcusriemer/blockwerkzeug:base
-LABEL name="esqulino development image: Server"
-
-RUN pacman --noconfirm -Sy $BUILD_PACKAGES $SERVER_PACKAGES
