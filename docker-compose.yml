@@ -1,8 +1,9 @@
 version: "3"
 
 services:
+  # The postgresql database
   db:
-    image: postgres:latest
+    image: postgres:15-bullseye
     ports:
       - 5432:5432
     environment:
@@ -11,15 +12,31 @@ services:
     volumes:
       - data-postgres-volume:/var/lib/postgresql/data
 
-  accounts:
-    image: jboss/keycloak
+
+  # The angular client image:
+  client:
+    profiles: ["build"] # Don't start this service by default
+    image: blattwerkzeug-client:latest
+    build:
+      context: .
+      dockerfile: ./docker/client.Dockerfile
+
+  # The rails server
+  server:
+    build:
+      context: .
+      dockerfile: ./docker/server.Dockerfile
+    image: akradocker/blattwerkzeug:latest
     ports:
-      - 8080:8080
+      - 9292:9292
+    depends_on:
+      - db
     environment:
-      - KEYCLOAK_USER=${KEYCLOAK_USER}
-      - KEYCLOAK_PASSWORD=${KEYCLOAK_PASSWORD}
-#      - DB_VENDOR=postgres
-#      - DB_ADDR=db
+      - DATABASE_HOST=db
+    volumes:
+      - data-files-volume:/blattwerkzeug/rails_app/data
+    tmpfs:
+      - /blattwerkzeug/rails_app/server/tmp
 
 volumes:
   data-files-volume:
