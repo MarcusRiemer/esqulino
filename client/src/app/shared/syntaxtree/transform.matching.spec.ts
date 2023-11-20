@@ -3,7 +3,7 @@ import { Selector } from "./transform.description";
 import { findMatches } from "./transform.matching";
 import * as RegexTemplates from "./transform.rules.regex";
 
-fdescribe("Finding matchings of selectors on trees", () => {
+describe("Finding matchings of selectors on trees", () => {
   describe("Matching against the not type Selector", () => {
     it("Matching all non char nodes", () => {
       const testInput = new SyntaxTree({

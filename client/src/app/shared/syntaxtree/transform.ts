@@ -633,13 +633,11 @@ export function applyRules(
     let matches = findMatches(inpTree.rootNode, rules[rule_index].selector);
     while (matches.length > 0) {
       let nextMatch: NodeLocation = matches.shift();
-      /*
       console.log(JSON.stringify({
         nxt_Match: nextMatch,
         matches: matches,
         rule_index: rule_index,
       }));
-      */
       // Check that the next matched location is still valid.
       if (
         !doesNodeMatchSelector(
@@ -647,7 +645,8 @@ export function applyRules(
           rules[rule_index].selector
         )
       ) {
-        continue;
+        console.log("Invalidated match on : "+ JSON.stringify(nextMatch)); 
+        continue; 
       } else {
         //TODO: Rewriting the merge to rely on the parent and delete all same level matched siblings
         // might be more efficent/better.

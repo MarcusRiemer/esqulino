@@ -15,7 +15,7 @@ import {
   TransformRule,
 } from "./transform.description";
 
-fdescribe("Tests for the intermediate steps of the applyRules function", () => {
+describe("Tests for the intermediate steps of the applyRules function", () => {
   it("Append given children to an NodeDescription with undefined children", () => {
     const noChildrenNodeDesc: AST.NodeDescription = {
       name: "char",
