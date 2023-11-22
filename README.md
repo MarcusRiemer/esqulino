@@ -9,6 +9,10 @@ To eliminate the possibility of syntactical errors while programming, the elemen
 * Not (yet?) a developer? Then you probably want to check out [BlattWerkzeug.de](http://blattwerkzeug.de) for the hosted version of this project. But beware: The current implementation of this software is **not yet ready** to be used in a classroom. It’s main purpose is to demonstrate and field test the various concepts.
 * You are a developer? Then you probably want to check out [the manual](http://manual.blattwerkzeug.de).
   * [Compilation Guide](http://manual.blattwerkzeug.de/en/latest/compilation.html)
+* You don't want to read a lot and just run the project in a container? Then just enter the following prompts:
+  * `docker-compose build`
+  * `docker-compose up`
+  * and then you should be able open the application locally at http://localhost:9292/
 
 ## About the name ...
 
