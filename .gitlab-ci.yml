@@ -3,6 +3,18 @@ stages:
   - test
   - deploy
 
+build_image:
+  stage: build
+  image:
+    entrypoint: [ '' ]
+    name: gcr.io/kaniko-project/executor:debug
+  before_script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+  script:
+    - docker build -t registry.akra.de/mari/blattwerkzeug .
+    - docker push registry.akra.de/mari/blattwerkzeug
+
 .services_config: &services_config
   services:
     - postgres:15-bullseye
