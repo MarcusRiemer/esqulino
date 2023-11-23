@@ -22,7 +22,7 @@ variables:
 #
 build:
   stage: build
-  image: node:latest
+  image: registry.akra.de/mari/blattwerkzeug:latest
   script:
     - cd client
     - make install-deps
@@ -81,7 +81,7 @@ test_rspec:
 
 test_client:
   stage: test
-  image: node:latest
+  image: registry.akra.de/mari/blattwerkzeug:latest
   interruptible: true
   variables:
     STACKPROF: 1
