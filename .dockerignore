@@ -1,1 +1,29 @@
+## Ignore the following when building the docker image
 .git
+
+server/.*
+server/log/
+server/storage/
+server/test/
+server/tmp/
+
+server/Makefile
+server/start_server.sh
+
+# Ignore the following when building the Angular client's image
+client/.*
+client/log/
+client/docs
+client/node_modules
+
+client/Makefile
+
+data/
+doc/
+docker/
+files/
+schema/
+scripts/
+seed/
+seed-test/
+vagrant/
