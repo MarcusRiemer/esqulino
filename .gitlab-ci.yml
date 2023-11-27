@@ -20,6 +20,31 @@ variables:
 # | |_) | |_| | | | (_| |
 # |_.__/ \__,_|_|_|\__,_|
 #
+
+build_main_image:
+  stage: build
+  resource_group: build_image
+  image:
+    entrypoint: [""]
+    name: gcr.io/kaniko-project/executor:debug
+  only:
+    refs:
+      - master
+      - chore/build_image_with_kaniko
+  before_script:
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"username\":\"${CI_REGISTRY_USER}\",\"password\":\"${CI_REGISTRY_PASSWORD}\"}}}" > /kaniko/.docker/config.json
+    - export BUILD_ARGS=$(cat .tool-versions | sed -e 's/\([^ ]*\) \(.*\)/\1_VERSION=\2/' | tr "[:lower:]" "[:upper:]" | xargs -n1 echo --build-arg )
+  script:
+    - |
+      /kaniko/executor ${BUILD_ARGS} \
+      --skip-unused-stages \
+      --cache=true \
+      --cache-repo ${CI_REGISTRY_IMAGE}/cache \
+      --context ${CI_PROJECT_DIR} \
+      --dockerfile ${CI_PROJECT_DIR}/Dockerfile \
+      --destination ${CI_REGISTRY_IMAGE}:latest \
+      --destination ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+
 build:
   stage: build
   image: registry.akra.de/mari/blattwerkzeug:latest
