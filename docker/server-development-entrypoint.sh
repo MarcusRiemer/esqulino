@@ -1,4 +1,4 @@
-#!/bin/sh 
+#!/bin/sh
 
 cd server
 
@@ -15,5 +15,4 @@ bundler exec rails "blattwerkzeug:role:load_all" \
 # Give admin rights to guest user
 bundler exec rails "blattwerkzeug:dev:make_guest_admin"
 
-# Start the rails server on port 9292
-rails server -b 0.0.0.0 -p 9292; 
+rails server -b 0.0.0.0;

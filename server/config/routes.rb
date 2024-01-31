@@ -111,6 +111,9 @@ Rails.application.routes.draw do
     match '*path', via: :all, to: proc { [404, {}, ["Unknown API endpoint"]] }
   end
 
+
+  get "up" => "rails/health#show"
+
   # Third stop:  Serving static files and the index.html on development machines
   # These paths are not meant to be called when running in production
   root action: :index, controller: 'static_files'

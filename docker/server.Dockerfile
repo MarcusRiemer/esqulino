@@ -54,6 +54,7 @@ COPY seed/ ./seed
 
 # Define the port mapping
 EXPOSE 9292
+EXPOSE 3000
 
 # Define the Environment variables:
 
@@ -61,6 +62,3 @@ EXPOSE 9292
 COPY docker/server-development-entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-
-# Start the rails server
-#CMD ["rails", "server", "-b", "0.0.0.0", "-p", "9292"]

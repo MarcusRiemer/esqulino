@@ -3,7 +3,7 @@ default: &default
   database: esqulino
   host: <%= ENV['DATABASE_HOST'] || 'localhost' %>
   username: <%= ENV['DATABASE_USER'] || 'esqulino' %>
-  password: <%= ENV['DATABASE_PASS'] || '' %>
+  password: <%= ENV['DATABASE_PASS'] || ENV['POSTGRES_PASSWORD'] || '' %>
   encoding: unicode
   port: 5432
 

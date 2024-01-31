@@ -1,0 +1,54 @@
+# Name of your application. Used to uniquely configure containers.
+service: blattwerkzeug
+
+# Name of the container image.
+image: marcusriemer/blattwerkzeug
+
+# Deploy to these servers.
+servers:
+  - 78.47.49.111
+
+# Credentials for your image host.
+registry:
+  username: marcusriemer
+
+  # Always use an access token rather than real password when possible.
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Inject ENV variables into containers (secrets come from .env).
+# Remember to run `kamal env push` after making changes!
+env:
+  clear:
+    DATABASE_HOST: db
+  secret:
+    - RAILS_MASTER_KEY
+    - POSTGRES_PASSWORD
+
+# Configure builder setup.
+builder:
+  dockerfile: "docker/server.Dockerfile"
+  context: "."
+  multiarch: false
+
+# Use accessory services (secrets come from .env).
+accessories:
+  db:
+    image: postgres:15-bullseye
+    host: 78.47.49.111
+    ports:
+      - 5432:5432
+    env:
+      clear:
+        POSTGRES_USER: esqulino
+      secret:
+        - POSTGRES_PASSWORD
+    volumes:
+      - data-postgres-volume:/var/lib/postgresql/data
+
+labels:
+  traefik.http.routers.blattwerkzeug.entrypoints: web
+
+traefik:
+  args:
+    entrypoints.web.address: ':9292'
