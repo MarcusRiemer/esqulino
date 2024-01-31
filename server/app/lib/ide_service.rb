@@ -298,8 +298,8 @@ module IdeService
     end
 
     def request(event)
-      head = color("  IDE Request (#{event.duration.round(1)}ms)", MAGENTA, true)
-      payload = color(event.payload[:request].to_json, YELLOW, true)
+      head = color("  IDE Request (#{event.duration.round(1)}ms)", MAGENTA, bold: true)
+      payload = color(event.payload[:request].to_json, YELLOW, bold: true)
       debug "#{head}  #{payload}"
     end
   end

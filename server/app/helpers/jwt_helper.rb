@@ -1,7 +1,7 @@
 module JwtHelper
   # Is used for signing the JWT
   def self.secret_key
-    return Rails.application.secrets.secret_key_base.to_s
+    return Rails.application.credentials.secret_key_base.to_s
   end
 
   # Is used for issuer claim
