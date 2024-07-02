@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   # The postgresql database
   db:
@@ -12,21 +10,12 @@ services:
     volumes:
       - data-postgres-volume:/var/lib/postgresql/data
 
-
-  # The angular client image:
-  client:
-    profiles: ["build"] # Don't start this service by default
-    image: blattwerkzeug-client:latest
-    build:
-      context: .
-      dockerfile: ./docker/client.Dockerfile
-
   # The rails server
   server:
     build:
       context: .
       dockerfile: ./docker/server.Dockerfile
-    image: akradocker/blattwerkzeug:latest
+    image: marcusriemer/blattwerkzeug:latest
     ports:
       - 9292:9292
     depends_on:

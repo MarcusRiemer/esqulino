@@ -1,4 +1,6 @@
-# Ignore the following when building the Rails image
+client/log/
+client/docs/
+client/node_modules/
 
 server/.*
 server/log/
@@ -9,4 +11,4 @@ server/tmp/
 
 server/Makefile
 server/start_server.sh
-# README.md 
+# README.md
