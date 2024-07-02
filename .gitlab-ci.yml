@@ -1,7 +1,6 @@
 stages:
   - build
   - test
-  - deploy
 
 .services_config: &services_config
   services:
@@ -40,20 +39,6 @@ build:
 # | ||  __/\__ \ |_
 #  \__\___||___/\__|
 #
-test_rubocop:
-  stage: test
-  image: ruby:3.2.2
-  interruptible: true
-  before_script:
-    - cd server
-    - gem update --system
-    - apt-get update
-    - apt-get install libmagic-dev
-    - make install-deps
-  script:
-#    - bundle exec rubocop
-    - echo "rubocop job is still skipped due to too many offenses and will be enabled later"
-
 test_rspec:
   <<: *services_config
   stage: test
@@ -107,15 +92,3 @@ test_client:
     - make install-deps
   script:
     - make test
-
-#      _            _
-#   __| | ___ _ __ | | ___  _   _
-#  / _` |/ _ \ '_ \| |/ _ \| | | |
-# | (_| |  __/ |_) | | (_) | |_| |
-#  \__,_|\___| .__/|_|\___/ \__, |
-#            |_|            |___/
-
-deploy:
-  stage: deploy
-  script:
-    - echo "Deploying application will be added later"
