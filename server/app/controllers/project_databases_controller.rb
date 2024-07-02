@@ -38,7 +38,7 @@ class ProjectDatabasesController < ApplicationController
 
       # Was the rendering successful?
       if status.exitstatus != 0
-        halt 500, { 'Content-Type' => 'text/plain' }, err
+        render status: 500, plain: err
       else
         # We need some special work for SVG images
         content_type = if format.start_with? 'svg'
