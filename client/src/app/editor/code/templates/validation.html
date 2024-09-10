@@ -1,29 +1,29 @@
 <h4 class="card-title">Validierung</h4>
 <span *ngIf="!codeResource$">Bug: Missing Code Resource</span>
 <ng-container *ngIf="(result$ | async) as result;">
-  <div style="overflow-x: auto;">
-  <table *ngIf="!result.isValid" class="table validation-table">
-    <thead>
-      <tr>
-        <th>Ort</th>
-        <th>Code</th>
-        <th>Erklärung</th>
-        <th>Daten</th>
-      </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let error of errors$ | async">
-      <td>
-        <ng-container *ngIf="error.node">
-          {{ error.node.typeName }}
-          <code>{{ error.node.location | json }}</code>
-        </ng-container>
-      </td>
-      <td>{{ error.code }}</td>
-      <td>{{ error.humanError }}</td>
-      <td>{{ error.data | json }}</td>
-    </tr>
-  </tbody>
-  </table>
-</div>
+  <div style="overflow-x: auto">
+    <table *ngIf="!result.isValid" class="table validation-table">
+      <thead>
+        <tr>
+          <th>Ort</th>
+          <th>Code</th>
+          <th>Erklärung</th>
+          <th>Daten</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let error of errors$ | async">
+          <td>
+            <ng-container *ngIf="error.node">
+              {{ error.node.typeName }}
+              <code>{{ error.node.location | json }}</code>
+            </ng-container>
+          </td>
+          <td>{{ error.code }}</td>
+          <td>{{ error.humanError }}</td>
+          <td>{{ error.data | json }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </ng-container>
