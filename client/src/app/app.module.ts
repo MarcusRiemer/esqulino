@@ -116,9 +116,7 @@ if (environment.sentry && environment.sentry.active) {
           includeQuery: false,
           // Put name of operation in URL to ease debugging
           uri: ({ operationName, variables }) =>
-            `/api/graphql/${operationName}?${urlParamsFromObject(
-              variables["input"] ?? variables
-            )}`,
+            `/api/graphql/${operationName}}`,
         }),
         defaultOptions: {
           mutate: {
