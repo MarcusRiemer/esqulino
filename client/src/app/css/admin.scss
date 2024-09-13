@@ -14,6 +14,11 @@
         height: 50vh;
     }
 
+    /*Typical width: Full with of the screen, or es much width as the textarea can get*/
+    textarea.full-width, json-editor.full-width ace-editor {
+        width: 100%;
+    }
+
     /* Make the ace-editor look a little like the surrounding components */
     ace-editor {
         min-height: 200px;
