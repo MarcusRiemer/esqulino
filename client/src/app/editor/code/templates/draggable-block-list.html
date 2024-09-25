@@ -4,14 +4,14 @@
   </summary>
   <details *ngFor="let category of blockSidebar.categories" open>
     <summary>
-      <h6>{{ category.displayName }}</h6>
+      <h6>{{ category.displayName}}</h6>
     </summary>
     <div
       *ngFor="let block of category.blocks"
       (mousedown)="startDrag($event, block)"
       class="block rounded"
     >
-      {{ block.displayName }}
+    <span>{{ block.displayName }}</span>
     </div>
   </details>
 </details>
