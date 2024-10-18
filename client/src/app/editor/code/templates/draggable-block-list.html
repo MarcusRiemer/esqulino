@@ -11,7 +11,9 @@
       (mousedown)="startDrag($event, block)"
       class="block rounded"
     >
-    <span>{{ block.displayName }}</span>
+      <ng-container *ngIf="block.displayName.includes('A')">
+        <span>{{ block.displayName }}</span>
+      </ng-container>
     </div>
   </details>
 </details>

@@ -153,7 +153,6 @@ export class SidebarService {
    * Filter the Sidebar for Blocks with a specific Keyword
    */
   readonly _filter$ = new BehaviorSubject<InternalSidebarModel[]>([]);
-
 }
 
 /**
