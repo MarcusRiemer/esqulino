@@ -6,6 +6,7 @@
   [@background-color]="targetState$ | async"
   (mouseover)="onMouseEnter($event)"
   (mouseout)="onMouseOut($event)"
+  (click)="onMouseClick($event)"
 >
   &nbsp;{{ displayText | async }}&nbsp;
 </div>

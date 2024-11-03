@@ -1,17 +1,26 @@
 import { Injectable } from "@angular/core";
 
 import { BehaviorSubject, Observable, combineLatest } from "rxjs";
-import { map, filter, tap, shareReplay, switchMap } from "rxjs/operators";
+import {
+  map,
+  filter,
+  tap,
+  shareReplay,
+  switchMap,
+  first,
+} from "rxjs/operators";
 
 import { ResourceReferencesService } from "../shared/resource-references.service";
 import {
   CodeResource,
+  NodeDescription,
   NodeLocation,
   SyntaxTree,
   ValidationResult,
 } from "../shared/syntaxtree";
 
 import { ProjectService } from "./project.service";
+import { FixedSidebarBlock } from "../shared/block";
 
 /**
  * This service represents a single code resource that is currently beeing
@@ -27,6 +36,8 @@ export class CurrentCodeResourceService {
   private _codeResource = new BehaviorSubject<CodeResource>(undefined);
 
   private _executionLocation = new BehaviorSubject<NodeLocation>(undefined);
+
+  private _holeLocation = new BehaviorSubject<NodeLocation>(undefined);
 
   constructor(
     private _projectService: ProjectService,
@@ -120,6 +131,9 @@ export class CurrentCodeResourceService {
   readonly currentExecutionLocation$: Observable<NodeLocation> =
     this._executionLocation.asObservable();
 
+  readonly currentHoleLocation$: Observable<NodeLocation> =
+    this._holeLocation.asObservable();
+
   /**
    * The currently loaded resource
    */
@@ -139,5 +153,43 @@ export class CurrentCodeResourceService {
    */
   setCurrentExecutionLocation(loc?: NodeLocation) {
     this._executionLocation.next(loc);
+  }
+
+  setCurrentHoleLocation(loc?: NodeLocation) {
+    this._holeLocation.next(loc);
+    console.log(`New hole location ${JSON.stringify(loc)}`);
+  }
+
+  async currentHoleMatchesBlock(block: NodeDescription | FixedSidebarBlock) {
+    const validator = await this.validator$.pipe(first()).toPromise();
+    const ast = this.peekSyntaxtree;
+    const holeLocation = this._holeLocation.value;
+
+    if (holeLocation === undefined) {
+      return true;
+    }
+
+    const fillBlocks =
+      block instanceof FixedSidebarBlock
+        ? block.tailoredBlockDescription(ast)
+        : [block];
+
+    /*const possibleAst = ast.insertNode(
+      holeLocation,
+      block.tailoredBlockDescription(ast)[0]
+    );*/
+
+    console.log("LOCATION", holeLocation);
+    const possibleAst = ast.insertNode(holeLocation, fillBlocks[0]);
+
+    const instertedNode = possibleAst.locate(holeLocation);
+
+    return (
+      validator.validateFromRoot(possibleAst).getErrorsOn(instertedNode)
+        .length == 0
+    );
+
+    //hier Loch abfangen
+    //return block.displayName.includes("A");
   }
 }

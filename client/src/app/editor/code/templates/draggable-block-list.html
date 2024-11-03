@@ -6,14 +6,14 @@
     <summary>
       <h6>{{ category.displayName}}</h6>
     </summary>
-    <div
-      *ngFor="let block of category.blocks"
-      (mousedown)="startDrag($event, block)"
-      class="block rounded"
-    >
-      <ng-container *ngIf="block.displayName.includes('A')">
+    <ng-container *ngFor="let block of category.blocks">
+      <div
+        *ngIf="true || block.displayName?.includes('A')"
+        (mousedown)="startDrag($event, block)"
+        class="block rounded"
+      >
         <span>{{ block.displayName }}</span>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
   </details>
 </details>

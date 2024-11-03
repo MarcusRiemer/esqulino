@@ -28,6 +28,7 @@ import {
   dropLocationHasChildren,
 } from "./drop-target-state";
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
+import { json } from "express";
 
 const CSS_WHITE = "255, 255, 255";
 const CSS_YELLOW = "255, 255, 0";
@@ -316,6 +317,17 @@ export class BlockRenderDropTargetComponent {
   onMouseOut(evt: MouseEvent) {
     this._currentMouseTarget.next(false);
     evt.stopPropagation();
+  }
+
+  onMouseClick(evt: MouseEvent) {
+    /* this._renderData.syntaxTree
+    this._renderData.validator
+    this._dragService.peekDragData.draggedDescription
+    const newTree = this._renderData.syntaxTree.insertNode(this.dropLocation , this._dragService.peekDragData.draggedDescription[0])
+    const result = this._renderData.validator.validateFromRoot(newTree)
+    const node = newTree.locate(this.dropLocation)
+    result.getErrorsOn(node)*/
+    console.log("LOCH:", this.dropLocation);
   }
 
   readonly displayText = this._isCurrentDropCandidate.pipe(
