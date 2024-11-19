@@ -29,6 +29,7 @@ import {
 } from "./drop-target-state";
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
 import { json } from "express";
+import { CurrentCodeResourceService } from "../../current-coderesource.service";
 
 const CSS_WHITE = "255, 255, 255";
 const CSS_YELLOW = "255, 255, 0";
@@ -173,7 +174,8 @@ export class BlockRenderDropTargetComponent {
 
   constructor(
     private _dragService: DragService,
-    private _renderData: RenderedCodeResourceService
+    private _renderData: RenderedCodeResourceService,
+    private _currentCodeResourceService: CurrentCodeResourceService
   ) {}
 
   /**
@@ -327,7 +329,8 @@ export class BlockRenderDropTargetComponent {
     const result = this._renderData.validator.validateFromRoot(newTree)
     const node = newTree.locate(this.dropLocation)
     result.getErrorsOn(node)*/
-    console.log("LOCH:", this.dropLocation);
+    this._currentCodeResourceService.setCurrentHoleLocation(this.dropLocation);
+    console.log(this._currentCodeResourceService.currentHoleLocation$);
   }
 
   readonly displayText = this._isCurrentDropCandidate.pipe(

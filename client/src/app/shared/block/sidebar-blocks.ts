@@ -85,7 +85,7 @@ export class FixedSidebarBlock {
 
   constructor(desc: SidebarBlockDescription) {
     this.displayName = desc.displayName;
-    this.isVisableInSidebar = false;
+    this.isVisableInSidebar = true;
 
     if (Array.isArray(desc.defaultNode)) {
       this.defaultNode = desc.defaultNode;
