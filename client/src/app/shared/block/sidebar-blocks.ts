@@ -74,6 +74,9 @@ export class FixedSidebarBlock {
    */
   public readonly displayName: string;
 
+  /** This controlls the visability in Sidebar */
+  public isVisableInSidebar: boolean;
+
   /**
    * @return The node that should be created when this block
    *         needs to be instanciated.
@@ -82,6 +85,7 @@ export class FixedSidebarBlock {
 
   constructor(desc: SidebarBlockDescription) {
     this.displayName = desc.displayName;
+    this.isVisableInSidebar = false;
 
     if (Array.isArray(desc.defaultNode)) {
       this.defaultNode = desc.defaultNode;

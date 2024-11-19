@@ -320,7 +320,7 @@ export class BlockRenderDropTargetComponent {
   }
 
   onMouseClick(evt: MouseEvent) {
-    /* this._renderData.syntaxTree
+    /*this._renderData.syntaxTree
     this._renderData.validator
     this._dragService.peekDragData.draggedDescription
     const newTree = this._renderData.syntaxTree.insertNode(this.dropLocation , this._dragService.peekDragData.draggedDescription[0])

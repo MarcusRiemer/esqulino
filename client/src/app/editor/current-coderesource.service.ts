@@ -161,9 +161,9 @@ export class CurrentCodeResourceService {
   }
 
   async currentHoleMatchesBlock(block: NodeDescription | FixedSidebarBlock) {
-    const validator = await this.validator$.pipe(first()).toPromise();
     const ast = this.peekSyntaxtree;
     const holeLocation = this._holeLocation.value;
+    const validator = await this.validator$.pipe(first()).toPromise();
 
     if (holeLocation === undefined) {
       return true;
@@ -184,12 +184,15 @@ export class CurrentCodeResourceService {
 
     const instertedNode = possibleAst.locate(holeLocation);
 
-    return (
-      validator.validateFromRoot(possibleAst).getErrorsOn(instertedNode)
-        .length == 0
-    );
+    const allErrors = validator.validateFromRoot(possibleAst);
+    const errorList = validator
+      .validateFromRoot(possibleAst)
+      .getErrorsOn(instertedNode)
+      .filter((error) => error.code != "MISSING_CHILD");
 
-    //hier Loch abfangen
-    //return block.displayName.includes("A");
+    console.log("HIEEEER", errorList.length, errorList);
+    console.log("DOOOOOOORT", allErrors);
+
+    return errorList.length == 0;
   }
 }
