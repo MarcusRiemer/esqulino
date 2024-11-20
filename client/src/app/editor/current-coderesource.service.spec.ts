@@ -141,8 +141,7 @@ describe(`CurrentCodersourceService`, () => {
   });
 
   describe(`.currentHoleMatchesBlock(block)`, () => {
-    //TODO: Für diese Fälle ein describe mit treeDesc schreiben
-    it(`shows only Blocks with A`, async () => {
+    it(`returns true when Block with A in displayname is insertet`, async () => {
       const s = await instantiate({
         language: "sql",
         name: "querySelect",
@@ -160,7 +159,7 @@ describe(`CurrentCodersourceService`, () => {
       expect(result).toBeTrue();
     });
 
-    it(`does not show Blocks without A`, async () => {
+    it(`returns false when Block without A in displayname is insertet`, async () => {
       const s = await instantiate({
         language: "sql",
         name: "querySelect",
@@ -200,7 +199,7 @@ describe(`CurrentCodersourceService`, () => {
         },
       };
 
-      it(`fills SELECT with *`, async () => {
+      it(`returns true when * Block is insertet into SELECT hole`, async () => {
         const s = await instantiate(treeDesc);
 
         const block: NodeDescription = {
@@ -222,7 +221,7 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeTrue();
       });
 
-      it(`fills SELECT with Function Sum`, async () => {
+      it(`returns true when SELECT hole is filled with Sum Function`, async () => {
         const s = await instantiate(treeDesc);
 
         const block: NodeDescription = {
@@ -283,7 +282,7 @@ describe(`CurrentCodersourceService`, () => {
         },
       };
 
-      it(`Fills SELECT Hole with * Block`, async () => {
+      it(`returns true when SELECT Hole is filled with * Block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {
@@ -301,7 +300,7 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeTrue();
       });
 
-      it(`Fills SELECT Hole with PARAM Block`, async () => {
+      it(`returns true when SELECT Hole is filled with PARAM Block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {
@@ -343,7 +342,7 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeTrue();
       });
 
-      it(`Fills SELECT Hole with Binary Expression Block`, async () => {
+      it(`returns true when SELECT Hole is filled with Binary Expression Block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {
@@ -375,7 +374,7 @@ describe(`CurrentCodersourceService`, () => {
       });
       //Fills SELECT WiTH non Valid Block
 
-      it(`Fills SELECT Hole with WHERE block`, async () => {
+      it(`returns true when SELECT Hole is filled with WHERE block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {
@@ -393,7 +392,7 @@ describe(`CurrentCodersourceService`, () => {
       });
 
       //Funktions
-      it(`Fills the SELECT Hole with a COUNT() Block`, async () => {
+      it(`returns true when the SELECT Hole is filled with a COUNT() Block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {
@@ -467,7 +466,6 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeFalse();
       });
 
-      //Inseting this Block throws MISSING_CHILD Error
       describe(`Tree with 2 Holes`, () => {
         const treeDescTwoHoles = {
           name: "querySelect",
@@ -512,7 +510,7 @@ describe(`CurrentCodersourceService`, () => {
           },
         };
 
-        it(`returns false after inserting a valid Block becaus of another error`, async () => {
+        it(`returns false after inserting a valid Block because of another error`, async () => {
           const s = await instantiate(treeDescTwoHoles);
 
           const block: NodeDescription = {
