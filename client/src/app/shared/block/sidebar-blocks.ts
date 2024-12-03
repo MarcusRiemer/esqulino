@@ -75,7 +75,7 @@ export class FixedSidebarBlock {
   public readonly displayName: string;
 
   /** This controlls the visability in Sidebar */
-  public isVisableInSidebar: boolean;
+  public isVisibleInSidebar: boolean;
 
   /**
    * @return The node that should be created when this block
@@ -85,7 +85,7 @@ export class FixedSidebarBlock {
 
   constructor(desc: SidebarBlockDescription) {
     this.displayName = desc.displayName;
-    this.isVisableInSidebar = true;
+    this.isVisibleInSidebar = true;
 
     if (Array.isArray(desc.defaultNode)) {
       this.defaultNode = desc.defaultNode;

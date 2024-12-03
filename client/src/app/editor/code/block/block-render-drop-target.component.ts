@@ -28,7 +28,6 @@ import {
   dropLocationHasChildren,
 } from "./drop-target-state";
 import { RenderedCodeResourceService } from "./rendered-coderesource.service";
-import { json } from "express";
 import { CurrentCodeResourceService } from "../../current-coderesource.service";
 
 const CSS_WHITE = "255, 255, 255";

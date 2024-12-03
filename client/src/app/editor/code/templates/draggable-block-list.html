@@ -8,7 +8,7 @@
     </summary>
     <ng-container *ngFor="let block of category.blocks">
       <div
-        *ngIf="block.isVisableInSidebar"
+        *ngIf="isVisibleInSidebar(block)"
         (mousedown)="startDrag($event, block)"
         class="block rounded"
       >

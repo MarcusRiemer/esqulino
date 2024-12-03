@@ -374,7 +374,7 @@ describe(`CurrentCodersourceService`, () => {
       });
       //Fills SELECT WiTH non Valid Block
 
-      it(`returns true when SELECT Hole is filled with WHERE block`, async () => {
+      it(`returns false when SELECT Hole is filled with WHERE block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {

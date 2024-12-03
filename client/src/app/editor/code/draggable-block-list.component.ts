@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 
-import { CodeResource } from "../../shared/syntaxtree";
+import { CodeResource, NodeDescription } from "../../shared/syntaxtree";
 import {
   FixedSidebarBlock,
   FixedBlocksSidebar,
@@ -17,7 +17,7 @@ import { CurrentCodeResourceService } from "../current-coderesource.service";
   templateUrl: "templates/draggable-block-list.html",
   selector: "draggable-block-list",
 })
-export class DraggableBlockListComponent implements OnChanges {
+export class DraggableBlockListComponent{
   @Input()
   blockSidebar: FixedBlocksSidebar;
 
@@ -30,8 +30,6 @@ export class DraggableBlockListComponent implements OnChanges {
     private _dragService: DragService,
     private readonly _currentCodeResource: CurrentCodeResourceService
   ) {}
-
-  shownBlocks$: Observable<[]> = of([]);
 
   /**
    * The user has decided to start dragging something from the sidebar.
@@ -48,15 +46,11 @@ export class DraggableBlockListComponent implements OnChanges {
       alert(e);
     }
   }
-  ngOnChanges(changes: SimpleChanges): void {
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
-    this.shownBlocks$;
 
-    /* this.blockSidebar.categories.forEach(category => {
-      category.blocks.forEach(block => {
-        block.isVisableInSidebar = this._currentCodeResource.currentHoleMatchesBlock(block)
-      })
-    });*/
+  isVisibleInSidebar(block: NodeDescription | FixedSidebarBlock) {
+    return true;
+    //console.log("isVisible", block)
+    //return this._currentCodeResource.currentHoleMatchesBlock(block)
   }
+
 }
