@@ -17,6 +17,7 @@ import {
   NodeLocation,
   SyntaxTree,
   ValidationResult,
+  Validator,
 } from "../shared/syntaxtree";
 
 import { ProjectService } from "./project.service";
@@ -161,9 +162,16 @@ export class CurrentCodeResourceService {
   }
 
   async currentHoleMatchesBlock(block: NodeDescription | FixedSidebarBlock) {
+    const validator = await this.validator$.pipe(first()).toPromise();
+    return this.currentHoleMatchesBlock2(block, validator);
+  }
+
+  async currentHoleMatchesBlock2(
+    block: NodeDescription | FixedSidebarBlock,
+    validator: Validator
+  ) {
     const ast = this.peekSyntaxtree;
     const holeLocation = this._holeLocation.value;
-    const validator = await this.validator$.pipe(first()).toPromise();
 
     if (holeLocation === undefined) {
       return true;
@@ -188,6 +196,7 @@ export class CurrentCodeResourceService {
     const errorList = validator
       .validateFromRoot(possibleAst)
       .getErrorsOn(instertedNode)
+      //.errors
       .filter((error) => error.code != "MISSING_CHILD");
 
     console.log("HIEEEER", errorList.length, errorList);

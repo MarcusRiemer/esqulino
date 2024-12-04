@@ -199,7 +199,7 @@ describe(`CurrentCodersourceService`, () => {
         },
       };
 
-      it(`returns true when * Block is insertet into SELECT hole`, async () => {
+      it(`returns true when * Block is inserted into SELECT hole`, async () => {
         const s = await instantiate(treeDesc);
 
         const block: NodeDescription = {
@@ -244,6 +244,26 @@ describe(`CurrentCodersourceService`, () => {
 
         const result = await s.currentHoleMatchesBlock(block);
         expect(result).toBeTrue();
+      });
+
+      it(`returns false when SELECT hole is flilled with invalid JOIN block`, async () => {
+        const s = await instantiate(treeDesc);
+
+        const block: NodeDescription = {
+          name: "crossJoin",
+          language: "sql",
+          children: {
+            table: [],
+          },
+        };
+
+        s.setCurrentHoleLocation([
+          ["select", 0],
+          ["columns", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeFalse();
       });
     });
 
@@ -466,6 +486,120 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeFalse();
       });
 
+      describe(`Tree with one hole in Binary Expression`, () => {
+        const treeDescOneHoleBinExpression = {
+          name: "querySelect",
+          language: "sql",
+          children: {
+            from: [
+              {
+                name: "from",
+                language: "sql",
+                children: {
+                  joins: [],
+                  tables: [
+                    {
+                      name: "tableIntroduction",
+                      language: "sql",
+                      properties: {
+                        name: "termin",
+                      },
+                    },
+                    {
+                      name: "tableIntroduction",
+                      language: "sql",
+                      properties: {
+                        name: "block",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            where: [
+              {
+                name: "where",
+                language: "sql",
+                children: {
+                  expressions: [
+                    {
+                      name: "binaryExpression",
+                      language: "sql",
+                      children: {
+                        lhs: [
+                          {
+                            name: "columnName",
+                            language: "sql",
+                            properties: {
+                              columnName: "BLOCK",
+                              refTableName: "termin",
+                            },
+                          },
+                        ],
+                        rhs: [],
+                        operator: [
+                          {
+                            name: "relationalOperator",
+                            language: "sql",
+                            properties: {
+                              operator: "<=",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            select: [
+              {
+                name: "select",
+                language: "sql",
+                children: {
+                  columns: [
+                    {
+                      name: "columnName",
+                      language: "sql",
+                      properties: {
+                        columnName: "TAG",
+                        refTableName: "termin",
+                      },
+                    },
+                    {
+                      name: "columnName",
+                      language: "sql",
+                      properties: {
+                        columnName: "ENDZEIT",
+                        refTableName: "block",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            groupBy: [],
+          },
+        };
+
+        it(`returns false when not valid SQL Block is inserted`, async () => {
+          const s = await instantiate(treeDescOneHoleBinExpression);
+
+          const block: NodeDescription = {
+            name: "select",
+            language: "sql",
+          };
+
+          s.setCurrentHoleLocation([
+            ["where", 0],
+            ["expressions", 0],
+          ]);
+
+          const result = await s.currentHoleMatchesBlock(block);
+          expect(result).toBeFalse();
+        });
+      });
+
       describe(`Tree with 2 Holes`, () => {
         const treeDescTwoHoles = {
           name: "querySelect",
@@ -543,10 +677,124 @@ describe(`CurrentCodersourceService`, () => {
             ["where", 0],
             ["expressions", 0],
           ]);
+
+          console.log("HELLLO");
           const result = await s.currentHoleMatchesBlock(block);
 
           expect(result).toBeFalse();
         });
+      });
+
+      describe(`Tree with 2 Holes in GROUP BY and ORDER BY`, () => {
+        const treeDescTwoHoleGroupOrder = {
+          name: "querySelect",
+          language: "sql",
+          children: {
+            from: [
+              {
+                name: "from",
+                language: "sql",
+                children: {
+                  tables: [
+                    {
+                      name: "tableIntroduction",
+                      language: "sql",
+                      properties: {
+                        name: "geschichte",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            where: [],
+            select: [
+              {
+                name: "select",
+                language: "sql",
+                children: {
+                  columns: [
+                    {
+                      name: "functionCall",
+                      language: "sql",
+                      properties: {
+                        name: "COUNT",
+                      },
+                      children: {
+                        arguments: [],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            groupBy: [
+              {
+                name: "groupBy",
+                language: "sql",
+                children: {
+                  expressions: [],
+                },
+              },
+            ],
+            orderBy: [
+              {
+                name: "orderBy",
+                language: "sql",
+                children: {
+                  expressions: [
+                    {
+                      name: "sortOrder",
+                      language: "sql",
+                      properties: {
+                        order: "DESC",
+                      },
+                      children: {
+                        expression: [],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        };
+
+        it(`returns false when invalid block is inserted in GROUP BY`, async ()=>{
+          const s = await instantiate(treeDescTwoHoleGroupOrder)
+
+          const block: NodeDescription = {
+            name: "from",
+            language: "sql",
+          };
+
+          s.setCurrentHoleLocation([
+            ["groupBy", 0],
+            ["expressions", 0],
+          ]);
+
+          const result = await s.currentHoleMatchesBlock(block);
+          expect(result).toBeFalse();
+        })
+
+        it(`returns false when invalid block is inserted in ORDER BY`, async ()=>{
+          const s = await instantiate(treeDescTwoHoleGroupOrder)
+
+          const block: NodeDescription = {
+            name: "from",
+            language: "sql",
+          };
+
+          //TODO wie komme ich hier an das Loch ein Kind weiter unten?
+          s.setCurrentHoleLocation([
+            ["orderBy", 0],
+            ["expressions", 0],
+          ]);
+
+          const result = await s.currentHoleMatchesBlock(block);
+          expect(result).toBeFalse();
+        })
+
       });
     });
   });
