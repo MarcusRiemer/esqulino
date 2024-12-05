@@ -6,6 +6,7 @@
   [@background-color]="targetState$ | async"
   (mouseover)="onMouseEnter($event)"
   (mouseout)="onMouseOut($event)"
+  [ngClass]="{holeIsSelected: _isSelected$ | async}"
   (click)="onMouseClick($event)"
 >
   &nbsp;{{ displayText | async }}&nbsp;

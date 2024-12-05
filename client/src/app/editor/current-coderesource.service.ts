@@ -166,10 +166,10 @@ export class CurrentCodeResourceService {
     return this.currentHoleMatchesBlock2(block, validator);
   }
 
-  async currentHoleMatchesBlock2(
+  currentHoleMatchesBlock2(
     block: NodeDescription | FixedSidebarBlock,
     validator: Validator
-  ) {
+  ): boolean {
     const ast = this.peekSyntaxtree;
     const holeLocation = this._holeLocation.value;
 
@@ -187,7 +187,7 @@ export class CurrentCodeResourceService {
       block.tailoredBlockDescription(ast)[0]
     );*/
 
-    console.log("LOCATION", holeLocation);
+    //console.log("LOCATION", holeLocation);
     const possibleAst = ast.insertNode(holeLocation, fillBlocks[0]);
 
     const instertedNode = possibleAst.locate(holeLocation);
@@ -199,8 +199,11 @@ export class CurrentCodeResourceService {
       //.errors
       .filter((error) => error.code != "MISSING_CHILD");
 
-    console.log("HIEEEER", errorList.length, errorList);
-    console.log("DOOOOOOORT", allErrors);
+    if (errorList.length > 0) {
+      console.log("HIEEEER", errorList.length, errorList);
+    }
+
+    //console.log("DOOOOOOORT", allErrors);
 
     return errorList.length == 0;
   }

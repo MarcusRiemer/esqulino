@@ -246,7 +246,7 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeTrue();
       });
 
-      it(`returns false when SELECT hole is flilled with invalid JOIN block`, async () => {
+      it(`returns false when SELECT hole is filled with invalid JOIN block`, async () => {
         const s = await instantiate(treeDesc);
 
         const block: NodeDescription = {
@@ -593,6 +593,7 @@ describe(`CurrentCodersourceService`, () => {
           s.setCurrentHoleLocation([
             ["where", 0],
             ["expressions", 0],
+            ["rhs", 0],
           ]);
 
           const result = await s.currentHoleMatchesBlock(block);
@@ -760,8 +761,8 @@ describe(`CurrentCodersourceService`, () => {
           },
         };
 
-        it(`returns false when invalid block is inserted in GROUP BY`, async ()=>{
-          const s = await instantiate(treeDescTwoHoleGroupOrder)
+        it(`returns false when invalid block is inserted in GROUP BY`, async () => {
+          const s = await instantiate(treeDescTwoHoleGroupOrder);
 
           const block: NodeDescription = {
             name: "from",
@@ -775,10 +776,10 @@ describe(`CurrentCodersourceService`, () => {
 
           const result = await s.currentHoleMatchesBlock(block);
           expect(result).toBeFalse();
-        })
+        });
 
-        it(`returns false when invalid block is inserted in ORDER BY`, async ()=>{
-          const s = await instantiate(treeDescTwoHoleGroupOrder)
+        it(`returns false when invalid block is inserted in ORDER BY`, async () => {
+          const s = await instantiate(treeDescTwoHoleGroupOrder);
 
           const block: NodeDescription = {
             name: "from",
@@ -793,8 +794,7 @@ describe(`CurrentCodersourceService`, () => {
 
           const result = await s.currentHoleMatchesBlock(block);
           expect(result).toBeFalse();
-        })
-
+        });
       });
     });
   });

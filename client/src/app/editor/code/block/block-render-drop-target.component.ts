@@ -171,6 +171,8 @@ export class BlockRenderDropTargetComponent {
    */
   private _currentMouseTarget = new BehaviorSubject(false);
 
+  public _isSelected$ = new BehaviorSubject(false);
+
   constructor(
     private _dragService: DragService,
     private _renderData: RenderedCodeResourceService,
@@ -330,6 +332,7 @@ export class BlockRenderDropTargetComponent {
     result.getErrorsOn(node)*/
     this._currentCodeResourceService.setCurrentHoleLocation(this.dropLocation);
     console.log(this._currentCodeResourceService.currentHoleLocation$);
+    this._isSelected$.next(true);
   }
 
   readonly displayText = this._isCurrentDropCandidate.pipe(
