@@ -190,14 +190,20 @@ export class CurrentCodeResourceService {
     //console.log("LOCATION", holeLocation);
     const possibleAst = ast.insertNode(holeLocation, fillBlocks[0]);
 
-    const instertedNode = possibleAst.locate(holeLocation);
+    const insertedNode = possibleAst.locate(holeLocation);
 
     const allErrors = validator.validateFromRoot(possibleAst);
     const errorList = validator
       .validateFromRoot(possibleAst)
-      .getErrorsOn(instertedNode)
-      //.errors
-      .filter((error) => error.code != "MISSING_CHILD");
+      //.getErrorsOn(instertedNode)
+      .errors.filter(
+        (error) =>
+          (
+            error.code == ErrorCodes.IllegalChildType &&
+            (error.node === insertedNode ||
+              error.node === insertedNode.nodeParent)
+          )
+      );
 
     if (errorList.length > 0) {
       console.log("HIEEEER", errorList.length, errorList);

@@ -190,7 +190,7 @@ describe(`CurrentCodersourceService`, () => {
               name: "from",
               language: "sql",
               children: {
-                tabels: [
+                tables: [
                   {
                     name: "tableIntroduction",
                     language: "sql",
@@ -916,6 +916,120 @@ describe(`CurrentCodersourceService`, () => {
       });
     });
 
+    describe(`Tree with 2 Holes sql: query Select with SELECT and FROM holes, additional GROUP BY and ORDER BY Blocks`, async () => {
+      const treeDescTwoHolesSFGbOb = {
+        name: "querySelect",
+        language: "sql",
+        children: {
+          from: [
+            {
+              name: "from",
+              language: "sql",
+              children: {
+                joins: [],
+                tables: [],
+              },
+            },
+          ],
+          where: [],
+          select: [
+            {
+              name: "select",
+              language: "sql",
+              children: {
+                columns: [],
+              },
+            },
+          ],
+          groupBy: [
+            {
+              name: "groupBy",
+              language: "sql",
+              children: {
+                expressions: [
+                  {
+                    name: "columnName",
+                    language: "sql",
+                    properties: {
+                      columnName: "geschichte_code",
+                      refTableName: "geschichte",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          orderBy: [
+            {
+              name: "orderBy",
+              language: "sql",
+              children: {
+                expressions: [
+                  {
+                    name: "sortOrder",
+                    language: "sql",
+                    properties: {
+                      order: "DESC",
+                    },
+                    children: {
+                      expression: [
+                        {
+                          name: "columnName",
+                          language: "sql",
+                          properties: {
+                            columnName: "seitenanzahl",
+                            refTableName: "geschichte",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      };
+
+      it(`returns false when an invalid block is inserted in FROM`, async () => {
+        const s = await instantiate(treeDescTwoHolesSFGbOb);
+
+        const block: NodeDescription = {
+          name: "StarOperator",
+          language: "sql",
+        };
+        s.setCurrentHoleLocation([
+          ["from", 0],
+          ["tables", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+
+        expect(result).toBeFalse();
+      });
+
+      it(`returns true when valid block is inserted in FROM`, async () => {
+        const s = await instantiate(treeDescTwoHolesSFGbOb);
+
+        const block: NodeDescription = {
+          name: "tableIntroduction",
+          language: "sql",
+          properties: {
+            name: "geschichte",
+          },
+        };
+
+        s.setCurrentHoleLocation([
+          ["from", 0],
+          ["tables", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+
+        expect(result).toBeTrue();
+      });
+    });
+
     describe(`Tree with 2 Holes sql: query with two holes at WHERE and SELECT`, () => {
       const treeDescTwoHoles = {
         name: "querySelect",
@@ -960,6 +1074,7 @@ describe(`CurrentCodersourceService`, () => {
         },
       };
 
+      //This only works if the whole tree is validated after inserting the block and not only the hole where the block should be inserted
       it(`returns false after inserting a valid Block because of another error`, async () => {
         const s = await instantiate(treeDescTwoHoles);
 
@@ -989,6 +1104,45 @@ describe(`CurrentCodersourceService`, () => {
             ],
           },
         };
+        s.setCurrentHoleLocation([
+          ["where", 0],
+          ["expressions", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+
+        expect(result).toBeFalse();
+      });
+
+      it(`returns true when valid block is inserted at WHERE`, async () => {
+        const s = await instantiate(treeDescTwoHoles);
+
+        const block: NodeDescription = {
+          name: "functionCall",
+          language: "sql",
+          properties: {
+            name: "MAX",
+          },
+        };
+
+        s.setCurrentHoleLocation([
+          ["where", 0],
+          ["expressions", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+
+        expect(result).toBeTrue();
+      });
+
+      it(`returns false when invalid block is inserted at WHERE`, async () => {
+        const s = await instantiate(treeDescTwoHoles);
+
+        const block: NodeDescription = {
+          name: "select",
+          language: "sql",
+        };
+
         s.setCurrentHoleLocation([
           ["where", 0],
           ["expressions", 0],
@@ -1100,7 +1254,7 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeFalse();
       });
 
-      it(`returns true when valid block is inserted in ORDER BY`, async () => {
+      fit(`returns true when valid block is inserted in ORDER BY`, async () => {
         const s = await instantiate(treeDescTwoHoleGroupOrder);
 
         const block: NodeDescription = {
@@ -1111,7 +1265,7 @@ describe(`CurrentCodersourceService`, () => {
         s.setCurrentHoleLocation([
           ["orderBy", 0],
           ["expressions", 0],
-          ["sortOrder", 0],
+          ["expression", 0],
         ]);
 
         const result = await s.currentHoleMatchesBlock(block);
