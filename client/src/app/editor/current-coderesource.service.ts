@@ -13,6 +13,7 @@ import {
 import { ResourceReferencesService } from "../shared/resource-references.service";
 import {
   CodeResource,
+  ErrorCodes,
   NodeDescription,
   NodeLocation,
   SyntaxTree,
@@ -165,11 +166,10 @@ export class CurrentCodeResourceService {
     const validator = await this.validator$.pipe(first()).toPromise();
     return this.currentHoleMatchesBlock2(block, validator);
   }
-
   currentHoleMatchesBlock2(
     block: NodeDescription | FixedSidebarBlock,
     validator: Validator
-  ): boolean {
+  ) {
     const ast = this.peekSyntaxtree;
     const holeLocation = this._holeLocation.value;
 
@@ -203,7 +203,7 @@ export class CurrentCodeResourceService {
       console.log("HIEEEER", errorList.length, errorList);
     }
 
-    //console.log("DOOOOOOORT", allErrors);
+    console.log("DOOOOOOORT", allErrors);
 
     return errorList.length == 0;
   }

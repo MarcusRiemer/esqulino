@@ -11,6 +11,7 @@ import {
 import { LanguageService } from "../shared/language.service";
 import {
   ErrorCodes,
+  Language,
   NodeDescription,
   ServerApiService,
   ValidationContext,
@@ -177,99 +178,9 @@ describe(`CurrentCodersourceService`, () => {
       expect(result).toBeFalse();
     });
 
-    describe(`Tree with 2 Holes sql: query select without FROM and SELECT`, () => {
-      const treeDesc = {
-        name: "querySelect",
-        language: "sql",
-        children: {
-          from: [
-            {
-              name: "from",
-              language: "sql",
-            },
-          ],
-          where: [],
-          select: [
-            {
-              name: "select",
-              language: "sql",
-            },
-          ],
-          groupBy: [],
-        },
-      };
-
-      it(`returns true when * Block is inserted into SELECT hole`, async () => {
-        const s = await instantiate(treeDesc);
-
-        const block: NodeDescription = {
-          name: "starOperator",
-          language: "sql",
-        };
-        s.setCurrentHoleLocation([
-          ["select", 0],
-          ["columns", 0],
-        ]);
-        expect(await s.peekSyntaxtree.locate([])).toBe(
-          s.peekSyntaxtree.rootNode
-        );
-        expect(await s.peekSyntaxtree.locate([["select", 0]])).toBe(
-          s.peekSyntaxtree.rootNode.children["select"][0]
-        );
-
-        const result = await s.currentHoleMatchesBlock(block);
-        expect(result).toBeTrue();
-      });
-
-      it(`returns true when SELECT hole is filled with Sum Function`, async () => {
-        const s = await instantiate(treeDesc);
-
-        const block: NodeDescription = {
-          name: "functionCall",
-          language: "sql",
-          properties: {
-            name: "SUM",
-          },
-        };
-        s.setCurrentHoleLocation([
-          ["select", 0],
-          ["columns", 0],
-        ]);
-        expect(await s.peekSyntaxtree.locate([])).toBe(
-          s.peekSyntaxtree.rootNode
-        );
-        expect(await s.peekSyntaxtree.locate([["select", 0]])).toBe(
-          s.peekSyntaxtree.rootNode.children["select"][0]
-        );
-
-        const result = await s.currentHoleMatchesBlock(block);
-        expect(result).toBeTrue();
-      });
-
-      it(`returns false when SELECT hole is filled with invalid JOIN block`, async () => {
-        const s = await instantiate(treeDesc);
-
-        const block: NodeDescription = {
-          name: "crossJoin",
-          language: "sql",
-          children: {
-            table: [],
-          },
-        };
-
-        s.setCurrentHoleLocation([
-          ["select", 0],
-          ["columns", 0],
-        ]);
-
-        const result = await s.currentHoleMatchesBlock(block);
-        expect(result).toBeFalse();
-      });
-    });
-
     //FILL ONE HOLE IN SELECT FROM WITH VALID BLOCKS
     //Expressions
-    describe("Tree with 1 hole sql: query with only one Hole in ast at SELECT", () => {
+    describe("Tree with 1 hole sql: query with only one hole in ast at SELECT", () => {
       const treeDescOneHole = {
         name: "querySelect",
         language: "sql",
@@ -302,7 +213,7 @@ describe(`CurrentCodersourceService`, () => {
         },
       };
 
-      it(`returns true when SELECT Hole is filled with * Block`, async () => {
+      it(`returns true when SELECT hole is filled with * Block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {
@@ -320,7 +231,7 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeTrue();
       });
 
-      it(`returns true when SELECT Hole is filled with PARAM Block`, async () => {
+      it(`returns true when SELECT hole is filled with PARAM Block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {
@@ -341,7 +252,7 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeTrue();
       });
 
-      it(`Fills SELECT Hole with Konst Block`, async () => {
+      it(`Fills SELECT hole with Konst Block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {
@@ -362,7 +273,7 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeTrue();
       });
 
-      it(`returns true when SELECT Hole is filled with Binary Expression Block`, async () => {
+      it(`returns true when SELECT hole is filled with Binary Expression Block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {
@@ -392,27 +303,8 @@ describe(`CurrentCodersourceService`, () => {
         const result = await s.currentHoleMatchesBlock(block);
         expect(result).toBeTrue();
       });
-      //Fills SELECT WiTH non Valid Block
-
-      it(`returns false when SELECT Hole is filled with WHERE block`, async () => {
-        const s = await instantiate(treeDescOneHole);
-
-        const block: NodeDescription = {
-          name: "where",
-          language: "sql",
-        };
-
-        s.setCurrentHoleLocation([
-          ["select", 0],
-          ["columns", 0],
-        ]);
-
-        const result = await s.currentHoleMatchesBlock(block);
-        expect(result).toBeFalse();
-      });
-
       //Funktions
-      it(`returns true when the SELECT Hole is filled with a COUNT() Block`, async () => {
+      it(`returns true when the SELECT hole is filled with a COUNT() Block`, async () => {
         const s = await instantiate(treeDescOneHole);
 
         const block: NodeDescription = {
@@ -431,7 +323,7 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeTrue();
       });
 
-      it(`returns true when Hole is filled with a Block that only returns MISSING_CHILD Error`, async () => {
+      it(`returns true when hole is filled with a Block that only returns MISSING_CHILD Error`, async () => {
         const s = await instantiate(treeDescOneHole);
         const block: NodeDescription = {
           name: "functionCall",
@@ -485,316 +377,763 @@ describe(`CurrentCodersourceService`, () => {
 
         expect(result).toBeFalse();
       });
+    });
 
-      describe(`Tree with one hole in Binary Expression`, () => {
-        const treeDescOneHoleBinExpression = {
-          name: "querySelect",
-          language: "sql",
-          children: {
-            from: [
-              {
-                name: "from",
-                language: "sql",
-                children: {
-                  joins: [],
-                  tables: [
-                    {
-                      name: "tableIntroduction",
-                      language: "sql",
-                      properties: {
-                        name: "termin",
-                      },
+    describe(`Tree with 1 hole sql: query with one hole in Binary Expression`, () => {
+      const treeDescOneHoleBinExpression = {
+        name: "querySelect",
+        language: "sql",
+        children: {
+          from: [
+            {
+              name: "from",
+              language: "sql",
+              children: {
+                joins: [],
+                tables: [
+                  {
+                    name: "tableIntroduction",
+                    language: "sql",
+                    properties: {
+                      name: "termin",
                     },
-                    {
-                      name: "tableIntroduction",
-                      language: "sql",
-                      properties: {
-                        name: "block",
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-            where: [
-              {
-                name: "where",
-                language: "sql",
-                children: {
-                  expressions: [
-                    {
-                      name: "binaryExpression",
-                      language: "sql",
-                      children: {
-                        lhs: [
-                          {
-                            name: "columnName",
-                            language: "sql",
-                            properties: {
-                              columnName: "BLOCK",
-                              refTableName: "termin",
-                            },
-                          },
-                        ],
-                        rhs: [],
-                        operator: [
-                          {
-                            name: "relationalOperator",
-                            language: "sql",
-                            properties: {
-                              operator: "<=",
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-            select: [
-              {
-                name: "select",
-                language: "sql",
-                children: {
-                  columns: [
-                    {
-                      name: "columnName",
-                      language: "sql",
-                      properties: {
-                        columnName: "TAG",
-                        refTableName: "termin",
-                      },
-                    },
-                    {
-                      name: "columnName",
-                      language: "sql",
-                      properties: {
-                        columnName: "ENDZEIT",
-                        refTableName: "block",
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-            groupBy: [],
-          },
-        };
-
-        it(`returns false when not valid SQL Block is inserted`, async () => {
-          const s = await instantiate(treeDescOneHoleBinExpression);
-
-          const block: NodeDescription = {
-            name: "select",
-            language: "sql",
-          };
-
-          s.setCurrentHoleLocation([
-            ["where", 0],
-            ["expressions", 0],
-            ["rhs", 0],
-          ]);
-
-          const result = await s.currentHoleMatchesBlock(block);
-          expect(result).toBeFalse();
-        });
-      });
-
-      describe(`Tree with 2 Holes`, () => {
-        const treeDescTwoHoles = {
-          name: "querySelect",
-          language: "sql",
-          children: {
-            from: [
-              {
-                name: "from",
-                language: "sql",
-                children: {
-                  tables: [
-                    {
-                      name: "tableIntroduction",
-                      language: "sql",
-                      properties: {
-                        name: "geschichte",
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-            where: [
-              {
-                name: "where",
-                language: "sql",
-                children: {
-                  expressions: [],
-                },
-              },
-            ],
-            select: [
-              {
-                name: "select",
-                language: "sql",
-                children: {
-                  columns: [],
-                },
-              },
-            ],
-            groupBy: [],
-          },
-        };
-
-        it(`returns false after inserting a valid Block because of another error`, async () => {
-          const s = await instantiate(treeDescTwoHoles);
-
-          const block: NodeDescription = {
-            name: "binaryExpression",
-            language: "sql",
-            children: {
-              lhs: [
-                {
-                  name: "columnName",
-                  language: "sql",
-                  properties: {
-                    columnName: "id",
-                    refTableName: "charakter",
                   },
-                },
-              ],
-              rhs: [],
-              operator: [
-                {
-                  name: "relationalOperator",
-                  language: "sql",
-                  properties: {
-                    operator: "=",
+                  {
+                    name: "tableIntroduction",
+                    language: "sql",
+                    properties: {
+                      name: "block",
+                    },
                   },
-                },
-              ],
+                ],
+              },
             },
-          };
-          s.setCurrentHoleLocation([
-            ["where", 0],
-            ["expressions", 0],
-          ]);
+          ],
+          where: [
+            {
+              name: "where",
+              language: "sql",
+              children: {
+                expressions: [
+                  {
+                    name: "binaryExpression",
+                    language: "sql",
+                    children: {
+                      lhs: [
+                        {
+                          name: "columnName",
+                          language: "sql",
+                          properties: {
+                            columnName: "BLOCK",
+                            refTableName: "termin",
+                          },
+                        },
+                      ],
+                      rhs: [],
+                      operator: [
+                        {
+                          name: "relationalOperator",
+                          language: "sql",
+                          properties: {
+                            operator: "<=",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          select: [
+            {
+              name: "select",
+              language: "sql",
+              children: {
+                columns: [
+                  {
+                    name: "columnName",
+                    language: "sql",
+                    properties: {
+                      columnName: "TAG",
+                      refTableName: "termin",
+                    },
+                  },
+                  {
+                    name: "columnName",
+                    language: "sql",
+                    properties: {
+                      columnName: "ENDZEIT",
+                      refTableName: "block",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          groupBy: [],
+        },
+      };
 
-          console.log("HELLLO");
-          const result = await s.currentHoleMatchesBlock(block);
+      it(`returns false when not valid sql Block is inserted in rhs`, async () => {
+        const s = await instantiate(treeDescOneHoleBinExpression);
 
-          expect(result).toBeFalse();
-        });
+        const block: NodeDescription = {
+          name: "select",
+          language: "sql",
+        };
+
+        s.setCurrentHoleLocation([
+          ["where", 0],
+          ["expressions", 0],
+          ["rhs", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeFalse();
+      });
+    });
+
+    describe(`Tree with 1 Hole sql: query without FROM with multiple TABLE NOT IN FROM errors`, () => {
+      const treeDescOneHoleComplex = {
+        name: "querySelect",
+        language: "sql",
+        children: {
+          from: [
+            {
+              name: "from",
+              language: "sql",
+              children: {
+                joins: [
+                  {
+                    name: "innerJoinOn",
+                    language: "sql",
+                    children: {
+                      on: [
+                        {
+                          name: "binaryExpression",
+                          language: "sql",
+                          children: {
+                            lhs: [
+                              {
+                                name: "columnName",
+                                language: "sql",
+                                properties: {
+                                  columnName: "Sprecher_ID",
+                                  refTableName: "Auftritt",
+                                },
+                              },
+                            ],
+                            rhs: [
+                              {
+                                name: "columnName",
+                                language: "sql",
+                                properties: {
+                                  columnName: "Sprecher_ID",
+                                  refTableName: "Sprecher",
+                                },
+                              },
+                            ],
+                            operator: [
+                              {
+                                name: "relationalOperator",
+                                language: "sql",
+                                properties: {
+                                  operator: "=",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                      table: [
+                        {
+                          name: "tableIntroduction",
+                          language: "sql",
+                          properties: {
+                            name: "Auftritt",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    name: "innerJoinOn",
+                    language: "sql",
+                    children: {
+                      on: [
+                        {
+                          name: "binaryExpression",
+                          language: "sql",
+                          children: {
+                            lhs: [
+                              {
+                                name: "columnName",
+                                language: "sql",
+                                properties: {
+                                  columnName: "Charakter_ID",
+                                  refTableName: "Auftritt",
+                                },
+                              },
+                            ],
+                            rhs: [
+                              {
+                                name: "columnName",
+                                language: "sql",
+                                properties: {
+                                  columnName: "Charakter_ID",
+                                  refTableName: "Charakter",
+                                },
+                              },
+                            ],
+                            operator: [
+                              {
+                                name: "relationalOperator",
+                                language: "sql",
+                                properties: {
+                                  operator: "=",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                      table: [
+                        {
+                          name: "tableIntroduction",
+                          language: "sql",
+                          properties: {
+                            name: "Charakter",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+                tables: [],
+              },
+            },
+          ],
+          where: [],
+          select: [
+            {
+              name: "select",
+              language: "sql",
+              children: {
+                columns: [
+                  {
+                    name: "columnName",
+                    language: "sql",
+                    properties: {
+                      columnName: "Sprecher_Name",
+                      refTableName: "Sprecher",
+                    },
+                  },
+                  {
+                    name: "functionCall",
+                    language: "sql",
+                    properties: {
+                      name: "COUNT",
+                    },
+                    children: {
+                      distinct: [
+                        {
+                          name: "distinct",
+                          language: "sql",
+                        },
+                      ],
+                      arguments: [
+                        {
+                          name: "columnName",
+                          language: "sql",
+                          properties: {
+                            columnName: "Charakter_Name",
+                            refTableName: "Charakter",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    name: "functionCall",
+                    language: "sql",
+                    properties: {
+                      name: "GROUP_CONCAT",
+                    },
+                    children: {
+                      distinct: [
+                        {
+                          name: "distinct",
+                          language: "sql",
+                        },
+                      ],
+                      arguments: [
+                        {
+                          name: "columnName",
+                          language: "sql",
+                          properties: {
+                            columnName: "Charakter_Name",
+                            refTableName: "Charakter",
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          groupBy: [
+            {
+              name: "groupBy",
+              language: "sql",
+              children: {
+                expressions: [
+                  {
+                    name: "columnName",
+                    language: "sql",
+                    properties: {
+                      columnName: "Sprecher_ID",
+                      refTableName: "Sprecher",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          orderBy: [
+            {
+              name: "orderBy",
+              language: "sql",
+              children: {
+                expressions: [
+                  {
+                    name: "sortOrder",
+                    language: "sql",
+                    properties: {
+                      order: "DESC",
+                    },
+                    children: {
+                      expression: [
+                        {
+                          name: "functionCall",
+                          language: "sql",
+                          properties: {
+                            name: "COUNT",
+                          },
+                          children: {
+                            distinct: [
+                              {
+                                name: "distinct",
+                                language: "sql",
+                              },
+                            ],
+                            arguments: [
+                              {
+                                name: "columnName",
+                                language: "sql",
+                                properties: {
+                                  columnName: "Charakter_ID",
+                                  refTableName: "Charakter",
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      };
+
+      it("returns false when invalid block is inserted in FROM", async () => {
+        const s = await instantiate(treeDescOneHoleComplex);
+
+        const block: NodeDescription = {
+          name: "starOperator",
+          language: "sql",
+        };
+        s.setCurrentHoleLocation([
+          ["from", 0],
+          ["table", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeTrue();
       });
 
-      describe(`Tree with 2 Holes in GROUP BY and ORDER BY`, () => {
-        const treeDescTwoHoleGroupOrder = {
-          name: "querySelect",
+      it(`returns true when valid block is inserted in FROM`, async () => {
+        const s = await instantiate(treeDescOneHoleComplex);
+
+        const block: NodeDescription = {
+          name: "tableIntroduction",
+          language: "sql",
+          properties: {
+            name: "Character",
+          },
+        };
+        s.setCurrentHoleLocation([
+          ["from", 0],
+          ["table", 0],
+        ]);
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeTrue();
+      });
+    });
+
+    describe(`Tree with 2 Holes sql: query select without FROM and SELECT`, () => {
+      const treeDescTwoHolesSelectFrom = {
+        name: "querySelect",
+        language: "sql",
+        children: {
+          from: [
+            {
+              name: "from",
+              language: "sql",
+            },
+          ],
+          where: [],
+          select: [
+            {
+              name: "select",
+              language: "sql",
+            },
+          ],
+          groupBy: [],
+        },
+      };
+
+      it(`returns true when * Block is inserted into SELECT hole`, async () => {
+        const s = await instantiate(treeDescTwoHolesSelectFrom);
+
+        const block: NodeDescription = {
+          name: "starOperator",
+          language: "sql",
+        };
+        s.setCurrentHoleLocation([
+          ["select", 0],
+          ["columns", 0],
+        ]);
+        expect(await s.peekSyntaxtree.locate([])).toBe(
+          s.peekSyntaxtree.rootNode
+        );
+        expect(await s.peekSyntaxtree.locate([["select", 0]])).toBe(
+          s.peekSyntaxtree.rootNode.children["select"][0]
+        );
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeTrue();
+      });
+
+      it(`returns true when SELECT hole is filled with Sum Function`, async () => {
+        const s = await instantiate(treeDescTwoHolesSelectFrom);
+
+        const block: NodeDescription = {
+          name: "functionCall",
+          language: "sql",
+          properties: {
+            name: "SUM",
+          },
+        };
+        s.setCurrentHoleLocation([
+          ["select", 0],
+          ["columns", 0],
+        ]);
+        expect(await s.peekSyntaxtree.locate([])).toBe(
+          s.peekSyntaxtree.rootNode
+        );
+        expect(await s.peekSyntaxtree.locate([["select", 0]])).toBe(
+          s.peekSyntaxtree.rootNode.children["select"][0]
+        );
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeTrue();
+      });
+
+      it(`returns false when SELECT hole is filled with invalid JOIN block`, async () => {
+        const s = await instantiate(treeDescTwoHolesSelectFrom);
+
+        const block: NodeDescription = {
+          name: "crossJoin",
           language: "sql",
           children: {
-            from: [
-              {
-                name: "from",
-                language: "sql",
-                children: {
-                  tables: [
-                    {
-                      name: "tableIntroduction",
-                      language: "sql",
-                      properties: {
-                        name: "geschichte",
-                      },
+            table: [],
+          },
+        };
+
+        s.setCurrentHoleLocation([
+          ["select", 0],
+          ["columns", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeFalse();
+      });
+
+      it(`returns false when FROM hole is filled with invalid JOIN block`, async () => {
+        const s = await instantiate(treeDescTwoHolesSelectFrom);
+
+        const block: NodeDescription = {
+          name: "crossJoin",
+          language: "sql",
+          children: {
+            table: [],
+          },
+        };
+
+        s.setCurrentHoleLocation([
+          ["from", 0],
+          ["tables", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeFalse();
+      });
+
+      it(`returns false when TABLE_NOT_IN_FROM Error occurs after inserting block in SELECT`, async () => {
+        const s = await instantiate(treeDescTwoHolesSelectFrom);
+
+        const block: NodeDescription = {
+          name: "columnName",
+          language: "sql",
+          properties: {
+            columnName: "Character_Name",
+            refTableName: "Charakter",
+          },
+        };
+
+        s.setCurrentHoleLocation([
+          ["select", 0],
+          ["columns", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeFalse();
+      });
+    });
+
+    describe(`Tree with 2 Holes sql: query with two holes at WHERE and SELECT`, () => {
+      const treeDescTwoHoles = {
+        name: "querySelect",
+        language: "sql",
+        children: {
+          from: [
+            {
+              name: "from",
+              language: "sql",
+              children: {
+                tables: [
+                  {
+                    name: "tableIntroduction",
+                    language: "sql",
+                    properties: {
+                      name: "geschichte",
                     },
-                  ],
+                  },
+                ],
+              },
+            },
+          ],
+          where: [
+            {
+              name: "where",
+              language: "sql",
+              children: {
+                expressions: [],
+              },
+            },
+          ],
+          select: [
+            {
+              name: "select",
+              language: "sql",
+              children: {
+                columns: [],
+              },
+            },
+          ],
+          groupBy: [],
+        },
+      };
+
+      it(`returns false after inserting a valid Block because of another error`, async () => {
+        const s = await instantiate(treeDescTwoHoles);
+
+        const block: NodeDescription = {
+          name: "binaryExpression",
+          language: "sql",
+          children: {
+            lhs: [
+              {
+                name: "columnName",
+                language: "sql",
+                properties: {
+                  columnName: "id",
+                  refTableName: "charakter",
                 },
               },
             ],
-            where: [],
-            select: [
+            rhs: [],
+            operator: [
               {
-                name: "select",
+                name: "relationalOperator",
                 language: "sql",
-                children: {
-                  columns: [
-                    {
-                      name: "functionCall",
-                      language: "sql",
-                      properties: {
-                        name: "COUNT",
-                      },
-                      children: {
-                        arguments: [],
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-            groupBy: [
-              {
-                name: "groupBy",
-                language: "sql",
-                children: {
-                  expressions: [],
-                },
-              },
-            ],
-            orderBy: [
-              {
-                name: "orderBy",
-                language: "sql",
-                children: {
-                  expressions: [
-                    {
-                      name: "sortOrder",
-                      language: "sql",
-                      properties: {
-                        order: "DESC",
-                      },
-                      children: {
-                        expression: [],
-                      },
-                    },
-                  ],
+                properties: {
+                  operator: "=",
                 },
               },
             ],
           },
         };
+        s.setCurrentHoleLocation([
+          ["where", 0],
+          ["expressions", 0],
+        ]);
 
-        it(`returns false when invalid block is inserted in GROUP BY`, async () => {
-          const s = await instantiate(treeDescTwoHoleGroupOrder);
+        const result = await s.currentHoleMatchesBlock(block);
 
-          const block: NodeDescription = {
-            name: "from",
-            language: "sql",
-          };
+        expect(result).toBeFalse();
+      });
+    });
 
-          s.setCurrentHoleLocation([
-            ["groupBy", 0],
-            ["expressions", 0],
-          ]);
+    describe(`Tree with 2 Holes sql: query with holes in GROUP BY and ORDER BY`, () => {
+      const treeDescTwoHoleGroupOrder = {
+        name: "querySelect",
+        language: "sql",
+        children: {
+          from: [
+            {
+              name: "from",
+              language: "sql",
+              children: {
+                tables: [
+                  {
+                    name: "tableIntroduction",
+                    language: "sql",
+                    properties: {
+                      name: "geschichte",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          select: [
+            {
+              name: "select",
+              language: "sql",
+              children: {
+                columns: [
+                  {
+                    name: "functionCall",
+                    language: "sql",
+                    properties: {
+                      name: "COUNT",
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          groupBy: [
+            {
+              name: "groupBy",
+              language: "sql",
+            },
+          ],
+          orderBy: [
+            {
+              name: "orderBy",
+              language: "sql",
+              children: {
+                expressions: [
+                  {
+                    name: "sortOrder",
+                    language: "sql",
+                    properties: {
+                      order: "DESC",
+                    },
+                    children: {
+                      expression: [],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      };
 
-          const result = await s.currentHoleMatchesBlock(block);
-          expect(result).toBeFalse();
-        });
+      it(`returns true when valid block is inserted in GROUP BY`, async () => {
+        const s = await instantiate(treeDescTwoHoleGroupOrder);
 
-        it(`returns false when invalid block is inserted in ORDER BY`, async () => {
-          const s = await instantiate(treeDescTwoHoleGroupOrder);
+        const block: NodeDescription = {
+          name: "functionCall",
+          language: "sql",
+          properties: {
+            name: "MAX",
+          },
+        };
 
-          const block: NodeDescription = {
-            name: "from",
-            language: "sql",
-          };
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeTrue();
+      });
 
-          //TODO wie komme ich hier an das Loch ein Kind weiter unten?
-          s.setCurrentHoleLocation([
-            ["orderBy", 0],
-            ["expressions", 0],
-          ]);
+      it(`returns false when invalid block is inserted in GROUP BY`, async () => {
+        const s = await instantiate(treeDescTwoHoleGroupOrder);
 
-          const result = await s.currentHoleMatchesBlock(block);
-          expect(result).toBeFalse();
-        });
+        const block: NodeDescription = {
+          name: "from",
+          language: "sql",
+        };
+
+        s.setCurrentHoleLocation([
+          ["groupBy", 0],
+          ["expressions", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeFalse();
+      });
+
+      it(`returns true when valid block is inserted in ORDER BY`, async () => {
+        const s = await instantiate(treeDescTwoHoleGroupOrder);
+
+        const block: NodeDescription = {
+          name: "constant",
+          language: "sql",
+        };
+
+        s.setCurrentHoleLocation([
+          ["orderBy", 0],
+          ["expressions", 0],
+          ["sortOrder", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeTrue();
+      });
+
+      it(`returns false when invalid block is inserted in ORDER BY`, async () => {
+        const s = await instantiate(treeDescTwoHoleGroupOrder);
+
+        const block: NodeDescription = {
+          name: "from",
+          language: "sql",
+        };
+
+        s.setCurrentHoleLocation([
+          ["orderBy", 0],
+          ["expressions", 0],
+          ["sortOrder", 0],
+        ]);
+
+        const result = await s.currentHoleMatchesBlock(block);
+        expect(result).toBeFalse();
       });
     });
   });
