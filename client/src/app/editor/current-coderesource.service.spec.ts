@@ -1254,7 +1254,7 @@ describe(`CurrentCodersourceService`, () => {
         expect(result).toBeFalse();
       });
 
-      fit(`returns true when valid block is inserted in ORDER BY`, async () => {
+      it(`returns true when valid block is inserted in ORDER BY`, async () => {
         const s = await instantiate(treeDescTwoHoleGroupOrder);
 
         const block: NodeDescription = {
@@ -1283,7 +1283,7 @@ describe(`CurrentCodersourceService`, () => {
         s.setCurrentHoleLocation([
           ["orderBy", 0],
           ["expressions", 0],
-          ["sortOrder", 0],
+          ["expression", 0],
         ]);
 
         const result = await s.currentHoleMatchesBlock(block);

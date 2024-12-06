@@ -172,6 +172,9 @@ export class CurrentCodeResourceService {
   ) {
     const ast = this.peekSyntaxtree;
     const holeLocation = this._holeLocation.value;
+    const parentLocation = holeLocation; //all but last element
+    const dropLocation = holeLocation[/*last index of hole location*/ 0];
+    const parentNode = ast.locate(parentLocation);
 
     if (holeLocation === undefined) {
       return true;
@@ -188,21 +191,23 @@ export class CurrentCodeResourceService {
     );*/
 
     //console.log("LOCATION", holeLocation);
-    const possibleAst = ast.insertNode(holeLocation, fillBlocks[0]);
+    // const possibleAst = ast.insertNode(holeLocation, fillBlocks[0]);
+    //const insertedNode = possibleAst.locate(holeLocation);
 
-    const insertedNode = possibleAst.locate(holeLocation);
+    return validator
+      .getGrammarValidator("sql")
+      .getType(parentNode)
+      .allowsChildType(fillBlocks[0], dropLocation[0]);
 
-    const allErrors = validator.validateFromRoot(possibleAst);
+    /* const allErrors = validator.validateFromRoot(possibleAst);
     const errorList = validator
       .validateFromRoot(possibleAst)
       //.getErrorsOn(instertedNode)
       .errors.filter(
         (error) =>
-          (
-            error.code == ErrorCodes.IllegalChildType &&
-            (error.node === insertedNode ||
-              error.node === insertedNode.nodeParent)
-          )
+          error.code == ErrorCodes.IllegalChildType &&
+          (error.node === insertedNode ||
+            error.node === insertedNode.nodeParent)
       );
 
     if (errorList.length > 0) {
@@ -211,6 +216,6 @@ export class CurrentCodeResourceService {
 
     console.log("DOOOOOOORT", allErrors);
 
-    return errorList.length == 0;
+    return errorList.length == 0;*/
   }
 }
