@@ -778,7 +778,7 @@ describe(`CurrentCodersourceService`, () => {
         };
         s.setCurrentHoleLocation([
           ["from", 0],
-          ["table", 0],
+          ["tables", 0],
         ]);
         const result = await s.currentHoleMatchesBlock(block);
         expect(result).toBeTrue();

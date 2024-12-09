@@ -16,6 +16,7 @@ import {
   ErrorCodes,
   NodeDescription,
   NodeLocation,
+  QualifiedTypeName,
   SyntaxTree,
   ValidationResult,
   Validator,
@@ -169,40 +170,60 @@ export class CurrentCodeResourceService {
   currentHoleMatchesBlock2(
     block: NodeDescription | FixedSidebarBlock,
     validator: Validator
-  ) {
+  ): boolean {
     const ast = this.peekSyntaxtree;
-    const holeLocation = this._holeLocation.value;
-    const parentLocation = holeLocation; //all but last element
-    const dropLocation = holeLocation[/*last index of hole location*/ 0];
-    const parentNode = ast.locate(parentLocation);
 
-    if (holeLocation === undefined) {
-      return true;
-    }
+    const holeLocation = structuredClone(this._holeLocation.value);
 
-    const fillBlocks =
-      block instanceof FixedSidebarBlock
-        ? block.tailoredBlockDescription(ast)
-        : [block];
+    if (holeLocation != undefined && holeLocation.length > 0) {
+      //const dropLocation = holeLocation.pop();
+      //const parentLocation = holeLocation; //all but last element
+      const dropLocation = holeLocation[holeLocation.length - 1];
+      const parentLocation = holeLocation.slice(0, holeLocation.length - 1);
+      //const dropLocation = holeLocation[/*last index of hole location*/ 0];
+      //const [...parentLocation, dropLocation] = holeLocation
+      const parentNode = ast.locate(parentLocation);
 
-    /*const possibleAst = ast.insertNode(
+      console.log("HOLELOCATION", holeLocation);
+      console.log("DROPLOCATION", dropLocation);
+      console.log("PARENTLOCATION", parentLocation);
+      console.log("PARENTNODE", parentNode);
+
+      //macht aus dem block ein array, falls dieser noch keins sein sollte
+      const fillBlocks =
+        block instanceof FixedSidebarBlock
+          ? block.tailoredBlockDescription(ast)
+          : [block];
+
+      const childBlockTypeName: QualifiedTypeName = {
+        typeName: fillBlocks[0].name,
+        languageName: fillBlocks[0].language,
+      };
+
+      /*const possibleAst = ast.insertNode(
       holeLocation,
       block.tailoredBlockDescription(ast)[0]
     );*/
 
-    //console.log("LOCATION", holeLocation);
-    // const possibleAst = ast.insertNode(holeLocation, fillBlocks[0]);
-    //const insertedNode = possibleAst.locate(holeLocation);
+      //const possibleAst = ast.insertNode(holeLocation, fillBlocks[0]);
+      //const insertedNode = possibleAst.locate(holeLocation);
 
-    return validator
-      .getGrammarValidator("sql")
-      .getType(parentNode)
-      .allowsChildType(fillBlocks[0], dropLocation[0]);
+      return validator
+        .getGrammarValidator(childBlockTypeName.languageName)
+        .getType(parentNode)
+        .allowsChildType(childBlockTypeName, dropLocation[0]);
+    } else {
+      return true;
+    }
+
+    /*URSPRUENGLICHER CODE UM BLÖCKE ZU FILTERN
+      wird ersetzt, da es wenig performant und unnötig aufwändig ist jeden Block einzusetzten
+      und dann den gesamten Baum zu validieren. So bekomme ich auch alle anderen Fehler im Baum mit,
+      die mich zum einsetzten des Blockes eigentlich gar nicht interessieren*/
 
     /* const allErrors = validator.validateFromRoot(possibleAst);
     const errorList = validator
       .validateFromRoot(possibleAst)
-      //.getErrorsOn(instertedNode)
       .errors.filter(
         (error) =>
           error.code == ErrorCodes.IllegalChildType &&
