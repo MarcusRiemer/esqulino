@@ -61,10 +61,11 @@ export class DraggableBlockListComponent {
 
   isVisibleInSidebar(block: NodeDescription | FixedSidebarBlock) {
     if (this.validator) {
-      //console.log("isVisible", block);
       const result = this._currentCodeResource.currentHoleMatchesBlock2(
         block,
-        this.validator
+        this.validator,
+        this._currentCodeResource.currentDropLocation$,
+        this._currentCodeResource.currentHoleLocationParent$
       );
       return result;
     }

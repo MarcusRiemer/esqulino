@@ -278,7 +278,7 @@ export class BlockRenderDropTargetComponent {
   /**
    * True if either the drop target or the drop location should be shown.
    */
-  readonly showAnything: Observable<boolean> = combineLatest(
+  readonly showAnything$: Observable<boolean> = combineLatest(
     this._isCurrentDropCandidate,
     this._isHole$,
     this._parentRequiresChildren$,

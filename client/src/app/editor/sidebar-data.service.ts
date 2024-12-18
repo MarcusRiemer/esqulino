@@ -10,12 +10,16 @@ import {
   TruckWorldTilesSidebar,
 } from "../shared/block";
 import { DatabaseSchemaService } from "./database-schema.service";
+import { CurrentCodeResourceService } from "./current-coderesource.service";
 
 @Injectable({
   providedIn: "root",
 })
+// TODO 3: Hier muss der current code resource service mit rein, damit er zu den Blöcken reisen kann
 export class SidebarDataService {
-  constructor(private _databaseSchema: DatabaseSchemaService) {}
+  constructor(private _databaseSchema: DatabaseSchemaService, 
+    private _currentCodeResource: CurrentCodeResourceService
+  ) {}
 
   /**
    * Creates proper Sidebar instances from various descriptions.

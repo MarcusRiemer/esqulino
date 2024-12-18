@@ -1,3 +1,4 @@
+import { combineLatest, Observable, of } from "rxjs";
 import { NodeDescription, SyntaxTree } from "../syntaxtree";
 
 import {
@@ -8,6 +9,8 @@ import {
   isNodeDerivedPropertyDescription,
 } from "./block.description";
 import { Sidebar } from "./sidebar";
+import { CurrentCodeResourceService } from "src/app/editor/current-coderesource.service";
+import { map } from "rxjs/operators";
 
 /**
  * Resolves all runtime derived values for a tailored node description. The
@@ -75,7 +78,18 @@ export class FixedSidebarBlock {
   public readonly displayName: string;
 
   /** This controlls the visability in Sidebar */
-  public isVisibleInSidebar: boolean;
+ // public isVisibleInSidebar$: Observable<boolean> = of(true);
+  // TODO 3: Build ordentliches observable
+  //public isVisibleInSidebar$: Observable<boolean> = combineLatest(holeLocation, validator).pipe( ... )
+
+  public isVisibleInSidebar$: Observable<boolean> = combineLatest([
+    this._currentCodeResource.currentHoleLocation$,
+    this._currentCodeResource.validator$
+  ]).pipe(
+    map(([holeLocation, validator])=>{
+      //TODO 4: was muss hier passieren, damit true zurückgegegeben wird und der Block angezeigt wird?
+    })
+  )
 
   /**
    * @return The node that should be created when this block
@@ -83,9 +97,10 @@ export class FixedSidebarBlock {
    */
   public readonly defaultNode: NodeTailoredDescription[];
 
-  constructor(desc: SidebarBlockDescription) {
+  // TODO 3: Alle benötigten Daten für das Observable mit reingeben, vermutlich einfach den current code resource service reingeben
+  constructor(desc: SidebarBlockDescription,private _currentCodeResource: CurrentCodeResourceService) {
     this.displayName = desc.displayName;
-    this.isVisibleInSidebar = true;
+    //this.isVisibleInSidebar = true;
 
     if (Array.isArray(desc.defaultNode)) {
       this.defaultNode = desc.defaultNode;

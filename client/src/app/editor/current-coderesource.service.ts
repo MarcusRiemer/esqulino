@@ -16,6 +16,7 @@ import {
   ErrorCodes,
   NodeDescription,
   NodeLocation,
+  NodeLocationStep,
   QualifiedTypeName,
   SyntaxTree,
   ValidationResult,
@@ -137,6 +138,17 @@ export class CurrentCodeResourceService {
   readonly currentHoleLocation$: Observable<NodeLocation> =
     this._holeLocation.asObservable();
 
+  readonly currentHoleLocationParent$ : Observable<NodeLocation> =
+  this._holeLocation.pipe(
+    map(l => l.slice(0, l.length - 1) ),
+    shareReplay(1)
+  )
+  readonly currentDropLocation$ : Observable<NodeLocation | NodeLocationStep> =
+  this._holeLocation.pipe(
+    map(l => l[l.length - 1]),
+    shareReplay(1)
+  )
+
   /**
    * The currently loaded resource
    */
@@ -165,29 +177,33 @@ export class CurrentCodeResourceService {
 
   async currentHoleMatchesBlock(block: NodeDescription | FixedSidebarBlock) {
     const validator = await this.validator$.pipe(first()).toPromise();
-    return this.currentHoleMatchesBlock2(block, validator);
+    return this.currentHoleMatchesBlock2(block, validator,this.currentDropLocation$, this.currentHoleLocationParent$);
   }
   currentHoleMatchesBlock2(
     block: NodeDescription | FixedSidebarBlock,
-    validator: Validator
+    validator: Validator,
+    currentDropLocation$,
+    currentHoleLocationParent$
   ): boolean {
     const ast = this.peekSyntaxtree;
 
+    // TODO 1: Hole location muss parameter sein
+    // TODO 2: Es müssen zwei Parameter sein: Parent und drop
     const holeLocation = structuredClone(this._holeLocation.value);
 
     if (holeLocation != undefined && holeLocation.length > 0) {
       //const dropLocation = holeLocation.pop();
       //const parentLocation = holeLocation; //all but last element
-      const dropLocation = holeLocation[holeLocation.length - 1];
-      const parentLocation = holeLocation.slice(0, holeLocation.length - 1);
+      //const dropLocation = holeLocation[holeLocation.length - 1];
+      //const parentLocation = holeLocation.slice(0, holeLocation.length - 1);
       //const dropLocation = holeLocation[/*last index of hole location*/ 0];
       //const [...parentLocation, dropLocation] = holeLocation
-      const parentNode = ast.locate(parentLocation);
+      const parentNode = ast.locate(currentHoleLocationParent$);
 
-      console.log("HOLELOCATION", holeLocation);
-      console.log("DROPLOCATION", dropLocation);
-      console.log("PARENTLOCATION", parentLocation);
-      console.log("PARENTNODE", parentNode);
+      /*console.log("HOLELOCATION", holeLocation);
+      console.log("DROPLOCATION", currentDropLocation$);
+      console.log("PARENTLOCATION", currentHoleLocationParent$);
+      console.log("PARENTNODE", parentNode);*/
 
       //macht aus dem block ein array, falls dieser noch keins sein sollte
       const fillBlocks =
@@ -211,7 +227,7 @@ export class CurrentCodeResourceService {
       return validator
         .getGrammarValidator(childBlockTypeName.languageName)
         .getType(parentNode)
-        .allowsChildType(childBlockTypeName, dropLocation[0]);
+        .allowsChildType(childBlockTypeName, currentDropLocation$[0]);
     } else {
       return true;
     }
