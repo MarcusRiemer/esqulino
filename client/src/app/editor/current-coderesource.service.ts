@@ -140,7 +140,8 @@ export class CurrentCodeResourceService {
 
   readonly currentHoleLocationParent$: Observable<NodeLocation> =
     this._holeLocation.pipe(
-      map((l) => structuredClone(l.slice(0, l.length - 1))),
+      map((l) => structuredClone(l).slice(0, l.length - 1)),
+      tap((l) => console.log(l)),
       shareReplay(1)
     );
   readonly currentHoleDropStep$: Observable<NodeLocationStep> =
@@ -195,17 +196,14 @@ export class CurrentCodeResourceService {
     validator: Validator,
     currentHoleDropStep: NodeLocationStep,
     currentHoleLocationParent: NodeLocation
-  ): boolean {
+   ): boolean {
     const ast = this.peekSyntaxtree;
 
     // TODO 1: Hole location muss parameter sein
     // TODO 2: Es müssen zwei Parameter sein: Parent und drop
     //const holeLocation = structuredClone(this._holeLocation.value);
 
-    if (
-      currentHoleLocationParent != undefined &&
-      currentHoleLocationParent.length > 0
-    ) {
+    if (currentHoleLocationParent != undefined && currentHoleLocationParent.length > 0) {
       //const dropLocation = holeLocation.pop();
       //const parentLocation = holeLocation; //all but last element
       //const dropLocation = holeLocation[holeLocation.length - 1];

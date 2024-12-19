@@ -62,16 +62,15 @@ export class DraggableBlockListComponent {
     }
   }
 
-  isVisibleInSidebar(block: NodeDescription | FixedSidebarBlock) {
+  //TODO 5: Brauche ich das hier überhaupt noch? ANTWORT: NEIN
+  /*isVisibleInSidebar(block: NodeDescription | FixedSidebarBlock) {
     if (this.validator) {
       const result = this._currentCodeResource.currentHoleMatchesBlock2(
         block,
-        this.validator,
-        this._currentCodeResource.currentHoleDropStep$,
-        this._currentCodeResource.currentHoleLocationParent$
+        this.validator
       );
       return result;
     }
     return true;
-  }
+  }*/
 }

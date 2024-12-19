@@ -9,7 +9,7 @@
     <ng-container *ngFor="let block of category.blocks">
       <!-- Step 3: Hier kann dann geerntet werden: block.isVisibleInSidebar | async-->
       <div
-        *ngIf="isVisibleInSidebar(block)"
+        *ngIf="block.isVisibleInSidebar$| async"
         (mousedown)="startDrag($event, block)"
         class="block rounded"
       >

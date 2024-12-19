@@ -10,7 +10,7 @@ import {
 } from "./block.description";
 import { Sidebar } from "./sidebar";
 import { CurrentCodeResourceService } from "src/app/editor/current-coderesource.service";
-import { map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 
 /**
  * Resolves all runtime derived values for a tailored node description. The
@@ -87,6 +87,7 @@ export class FixedSidebarBlock {
     this._currentCodeResource.currentHoleDropStep$,
     this._currentCodeResource.currentHoleLocationParent$,
   ]).pipe(
+    tap((l)=>console.log(l)),
     map(([validator, currentDropLocation, currentHoleLocationParent]) => {
       return this._currentCodeResource.currentHoleMatchesBlock2(
         this,
