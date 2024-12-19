@@ -78,18 +78,27 @@ export class FixedSidebarBlock {
   public readonly displayName: string;
 
   /** This controlls the visability in Sidebar */
- // public isVisibleInSidebar$: Observable<boolean> = of(true);
+  // public isVisibleInSidebar$: Observable<boolean> = of(true);
   // TODO 3: Build ordentliches observable
   //public isVisibleInSidebar$: Observable<boolean> = combineLatest(holeLocation, validator).pipe( ... )
 
   public isVisibleInSidebar$: Observable<boolean> = combineLatest([
     this._currentCodeResource.currentHoleLocation$,
-    this._currentCodeResource.validator$
+    this._currentCodeResource.validator$,
+    this._currentCodeResource.currentDropLocation$,
+    this._currentCodeResource.currentHoleLocationParent$,
   ]).pipe(
-    map(([holeLocation, validator])=>{
-      //TODO 4: was muss hier passieren, damit true zurückgegegeben wird und der Block angezeigt wird?
-    })
-  )
+    map(
+      ([
+        holeLocation,
+        validator,
+        currentDropLocation,
+        currentHoleLocationParent,
+      ]) => {
+        //TODO 4: was muss hier passieren, damit true zurückgegegeben wird und der Block angezeigt wird?
+      }
+    )
+  );
 
   /**
    * @return The node that should be created when this block
@@ -98,7 +107,10 @@ export class FixedSidebarBlock {
   public readonly defaultNode: NodeTailoredDescription[];
 
   // TODO 3: Alle benötigten Daten für das Observable mit reingeben, vermutlich einfach den current code resource service reingeben
-  constructor(desc: SidebarBlockDescription,private _currentCodeResource: CurrentCodeResourceService) {
+  constructor(
+    desc: SidebarBlockDescription,
+    private _currentCodeResource: CurrentCodeResourceService
+  ) {
     this.displayName = desc.displayName;
     //this.isVisibleInSidebar = true;
 

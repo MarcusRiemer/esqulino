@@ -138,16 +138,16 @@ export class CurrentCodeResourceService {
   readonly currentHoleLocation$: Observable<NodeLocation> =
     this._holeLocation.asObservable();
 
-  readonly currentHoleLocationParent$ : Observable<NodeLocation> =
-  this._holeLocation.pipe(
-    map(l => l.slice(0, l.length - 1) ),
-    shareReplay(1)
-  )
-  readonly currentDropLocation$ : Observable<NodeLocation | NodeLocationStep> =
-  this._holeLocation.pipe(
-    map(l => l[l.length - 1]),
-    shareReplay(1)
-  )
+  readonly currentHoleLocationParent$: Observable<NodeLocation> =
+    this._holeLocation.pipe(
+      map((l) => l.slice(0, l.length - 1)),
+      shareReplay(1)
+    );
+  readonly currentDropLocation$: Observable<NodeLocation | NodeLocationStep> =
+    this._holeLocation.pipe(
+      map((l) => l[l.length - 1]),
+      shareReplay(1)
+    );
 
   /**
    * The currently loaded resource
@@ -177,13 +177,24 @@ export class CurrentCodeResourceService {
 
   async currentHoleMatchesBlock(block: NodeDescription | FixedSidebarBlock) {
     const validator = await this.validator$.pipe(first()).toPromise();
-    return this.currentHoleMatchesBlock2(block, validator,this.currentDropLocation$, this.currentHoleLocationParent$);
+    const currentDropLocation = await this.currentDropLocation$
+      .pipe(first())
+      .toPromise();
+    const currentHoleLocationParent = await this.currentHoleLocationParent$
+      .pipe(first())
+      .toPromise();
+    return this.currentHoleMatchesBlock2(
+      block,
+      validator,
+      currentDropLocation,
+      currentHoleLocationParent
+    );
   }
   currentHoleMatchesBlock2(
     block: NodeDescription | FixedSidebarBlock,
     validator: Validator,
-    currentDropLocation$,
-    currentHoleLocationParent$
+    currentDropLocation: NodeLocation | NodeLocationStep,
+    currentHoleLocationParent: NodeLocation
   ): boolean {
     const ast = this.peekSyntaxtree;
 
@@ -198,7 +209,7 @@ export class CurrentCodeResourceService {
       //const parentLocation = holeLocation.slice(0, holeLocation.length - 1);
       //const dropLocation = holeLocation[/*last index of hole location*/ 0];
       //const [...parentLocation, dropLocation] = holeLocation
-      const parentNode = ast.locate(currentHoleLocationParent$);
+      const parentNode = ast.locate(currentHoleLocationParent);
 
       /*console.log("HOLELOCATION", holeLocation);
       console.log("DROPLOCATION", currentDropLocation$);
@@ -227,7 +238,7 @@ export class CurrentCodeResourceService {
       return validator
         .getGrammarValidator(childBlockTypeName.languageName)
         .getType(parentNode)
-        .allowsChildType(childBlockTypeName, currentDropLocation$[0]);
+        .allowsChildType(childBlockTypeName, currentDropLocation[0]);
     } else {
       return true;
     }
