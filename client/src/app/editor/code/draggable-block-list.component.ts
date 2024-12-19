@@ -3,6 +3,7 @@ import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import {
   CodeResource,
   NodeDescription,
+  NodeLocationStep,
   Validator,
 } from "../../shared/syntaxtree";
 import {
@@ -32,6 +33,8 @@ export class DraggableBlockListComponent {
   filteredCategories: Array<FixedBlocksSidebarCategory>;
 
   validator: Validator | undefined;
+
+  currentHoleDropStep: NodeLocationStep;
 
   constructor(
     private _dragService: DragService,
@@ -64,7 +67,7 @@ export class DraggableBlockListComponent {
       const result = this._currentCodeResource.currentHoleMatchesBlock2(
         block,
         this.validator,
-        this._currentCodeResource.currentDropLocation$,
+        this._currentCodeResource.currentHoleDropStep$,
         this._currentCodeResource.currentHoleLocationParent$
       );
       return result;

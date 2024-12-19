@@ -83,21 +83,18 @@ export class FixedSidebarBlock {
   //public isVisibleInSidebar$: Observable<boolean> = combineLatest(holeLocation, validator).pipe( ... )
 
   public isVisibleInSidebar$: Observable<boolean> = combineLatest([
-    this._currentCodeResource.currentHoleLocation$,
     this._currentCodeResource.validator$,
-    this._currentCodeResource.currentDropLocation$,
+    this._currentCodeResource.currentHoleDropStep$,
     this._currentCodeResource.currentHoleLocationParent$,
   ]).pipe(
-    map(
-      ([
-        holeLocation,
+    map(([validator, currentDropLocation, currentHoleLocationParent]) => {
+      return this._currentCodeResource.currentHoleMatchesBlock2(
+        this,
         validator,
         currentDropLocation,
-        currentHoleLocationParent,
-      ]) => {
-        //TODO 4: was muss hier passieren, damit true zurückgegegeben wird und der Block angezeigt wird?
-      }
-    )
+        currentHoleLocationParent
+      );
+    })
   );
 
   /**
@@ -144,11 +141,13 @@ export class FixedBlocksSidebarCategory implements BlocksSidebarCategory {
 
   constructor(
     _parent: FixedBlocksSidebar,
-    desc: FixedBlocksSidebarCategoryDescription
+    desc: FixedBlocksSidebarCategoryDescription,
+    currentCodeResourceService: CurrentCodeResourceService
   ) {
     this.displayName = desc.categoryCaption;
     this.blocks = desc.blocks.map(
-      (blockDesc) => new FixedSidebarBlock(blockDesc)
+      (blockDesc) =>
+        new FixedSidebarBlock(blockDesc, currentCodeResourceService)
     );
   }
 }
@@ -173,10 +172,17 @@ export class FixedBlocksSidebar implements Sidebar {
    */
   public readonly categories: ReadonlyArray<BlocksSidebarCategory>;
 
-  constructor(desc: FixedBlocksSidebarDescription) {
+  constructor(
+    desc: FixedBlocksSidebarDescription,
+    currentCodeResourceService: CurrentCodeResourceService
+  ) {
     this.displayName = desc.caption;
     this.categories = desc.categories.map((catDesc) => {
-      return new FixedBlocksSidebarCategory(this, catDesc);
+      return new FixedBlocksSidebarCategory(
+        this,
+        catDesc,
+        currentCodeResourceService
+      );
     });
   }
 }

@@ -32,7 +32,7 @@ export class SidebarDataService {
     return desc.map((sidebarDesc) => {
       switch (sidebarDesc.type) {
         case "fixedBlocks":
-          return new FixedBlocksSidebar(sidebarDesc);
+          return new FixedBlocksSidebar(sidebarDesc, this._currentCodeResource);
         case "databaseSchema":
           return new DatabaseSchemaSidebar(this._databaseSchema.currentSchema);
         case "truckProgramUserFunctions":

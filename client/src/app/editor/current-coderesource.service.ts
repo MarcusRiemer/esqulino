@@ -140,10 +140,10 @@ export class CurrentCodeResourceService {
 
   readonly currentHoleLocationParent$: Observable<NodeLocation> =
     this._holeLocation.pipe(
-      map((l) => l.slice(0, l.length - 1)),
+      map((l) => structuredClone(l.slice(0, l.length - 1))),
       shareReplay(1)
     );
-  readonly currentDropLocation$: Observable<NodeLocation | NodeLocationStep> =
+  readonly currentHoleDropStep$: Observable<NodeLocationStep> =
     this._holeLocation.pipe(
       map((l) => l[l.length - 1]),
       shareReplay(1)
@@ -177,7 +177,7 @@ export class CurrentCodeResourceService {
 
   async currentHoleMatchesBlock(block: NodeDescription | FixedSidebarBlock) {
     const validator = await this.validator$.pipe(first()).toPromise();
-    const currentDropLocation = await this.currentDropLocation$
+    const currentDropLocation = await this.currentHoleDropStep$
       .pipe(first())
       .toPromise();
     const currentHoleLocationParent = await this.currentHoleLocationParent$
@@ -193,16 +193,19 @@ export class CurrentCodeResourceService {
   currentHoleMatchesBlock2(
     block: NodeDescription | FixedSidebarBlock,
     validator: Validator,
-    currentDropLocation: NodeLocation | NodeLocationStep,
+    currentHoleDropStep: NodeLocationStep,
     currentHoleLocationParent: NodeLocation
   ): boolean {
     const ast = this.peekSyntaxtree;
 
     // TODO 1: Hole location muss parameter sein
     // TODO 2: Es müssen zwei Parameter sein: Parent und drop
-    const holeLocation = structuredClone(this._holeLocation.value);
+    //const holeLocation = structuredClone(this._holeLocation.value);
 
-    if (holeLocation != undefined && holeLocation.length > 0) {
+    if (
+      currentHoleLocationParent != undefined &&
+      currentHoleLocationParent.length > 0
+    ) {
       //const dropLocation = holeLocation.pop();
       //const parentLocation = holeLocation; //all but last element
       //const dropLocation = holeLocation[holeLocation.length - 1];
@@ -238,7 +241,7 @@ export class CurrentCodeResourceService {
       return validator
         .getGrammarValidator(childBlockTypeName.languageName)
         .getType(parentNode)
-        .allowsChildType(childBlockTypeName, currentDropLocation[0]);
+        .allowsChildType(childBlockTypeName, currentHoleDropStep[0]);
     } else {
       return true;
     }
