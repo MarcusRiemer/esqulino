@@ -183,7 +183,7 @@ GEM
       net-protocol
       timeout
     netrc (0.11.0)
-    nio4r (2.5.8)
+    nio4r (2.7.4)
     nokogiri (1.14.2)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
@@ -337,7 +337,9 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
+    sqlite3 (2.5.0)
+      mini_portile2 (~> 2.8.0)
+    sqlite3 (2.5.0-x86_64-linux-gnu)
     strscan (3.0.1)
     thor (1.2.1)
     timeout (0.2.0)
