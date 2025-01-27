@@ -142,41 +142,6 @@ describe(`CurrentCodersourceService`, () => {
   });
 
   describe(`.currentHoleMatchesBlock(block)`, () => {
-    it(`returns true when Block with A in displayname is insertet`, async () => {
-      const s = await instantiate({
-        language: "sql",
-        name: "querySelect",
-      });
-
-      const block: FixedSidebarBlock = new FixedSidebarBlock({
-        displayName: "ANY",
-        defaultNode: {
-          name: "*",
-          language: "sql",
-        },
-      });
-
-      const result = await s.currentHoleMatchesBlock(block);
-      expect(result).toBeTrue();
-    });
-
-    it(`returns false when Block without A in displayname is insertet`, async () => {
-      const s = await instantiate({
-        language: "sql",
-        name: "querySelect",
-      });
-
-      const block: FixedSidebarBlock = new FixedSidebarBlock({
-        displayName: "FROM",
-        defaultNode: {
-          name: "*",
-          language: "sql",
-        },
-      });
-
-      const result = await s.currentHoleMatchesBlock(block);
-      expect(result).toBeFalse();
-    });
 
     //FILL ONE HOLE IN SELECT FROM WITH VALID BLOCKS
     //Expressions

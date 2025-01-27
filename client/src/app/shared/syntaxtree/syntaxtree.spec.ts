@@ -1111,7 +1111,7 @@ describe("AST: Basic Operations", () => {
     expect(curr.rootNode.children["a"][0].typeName).toEqual("new");
   });
 
-  fit("Insterting child node into another child node", () => {
+  it("Insterting child node into another child node", () => {
     const treeDesc: NodeDescription = {
       language: "lang",
       name: "r",

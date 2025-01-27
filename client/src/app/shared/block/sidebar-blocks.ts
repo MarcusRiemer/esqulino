@@ -88,11 +88,11 @@ export class FixedSidebarBlock {
     this._currentCodeResource.currentHoleLocationParent$,
   ]).pipe(
     tap((l)=>console.log(l)),
-    map(([validator, currentDropLocation, currentHoleLocationParent]) => {
+    map(([validator, currentHoleDropStep, currentHoleLocationParent]) => {
       return this._currentCodeResource.currentHoleMatchesBlock2(
         this,
         validator,
-        currentDropLocation,
+        currentHoleDropStep,
         currentHoleLocationParent
       );
     })

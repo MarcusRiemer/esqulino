@@ -178,7 +178,7 @@ export class CurrentCodeResourceService {
 
   async currentHoleMatchesBlock(block: NodeDescription | FixedSidebarBlock) {
     const validator = await this.validator$.pipe(first()).toPromise();
-    const currentDropLocation = await this.currentHoleDropStep$
+    const currentHoleDropStep = await this.currentHoleDropStep$
       .pipe(first())
       .toPromise();
     const currentHoleLocationParent = await this.currentHoleLocationParent$
@@ -187,7 +187,7 @@ export class CurrentCodeResourceService {
     return this.currentHoleMatchesBlock2(
       block,
       validator,
-      currentDropLocation,
+      currentHoleDropStep,
       currentHoleLocationParent
     );
   }
